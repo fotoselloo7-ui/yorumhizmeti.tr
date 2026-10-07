@@ -1,8 +1,1 @@
-<section class="section">
-    <div class="container text-center" style="max-width: 500px;">
-        <div style="font-size: 80px; font-weight: 800; color: var(--color-border); margin-bottom: var(--space-4);">404</div>
-        <h1 style="font-size: var(--font-size-2xl); margin-bottom: var(--space-3);">Sayfa Bulunamadı</h1>
-        <p class="text-secondary mb-6">Aradığınız sayfa mevcut değil veya kaldırılmış olabilir.</p>
-        <a href="/" class="btn btn-primary"><?= icon('home', 16) ?> Ana Sayfaya Dön</a>
-    </div>
-</section>
+<section class="yv-status-page"><div class="yv-status-card"><div class="yv-status-icon"><?= icon('search',32) ?></div><div class="yv-kicker">404</div><h1>Aradığınız sayfa burada değil.</h1><p>Bağlantı değişmiş veya sayfa kaldırılmış olabilir. Hizmet kataloğuna dönerek aradığınız içeriğe ulaşabilirsiniz.</p><div class="yv-status-actions"><a class="yv-btn yv-btn-primary" href="/"><?= icon('home',12) ?> Ana sayfa</a><a class="yv-btn yv-btn-light" href="/kategoriler"><?= icon('grid',12) ?> Hizmetler</a></div></div></section>
