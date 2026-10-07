@@ -56,9 +56,7 @@ if (!function_exists('yh6PackageCard')) {
     }
 }
 
-$heroImage = ($hero && !empty($hero['image']))
-    ? upload_url($hero['image'])
-    : 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=88';
+$heroCutout = asset('img/hero-woman-cutout.png');
 
 $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['extra'] : [];
 ?>
