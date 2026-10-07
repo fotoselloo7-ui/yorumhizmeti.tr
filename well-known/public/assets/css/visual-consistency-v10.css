@@ -305,3 +305,53 @@
 .yh6-device-stack span{position:absolute;right:8px;bottom:16px;width:72px;height:46px;border:5px solid #32445f;border-radius:7px;background:linear-gradient(145deg,#eaf4ff,#c8e8ff)}
 .yh6-promo-image{display:none!important}
 @media(max-width:650px){.yh6-promo-visual{width:50%}.yh6-promo-cutout{width:100%;height:92%}.yh6-device-stack{transform:scale(.82);transform-origin:right center}}
+
+
+/* dark featured section follows the approved neon-wave reference */
+.yh6-featured{isolation:isolate!important}
+.yh6-featured:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at -8% 62%,rgba(0,155,255,.22),transparent 27%),
+    radial-gradient(ellipse at 108% 66%,rgba(255,34,121,.22),transparent 28%),
+    radial-gradient(ellipse at 13% 92%,rgba(64,77,255,.12),transparent 24%),
+    radial-gradient(ellipse at 85% 90%,rgba(180,44,255,.12),transparent 25%);
+  opacity:.9;
+}
+.yh6-featured>.container{position:relative;z-index:2}
+.yh6-featured-grid:before,
+.yh6-featured-grid:after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:280px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,#1fa8ff,transparent);
+  box-shadow:0 0 24px rgba(31,168,255,.5);
+  transform:rotate(-13deg);
+  opacity:.5;
+}
+.yh6-featured-grid:before{left:-80px;top:35%}
+.yh6-featured-grid:after{right:-80px;bottom:18%;background:linear-gradient(90deg,transparent,#ff2f8c,transparent);box-shadow:0 0 24px rgba(255,47,140,.5);transform:rotate(12deg)}
+.yh6-package-card{backdrop-filter:blur(10px)!important}
+
+/* common CTA / badge geometry */
+.yh6-btn,.yv-btn,.yv-link-button,.yv-blog-head-v8>a,.yv-product-add-v5,.yv-product-now-v5,.yv-checkout-pay-v5{
+  font-weight:800!important;
+  letter-spacing:-.01em;
+}
+.yh6-package-badge,.yv-package-ribbon-v5,.yv-product-badges-v5 span,.yv-product-badges-v5 b{
+  box-shadow:0 6px 14px rgba(35,40,85,.06);
+}
+
+/* soften abrupt section joins like the approved mockups */
+.yh6-why,.yh6-promos,.yh6-reviews,.yh6-blog,.yh6-faq,
+.yv-category-story-v5,.yv-category-compare-v5,.yv-category-reviews-v5,
+.yv-product-stage-v5,.yv-product-content-v5,.yv-product-reviews-v5,.yv-product-related-v5{
+  position:relative;
+}
