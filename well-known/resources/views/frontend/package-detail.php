@@ -71,6 +71,17 @@ $reviews=$testimonialSection['extra']??[];
     <div class="yv-product-price-v5"><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
     <p>Bu paketle markanızın görünürlüğünü ve sosyal kanıtını güçlendirin.</p>
 
+    <?php if(!empty($variantPackages) && count($variantPackages) > 1): ?>
+    <div class="yv-product-variants-v9">
+      <label>Paket Seçimi <?= icon('help-circle',11) ?></label>
+      <div>
+        <?php foreach($variantPackages as $variant): $variantPrice=(!empty($variant['discount_price'])&&$variant['discount_price']<$variant['price'])?$variant['discount_price']:$variant['price']; ?>
+        <a class="<?= (int)$variant['id']===(int)$package['id']?'active':'' ?>" href="/paket/<?= e($variant['slug']) ?>"><strong><?= e(excerpt($variant['name'],28)) ?></strong><small><?= money($variantPrice) ?></small></a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <?php endif; ?>
+
     <form id="packageForm" method="POST" action="/sepet/ekle" class="yv-buy-form-v5">
      <?= csrfField() ?><input type="hidden" name="package_id" value="<?= $package['id'] ?>">
      <?php if(!empty($fields)): foreach($fields as $field): ?><div class="yv-form-group"><label><?= e($field['field_label']) ?><?= $field['is_required']?' *':'' ?></label>
