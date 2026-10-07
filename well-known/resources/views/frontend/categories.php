@@ -39,7 +39,7 @@ function yvCategoryMeta(array $cat): array {
 <section class="yv-category-search">
  <div class="container">
   <div class="yv-filter-shell">
-   <div class="search-box"><?= icon('search',17) ?><input id="categorySearch" type="text" placeholder="Hizmet veya platform ara..."></div>
+   <div class="search-box"><?= icon('search',17) ?><input id="categorySearch" type="text" value="<?= e($searchQuery ?? '') ?>" placeholder="Hizmet veya platform ara..."></div>
    <a class="yv-btn yv-btn-primary" href="#categories"><?= icon('grid',13) ?> Kategorileri keşfet</a>
   </div>
  </div>
@@ -47,6 +47,7 @@ function yvCategoryMeta(array $cat): array {
 
 <section id="categories">
  <div class="container">
+  <?php if(!empty($categories)): ?>
   <div class="yv-category-grid" id="platformGrid">
    <?php foreach($categories as $cat): [$cls,$ico]=yvCategoryMeta($cat); ?>
    <a class="yv-category-card <?= e($cls) ?>" data-name="<?= e(mb_strtolower($cat['name'])) ?>" href="/kategori/<?= e($cat['slug']) ?>">
@@ -59,6 +60,9 @@ function yvCategoryMeta(array $cat): array {
    </a>
    <?php endforeach; ?>
   </div>
+  <?php else: ?>
+  <div class="yv-empty" style="margin:34px 0 70px"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>Hizmet bulunamadı</h2><p>"<?= e($searchQuery ?? '') ?>" aramanızla eşleşen kategori bulunamadı.</p><a class="yv-btn yv-btn-primary" href="/kategoriler">Tüm hizmetleri göster</a></div>
+  <?php endif; ?>
 
   <div class="yv-promo">
    <div class="yv-promo-copy">
