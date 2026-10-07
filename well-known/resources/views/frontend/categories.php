@@ -26,8 +26,9 @@ function yvCategoryMeta(array $cat): array {
           <span class="yv-trust-pill"><?= icon('headphones',13) ?> 7/24 destek</span>
         </div>
       </div>
-      <div class="yv-hero-art">
-        <div class="yv-hero-person"></div>
+      <div class="yv-hero-art yv-hub-hero-art-v11">
+        <div class="yv-hub-blob-v11"></div>
+        <img class="yv-hub-hero-cutout-v11" src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="YorumHizmeti dijital hizmetler" loading="eager">
         <div class="yv-float a"><?= icon('star-fill',14) ?> Güçlü sosyal kanıt</div>
         <div class="yv-float b"><?= icon('trending-up',14) ?> Markanı büyüt</div>
         <div class="yv-float c"><?= icon('check-circle',14) ?> Tek panel, kolay işlem</div>
@@ -51,9 +52,7 @@ function yvCategoryMeta(array $cat): array {
   <div class="yv-category-grid" id="platformGrid">
    <?php foreach($categories as $cat): [$cls,$ico]=yvCategoryMeta($cat); ?>
    <a class="yv-category-card <?= e($cls) ?>" data-name="<?= e(mb_strtolower($cat['name'])) ?>" href="/kategori/<?= e($cat['slug']) ?>">
-     <div class="yv-cat-icon">
-      <?php if(!empty($cat['image'])): ?><img src="<?= e(upload_url($cat['image'])) ?>" alt="<?= e($cat['image_alt'] ?? $cat['name']) ?>" style="width:26px;height:26px;object-fit:contain"><?php else: ?><?= icon($ico,22) ?><?php endif; ?>
-     </div>
+     <div class="yv-cat-icon"><?= icon($ico,22) ?></div>
      <h2><?= e($cat['name']) ?></h2>
      <p><?= e(excerpt(strip_tags($cat['description'] ?? ($cat['name'].' hizmetleri ve paketleri')),80)) ?></p>
      <span>Hizmetleri gör <?= icon('arrow-right',11) ?></span>
@@ -71,7 +70,7 @@ function yvCategoryMeta(array $cat): array {
     <p>Gerçek ihtiyaçlara göre ayrılmış hizmet grupları, hızlı satın alma ve güven veren modern deneyim.</p>
     <a href="#categories" class="yv-btn yv-btn-light">Hemen incele <?= icon('arrow-right',12) ?></a>
    </div>
-   <div class="yv-promo-art"></div>
+   <div class="yv-promo-art yv-promo-art-v11"><div class="yv-promo-art-blob-v11"></div><img src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="Dijital marka görünümü"></div>
   </div>
  </div>
 </section>
