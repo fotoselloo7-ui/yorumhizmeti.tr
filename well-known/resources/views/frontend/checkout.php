@@ -7,7 +7,7 @@
    <div><div class="yv-kicker"><?= icon('lock',12) ?> Güvenli ödeme</div><h1><span>Güvenli Ödeme</span> ile Siparişini Tamamla</h1><p>Siparişini güvenle tamamla, seçtiğin hizmetin keyfini çıkar. Tüm ödeme ve sipariş adımları korumalı altyapıda ilerler.</p></div>
    <div class="yv-checkout-shield-v5"><span><?= icon('lock',34) ?></span><div><strong>%100 Güvenli Ödeme</strong><small>Tüm ödemeleriniz 256 bit SSL ile korunmaktadır.</small></div></div>
   </div>
-  <div class="yv-checkout-steps-v5"><div class="done"><span><?= icon('shopping-cart',15) ?></span><b>1</b><strong>Sepet</strong><small>Ürünlerini gözden geçir</small></div><i></i><div class="active"><span><?= icon('credit-card',15) ?></span><b>2</b><strong>Ödeme</strong><small>Bilgilerini gir ve öde</small></div><i></i><div><span><?= icon('check',15) ?></span><b>3</b><strong>Onay</strong><small>Siparişini tamamla</small></div></div>
+  <div class="yv-checkout-steps-v5"><div class="active"><span><?= icon('shopping-cart',15) ?></span><b>1</b><strong>Sepet</strong><small>Ürünlerini gözden geçir</small></div><i></i><div><span><?= icon('credit-card',15) ?></span><b>2</b><strong>Ödeme</strong><small>Bilgilerini gir ve öde</small></div><i></i><div><span><?= icon('check',15) ?></span><b>3</b><strong>Onay</strong><small>Siparişini tamamla</small></div></div>
  </div>
 </section>
 
