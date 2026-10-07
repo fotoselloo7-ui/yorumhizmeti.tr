@@ -58,6 +58,7 @@ function yvCatDesign(array $cat): array {
   <div class="yv-package-grid">
    <?php foreach($packages as $pkg): $price=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']; ?>
     <a class="yv-package-card" href="/paket/<?= e($pkg['slug']) ?>">
+     <?php if(!empty($pkg['image'])): ?><div class="yv-package-cover"><img src="<?= e(upload_url($pkg['image'])) ?>" alt="<?= e($pkg['image_alt'] ?? $pkg['name']) ?>"></div><?php endif; ?>
      <div class="yv-package-top"><span class="yv-platform-mark <?= e($platformClass) ?>"><?= icon($platformIcon,18) ?></span><span style="font-size:8px;color:#8790a3;font-weight:700"><?= e($pkg['category_name']??$category['name']) ?></span><?php if(!empty($pkg['is_featured'])||!empty($pkg['badge'])): ?><span class="yv-package-badge"><?= e($pkg['badge'] ?: 'Popüler') ?></span><?php endif; ?></div>
      <h3><?= e($pkg['name']) ?></h3>
      <ul><li><?= icon('check-circle',12) ?> Şifresiz ve güvenli işlem</li><li><?= icon('check-circle',12) ?> Hızlı sipariş takibi</li><li><?= icon('check-circle',12) ?> Satış sonrası destek</li></ul>
