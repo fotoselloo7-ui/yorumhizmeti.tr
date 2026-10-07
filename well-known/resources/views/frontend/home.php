@@ -72,7 +72,7 @@ if (!function_exists('yhPackageCard')) {
 
 $heroImage = ($hero && !empty($hero['image']))
     ? upload_url($hero['image'])
-    : 'https://images.unsplash.com/photo-1758874384232-cfa79a5babf1?auto=format&fit=crop&w=1400&q=84';
+    : 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1400&q=84';
 ?>
 
 <main class="yh-home">
