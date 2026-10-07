@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -74,7 +75,7 @@
         <div class="container nv-topbar-inner">
             <div class="nv-topbar-main">
                 <span class="nv-topbar-dot"></span>
-                <span>Dijital büyüme için güvenilir, hızlı ve modern çözümler</span>
+                <span>Türkiye'nin güvenilir dijital hizmet platformu</span>
             </div>
             <div class="nv-topbar-meta">
                 <span><?= icon('shield', 14) ?> Güvenli Ödeme</span>
@@ -100,11 +101,13 @@
                 </a>
 
                 <nav class="nav-main" id="navMain">
-                    <a href="/" class="<?= ($_SERVER['REQUEST_URI'] ?? '') === '/' ? 'active' : '' ?>">Ana Sayfa</a>
-                    <a href="/kategoriler" class="<?= isActive('/kategori') ?>">Hizmetler</a>
+                    <a href="/kategoriler" class="<?= isActive('/kategori') ?>">Tüm Hizmetler</a>
+                    <a href="/kategori/google-hizmetleri">Google</a>
+                    <a href="/kategori/instagram-hizmetleri">Instagram</a>
+                    <a href="/kategori/tiktok-hizmetleri">TikTok</a>
+                    <a href="/kategori/youtube-hizmetleri">YouTube</a>
+                    <a href="/kategori/web-site-hizmetleri">Web Site</a>
                     <a href="/blog" class="<?= isActive('/blog') ?>">Blog</a>
-                    <a href="/sss" class="<?= isActive('/sss') ?>">SSS</a>
-                    <a href="/iletisim" class="<?= isActive('/iletisim') ?>">İletişim</a>
                 </nav>
 
                 <div class="header-actions">
@@ -194,6 +197,18 @@
                     <a href="/sayfa/kvkk">KVKK</a>
                     <a href="/sayfa/iade-teslimat-politikasi">İade Politikası</a>
                 </div>
+            </div>
+
+            <div class="footer-newsletter-v4">
+                <div>
+                    <span><?= icon('mail', 18) ?></span>
+                    <div><strong>Fırsatları kaçırmayın</strong><small>Yeni hizmet ve kampanyalardan haberdar olun.</small></div>
+                </div>
+                <div class="footer-newsletter-form">
+                    <input type="email" aria-label="E-posta" placeholder="E-posta adresiniz">
+                    <button type="button" aria-label="Gönder"><?= icon('arrow-right', 14) ?></button>
+                </div>
+                <div class="footer-payments-v4"><span>VISA</span><span>Mastercard</span><span>TROY</span><span><?= icon('lock', 12) ?> SSL</span></div>
             </div>
 
             <div class="footer-bottom">
