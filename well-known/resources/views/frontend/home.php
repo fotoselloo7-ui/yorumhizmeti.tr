@@ -171,20 +171,20 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
         <div class="yh6-promo-grid">
         <?php foreach(array_slice($homeCategoryBlocks,0,3) as $idx=>$block):
             $cat=$block['category']; [$cls,$ico,$label]=yh6Platform($cat['slug']??'', $cat['name']??'');
-            $imgs=[
-                'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=86',
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=86',
-                'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=86'
-            ];
+            $promoCutout = $idx === 1 ? asset('img/support-woman-cutout.png') : asset('img/hero-woman-cutout.png');
         ?>
-            <a href="/kategori/<?= e($cat['slug']) ?>" class="yh6-promo-card <?= e($cls) ?>" style="--yh6-promo-image:url('<?= e($imgs[$idx] ?? $imgs[0]) ?>')">
+            <a href="/kategori/<?= e($cat['slug']) ?>" class="yh6-promo-card <?= e($cls) ?>">
                 <div class="yh6-promo-copy">
                     <span><?= $idx===0?'MARKANI ÖNE ÇIKARIN':($idx===1?'TRENDLERDE YERİNİZİ ALIN':'PROFESYONEL ÇÖZÜMLER') ?></span>
                     <h3><?= e($cat['name']) ?></h3>
                     <p><?= e(excerpt(strip_tags($cat['description'] ?? 'Markanızın görünürlüğünü artıran güçlü dijital hizmetler.'), 100)) ?></p>
                     <em>Paketleri İncele <?= icon('arrow-right', 10) ?></em>
                 </div>
-                <div class="yh6-promo-image"></div>
+                <?php if($idx < 2): ?>
+                <div class="yh6-promo-visual"><span class="yh6-promo-orb"><?= icon($ico,24) ?></span><img class="yh6-promo-cutout" src="<?= e($promoCutout) ?>" alt="<?= e($cat['name']) ?>"></div>
+                <?php else: ?>
+                <div class="yh6-promo-visual device"><div class="yh6-device-stack"><i></i><b></b><span></span></div></div>
+                <?php endif; ?>
                 <div class="yh6-promo-chips"><small>Hızlı Teslimat</small><small>Güvenli Hizmet</small><small>7/24 Destek</small></div>
             </a>
         <?php endforeach; ?>
