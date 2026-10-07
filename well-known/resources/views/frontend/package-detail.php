@@ -13,7 +13,6 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
 <div class="yv-product-page">
  <div class="container">
   <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a> <span class="sep">/</span><a href="/kategori/<?= e($package['category_slug']??'') ?>"><?= e($package['category_name']??'Hizmetler') ?></a> <span class="sep">/</span><span><?= e($package['name']) ?></span></div>
-
   <div class="yv-product-hero">
    <div class="yv-product-media">
     <div class="yv-product-media-copy">
@@ -27,13 +26,11 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
     <div class="yv-product-float one"><?= icon('check-circle',12) ?> Güvenli işlem</div>
     <div class="yv-product-float two"><?= icon('trending-up',12) ?> Marka görünürlüğü</div>
    </div>
-
    <div class="yv-buy-card">
     <div class="yv-buy-badges"><span><?= e($package['badge'] ?: 'Öne Çıkan Paket') ?></span><?php if(!empty($package['discount_price'])&&$package['discount_price']<$package['price']): ?><span>İndirimli fiyat</span><?php else: ?><span>Aktif paket</span><?php endif; ?></div>
     <h2><?= e($package['name']) ?></h2>
     <div class="yv-rating-line"><b>★★★★★</b><span>Güvenli satın alma</span></div>
     <div class="yv-price-box"><?php if(!empty($package['discount_price'])&&$package['discount_price']<$package['price']): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><span class="yv-tax">KDV dahildir</span></div>
-
     <form id="packageForm" method="POST" action="/sepet/ekle" class="yv-buy-form">
      <?= csrfField() ?><input type="hidden" name="package_id" value="<?= $package['id'] ?>">
      <?php if(!empty($fields)): foreach($fields as $field): ?><div class="yv-form-group"><label><?= e($field['field_label']) ?><?= $field['is_required']?' *':'' ?></label>
@@ -42,12 +39,11 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
       <?php else: ?><input class="form-control" type="<?= $field['field_type']==='url'?'url':'text' ?>" name="field_<?= $package['id'] ?>_<?= e($field['field_key']) ?>" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>><?php endif; ?>
      </div><?php endforeach; endif; ?>
      <?php if(($package['max_quantity']??1)>1): ?><div class="yv-form-group"><label>Sipariş adedi</label><input class="form-control" type="number" name="quantity" value="<?= (int)($package['min_quantity']?:1) ?>" min="<?= (int)($package['min_quantity']?:1) ?>" max="<?= (int)$package['max_quantity'] ?>"></div><?php else: ?><input type="hidden" name="quantity" value="1"><?php endif; ?>
-     <div class="yv-buy-actions"><button class="yv-add" type="submit"><?= icon('shopping-cart',15) ?> Sepete Ekle</button><button class="yv-now" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button><?php if(setting('site_whatsapp')): ?><a class="yv-whatsapp" target="_blank" rel="noopener" href="https://wa.me/<?= preg_replace('/[^0-9]/','',setting('site_whatsapp')) ?>"><?= icon('whatsapp',15) ?> WhatsApp'tan Sor</a><?php endif; ?></div>
+     <div class="yv-buy-actions"><button class="yv-add" type="submit"><?= icon('shopping-cart',15) ?> Sepete Ekle</button><button class="yv-now" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button></div>
     </form>
     <div class="yv-buy-trust"><div><?= icon('shield',14) ?>SSL güvencesi</div><div><?= icon('clock',14) ?><?= e($package['delivery_time'] ?: 'Hızlı teslimat') ?></div><div><?= icon('headphones',14) ?>7/24 destek</div></div>
    </div>
   </div>
-
   <div class="yv-product-content">
    <div class="yv-product-main">
     <div class="yv-info-strip"><div><?= icon('user',16) ?><strong>Şifresiz İşlem</strong><small>Giriş bilgisi istemeyiz</small></div><div><?= icon('shield',16) ?><strong>Güvenli Ödeme</strong><small>SSL korumalı süreç</small></div><div><?= icon('zap',16) ?><strong>Hızlı Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Hızlı başlangıç') ?></small></div><div><?= icon('headphones',16) ?><strong>Canlı Destek</strong><small>İhtiyacınızda yanınızda</small></div></div>
@@ -57,7 +53,6 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
    </div>
    <div></div>
   </div>
-
   <?php if(!empty($relatedPackages)): ?><section class="yv-related"><div class="yv-related-head"><div><div class="yv-kicker">Benzer hizmetler</div><h2>İlgili Paketler</h2></div><a class="yv-text-link" href="/kategori/<?= e($package['category_slug']??'') ?>">Tümünü gör <?= icon('arrow-right',11) ?></a></div><div class="yv-related-grid"><?php foreach($relatedPackages as $rp): $rpPrice=(!empty($rp['discount_price'])&&$rp['discount_price']<$rp['price'])?$rp['discount_price']:$rp['price']; ?><a class="yv-package-card" href="/paket/<?= e($rp['slug']) ?>"><div class="yv-package-top"><span class="yv-platform-mark <?= e($pclass) ?>"><?= icon($platform,18) ?></span></div><h3><?= e($rp['name']) ?></h3><div class="yv-package-price"><strong><?= money($rpPrice) ?></strong></div><div class="yv-package-meta"><span>Hızlı teslimat</span><b>Detay <?= icon('arrow-right',11) ?></b></div></a><?php endforeach; ?></div></section><?php endif; ?>
  </div>
 </div>
