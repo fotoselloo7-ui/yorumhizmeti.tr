@@ -60,7 +60,7 @@ foreach ($platformKeys as $pk) {
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="hero-visual-inner">
+                <div class="hero-visual-inner" style="--hero-image: url('<?= e(($hero && !empty($hero['image'])) ? upload_url($hero['image']) : 'https://images.unsplash.com/photo-1758874384232-cfa79a5babf1?auto=format&fit=crop&w=1200&q=82') ?>');">
                     <!-- Central mockup -->
                     <div class="hero-mockup">
                         <div class="hero-mockup-screen">
