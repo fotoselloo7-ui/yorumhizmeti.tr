@@ -1,0 +1,292 @@
+/* ============================================================
+   YorumHizmeti.tr — Visual Consistency V10
+   Final layer for approved screenshots.
+   ============================================================ */
+
+:root{
+  --v10-radius-sm:10px;
+  --v10-radius-md:14px;
+  --v10-radius-lg:18px;
+  --v10-radius-xl:24px;
+  --v10-shadow:0 10px 28px rgba(26,39,83,.07);
+  --v10-shadow-hover:0 18px 42px rgba(26,39,83,.12);
+  --v10-float-shadow:0 16px 36px rgba(35,43,90,.15);
+  --v10-line:#e4e8f1;
+  --v10-ink:#111735;
+  --v10-muted:#68738a;
+  --v10-grad:linear-gradient(100deg,#2868ff,#7437ff 55%,#f42e91);
+}
+
+/* shared premium rhythm */
+.yh-home-v6 section,
+.yv-category-v5 section,
+.yv-product-v5 section,
+.yv-checkout-v5 section,
+.yv-blog-v8 section{isolation:isolate}
+.yh6-package-card,
+.yv-category-package-card-v5,
+.yv-product-related-card-v5,
+.yv-checkout-card-v5,
+.yv-checkout-summary-v5,
+.yv-checkout-why-v5,
+.yv-blog-post-card-v8,
+.yv-blog-side-card-v8,
+.yh6-review-grid article,
+.yv-category-review-grid-v5 article,
+.yv-product-review-grid-v5 article,
+.yv-checkout-review-grid-v9 article{
+  border-color:var(--v10-line)!important;
+  box-shadow:var(--v10-shadow)!important;
+}
+.yh6-package-card:hover,
+.yv-category-package-card-v5:hover,
+.yv-product-related-card-v5:hover,
+.yv-blog-post-card-v8:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:var(--v10-shadow-hover)!important;
+}
+
+/* ---------------- TRANSPARENT CUTOUT SYSTEM ---------------- */
+.yh6-hero-person,
+.yv-category-hero-woman-v5,
+.yv-blog-woman-v8,
+.yv-checkout-support-v5 .woman,
+.yv-product-gallery-fallback-v5 .woman{
+  display:block!important;
+  position:absolute!important;
+  z-index:3!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  background:none!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  mask-image:none!important;
+  -webkit-mask-image:none!important;
+  filter:drop-shadow(0 22px 28px rgba(53,39,105,.13))!important;
+}
+
+/* homepage hero: cutout over independent blob, never a rectangular photo */
+.yh6-hero-art{overflow:visible!important}
+.yh6-hero-blob{
+  right:6%!important;
+  top:3%!important;
+  width:83%!important;
+  height:94%!important;
+  border-radius:46% 54% 42% 58%/48% 44% 56% 52%!important;
+  background:
+    radial-gradient(circle at 30% 22%,rgba(255,255,255,.94),transparent 27%),
+    radial-gradient(circle at 72% 68%,rgba(255,255,255,.45),transparent 32%),
+    linear-gradient(145deg,#ffdceb 0%,#eadcff 54%,#e0efff 100%)!important;
+  box-shadow:inset 0 0 0 1px rgba(120,80,220,.04)!important;
+}
+.yh6-hero-person{
+  right:10%!important;
+  bottom:-2px!important;
+  width:64%!important;
+  height:98%!important;
+  max-height:430px!important;
+}
+.yh6-hero-art:after{
+  content:"";
+  position:absolute;
+  right:2%;
+  top:10%;
+  z-index:1;
+  width:110px;
+  height:110px;
+  background-image:radial-gradient(rgba(109,75,233,.22) 1.2px,transparent 1.2px);
+  background-size:11px 11px;
+  opacity:.5;
+}
+.yh6-social-float,
+.yh6-rating-float,
+.yh6-review-float,
+.yh6-growth-float,
+.yv-category-float-v5,
+.yv-category-brand-orbit-v5,
+.yv-product-float-v5,
+.yv-product-orbit-v5,
+.yv-blog-float-v8{
+  border:1px solid rgba(255,255,255,.82)!important;
+  box-shadow:var(--v10-float-shadow)!important;
+  backdrop-filter:blur(14px)!important;
+}
+.yh6-social-float{width:54px!important;height:54px!important;border-radius:17px!important}
+.yh6-rating-float{padding:8px 11px!important}
+.yh6-review-float{min-width:155px!important}
+.yh6-growth-float{min-width:118px!important}
+.yh6-hero-metrics>div{border-radius:11px!important;background:rgba(255,255,255,.96)!important}
+.yh6-platform-bar{border-radius:18px!important;padding:9px!important}
+.yh6-platform-bar a{border-radius:12px!important}
+
+/* category hero matches the approved Instagram composition */
+.yv-category-hero-art-v5{overflow:visible!important}
+.yv-category-hero-art-v5:before{
+  right:6%!important;
+  top:3%!important;
+  width:83%!important;
+  height:94%!important;
+  border-radius:46% 54% 42% 58%/48% 44% 56% 52%!important;
+  background:
+    radial-gradient(circle at 32% 22%,rgba(255,255,255,.92),transparent 27%),
+    linear-gradient(145deg,#ffd7eb 0%,#eadcff 55%,#e3f0ff 100%)!important;
+}
+.yv-category-hero-woman-v5{
+  right:10%!important;
+  bottom:0!important;
+  width:62%!important;
+  height:97%!important;
+  max-height:355px!important;
+}
+.yv-category-brand-orbit-v5.main{
+  left:9%!important;
+  top:48px!important;
+  z-index:5!important;
+}
+.yv-category-float-v5.a{left:29%!important;bottom:78px!important}
+.yv-category-float-v5.b{right:1%!important;bottom:58px!important}
+.yv-category-float-v5.c{right:0!important;top:84px!important}
+.yv-category-chip-row-v5 a{border-radius:12px!important}
+.yv-category-package-card-v5{border-radius:16px!important}
+.yv-category-package-card-v5 em{border-radius:9px!important}
+
+/* product page visual coherence */
+.yv-product-hero-visual-v5:before{
+  background:
+    radial-gradient(circle at 34% 20%,rgba(255,255,255,.78),transparent 26%),
+    linear-gradient(145deg,#eee1ff,#dfeaff)!important;
+  box-shadow:inset 0 0 0 1px rgba(105,80,220,.05);
+}
+.yv-product-device-v5{box-shadow:0 28px 60px rgba(28,35,77,.23)!important}
+.yv-product-gallery-fallback-v5{
+  background:
+    radial-gradient(circle at 22% 18%,rgba(255,255,255,.9),transparent 25%),
+    linear-gradient(135deg,#f0eaff,#e9f3ff)!important;
+}
+.yv-product-gallery-fallback-v5:before{
+  content:"";
+  position:absolute;
+  left:7%;
+  bottom:-8%;
+  width:54%;
+  height:96%;
+  border-radius:46% 54% 38% 62%/48% 46% 54% 52%;
+  background:linear-gradient(145deg,#ffd9eb,#eadcff 58%,#e1edff);
+  z-index:1;
+}
+.yv-product-gallery-fallback-v5 .woman{
+  left:8%!important;
+  bottom:0!important;
+  width:50%!important;
+  height:94%!important;
+  z-index:2!important;
+}
+.yv-product-gallery-fallback-v5 .logo,
+.yv-product-gallery-fallback-v5 .review,
+.yv-product-gallery-fallback-v5 .business{z-index:4!important}
+.yv-product-buy-v5{border-radius:18px!important}
+.yv-product-add-v5,.yv-product-now-v5{border-radius:10px!important}
+.yv-product-variants-v9 a{border-radius:10px!important}
+
+/* blog hero: cutout person + independent laptop/shape language */
+.yv-blog-hero-art-v8{overflow:visible!important}
+.yv-blog-hero-art-v8:before{
+  inset:10px 5% 0 8%!important;
+  border-radius:47% 53% 42% 58%/48% 44% 56% 52%!important;
+  background:
+    radial-gradient(circle at 30% 22%,rgba(255,255,255,.92),transparent 27%),
+    linear-gradient(145deg,#ffddeb,#eadcff 56%,#e4f0ff)!important;
+}
+.yv-blog-woman-v8{
+  right:12%!important;
+  bottom:0!important;
+  width:64%!important;
+  height:96%!important;
+  max-height:330px!important;
+}
+.yv-blog-hero-art-v8:after{
+  content:"";
+  position:absolute;
+  left:31%;
+  bottom:-4px;
+  z-index:4;
+  width:190px;
+  height:66px;
+  border-radius:14px 14px 4px 4px;
+  background:linear-gradient(160deg,#b8c2d8,#6f7b96);
+  box-shadow:0 14px 30px rgba(28,39,78,.16);
+  transform:perspective(180px) rotateX(18deg);
+  opacity:.95;
+}
+.yv-blog-float-v8{width:48px!important;height:48px!important;border-radius:15px!important}
+.yv-blog-post-card-v8{border-radius:13px!important}
+.yv-blog-side-card-v8,.yv-blog-news-v8{border-radius:14px!important}
+
+/* checkout support must be a transparent cutout, not a rectangular stock photo */
+.yv-checkout-support-v5{
+  overflow:hidden!important;
+  background:
+    radial-gradient(circle at 82% 30%,rgba(244,46,145,.14),transparent 30%),
+    linear-gradient(135deg,#f2efff 0%,#fff0f7 100%)!important;
+}
+.yv-checkout-support-v5:before{
+  content:"";
+  position:absolute;
+  right:-6%;
+  bottom:-18%;
+  width:61%;
+  height:112%;
+  border-radius:48% 52% 40% 60%/45% 44% 56% 55%;
+  background:linear-gradient(145deg,#ffd7eb,#e9dcff 60%,#dcecff);
+}
+.yv-checkout-support-v5 .woman{
+  right:0!important;
+  bottom:0!important;
+  width:51%!important;
+  height:94%!important;
+  z-index:2!important;
+}
+.yv-checkout-support-v5>div:last-child{position:relative!important;z-index:4!important}
+.yv-checkout-payment-v5{border-radius:11px!important}
+.yv-checkout-summary-v5{border-radius:16px!important}
+.yv-checkout-pay-v5{border-radius:10px!important}
+
+/* cards, testimonials, process and FAQ use one geometry */
+.yh6-review-grid article,
+.yv-category-review-grid-v5 article,
+.yv-product-review-grid-v5 article,
+.yv-checkout-review-grid-v9 article{border-radius:13px!important}
+.yh6-how-grid>div{border-radius:12px!important}
+.yh6-faq-item,.premium-faq-item,.yv-blog-faq-grid-v8>div{border-radius:10px!important}
+.yh6-final .container,.yv-blog-final-v8 .container{border-radius:17px!important}
+
+/* keep body copy and labels visually consistent across supplied refs */
+.yh-home-v6 p,
+.yv-category-v5 p,
+.yv-product-v5 p,
+.yv-checkout-v5 p,
+.yv-blog-v8 p{color:var(--v10-muted)}
+.yh6-section-head h2,
+.yv-section-head-v5 h2,
+.yv-blog-head-v8 h2{color:var(--v10-ink)}
+
+/* mobile remains 2-column for commerce where the approved design allows it */
+@media(max-width:650px){
+  .yh6-hero-person{right:7%!important;width:72%!important;height:96%!important;max-height:300px!important}
+  .yh6-hero-art:after{width:80px;height:80px}
+  .yv-category-hero-woman-v5{right:8%!important;width:69%!important;height:95%!important;max-height:290px!important}
+  .yv-category-float-v5.c{right:1%!important;top:72px!important}
+  .yv-blog-woman-v8{right:7%!important;width:72%!important;height:94%!important;max-height:275px!important}
+  .yv-blog-hero-art-v8:after{left:27%;width:155px;height:52px}
+  .yv-checkout-support-v5 .woman{width:57%!important;height:92%!important}
+  .yv-product-gallery-fallback-v5 .woman{left:3%!important;width:59%!important;height:92%!important}
+  .yh6-review-grid,.yv-category-review-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(max-width:420px){
+  .container,.yh-home-v6 .container{width:min(1200px,calc(100% - 32px))!important}
+  .yh6-social-float{width:42px!important;height:42px!important}
+  .yh6-review-float{left:0!important;min-width:135px!important}
+  .yh6-growth-float{right:-2px!important;min-width:105px!important}
+}
