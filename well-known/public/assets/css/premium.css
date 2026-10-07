@@ -986,3 +986,34 @@ textarea{
     .blog-layout,
     .contact-grid{gap:18px!important}
 }
+
+
+/* --- Unified Font Awesome icon behavior --- */
+.icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    line-height:1;
+    vertical-align:-.08em;
+}
+.btn .icon,
+.nav-main .icon,
+.header-actions .icon,
+.platform-pill .icon,
+.hero-trust-item .icon,
+.step-icon .icon,
+.trust-item-icon .icon,
+.service-card-icon .icon,
+.footer-social .icon,
+.floating-contact .icon,
+.mobile-bottom-nav .icon{
+    color:inherit;
+}
+.search-box > .icon{color:#8b95a7}
+.platform-pill .icon{width:20px;text-align:center}
+.hpc-icon .icon{width:28px}
+.hero-trust-item .icon{width:16px}
+.trust-item-icon .icon{width:18px}
+.service-card-icon .icon{width:24px}
+.floating-contact .icon{width:22px}
