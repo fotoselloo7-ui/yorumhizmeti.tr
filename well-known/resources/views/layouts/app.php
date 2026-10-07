@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="<?= asset('css/premium.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
