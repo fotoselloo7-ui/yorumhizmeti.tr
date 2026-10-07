@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p /tmp/yh-assets /tmp/yh-output
           curl -L --fail --retry 3 \
-            "https://images.pexels.com/photos/16459052/pexels-photo-16459052.jpeg?cs=srgb&fm=jpg" \
+            "https://images.pexels.com/photos/16459053/pexels-photo-16459053.jpeg?cs=srgb&fm=jpg" \
             -o /tmp/yh-assets/hero.jpg
           curl -L --fail --retry 3 \
             "https://images.pexels.com/photos/6502999/pexels-photo-6502999.jpeg?cs=srgb&fm=jpg" \
