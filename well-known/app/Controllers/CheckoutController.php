@@ -34,12 +34,23 @@ class CheckoutController extends Controller
         $gatewayManager = new PaymentGatewayManager();
         $paymentOptions = $gatewayManager->getCheckoutOptions();
 
+        $testimonialSection = null;
+        try {
+            $testimonialSection = $db->fetch("SELECT * FROM home_sections WHERE section_key = 'testimonials' AND status = 'active' LIMIT 1");
+            if ($testimonialSection) {
+                $testimonialSection['extra'] = !empty($testimonialSection['extra_data']) ? json_decode($testimonialSection['extra_data'], true) : [];
+            }
+        } catch (\Exception $e) {
+            $testimonialSection = null;
+        }
+
         $this->render('frontend/checkout', [
             'pageTitle' => 'Ödeme - ' . setting('site_name'),
             'cartItems' => $cartItems,
             'total' => $total,
             'paymentOptions' => $paymentOptions,
             'user' => Auth::user(),
+            'testimonialSection' => $testimonialSection,
         ]);
     }
 
