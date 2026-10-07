@@ -1,21 +1,4 @@
-<div class="breadcrumb container" style="padding-top: var(--space-4);"><a href="/">Ana Sayfa</a> <span class="separator">/</span> <a href="/blog">Blog</a> <span class="separator">/</span> <span><?= e($category['name']) ?></span></div>
-<section class="section">
-    <div class="container">
-        <div class="section-header"><h1 style="font-size: var(--font-size-2xl);"><?= e($category['name']) ?></h1></div>
-        <?php if (!empty($posts)): ?>
-        <div class="blog-grid">
-            <?php foreach ($posts as $post): ?>
-            <div class="blog-card">
-                <div class="blog-card-image"><?php if ($post['image']): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['title']) ?>" loading="lazy"><?php else: ?><?= icon('file-text', 40) ?><?php endif; ?></div>
-                <div class="blog-card-body">
-                    <h3><a href="/blog/<?= e($post['slug']) ?>"><?= e($post['title']) ?></a></h3>
-                    <p><?= e(excerpt($post['excerpt'] ?? '', 120)) ?></p>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php else: ?>
-        <div class="empty-state"><?= icon('file-text', 48) ?><h3>Bu kategoride henüz yazı yok</h3></div>
-        <?php endif; ?>
-    </div>
-</section>
+<div class="yv-blog-home">
+<section class="yv-simple-hero"><div class="container"><div class="breadcrumb" style="margin-bottom:12px"><a href="/">Ana Sayfa</a> / <a href="/blog">Blog</a> / <span><?= e($category['name']) ?></span></div><div class="yv-kicker"><?= icon('folder',12) ?> Blog kategorisi</div><h1><?= e($category['name']) ?></h1><p><?= e($category['description'] ?? 'Bu kategorideki güncel içerik ve rehberleri keşfedin.') ?></p></div></section>
+<section style="padding:42px 0 72px;background:#f8f9fd"><div class="container"><?php if(!empty($posts)): ?><div class="yv-post-grid"><?php foreach($posts as $post): ?><a class="yv-post-card" href="/blog/<?= e($post['slug']) ?>"><div class="yv-post-image"><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>" loading="lazy"><?php else: ?><div class="yv-post-placeholder"><?= icon('file-text',26) ?></div><?php endif; ?></div><div class="yv-post-body"><small><?= e($category['name']) ?></small><h3><?= e($post['title']) ?></h3><p><?= e(excerpt(strip_tags($post['excerpt']??$post['content']??''),100)) ?></p><div class="yv-post-meta"><span><?= !empty($post['published_at'])?formatDate($post['published_at'],'d.m.Y'):'Güncel' ?></span><span><?= (int)($post['views']??0) ?> görüntülenme</span></div></div></a><?php endforeach; ?></div><?php else: ?><div class="yv-empty"><div class="yv-empty-icon"><?= icon('file-text',30) ?></div><h2>Henüz içerik yok</h2><p>Bu kategoride yayınlanmış bir yazı bulunmuyor.</p><a class="yv-btn yv-btn-primary" href="/blog">Bilgi merkezine dön</a></div><?php endif; ?></div></section>
+</div>
