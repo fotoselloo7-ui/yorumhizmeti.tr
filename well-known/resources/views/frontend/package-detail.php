@@ -21,7 +21,11 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
      <p><?= e($package['short_description'] ?: 'Markanız için güvenli, hızlı ve profesyonel dijital hizmet paketi.') ?></p>
      <div class="yv-trust-row"><span class="yv-trust-pill"><?= icon('shield',11) ?> Güvenli</span><span class="yv-trust-pill"><?= icon('zap',11) ?> Hızlı</span><span class="yv-trust-pill"><?= icon('headphones',11) ?> Destek</span></div>
     </div>
+    <?php if(!empty($package['image'])): ?>
+    <div class="yv-product-custom-image"><img src="<?= e(upload_url($package['image'])) ?>" alt="<?= e($package['image_alt'] ?? $package['name']) ?>"></div>
+    <?php else: ?>
     <div class="yv-product-phone"></div>
+    <?php endif; ?>
     <div class="yv-product-logo yv-platform-mark <?= e($pclass) ?>"><?= icon($platform,28) ?></div>
     <div class="yv-product-float one"><?= icon('check-circle',12) ?> Güvenli işlem</div>
     <div class="yv-product-float two"><?= icon('trending-up',12) ?> Marka görünürlüğü</div>
@@ -53,7 +57,7 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
    </div>
    <div></div>
   </div>
-  <?php if(!empty($relatedPackages)): ?><section class="yv-related"><div class="yv-related-head"><div><div class="yv-kicker">Benzer hizmetler</div><h2>İlgili Paketler</h2></div><a class="yv-text-link" href="/kategori/<?= e($package['category_slug']??'') ?>">Tümünü gör <?= icon('arrow-right',11) ?></a></div><div class="yv-related-grid"><?php foreach($relatedPackages as $rp): $rpPrice=(!empty($rp['discount_price'])&&$rp['discount_price']<$rp['price'])?$rp['discount_price']:$rp['price']; ?><a class="yv-package-card" href="/paket/<?= e($rp['slug']) ?>"><div class="yv-package-top"><span class="yv-platform-mark <?= e($pclass) ?>"><?= icon($platform,18) ?></span></div><h3><?= e($rp['name']) ?></h3><div class="yv-package-price"><strong><?= money($rpPrice) ?></strong></div><div class="yv-package-meta"><span>Hızlı teslimat</span><b>Detay <?= icon('arrow-right',11) ?></b></div></a><?php endforeach; ?></div></section><?php endif; ?>
+  <?php if(!empty($relatedPackages)): ?><section class="yv-related"><div class="yv-related-head"><div><div class="yv-kicker">Benzer hizmetler</div><h2>İlgili Paketler</h2></div><a class="yv-text-link" href="/kategori/<?= e($package['category_slug']??'') ?>">Tümünü gör <?= icon('arrow-right',11) ?></a></div><div class="yv-related-grid"><?php foreach($relatedPackages as $rp): $rpPrice=(!empty($rp['discount_price'])&&$rp['discount_price']<$rp['price'])?$rp['discount_price']:$rp['price']; ?><a class="yv-package-card" href="/paket/<?= e($rp['slug']) ?>"><?php if(!empty($rp['image'])): ?><div class="yv-package-cover"><img src="<?= e(upload_url($rp['image'])) ?>" alt="<?= e($rp['image_alt'] ?? $rp['name']) ?>"></div><?php endif; ?><div class="yv-package-top"><span class="yv-platform-mark <?= e($pclass) ?>"><?= icon($platform,18) ?></span></div><h3><?= e($rp['name']) ?></h3><div class="yv-package-price"><strong><?= money($rpPrice) ?></strong></div><div class="yv-package-meta"><span>Hızlı teslimat</span><b>Detay <?= icon('arrow-right',11) ?></b></div></a><?php endforeach; ?></div></section><?php endif; ?>
  </div>
 </div>
 <script>
