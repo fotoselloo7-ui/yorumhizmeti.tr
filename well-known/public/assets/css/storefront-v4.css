@@ -214,3 +214,17 @@ body{background:#fff;color:var(--yv-ink)}
 .header-search-v4:focus-within{width:205px;border-color:#b9afea;background:#fff;box-shadow:0 0 0 3px rgba(104,75,232,.07)}
 .header-search-v4 .icon{color:#8c95a8}.header-search-v4 input{width:100%;border:0!important;outline:0!important;background:transparent!important;padding:0!important;font-family:Poppins,sans-serif;font-size:9px!important;box-shadow:none!important}
 @media(max-width:1120px){.header-search-v4{display:none}}
+
+
+/* customer-panel finishing touches */
+.panel-empty-state{padding:55px 24px!important;text-align:center!important;border:1px solid #e4e8f1!important;border-radius:19px!important;background:#fff!important;box-shadow:0 10px 28px rgba(28,44,83,.04)!important}
+.panel-empty-icon{width:68px!important;height:68px!important;margin:0 auto 16px!important;border-radius:20px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:linear-gradient(135deg,#eef2ff,#fff0f8)!important;color:#6349e7!important}
+.panel-empty-state h3{font-size:17px!important;margin-bottom:7px!important}.panel-empty-state p{max-width:420px!important;margin:0 auto 16px!important;font-size:9px!important;color:#7c8699!important}
+.panel-tickets-mobile{gap:9px!important}.panel-ticket-card-top,.panel-ticket-card-meta{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:8px!important}.panel-ticket-card-subject{font-size:10px!important;font-weight:750!important;color:#1e2846!important;margin:10px 0!important}.panel-ticket-order{font-size:7px!important;color:#7c8699!important}
+.panel-pagination{display:flex!important;gap:6px!important;justify-content:center!important;margin-top:15px!important}.panel-pagination a,.panel-pagination span{width:30px!important;height:30px!important;border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:center!important;border:1px solid #e1e5ee!important;background:#fff!important;font-size:8px!important}.panel-pagination .active{background:var(--yv-grad)!important;color:#fff!important;border-color:transparent!important}
+.order-detail-sidebar .card{border:1px solid #e4e8f1!important;border-radius:17px!important;box-shadow:0 8px 24px rgba(28,44,83,.04)!important}
+.status-badge{border-radius:999px!important;padding:6px 9px!important;font-size:7px!important;font-weight:800!important}
+.panel-ticket-meta-row{display:flex!important;gap:6px!important;align-items:center!important;flex-wrap:wrap!important;margin-top:7px!important}
+.panel-chat-text{font-size:9px!important;line-height:1.75!important}
+.panel-chat-attachment{margin-top:8px!important}
+.panel-reply-filename{font-size:7px!important;color:#7e8799!important;margin-left:6px!important}
