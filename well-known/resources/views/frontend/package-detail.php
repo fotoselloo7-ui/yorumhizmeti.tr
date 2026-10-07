@@ -12,8 +12,8 @@ if (!function_exists('yvPkgDesign')) {
         return ['default','package'];
     }
 }
-$lower=mb_strtolower(($package['name']??'').' '.($package['category_name']??''));
-[$pclass,$platform]=yvPkgDesign($package['name']??'', $package['category_name']??'');
+$lower=mb_strtolower((package_display_name($package)).' '.($package['category_name']??''));
+[$pclass,$platform]=yvPkgDesign(package_display_name($package), $package['category_name']??'');
 $price=(!empty($package['discount_price'])&&$package['discount_price']<$package['price'])?$package['discount_price']:$package['price'];
 $discount=(!empty($package['discount_price'])&&$package['discount_price']<$package['price']&&$package['price']>0)?round((1-$package['discount_price']/$package['price'])*100):0;
 $reviews=$testimonialSection['extra']??[];
@@ -21,11 +21,11 @@ $reviews=$testimonialSection['extra']??[];
 <div class="yv-product-v5">
 <section class="yv-product-hero-v5 <?= e($pclass) ?>">
  <div class="container">
-  <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a><span class="sep">/</span><a href="/kategori/<?= e($package['category_slug']??'') ?>"><?= e($package['category_name']??'Hizmetler') ?></a><span class="sep">/</span><span><?= e($package['name']) ?></span></div>
+  <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a><span class="sep">/</span><a href="/kategori/<?= e($package['category_slug']??'') ?>"><?= e($package['category_name']??'Hizmetler') ?></a><span class="sep">/</span><span><?= e(package_display_name($package)) ?></span></div>
   <div class="yv-product-hero-grid-v5">
    <div class="yv-product-hero-copy-v5">
     <div class="yv-product-brand-v5"><span><?= icon($platform,30) ?></span><small><?= e($package['category_name']??'Premium Hizmet') ?></small></div>
-    <h1><?= e($package['name']) ?></h1>
+    <h1><?= e(package_display_name($package)) ?></h1>
     <p><?= e($package['short_description'] ?: 'Markanız için güvenli, hızlı ve profesyonel dijital hizmet paketi.') ?></p>
     <div class="yv-product-proof-v5">
      <div><?= icon('users',15) ?><span><b>Gerçek Kullanıcılar</b><small>%100 organik</small></span></div>
@@ -51,7 +51,7 @@ $reviews=$testimonialSection['extra']??[];
    <div class="yv-product-gallery-v5">
     <div class="yv-product-gallery-main-v5">
      <?php if(!empty($package['image'])): ?><img src="<?= e(upload_url($package['image'])) ?>" alt="<?= e($package['image_alt']??$package['name']) ?>">
-     <?php else: ?><div class="yv-product-gallery-fallback-v5"><img class="woman" src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="<?= e($package['name']) ?>"><span class="logo"><?= icon($platform,38) ?></span><div class="review">★★★★★<b>Harika hizmet!</b><small>Kesinlikle tavsiye ederim.</small></div><div class="business"><strong>Markanız</strong><span>4.9 ★★★★★</span><small>Gerçek sosyal kanıt</small></div></div><?php endif; ?>
+     <?php else: ?><div class="yv-product-gallery-fallback-v5"><img class="woman" src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="<?= e(package_display_name($package)) ?>"><span class="logo"><?= icon($platform,38) ?></span><div class="review">★★★★★<b>Harika hizmet!</b><small>Kesinlikle tavsiye ederim.</small></div><div class="business"><strong>Markanız</strong><span>4.9 ★★★★★</span><small>Gerçek sosyal kanıt</small></div></div><?php endif; ?>
     </div>
     <div class="yv-product-thumbs-v5">
      <span class="active"><?= icon($platform,18) ?></span><span><?= icon('trending-up',18) ?></span><span><?= icon('shield',18) ?></span><span><?= icon('users',18) ?></span><span><?= icon('star-fill',18) ?></span>
@@ -66,7 +66,7 @@ $reviews=$testimonialSection['extra']??[];
 
    <aside class="yv-product-buy-v5">
     <div class="yv-product-badges-v5"><span><?= e($package['badge'] ?: 'En Çok Tercih Edilen Paket') ?></span><?php if($discount): ?><b>%<?= $discount ?> İndirim</b><?php endif; ?></div>
-    <h2><?= e($package['name']) ?></h2>
+    <h2><?= e(package_display_name($package)) ?></h2>
     <div class="yv-product-rating-v5"><b>★ 4.9</b><span>Güvenli satın alma deneyimi</span></div>
     <div class="yv-product-price-v5"><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
     <p>Bu paketle markanızın görünürlüğünü ve sosyal kanıtını güçlendirin.</p>
@@ -76,7 +76,7 @@ $reviews=$testimonialSection['extra']??[];
       <label>Paket Seçimi <?= icon('help-circle',11) ?></label>
       <div>
         <?php foreach($variantPackages as $variant): $variantPrice=(!empty($variant['discount_price'])&&$variant['discount_price']<$variant['price'])?$variant['discount_price']:$variant['price']; ?>
-        <a class="<?= (int)$variant['id']===(int)$package['id']?'active':'' ?>" href="/paket/<?= e($variant['slug']) ?>"><strong><?= e(excerpt($variant['name'],28)) ?></strong><small><?= money($variantPrice) ?></small></a>
+        <a class="<?= (int)$variant['id']===(int)$package['id']?'active':'' ?>" href="/paket/<?= e($variant['slug']) ?>"><strong><?= e(excerpt(package_display_name($variant),28)) ?></strong><small><?= money($variantPrice) ?></small></a>
         <?php endforeach; ?>
       </div>
     </div>
@@ -101,7 +101,7 @@ $reviews=$testimonialSection['extra']??[];
 
 <section class="yv-product-content-v5"><div class="container">
  <div class="yv-product-tabs-v5"><span class="active">Açıklama</span><span>Özellikler</span><span>Teslimat Süreci</span><span>Sıkça Sorulan Sorular</span></div>
- <article class="yv-product-copy-v5"><h2><?= e($package['name']) ?> Nedir?</h2><div class="blog-content"><?php if(!empty($package['description'])): ?><?= $package['description'] ?><?php else: ?><p>Bu paket, ihtiyacınız olan dijital hizmeti güvenli, hızlı ve kolay bir sipariş deneyimiyle sunar. Ödeme ve gerekli bilgiler tamamlandıktan sonra siparişiniz işleme alınır ve hesabınızdan takip edilebilir.</p><?php endif; ?></div></article>
+ <article class="yv-product-copy-v5"><h2><?= e(package_display_name($package)) ?> Nedir?</h2><div class="blog-content"><?php if(!empty($package['description'])): ?><?= $package['description'] ?><?php else: ?><p>Bu paket, ihtiyacınız olan dijital hizmeti güvenli, hızlı ve kolay bir sipariş deneyimiyle sunar. Ödeme ve gerekli bilgiler tamamlandıktan sonra siparişiniz işleme alınır ve hesabınızdan takip edilebilir.</p><?php endif; ?></div></article>
  <div class="yv-product-gains-v5"><h3>Bu Paket ile Neler Kazanırsınız?</h3><div><span><?= icon('check-circle',13) ?> Daha güçlü dijital görünürlük</span><span><?= icon('check-circle',13) ?> Marka güvenilirliğinde artış</span><span><?= icon('check-circle',13) ?> Daha fazla müşteri erişimi</span><span><?= icon('check-circle',13) ?> Gerçek sosyal kanıt</span><span><?= icon('check-circle',13) ?> Hızlı ve güvenli süreç</span><span><?= icon('check-circle',13) ?> 7/24 satış sonrası destek</span></div></div>
 </div></section>
 
@@ -113,7 +113,7 @@ $reviews=$testimonialSection['extra']??[];
 
 <?php if(!empty($faqs)): ?><section class="yv-product-faq-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Sıkça sorulan sorular</div><h2>Bu paket hakkında merak edilenler.</h2></div></div><div class="yv-services-faq-grid"><?php foreach(array_slice($faqs,0,6) as $faq): ?><div class="premium-faq-item"><button type="button" class="premium-faq-question"><span><?= e($faq['question']) ?></span><?= icon('plus',12) ?></button><div class="premium-faq-answer"><?= nl2br(e($faq['answer'])) ?></div></div><?php endforeach; ?></div></div></section><?php endif; ?>
 
-<?php if(!empty($relatedPackages)): ?><section class="yv-product-related-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">İlgili paketler</div><h2>İlgili Paketler</h2><p>İşletmenizi daha da güçlendirecek diğer popüler paketlere göz atın.</p></div><a class="yv-link-button" href="/kategoriler">Tüm Paketleri Gör <?= icon('arrow-right',11) ?></a></div><div class="yv-product-related-grid-v5"><?php foreach($relatedPackages as $rp): $rpPrice=(!empty($rp['discount_price'])&&$rp['discount_price']<$rp['price'])?$rp['discount_price']:$rp['price']; [$rpClass,$rpIcon]=yvPkgDesign($rp['name']??'', $rp['category_name']??''); ?><a class="yv-product-related-card-v5 <?= e($rpClass) ?>" href="/paket/<?= e($rp['slug']) ?>"><?php if(!empty($rp['image'])): ?><img src="<?= e(upload_url($rp['image'])) ?>" alt="<?= e($rp['image_alt']??$rp['name']) ?>"><?php else: ?><div class="art <?= e($rpClass) ?>"><span><?= icon($rpIcon,28) ?></span></div><?php endif; ?><div><small><?= e($rp['category_name']??'Hizmet') ?></small><h3><?= e($rp['name']) ?></h3><ul><li><?= icon('check',10) ?> Hızlı teslimat</li><li><?= icon('check',10) ?> Güvenli işlem</li><li><?= icon('check',10) ?> 7/24 destek</li></ul><strong><?= money($rpPrice) ?></strong><em>Detayları İncele <?= icon('arrow-right',10) ?></em></div></a><?php endforeach; ?></div></div></section><?php endif; ?>
+<?php if(!empty($relatedPackages)): ?><section class="yv-product-related-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">İlgili paketler</div><h2>İlgili Paketler</h2><p>İşletmenizi daha da güçlendirecek diğer popüler paketlere göz atın.</p></div><a class="yv-link-button" href="/kategoriler">Tüm Paketleri Gör <?= icon('arrow-right',11) ?></a></div><div class="yv-product-related-grid-v5"><?php foreach($relatedPackages as $rp): $rpPrice=(!empty($rp['discount_price'])&&$rp['discount_price']<$rp['price'])?$rp['discount_price']:$rp['price']; [$rpClass,$rpIcon]=yvPkgDesign(package_display_name($rp), $rp['category_name']??''); ?><a class="yv-product-related-card-v5 <?= e($rpClass) ?>" href="/paket/<?= e($rp['slug']) ?>"><?php if(!empty($rp['image'])): ?><img src="<?= e(upload_url($rp['image'])) ?>" alt="<?= e($rp['image_alt']??$rp['name']) ?>"><?php else: ?><div class="art <?= e($rpClass) ?>"><span><?= icon($rpIcon,28) ?></span></div><?php endif; ?><div><small><?= e($rp['category_name']??'Hizmet') ?></small><h3><?= e(package_display_name($rp)) ?></h3><ul><li><?= icon('check',10) ?> Hızlı teslimat</li><li><?= icon('check',10) ?> Güvenli işlem</li><li><?= icon('check',10) ?> 7/24 destek</li></ul><strong><?= money($rpPrice) ?></strong><em>Detayları İncele <?= icon('arrow-right',10) ?></em></div></a><?php endforeach; ?></div></div></section><?php endif; ?>
 </div>
 <script>
 document.querySelectorAll('.premium-faq-question').forEach(q=>q.addEventListener('click',()=>{const a=q.nextElementSibling;a.style.display=a.style.display==='block'?'none':'block'}));
