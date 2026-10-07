@@ -66,6 +66,7 @@ class SupportController extends Controller
             'pageTitle' => 'Destek Talebi #' . $ticket['ticket_number'],
             'ticket' => $ticket,
             'messages' => $messages,
+            'user' => Auth::user(),
         ]);
     }
 
