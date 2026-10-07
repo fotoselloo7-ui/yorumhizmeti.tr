@@ -1,18 +1,1 @@
-<div class="auth-wrapper">
-    <div class="auth-card">
-        <h1>Şifremi Unuttum</h1>
-        <p class="subtitle">E-posta adresinizi girin, şifre sıfırlama linki gönderelim</p>
-        <?php if (!empty($flash['success'])): ?>
-            <div class="alert alert-success"><?= icon('check-circle', 16) ?> <span><?= e($flash['success']) ?></span></div>
-        <?php endif; ?>
-        <form method="POST" action="/sifremi-unuttum">
-            <?= csrfField() ?>
-            <div class="form-group">
-                <label for="email">E-posta</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block btn-lg"><?= icon('send', 18) ?> Gönder</button>
-        </form>
-        <p class="text-center text-sm" style="margin-top: var(--space-6);"><a href="/giris">Giriş sayfasına dön</a></p>
-    </div>
-</div>
+<div class="auth-wrapper"><div class="auth-shell-v4 compact"><div class="auth-art-v4 forgot"><a href="/" class="auth-logo-v4"><span>Y</span> YorumHizmeti.tr</a><div class="auth-art-copy"><h2>Hesabınıza yeniden erişin.</h2><p>Kayıtlı e-posta adresinizi girin. Şifre yenileme bağlantısını size gönderelim.</p></div></div><div class="auth-card"><div class="yv-kicker"><?= icon('mail',11) ?> Şifre yardımı</div><h1>Şifremi Unuttum</h1><p class="subtitle">E-posta adresinizi girin, sıfırlama bağlantısını gönderelim.</p><?php if(!empty($flash['success'])): ?><div class="alert alert-success"><?= icon('check-circle',16) ?><span><?= e($flash['success']) ?></span></div><?php endif; ?><form method="POST" action="/sifremi-unuttum"><?= csrfField() ?><div class="form-group"><label for="email">E-posta</label><input type="email" id="email" name="email" class="form-control" placeholder="ornek@email.com" required></div><button type="submit" class="btn btn-primary btn-block btn-lg"><?= icon('send',16) ?> Bağlantı Gönder</button></form><p class="text-center text-sm" style="margin-top:20px"><a href="/giris"><?= icon('arrow-left',11) ?> Giriş sayfasına dön</a></p></div></div></div>
