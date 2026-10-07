@@ -1,14 +1,1 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ödeme - <?= e(setting('site_name')) ?></title>
-    <style>body{margin:0;padding:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:100vh;}iframe{border:none;width:100%;max-width:460px;height:600px;}</style>
-</head>
-<body>
-    <?php if ($gateway === 'paytr'): ?>
-        <iframe src="https://www.paytr.com/odeme/guvenli/<?= e($iframeToken) ?>" frameborder="0" scrolling="no"></iframe>
-    <?php endif; ?>
-</body>
-</html>
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Güvenli Ödeme - <?= e(setting('site_name')) ?></title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:28px;background:radial-gradient(circle at 20% 10%,rgba(107,75,235,.16),transparent 25%),linear-gradient(135deg,#f7f9ff,#fff);font-family:Poppins,sans-serif}.shell{width:min(520px,100%);margin:auto}.head{text-align:center;margin-bottom:16px}.head b{font-size:20px;color:#111735}.head p{font-size:11px;color:#758096}.frame{overflow:hidden;border:1px solid #e1e6ef;border-radius:22px;background:#fff;box-shadow:0 24px 70px rgba(25,40,82,.14)}iframe{border:0;width:100%;height:650px;display:block}</style></head><body><div class="shell"><div class="head"><b>Güvenli Ödeme</b><p>Ödeme işleminiz güvenli ödeme sağlayıcısı üzerinden tamamlanır.</p></div><div class="frame"><?php if($gateway==='paytr'): ?><iframe src="https://www.paytr.com/odeme/guvenli/<?= e($iframeToken) ?>" scrolling="no"></iframe><?php endif; ?></div></div></body></html>
