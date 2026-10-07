@@ -168,6 +168,36 @@ function money(float $amount): string
 }
 
 /**
+ * Paket adı boş bırakılmış eski kayıtlar için güvenli görünen ad üretir.
+ * Veritabanını değiştirmez; sadece vitrindeki boş başlıkları engeller.
+ */
+function package_display_name(array $package): string
+{
+    $name = trim((string)($package['name'] ?? ''));
+    if ($name !== '') {
+        return $name;
+    }
+
+    foreach (['seo_title', 'og_title'] as $key) {
+        $candidate = trim((string)($package[$key] ?? ''));
+        if ($candidate !== '') {
+            $candidate = trim(explode('|', $candidate)[0]);
+            if ($candidate !== '') {
+                return $candidate;
+            }
+        }
+    }
+
+    $slug = trim((string)($package['slug'] ?? ''));
+    if ($slug !== '') {
+        $label = str_replace('-', ' ', $slug);
+        return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
+    }
+
+    return 'Dijital Hizmet Paketi';
+}
+
+/**
  * Tarih formatla
  */
 function formatDate(?string $date, string $format = 'd.m.Y H:i'): string
