@@ -9,7 +9,7 @@ class BlogController extends Controller
     {
         $db = Database::getInstance();
         $page = max(1, (int) ($_GET['page'] ?? 1));
-        $perPage = 9;
+        $perPage = 10;
         $offset = ($page - 1) * $perPage;
 
         $where = ["bp.status = 'active'"];
@@ -54,7 +54,17 @@ class BlogController extends Controller
         
         $posts = $db->fetchAll($sql, $params);
         $categories = $db->fetchAll("SELECT * FROM blog_categories WHERE status = 'active' ORDER BY sort_order ASC");
-        $popularPosts = $db->fetchAll("SELECT * FROM blog_posts WHERE status = 'active' ORDER BY views DESC, published_at DESC LIMIT 5");
+        $popularPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.views DESC, bp.published_at DESC LIMIT 5");
+        $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
+        $testimonialSection = null;
+        try {
+            $testimonialSection = $db->fetch("SELECT * FROM home_sections WHERE section_key = 'testimonials' AND status = 'active' LIMIT 1");
+            if ($testimonialSection) {
+                $testimonialSection['extra'] = !empty($testimonialSection['extra_data']) ? json_decode($testimonialSection['extra_data'], true) : [];
+            }
+        } catch (\Exception $e) {
+            $testimonialSection = null;
+        }
 
         $this->render('frontend/blog/index', [
             'pageTitle' => 'Blog - ' . setting('site_name'),
@@ -62,6 +72,8 @@ class BlogController extends Controller
             'posts' => $posts,
             'categories' => $categories,
             'popularPosts' => $popularPosts,
+            'faqs' => $faqs,
+            'testimonialSection' => $testimonialSection,
             'page' => $page,
             'totalPages' => max(1, ceil($total / $perPage)),
         ]);
