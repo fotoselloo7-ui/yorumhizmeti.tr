@@ -20,7 +20,7 @@ if (!function_exists('yvBlogPlatform')) {
     <div class="breadcrumb"><a href="/">Anasayfa</a><span class="separator">/</span><span>Blog / Bilgi Merkezi</span></div>
     <div class="yv-blog-hero-grid-v8">
       <div class="yv-blog-hero-copy-v8">
-        <div class="yv-kicker"><?= icon('book-open',12) ?> Blog / Bilgi Merkezi</div>
+        <div class="yv-kicker"><?= icon('file-text',12) ?> Blog / Bilgi Merkezi</div>
         <h1>Dijital Başarınız İçin<br><span>Güncel Bilgiler, Rehberler ve İpuçları!</span></h1>
         <p>Sosyal medya, Google, web siteniz ve daha fazlası için uzman bilgileri, stratejileri ve pratik rehberleri keşfedin. YorumHizmeti.tr blogu ile dijital dünyada her zaman bir adım önde olun.</p>
         <form class="yv-blog-search-v8" method="GET" action="/blog">
@@ -106,6 +106,6 @@ if (!function_exists('yvBlogPlatform')) {
 
 <?php if(!empty($faqs)): ?><section class="yv-blog-faq-v8"><div class="container"><div class="yv-blog-head-v8"><div><h2>Sıkça Sorulan Sorular</h2></div><a href="/sss">Tüm Soruları Gör <?= icon('arrow-right',10) ?></a></div><div class="yv-blog-faq-grid-v8"><?php foreach($faqs as $faq): ?><div><button type="button"><span><?= e($faq['question']) ?></span><?= icon('plus',11) ?></button><p><?= nl2br(e($faq['answer'])) ?></p></div><?php endforeach; ?></div></div></section><?php endif; ?>
 
-<section class="yv-blog-final-v8"><div class="container"><div><?= icon('book-open',23) ?><span><strong>Bilgi ile Daha Güçlü Olun!</strong><small>Sosyal medya, Google ve dijital pazarlama hakkında en güncel rehberleri keşfedin.</small></span></div><a href="/blog">Tüm Yazıları Keşfet <?= icon('arrow-right',11) ?></a><div class="yv-blog-avatars-v8"><span>A</span><span>E</span><span>M</span><b>+50.000<small>Mutlu Takipçi</small></b></div></div></section>
+<section class="yv-blog-final-v8"><div class="container"><div><?= icon('file-text',23) ?><span><strong>Bilgi ile Daha Güçlü Olun!</strong><small>Sosyal medya, Google ve dijital pazarlama hakkında en güncel rehberleri keşfedin.</small></span></div><a href="/blog">Tüm Yazıları Keşfet <?= icon('arrow-right',11) ?></a><div class="yv-blog-avatars-v8"><span>A</span><span>E</span><span>M</span><b>+50.000<small>Mutlu Takipçi</small></b></div></div></section>
 </div>
 <script>document.querySelectorAll('.yv-blog-faq-grid-v8 button').forEach(btn=>btn.addEventListener('click',()=>{const p=btn.nextElementSibling;p.style.display=p.style.display==='block'?'none':'block'}));</script>
