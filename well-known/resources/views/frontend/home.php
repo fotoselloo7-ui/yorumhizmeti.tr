@@ -38,7 +38,7 @@ if (!function_exists('yh6PackageCard')) {
                 <span class="yh6-package-icon <?= e($cls) ?>"><?= icon($ico, 22) ?></span>
                 <span class="yh6-package-badge"><?= e($pkg['badge'] ?: (!empty($pkg['is_featured']) ? 'En Popüler' : $label)) ?></span>
             </div>
-            <h3><?= e($pkg['name']) ?></h3>
+            <h3><?= e(package_display_name($pkg)) ?></h3>
             <ul>
                 <li><?= icon('check-circle', 11) ?> Güvenli ve hızlı işlem</li>
                 <li><?= icon('check-circle', 11) ?> Şifresiz sipariş süreci</li>
