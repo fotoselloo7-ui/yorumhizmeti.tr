@@ -66,7 +66,7 @@
     <?php endif; ?>
 
     <?= setting('header_script') ?>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body>
 
@@ -257,6 +257,7 @@
     </nav>
 
     <script src="<?= asset('js/app.js') ?>"></script>
+    <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?= setting('footer_script') ?>
 </body>
 </html>
