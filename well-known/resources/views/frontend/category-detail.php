@@ -75,7 +75,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
    <a class="yv-category-package-card-v5" href="/paket/<?= e($pkg['slug']) ?>">
     <div class="yv-category-package-icon-v5 <?= e($platformClass) ?>"><?= icon($platformIcon,23) ?></div>
     <?php if($index===0 || !empty($pkg['is_featured'])): ?><span class="yv-package-ribbon-v5"><?= $index===0?'EN POPÜLER':'ÇOK TERCİH EDİLEN' ?></span><?php endif; ?>
-    <h3><?= e($pkg['name']) ?></h3>
+    <h3><?= e(package_display_name($pkg)) ?></h3>
     <ul>
      <li><?= icon('check-circle',12) ?> Gerçek ve aktif kullanıcılar</li>
      <li><?= icon('check-circle',12) ?> Hızlı ve güvenli teslimat</li>
@@ -105,7 +105,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 </section>
 
 <?php if(count($packages)>=3): ?>
-<section class="yv-category-compare-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Paket karşılaştırması</div><h2>İhtiyacınıza uygun paketi seçin.</h2><p>Öne çıkan paketleri hızlıca karşılaştırın.</p></div></div><div class="yv-compare-table-wrap-v5"><table><thead><tr><th>Özellikler</th><?php foreach(array_slice($packages,0,6) as $pkg): ?><th><?= e(excerpt($pkg['name'],28)) ?></th><?php endforeach; ?></tr></thead><tbody><tr><td>Gerçek Kullanıcılar</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>Hızlı Teslimat</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= e($pkg['delivery_time'] ?: 'Hızlı') ?></td><?php endforeach; ?></tr><tr><td>Şifre Gerektirmez</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>7/24 Destek</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>Başlangıç Fiyatı</td><?php foreach(array_slice($packages,0,6) as $pkg): $p=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']; ?><td><strong><?= money($p) ?></strong></td><?php endforeach; ?></tr></tbody></table></div></div></section>
+<section class="yv-category-compare-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Paket karşılaştırması</div><h2>İhtiyacınıza uygun paketi seçin.</h2><p>Öne çıkan paketleri hızlıca karşılaştırın.</p></div></div><div class="yv-compare-table-wrap-v5"><table><thead><tr><th>Özellikler</th><?php foreach(array_slice($packages,0,6) as $pkg): ?><th><?= e(excerpt(package_display_name($pkg),28)) ?></th><?php endforeach; ?></tr></thead><tbody><tr><td>Gerçek Kullanıcılar</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>Hızlı Teslimat</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= e($pkg['delivery_time'] ?: 'Hızlı') ?></td><?php endforeach; ?></tr><tr><td>Şifre Gerektirmez</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>7/24 Destek</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>Başlangıç Fiyatı</td><?php foreach(array_slice($packages,0,6) as $pkg): $p=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']; ?><td><strong><?= money($p) ?></strong></td><?php endforeach; ?></tr></tbody></table></div></div></section>
 <?php endif; ?>
 
 <?php $reviews=$testimonialSection['extra']??[]; if(!empty($reviews)): ?>
