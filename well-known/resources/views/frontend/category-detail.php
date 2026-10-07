@@ -16,9 +16,7 @@ if (!function_exists('yvCatDesign')) {
 $categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
 $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
-$categoryHeroImage = !empty($category['image'])
-    ? upload_url($category['image'])
-    : 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=88';
+$categoryHeroCutout = asset('img/hero-woman-cutout.png');
 ?>
 <div class="yv-category-v5">
 <section class="yv-category-hero-v5 <?= e($platformClass) ?>">
