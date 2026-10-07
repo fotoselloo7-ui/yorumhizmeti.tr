@@ -41,6 +41,9 @@ if (!function_exists('yhPackageCard')) {
         ob_start();
         ?>
         <a class="yh-product-card <?= $variant === 'dark' ? 'is-dark' : '' ?>" href="/paket/<?= e($pkg['slug']) ?>">
+            <?php if (!empty($pkg['image'])): ?>
+            <div class="yh-product-cover"><img src="<?= e(upload_url($pkg['image'])) ?>" alt="<?= e($pkg['image_alt'] ?? $pkg['name']) ?>"></div>
+            <?php endif; ?>
             <div class="yh-product-top">
                 <span class="yh-platform-icon <?= e($platform['class']) ?>">
                     <?= icon($platform['icon'], 18) ?>
