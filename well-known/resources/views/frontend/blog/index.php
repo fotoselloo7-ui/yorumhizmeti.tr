@@ -31,7 +31,7 @@ if (!function_exists('yvBlogPlatform')) {
         <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Google Yorum</span><span>Instagram Etkileşim</span><span>TikTok Takipçi</span><span>SEO</span></div>
       </div>
       <div class="yv-blog-hero-art-v8">
-        <div class="yv-blog-woman-v8"></div>
+        <img class="yv-blog-woman-v8" src="<?= e(asset('img/blog-woman-cutout.png')) ?>" alt="YorumHizmeti bilgi merkezi" loading="eager">
         <span class="yv-blog-float-v8 google"><?= icon('google',25) ?></span>
         <span class="yv-blog-float-v8 instagram"><?= icon('instagram',24) ?></span>
         <span class="yv-blog-float-v8 tiktok"><?= icon('tiktok',23) ?></span>
