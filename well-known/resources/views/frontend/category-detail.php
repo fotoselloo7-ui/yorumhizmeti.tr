@@ -13,6 +13,12 @@ if (!function_exists('yvCatDesign')) {
     }
 }
 [$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
+$categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
+$categoryLead = array_shift($categoryWords) ?: 'Dijital';
+$categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
+$categoryHeroImage = !empty($category['image'])
+    ? upload_url($category['image'])
+    : 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=88';
 ?>
 <div class="yv-category-v5">
 <section class="yv-category-hero-v5 <?= e($platformClass) ?>">
@@ -21,7 +27,7 @@ if (!function_exists('yvCatDesign')) {
   <div class="yv-category-hero-grid-v5">
    <div>
     <div class="yv-category-brand-v5"><span><?= icon($platformIcon,26) ?></span><small><?= e($category['name']) ?></small></div>
-    <h1><?= e($category['name']) ?></h1>
+    <h1><span class="yv-cat-title-lead"><?= e($categoryLead) ?></span><span class="yv-cat-title-accent"><?= e($categoryRest) ?></span></h1>
     <p><?= e($category['description'] ?: 'İhtiyacınıza uygun, güvenli ve hızlı dijital hizmet paketlerini keşfedin. Siparişinizi kolayca oluşturun ve süreci hesabınızdan takip edin.') ?></p>
     <div class="yv-category-benefits-v5">
      <span><?= icon('zap',13) ?><b>Hızlı Teslimat</b><small>Dakikalar içinde</small></span>
@@ -32,7 +38,7 @@ if (!function_exists('yvCatDesign')) {
     <a class="yv-btn yv-btn-primary" href="#packages">Hemen Paketleri İncele <?= icon('arrow-right',12) ?></a>
    </div>
    <div class="yv-category-hero-art-v5">
-    <div class="yv-category-hero-woman-v5"></div>
+    <div class="yv-category-hero-woman-v5" style="--cat-hero-image:url('<?= e($categoryHeroImage) ?>')"></div>
     <span class="yv-category-brand-orbit-v5 main"><?= icon($platformIcon,34) ?></span>
     <span class="yv-category-brand-orbit-v5 small one"><?= icon('heart',18) ?></span>
     <span class="yv-category-brand-orbit-v5 small two"><?= icon('trending-up',18) ?></span>
