@@ -1,0 +1,30 @@
+[01-Jul-2026 18:01:32 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yorumhizmeti_yorumhizmeti.admin_activity_logs' doesn't exist in /home/yorumhizmeti/public_html/app/Core/Database.php:48
+Stack trace:
+#0 /home/yorumhizmeti/public_html/app/Core/Database.php(48): PDO->prepare('SELECT * FROM a...')
+#1 /home/yorumhizmeti/public_html/app/Core/Database.php(61): App\Core\Database->query('SELECT * FROM a...', Array)
+#2 /home/yorumhizmeti/public_html/app/Controllers/Admin/SettingsController.php(158): App\Core\Database->fetchAll('SELECT * FROM a...')
+#3 [internal function]: App\Controllers\Admin\SettingsController->logs()
+#4 /home/yorumhizmeti/public_html/app/Core/Router.php(99): call_user_func_array(Array, Array)
+#5 /home/yorumhizmeti/public_html/app/Core/Router.php(39): App\Core\Router->callAction('Admin\\SettingsC...')
+#6 /home/yorumhizmeti/public_html/app/Core/App.php(30): App\Core\Router->dispatch()
+#7 /home/yorumhizmeti/public_html/public/index.php(64): App\Core\App->run()
+#8 {main}
+  thrown in /home/yorumhizmeti/public_html/app/Core/Database.php on line 48
+[01-Jul-2026 20:30:23 UTC] PHP Fatal error:  Uncaught TypeError: Cannot access offset of type string on string in /home/yorumhizmeti/public_html/resources/views/admin/import/index.php:54
+Stack trace:
+#0 /home/yorumhizmeti/public_html/app/Core/View.php(48): require()
+#1 /home/yorumhizmeti/public_html/app/Core/Controller.php(22): App\Core\View->render('admin/import/in...', Array, 'admin')
+#2 /home/yorumhizmeti/public_html/app/Controllers/Admin/SettingsController.php(166): App\Core\Controller->renderAdmin('admin/import/in...', Array)
+#3 [internal function]: App\Controllers\Admin\SettingsController->importPage()
+#4 /home/yorumhizmeti/public_html/app/Core/Router.php(99): call_user_func_array(Array, Array)
+#5 /home/yorumhizmeti/public_html/app/Core/Router.php(39): App\Core\Router->callAction('Admin\\SettingsC...')
+#6 /home/yorumhizmeti/public_html/app/Core/App.php(30): App\Core\Router->dispatch()
+#7 /home/yorumhizmeti/public_html/public/index.php(64): App\Core\App->run()
+#8 {main}
+  thrown in /home/yorumhizmeti/public_html/resources/views/admin/import/index.php on line 54
+[02-Jul-2026 00:53:46 UTC] PHP Deprecated:  rtrim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/yorumhizmeti/public_html/app/Core/Router.php on line 51
+[02-Jul-2026 00:53:46 UTC] PHP Deprecated:  rtrim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/yorumhizmeti/public_html/app/Core/Router.php on line 51
+[02-Jul-2026 00:53:49 UTC] PHP Deprecated:  rtrim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/yorumhizmeti/public_html/app/Core/Router.php on line 51
+[02-Jul-2026 00:53:49 UTC] PHP Deprecated:  rtrim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/yorumhizmeti/public_html/app/Core/Router.php on line 51
+[02-Jul-2026 00:53:54 UTC] PHP Deprecated:  rtrim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/yorumhizmeti/public_html/app/Core/Router.php on line 51
+[02-Jul-2026 00:53:54 UTC] PHP Deprecated:  rtrim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/yorumhizmeti/public_html/app/Core/Router.php on line 51
