@@ -1,0 +1,74 @@
+name: Build transparent brand cutouts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-transparent-brand-assets.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-cutouts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install background remover
+        run: |
+          python -m pip install --upgrade pip
+          pip install "rembg[cpu]" pillow
+
+      - name: Download licensed source photos
+        run: |
+          mkdir -p /tmp/yh-assets well-known/public/assets/img
+          curl -L --fail --retry 3             "https://images.unsplash.com/photo-1615890643735-6cd26210d646?auto=format&fit=crop&w=1800&q=90"             -o /tmp/yh-assets/hero.jpg
+          curl -L --fail --retry 3             "https://images.unsplash.com/photo-1619852182277-79aa23f82c8e?auto=format&fit=crop&w=1800&q=90"             -o /tmp/yh-assets/blog.jpg
+          curl -L --fail --retry 3             "https://images.unsplash.com/photo-1766066014237-00645c74e9c6?auto=format&fit=crop&w=1800&q=90"             -o /tmp/yh-assets/support.jpg
+
+      - name: Remove backgrounds
+        run: |
+          rembg i /tmp/yh-assets/hero.jpg well-known/public/assets/img/hero-woman-cutout.png
+          rembg i /tmp/yh-assets/blog.jpg well-known/public/assets/img/blog-woman-cutout.png
+          rembg i /tmp/yh-assets/support.jpg well-known/public/assets/img/support-woman-cutout.png
+
+      - name: Normalize PNG dimensions and trim
+        run: |
+          python - <<'PY'
+          from PIL import Image, ImageChops
+          from pathlib import Path
+
+          for p in Path("well-known/public/assets/img").glob("*-woman-cutout.png"):
+              im = Image.open(p).convert("RGBA")
+              alpha = im.getchannel("A")
+              bbox = alpha.getbbox()
+              if bbox:
+                  im = im.crop(bbox)
+              max_h = 1500
+              if im.height > max_h:
+                  ratio = max_h / im.height
+                  im = im.resize((max(1, int(im.width * ratio)), max_h), Image.Resampling.LANCZOS)
+              im.save(p, optimize=True)
+              print(p, im.size, "alpha:", im.getchannel("A").getextrema())
+          PY
+
+      - name: Commit generated transparent assets
+        run: |
+          git config user.name "YorumHizmeti Visual Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add well-known/public/assets/img/*-woman-cutout.png
+          if git diff --cached --quiet; then
+            echo "No generated asset changes."
+            exit 0
+          fi
+          git commit -m "Generate transparent cutout brand imagery"
+          git push
