@@ -12,7 +12,7 @@ class PackageController extends Controller
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
         $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order ASC", [$package['id']]);
-        $variantPackages = $db->fetchAll("SELECT id, name, slug, price, discount_price FROM packages WHERE category_id = ? AND status = 'active' ORDER BY sort_order ASC LIMIT 3", [$package['category_id']]);
+        $variantPackages = $db->fetchAll("SELECT id, name, slug, price, discount_price, seo_title, og_title FROM packages WHERE category_id = ? AND status = 'active' ORDER BY sort_order ASC LIMIT 3", [$package['category_id']]);
         $relatedPackages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id != ? AND p.status = 'active' ORDER BY (p.category_id = ?) ASC, p.is_featured DESC, p.sort_order ASC LIMIT 4", [$package['id'], $package['category_id']]);
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
         $testimonialSection = null;
@@ -28,7 +28,7 @@ class PackageController extends Controller
         $schema = json_encode([
             '@context' => 'https://schema.org',
             '@type' => 'Product',
-            'name' => $package['name'],
+            'name' => package_display_name($package),
             'description' => strip_tags($package['short_description'] ?? ''),
             'offers' => [
                 '@type' => 'Offer',
@@ -39,7 +39,7 @@ class PackageController extends Controller
         ], JSON_UNESCAPED_UNICODE);
 
         $this->render('frontend/package-detail', [
-            'pageTitle' => $package['seo_title'] ?: $package['name'] . ' - ' . setting('site_name'),
+            'pageTitle' => $package['seo_title'] ?: package_display_name($package) . ' - ' . setting('site_name'),
             'metaDescription' => $package['seo_description'] ?: excerpt(strip_tags($package['short_description'] ?? ''), 160),
             'canonicalUrl' => url('/paket/' . $package['slug']),
             'schema' => $schema,
