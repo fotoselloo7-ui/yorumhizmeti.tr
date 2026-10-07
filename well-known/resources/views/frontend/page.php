@@ -1,9 +1,1 @@
-<section class="section">
-    <div class="container">
-        <div class="breadcrumb mb-4"><a href="/">Ana Sayfa</a> <span class="separator">/</span> <span><?= e($page['title']) ?></span></div>
-        <div class="blog-content card" style="max-width: 800px; margin: 0 auto;">
-            <h1><?= e($page['title']) ?></h1>
-            <?= $page['content'] ?>
-        </div>
-    </div>
-</section>
+<section class="yv-simple-hero"><div class="container"><div class="yv-kicker"><?= icon('file-text',12) ?> YorumHizmeti.tr</div><h1><?= e($page['title']) ?></h1><p>Şeffaf, anlaşılır ve güncel bilgilendirmeler.</p></div></section><section class="yv-content-page"><div class="container"><article class="yv-content-card"><div class="breadcrumb" style="margin-bottom:18px"><a href="/">Ana Sayfa</a> / <span><?= e($page['title']) ?></span></div><?= $page['content'] ?></article></div></section>
