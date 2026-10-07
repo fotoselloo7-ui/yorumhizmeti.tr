@@ -1,8 +1,8 @@
-<section class="section">
+<section class="section panel-section">
     <div class="container">
-        <div class="user-dashboard">
+        <div class="panel-layout">
             <?php include __DIR__ . '/../partials/user-sidebar.php'; ?>
-            <div>
+            <div class="panel-content">
                 <!-- Üst Başlık (Header) -->
                 <div class="order-detail-header fade-in-up">
                     <div style="display:flex; align-items:center; gap:var(--space-4);">
