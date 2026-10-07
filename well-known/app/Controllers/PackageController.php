@@ -12,7 +12,7 @@ class PackageController extends Controller
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
         $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order ASC", [$package['id']]);
-        $relatedPackages = $db->fetchAll("SELECT * FROM packages WHERE category_id = ? AND id != ? AND status = 'active' ORDER BY sort_order ASC LIMIT 4", [$package['category_id'], $package['id']]);
+        $relatedPackages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = ? AND p.id != ? AND p.status = 'active' ORDER BY p.sort_order ASC LIMIT 4", [$package['category_id'], $package['id']]);
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
         $testimonialSection = null;
         try {
