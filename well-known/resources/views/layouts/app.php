@@ -163,25 +163,22 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
-            <div class="footer-grid">
+            <div class="footer-grid footer-grid-v9">
                 <div class="footer-brand">
                     <h3><?= e(setting('site_name', 'Yorum Hizmeti')) ?></h3>
-                    <p><?= e(setting('site_slogan', '')) ?></p>
-                    <p style="margin-top: 12px;">
-                        <?php if (setting('site_email')): ?>
-                            <?= icon('mail', 14) ?> <?= e(setting('site_email')) ?><br>
-                        <?php endif; ?>
-                        <?php if (setting('site_phone')): ?>
-                            <?= icon('phone', 14) ?> <?= e(setting('site_phone')) ?>
-                        <?php endif; ?>
-                    </p>
+                    <p><?= e(setting('site_slogan', 'Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web ve dijital çözümlere kadar güvenilir hizmet ortağınız.')) ?></p>
+                    <div class="footer-social footer-social-v9">
+                        <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
+                        <?php if (setting('social_youtube')): ?><a href="<?= e(setting('social_youtube')) ?>" target="_blank" rel="noopener" aria-label="YouTube"><?= icon('youtube', 15) ?></a><?php endif; ?>
+                        <?php if (setting('social_twitter')): ?><a href="<?= e(setting('social_twitter')) ?>" target="_blank" rel="noopener" aria-label="X"><?= icon('twitter', 15) ?></a><?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="footer-col">
-                    <h4>Hizmetler</h4>
+                    <h4>Hizmetlerimiz</h4>
                     <?php
                     try {
-                        $footerCats = \App\Core\Database::getInstance()->fetchAll("SELECT name, slug FROM categories WHERE status = 'active' ORDER BY sort_order LIMIT 6");
+                        $footerCats = \App\Core\Database::getInstance()->fetchAll("SELECT name, slug FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order LIMIT 6");
                         foreach ($footerCats as $fc):
                     ?>
                         <a href="/kategori/<?= e($fc['slug']) ?>"><?= e($fc['name']) ?></a>
@@ -189,47 +186,41 @@
                 </div>
 
                 <div class="footer-col">
-                    <h4>Bilgi</h4>
+                    <h4>Kurumsal</h4>
                     <a href="/sayfa/hakkimizda">Hakkımızda</a>
                     <a href="/blog">Blog</a>
                     <a href="/sss">Sıkça Sorulan Sorular</a>
                     <a href="/iletisim">İletişim</a>
+                    <a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a>
+                    <a href="/sayfa/kvkk">KVKK</a>
                 </div>
 
-                <div class="footer-col">
-                    <h4>Yasal</h4>
-                    <a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a>
-                    <a href="/sayfa/mesafeli-satis-sozlesmesi">Mesafeli Satış Sözleşmesi</a>
-                    <a href="/sayfa/kvkk">KVKK</a>
-                    <a href="/sayfa/iade-teslimat-politikasi">İade Politikası</a>
+                <div class="footer-col footer-contact-v9">
+                    <h4>İletişim</h4>
+                    <?php if (setting('site_phone')): ?><a href="tel:<?= e(setting('site_phone')) ?>"><?= icon('phone', 12) ?> <?= e(setting('site_phone')) ?></a><?php endif; ?>
+                    <?php if (setting('site_email')): ?><a href="mailto:<?= e(setting('site_email')) ?>"><?= icon('mail', 12) ?> <?= e(setting('site_email')) ?></a><?php endif; ?>
+                    <?php if (setting('whatsapp_number')): ?><a href="https://wa.me/<?= e(ltrim(str_replace(['+', ' '], '', setting('whatsapp_number')), '0')) ?>" target="_blank" rel="noopener"><?= icon('whatsapp', 12) ?> WhatsApp Destek</a><?php endif; ?>
+                    <span><?= icon('headphones', 12) ?> 7/24 Canlı Destek</span>
+                </div>
+
+                <div class="footer-col footer-subscribe-v9">
+                    <h4>E-Bülten</h4>
+                    <p>Kampanya ve yeniliklerden haberdar olun.</p>
+                    <div class="footer-newsletter-form">
+                        <input type="email" aria-label="E-posta" placeholder="E-posta adresiniz">
+                        <button type="button" aria-label="Gönder"><?= icon('arrow-right', 12) ?></button>
+                    </div>
                 </div>
             </div>
 
-            <div class="footer-newsletter-v4">
-                <div>
-                    <span><?= icon('mail', 18) ?></span>
-                    <div><strong>Fırsatları kaçırmayın</strong><small>Yeni hizmet ve kampanyalardan haberdar olun.</small></div>
-                </div>
-                <div class="footer-newsletter-form">
-                    <input type="email" aria-label="E-posta" placeholder="E-posta adresiniz">
-                    <button type="button" aria-label="Gönder"><?= icon('arrow-right', 14) ?></button>
-                </div>
-                <div class="footer-payments-v4"><span>VISA</span><span>Mastercard</span><span>TROY</span><span><?= icon('lock', 12) ?> SSL</span></div>
+            <div class="footer-trust-v9">
+                <div class="footer-payments-v4"><span>VISA</span><span>Mastercard</span><span>TROY</span><span><?= icon('lock', 11) ?> Güvenli Ödeme</span></div>
+                <div class="footer-legal-v9"><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a><a href="/sayfa/kullanim-sartlari">Kullanım Şartları</a><a href="/sayfa/iade-teslimat-politikasi">İade Politikası</a></div>
             </div>
 
             <div class="footer-bottom">
-                <span><?= e(setting('footer_text', '© ' . date('Y') . ' Yorum Hizmeti')) ?></span>
-                <div class="footer-social">
-                    <?php if (setting('social_instagram')): ?>
-                        <a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 18) ?></a>
-                    <?php endif; ?>
-                    <?php if (setting('social_youtube')): ?>
-                        <a href="<?= e(setting('social_youtube')) ?>" target="_blank" rel="noopener" aria-label="YouTube"><?= icon('youtube', 18) ?></a>
-                    <?php endif; ?>
-                    <?php if (setting('social_twitter')): ?>
-                        <a href="<?= e(setting('social_twitter')) ?>" target="_blank" rel="noopener" aria-label="X"><?= icon('twitter', 18) ?></a>
-                    <?php endif; ?>
-                </div>
+                <span><?= e(setting('footer_text', '© ' . date('Y') . ' YorumHizmeti.tr - Tüm hakları saklıdır.')) ?></span>
+                <span><?= icon('shield', 11) ?> Güvenli Ödeme · 7/24 Destek · %100 Müşteri Memnuniyeti</span>
             </div>
         </div>
     </footer>
