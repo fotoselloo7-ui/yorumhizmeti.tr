@@ -237,9 +237,9 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
     <div class="container">
         <div class="yh6-section-head"><div><span class="yh6-eyebrow">Bilgi Merkezi</span><h2>Son Blog Yazıları</h2><p>Sosyal medya ve dijital pazarlama hakkında en güncel içerikler.</p></div><a href="/blog" class="yh6-link">Tüm Yazılar <?= icon('arrow-right',10) ?></a></div>
         <div class="yh6-blog-grid">
-            <?php foreach(array_slice($latestPosts,0,4) as $post): ?>
+            <?php foreach(array_slice($latestPosts,0,4) as $post): [$postCls,$postIco,$postLabel]=yh6Platform($post['category_slug']??'', $post['category_name']??$post['title']); ?>
             <a href="/blog/<?= e($post['slug']) ?>" class="yh6-blog-card">
-                <div class="yh6-blog-image"><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><?php else: ?><span><?= icon('file-text',25) ?></span><?php endif; ?></div>
+                <div class="yh6-blog-image <?= e($postCls) ?>"><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><?php else: ?><span><?= icon($postIco,28) ?></span><?php endif; ?></div>
                 <div><small><?= e($post['category_name']??'Rehber') ?></small><h3><?= e($post['title']) ?></h3><p><?= e(excerpt(strip_tags($post['excerpt']??$post['content']??''),95)) ?></p><em><?= !empty($post['published_at'])?formatDate($post['published_at'],'d M Y'):'Güncel' ?> · 5 dk okuma</em></div>
             </a>
             <?php endforeach; ?>
