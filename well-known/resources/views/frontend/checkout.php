@@ -22,7 +22,17 @@
     elseif(str_contains($nameLower,'youtube')){$ico='youtube';$cls='youtube';}
     elseif(str_contains($nameLower,'google')){$ico='google';$cls='google';}
     elseif(str_contains($nameLower,'facebook')){$ico='facebook';$cls='facebook';}
-   ?><div class="yv-checkout-product-v5"><span class="<?= e($cls) ?>"><?= icon($ico,23) ?></span><div><strong><?= e($item['name']) ?></strong><small><?= (int)$item['quantity'] ?> adet · <?= e($item['delivery_time']??'Hızlı teslimat') ?></small></div><b><?= money($item['line_total']) ?></b></div><?php endforeach; ?>
+   ?><div class="yv-checkout-product-v5">
+      <span class="<?= e($cls) ?>"><?= icon($ico,23) ?></span>
+      <div><strong><?= e($item['name']) ?></strong><small><?= e($item['delivery_time']??'Hızlı teslimat') ?></small></div>
+      <div class="yv-checkout-qty-v9">
+        <button type="button" onclick="changeCheckoutQty(<?= (int)$item['cart_key'] ?>,<?= max(1,(int)$item['quantity']-1) ?>)" aria-label="Azalt">−</button>
+        <b><?= (int)$item['quantity'] ?></b>
+        <button type="button" onclick="changeCheckoutQty(<?= (int)$item['cart_key'] ?>,<?= min((int)($item['max_quantity']?:9999),(int)$item['quantity']+1) ?>)" aria-label="Artır">+</button>
+      </div>
+      <strong class="yv-checkout-line-total-v9"><?= money($item['line_total']) ?></strong>
+      <button class="yv-checkout-remove-v9" type="button" onclick="removeCheckoutItem(<?= (int)$item['cart_key'] ?>)" aria-label="Sepetten çıkar"><?= icon('trash',13) ?></button>
+    </div><?php endforeach; ?>
   </div>
   <div class="yv-checkout-campaign-v9"><span><?= icon('package',16) ?></span><div><strong>Kampanya Avantajı</strong><small>Uygun kampanyalar ve paket indirimleri sipariş özetine otomatik yansıtılır.</small></div><em><?= icon('check-circle',12) ?> Otomatik uygulanır</em></div>
   </section>
@@ -52,4 +62,13 @@
 <section class="yv-checkout-reviews-v9"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker"><?= icon('message-circle',11) ?> Gerçek kullanıcı deneyimleri</div><h2>Müşterilerimiz Ne Diyor?</h2><p>Binlerce müşterimizin arasına siz de katılın.</p></div><a href="/" class="yv-link-button">Tüm Yorumları Gör <?= icon('arrow-right',10) ?></a></div><div class="yv-checkout-review-grid-v9"><?php foreach(array_slice($checkoutReviews,0,3) as $review): ?><article><div><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><b><?= e($review['name']??'Müşteri') ?></b><em>★★★★★</em></div><p><?= e($review['text']??'') ?></p></article><?php endforeach; ?></div></div></section>
 <?php endif; ?>
 </div>
-<script>document.getElementById('checkoutForm').addEventListener('submit',function(){if(!this.checkValidity())return;const b=document.getElementById('btnCheckoutSubmit');b.disabled=true;b.textContent='Lütfen bekleyin...'});</script>
+<script>
+const checkoutCsrf=document.querySelector('#checkoutForm input[name="_csrf_token"]')?.value||'';
+function checkoutCartPost(url,data){
+  const body=new URLSearchParams({...data,_csrf_token:checkoutCsrf});
+  fetch(url,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','X-Requested-With':'XMLHttpRequest'},body:body.toString()}).then(()=>location.reload());
+}
+function changeCheckoutQty(key,qty){ if(qty<1)return; checkoutCartPost('/sepet/guncelle',{key,quantity:qty}); }
+function removeCheckoutItem(key){ checkoutCartPost('/sepet/sil',{key}); }
+document.getElementById('checkoutForm').addEventListener('submit',function(){if(!this.checkValidity())return;const b=document.getElementById('btnCheckoutSubmit');b.disabled=true;b.textContent='Lütfen bekleyin...'});
+</script>
