@@ -273,3 +273,12 @@ body{font-family:Poppins,system-ui,sans-serif!important;background:#fff;color:va
 .yv-product-variants-v9 a.active{border-color:#2868ff;box-shadow:0 0 0 1px #2868ff;background:#f6f9ff}
 .yv-product-variants-v9 strong{font-size:6.5px;line-height:1.25}.yv-product-variants-v9 small{font-size:7px;color:#5d48df;font-weight:800}
 @media(max-width:500px){.yv-product-variants-v9>div{grid-template-columns:1fr}}
+
+
+/* ---------- functional checkout quantity controls ---------- */
+.yv-checkout-product-v5{grid-template-columns:46px minmax(0,1fr) 88px 80px 28px!important}
+.yv-checkout-qty-v9{display:grid;grid-template-columns:26px 28px 26px;align-items:center;justify-content:center;border:1px solid #e2e6ef;border-radius:8px;overflow:hidden;background:#fff}
+.yv-checkout-qty-v9 button{height:29px;border:0;background:#f8f9fd;color:#42506b;font-family:inherit;font-size:12px;cursor:pointer}.yv-checkout-qty-v9 button:hover{background:#eef2ff;color:#6049df}.yv-checkout-qty-v9 b{text-align:center;font-size:7px}
+.yv-checkout-line-total-v9{text-align:right;font-size:10px!important;color:#1d2947}
+.yv-checkout-remove-v9{width:28px;height:28px;border:0;border-radius:8px;background:#fff1f5;color:#ef3f72;display:flex;align-items:center;justify-content:center;cursor:pointer}
+@media(max-width:650px){.yv-checkout-product-v5{grid-template-columns:42px minmax(0,1fr) 76px 24px!important}.yv-checkout-line-total-v9{grid-column:2/3;text-align:left!important}.yv-checkout-remove-v9{grid-column:4;grid-row:1}.yv-checkout-qty-v9{grid-column:3;grid-row:1/3}}
