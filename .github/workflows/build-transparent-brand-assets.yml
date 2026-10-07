@@ -31,9 +31,9 @@ jobs:
       - name: Download licensed source photos
         run: |
           mkdir -p /tmp/yh-assets well-known/public/assets/img
-          curl -L --fail --retry 3             "https://images.unsplash.com/photo-1610788725779-e51d62d1e571?auto=format&fit=crop&w=1800&q=90"             -o /tmp/yh-assets/hero.jpg
-          curl -L --fail --retry 3             "https://images.unsplash.com/photo-1619852182277-79aa23f82c8e?auto=format&fit=crop&w=1800&q=90"             -o /tmp/yh-assets/blog.jpg
-          curl -L --fail --retry 3             "https://images.unsplash.com/photo-1766066014237-00645c74e9c6?auto=format&fit=crop&w=1800&q=90"             -o /tmp/yh-assets/support.jpg
+          curl -L --fail --retry 3             "https://images.pexels.com/photos/16459052/pexels-photo-16459052.jpeg?cs=srgb&fm=jpg"             -o /tmp/yh-assets/hero.jpg
+          curl -L --fail --retry 3             "https://images.pexels.com/photos/6502999/pexels-photo-6502999.jpeg?cs=srgb&fm=jpg"             -o /tmp/yh-assets/blog.jpg
+          curl -L --fail --retry 3             "https://images.pexels.com/photos/6502997/pexels-photo-6502997.jpeg?cs=srgb&fm=jpg"             -o /tmp/yh-assets/support.jpg
 
       - name: Remove backgrounds
         run: |
