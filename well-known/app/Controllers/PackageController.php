@@ -12,7 +12,17 @@ class PackageController extends Controller
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
         $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order ASC", [$package['id']]);
-        $relatedPackages = $db->fetchAll("SELECT * FROM packages WHERE category_id = ? AND id != ? AND status = 'active' ORDER BY sort_order ASC LIMIT 3", [$package['category_id'], $package['id']]);
+        $relatedPackages = $db->fetchAll("SELECT * FROM packages WHERE category_id = ? AND id != ? AND status = 'active' ORDER BY sort_order ASC LIMIT 4", [$package['category_id'], $package['id']]);
+        $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
+        $testimonialSection = null;
+        try {
+            $testimonialSection = $db->fetch("SELECT * FROM home_sections WHERE section_key = 'testimonials' AND status = 'active' LIMIT 1");
+            if ($testimonialSection) {
+                $testimonialSection['extra'] = !empty($testimonialSection['extra_data']) ? json_decode($testimonialSection['extra_data'], true) : [];
+            }
+        } catch (\Exception $e) {
+            $testimonialSection = null;
+        }
 
         $schema = json_encode([
             '@context' => 'https://schema.org',
@@ -35,6 +45,8 @@ class PackageController extends Controller
             'package' => $package,
             'fields' => $fields,
             'relatedPackages' => $relatedPackages,
+            'faqs' => $faqs,
+            'testimonialSection' => $testimonialSection,
         ]);
     }
 }
