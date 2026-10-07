@@ -51,7 +51,7 @@ Site adresi: [http://127.0.0.1:8006](http://127.0.0.1:8006)
 ## Admin Panel
 
 - URL: `/admin/giris`
-- Varsayılan giriş: `admin@yorumhizmeti.tr` / `admin123`
+- Varsayılan giriş: `admin@yorumhizmeti.tr` / `Admin123!`
 
 ## Proje Yapısı
 
