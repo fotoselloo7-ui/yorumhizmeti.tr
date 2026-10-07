@@ -19,7 +19,7 @@
     <meta property="og:image" content="<?= e($ogImage) ?>">
     <?php endif; ?>
     <meta property="og:url" content="<?= e($canonicalUrl ?? url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
-    <meta property="og:site_name" content="<?= e(setting('site_name', 'Yorum Hizmeti')) ?>">
+    <meta property="og:site_name" content="YorumHizmeti.tr">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
@@ -30,6 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 
     <!-- CSS -->
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
@@ -39,6 +40,7 @@
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -165,7 +167,7 @@
         <div class="container">
             <div class="footer-grid footer-grid-v9">
                 <div class="footer-brand">
-                    <h3><?= e(setting('site_name', 'Yorum Hizmeti')) ?></h3>
+                    <h3>YorumHizmeti.tr</h3>
                     <p><?= e(setting('site_slogan', 'Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web ve dijital çözümlere kadar güvenilir hizmet ortağınız.')) ?></p>
                     <div class="footer-social footer-social-v9">
                         <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
