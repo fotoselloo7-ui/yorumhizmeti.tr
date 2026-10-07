@@ -278,7 +278,7 @@
   .yv-category-hero-woman-v5{right:8%!important;width:69%!important;height:95%!important;max-height:290px!important}
   .yv-category-float-v5.c{right:1%!important;top:72px!important}
   .yv-blog-woman-v8{right:7%!important;width:72%!important;height:94%!important;max-height:275px!important}
-  .yv-blog-hero-art-v8:after{left:27%;width:155px;height:52px}
+  .yv-blog-hero-art-v8:after{right:0;top:16%;width:74px;height:74px}
   .yv-checkout-support-v5 .woman{width:57%!important;height:92%!important}
   .yv-product-gallery-fallback-v5 .woman{left:3%!important;width:59%!important;height:92%!important}
   .yh6-review-grid,.yv-category-review-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
