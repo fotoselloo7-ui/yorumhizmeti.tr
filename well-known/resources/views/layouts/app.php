@@ -215,7 +215,7 @@
 
             <div class="footer-trust-v9">
                 <div class="footer-payments-v4"><span>VISA</span><span>Mastercard</span><span>TROY</span><span><?= icon('lock', 11) ?> Güvenli Ödeme</span></div>
-                <div class="footer-legal-v9"><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a><a href="/sayfa/kullanim-sartlari">Kullanım Şartları</a><a href="/sayfa/iade-teslimat-politikasi">İade Politikası</a></div>
+                <div class="footer-legal-v9"><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a><a href="/sayfa/mesafeli-satis-sozlesmesi">Kullanım Şartları</a><a href="/sayfa/iade-teslimat-politikasi">İade Politikası</a></div>
             </div>
 
             <div class="footer-bottom">
