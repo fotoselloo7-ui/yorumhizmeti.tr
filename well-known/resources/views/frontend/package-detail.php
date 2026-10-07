@@ -89,7 +89,7 @@ $reviews=$testimonialSection['extra']??[];
       <?php elseif($field['field_type']==='select'): ?><select class="form-control" name="field_<?= $package['id'] ?>_<?= e($field['field_key']) ?>" <?= $field['is_required']?'required':'' ?>><option value="">Seçiniz</option><?php foreach(explode(',',$field['options']??'') as $opt): if(trim($opt)!==''): ?><option value="<?= e(trim($opt)) ?>"><?= e(trim($opt)) ?></option><?php endif; endforeach; ?></select>
       <?php else: ?><input class="form-control" type="<?= $field['field_type']==='url'?'url':'text' ?>" name="field_<?= $package['id'] ?>_<?= e($field['field_key']) ?>" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>><?php endif; ?>
      </div><?php endforeach; endif; ?>
-     <?php if(($package['max_quantity']??1)>1): ?><div class="yv-form-group"><label>Adet</label><input class="form-control" type="number" name="quantity" value="<?= (int)($package['min_quantity']?:1) ?>" min="<?= (int)($package['min_quantity']?:1) ?>" max="<?= (int)$package['max_quantity'] ?>"></div><?php else: ?><input type="hidden" name="quantity" value="1"><?php endif; ?>
+     <?php if(($package['max_quantity']??1)>1): ?><div class="yv-product-qty-v9"><label>Adet</label><div><button type="button" onclick="stepProductQty(-1)">−</button><input id="productQty" type="number" name="quantity" value="<?= (int)($package['min_quantity']?:1) ?>" min="<?= (int)($package['min_quantity']?:1) ?>" max="<?= (int)$package['max_quantity'] ?>"><button type="button" onclick="stepProductQty(1)">+</button></div></div><?php else: ?><input type="hidden" name="quantity" value="1"><?php endif; ?>
      <button class="yv-product-add-v5" type="submit"><?= icon('shopping-cart',15) ?> Sepete Ekle</button>
      <button class="yv-product-now-v5" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button>
     </form>
@@ -117,5 +117,6 @@ $reviews=$testimonialSection['extra']??[];
 </div>
 <script>
 document.querySelectorAll('.premium-faq-question').forEach(q=>q.addEventListener('click',()=>{const a=q.nextElementSibling;a.style.display=a.style.display==='block'?'none':'block'}));
+function stepProductQty(delta){const q=document.getElementById('productQty');if(!q)return;const min=parseInt(q.min||'1',10),max=parseInt(q.max||'999999',10);q.value=Math.min(max,Math.max(min,parseInt(q.value||min,10)+delta));}
 function buyNow(){const f=document.getElementById('packageForm');if(!f.reportValidity())return;const b=f.querySelector('.yv-product-now-v5');b.disabled=true;b.textContent='Yönlendiriliyor...';fetch(f.action,{method:'POST',body:new FormData(f),headers:{'X-Requested-With':'XMLHttpRequest'}}).finally(()=>location.href='/odeme')}
 </script>
