@@ -1017,3 +1017,13 @@ textarea{
 .trust-item-icon .icon{width:18px}
 .service-card-icon .icon{width:24px}
 .floating-contact .icon{width:22px}
+
+
+/* Hero brand icon colors */
+.hero-star-icon{color:#f7b731!important}
+.hero-float.google .icon{color:#4285f4}
+.hero-float.instagram .icon{color:#e1306c}
+.hero-float.tiktok .icon{color:#111827}
+.hero-float.youtube .icon{color:#ff0000}
+.hero-float.facebook .icon{color:#1877f2}
+.hero-float.stats .icon{color:#2563eb}
