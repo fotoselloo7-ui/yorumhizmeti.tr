@@ -239,3 +239,17 @@ body{background:#fff;color:var(--yv-ink)}
 .yh-product-cover{height:115px;margin:-17px -17px 14px;border-radius:17px 17px 0 0}
 .yh-product-card.is-dark .yh-product-cover{opacity:.9}
 @media(max-width:600px){.yv-product-custom-image{width:60%;opacity:.82}.yv-package-cover,.yh-product-cover{height:82px;margin:-12px -12px 10px}.yh-product-cover{margin:-12px -12px 10px}.yv-product-media-copy{right:43%}}
+
+
+/* fallback product artwork when no uploaded package cover exists */
+.yv-package-cover.fallback,.yh-product-cover.fallback{position:relative;display:flex;align-items:center;justify-content:center;isolation:isolate;color:#fff;background:linear-gradient(135deg,#60708d,#2e3a55)}
+.yv-package-cover.fallback:before,.yh-product-cover.fallback:before{content:"";position:absolute;inset:0;z-index:-2;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px}
+.yv-package-cover.fallback i,.yh-product-cover.fallback i{position:absolute;width:90px;height:90px;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-15px;top:-30px}
+.yv-package-cover.fallback>span,.yh-product-cover.fallback>span{width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);box-shadow:0 13px 28px rgba(0,0,0,.14)}
+.yv-package-cover.fallback.instagram,.yh-product-cover.fallback.instagram{background:linear-gradient(135deg,#ef318e,#713bdc)}
+.yv-package-cover.fallback.tiktok,.yh-product-cover.fallback.tiktok{background:linear-gradient(135deg,#080b11,#213049)}
+.yv-package-cover.fallback.youtube,.yh-product-cover.fallback.youtube{background:linear-gradient(135deg,#f72f42,#a90018)}
+.yv-package-cover.fallback.google,.yh-product-cover.fallback.google{background:linear-gradient(135deg,#397cf0,#26a668)}
+.yv-package-cover.fallback.facebook,.yh-product-cover.fallback.facebook{background:linear-gradient(135deg,#2c85f4,#1b4ca3)}
+.yv-package-cover.fallback.twitter,.yh-product-cover.fallback.twitter{background:linear-gradient(135deg,#202126,#050506)}
+.yv-package-cover.fallback.web,.yh-product-cover.fallback.web{background:linear-gradient(135deg,#2371f5,#12bede)}
