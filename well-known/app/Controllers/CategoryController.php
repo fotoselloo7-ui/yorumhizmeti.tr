@@ -73,7 +73,20 @@ class CategoryController extends Controller
             $orderBy = "ORDER BY p.is_featured DESC, p.sort_order ASC";
         }
 
-        $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
+        $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
+
+        $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
+        $testimonialSection = null;
+        try {
+            $testimonialSection = $db->fetch("SELECT * FROM home_sections WHERE section_key = 'testimonials' AND status = 'active' LIMIT 1");
+            if ($testimonialSection) {
+                $testimonialSection['extra'] = !empty($testimonialSection['extra_data'])
+                    ? json_decode($testimonialSection['extra_data'], true)
+                    : [];
+            }
+        } catch (\Exception $e) {
+            $testimonialSection = null;
+        }
 
         $this->render('frontend/category-detail', [
             'pageTitle' => $category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name'),
@@ -87,7 +100,9 @@ class CategoryController extends Controller
             'selectedSubCategory' => $selectedSubCategory,
             'currentSort' => $sort,
             'searchQuery' => $q,
-            'altSlug' => $altSlug
+            'altSlug' => $altSlug,
+            'faqs' => $faqs,
+            'testimonialSection' => $testimonialSection
         ]);
     }
 }
