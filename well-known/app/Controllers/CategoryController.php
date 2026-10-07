@@ -7,11 +7,21 @@ class CategoryController extends Controller
 {
     public function index(): void
     {
-        $categories = Database::getInstance()->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC");
+        $db = Database::getInstance();
+        $q = trim($_GET['q'] ?? '');
+        if ($q !== '') {
+            $categories = $db->fetchAll(
+                "SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL AND (name LIKE ? OR description LIKE ?) ORDER BY sort_order ASC",
+                ["%{$q}%", "%{$q}%"]
+            );
+        } else {
+            $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC");
+        }
         $this->render('frontend/categories', [
             'pageTitle' => 'Hizmet Kategorileri - ' . setting('site_name'),
             'metaDescription' => 'Dijital hizmet kategorilerimizi inceleyin.',
             'categories' => $categories,
+            'searchQuery' => $q,
         ]);
     }
 
