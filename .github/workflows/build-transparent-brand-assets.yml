@@ -37,9 +37,9 @@ jobs:
 
       - name: Remove backgrounds
         run: |
-          rembg i /tmp/yh-assets/hero.jpg well-known/public/assets/img/hero-woman-cutout.png
-          rembg i /tmp/yh-assets/blog.jpg well-known/public/assets/img/blog-woman-cutout.png
-          rembg i /tmp/yh-assets/support.jpg well-known/public/assets/img/support-woman-cutout.png
+          rembg i -m u2netp /tmp/yh-assets/hero.jpg well-known/public/assets/img/hero-woman-cutout.png
+          rembg i -m u2netp /tmp/yh-assets/blog.jpg well-known/public/assets/img/blog-woman-cutout.png
+          rembg i -m u2netp /tmp/yh-assets/support.jpg well-known/public/assets/img/support-woman-cutout.png
 
       - name: Normalize PNG dimensions and trim
         run: |
