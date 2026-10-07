@@ -30,27 +30,32 @@ jobs:
 
       - name: Download licensed source photos
         run: |
-          mkdir -p /tmp/yh-assets well-known/public/assets/img
-          curl -L --fail --retry 3             "https://images.pexels.com/photos/16459052/pexels-photo-16459052.jpeg?cs=srgb&fm=jpg"             -o /tmp/yh-assets/hero.jpg
-          curl -L --fail --retry 3             "https://images.pexels.com/photos/6502999/pexels-photo-6502999.jpeg?cs=srgb&fm=jpg"             -o /tmp/yh-assets/blog.jpg
-          curl -L --fail --retry 3             "https://images.pexels.com/photos/6502997/pexels-photo-6502997.jpeg?cs=srgb&fm=jpg"             -o /tmp/yh-assets/support.jpg
+          mkdir -p /tmp/yh-assets /tmp/yh-output
+          curl -L --fail --retry 3 \
+            "https://images.pexels.com/photos/16459052/pexels-photo-16459052.jpeg?cs=srgb&fm=jpg" \
+            -o /tmp/yh-assets/hero.jpg
+          curl -L --fail --retry 3 \
+            "https://images.pexels.com/photos/6502999/pexels-photo-6502999.jpeg?cs=srgb&fm=jpg" \
+            -o /tmp/yh-assets/blog.jpg
+          curl -L --fail --retry 3 \
+            "https://images.pexels.com/photos/6502997/pexels-photo-6502997.jpeg?cs=srgb&fm=jpg" \
+            -o /tmp/yh-assets/support.jpg
 
       - name: Remove backgrounds
         run: |
-          rembg i -m u2netp /tmp/yh-assets/hero.jpg well-known/public/assets/img/hero-woman-cutout.png
-          rembg i -m u2netp /tmp/yh-assets/blog.jpg well-known/public/assets/img/blog-woman-cutout.png
-          rembg i -m u2netp /tmp/yh-assets/support.jpg well-known/public/assets/img/support-woman-cutout.png
+          rembg i -m u2netp /tmp/yh-assets/hero.jpg /tmp/yh-output/hero-woman-cutout.png
+          rembg i -m u2netp /tmp/yh-assets/blog.jpg /tmp/yh-output/blog-woman-cutout.png
+          rembg i -m u2netp /tmp/yh-assets/support.jpg /tmp/yh-output/support-woman-cutout.png
 
       - name: Normalize PNG dimensions and trim
         run: |
           python - <<'PY'
-          from PIL import Image, ImageChops
+          from PIL import Image
           from pathlib import Path
 
-          for p in Path("well-known/public/assets/img").glob("*-woman-cutout.png"):
+          for p in Path("/tmp/yh-output").glob("*-woman-cutout.png"):
               im = Image.open(p).convert("RGBA")
-              alpha = im.getchannel("A")
-              bbox = alpha.getbbox()
+              bbox = im.getchannel("A").getbbox()
               if bbox:
                   im = im.crop(bbox)
               max_h = 1500
@@ -65,11 +70,20 @@ jobs:
         run: |
           git config user.name "YorumHizmeti Visual Bot"
           git config user.email "actions@users.noreply.github.com"
+
+          # Sync the latest branch before touching binary assets so concurrent
+          # storefront commits cannot create binary rebase conflicts.
+          git fetch origin main
+          git reset --hard origin/main
+
+          mkdir -p well-known/public/assets/img
+          cp /tmp/yh-output/*-woman-cutout.png well-known/public/assets/img/
+
           git add well-known/public/assets/img/*-woman-cutout.png
           if git diff --cached --quiet; then
             echo "No generated asset changes."
             exit 0
           fi
+
           git commit -m "Generate transparent cutout brand imagery"
-          git pull --rebase origin main
-          git push
+          git push origin main
