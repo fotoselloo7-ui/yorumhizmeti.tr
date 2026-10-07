@@ -22,7 +22,7 @@ class HomeController extends Controller
         }
 
         // Son blog yazıları
-        $latestPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.published_at DESC LIMIT 3");
+        $latestPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.published_at DESC LIMIT 4");
 
         // Ana Sayfa Özel Kategori Blokları (Instagram, Web Tasarım, TikTok vb.)
         $homeCategoryBlocks = [];
