@@ -91,11 +91,10 @@
             <div class="header-inner">
                 <a href="/" class="site-logo">
                     <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="10" fill="#2563EB"/>
-                        <path d="M10 12C10 10.8954 10.8954 10 12 10H24C25.1046 10 26 10.8954 26 12V20C26 21.1046 25.1046 22 24 22H15L11 26V22H12C10.8954 22 10 21.1046 10 20V12Z" fill="white"/>
-                        <circle cx="15" cy="16" r="1.5" fill="#2563EB"/>
-                        <circle cx="18" cy="16" r="1.5" fill="#2563EB"/>
-                        <circle cx="21" cy="16" r="1.5" fill="#2563EB"/>
+                        <defs><linearGradient id="yhLogoGrad" x1="4" y1="4" x2="32" y2="32"><stop stop-color="#2868FF"/><stop offset=".55" stop-color="#7437FF"/><stop offset="1" stop-color="#F42E91"/></linearGradient></defs>
+                        <rect x="1" y="1" width="34" height="34" rx="11" fill="url(#yhLogoGrad)"/>
+                        <path d="M10.5 11.5h15v10.2a2.3 2.3 0 0 1-2.3 2.3h-7.1l-4.6 3.5V24h-1a2 2 0 0 1-2-2V13.5a2 2 0 0 1 2-2Z" fill="white" fill-opacity=".96"/>
+                        <path d="m14.4 17.6 2.3 2.2 5-5" stroke="url(#yhLogoGrad)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <?= e(setting('site_name', 'Yorum Hizmeti')) ?>
                 </a>
@@ -109,6 +108,11 @@
                     <a href="/kategori/web-site-hizmetleri">Web Site</a>
                     <a href="/blog" class="<?= isActive('/blog') ?>">Blog</a>
                 </nav>
+
+                <form class="header-search-v4" action="/kategoriler" method="GET">
+                    <?= icon('search', 13) ?>
+                    <input type="search" name="q" aria-label="Hizmet ara" placeholder="Hizmet ara...">
+                </form>
 
                 <div class="header-actions">
                     <?php $cartCount = count($_SESSION['cart'] ?? []); ?>
