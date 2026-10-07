@@ -1,137 +1,34 @@
-<style>
-.blog-hero { background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%); color: #fff; padding: 60px 0; text-align: center; border-radius: 16px; margin-bottom: 40px; }
-.blog-hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 15px; color: #fff; }
-.blog-hero p { font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 30px; }
-.blog-search { max-width: 500px; margin: 0 auto; position: relative; }
-.blog-search input { width: 100%; padding: 15px 20px 15px 50px; border-radius: 30px; border: none; font-size: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; }
-.blog-search i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--color-text-secondary); font-size: 20px; }
-.blog-categories-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px; }
-.blog-pill { padding: 8px 16px; border-radius: 20px; background: #fff; color: var(--color-text); text-decoration: none; font-weight: 500; font-size: 14px; border: 1px solid var(--color-border); transition: all 0.3s ease; }
-.blog-pill:hover, .blog-pill.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
-.blog-layout { display: grid; grid-template-columns: 1fr 320px; gap: 30px; }
-@media(max-width: 991px) { .blog-layout { grid-template-columns: 1fr; } }
-.blog-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--color-border); transition: transform 0.3s ease; display: flex; flex-direction: column; }
-.blog-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
-.blog-card-img { width: 100%; height: 200px; object-fit: cover; }
-.blog-card-img-placeholder { width: 100%; height: 200px; background: var(--color-light); display: flex; align-items: center; justify-content: center; color: var(--color-text-secondary); }
-.blog-card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-.blog-card-meta { display: flex; align-items: center; gap: 15px; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 10px; }
-.blog-card-meta span { display: flex; align-items: center; gap: 5px; }
-.blog-card-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--color-dark); line-height: 1.4; }
-.blog-card-title a { color: inherit; text-decoration: none; }
-.blog-card-title a:hover { color: var(--color-primary); }
-.blog-card-excerpt { color: var(--color-text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 20px; flex: 1; }
-.blog-sidebar-widget { background: #fff; border-radius: 12px; padding: 25px; border: 1px solid var(--color-border); margin-bottom: 30px; }
-.blog-sidebar-widget h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--color-dark); display: flex; align-items: center; gap: 10px; padding-bottom: 15px; border-bottom: 1px solid var(--color-border); }
-.popular-post-item { display: flex; gap: 15px; margin-bottom: 15px; }
-.popular-post-item:last-child { margin-bottom: 0; }
-.popular-post-item img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
-.popular-post-item-info h4 { font-size: 14px; font-weight: 600; line-height: 1.3; margin-bottom: 5px; }
-.popular-post-item-info h4 a { color: var(--color-dark); text-decoration: none; }
-.popular-post-item-info h4 a:hover { color: var(--color-primary); }
-.popular-post-meta { font-size: 12px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 5px; }
-</style>
-
-<div class="container" style="padding-top: 40px; padding-bottom: 80px;">
-    
-    <div class="blog-hero">
-        <h1>Dijital Rehber & Blog</h1>
-        <p>Sosyal medya büyüme stratejileri, SEO taktikleri ve güncel dijital pazarlama haberleri.</p>
-        <div class="blog-search">
-            <form action="/blog" method="GET">
-                <i class="ri-search-line"></i>
-                <input type="text" name="q" placeholder="Blogda ara..." value="<?= e($_GET['q'] ?? '') ?>">
-            </form>
-        </div>
-    </div>
-
-    <div class="blog-categories-pills">
-        <a href="/blog" class="blog-pill <?= empty($_GET['category']) ? 'active' : '' ?>">Tümü</a>
-        <?php foreach($categories as $cat): ?>
-        <a href="/blog?category=<?= e($cat['slug']) ?>" class="blog-pill <?= ($_GET['category'] ?? '') === $cat['slug'] ? 'active' : '' ?>">
-            <?= e($cat['name']) ?>
-        </a>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="blog-layout">
-        <!-- Main Content -->
-        <div>
-            <?php if (!empty($posts)): ?>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
-                <?php foreach ($posts as $post): ?>
-                <div class="blog-card">
-                    <?php if ($post['image']): ?>
-                        <a href="/blog/<?= e($post['slug']) ?>"><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt'] ?? $post['title']) ?>" class="blog-card-img" loading="lazy"></a>
-                    <?php else: ?>
-                        <a href="/blog/<?= e($post['slug']) ?>" class="blog-card-img-placeholder"><?= icon('image', 40) ?></a>
-                    <?php endif; ?>
-                    <div class="blog-card-content">
-                        <div class="blog-card-meta">
-                            <span><i class="ri-folder-2-line"></i> <?= e($post['category_name'] ?? 'Kategorisiz') ?></span>
-                            <span><i class="ri-calendar-line"></i> <?= date('d M Y', strtotime($post['published_at'])) ?></span>
-                            <span><i class="ri-eye-line"></i> <?= number_format($post['views']) ?></span>
-                        </div>
-                        <h3 class="blog-card-title"><a href="/blog/<?= e($post['slug']) ?>"><?= e($post['title']) ?></a></h3>
-                        <p class="blog-card-excerpt"><?= e(excerpt(strip_tags($post['excerpt'] ?: $post['content']), 120)) ?></p>
-                        <a href="/blog/<?= e($post['slug']) ?>" style="color: var(--color-primary); font-weight: 600; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 5px;">Devamını Oku <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-
-            <?php if ($totalPages > 1): ?>
-            <div class="pagination" style="margin-top: 40px; display: flex; justify-content: center; gap: 10px;">
-                <?php 
-                $queryStr = $_GET;
-                unset($queryStr['page']);
-                $qStr = http_build_query($queryStr);
-                $qStr = $qStr ? '&' . $qStr : '';
-                ?>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <?php if ($i === $page): ?>
-                        <span style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--color-primary); color: #fff; border-radius: 8px; font-weight: 600;"><?= $i ?></span>
-                    <?php else: ?>
-                        <a href="?page=<?= $i ?><?= $qStr ?>" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #fff; color: var(--color-dark); border: 1px solid var(--color-border); border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.background='var(--color-primary)'; this.style.color='#fff';" onmouseout="this.style.background='#fff'; this.style.color='var(--color-dark)';"><?= $i ?></a>
-                    <?php endif; ?>
-                <?php endfor; ?>
-            </div>
-            <?php endif; ?>
-
-            <?php else: ?>
-            <div style="background: #fff; border-radius: 12px; padding: 60px 20px; text-align: center; border: 1px solid var(--color-border);">
-                <i class="ri-file-search-line" style="font-size: 64px; color: var(--color-text-secondary); margin-bottom: 20px; display: block;"></i>
-                <h3 style="font-size: 20px; font-weight: 600; color: var(--color-dark); margin-bottom: 10px;">Kayıt Bulunamadı</h3>
-                <p style="color: var(--color-text-secondary);">Arama kriterlerinize uygun blog yazısı bulunmuyor.</p>
-                <a href="/blog" class="btn btn-primary" style="margin-top: 20px;">Tüm Yazıları Gör</a>
-            </div>
-            <?php endif; ?>
-        </div>
-
-        <!-- Sidebar -->
-        <aside>
-            <div class="blog-sidebar-widget">
-                <h3><i class="ri-fire-line" style="color: #ff9800;"></i> Popüler Yazılar</h3>
-                <?php if(!empty($popularPosts)): ?>
-                    <?php foreach($popularPosts as $pop): ?>
-                    <div class="popular-post-item">
-                        <?php if($pop['image']): ?>
-                        <a href="/blog/<?= e($pop['slug']) ?>"><img src="<?= e(upload_url($pop['image'])) ?>" alt="<?= e($pop['title']) ?>" loading="lazy"></a>
-                        <?php else: ?>
-                        <a href="/blog/<?= e($pop['slug']) ?>" style="width: 70px; height: 70px; border-radius: 8px; background: var(--color-light); display: flex; align-items: center; justify-content: center; color: var(--color-text-secondary);"><i class="ri-image-line" style="font-size: 24px;"></i></a>
-                        <?php endif; ?>
-                        <div class="popular-post-item-info">
-                            <h4><a href="/blog/<?= e($pop['slug']) ?>"><?= e($pop['title']) ?></a></h4>
-                            <div class="popular-post-meta">
-                                <span><i class="ri-eye-line"></i> <?= number_format($pop['views']) ?> hit</span>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-sm text-secondary">Popüler yazı bulunmuyor.</p>
-                <?php endif; ?>
-            </div>
-        </aside>
-    </div>
+<?php
+$featured=$posts[0]??null;
+$gridPosts=$featured?array_slice($posts,1):$posts;
+?>
+<div class="yv-blog-home">
+<section class="yv-page-hero yv-blog-hero">
+ <div class="container">
+  <div class="yv-hero-grid">
+   <div>
+    <div class="yv-kicker"><?= icon('file-text',12) ?> Blog / Bilgi Merkezi</div>
+    <h1>Dijital başarınız için <span>rehberler ve ipuçları.</span></h1>
+    <p>Sosyal medya, Google, web siteleri ve dijital büyüme hakkında güncel içerikleri keşfedin. Doğru bilgiyle daha güçlü kararlar alın.</p>
+    <form class="yv-blog-search" method="GET" action="/blog"><input name="q" value="<?= e($_GET['q']??'') ?>" placeholder="Hangi konuda bilgi arıyorsunuz?"><button type="submit"><?= icon('search',12) ?> Ara</button></form>
+   </div>
+   <div class="yv-hero-art"><div class="yv-hero-person"></div><div class="yv-float a"><?= icon('google',14) ?> Google</div><div class="yv-float b"><?= icon('instagram',14) ?> Instagram</div><div class="yv-float c"><?= icon('trending-up',14) ?> Büyüme rehberleri</div></div>
+  </div>
+ </div>
+</section>
+<div class="container">
+ <div class="yv-blog-chips"><a class="yv-blog-chip <?= empty($_GET['category'])?'active':'' ?>" href="/blog">Tümü</a><?php foreach($categories as $cat): ?><a class="yv-blog-chip" href="/blog?category=<?= e($cat['slug']) ?>"><?= e($cat['name']) ?></a><?php endforeach; ?></div>
+ <div class="yv-blog-layout">
+  <main>
+   <?php if($featured): ?><article class="yv-featured-post"><div class="yv-featured-copy"><div class="yv-kicker" style="background:rgba(255,255,255,.12);color:#fff">Öne çıkan yazı</div><h2><?= e($featured['title']) ?></h2><p><?= e(excerpt(strip_tags($featured['excerpt']??$featured['content']??''),180)) ?></p><a class="yv-btn yv-btn-light" href="/blog/<?= e($featured['slug']) ?>">Yazıyı oku <?= icon('arrow-right',11) ?></a></div><div class="yv-featured-media"><?php if(!empty($featured['image'])): ?><img src="<?= e(upload_url($featured['image'])) ?>" alt="<?= e($featured['image_alt']??$featured['title']) ?>" style="width:100%;height:100%;object-fit:cover"><?php endif; ?></div></article><?php endif; ?>
+   <div style="display:flex;align-items:end;justify-content:space-between;margin:22px 0 13px"><div><div class="yv-kicker">Güncel içerikler</div><h2 style="margin:0;font-size:27px;letter-spacing:-.045em">Son Yazılar</h2></div></div>
+   <?php if(!empty($gridPosts)): ?><div class="yv-post-grid"><?php foreach($gridPosts as $post): ?><a class="yv-post-card" href="/blog/<?= e($post['slug']) ?>"><div class="yv-post-image"><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><?php else: ?><div class="yv-post-placeholder"><?= icon('file-text',26) ?></div><?php endif; ?></div><div class="yv-post-body"><small><?= e($post['category_name']??'Rehber') ?></small><h3><?= e($post['title']) ?></h3><p><?= e(excerpt(strip_tags($post['excerpt']??$post['content']??''),95)) ?></p><div class="yv-post-meta"><span><?= !empty($post['published_at'])?formatDate($post['published_at'],'d.m.Y'):'Güncel' ?></span><span><?= (int)($post['views']??0) ?> görüntülenme</span></div></div></a><?php endforeach; ?></div><?php else: ?><div class="yv-empty"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>İçerik bulunamadı</h2><p>Arama veya filtre kriterlerine uygun yazı bulunamadı.</p></div><?php endif; ?>
+   <?php if($totalPages>1): ?><div class="pagination" style="margin-top:22px"><?php for($i=1;$i<=$totalPages;$i++): ?><a class="<?= $i==$page?'active':'' ?>" href="?<?= http_build_query(array_merge($_GET,['page'=>$i])) ?>"><?= $i ?></a><?php endfor; ?></div><?php endif; ?>
+  </main>
+  <aside>
+   <div class="yv-sidebar-card"><h3><?= icon('trending-up',13) ?> Popüler Yazılar</h3><?php foreach($popularPosts as $i=>$post): ?><div class="yv-popular-item"><span class="yv-popular-num"><?= $i+1 ?></span><a href="/blog/<?= e($post['slug']) ?>"><?= e($post['title']) ?></a></div><?php endforeach; ?></div>
+   <div class="yv-sidebar-card"><h3><?= icon('mail',13) ?> E-Bülten</h3><p style="font-size:8px;color:#7e879a;line-height:1.6">Yeni rehber ve içeriklerden haberdar olun.</p><div class="footer-newsletter-form"><input type="email" placeholder="E-posta adresiniz"><button type="button"><?= icon('arrow-right',11) ?></button></div></div>
+  </aside>
+ </div>
+</div>
 </div>
