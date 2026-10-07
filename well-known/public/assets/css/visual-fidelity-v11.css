@@ -318,3 +318,81 @@
   .yv-category-package-card-v5 h3{min-height:32px!important;font-size:11px!important}
   .yv-category-review-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+
+/* ---------- category platform-specific artwork ---------- */
+.yv-category-hero-v5.instagram .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.instagram .screen>span{background:linear-gradient(135deg,#ff3e83,#813be9)!important;color:#fff!important}
+.yv-category-hero-v5.tiktok .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.tiktok .screen>span{background:linear-gradient(135deg,#11151d,#303649)!important;color:#fff!important}
+.yv-category-hero-v5.youtube .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.youtube .screen>span{background:linear-gradient(135deg,#ff3540,#c50016)!important;color:#fff!important}
+.yv-category-hero-v5.google .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.google .screen>span{background:linear-gradient(135deg,#4285f4,#34a853)!important;color:#fff!important}
+.yv-category-hero-v5.web .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.web .screen>span{background:linear-gradient(135deg,#2873ff,#11bde5)!important;color:#fff!important}
+.yv-category-hero-v5.facebook .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.facebook .screen>span{background:linear-gradient(135deg,#2582f4,#1557be)!important;color:#fff!important}
+.yv-category-phone-art-v5 .screen>span{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:54px!important;height:54px!important;border-radius:16px!important;
+  box-shadow:0 12px 24px rgba(30,42,84,.12)!important;
+}
+
+/* ---------- stronger visual fallbacks for content without uploaded images ---------- */
+.yh6-blog-image.instagram{background:linear-gradient(135deg,#fff0f6,#efe9ff)!important;color:#e1306c!important}
+.yh6-blog-image.tiktok{background:linear-gradient(135deg,#e9edf5,#f6f7fb)!important;color:#111827!important}
+.yh6-blog-image.youtube{background:linear-gradient(135deg,#fff0f1,#fff7f7)!important;color:#f21930!important}
+.yh6-blog-image.google{background:linear-gradient(135deg,#eef5ff,#effcf3)!important;color:#4285f4!important}
+.yh6-blog-image.web,.yh6-blog-image.seo{background:linear-gradient(135deg,#edf7ff,#eef0ff)!important;color:#2868ff!important}
+.yh6-blog-image>span{width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 14px 28px rgba(29,42,84,.10)}
+
+/* featured blog fallback: actual phone/card composition instead of empty color block */
+.yv-blog-phone-art-v8{position:absolute!important;inset:0!important;overflow:hidden!important}
+.yv-blog-phone-art-v8:before{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  width:145px;height:215px;
+  border:9px solid #162447;
+  border-radius:28px;
+  background:linear-gradient(180deg,#f9fbff,#eaf2ff);
+  transform:translate(-50%,-50%) rotate(7deg);
+  box-shadow:0 24px 46px rgba(20,28,69,.27);
+}
+.yv-blog-phone-art-v8:after{
+  content:"";
+  position:absolute;
+  right:10%;top:17%;
+  width:110px;height:70px;
+  border-radius:13px;
+  background:rgba(255,255,255,.95);
+  box-shadow:0 14px 28px rgba(31,40,85,.14);
+}
+.yv-blog-phone-art-v8>span{position:relative;z-index:3!important}
+.yv-blog-phone-art-v8>strong{position:relative;z-index:3!important}
+.yv-blog-phone-art-v8>em{position:relative;z-index:3!important}
+
+/* homepage dark cards and category cards should never lose their names */
+.yh6-package-card h3:empty,
+.yv-category-package-card-v5 h3:empty{display:none!important}
+
+/* smoother FAQ accordion visuals */
+.premium-faq-item:has(.premium-faq-answer[style*="block"]){
+  border-color:#d5cff8!important;
+  box-shadow:0 10px 24px rgba(91,70,210,.06)!important;
+}
+.premium-faq-question .icon{color:#654ce3!important}
+
+/* footer/logo polish */
+.footer-brand h3,.site-logo{color:#fff}
+.site-header .site-logo{color:#111735!important}
+.footer-contact-v9 .icon{color:#8aa2ff!important}
+.footer-social-v9 a:hover{transform:translateY(-2px);background:rgba(255,255,255,.10)!important}
+
+/* mobile card text remains readable */
+@media(max-width:650px){
+  .yv-category-package-card-v5 h3{line-height:1.28!important}
+  .yv-blog-post-grid-v8{grid-template-columns:1fr!important}
+  .yv-blog-post-card-v8{min-height:0!important}
+}
