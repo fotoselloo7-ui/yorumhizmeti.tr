@@ -23,7 +23,9 @@
     elseif(str_contains($nameLower,'google')){$ico='google';$cls='google';}
     elseif(str_contains($nameLower,'facebook')){$ico='facebook';$cls='facebook';}
    ?><div class="yv-checkout-product-v5"><span class="<?= e($cls) ?>"><?= icon($ico,23) ?></span><div><strong><?= e($item['name']) ?></strong><small><?= (int)$item['quantity'] ?> adet · <?= e($item['delivery_time']??'Hızlı teslimat') ?></small></div><b><?= money($item['line_total']) ?></b></div><?php endforeach; ?>
-  </div></section>
+  </div>
+  <div class="yv-checkout-campaign-v9"><span><?= icon('gift',16) ?></span><div><strong>Kampanya Avantajı</strong><small>Uygun kampanyalar ve paket indirimleri sipariş özetine otomatik yansıtılır.</small></div><em><?= icon('check-circle',12) ?> Otomatik uygulanır</em></div>
+  </section>
 
   <section class="yv-checkout-card-v5"><div class="yv-checkout-card-head-v5"><span><?= icon('user',16) ?></span><div><h2>Fatura ve İletişim Bilgileri</h2><small>Siparişle ilgili bilgilendirmeler bu bilgiler üzerinden iletilir.</small></div></div><div class="yv-checkout-user-v5"><div><label>Ad Soyad</label><input class="form-control" value="<?= e($user['name']??'') ?>" disabled></div><div><label>E-posta Adresi</label><input class="form-control" value="<?= e($user['email']??'') ?>" disabled></div><div><label>Telefon Numarası</label><input class="form-control" value="<?= e($user['phone']??'') ?>" disabled placeholder="Hesabınızdan güncelleyebilirsiniz"></div><div class="yv-checkout-login-state-v5"><?= icon('check-circle',13) ?> Giriş yapılmış güvenli hesap</div></div></section>
 
@@ -45,5 +47,9 @@
 </div></form></div></section>
 
 <section class="yv-checkout-proofbar-v5"><div class="container"><div><?= icon('shopping-cart',20) ?><span><strong>50.000+</strong><small>Mutlu müşteri</small></span></div><div><?= icon('shield',20) ?><span><strong>%100</strong><small>Güvenli ödeme</small></span></div><div><?= icon('zap',20) ?><span><strong>Hızlı</strong><small>Teslimat</small></span></div><div><?= icon('star-fill',20) ?><span><strong>4.9/5</strong><small>Müşteri memnuniyeti</small></span></div><div><?= icon('headphones',20) ?><span><strong>7/24</strong><small>Canlı destek</small></span></div></div></section>
+
+<?php $checkoutReviews=$testimonialSection['extra']??[]; if(!empty($checkoutReviews)): ?>
+<section class="yv-checkout-reviews-v9"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker"><?= icon('message-circle',11) ?> Gerçek kullanıcı deneyimleri</div><h2>Müşterilerimiz Ne Diyor?</h2><p>Binlerce müşterimizin arasına siz de katılın.</p></div><a href="/" class="yv-link-button">Tüm Yorumları Gör <?= icon('arrow-right',10) ?></a></div><div class="yv-checkout-review-grid-v9"><?php foreach(array_slice($checkoutReviews,0,3) as $review): ?><article><div><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><b><?= e($review['name']??'Müşteri') ?></b><em>★★★★★</em></div><p><?= e($review['text']??'') ?></p></article><?php endforeach; ?></div></div></section>
+<?php endif; ?>
 </div>
 <script>document.getElementById('checkoutForm').addEventListener('submit',function(){if(!this.checkValidity())return;const b=document.getElementById('btnCheckoutSubmit');b.disabled=true;b.textContent='Lütfen bekleyin...'});</script>
