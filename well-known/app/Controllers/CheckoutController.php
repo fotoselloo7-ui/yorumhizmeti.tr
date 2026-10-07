@@ -20,13 +20,13 @@ class CheckoutController extends Controller
         $db = Database::getInstance();
         $cartItems = [];
         $total = 0;
-        foreach ($cart as $item) {
+        foreach ($cart as $key => $item) {
             $pkg = $db->fetch("SELECT * FROM packages WHERE id = ? AND status = 'active'", [$item['id']]);
             if ($pkg) {
                 $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
                 $qty = $item['quantity'] ?? 1;
                 $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order", [$pkg['id']]);
-                $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields]);
+                $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields, 'cart_key' => $key]);
                 $total += $price * $qty;
             }
         }
