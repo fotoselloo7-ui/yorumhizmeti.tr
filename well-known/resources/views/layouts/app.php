@@ -29,11 +29,12 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/premium.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -68,6 +69,20 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 </head>
 <body>
+
+    <div class="nv-topbar">
+        <div class="container nv-topbar-inner">
+            <div class="nv-topbar-main">
+                <span class="nv-topbar-dot"></span>
+                <span>Dijital büyüme için güvenilir, hızlı ve modern çözümler</span>
+            </div>
+            <div class="nv-topbar-meta">
+                <span><?= icon('shield', 14) ?> Güvenli Ödeme</span>
+                <span><?= icon('zap', 14) ?> Hızlı Teslimat</span>
+                <span><?= icon('headphones', 14) ?> 7/24 Destek</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Header -->
     <header class="site-header">
