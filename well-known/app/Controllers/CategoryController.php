@@ -9,33 +9,19 @@ class CategoryController extends Controller
     {
         $db = Database::getInstance();
         $q = trim($_GET['q'] ?? '');
-        $baseCategorySql = "SELECT c.*, (
-            SELECT COUNT(*) FROM packages p
-            WHERE p.status = 'active'
-            AND (
-                p.category_id = c.id
-                OR p.category_id IN (SELECT sc.id FROM categories sc WHERE sc.parent_id = c.id)
-            )
-        ) AS package_count
-        FROM categories c
-        WHERE c.status = 'active' AND c.parent_id IS NULL";
         if ($q !== '') {
             $categories = $db->fetchAll(
-                $baseCategorySql . " AND (c.name LIKE ? OR c.description LIKE ?) ORDER BY c.sort_order ASC",
+                "SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL AND (name LIKE ? OR description LIKE ?) ORDER BY sort_order ASC",
                 ["%{$q}%", "%{$q}%"]
             );
         } else {
-            $categories = $db->fetchAll($baseCategorySql . " ORDER BY c.sort_order ASC");
+            $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC");
         }
-        $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
-        $featuredPackages = $db->fetchAll("SELECT p.*, c.name AS category_name, c.slug AS category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.status = 'active' ORDER BY p.is_featured DESC, p.sort_order ASC, p.id DESC LIMIT 5");
         $this->render('frontend/categories', [
             'pageTitle' => 'Hizmet Kategorileri - ' . setting('site_name'),
             'metaDescription' => 'Dijital hizmet kategorilerimizi inceleyin.',
             'categories' => $categories,
             'searchQuery' => $q,
-            'faqs' => $faqs,
-            'featuredPackages' => $featuredPackages,
         ]);
     }
 
@@ -87,17 +73,7 @@ class CategoryController extends Controller
             $orderBy = "ORDER BY p.is_featured DESC, p.sort_order ASC";
         }
 
-        $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
-        $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
-        $testimonialSection = null;
-        try {
-            $testimonialSection = $db->fetch("SELECT * FROM home_sections WHERE section_key = 'testimonials' AND status = 'active' LIMIT 1");
-            if ($testimonialSection) {
-                $testimonialSection['extra'] = !empty($testimonialSection['extra_data']) ? json_decode($testimonialSection['extra_data'], true) : [];
-            }
-        } catch (\Exception $e) {
-            $testimonialSection = null;
-        }
+        $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
 
         $this->render('frontend/category-detail', [
             'pageTitle' => $category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name'),
@@ -111,9 +87,7 @@ class CategoryController extends Controller
             'selectedSubCategory' => $selectedSubCategory,
             'currentSort' => $sort,
             'searchQuery' => $q,
-            'altSlug' => $altSlug,
-            'faqs' => $faqs,
-            'testimonialSection' => $testimonialSection
+            'altSlug' => $altSlug
         ]);
     }
 }
