@@ -24,7 +24,7 @@
     elseif(str_contains($nameLower,'facebook')){$ico='facebook';$cls='facebook';}
    ?><div class="yv-checkout-product-v5"><span class="<?= e($cls) ?>"><?= icon($ico,23) ?></span><div><strong><?= e($item['name']) ?></strong><small><?= (int)$item['quantity'] ?> adet · <?= e($item['delivery_time']??'Hızlı teslimat') ?></small></div><b><?= money($item['line_total']) ?></b></div><?php endforeach; ?>
   </div>
-  <div class="yv-checkout-campaign-v9"><span><?= icon('gift',16) ?></span><div><strong>Kampanya Avantajı</strong><small>Uygun kampanyalar ve paket indirimleri sipariş özetine otomatik yansıtılır.</small></div><em><?= icon('check-circle',12) ?> Otomatik uygulanır</em></div>
+  <div class="yv-checkout-campaign-v9"><span><?= icon('package',16) ?></span><div><strong>Kampanya Avantajı</strong><small>Uygun kampanyalar ve paket indirimleri sipariş özetine otomatik yansıtılır.</small></div><em><?= icon('check-circle',12) ?> Otomatik uygulanır</em></div>
   </section>
 
   <section class="yv-checkout-card-v5"><div class="yv-checkout-card-head-v5"><span><?= icon('user',16) ?></span><div><h2>Fatura ve İletişim Bilgileri</h2><small>Siparişle ilgili bilgilendirmeler bu bilgiler üzerinden iletilir.</small></div></div><div class="yv-checkout-user-v5"><div><label>Ad Soyad</label><input class="form-control" value="<?= e($user['name']??'') ?>" disabled></div><div><label>E-posta Adresi</label><input class="form-control" value="<?= e($user['email']??'') ?>" disabled></div><div><label>Telefon Numarası</label><input class="form-control" value="<?= e($user['phone']??'') ?>" disabled placeholder="Hesabınızdan güncelleyebilirsiniz"></div><div class="yv-checkout-login-state-v5"><?= icon('check-circle',13) ?> Giriş yapılmış güvenli hesap</div></div></section>
