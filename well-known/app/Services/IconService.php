@@ -1,148 +1,59 @@
 <?php
 namespace App\Services;
 
-/**
- * IconService - Modern Remix Icon Sistemi
- * HTML içerisine raw SVG gömmek yerine, çok daha temiz ve performanslı
- * olan Remix Icon font sistemini kullanır. Veritabanındaki eski ikon 
- * anahtarları (Lucide) Remix karşılıklarına eşlenir.
- */
 class IconService
 {
     private static array $map = [
-        'home' => 'home',
-        'package' => 'box-3',
-        'box' => 'box-3',
-        'shopping-cart' => 'shopping-cart-2',
-        'users' => 'group',
-        'user' => 'user',
-        'settings' => 'settings-3',
-        'search' => 'search',
-        'menu' => 'menu',
-        'x' => 'close',
-        'check' => 'check',
-        'check-circle' => 'checkbox-circle',
-        'alert-triangle' => 'error-warning',
-        'alert-circle' => 'information',
-        'info' => 'information',
-        'plus' => 'add',
-        'minus' => 'subtract',
-        'edit' => 'edit-2',
-        'trash' => 'delete-bin',
-        'eye' => 'eye',
-        'eye-off' => 'eye-off',
-        'mail' => 'mail',
-        'phone' => 'phone',
-        'globe' => 'global',
-        'star' => 'star',
-        'heart' => 'heart',
-        'share-2' => 'share',
-        'external-link' => 'external-link',
-        'lock' => 'lock-2',
-        'unlock' => 'lock-unlock',
-        'log-out' => 'logout-box-r',
-        'log-in' => 'login-box',
-        'shield' => 'shield',
-        'credit-card' => 'bank-card',
-        'truck' => 'truck',
-        'headphones' => 'customer-service-2',
-        'message-circle' => 'message-3',
-        'help-circle' => 'question',
-        'bar-chart' => 'bar-chart-box',
-        'file-text' => 'file-text',
-        'image' => 'image',
-        'upload' => 'upload-cloud-2',
-        'download' => 'download-cloud-2',
-        'filter' => 'filter-3',
-        'calendar' => 'calendar',
-        'clock' => 'time',
-        'tag' => 'price-tag-3',
-        'bookmark' => 'bookmark',
-        'arrow-left' => 'arrow-left',
-        'arrow-right' => 'arrow-right',
-        'arrow-up' => 'arrow-up',
-        'arrow-down' => 'arrow-down',
-        'chevron-right' => 'arrow-right-s',
-        'chevron-left' => 'arrow-left-s',
-        'chevron-down' => 'arrow-down-s',
-        'chevron-up' => 'arrow-up-s',
-        'refresh-cw' => 'refresh',
-        'more-vertical' => 'more-2',
-        'camera' => 'camera',
-        'video' => 'video',
-        'play-circle' => 'play-circle',
-        'thumbs-up' => 'thumb-up',
-        'target' => 'focus-2',
-        'trending-up' => 'line-chart',
-        'layers' => 'stack',
-        'grid' => 'layout-grid',
-        'list' => 'list-unordered',
-        'copy' => 'file-copy',
-        'clipboard' => 'clipboard',
-        'dollar-sign' => 'money-dollar-circle',
-        'percent' => 'percent',
-        'activity' => 'pulse',
-        'zap' => 'flashlight',
-        'award' => 'award',
-        'inbox' => 'inbox',
-        'send' => 'send-plane',
-        'link' => 'links',
-        'map-pin' => 'map-pin-2',
-        'whatsapp' => 'whatsapp',
-        'instagram' => 'instagram',
-        'facebook' => 'facebook-circle',
-        'tiktok' => 'tiktok',
-        'google' => 'google',
-        'youtube' => 'youtube',
-        'twitter' => 'twitter-x',
-        'save' => 'save-3',
-        'folder' => 'folder-2',
-        'database' => 'database-2',
-        'toggle-left' => 'toggle',
-        'toggle-right' => 'toggle-fill',
-        'power' => 'shut-down',
-        'rotate-ccw' => 'arrow-go-back',
-        'play' => 'play',
-        'bar-chart-2' => 'bar-chart-2'
+        'home'=>['solid','house'],'package'=>['solid','box'],'box'=>['solid','box'],
+        'shopping-cart'=>['solid','cart-shopping'],'users'=>['solid','users'],'user'=>['regular','user'],
+        'settings'=>['solid','gear'],'search'=>['solid','magnifying-glass'],'menu'=>['solid','bars'],
+        'x'=>['solid','xmark'],'check'=>['solid','check'],'check-circle'=>['regular','circle-check'],
+        'alert-triangle'=>['solid','triangle-exclamation'],'alert-circle'=>['solid','circle-exclamation'],
+        'info'=>['solid','circle-info'],'plus'=>['solid','plus'],'minus'=>['solid','minus'],
+        'edit'=>['regular','pen-to-square'],'trash'=>['regular','trash-can'],'eye'=>['regular','eye'],
+        'eye-off'=>['regular','eye-slash'],'mail'=>['regular','envelope'],'phone'=>['solid','phone'],
+        'globe'=>['solid','globe'],'star'=>['regular','star'],'heart'=>['regular','heart'],
+        'external-link'=>['solid','arrow-up-right-from-square'],'lock'=>['solid','lock'],
+        'unlock'=>['solid','lock-open'],'log-out'=>['solid','right-from-bracket'],'log-in'=>['solid','right-to-bracket'],
+        'shield'=>['solid','shield-halved'],'credit-card'=>['regular','credit-card'],'truck'=>['solid','truck-fast'],
+        'headphones'=>['solid','headset'],'message-circle'=>['regular','comment-dots'],
+        'help-circle'=>['regular','circle-question'],'bar-chart'=>['solid','chart-column'],
+        'bar-chart-2'=>['solid','chart-column'],'file-text'=>['regular','file-lines'],'image'=>['regular','image'],
+        'upload'=>['solid','cloud-arrow-up'],'download'=>['solid','cloud-arrow-down'],'filter'=>['solid','filter'],
+        'calendar'=>['regular','calendar'],'clock'=>['regular','clock'],'tag'=>['solid','tag'],
+        'bookmark'=>['regular','bookmark'],'arrow-left'=>['solid','arrow-left'],'arrow-right'=>['solid','arrow-right'],
+        'arrow-up'=>['solid','arrow-up'],'arrow-down'=>['solid','arrow-down'],
+        'chevron-right'=>['solid','chevron-right'],'chevron-left'=>['solid','chevron-left'],
+        'chevron-down'=>['solid','chevron-down'],'chevron-up'=>['solid','chevron-up'],
+        'refresh-cw'=>['solid','arrows-rotate'],'more-vertical'=>['solid','ellipsis-vertical'],
+        'camera'=>['solid','camera'],'video'=>['solid','video'],'play-circle'=>['regular','circle-play'],
+        'play'=>['solid','play'],'thumbs-up'=>['regular','thumbs-up'],'target'=>['solid','bullseye'],
+        'trending-up'=>['solid','arrow-trend-up'],'layers'=>['solid','layer-group'],'grid'=>['solid','grip'],
+        'list'=>['solid','list'],'copy'=>['regular','copy'],'clipboard'=>['regular','clipboard'],
+        'dollar-sign'=>['solid','turkish-lira-sign'],'percent'=>['solid','percent'],
+        'activity'=>['solid','wave-square'],'zap'=>['solid','bolt'],'award'=>['solid','award'],
+        'inbox'=>['solid','inbox'],'send'=>['solid','paper-plane'],'link'=>['solid','link'],
+        'map-pin'=>['solid','location-dot'],'save'=>['regular','floppy-disk'],'folder'=>['regular','folder'],
+        'database'=>['solid','database'],'toggle-left'=>['solid','toggle-off'],'toggle-right'=>['solid','toggle-on'],
+        'power'=>['solid','power-off'],'rotate-ccw'=>['solid','rotate-left'],
+        'whatsapp'=>['brands','whatsapp'],'instagram'=>['brands','instagram'],'facebook'=>['brands','facebook-f'],
+        'tiktok'=>['brands','tiktok'],'google'=>['brands','google'],'youtube'=>['brands','youtube'],
+        'twitter'=>['brands','x-twitter']
     ];
 
-    /**
-     * İkon render et
-     */
     public static function render(string $name, int $size = 20, string $class = ''): string
     {
-        // Eğer isim zaten ri- ile başlıyorsa direkt kullanalım, yoksa map'ten bakalım
-        if (str_starts_with($name, 'ri-')) {
-            $remixName = $name;
-        } else {
-            $mapped = self::$map[$name] ?? $name; // Mapte yoksa girileni kullan
-            
-            // Eğer sosyal medya ikonuysa (instagram, facebook vb.) genelde -fill istenir, 
-            // ama RemixIcon line versiyonu için -line ekliyoruz.
-            // Marka ikonları fill olarak gelir genelde.
-            $isBrand = in_array($mapped, ['whatsapp', 'instagram', 'facebook-circle', 'tiktok', 'google', 'youtube', 'twitter-x']);
-            
-            $suffix = $isBrand ? '-fill' : '-line';
-            $remixName = 'ri-' . $mapped . $suffix;
-        }
-
-        $classAttr = 'icon ' . $remixName . ($class ? ' ' . $class : '');
-        $styleAttr = "font-size: {$size}px; display: inline-flex; align-items: center; justify-content: center; line-height: 1;";
-
-        return '<i class="' . e($classAttr) . '" style="' . $styleAttr . '"></i>';
+        $item = self::$map[$name] ?? ['regular','circle'];
+        $prefix = $item[0] === 'brands' ? 'fa-brands' : ($item[0] === 'regular' ? 'fa-regular' : 'fa-solid');
+        $safeClass = trim($class);
+        return '<i class="icon fa-fw ' . $prefix . ' fa-' . $item[1] . ($safeClass ? ' ' . $safeClass : '') . '" aria-hidden="true" style="font-size:' . (int)$size . 'px"></i>';
     }
 
-    /**
-     * Tüm ikon listesi (Admin panel vb. yerde ikon seçici için)
-     */
     public static function list(): array
     {
         return array_keys(self::$map);
     }
 
-    /**
-     * İkon var mı kontrol
-     */
     public static function has(string $name): bool
     {
         return isset(self::$map[$name]);
