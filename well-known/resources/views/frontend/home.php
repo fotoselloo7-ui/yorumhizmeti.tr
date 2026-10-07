@@ -66,7 +66,7 @@ foreach ($platformKeys as $pk) {
                         <div class="hero-mockup-screen">
                             <div class="hero-stars">
                                 <?php for ($i = 0; $i < 5; $i++): ?>
-                                <svg width="20" height="20" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#FBBF24" stroke="#FBBF24" stroke-width="1"/></svg>
+                                    <?= icon('star-fill', 16, 'hero-star-icon') ?>
                                 <?php endfor; ?>
                             </div>
                             <div class="hero-rating-text">Müşteri Memnuniyeti %98</div>
@@ -77,24 +77,12 @@ foreach ($platformKeys as $pk) {
                         </div>
                     </div>
                     <!-- Floating social icons -->
-                    <div class="hero-float google">
-                        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                    </div>
-                    <div class="hero-float instagram">
-                        <svg viewBox="0 0 24 24" width="28" height="28"><defs><linearGradient id="ig" x1="0" y1="24" x2="24" y2="0"><stop offset="0%" stop-color="#feda75"/><stop offset="25%" stop-color="#fa7e1e"/><stop offset="50%" stop-color="#d62976"/><stop offset="75%" stop-color="#962fbf"/><stop offset="100%" stop-color="#4f5bd5"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig)"/><circle cx="12" cy="12" r="5" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="17.5" cy="6.5" r="1.2" fill="#fff"/></svg>
-                    </div>
-                    <div class="hero-float tiktok">
-                        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.48a8.2 8.2 0 0 0 4.82 1.56V7.59a4.84 4.84 0 0 1-1.06-.9z" fill="#000"/></svg>
-                    </div>
-                    <div class="hero-float youtube">
-                        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="#FF0000"/><polygon points="9.545 15.568 15.818 12 9.545 8.432" fill="#fff"/></svg>
-                    </div>
-                    <div class="hero-float facebook">
-                        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/></svg>
-                    </div>
-                    <div class="hero-float stats">
-                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2563EB" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                    </div>
+                    <div class="hero-float google"><?= icon('google', 26) ?></div>
+                    <div class="hero-float instagram"><?= icon('instagram', 26) ?></div>
+                    <div class="hero-float tiktok"><?= icon('tiktok', 25) ?></div>
+                    <div class="hero-float youtube"><?= icon('youtube', 25) ?></div>
+                    <div class="hero-float facebook"><?= icon('facebook', 24) ?></div>
+                    <div class="hero-float stats"><?= icon('bar-chart', 24) ?></div>
                 </div>
             </div>
         </div>
