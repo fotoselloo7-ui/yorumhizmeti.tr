@@ -67,6 +67,12 @@ class BlogController extends Controller
         ]);
     }
 
+    public function category(string $slug): void
+    {
+        $_GET['category'] = $slug;
+        $this->index();
+    }
+
     public function show(string $slug): void
     {
         $db = Database::getInstance();
