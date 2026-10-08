@@ -11,6 +11,7 @@ on:
       - 'well-known/database/migrations/netvera-inquiries-v1.sql'
       - 'well-known/app/Controllers/NetveraInquiryController.php'
       - 'well-known/tests/netvera-inquiry-e2e.php'
+      - 'well-known/tests/netvera-link-parity.php'
       - '.github/workflows/netvera-migration-qa.yml'
   workflow_dispatch:
 
@@ -71,6 +72,7 @@ jobs:
           }
           echo "Authentic, public-only catalogue metadata: OK\n";
           '
+          php well-known/tests/netvera-link-parity.php well-known/database/netvera-public-catalog.json
           php well-known/scripts/import-netvera-public.php well-known/database/netvera-public-catalog.json
       - name: Apply twice to test idempotency and untouched payment tables
         shell: bash
