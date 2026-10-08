@@ -93,6 +93,29 @@ jobs:
           $db -e "SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM payment_gateways),(SELECT COUNT(*) FROM users)" > /tmp/untouched.after
           diff -u /tmp/untouched.before /tmp/untouched.after
           echo 'PASS: 16 products, 3 categories, 41 images, 5 blogs, CRM, SEO, editable product and untouched payment tables'
+          # The newly created CRM is a working HTTP module, not just an empty table.
+          QA_ORIGIN=http://127.0.0.1:8006 php well-known/tests/netvera-inquiry-e2e.php
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_public_inquiries')" = 2 ]
+          # Verify the three previously warning-filled admin screens work after login.
+          qa_hash=$(php -r 'echo password_hash("qa-local-netvera", PASSWORD_DEFAULT);')
+          $db -e "UPDATE admins SET password='${qa_hash}', must_change_password=0 WHERE id=1"
+          curl -fsS -c /tmp/admin-cookies -b /tmp/admin-cookies http://127.0.0.1:8006/admin/giris > /tmp/nv-admin-login.html
+          csrf=$(sed -n 's/.*name="_csrf_token" value="\([a-z0-9]*\)".*/\1/p' /tmp/nv-admin-login.html | head -n 1)
+          [ "${#csrf}" -eq 64 ]
+          curl -sS -c /tmp/admin-cookies -b /tmp/admin-cookies -o /dev/null \
+            --data-urlencode "_csrf_token=$csrf" \
+            --data-urlencode 'email=admin@yorumhizmeti.tr' \
+            --data-urlencode 'password=qa-local-netvera' \
+            http://127.0.0.1:8006/admin/giris
+          curl -fsS -b /tmp/admin-cookies http://127.0.0.1:8006/admin/netvera-gelen-kutusu > /tmp/nv-admin-inbox.html
+          grep -q 'Netvera Canlı Destek ve Teklifler' /tmp/nv-admin-inbox.html
+          grep -q 'Automated QA' /tmp/nv-admin-inbox.html
+          ! grep -q 'gelen kutusu henüz kurulmamış' /tmp/nv-admin-inbox.html
+          curl -fsS -b /tmp/admin-cookies http://127.0.0.1:8006/admin/netvera-yazilimlar > /tmp/nv-admin-scripts.html
+          grep -q 'Yazılım Ürünleri (16)' /tmp/nv-admin-scripts.html
+          curl -fsS -b /tmp/admin-cookies http://127.0.0.1:8006/admin/netvera-kategoriler > /tmp/nv-admin-categories.html
+          grep -q 'Sektörel Yönetim Yazılımları' /tmp/nv-admin-categories.html
+          echo 'PASS: authenticated CRM inbox, edit-ready 16 products and original category management'
 
       - name: Assert production and remote databases cannot auto-bootstrap
         shell: bash
