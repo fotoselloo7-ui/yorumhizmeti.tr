@@ -60,6 +60,7 @@
     <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
     <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.2">
     <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
     <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=27.1">
