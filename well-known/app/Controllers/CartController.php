@@ -69,10 +69,24 @@ class CartController extends Controller
     {
         Csrf::check();
         $key = (int) ($_POST['key'] ?? -1);
-        $quantity = max(1, (int) ($_POST['quantity'] ?? 1));
-        if (isset($_SESSION['cart'][$key])) {
-            $_SESSION['cart'][$key]['quantity'] = $quantity;
+        if (!isset($_SESSION['cart'][$key])) {
+            redirect('/sepet');
         }
+
+        $item = $_SESSION['cart'][$key];
+        $pkg = Database::getInstance()->fetch(
+            "SELECT min_quantity, max_quantity, status FROM packages WHERE id = ? AND status = 'active'",
+            [(int)($item['id'] ?? 0)]
+        );
+        if (!$pkg) {
+            flash('error', 'Bu paket artık satışta değil.');
+            redirect('/sepet');
+        }
+
+        $min = max(1, (int)$pkg['min_quantity']);
+        $max = max($min, (int)$pkg['max_quantity']);
+        $quantity = max($min, min($max, (int)($_POST['quantity'] ?? $min)));
+        $_SESSION['cart'][$key]['quantity'] = $quantity;
         redirect('/sepet');
     }
 
