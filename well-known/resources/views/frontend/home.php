@@ -11,7 +11,18 @@ if (!function_exists('yh6Platform')) {
         if (str_contains($s,'youtube')) return ['youtube','youtube','YouTube'];
         if (str_contains($s,'facebook')) return ['facebook','facebook','Facebook'];
         if (str_contains($s,'twitter') || str_contains($s,' x ')) return ['twitter','twitter','X'];
+        if (str_contains($s,'threads')) return ['threads','threads','Threads'];
+        if (str_contains($s,'telegram')) return ['telegram','telegram','Telegram'];
+        if (str_contains($s,'spotify')) return ['spotify','spotify','Spotify'];
+        if (str_contains($s,'discord')) return ['discord','discord','Discord'];
+        if (str_contains($s,'linkedin')) return ['linkedin','linkedin','LinkedIn'];
+        if (str_contains($s,'twitch')) return ['twitch','twitch','Twitch'];
         if (str_contains($s,'google')) return ['google','google','Google'];
+        if (str_contains($s,'e-ticaret') || str_contains($s,'eticaret')) return ['ecommerce','store','E-Ticaret'];
+        if (str_contains($s,'mobil')) return ['mobileapp','mobile-app','Mobil'];
+        if (str_contains($s,'içerik') || str_contains($s,'icerik')) return ['content','content-create','İçerik'];
+        if (str_contains($s,'grafik')) return ['graphic','palette','Tasarım'];
+        if (str_contains($s,'yerel')) return ['local','local-business','Yerel'];
         if (str_contains($s,'web') || str_contains($s,'site')) return ['web','globe','Web Site'];
         if (str_contains($s,'seo')) return ['seo','bar-chart','SEO'];
         return ['default','package','Hizmet'];
