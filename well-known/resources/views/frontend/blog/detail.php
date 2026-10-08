@@ -28,7 +28,52 @@
    <main>
     <article class="yv-content-card" style="max-width:none;margin:0">
      <?php if(!empty($toc)): ?><div class="blog-toc" style="margin-bottom:22px;padding:16px"><strong style="font-size:11px">İçindekiler</strong><ul style="margin:10px 0 0;padding-left:18px"><?php foreach($toc as $item): ?><li style="font-size:9px;margin:6px 0"><a href="#<?= e($item['id']??'') ?>"><?= e($item['text']??'') ?></a></li><?php endforeach; ?></ul></div><?php endif; ?>
+     <?php
+       $nvAnswer=trim((string)($nvSeoData['direct_answer']??''));
+       $nvQuestion=trim((string)($nvSeoData['main_question']??''));
+     ?>
+     <?php if($nvAnswer!==''): ?>
+     <aside class="nv44-answer-box" aria-label="Kısa cevap">
+       <span class="nv44-answer-label"><?= icon('sparkles',15) ?> Kısa Cevap</span>
+       <?php if($nvQuestion!==''): ?><h2><?= e($nvQuestion) ?></h2><?php endif; ?>
+       <p><?= e($nvAnswer) ?></p>
+     </aside>
+     <?php endif; ?>
      <div class="blog-body nv42-article-body"><?= \App\Services\BlogContentRenderer::render((string)$post['content']) ?></div>
+     <?php
+       $nvSourceUrls=preg_split('/\R/',(string)($nvSeoData['sources']??''))?:[];
+       $nvSafeSources=[];
+       foreach($nvSourceUrls as $nvSource){
+          $nvSource=trim($nvSource);
+          if($nvSource!==''&&filter_var($nvSource,FILTER_VALIDATE_URL)
+             &&in_array(strtolower((string)parse_url($nvSource,PHP_URL_SCHEME)),['http','https'],true))
+             $nvSafeSources[]=$nvSource;
+       }
+       $nvSafeSources=array_slice(array_unique($nvSafeSources),0,15);
+     ?>
+     <?php if($nvSafeSources): ?>
+       <section class="nv44-sources" aria-label="Makale kaynakları">
+         <h2>Kaynaklar ve İleri Okuma</h2>
+         <ul>
+           <?php foreach($nvSafeSources as $nvSource): ?>
+             <li><a href="<?= e($nvSource) ?>" rel="noopener noreferrer nofollow" target="_blank"><?= e((string)(parse_url($nvSource,PHP_URL_HOST)?:$nvSource)) ?> <?= icon('external-link',12) ?></a></li>
+           <?php endforeach; ?>
+         </ul>
+       </section>
+     <?php endif; ?>
+     <?php if(!empty($nvSeoData['author_name']) || !empty($nvSeoData['reviewer_name'])): ?>
+       <div class="nv44-byline">
+         <?php if(!empty($nvSeoData['author_name'])): ?>
+           <span><?= icon('user-round',13) ?> Yazar: <?= e($nvSeoData['author_name']) ?></span>
+         <?php endif; ?>
+         <?php if(!empty($nvSeoData['reviewer_name'])): ?>
+           <span><?= icon('check-circle',13) ?> Kontrol: <?= e($nvSeoData['reviewer_name']) ?></span>
+         <?php endif; ?>
+         <?php if(!empty($nvSeoData['last_reviewed'])): ?>
+           <span><?= e($nvSeoData['last_reviewed']) ?></span>
+         <?php endif; ?>
+       </div>
+     <?php endif; ?>
      <?php if(!empty($tags)): ?><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid #edf0f4"><?php foreach($tags as $tag): ?><a class="yv-blog-chip" href="/blog?tag=<?= e($tag['slug']) ?>">#<?= e($tag['name']) ?></a><?php endforeach; ?></div><?php endif; ?>
     </article>
 
