@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($pageTitle ?? setting('default_seo_title', 'Yorum Hizmeti')) ?></title>
     <meta name="description" content="<?= e($metaDescription ?? setting('default_seo_description')) ?>">
+    <?php
+      $nvRobots = (string)($nvSeoData['robots'] ?? '');
+      if ($nvRobots === '' && !empty($noindex)) $nvRobots = 'noindex,follow';
+    ?>
+    <?php if ($nvRobots !== ''): ?><meta name="robots" content="<?= e($nvRobots) ?>"><?php endif; ?>
+    <?php if (!empty($nvSeoData['author_name'])): ?><meta name="author" content="<?= e($nvSeoData['author_name']) ?>"><?php endif; ?>
     <?php if (!empty($canonicalUrl)): ?>
     <link rel="canonical" href="<?= e($canonicalUrl) ?>">
     <?php endif; ?>    <!-- Favicon -->
@@ -90,6 +96,32 @@
     <style>:root{<?= implode(';', $overrides) ?>}</style>
     <?php endif; ?>
 
+    <?php
+      $nvSemantic = null;
+      if (!empty($nvSeoData['geo_summary']) || !empty($nvSeoData['entity_topics']) ||
+          !empty($nvSeoData['service_area'])) {
+        $nvSemantic = [
+          '@context'=>'https://schema.org',
+          '@type'=>'WebPage',
+          'name'=>$pageTitle ?? '',
+          'url'=>$canonicalUrl ?? url($_SERVER['REQUEST_URI'] ?? '/')
+        ];
+        if (!empty($nvSeoData['geo_summary'])) $nvSemantic['description'] = $nvSeoData['geo_summary'];
+        $topics = array_filter(array_map('trim', explode(',', (string)($nvSeoData['entity_topics']??''))));
+        if ($topics) $nvSemantic['about'] = array_map(static fn($t)=>['@type'=>'Thing','name'=>$t],array_slice(array_values($topics),0,15));
+        if (!empty($nvSeoData['service_area'])) $nvSemantic['spatialCoverage'] = $nvSeoData['service_area'];
+        if (!empty($nvSeoData['author_name']))
+          $nvSemantic['author'] = [
+            '@type'=>($nvSeoData['author_type']??'')==='Person'?'Person':'Organization',
+            'name'=>$nvSeoData['author_name']
+          ];
+        $sameAs = array_filter(array_map('trim', preg_split('/\R/', (string)($nvSeoData['same_as_urls']??''))?:[]));
+        if($sameAs) $nvSemantic['sameAs']=array_values($sameAs);
+      }
+    ?>
+    <?php if ($nvSemantic): ?>
+    <script type="application/ld+json"><?= json_encode($nvSemantic, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) ?></script>
+    <?php endif; ?>
     <?php if (!empty($schema)): ?>
     <script type="application/ld+json"><?= $schema ?></script>
     <?php endif; ?>
