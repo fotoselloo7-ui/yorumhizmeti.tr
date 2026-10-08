@@ -1,0 +1,332 @@
+/* ============================================================
+   YorumHizmeti.tr — BALANCED RESPONSIVE V14
+   20px is the MINIMUM viewport gutter, not a full-width command.
+   Content is centered and capped so ultrawide screens never stretch.
+   Loaded after responsive-fluid-v13.css.
+   ============================================================ */
+
+:root{
+  --page-gutter:20px;
+  --content-max:1440px;
+  --content-width:min(var(--content-max), calc(100% - (var(--page-gutter) * 2)));
+}
+
+/* ---- global centered frame: minimum 20px gutter, max 1440px ---- */
+.container,
+.yh-home-v6 .container,
+.site-header .container,
+.nv-topbar .container,
+.site-footer .container,
+.panel-section>.container,
+.yv-page-hero>.container,
+.yv-simple-hero>.container{
+  width:var(--content-width)!important;
+  max-width:var(--content-max)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.container .container{
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+/* stop wide sections from visually stretching */
+.yh-home-v6 section> .container,
+.yv-category-v5 section> .container,
+.yv-product-v5 section> .container,
+.yv-checkout-v5 section> .container,
+.yv-blog-v8 section> .container{
+  width:var(--content-width)!important;
+  max-width:var(--content-max)!important;
+  margin-inline:auto!important;
+}
+
+/* ---------- header / topbar ---------- */
+.nv-topbar-inner,
+.header-inner{max-width:100%!important}
+.header-inner{gap:clamp(12px,1.2vw,24px)!important}
+.nav-main{justify-content:center!important}
+.header-search-v4{flex:0 1 220px!important;max-width:240px!important}
+
+/* ============================================================
+   HOME — balanced, not stretched
+   ============================================================ */
+.yh6-hero-grid{
+  grid-template-columns:minmax(0,.92fr) minmax(500px,1.08fr)!important;
+  gap:clamp(30px,3vw,54px)!important;
+  max-width:100%!important;
+}
+.yh6-hero-copy{
+  max-width:650px!important;
+}
+.yh6-hero-copy h1{
+  max-width:640px!important;
+  font-size:clamp(50px,3.7vw,68px)!important;
+  line-height:.99!important;
+}
+.yh6-hero-copy>p{max-width:620px!important}
+.yh6-hero-art{
+  width:100%!important;
+  max-width:760px!important;
+  justify-self:end!important;
+}
+.yh6-platform-bar{
+  width:100%!important;
+  max-width:100%!important;
+}
+.yh6-why-grid{
+  grid-template-columns:minmax(320px,.78fr) minmax(0,1.22fr)!important;
+  gap:clamp(34px,4vw,64px)!important;
+}
+.yh6-dashboard{max-width:760px!important;justify-self:end!important}
+.yh6-featured-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.yh6-promo-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.yh6-review-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.yh6-blog-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+
+/* ============================================================
+   ALL SERVICES / CATEGORY
+   ============================================================ */
+.yv-hero-grid{
+  grid-template-columns:minmax(0,.92fr) minmax(460px,1.08fr)!important;
+  gap:clamp(32px,3.5vw,62px)!important;
+}
+.yv-hub-hero-art-v11{max-width:720px!important;justify-self:end!important}
+.yv-category-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+.yv-promo{
+  grid-template-columns:minmax(0,1fr) minmax(340px,.72fr)!important;
+}
+
+.yv-category-hero-grid-v5{
+  grid-template-columns:minmax(0,.92fr) minmax(460px,1.08fr)!important;
+  gap:clamp(30px,3.6vw,64px)!important;
+}
+.yv-category-hero-art-v5{max-width:720px!important;justify-self:end!important}
+.yv-category-chip-row-v5{grid-template-columns:repeat(8,minmax(0,1fr))!important}
+.yv-category-package-grid-v5{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.yv-category-story-grid-v5{
+  grid-template-columns:minmax(280px,.95fr) minmax(360px,1.15fr) minmax(240px,.72fr)!important;
+}
+.yv-category-review-grid-v5{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+
+/* ============================================================
+   PRODUCT
+   ============================================================ */
+.yv-product-hero-grid-v5{
+  grid-template-columns:minmax(0,.92fr) minmax(460px,1.08fr)!important;
+  gap:clamp(28px,3vw,54px)!important;
+}
+.yv-product-hero-visual-v5{max-width:720px!important;justify-self:end!important}
+.yv-product-stage-grid-v5{
+  grid-template-columns:minmax(0,1fr) 380px!important;
+  gap:22px!important;
+}
+.yv-product-related-grid-v5{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+
+/* ============================================================
+   CART / CHECKOUT
+   ============================================================ */
+.yv-cart-layout-v5,
+.yv-checkout-layout-v5{
+  grid-template-columns:minmax(0,1fr) 370px!important;
+  gap:22px!important;
+}
+.yv-checkout-proofbar-v5>.container{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.yv-checkout-review-grid-v9{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+
+/* ============================================================
+   BLOG
+   ============================================================ */
+.yv-blog-hero-grid-v8{
+  grid-template-columns:minmax(0,1fr) minmax(440px,1fr)!important;
+  gap:clamp(32px,4vw,70px)!important;
+}
+.yv-blog-hero-art-v8{max-width:700px!important;justify-self:end!important}
+.yv-blog-layout-v8{
+  grid-template-columns:minmax(0,1fr) 310px!important;
+  gap:24px!important;
+}
+.yv-blog-post-grid-v8{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.yv-blog-layout{
+  grid-template-columns:minmax(0,1fr) 310px!important;
+  gap:24px!important;
+}
+
+/* ============================================================
+   CONTACT / FAQ / CONTENT / ACCOUNT
+   ============================================================ */
+.yv-simple-hero-visual-v12>.container{
+  grid-template-columns:minmax(0,1fr) minmax(420px,.82fr)!important;
+  gap:clamp(30px,4vw,64px)!important;
+}
+.yv-simple-hero-art-v12{max-width:680px!important;justify-self:end!important}
+.yv-contact-grid{
+  grid-template-columns:360px minmax(0,1fr)!important;
+  gap:36px!important;
+}
+.yv-faq-shell{
+  grid-template-columns:320px minmax(0,1fr)!important;
+  gap:36px!important;
+}
+.panel-layout{
+  grid-template-columns:240px minmax(0,1fr)!important;
+  gap:24px!important;
+}
+.order-detail-layout{
+  grid-template-columns:minmax(0,1fr) 340px!important;
+  gap:22px!important;
+}
+
+/* ---------- footer ---------- */
+.footer-grid-v9{
+  grid-template-columns:1.2fr .8fr .8fr .9fr 1fr!important;
+  gap:clamp(22px,2.2vw,38px)!important;
+}
+
+/* ============================================================
+   BREAKPOINTS
+   ============================================================ */
+
+/* smaller desktop / laptop: this is where the exact 20px gutter appears */
+@media(max-width:1480px){
+  .container,
+  .yh-home-v6 .container,
+  .site-header .container,
+  .nv-topbar .container,
+  .site-footer .container,
+  .panel-section>.container,
+  .yv-page-hero>.container,
+  .yv-simple-hero>.container{
+    width:calc(100% - 40px)!important;
+    max-width:none!important;
+    margin-inline:20px!important;
+  }
+
+  .yh-home-v6 section> .container,
+  .yv-category-v5 section> .container,
+  .yv-product-v5 section> .container,
+  .yv-checkout-v5 section> .container,
+  .yv-blog-v8 section> .container{
+    width:calc(100% - 40px)!important;
+    max-width:none!important;
+    margin-inline:20px!important;
+  }
+
+  .yh6-hero-copy h1{font-size:clamp(48px,4vw,64px)!important}
+}
+
+/* compact desktop */
+@media(max-width:1180px){
+  .nav-main{display:none!important}
+  .mobile-menu-btn{display:flex!important}
+  .header-search-v4{margin-left:auto!important}
+
+  .yh6-featured-grid,.yh6-review-grid,.yh6-blog-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  .yv-category-chip-row-v5{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .footer-grid-v9{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .footer-brand{grid-column:1/-1!important}
+}
+
+/* tablet */
+@media(max-width:980px){
+  .yh6-hero-grid,
+  .yv-hero-grid,
+  .yv-category-hero-grid-v5,
+  .yv-product-hero-grid-v5,
+  .yv-blog-hero-grid-v8,
+  .yv-simple-hero-visual-v12>.container{
+    grid-template-columns:1fr!important;
+  }
+
+  .yh6-hero-copy,.yv-blog-hero-copy-v8,.yv-product-hero-copy-v5{
+    max-width:720px!important;
+  }
+  .yh6-hero-art,.yv-hub-hero-art-v11,.yv-category-hero-art-v5,
+  .yv-product-hero-visual-v5,.yv-blog-hero-art-v8,.yv-simple-hero-art-v12{
+    width:100%!important;
+    max-width:720px!important;
+    justify-self:center!important;
+  }
+
+  .yh6-why-grid{grid-template-columns:1fr!important}
+  .yh6-dashboard{max-width:none!important;justify-self:stretch!important}
+
+  .yh6-featured-grid,.yh6-promo-grid,.yh6-review-grid,.yh6-blog-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .yv-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yv-category-package-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yv-category-story-grid-v5{grid-template-columns:1fr!important}
+  .yv-category-review-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+
+  .yv-product-stage-grid-v5,
+  .yv-cart-layout-v5,
+  .yv-checkout-layout-v5,
+  .yv-blog-layout-v8,
+  .yv-blog-layout,
+  .yv-contact-grid,
+  .yv-faq-shell,
+  .panel-layout,
+  .order-detail-layout{
+    grid-template-columns:1fr!important;
+  }
+  .yv-product-buy-v5,.yv-cart-summary-v5,.yv-checkout-summary-v5{position:static!important}
+  .yv-product-related-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yv-blog-sidebar-v8{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yv-blog-news-v8{grid-column:1/-1!important}
+}
+
+/* mobile */
+@media(max-width:768px){
+  :root{--page-gutter:20px}
+
+  .container,
+  .yh-home-v6 .container,
+  .site-header .container,
+  .site-footer .container,
+  .panel-section>.container,
+  .yv-page-hero>.container,
+  .yv-simple-hero>.container,
+  .yh-home-v6 section> .container,
+  .yv-category-v5 section> .container,
+  .yv-product-v5 section> .container,
+  .yv-checkout-v5 section> .container,
+  .yv-blog-v8 section> .container{
+    width:calc(100% - 40px)!important;
+    max-width:none!important;
+    margin-inline:20px!important;
+  }
+
+  .yh6-hero-copy h1{font-size:clamp(38px,11vw,54px)!important}
+  .yh6-featured-grid,.yh6-promo-grid,.yh6-review-grid,.yh6-blog-grid{
+    grid-template-columns:1fr!important;
+  }
+  .yh6-how-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yh6-faq-grid{grid-template-columns:1fr!important}
+
+  .yv-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yv-category-chip-row-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .yv-category-package-grid-v5,.yv-category-review-grid-v5{grid-template-columns:1fr!important}
+
+  .yv-product-related-grid-v5,.yv-product-review-grid-v5{grid-template-columns:1fr!important}
+  .yv-blog-post-grid-v8,.yv-blog-sidebar-v8{grid-template-columns:1fr!important}
+  .yv-blog-benefits-v8 .container>div{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+
+  .footer-grid-v9{grid-template-columns:1fr 1fr!important}
+  .footer-brand,.footer-subscribe-v9{grid-column:1/-1!important}
+}
+
+@media(max-width:480px){
+  .yv-category-grid{grid-template-columns:1fr!important}
+  .yh6-how-grid{grid-template-columns:1fr!important}
+  .footer-grid-v9{grid-template-columns:1fr!important}
+  .footer-brand,.footer-subscribe-v9{grid-column:auto!important}
+}
