@@ -55,6 +55,7 @@ class CategoryController extends Controller
             'parents' => $parents,
             'icons' => $icons,
             'seoResult' => $seo,
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('category',(int)$id),
         ]);
     }
 
@@ -72,6 +73,7 @@ class CategoryController extends Controller
         $data['seo_score'] = $score['score'];
 
         $this->db->update('categories', $data, 'id = ?', [(int) $id]);
+        \App\Services\NetveraSeoBridge::save('category',(int)$id,$_POST);
         logActivity('category_update', 'Kategori güncellendi: ' . $data['name']);
         flash('success', 'Kategori güncellendi.');
         redirect('/admin/kategoriler');
