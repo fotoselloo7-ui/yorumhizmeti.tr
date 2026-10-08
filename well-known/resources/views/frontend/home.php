@@ -110,6 +110,51 @@ if (!function_exists('yh18FeaturedCard')) {
     }
 }
 
+
+/**
+ * Authentic Netvera software card. Product destinations retain every indexed
+ * /hazir-scriptler/{slug} route; zero-priced products never invent a free offer.
+ */
+if (!function_exists('yh41SoftwareCard')) {
+    function yh41SoftwareCard(array $product): string {
+        $price = (float)($product['price'] ?? 0);
+        $old = (float)($product['old_price'] ?? 0);
+        $discount = ($old > $price && $price > 0) ? round((1-$price/$old)*100) : 0;
+        $detail = '/hazir-scriptler/'.rawurlencode((string)$product['slug']);
+        $image = trim((string)($product['cover_image'] ?? ''));
+        $short = trim(strip_tags((string)($product['short_desc'] ?? '')));
+        $ratingCount = (int)($product['review_count'] ?? 0);
+        ob_start(); ?>
+        <article class="yh18-featured-card yh41-software-card" data-netvera-software-card>
+            <a class="yh41-software-media" href="<?= e($detail) ?>" aria-label="<?= e($product['name']) ?> yazılımını incele">
+                <?php if ($image): ?>
+                <img src="<?= e(upload_url($image)) ?>" alt="<?= e($product['name']) ?>" loading="lazy" decoding="async">
+                <?php else: ?>
+                <span class="yh41-software-placeholder"><?= icon('monitor', 35) ?></span>
+                <?php endif; ?>
+                <span class="yh41-software-media-tag"><?= icon('code', 12) ?> HAZIR YAZILIM</span>
+            </a>
+            <div class="yh41-software-info">
+                <small><?= e($product['category_name'] ?: 'NetVera Yazılım') ?></small>
+                <h3><a href="<?= e($detail) ?>"><?= e($product['name']) ?></a></h3>
+                <?php if ($short): ?><p><?= e(excerpt($short, 106)) ?></p><?php endif; ?>
+                <?php if ($ratingCount > 0): ?>
+                  <span class="yh41-software-rating"><?= icon('star', 12) ?> <?= e(number_format((float)$product['average_rating'],1,',','.')) ?> / 5 (<?= $ratingCount ?> değerlendirme)</span>
+                <?php endif; ?>
+            </div>
+            <div class="yh18-card-bottom yh41-software-bottom">
+                <div class="yh18-card-price">
+                    <?php if ($old > $price && $price > 0): ?><del><?= money($old) ?></del><?php endif; ?>
+                    <strong><?= $price > 0 ? money($price) : 'Fiyat Sorunuz' ?></strong>
+                    <?php if ($discount > 0): ?><em>%<?= $discount ?> indirim</em><?php endif; ?>
+                </div>
+                <a href="<?= e($detail) ?>" class="yh18-card-cta">Yazılımı İncele <?= icon('arrow-right', 12) ?></a>
+            </div>
+        </article>
+        <?php return ob_get_clean();
+    }
+}
+
 $heroCutout = asset('img/hero-woman-cutout.png');
 
 $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['extra'] : [];
@@ -220,7 +265,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                 <span class="yh18-featured-avatar <?= e($firstFeaturedClass) ?>" data-featured-avatar><?= icon($firstFeaturedIcon, 24) ?></span>
                 <div>
                     <span class="yh6-eyebrow">Kategoriye Göre Popüler Paketler</span>
-                    <h2><span data-featured-title><?= e($firstFeaturedGroup['category']['name']) ?></span> Öne Çıkan Paketler</h2>
+                    <h2><span data-featured-title><?= e($firstFeaturedGroup['category']['name']) ?></span> <span data-featured-kind>Öne Çıkan Paketler</span></h2>
                     <p data-featured-subtitle><?= e(($firstFeaturedGroup['category']['name'] ?? 'Hizmet') . ' kategorisindeki öne çıkan paketleri inceleyin.') ?></p>
                 </div>
             </div>
@@ -257,6 +302,11 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                 <div class="yh24-featured-filter-list" role="tablist" aria-label="<?= e($navGroup['title']) ?> alt kategorileri">
                     <?php foreach ($navGroup['categories'] as $filterCategory):
                         [$gcls,$gico,$glabel] = yh6Platform($filterCategory['slug']??'', $filterCategory['name']??'');
+                        $isSoftware = (($filterCategory['kind'] ?? '') === 'software');
+                        if ($isSoftware) {
+                            $gcls = 'software';
+                            $gico = $filterCategory['icon'] ?? 'monitor';
+                        }
                         $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
                     ?>
                     <button type="button"
@@ -265,7 +315,8 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                             data-featured-parent-group="<?= e($navGroup['key']) ?>"
                             data-title="<?= e($filterCategory['name']) ?>"
                             data-class="<?= e($gcls) ?>"
-                            data-url="/kategori/<?= e($filterCategory['slug']) ?>"
+                            data-kind="<?= $isSoftware ? 'software' : 'package' ?>"
+                            data-url="<?= e($filterCategory['url'] ?? '/kategori/'.$filterCategory['slug']) ?>"
                             aria-selected="<?= $selected?'true':'false' ?>"
                             title="<?= e($filterCategory['name']) ?>">
                         <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
@@ -300,6 +351,32 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                     </a>
                 </div>
             </div>
+
+            <?php foreach(($featuredSoftwareGroups ?? []) as $softwareGroup): ?>
+            <div class="yh18-featured-pane yh41-software-pane"
+                 data-featured-pane="<?= (int)$softwareGroup['category']['id'] ?>"
+                 data-kind="software"
+                 hidden>
+                <div class="yh18-featured-grid yh41-software-grid" data-featured-track role="region"
+                     aria-label="<?= e($softwareGroup['category']['name']) ?> hazır yazılımları">
+                    <?php foreach($softwareGroup['products'] as $product): ?>
+                        <?= yh41SoftwareCard($product) ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="yh18-carousel-row">
+                    <div class="yh18-carousel-controls" aria-label="Yazılımları kaydır">
+                        <button type="button" class="yh18-slide-arrow" data-slide-prev aria-label="Önceki yazılımlar"><?= icon('chevron-left',18) ?></button>
+                        <span data-slide-count aria-live="off">1 / <?= count($softwareGroup['products']) ?></span>
+                        <button type="button" class="yh18-slide-arrow" data-slide-next aria-label="Sonraki yazılımlar"><?= icon('chevron-right',18) ?></button>
+                    </div>
+                </div>
+                <div class="yh18-featured-footer">
+                    <a href="<?= e($softwareGroup['category']['url']) ?>" class="yh18-all-link">
+                        <?= e($softwareGroup['category']['name']) ?> kategorisindeki tüm yazılımları gör <?= icon('arrow-right', 11) ?>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
             <?php endforeach; ?>
         </div>
     </div>
