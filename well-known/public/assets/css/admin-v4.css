@@ -47,3 +47,12 @@ table{border-collapse:separate!important;border-spacing:0!important}thead th{bac
  .admin-lead-heading h2{font-size:17px}
  .admin-lead-table{min-width:640px}
 }
+
+/* Backend catalog visibility; no storefront design changes. */
+.adm-catalog-status{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:0 0 18px;padding:11px 13px;background:#f8faff;border:1px solid #e5eafb;border-radius:11px}
+.adm-catalog-status>span,.adm-catalog-status>a{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #e4e9f4;border-radius:9px;background:#fff;color:#46536e;font-size:12px;text-decoration:none}
+.adm-catalog-status strong{color:#1e2b51}
+.adm-catalog-status>a{margin-left:auto;color:#5746d4;font-weight:700}
+.adm-catalog-status>.adm-catalog-alert{background:#fff4e5;border-color:#f4d7ab;color:#955d00}
+.adm-page-top-badges form{display:inline-flex;align-items:center}
+@media(max-width:700px){.adm-catalog-status{align-items:stretch}.adm-catalog-status>a{margin-left:0}.adm-page-top-badges{display:flex;flex-wrap:wrap;gap:8px}}
