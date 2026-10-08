@@ -7,20 +7,37 @@ class CategoryController extends Controller
 {
     public function index(): void
     {
-        $db = Database::getInstance();
-        $q = trim($_GET['q'] ?? '');
+        $q = trim((string)($_GET['q'] ?? ''));
+        $q = mb_substr($q, 0, 100);
+        $activeGroup = (string)($_GET['grup'] ?? '');
+        $groups = \App\Services\CatalogMenuService::groups();
+        $keys = array_column($groups, 'key');
+        if ($activeGroup !== '' && !in_array($activeGroup, $keys, true)) $activeGroup = '';
+
         if ($q !== '') {
-            $categories = $db->fetchAll(
-                "SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL AND (name LIKE ? OR description LIKE ?) ORDER BY sort_order ASC",
-                ["%{$q}%", "%{$q}%"]
-            );
-        } else {
-            $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC");
+            $groups = array_map(static function (array $group) use ($q): array {
+                $needle = mb_strtolower($q,'UTF-8');
+                $group['categories'] = array_values(array_filter($group['categories'], static function (array $cat) use ($needle): bool {
+                    if (str_contains(mb_strtolower(($cat['name'] ?? '') . ' ' . ($cat['description'] ?? ''),'UTF-8'), $needle)) return true;
+                    foreach ($cat['children'] as $child) {
+                        if (str_contains(mb_strtolower($child['name'] ?? '','UTF-8'),$needle)) return true;
+                    }
+                    return false;
+                }));
+                return $group;
+            }, $groups);
+            $groups = array_values(array_filter($groups, static fn($group) => !empty($group['categories'])));
         }
+
+        if ($activeGroup !== '') {
+            $groups = array_values(array_filter($groups, static fn($g) => $g['key'] === $activeGroup));
+        }
+
         $this->render('frontend/categories', [
             'pageTitle' => 'Hizmet Kategorileri - ' . setting('site_name'),
-            'metaDescription' => 'Dijital hizmet kategorilerimizi inceleyin.',
-            'categories' => $categories,
+            'metaDescription' => 'Sosyal medya, ajans, yazılım, SEO ve dijital pazarlama hizmetlerini keşfedin.',
+            'catalogGroups' => $groups,
+            'activeCatalogGroup' => $activeGroup,
             'searchQuery' => $q,
         ]);
     }
