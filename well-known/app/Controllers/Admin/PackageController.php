@@ -11,7 +11,13 @@ class PackageController extends Controller
     {
         $packages = $this->db->fetchAll("SELECT p.*, c.name as category_name, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.sort_order ASC, p.id DESC");
         $categories = $this->db->fetchAll("SELECT id, name, parent_id FROM categories WHERE status = 'active' ORDER BY parent_id ASC, name ASC");
-        $this->renderAdmin('admin/packages/index', ['pageTitle' => 'Paketler', 'packages' => $packages, 'categories' => $categories]);
+        $catalogStats = [
+            'total' => count($packages),
+            'active' => count(array_filter($packages, static fn($p) => $p['status'] === 'active')),
+            'hidden' => count(array_filter($packages, static fn($p) => $p['status'] !== 'active')),
+            'missing_category' => count(array_filter($packages, static fn($p) => empty($p['category_name']))),
+        ];
+        $this->renderAdmin('admin/packages/index', ['pageTitle' => 'Paketler', 'packages' => $packages, 'categories' => $categories, 'catalogStats' => $catalogStats]);
     }
 
     /**
