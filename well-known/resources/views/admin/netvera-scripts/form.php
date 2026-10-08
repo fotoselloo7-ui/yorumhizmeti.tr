@@ -136,7 +136,7 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
     <section class="adm-card nvpa-card">
       <div class="adm-card-header"><h3><?= icon('layers',18) ?> Ürün Modülleri ve Teknik Detaylar</h3><span>05 / Yapılandırılmış Veriler</span></div>
       <div class="adm-card-body">
-        <p>İçe aktarılan ürünün modül, özellik, lisans ve SSS yapıları korunur. JSON listeleri doğrulanır; geçersiz veri kaydedilmez.</p>
+        <p>İçe aktarılan ürünün modül, özellik, lisans ve SSS yapıları korunur. JSON dizi veya nesneleri doğrulanır; geçersiz veri kaydedilmez.</p>
         <div class="nvpa-two">
           <?php foreach([
             'modules_json'=>'Yazılım Modülleri',
@@ -198,11 +198,11 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
     for(var i=0;i<fields.length;i++){
       try{
         var parsed=JSON.parse(fields[i].value||'[]');
-        if(!Array.isArray(parsed))throw new Error('Array required');
+        if(!parsed || typeof parsed !== 'object')throw new Error('Array or object required');
       }catch(e){
         event.preventDefault();
         error.hidden=false;
-        error.textContent='Lütfen "'+fields[i].previousElementSibling.textContent.trim()+'" alanına geçerli bir JSON listesi girin.';
+        error.textContent='Lütfen "'+fields[i].previousElementSibling.textContent.trim()+'" alanına geçerli bir JSON dizi veya nesnesi girin.';
         fields[i].focus();
         error.scrollIntoView({behavior:'smooth',block:'center'});
         return;
