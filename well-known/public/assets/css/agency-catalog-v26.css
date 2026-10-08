@@ -114,3 +114,19 @@
 @media(max-width:1100px){.yh24-featured-filter-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:680px){.yh24-featured-filter-list{grid-template-columns:repeat(2,minmax(0,1fr))}.yh24-featured-filter.yh18-featured-tab{min-height:92px;padding:8px}.yh26-filter-icon{height:32px;width:32px}}
 @media(prefers-reduced-motion:reduce){.yh24-featured-filter.yh18-featured-tab{transition:none!important}.yh24-featured-filter.yh18-featured-tab:hover{transform:none}}
+
+/* Agency categories in the homepage's existing eight-tile quick strip.
+   Without these variants some cards had white text on a transparent background. */
+.yh6-platform-bar .ecommerce{background:linear-gradient(130deg,#10a879,#087d7a)}
+.yh6-platform-bar .mobileapp{background:linear-gradient(130deg,#6657e7,#8b48d7)}
+.yh6-platform-bar .content{background:linear-gradient(130deg,#f1803c,#d94882)}
+.yh6-platform-bar .graphic{background:linear-gradient(130deg,#ee4c8c,#974bd9)}
+.yh6-platform-bar .ads{background:linear-gradient(130deg,#ef8231,#e15048)}
+.yh6-platform-bar .local{background:linear-gradient(130deg,#1c9d84,#258dcc)}
+.yh6-platform-bar .reputation{background:linear-gradient(130deg,#13877c,#1670ad)}
+.yh6-platform-bar .threads{background:linear-gradient(130deg,#15171e,#333b48)}
+.yh6-platform-bar .telegram{background:linear-gradient(130deg,#289fdb,#2e77c0)}
+.yh6-platform-bar .spotify{background:linear-gradient(130deg,#1ab35b,#117d53)}
+.yh6-platform-bar .discord{background:linear-gradient(130deg,#6575ec,#444bbd)}
+.yh6-platform-bar .linkedin{background:linear-gradient(130deg,#126cae,#214b9e)}
+.yh6-platform-bar .twitch{background:linear-gradient(130deg,#9057e7,#5734ad)}

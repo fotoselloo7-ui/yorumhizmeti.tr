@@ -217,6 +217,19 @@ for(const screen of screens){
           errors.push('Platform category tiles overflow their grid');failed=true;
         }
       }
+      if(p.route==='/' && screen.name==='masaustu'){
+        const invisibleQuickCards=await page.locator('.yh6-platform-bar a').evaluateAll(cards=>
+          cards.filter(card=>{
+            const style=getComputedStyle(card);
+            const backgroundMissing=style.backgroundImage==='none' &&
+              ['transparent','rgba(0, 0, 0, 0)'].includes(style.backgroundColor);
+            return backgroundMissing;
+          }).map(card=>card.className)
+        );
+        if(invisibleQuickCards.length){
+          errors.push('Homepage quick service cards have no background: '+invisibleQuickCards.join(', '));failed=true;
+        }
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){
