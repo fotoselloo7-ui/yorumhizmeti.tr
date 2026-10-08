@@ -176,6 +176,27 @@ class BlogController extends Controller
             $toc = [];
         }
 
+        // Author attribution is sourced from the same verified metadata that
+        // appears visibly on the page. Never invent a person or a review.
+        $nvBlogSeo=\App\Services\NetveraSeoBridge::get('blog',(int)$post['id']);
+        $nvAuthorName=trim((string)($nvBlogSeo['author_name']??''));
+        $nvAuthorType=($nvBlogSeo['author_type']??'')==='Person'?'Person':'Organization';
+        $nvAuthor=[
+            '@type'=>$nvAuthorType,
+            'name'=>$nvAuthorName!==''?$nvAuthorName:setting('site_name')
+        ];
+        $authorUrl=trim((string)($nvBlogSeo['author_url']??''));
+        if($authorUrl!=='' && filter_var($authorUrl,FILTER_VALIDATE_URL)
+           && in_array(strtolower((string)parse_url($authorUrl,PHP_URL_SCHEME)),['http','https'],true))
+            $nvAuthor['url']=$authorUrl;
+        $sameAs=[];
+        foreach(preg_split('/\R/',(string)($nvBlogSeo['same_as_urls']??''))?:[] as $profile){
+            $profile=trim($profile);
+            if($profile!=='' && filter_var($profile,FILTER_VALIDATE_URL)
+               && in_array(strtolower((string)parse_url($profile,PHP_URL_SCHEME)),['http','https'],true))
+                $sameAs[]=$profile;
+        }
+        if($sameAs)$nvAuthor['sameAs']=array_values(array_unique(array_slice($sameAs,0,15)));
         // Schema JSON-LD
         $schemas = [];
         
@@ -189,10 +210,7 @@ class BlogController extends Controller
             'image' => $post['image'] ? url('/uploads/' . $post['image']) : url('/assets/img/logo.png'),
             'datePublished' => date('c', strtotime($post['published_at'])),
             'dateModified' => date('c', strtotime($post['updated_at'])),
-            'author' => [
-                '@type' => 'Organization',
-                'name' => setting('site_name')
-            ],
+            'author' => $nvAuthor,
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => setting('site_name'),
