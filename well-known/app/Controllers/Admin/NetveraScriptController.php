@@ -127,4 +127,50 @@ final class NetveraScriptController extends Controller
         flash('success','Netvera yazılım kaydı kaydedildi. Ödeme sistemi değiştirilmedi.');
         redirect('/admin/netvera-yazilimlar');
     }
+    /** Product gallery: add images, never delete original files used by indexed URLs. */
+    public function galleryAdd():void
+    {
+        Csrf::check();
+        $id=(int)($_POST['product_id']??0);
+        if($id<=0 || !NetveraBridgeService::ready() ||
+           !$this->db->fetch('SELECT legacy_id FROM nv_legacy_script_products WHERE legacy_id=?',[$id])){
+            flash('error','Yazılım bulunamadı.');
+            redirect('/admin/netvera-yazilimlar');return;
+        }
+        if(empty($_FILES['image']['name'])){
+            flash('error','Galeri görseli seçin.');
+            redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');return;
+        }
+        try{$image=Upload::image($_FILES['image'],'scripts');}
+        catch(\Throwable $e){
+            flash('error','Galeri görseli yüklenemedi.');
+            redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');return;
+        }
+        $row=$this->db->fetch('SELECT MAX(legacy_id) AS max_id,MAX(sort_order) AS max_order FROM nv_legacy_script_images');
+        $newId=max(1,(int)($row['max_id']??0)+1);
+        $this->db->insert('nv_legacy_script_images',[
+            'legacy_id'=>$newId,'product_legacy_id'=>$id,
+            'image_path'=>$image,'alt_text'=>mb_substr(trim((string)($_POST['alt_text']??'')),0,290),
+            'caption'=>mb_substr(trim((string)($_POST['caption']??'')),0,1500),
+            'sort_order'=>(int)($row['max_order']??0)+1,'active'=>1
+        ]);
+        logActivity('netvera_gallery_add','Yazılım galeri görseli eklendi. ID: '.$id);
+        flash('success','Galeri görseli eklendi.');
+        redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');
+    }
+
+    public function galleryHide():void
+    {
+        Csrf::check();
+        $id=(int)($_POST['product_id']??0);
+        $imageId=(int)($_POST['image_id']??0);
+        if($id>0 && $imageId>0 && NetveraBridgeService::ready()){
+            $this->db->update('nv_legacy_script_images',['active'=>0],
+                'legacy_id=? AND product_legacy_id=?',[$imageId,$id]);
+            logActivity('netvera_gallery_hide','Yazılım galeri görseli pasife alındı. ID: '.$imageId);
+            flash('success','Galeri görseli gizlendi. Orijinal dosya SEO için korundu.');
+        }
+        redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');
+    }
+
 }
