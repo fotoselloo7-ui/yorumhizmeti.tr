@@ -32,7 +32,7 @@ class SitemapService
         }
 
         // Preserve Netvera's indexed software URLs in the exact original structure.
-        if (NetveraBridgeService::ready()) {
+        if (NetveraBridgeService::all()) {
             $xml .= $this->url($baseUrl . '/hazir-scriptler', '0.9', 'weekly');
             foreach (NetveraBridgeService::all() as $script) {
                 $public=NetveraBridgeService::jsonFields($script);
@@ -68,6 +68,15 @@ class SitemapService
         $posts = $db->fetchAll("SELECT slug, updated_at FROM blog_posts WHERE status = 'active' AND noindex = 0");
         foreach ($posts as $post) {
             $xml .= $this->url($baseUrl . '/blog/' . $post['slug'], '0.6', 'weekly', $post['updated_at']);
+        }
+        // Preserve original Netvera indexed blog paths even before staging
+        // has imported its separate public-content SQL snapshot.
+        $indexedSlugs=array_fill_keys(array_column($posts,'slug'),true);
+        foreach (NetveraBlogSnapshot::all() as $post) {
+            if (isset($indexedSlugs[$post['slug']])) continue;
+            $existing=$db->fetch('SELECT id FROM blog_posts WHERE slug=? LIMIT 1',[$post['slug']]);
+            if ($existing) continue; // Do not re-publish deliberately hidden articles.
+            $xml .= $this->url($baseUrl.'/blog/'.$post['slug'],'0.6','weekly',$post['updated_at']);
         }
 
         // Sayfalar
