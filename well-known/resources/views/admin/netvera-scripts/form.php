@@ -25,5 +25,7 @@
 <?php foreach(['support_duration_type'=>'Destek Tipi','support_duration_months'=>'Destek Süresi','update_duration_type'=>'Güncelleme Tipi','update_duration_months'=>'Güncelleme Süresi','buy_url'=>'Satış URL','secondary_keywords'=>'Yardımcı Kelimeler','tags'=>'Etiketler','og_title'=>'OG Başlık','og_description'=>'OG Açıklama','og_image'=>'OG Görseli'] as $key=>$label): ?>
 <div class="form-group"><label><?= e($label) ?></label><input class="form-control" name="<?= $key ?>" value="<?= e($d[$key]??'') ?>"></div><?php endforeach; ?>
 </div></div>
+<?php foreach(['modules_json'=>'Modüller','specs_json'=>'Teknik Özellikler','license_json'=>'Lisans','faq_json'=>'SSS'] as $key=>$label): ?>
+<div class="form-group"><label><?= e($label) ?> JSON</label><textarea class="form-control" name="<?= $key ?>" rows="3"><?= e($d[$key]??'[]') ?></textarea></div><?php endforeach; ?>
 <button class="btn btn-primary" type="submit">Kaydet</button>
 </div></div></form>
