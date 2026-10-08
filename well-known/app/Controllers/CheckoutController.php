@@ -180,6 +180,8 @@ class CheckoutController extends Controller
                     'pageTitle' => 'Ödeme',
                     'iframeToken' => $result['iframe_token'],
                     'gateway' => $paymentGateway,
+                    'order' => $order,
+                    'user' => $user,
                 ]);
                 return;
             }
@@ -193,31 +195,113 @@ class CheckoutController extends Controller
         redirect('/siparis/' . $orderId);
     }
 
+    /**
+     * Purely local visual preview. No real PayTR token, orders or transactions.
+     * The merchant credentials/callback cannot be exercised via localhost.
+     */
+    public function paytrPreview(): void
+    {
+        $env=strtolower((string)($_ENV['APP_ENV']??'production'));
+        $host=strtolower((string)($_SERVER['HTTP_HOST']??''));
+        if (!in_array($env,['local','development'],true)
+            || !preg_match('/^(?:127\.0\.0\.1|localhost)(?::\d{1,5})?$/',$host)) {
+            http_response_code(404);
+            $this->render('frontend/404',['pageTitle'=>'Sayfa Bulunamadı']);
+            return;
+        }
+        $this->render('frontend/payment-iframe',[
+            'pageTitle'=>'PayTR Ödeme Tasarım Önizlemesi',
+            'iframeToken'=>'',
+            'gateway'=>'paytr',
+            'preview'=>true,
+            'order'=>['order_number'=>'ORNEK-001','total_amount'=>6990.00],
+            'user'=>[],
+        ]);
+    }
+
+    /**
+     * PayTR Step 2 is a backend-to-backend callback, not a customer redirect.
+     * Never acknowledge an unauthenticated or unknown order and NEVER create
+     * a second payment for a repeated (legitimate) PayTR notification.
+     */
     public function paytrCallback(): void
     {
-        $gatewayManager = new PaymentGatewayManager();
-        $service = $gatewayManager->getService('paytr');
-        if (!$service) { echo 'OK'; exit; }
-
-        $result = $service->handleCallback($_POST);
-        if ($result['success'] && !empty($result['order_number'])) {
-            $db = Database::getInstance();
-            $order = $db->fetch("SELECT * FROM orders WHERE order_number = ?", [$result['order_number']]);
-            if ($order) {
-                $orderService = new OrderService();
-                $orderService->updateStatus($order['id'], 'paid', 'PayTR ödeme onayı.', 'paytr');
-                $db->insert('payments', [
-                    'order_id' => $order['id'],
-                    'gateway_key' => 'paytr',
-                    'transaction_id' => $result['transaction_id'] ?? '',
-                    'amount' => $order['total_amount'],
-                    'status' => 'completed',
-                    'raw_response' => json_encode($_POST),
-                ]);
-            }
+        header('Content-Type: text/plain; charset=utf-8');
+        $manager = new PaymentGatewayManager();
+        $service = $manager->getService('paytr');
+        if (!$service || !$service->isConfigured()) {
+            http_response_code(503);
+            echo 'GATEWAY UNAVAILABLE';
+            return;
         }
-        echo 'OK';
-        exit;
+        $result=$service->handleCallback($_POST);
+        if (empty($result['verified']) || empty($result['order_number'])) {
+            http_response_code(403);
+            echo 'INVALID SIGNATURE';
+            return;
+        }
+        $db=Database::getInstance();
+        $pdo=$db->getPdo();
+        try {
+            $pdo->beginTransaction();
+            $order=$db->fetch('SELECT * FROM orders WHERE order_number=? FOR UPDATE',
+                [(string)$result['order_number']]);
+            if(!$order || ($order['payment_gateway']??'')!=='paytr'){
+                $pdo->rollBack();
+                http_response_code(404);
+                echo 'ORDER NOT FOUND';
+                return;
+            }
+            $expected=(int)round(((float)$order['total_amount'])*100);
+            $paid=(int)($_POST['total_amount']??0);
+            // PayTR total_amount can exceed payment_amount for instalments;
+            // never approve an underpayment, even with a valid signed callback.
+            $originalAmount=(string)($_POST['payment_amount']??'');
+            if ($expected<1 || $paid<$expected ||
+                ($originalAmount!=='' && (!ctype_digit($originalAmount) || (int)$originalAmount!==$expected))){
+                $pdo->rollBack();
+                http_response_code(422);
+                echo 'AMOUNT MISMATCH';
+                return;
+            }
+            if(!empty($result['success'])){
+                // Preserve fulfilled orders and make duplicated callbacks harmless.
+                if(($order['payment_status']??'')!=='paid'){
+                    $payment = $db->fetch(
+                        "SELECT id FROM payments WHERE order_id=? AND gateway_key='paytr' AND status='completed' LIMIT 1",
+                        [(int)$order['id']]
+                    );
+                    if(!$payment){
+                        (new OrderService())->updateStatus((int)$order['id'],'paid','PayTR ödeme onayı.','paytr');
+                        $safeResponse=[
+                          'merchant_oid'=>(string)($result['order_number']??''),
+                          'status'=>'success',
+                          'total_amount'=>$paid,
+                          'currency'=>substr((string)($_POST['currency']??'TL'),0,4),
+                          'test_mode'=>($_POST['test_mode']??'')==='1'?1:0
+                        ];
+                        $db->insert('payments',[
+                          'order_id'=>(int)$order['id'],
+                          'gateway_key'=>'paytr',
+                          'transaction_id'=>(string)$result['transaction_id'],
+                          'amount'=>$order['total_amount'],
+                          'status'=>'completed',
+                          'raw_response'=>json_encode($safeResponse,JSON_UNESCAPED_UNICODE)
+                        ]);
+                    }
+                }
+            }else if(($order['payment_status']??'')==='pending'){
+                // A failed attempt must not downgrade a previously paid order.
+                $db->update('orders',['payment_status'=>'failed'],'id=?',[(int)$order['id']]);
+            }
+            $pdo->commit();
+            echo 'OK';
+        }catch(\Throwable $e){
+            if($pdo->inTransaction())$pdo->rollBack();
+            error_log('PayTR callback persistence: '.get_class($e));
+            http_response_code(503);
+            echo 'RETRY';
+        }
     }
 
     public function iyzicoCallback(): void
