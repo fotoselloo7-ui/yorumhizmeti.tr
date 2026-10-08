@@ -786,6 +786,36 @@ try {
   await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.locator('[name="nvseo_secondary_keywords"]').count()))
     throw new Error('Native service SEO extension missing');
+  // Netvera canonical path parity — synthetic isolated CI products only.
+  await showcasePage.goto(origin+'/hazir-scriptler/haber-sitesi-scripti',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv40-detail').count()) ||
+     !(await showcasePage.locator('link[rel=canonical][href$="/hazir-scriptler/haber-sitesi-scripti"]').count())){
+    throw new Error('Netvera indexed product URL or canonical missing');
+  }
+  if(!(await showcasePage.locator('h1').textContent()).includes('Haber Scripti')){
+    throw new Error('Indexed Netvera script route does not load its own product');
+  }
+  const oldUrls=[
+    '/haber-sitesi-scripti',
+    '/paket/netvera-haber-sitesi-script-yazilimi'
+  ];
+  for(const oldUrl of oldUrls){
+    const redirect=await showcasePage.request.get(origin+oldUrl,{maxRedirects:0});
+    if(redirect.status()!==301||
+       redirect.headers()['location']!=='/hazir-scriptler/haber-sitesi-scripti'){
+      throw new Error('Missing 301 '+oldUrl+' to original Netvera canonical product');
+    }
+  }
+  for(const [oldUrl,target] of [
+    ['/temizlik-firmasi-scripti-web-site-yazilimi','netvera-temizlik-firmasi-script-yazilimi-pro'],
+    ['/emlak-scripti-hazir-emlak-sitesi-yazilimi','netvera-emlak-script-yazilimi-pro']
+  ]){
+    const redirect=await showcasePage.request.get(origin+oldUrl,{maxRedirects:0});
+    if(redirect.status()!==301 ||
+       redirect.headers()['location']!=='/hazir-scriptler/'+target){
+      throw new Error('Indexed legacy alias redirects to wrong software: '+oldUrl);
+    }
+  }
   // Older scripts added under the existing Web Site category must show up
   // automatically, WITHOUT installing the 23 new categories or selecting a
   // special featured flag. This reproduces the user's local problem.
