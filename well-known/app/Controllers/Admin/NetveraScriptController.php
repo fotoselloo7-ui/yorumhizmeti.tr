@@ -165,22 +165,21 @@ final class NetveraScriptController extends Controller
             flash('error','Bu kurulum yalnızca ayrı staging veritabanında APP_ENV=staging ve NETVERA_IMPORT_ALLOWED=1 ile yapılabilir.');
             redirect('/admin/netvera-kategoriler');return;
         }
-        if(NetveraBridgeService::ready()){
-            flash('success','Netvera içerik tabloları zaten kurulu.');
+        if(NetveraBridgeService::ready() && \App\Services\NetveraInquiryService::ready()){
+            flash('success','Netvera katalog ve gelen kutusu tabloları zaten kurulu.');
             redirect('/admin/netvera-kategoriler');return;
         }
         try{
-            $source=file_get_contents(BASE_PATH.'/database/migrations/netvera-legacy-bridge-v1.sql');
-            if($source===false)throw new \RuntimeException('Migration file not found');
-            // This controlled local SQL contains only CREATE TABLE IF NOT EXISTS.
-            // No user-supplied queries, customer data or payment-table changes.
-            foreach(explode(';',$source) as $statement){
-                $statement=trim($statement);
-                $statement=preg_replace('/^--[^\\r\\n]*(?:\\r?\\n|$)/m','',$statement);
-                if(trim($statement)==='')continue;
-                if(!preg_match('/^CREATE TABLE IF NOT EXISTS nv_legacy_/i',trim($statement)))
-                    throw new \RuntimeException('Non-allowlisted migration statement');
-                $this->db->getPdo()->exec($statement);
+            foreach(['netvera-legacy-bridge-v1.sql','netvera-inquiries-v1.sql'] as $filename){
+                $source=file_get_contents(BASE_PATH.'/database/migrations/'.$filename);
+                if($source===false)throw new \RuntimeException('Migration source unavailable');
+                foreach(explode(';',$source) as $statement){
+                    $statement=trim(preg_replace('/^\s*--[^\n]*(?:\n|$)/m','',$statement));
+                    if($statement==='')continue;
+                    if(!preg_match('/^CREATE TABLE IF NOT EXISTS nv_(?:legacy|public)_/i',$statement))
+                        throw new \RuntimeException('Non-allowlisted staging migration');
+                    $this->db->getPdo()->exec($statement);
+                }
             }
             flash('success','Staging içerik tabloları hazır. Mevcut kullanıcı, sipariş ve ödeme verilerine dokunulmadı.');
         }catch(\Throwable $e){
