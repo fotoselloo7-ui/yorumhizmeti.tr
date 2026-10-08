@@ -18,6 +18,8 @@ jobs:
             php -l "$file"
           done
 
+      - name: Netvera SEO GEO AIO content scoring regression
+        run: php well-known/tests/netvera-blog-quality-qa.php
       - name: Original Netvera Markdown rendering and link safety
         run: |
           php -r '
