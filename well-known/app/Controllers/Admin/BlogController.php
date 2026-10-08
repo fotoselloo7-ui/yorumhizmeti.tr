@@ -45,7 +45,19 @@ class BlogController extends Controller
     {
         $post = $this->db->fetch("SELECT * FROM blog_posts WHERE id = ?", [(int) $id]);
         if (!$post) { redirect('/admin/blog'); }
-        
+        // Source Netvera articles were imported as public Markdown, whereas
+        // this local Markdown editor reads raw_content. Restore the source
+        // body for editing without silently replacing it with an empty draft.
+        if(trim((string)($post['raw_content']??''))===''){
+            $post['raw_content']=$post['content']??'';
+            try{
+                $legacy=$this->db->fetch("SELECT source_json FROM nv_legacy_blog_meta WHERE blog_post_id=? LIMIT 1",[(int)$id]);
+                $source=$legacy?json_decode((string)$legacy['source_json'],true):null;
+                if(is_array($source) && trim((string)($source['content']??''))!=='')
+                    $post['raw_content']=$source['content'];
+            }catch(\Throwable $ignored){}
+        }
+
         $categories = $this->db->fetchAll("SELECT * FROM blog_categories WHERE status = 'active' ORDER BY name");
         $tags = $this->db->fetchAll("SELECT * FROM blog_tags ORDER BY name");
         $postTags = array_column($this->db->fetchAll("SELECT tag_id FROM blog_post_tags WHERE post_id = ?", [(int)$id]), 'tag_id');
