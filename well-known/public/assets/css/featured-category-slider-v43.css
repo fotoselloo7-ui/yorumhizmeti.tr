@@ -89,6 +89,15 @@
   scroll-behavior:auto;
   user-select:none;
 }
+#featured [data-featured-rail].is-drag-released{
+  scroll-snap-type:none;
+  scroll-behavior:auto;
+}
+#featured [data-featured-rail] a{
+  -webkit-user-drag:none;
+  user-select:none;
+}
+
 #featured .nv43-category-card.yh18-featured-tab{
   box-sizing:border-box;
   flex:0 0 clamp(168px,18.6vw,222px)!important;
