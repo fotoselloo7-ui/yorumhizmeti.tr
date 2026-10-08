@@ -112,8 +112,8 @@
       if (avatar) {
         platformClasses.forEach(cls => avatar.classList.remove(cls));
         avatar.classList.add(platformClass);
-        const svg = tab.querySelector('svg');
-        if (svg) avatar.replaceChildren(svg.cloneNode(true));
+        const platformIcon = tab.querySelector('.icon, svg, i');
+        if (platformIcon) avatar.replaceChildren(platformIcon.cloneNode(true));
       }
       pauseTemporarily();
     };
