@@ -17,3 +17,23 @@ jobs:
           find well-known -type f -name "*.php" -print0 | while IFS= read -r -d '' file; do
             php -l "$file"
           done
+
+      - name: Original Netvera Markdown rendering and link safety
+        run: |
+          php -r '
+            require "well-known/app/Services/BlogContentRenderer.php";
+            $data=json_decode(file_get_contents("well-known/database/netvera-public-catalog.json"),true);
+            if(count($data["blog_posts"])<5)exit(1);
+            foreach($data["blog_posts"] as $article){
+                $html=\App\Services\BlogContentRenderer::render($article["content"]);
+                if(strpos($html,"<h2>")===false||strpos($html,"<strong>")===false||
+                   strpos($html,"<img ")===false||strpos($html,"<p>")===false)
+                   {fwrite(STDERR,"Invalid markdown rendering: ".$article["slug"]."\n");exit(1);}
+                if(strpos($html,"<script")!==false)exit(1);
+            }
+            $unsafe=\App\Services\BlogContentRenderer::render("## Heading\n[evil](javascript:alert(1))\n<script>alert(1)</script>");
+            if(strpos($unsafe,"href=\"javascript:")!==false||strpos($unsafe,"<script")!==false)exit(1);
+            $html="<p>Already saved editor HTML <strong>preserved</strong></p>";
+            if(\App\Services\BlogContentRenderer::render($html)!==$html)exit(1);
+            echo "PASS: five authentic Markdown articles, image/links and unsafe URL rejection.\n";
+          '
