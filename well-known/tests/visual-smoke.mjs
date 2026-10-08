@@ -631,6 +631,97 @@ try {
   console.error('FAIL admin catalog integration:',String(e).slice(0,400));
 } finally { await catalogContext.close(); }
 
+// Full integration: admin installs real script taxonomy, picks one real CI-only
+// package, orders it separately, then publishes an authentic test reference.
+// All writes are to disposable Actions MySQL; never the production site.
+const showcaseCtx=await browser.newContext({viewport:{width:1440,height:900}});
+const showcasePage=await showcaseCtx.newPage();
+showcasePage.on('dialog',dialog=>dialog.accept());
+try {
+  await showcasePage.goto(origin+'/admin/giris',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('input[name=email]').fill('admin@yorumhizmeti.tr');
+  await showcasePage.locator('input[name=password]').fill('qa-test-menu-only');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('form button[type=submit]').click()
+  ]);
+  await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.adm31-setup-row form button[type=submit]').count()))throw new Error('Software category installer missing');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('.adm31-setup-row form button[type=submit]').click()
+  ]);
+  await showcasePage.goto(origin+'/kategoriler?grup=agency',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.getByText('Hazır Yazılımlar & Scriptler',{exact:true}).count()))
+    throw new Error('Installed script category not visible in agency catalog');
+
+  await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
+  const productName='CI Yazılım Demo Paketi';
+  const productSlug='ci-yazilim-demo-v31';
+  await showcasePage.locator('input[name=name]').fill(productName);
+  await showcasePage.locator('input[name=slug]').fill(productSlug);
+  await showcasePage.locator('select[name=category_id]').selectOption({label:'Haber Sitesi Yazılımı'});
+  await showcasePage.locator('textarea[name=short_description]').fill('CI için geçici yazılım vitrini testi, canlı satış ürünü değildir.');
+  await showcasePage.locator('input[name=price]').fill('2500');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/paketler',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
+  ]);
+  await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  const productRow=showcasePage.locator('.adm31-package-row').filter({hasText:productName});
+  if(!(await productRow.count()))throw new Error('Newly saved software package absent from showcase admin');
+  await productRow.locator('input[name="featured[]"]').check();
+  await productRow.locator('input[type=number]').fill('1');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('.adm31-showcase-form button[type=submit]').click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
+    throw new Error('Saved script selection not displayed on storefront');
+
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const create=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
+  await create.locator('[name=title]').fill('CI Web Referans Testi');
+  await create.locator('[name=category]').fill('Haber Sitesi');
+  await create.locator('[name=description]').fill('Otomatik test sırasında oluşturulmuş örnek portföy kaydı.');
+  await create.locator('[name=url]').fill('https://example.test/');
+  await create.locator('[name=sort_order]').fill('1');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    create.locator('button[type=submit]').click()
+  ]);
+  if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Web Referans Testi'}).count()))
+    throw new Error('Reference admin did not persist the project');
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-portfolio-card').filter({hasText:'CI Web Referans Testi'}).count()))
+    throw new Error('Published reference missing from storefront');
+
+  await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-desktop.png'),fullPage:true,animations:'disabled'});
+  await showcasePage.setViewportSize({width:390,height:844});
+  await showcasePage.reload({waitUntil:'domcontentloaded'});
+  const geometry=await showcasePage.evaluate(()=>{
+    const sections=['.nv31-software','.nv31-portfolio'].map(s=>document.querySelector(s));
+    return sections.map(root=>{
+      const cards=[...root.querySelectorAll('article')];
+      const boxes=cards.map(el=>el.getBoundingClientRect());
+      return {count:cards.length,width:root.clientWidth,scroll:root.scrollWidth,
+        cross:boxes.some((r,i)=>boxes.slice(i+1).some(o=>
+          Math.min(r.right,o.right)-Math.max(r.left,o.left)>4 &&
+          Math.min(r.bottom,o.bottom)-Math.max(r.top,o.top)>4))};
+    });
+  });
+  if(geometry.some(g=>!g.count||g.scroll>g.width+4||g.cross))
+    throw new Error('Mobile software/reference layout defect '+JSON.stringify(geometry));
+  await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-mobile.png'),fullPage:true,animations:'disabled'});
+  results.push({route:'Admin install -> software featured -> reference publish',screen:'integration',status:200,errors:[]});
+  console.log('PASS real admin software and references end-to-end');
+}catch(e){
+  failed=true;
+  results.push({route:'Admin install -> software featured -> reference publish',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL software/reference integration:',String(e).slice(0,600));
+}finally{await showcaseCtx.close();}
+
 // End-to-end checkout guard: registering, selecting a live package and rejecting a forged gateway.
 const checkoutContext = await browser.newContext({viewport:{width:1440,height:900}});
 const shopper = await checkoutContext.newPage();
