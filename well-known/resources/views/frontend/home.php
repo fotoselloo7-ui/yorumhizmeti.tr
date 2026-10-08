@@ -57,7 +57,7 @@ if (!function_exists('yh6PackageCard')) {
             </ul>
             <div class="yh6-rating"><span>★★★★★</span><small>4.9/5 müşteri puanı</small></div>
             <div class="yh6-price">
-                <strong><?= money($price) ?></strong>
+                <strong><?= $price>0 ? money($price) : 'Teklif Al' ?></strong>
                 <?php if ($old): ?><del><?= money($old) ?></del><?php endif; ?>
                 <?php if ($discount): ?><em>%<?= $discount ?></em><?php endif; ?>
             </div>
@@ -331,7 +331,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                             <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
                             <span class="yh26-filter-name"><?= e($filterCategory['name']) ?></span>
                             <?php if(!empty($featuredChildCategories[(int)$filterCategory['id']])): ?>
-                            <span class="nv43-subcategory-indicator"><?= icon('chevron-right',11) ?> Alt kategoriler</span>
+
                             <?php endif; ?>
                         </button>
                         <?php endforeach; ?>
@@ -350,7 +350,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                 <div class="nv43-child-panel" data-featured-children-for="<?= (int)$parentId ?>"
                      <?= $showChildren?'':'hidden' ?>>
                     <div class="nv43-rail-heading nv43-child-heading">
-                        <span><?= icon('corner-down-right',14) ?> ALT KATEGORİLER</span>
+                        <span class="nv43-child-heading-mark" aria-hidden="true"><?= icon('corner-down-right',14) ?></span>
                         <a href="<?= e((int)$parentId===-100000?'/hazir-scriptler':'/kategoriler') ?>" class="nv43-rail-all">
                             Tümünü gör <?= icon('arrow-up-right',13) ?>
                         </a>
@@ -574,13 +574,16 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
     <?php if (!empty($softwareHighlights)): ?>
     <div class="nv31-software-grid">
       <?php foreach($softwareHighlights as $i=>$sw):
-        $price = !empty($sw['discount_price']) && (float)$sw['discount_price'] < (float)$sw['price'] ? $sw['discount_price'] : $sw['price'];
-        $short = trim(strip_tags((string)($sw['short_description'] ?: $sw['description'] ?? '')));
+        $price = (float)($sw['price'] ?? 0);
+        $oldPrice = (float)($sw['old_price'] ?? 0);
+        $short = trim(strip_tags((string)($sw['short_desc'] ?: $sw['description'] ?? '')));
+        $productUrl = '/hazir-scriptler/'.rawurlencode((string)$sw['slug']);
+        $cover = (string)($sw['cover_image']??'');
       ?>
       <article class="nv31-software-card">
-        <a href="/paket/<?= e($sw['slug']) ?>" class="nv31-software-image" aria-label="<?= e($sw['name']) ?> yazılımını incele">
-          <?php if(!empty($sw['image'])): ?>
-            <img src="<?= e(upload_url($sw['image'])) ?>" loading="lazy" alt="<?= e($sw['image_alt'] ?: $sw['name']) ?>">
+        <a href="<?= e($productUrl) ?>" class="nv31-software-image" aria-label="<?= e($sw['name']) ?> yazılımını incele">
+          <?php if($cover!==''): ?>
+            <img src="<?= e(upload_url($cover)) ?>" loading="lazy" alt="<?= e($sw['name']) ?>">
           <?php else: ?>
             <span class="nv31-software-image-placeholder">
               <span><?= icon('monitor',45) ?></span>
@@ -592,12 +595,12 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
           <span class="nv31-software-image-arrow"><?= icon('arrow-up-right',17) ?></span>
         </a>
         <div class="nv31-software-body">
-          <span class="nv31-software-tag"><?= icon('layers',11) ?> <?= e($sw['category_name']) ?></span>
-          <h3><a href="/paket/<?= e($sw['slug']) ?>"><?= e($sw['name']) ?></a></h3>
+          <span class="nv31-software-tag"><?= icon('layers',11) ?> <?= e($sw['category_name'] ?: 'Hazır Scriptler') ?></span>
+          <h3><a href="<?= e($productUrl) ?>"><?= e($sw['name']) ?></a></h3>
           <p><?= e(mb_strimwidth($short, 0, 115, '…','UTF-8')) ?></p>
           <div class="nv31-software-bottom">
             <strong><?= money($price) ?></strong>
-            <a href="/paket/<?= e($sw['slug']) ?>" aria-label="<?= e($sw['name']) ?> detayları"><?= icon('arrow-right',16) ?></a>
+            <a href="<?= e($productUrl) ?>" aria-label="<?= e($sw['name']) ?> detayları"><?= icon('arrow-right',16) ?></a>
           </div>
         </div>
       </article>
