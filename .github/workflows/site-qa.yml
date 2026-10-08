@@ -1,0 +1,102 @@
+name: Responsive & Browser QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/**'
+      - '.github/workflows/site-qa.yml'
+
+concurrency:
+  group: storefront-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: qa_test_only_password
+          MYSQL_DATABASE: yorumhizmeti_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent -pqa_test_only_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, curl, gd
+          tools: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install MySQL client and import demo data
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq default-mysql-client
+          mysql --host=127.0.0.1 --port=3306 -uroot -pqa_test_only_password yorumhizmeti_ci < yorumhizmeti_yorumhizmeti.sql
+
+      - name: Configure isolated local test environment
+        shell: bash
+        run: |
+          cat > well-known/.env <<'EOF'
+          APP_NAME="YorumHizmeti CI"
+          APP_ENV=local
+          APP_DEBUG=true
+          APP_URL=http://127.0.0.1:8006
+          DB_HOST=127.0.0.1
+          DB_NAME=yorumhizmeti_ci
+          DB_USER=root
+          DB_PASS=qa_test_only_password
+          DB_CHARSET=utf8mb4
+          LICENSE_ENABLED=false
+          LICENSE_LOCAL_BYPASS=true
+          EOF
+          mkdir -p well-known/storage/cache well-known/storage/logs well-known/public/uploads
+          php -S 127.0.0.1:8006 -t well-known/public well-known/tests/router.php > /tmp/yorum-qa-php.log 2>&1 &
+          echo "$!" > /tmp/yorum-qa-php.pid
+          for attempt in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8006/ >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/yorum-qa-php.log
+          exit 1
+
+      - name: Install browser automation
+        run: |
+          npm --prefix well-known install --no-save --no-package-lock playwright
+          cd well-known
+          npx playwright install --with-deps chromium
+
+      - name: Browser audit and screenshots
+        id: audit
+        run: node well-known/tests/visual-smoke.mjs
+        env:
+          QA_ORIGIN: http://127.0.0.1:8006
+          QA_OUTPUT: qa-artifacts
+
+      - name: Upload screenshots and JSON audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-qa-screenshots-${{ github.run_number }}
+          path: qa-artifacts/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: PHP server log on failure
+        if: failure()
+        run: tail -n 180 /tmp/yorum-qa-php.log
