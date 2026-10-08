@@ -806,6 +806,12 @@ try {
       throw new Error('Missing 301 '+oldUrl+' to original Netvera canonical product');
     }
   }
+  const sitemapResponse=await showcasePage.request.get(origin+'/sitemap.xml');
+  const sitemapXml=await sitemapResponse.text();
+  if(!sitemapXml.includes('/hazir-scriptler/haber-sitesi-scripti')||
+     sitemapXml.includes('/paket/netvera-haber-sitesi-script-yazilimi')){
+    throw new Error('Netvera software sitemap missing canonical or still lists redirected package alias');
+  }
   for(const [oldUrl,target] of [
     ['/temizlik-firmasi-scripti-web-site-yazilimi','netvera-temizlik-firmasi-script-yazilimi-pro'],
     ['/emlak-scripti-hazir-emlak-sitesi-yazilimi','netvera-emlak-script-yazilimi-pro']
