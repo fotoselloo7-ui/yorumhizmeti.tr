@@ -113,14 +113,10 @@
                     <?= e(setting('site_name', 'Yorum Hizmeti')) ?>
                 </a>
 
-                <nav class="nav-main" id="navMain">
-                    <a href="/kategoriler" class="<?= isActive('/kategori') ?>">Tüm Hizmetler</a>
-                    <a href="/kategori/google-hizmetleri">Google</a>
-                    <a href="/kategori/instagram-hizmetleri">Instagram</a>
-                    <a href="/kategori/tiktok-hizmetleri">TikTok</a>
-                    <a href="/kategori/youtube-hizmetleri">YouTube</a>
-                    <a href="/kategori/web-site-hizmetleri">Web Site</a>
-                    <a href="/blog" class="<?= isActive('/blog') ?>">Blog</a>
+                <nav class="nav-main" id="navMain" aria-label="Ana menü">
+                    <?php foreach(\App\Services\NavigationService::items() as $navItem): ?>
+                    <a href="<?= e($navItem['url']) ?>" class="<?= isActive($navItem['url']) ? 'active' : '' ?>"><?= e($navItem['label']) ?></a>
+                    <?php endforeach; ?>
                 </nav>
 
                 <form class="header-search-v4" action="/kategoriler" method="GET">
