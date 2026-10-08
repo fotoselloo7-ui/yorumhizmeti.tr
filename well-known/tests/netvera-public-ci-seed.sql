@@ -8,7 +8,7 @@ INSERT INTO nv_legacy_script_products
  (legacy_id,category_legacy_id,slug,name,short_desc,description,price,old_price,meta_title,meta_description,public_json,sort_order,active)
  VALUES
  (47,11,'haber-sitesi-scripti','NetVera Haber Scripti — QA Örneği','Test amaçlı demo verisi','<p>Test ürün açıklaması</p>',4000,5000,
- 'Haber Sitesi Scripti QA','Staging test yazılımı','{"current_version":"1.0.0","modules_json":"[\"Haber yönetimi\",\"SEO\"]","demo_is_active":0,"demo_is_public":0}',1,1),
+ 'Haber Sitesi Scripti QA','Staging test yazılımı','{"current_version":"1.0.0","modules_json":"[]","demo_is_active":0,"demo_is_public":0}',1,1),
  (49,11,'netvera-temizlik-firmasi-script-yazilimi-pro','Temizlik Firması Scripti — QA','Test amaçlı','<p>Test</p>',3000,NULL,
  'Temizlik Scripti QA','Test','{"current_version":"1.0.0"}',2,1),
  (50,11,'netvera-emlak-script-yazilimi-pro','Emlak Scripti — QA','Test amaçlı','<p>Test</p>',3500,NULL,
