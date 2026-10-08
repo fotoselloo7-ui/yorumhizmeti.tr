@@ -1,0 +1,28 @@
+/* Catalog / payments integration only — visual composition intentionally unchanged. */
+.footer-payments-v4.footer-payment-logos{
+  display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;
+}
+.footer-payments-v4.footer-payment-logos>.footer-payment-mark{
+  width:76px!important;height:37px!important;min-width:76px!important;min-height:37px!important;
+  padding:4px 8px!important;border:1px solid rgba(255,255,255,.15)!important;
+  border-radius:8px!important;background:#fff!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  color:#1d3160!important;line-height:1!important;
+}
+.footer-payment-mark svg{display:block;width:100%;height:27px;max-width:100%}
+.footer-payments-v4.footer-payment-logos>.footer-payment-bank,
+.footer-payments-v4.footer-payment-logos>.footer-payment-security{
+  display:inline-flex!important;align-items:center!important;gap:7px!important;
+  min-height:37px!important;padding:0 11px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  border-radius:8px!important;background:rgba(255,255,255,.06)!important;
+  color:rgba(255,255,255,.9)!important;font-size:11px!important;line-height:1.3!important;
+  white-space:nowrap;
+}
+.footer-payment-bank>.icon,.footer-payment-security>.icon{font-size:15px;color:#92bdff}
+.footer-payments-v4.footer-payment-logos .footer-payment-bank>span{padding:0!important;background:none!important;border:0!important;font-size:11px!important}
+@media(max-width:650px){
+  .footer-payments-v4.footer-payment-logos{gap:7px!important}
+  .footer-payments-v4.footer-payment-logos>.footer-payment-mark{width:66px!important;min-width:66px!important}
+  .footer-payments-v4.footer-payment-logos>.footer-payment-bank,.footer-payments-v4.footer-payment-logos>.footer-payment-security{font-size:10px!important}
+}
