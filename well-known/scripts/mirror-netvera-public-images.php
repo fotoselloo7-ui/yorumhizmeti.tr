@@ -14,7 +14,7 @@ define('BASE_PATH',dirname(__DIR__));
 $apply=in_array('--apply',$argv,true);
 $allowed=(string)(getenv('NETVERA_MEDIA_MIRROR_ALLOWED')?:'');
 $branch=(string)(getenv('GITHUB_REF_NAME')?:'');
-if($apply && ($allowed!=='1' || ($branch!==''&&$branch!=='staging/netvera-source-integration'))){
+if($apply && ($allowed!=='1' || ($branch!=='' && !in_array($branch,['main','staging/netvera-source-integration'],true)))){
     fwrite(STDERR,"Protected mirror requires explicit staging opt-in.\n");exit(3);
 }
 $filename=BASE_PATH.'/database/netvera-public-catalog.json';
@@ -26,6 +26,12 @@ foreach(($data['images']??[]) as $i) $paths[]=$i['image_path']??'';
 foreach(($data['blog_posts']??[]) as $p){
     $paths[]=$p['image']??'';
     $paths[]=$p['og_image']??'';
+    // Source SQL keeps two additional inline illustrations per long-form
+    // Markdown article. They were omitted by the old 63-asset manifest.
+    if(preg_match_all('~!\[[^\]]*\]\((/uploads/blog/[a-zA-Z0-9_./-]+\.(?:png|jpg|jpeg|webp|gif))(?:\s+"[^"]*")?\)~i',
+        (string)($p['content']??''),$matches)){
+        foreach($matches[1] as $inlineImage)$paths[]=$inlineImage;
+    }
 }
 $paths=array_values(array_unique(array_filter(array_map(static function($raw):string{
     if(!is_string($raw))return '';
@@ -36,7 +42,7 @@ $paths=array_values(array_unique(array_filter(array_map(static function($raw):st
     return preg_match('~^/uploads/(?:scripts|blog)/[a-zA-Z0-9_./-]+\.(?:png|jpg|jpeg|webp|gif)$~D',$path)
       && !str_contains($path,'..') ? $path : '';
 },$paths))));
-if(count($paths)!==63){
+if(count($paths)!==73){
     fwrite(STDERR,"Unexpected media manifest cardinality: ".count($paths)."\n");exit(3);
 }
 echo "Netvera public image manifest: ".count($paths)." paths.\n";
