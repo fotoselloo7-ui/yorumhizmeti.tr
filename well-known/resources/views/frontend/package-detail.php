@@ -51,10 +51,15 @@ $reviews=$testimonialSection['extra']??[];
    <div class="yv-product-gallery-v5">
     <div class="yv-product-gallery-main-v5">
      <?php if(!empty($package['image'])): ?><img src="<?= e(upload_url($package['image'])) ?>" alt="<?= e($package['image_alt']??$package['name']) ?>">
-     <?php else: ?><div class="yv-product-gallery-fallback-v5"><img class="woman" src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="<?= e(package_display_name($package)) ?>"><span class="logo"><?= icon($platform,38) ?></span><div class="review">★★★★★<b>Harika hizmet!</b><small>Kesinlikle tavsiye ederim.</small></div><div class="business"><strong>Markanız</strong><span>4.9 ★★★★★</span><small>Gerçek sosyal kanıt</small></div></div><?php endif; ?>
+     <?php else: ?><div class="yv-product-gallery-demo-v12"><img class="yv-product-demo-photo-v12" src="<?= e(demo_visual_url(package_display_name($package).' '.($package['category_name']??''),'product')) ?>" alt="<?= e(package_display_name($package)) ?>"><div class="yv-product-demo-gradient-v12"></div><span class="logo"><?= icon($platform,38) ?></span><div class="review">★★★★★<b>Harika hizmet!</b><small>Kesinlikle tavsiye ederim.</small></div><div class="business"><strong><?= e($package['category_name']??'Dijital Hizmet') ?></strong><span>4.9 ★★★★★</span><small>Gerçek sosyal kanıt</small></div></div><?php endif; ?>
     </div>
-    <div class="yv-product-thumbs-v5">
-     <span class="active"><?= icon($platform,18) ?></span><span><?= icon('trending-up',18) ?></span><span><?= icon('shield',18) ?></span><span><?= icon('users',18) ?></span><span><?= icon('star-fill',18) ?></span>
+    <div class="yv-product-thumbs-v5 yv-product-thumbs-v12">
+     <?php $demoThumb=demo_visual_url(package_display_name($package).' '.($package['category_name']??''),'product'); ?>
+     <span class="active"><img src="<?= e(!empty($package['image']) ? upload_url($package['image']) : $demoThumb) ?>" alt=""></span>
+     <span><img src="<?= e(demo_visual_url(($package['category_name']??''). ' analiz','analysis')) ?>" alt=""></span>
+     <span><img src="<?= e(demo_visual_url(($package['category_name']??''). ' sosyal medya','social')) ?>" alt=""></span>
+     <span><img src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt=""></span>
+     <span><img src="<?= e(asset('img/support-woman-cutout.png')) ?>" alt=""></span>
     </div>
     <div class="yv-product-info-strip-v5">
      <div><?= icon('users',18) ?><span><strong>Gerçek Kullanıcılar</strong><small>%100 Organik</small></span></div>
