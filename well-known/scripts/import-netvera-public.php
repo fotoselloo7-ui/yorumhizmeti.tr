@@ -18,19 +18,32 @@ spl_autoload_register(static function(string $class):void {
     if(is_file($file))require $file;
 });
 require BASE_PATH.'/app/Core/Helpers.php';
-$archive=$argv[1]??'';
-if (!is_file($archive) || !class_exists('ZipArchive')) {
-    fwrite(STDERR,"Provide a public-content ZIP and enable PHP ZipArchive.\n");exit(2);
+$source=$argv[1]??'';
+$zip=null;
+$trustedFixture=realpath(BASE_PATH.'/database/netvera-public-catalog.json');
+$requested=realpath($source);
+if(!$requested || !is_file($requested)){
+    fwrite(STDERR,"Use the checked-in public catalog JSON or a verified public-only ZIP.\n");exit(2);
 }
-$zip=new ZipArchive();
-if($zip->open($archive)!==true)exit(2);
-$json=$zip->getFromName('netvera-public-content.json');
-$manifest=$zip->getFromName('manifest.json');
-if($json===false || $manifest===false)exit(2);
+if($trustedFixture && hash_equals($trustedFixture,$requested)){
+    // The version-controlled, allowlisted public snapshot needs no private ZIP.
+    // Content has been filtered down to products, blogs and public image metadata.
+    $json=file_get_contents($requested);
+    if($json===false)exit(2);
+}else{
+    if(!class_exists('ZipArchive'))exit(2);
+    $zip=new ZipArchive();
+    if($zip->open($requested)!==true)exit(2);
+    $json=$zip->getFromName('netvera-public-content.json');
+    $manifest=$zip->getFromName('manifest.json');
+    if($json===false || $manifest===false)exit(2);
+    $info=json_decode($manifest,true,512,JSON_THROW_ON_ERROR);
+    if(($info['content_sha256']??'')!==hash('sha256',$json)){
+        fwrite(STDERR,"Private payload checksum mismatch.\n");exit(2);
+    }
+}
 $data=json_decode($json,true,512,JSON_THROW_ON_ERROR);
-$info=json_decode($manifest,true,512,JSON_THROW_ON_ERROR);
-if(($data['format']??'')!=='netvera-public-safelist-v1'
-  || ($info['content_sha256']??'')!==hash('sha256',$json))exit(2);
+if(($data['format']??'')!=='netvera-public-safelist-v1')exit(2);
 $sections=['categories','products','images','blog_categories','blog_posts','approved_reviews'];
 foreach($sections as $key)if(!is_array($data[$key]??null))exit(2);
 foreach(['products','blog_posts','approved_reviews'] as $key)
@@ -43,7 +56,8 @@ echo json_encode($counts,JSON_UNESCAPED_UNICODE)."\n";
 if(!in_array('--apply',$argv,true)){echo "DRY RUN; no writes.\n";exit(0);}
 // CLI operator must explicitly opt into a disposable staging DB; never production.
 if((string)($_ENV['NETVERA_IMPORT_ALLOWED']??getenv('NETVERA_IMPORT_ALLOWED'))!=='1'
- || strtolower((string)($_ENV['APP_ENV']??'local'))==='production'){
+ || !in_array(strtolower((string)($_ENV['APP_ENV']??'production')),
+   ['staging','local','testing','development'],true)){
     fwrite(STDERR,"Staging opt-in required; production import blocked.\n");exit(3);
 }
 $db=\App\Core\Database::getInstance();
@@ -140,7 +154,7 @@ try {
 }
 // Only public blog/software image assets. Never copy chat, personal uploads or PHP.
 $count=0;
-for($i=0;$i<$zip->numFiles;$i++){
+if($zip instanceof ZipArchive)for($i=0;$i<$zip->numFiles;$i++){
     $entry=$zip->getNameIndex($i);
     if(!preg_match('~^public/uploads/(scripts|blog)/[a-z0-9_./-]+\.(?:jpg|jpeg|png|webp|gif)$~i',$entry)
       || str_contains($entry,'..'))continue;
