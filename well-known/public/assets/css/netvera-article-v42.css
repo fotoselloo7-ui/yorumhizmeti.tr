@@ -1,0 +1,57 @@
+/* Readable long-form Netvera editorial content, scoped to actual article body. */
+.nv42-article-body{
+  font-size:clamp(14px,1vw,16px)!important;
+  line-height:1.88!important;
+  color:#35435c;
+  letter-spacing:0;
+  overflow-wrap:anywhere;
+}
+.nv42-article-body p{margin:0 0 1.3em!important;font-size:inherit!important;line-height:inherit!important}
+.nv42-article-body h2,
+.nv42-article-body h3,
+.nv42-article-body h4{
+  color:#111c39;
+  line-height:1.36!important;
+  font-weight:800;
+  letter-spacing:-.025em;
+  margin:1.9em 0 .65em!important;
+  scroll-margin-top:100px;
+}
+.nv42-article-body h2{font-size:clamp(20px,1.65vw,27px)!important}
+.nv42-article-body h3{font-size:clamp(17px,1.3vw,22px)!important}
+.nv42-article-body h4{font-size:clamp(15px,1.1vw,19px)!important}
+.nv42-article-body strong{color:#1b2b50;font-weight:750}
+.nv42-article-body ul,.nv42-article-body ol{
+  margin:0 0 1.35em;
+  padding-left:1.6em;
+  list-style:revert;
+}
+.nv42-article-body li{margin:.4em 0;padding-left:.3em;line-height:1.8}
+.nv42-article-body li::marker{color:#7054db;font-weight:750}
+.nv42-article-body a{color:#5a41d2;text-decoration:underline;text-decoration-color:rgba(90,65,210,.35);text-underline-offset:3px}
+.nv42-article-body a:hover{color:#3c2da1;text-decoration-color:currentColor}
+.nv42-article-body blockquote{
+  margin:1.5em 0;
+  padding:17px 22px;
+  border-left:4px solid #7965ea;
+  border-radius:0 12px 12px 0;
+  background:#f6f4ff;
+  color:#465476;
+  font-size:1em;
+}
+.nv42-article-body blockquote p:last-child{margin-bottom:0!important}
+.nv42-article-body .nv-blog-figure{margin:26px 0 30px;text-align:center}
+.nv42-article-body .nv-blog-figure img{
+  display:block;width:100%;max-width:100%;height:auto;max-height:520px;
+  object-fit:contain;border-radius:14px;border:1px solid #e5e9f3;
+  background:#f8faff;box-shadow:0 13px 40px rgba(27,43,79,.06);
+}
+.nv42-article-body figcaption{padding:11px 12px 0;color:#808ba0;font-size:12px;line-height:1.65}
+.nv42-article-body code{font-size:.92em;background:#f0f1f8;border-radius:5px;padding:2px 4px}
+@media(max-width:650px){
+  .nv42-article-body{font-size:14px!important;line-height:1.78!important}
+  .nv42-article-body h2{font-size:20px!important}
+  .nv42-article-body h3{font-size:17px!important}
+  .nv42-article-body blockquote{padding:12px 15px}
+  .nv42-article-body .nv-blog-figure{margin:21px 0}
+}
