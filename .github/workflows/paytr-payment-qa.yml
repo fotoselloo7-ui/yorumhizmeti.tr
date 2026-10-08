@@ -1,0 +1,84 @@
+name: PayTR Local Integration QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/app/Services/PaytrService.php'
+      - 'well-known/app/Controllers/CheckoutController.php'
+      - 'well-known/app/Controllers/Admin/PaymentGatewayController.php'
+      - 'well-known/app/Core/App.php'
+      - 'well-known/resources/views/frontend/payment-iframe.php'
+      - 'well-known/public/assets/css/paytr-payment-v45.css'
+      - 'well-known/tests/paytr-payment-qa.php'
+      - 'well-known/tests/netvera-public-ci-seed.sql'
+      - '.github/workflows/paytr-payment-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paytr-callback-simulation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: paytr_ci_only
+          MYSQL_DATABASE: paytr_ci
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping --silent -ppaytr_ci_only"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql,mbstring,curl,gd,fileinfo
+          tools: none
+      - name: Import disposable base schema only
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq default-mysql-client
+          mysql -h127.0.0.1 -uroot -ppaytr_ci_only paytr_ci < yorumhizmeti_yorumhizmeti.sql
+          cat > well-known/.env <<'EOF'
+          APP_NAME="PayTR Local Simulation"
+          APP_ENV=local
+          APP_DEBUG=true
+          APP_URL=http://127.0.0.1:8006
+          DB_HOST=127.0.0.1
+          DB_NAME=paytr_ci
+          DB_USER=root
+          DB_PASS=paytr_ci_only
+          DB_CHARSET=utf8mb4
+          LICENSE_ENABLED=false
+          LICENSE_LOCAL_BYPASS=true
+          NETVERA_LOCAL_AUTO_SETUP=0
+          EOF
+          php -S 127.0.0.1:8006 -t well-known/public well-known/tests/router.php >/tmp/paytr-qa-php.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8006/ >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          echo 'Local PHP server failed'
+          tail -n 80 /tmp/paytr-qa-php.log
+          exit 1
+      - name: Simulated PayTR callback plus premium payment view
+        env:
+          QA_DB_HOST: 127.0.0.1
+          QA_DB_NAME: paytr_ci
+          QA_DB_PASS: paytr_ci_only
+          QA_ORIGIN: http://127.0.0.1:8006
+        run: php well-known/tests/paytr-payment-qa.php
+      - name: Verify no real merchant keys, remote payment or unverified money movement
+        run: |
+          ! grep -E 'merchant_id=[[:digit:]]{6,}|merchant_key=sk_live' well-known/.env
+          echo 'PASS: Mock credentials only, no outgoing get-token requests in callback simulation'
+      - name: PHP diagnostics on failure
+        if: failure()
+        run: tail -n 160 /tmp/paytr-qa-php.log
