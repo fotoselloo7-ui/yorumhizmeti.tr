@@ -249,7 +249,7 @@ for(const screen of screens){
               Math.min(rect.right,other.right)-Math.max(rect.left,other.left)>4 &&
               Math.min(rect.bottom,other.bottom)-Math.max(rect.top,other.top)>4));
             return {cards:cards.length,childLinks:links.length,
-              badHref:links.some(a=>!/^\\/kategori\\/[^?]+\\?alt=/.test(a.getAttribute('href')||'')),
+              badHref:links.some(a=>{const href=a.getAttribute('href')||''; return !href.startsWith('/kategori/')||!href.includes('?alt=');}),
               overflow:!!grid && grid.scrollWidth>grid.clientWidth+3,
               overlap:duplicateCard,
               hasSpotlight:!!root.querySelector('.nv27-service-spotlight')};
