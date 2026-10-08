@@ -3,7 +3,7 @@ name: Responsive & Browser QA
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, staging/netvera-source-integration]
     paths:
       - 'well-known/**'
       - '.github/workflows/site-qa.yml'
