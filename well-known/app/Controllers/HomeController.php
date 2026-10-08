@@ -56,70 +56,108 @@ class HomeController extends Controller
         // Yalnızca sunum grubu: admin kategori ağacına, fiyatlara ve paketlere dokunma.
         // Reuse the same social/agency/marketing taxonomy as the mega menu and category page.
         // Display only categories whose active packages are marked as featured.
-        $featuredNavGroups = [];
-        foreach (\App\Services\CatalogMenuService::groups() as $catalogGroup) {
-            $featuredNavGroups[$catalogGroup['key']] = [
-                'key' => $catalogGroup['key'],
-                'title' => $catalogGroup['short'],
-                'icon' => $catalogGroup['icon'],
-                'categories' => [],
+        // Drive this selector from the SAME active category tree as the mega menu.
+        // Parent categories are top-level cards. Children are a second, horizontal
+        // row, never flattened into the top-level rail.
+        $featuredNavGroups=[];
+        $featuredChildCategories=[];
+        $featuredChildPackageGroups=[];
+        $menuGroups=\App\Services\CatalogMenuService::groups();
+        $knownFeaturedRoots=array_fill_keys(
+            array_map(static fn(array $g):int=>(int)$g['category']['id'],$featuredPackageGroups),
+            true
+        );
+        foreach($menuGroups as $catalogGroup){
+            $key=$catalogGroup['key'];
+            $featuredNavGroups[$key]=[
+                'key'=>$key,'title'=>$catalogGroup['short'],
+                'icon'=>$catalogGroup['icon'],'categories'=>[]
             ];
-        }
-        foreach ($featuredPackageGroups as $group) {
-            $key = \App\Services\CatalogMenuService::bucket($group['category']);
-            if (isset($featuredNavGroups[$key])) {
-                $featuredNavGroups[$key]['categories'][] = $group['category'];
+            foreach($catalogGroup['categories'] as $root){
+                $id=(int)$root['id'];
+                $root['kind']='package';
+                $root['icon']=$root['icon']??'package';
+                $featuredNavGroups[$key]['categories'][]=$root;
+                // Unfeatured categories must still be reachable from the same
+                // selector; show existing active products, never synthetic ones.
+                if(!isset($knownFeaturedRoots[$id])){
+                    $matches=array_values(array_filter($featuredPackages,
+                        static fn(array $p):bool=>(int)$p['featured_group_id']===$id));
+                    $featuredPackageGroups[]=[
+                        'category'=>$root,'packages'=>array_slice($matches,0,16),
+                        'unfeatured'=>true
+                    ];
+                    $knownFeaturedRoots[$id]=true;
+                }
+                foreach(($root['children']??[]) as $child){
+                    $child['kind']='package';
+                    $child['parent_featured_id']=$id;
+                    $featuredChildCategories[$id][]=$child;
+                    $products=array_values(array_filter($featuredPackages,
+                        static fn(array $p):bool=>(int)$p['category_id']===(int)$child['id']));
+                    $featuredChildPackageGroups[]=[
+                        'category'=>$child,'packages'=>array_slice($products,0,16)
+                    ];
+                }
             }
         }
 
-        // The featured-package switcher and the actual Netvera software catalogue
-        // have different storage models. Show both here without creating fake
-        // packages, prices, ratings or changing the admin's featured selections.
-        $featuredSoftwareGroups = [];
-        $netveraProducts = \App\Services\NetveraBridgeService::all();
-        $netveraCategories = \App\Services\NetveraBridgeService::categories();
-        if ($netveraProducts && isset($featuredNavGroups['agency'])) {
-            $softwareRoot = [
-                'id' => -100000, 'name' => 'Hazır Yazılımlar & Scriptler',
-                'slug' => 'hazir-scriptler', 'url' => '/hazir-scriptler',
-                'kind' => 'software', 'icon' => 'monitor',
+        $featuredSoftwareGroups=[];
+        $netveraProducts=\App\Services\NetveraBridgeService::all();
+        $netveraCategories=\App\Services\NetveraBridgeService::categories();
+        if($netveraProducts){
+            if(!isset($featuredNavGroups['agency'])){
+                $featuredNavGroups['agency']=[
+                    'key'=>'agency','title'=>'Ajans & Yazılım',
+                    'icon'=>'layers','categories'=>[]
+                ];
+            }
+            $softwareRoot=[
+                'id'=>-100000,'name'=>'Hazır Yazılımlar & Scriptler',
+                'slug'=>'hazir-scriptler','url'=>'/hazir-scriptler',
+                'kind'=>'software','icon'=>'monitor'
             ];
-            $featuredNavGroups['agency']['categories'][] = $softwareRoot;
-            $featuredSoftwareGroups[] = [
-                'category' => $softwareRoot, 'products' => $netveraProducts,
-            ];
-
-            foreach ($netveraCategories as $netveraCategory) {
-                $catId = (int) $netveraCategory['legacy_id'];
-                $categoryProducts = array_values(array_filter(
+            $featuredNavGroups['agency']['categories'][]=$softwareRoot;
+            $featuredSoftwareGroups[]=['category'=>$softwareRoot,'products'=>$netveraProducts];
+            foreach($netveraCategories as $nc){
+                $catId=(int)$nc['legacy_id'];
+                $parentLegacy=(int)($nc['parent_legacy_id']??0);
+                $categoryProducts=array_values(array_filter(
                     $netveraProducts,
-                    static function (array $product) use ($catId, $netveraCategories): bool {
-                        $productCategory = (int) $product['category_legacy_id'];
-                        if ($productCategory === $catId) return true;
-                        // A parent category also displays items in its child category.
-                        foreach ($netveraCategories as $child) {
-                            if ((int) $child['legacy_id'] === $productCategory
-                                && (int) $child['parent_legacy_id'] === $catId) return true;
+                    static function(array $product)use($catId,$netveraCategories):bool{
+                        $productCat=(int)$product['category_legacy_id'];
+                        if($productCat===$catId)return true;
+                        foreach($netveraCategories as $child){
+                            if((int)$child['legacy_id']===$productCat &&
+                               (int)($child['parent_legacy_id']??0)===$catId)return true;
                         }
                         return false;
                     }
                 ));
-                $catIdUrl = '/hazir-scriptler?category='.rawurlencode((string)$netveraCategory['slug']);
-                $tabCategory = [
-                    'id' => -100000 - $catId,
-                    'name' => $netveraCategory['name'],
-                    'slug' => $netveraCategory['slug'],
-                    'url' => $catIdUrl,
-                    'kind' => 'software',
-                    'icon' => (int)$netveraCategory['parent_legacy_id'] > 0 ? 'code' : 'layers',
+                $tab=[
+                    'id'=>-100000-$catId,'name'=>$nc['name'],
+                    'slug'=>$nc['slug'],
+                    'url'=>'/hazir-scriptler?category='.rawurlencode((string)$nc['slug']),
+                    'kind'=>'software','icon'=>$parentLegacy?'code':'layers',
+                    'parent_featured_id'=>$parentLegacy?-100000-$parentLegacy:-100000
                 ];
-                $featuredNavGroups['agency']['categories'][] = $tabCategory;
-                $featuredSoftwareGroups[] = [
-                    'category' => $tabCategory, 'products' => $categoryProducts,
+                $featuredChildCategories[$tab['parent_featured_id']][]=$tab;
+                $featuredSoftwareGroups[]=['category'=>$tab,'products'=>$categoryProducts];
+            }
+            // The 34 existing ready-software type choices are actual menu links,
+            // not invented Netvera product records. Keep them as nested links.
+            foreach(\App\Services\SoftwareCatalogService::definitions() as $type){
+                [$label,$slug,$description,$iconName]=$type;
+                $featuredChildCategories[-100000][]=[
+                    'id'=>0,'name'=>$label,'slug'=>$slug,
+                    'url'=>'/hazir-yazilimlar?tur='.rawurlencode($slug),
+                    'kind'=>'link','icon'=>$iconName,'parent_featured_id'=>-100000
                 ];
             }
         }
-        $featuredNavGroups = array_values(array_filter($featuredNavGroups, static fn($g) => !empty($g['categories'])));
+        $featuredNavGroups=array_values(array_filter(
+            $featuredNavGroups,static fn(array $g):bool=>!empty($g['categories'])
+        ));
         $initialFeaturedNavGroup = $featuredNavGroups[0]['key'] ?? 'marketing';
         foreach ($featuredNavGroups as $navGroup) {
             foreach ($navGroup['categories'] as $category) {
@@ -326,6 +364,8 @@ class HomeController extends Controller
             'featuredPackages' => $featuredPackages,
             'featuredPackageGroups' => $featuredPackageGroups,
             'featuredSoftwareGroups' => $featuredSoftwareGroups,
+            'featuredChildCategories' => $featuredChildCategories,
+            'featuredChildPackageGroups' => $featuredChildPackageGroups,
             'featuredNavGroups' => $featuredNavGroups,
             'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
             'homePromoGroups' => $homePromoGroups,
