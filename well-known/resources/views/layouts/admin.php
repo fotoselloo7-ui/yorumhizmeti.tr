@@ -46,6 +46,9 @@
                 <a href="/admin/paketler" class="<?= isActive('/admin/paket') ?>">
                     <?= icon('package', 18) ?> Paketler
                 </a>
+                <a href="/admin/hazir-yazilimlar" class="<?= isActive('/admin/hazir-yazilimlar') ? 'active' : '' ?>">
+                    <?= icon('monitor', 18) ?> Hazır Yazılım Vitrini
+                </a>
                 <a href="/admin/import" class="<?= isActive('/admin/import') ?>">
                     <?= icon('upload', 18) ?> İçe Aktar
                 </a>
@@ -81,6 +84,9 @@
                 </a>
                 <a href="/admin/ana-sayfa" class="<?= isActive('/admin/ana-sayfa') ?>">
                     <?= icon('home', 18) ?> Ana Sayfa Yönetimi
+                </a>
+                <a href="/admin/referanslar" class="<?= isActive('/admin/referanslar') ? 'active' : '' ?>">
+                    <?= icon('award', 18) ?> Referanslarımız
                 </a>
                 <a href="/admin/blog-kategorileri" class="<?= isActive('/admin/blog-kategori') ?>">
                     <?= icon('folder', 18) ?> Blog Kategorileri

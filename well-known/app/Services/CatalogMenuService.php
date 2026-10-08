@@ -54,7 +54,7 @@ final class CatalogMenuService
         foreach (['instagram','tiktok','youtube','facebook','threads','telegram','spotify','discord','linkedin','twitch','twitter','pinterest','snapchat','whatsapp','github','soundcloud','bluesky','google','seo'] as $name)
             if (str_contains($t,$name)) return $name;
         if (preg_match('/(^|[ -])x[ -]|x-twitter/u',$t))return 'twitter';
-        foreach (['web'=>'/web|site|wordpress|domain|hosting/u','ecommerce'=>'/e.?ticaret|eticaret|commerce/u','mobileapp'=>'/mobil|uygulama|app/u','content'=>'/içerik|icerik/u','graphic'=>'/grafik|tasarım|tasarim/u','ads'=>'/reklam|ads/u','local'=>'/yerel|işletme|isletme/u','reputation'=>'/itibar/u'] as $key=>$pattern)
+        foreach (['software'=>'/hazır.?yazılım|hazir.?yazilim|script|yazılım.?script|yazilim.?script/u','web'=>'/web|site|wordpress|domain|hosting/u','ecommerce'=>'/e.?ticaret|eticaret|commerce/u','mobileapp'=>'/mobil|uygulama|app/u','content'=>'/içerik|icerik/u','graphic'=>'/grafik|tasarım|tasarim/u','ads'=>'/reklam|ads/u','local'=>'/yerel|işletme|isletme/u','reputation'=>'/itibar/u'] as $key=>$pattern)
             if(preg_match($pattern,$t))return $key;
         return 'default';
     }
@@ -102,7 +102,7 @@ final class CatalogMenuService
     public static function icon(array $cat,?array $parent=null): string
     {
         $s=self::style($cat,$parent);
-        $map=['seo'=>'bar-chart','web'=>'globe','ecommerce'=>'store','mobileapp'=>'mobile-app','content'=>'content-create','graphic'=>'palette','ads'=>'ads','local'=>'local-business','reputation'=>'reputation'];
+        $map=['software'=>'monitor','seo'=>'bar-chart','web'=>'globe','ecommerce'=>'store','mobileapp'=>'mobile-app','content'=>'content-create','graphic'=>'palette','ads'=>'ads','local'=>'local-business','reputation'=>'reputation'];
         $icon=$map[$s]??($s==='default'?($cat['icon_key']??'package'):$s);
         return IconService::has($icon)?$icon:'package';
     }

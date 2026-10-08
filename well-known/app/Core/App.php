@@ -130,6 +130,15 @@ class App
         $r->get('/admin/paket/{id}/alanlar', 'Admin\\PackageController@fields');
         $r->post('/admin/paket/{id}/alanlar-kaydet', 'Admin\\PackageController@saveFields');
 
+        // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
+        $r->get('/admin/hazir-yazilimlar', 'Admin\\SoftwareShowcaseController@index');
+        $r->post('/admin/hazir-yazilimlar/kategorileri-kur', 'Admin\\SoftwareShowcaseController@install');
+        $r->post('/admin/hazir-yazilimlar/kaydet', 'Admin\\SoftwareShowcaseController@save');
+        $r->get('/admin/referanslar', 'Admin\\ReferencesController@index');
+        $r->post('/admin/referanslar/ekle', 'Admin\\ReferencesController@store');
+        $r->post('/admin/referanslar/{id}/guncelle', 'Admin\\ReferencesController@update');
+        $r->post('/admin/referanslar/{id}/sil', 'Admin\\ReferencesController@delete');
+
         // Admin Siparişler
         $r->get('/admin/siparisler', 'Admin\\OrderController@index');
         $r->get('/admin/siparis/{id}', 'Admin\\OrderController@show');
