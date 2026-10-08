@@ -93,13 +93,55 @@ for(const screen of screens){
       if(p.route==='/' && screen.name==='masaustu'){
         const tabs=page.locator('[data-featured-tab]');
         const panes=page.locator('[data-featured-pane]:not([hidden])');
+        const groups=page.locator('[data-featured-group]');
         const count=await tabs.count();
+        const groupCount=await groups.count();
+        if(!groupCount)throw new Error('Featured category groups not rendered');
+        const geometry=await page.locator('.yh24-featured-navigation').evaluate(el=>{
+          const parent=el.getBoundingClientRect();
+          return {
+            overflow:el.scrollWidth>el.clientWidth+2,
+            allInside:[...el.querySelectorAll('[data-featured-group]')].every(btn=>{
+              const b=btn.getBoundingClientRect();
+              return b.left>=parent.left-2 && b.right<=parent.right+2;
+            })
+          };
+        });
+        if(geometry.overflow||!geometry.allInside){
+          errors.push('Featured groups overflow navigation container');failed=true;
+        }
         if(count>1){
           const first=await panes.first().getAttribute('data-featured-pane');
-          await tabs.nth(1).click();
+          if(groupCount>1){
+            await groups.nth(1).hover();
+            const key=await groups.nth(1).getAttribute('data-featured-group');
+            const panel=page.locator('[data-featured-filter-panel]:not([hidden])');
+            if((await panel.getAttribute('data-featured-filter-panel'))!==key){
+              throw new Error('Hover failed to reveal the group subcategory filters');
+            }
+            await panel.locator('[data-featured-tab]').first().click();
+          }else{
+            await page.locator('[data-featured-filter-panel]:not([hidden]) [data-featured-tab]').nth(1).click();
+          }
           const second=await panes.first().getAttribute('data-featured-pane');
-          switcher={tabs:count,changed:first!==second};
-          if(!switcher.changed){errors.push('Featured category tab did not switch content');failed=true}
+          switcher={tabs:count,groupCount,changed:first!==second};
+          if(!switcher.changed){errors.push('Featured grouped filter did not switch packages');failed=true}
+        }
+      }
+      if(p.route==='/' && screen.name==='mobil'){
+        const groups=page.locator('[data-featured-group]');
+        if(await groups.count()){
+          await groups.last().click();
+          const key=await groups.last().getAttribute('data-featured-group');
+          const panel=page.locator('[data-featured-filter-panel]:not([hidden])');
+          if((await panel.getAttribute('data-featured-filter-panel'))!==key){
+            throw new Error('Mobile group tap failed to open its filter panel');
+          }
+          const overflow=await page.locator('.yh24-featured-subfilters').evaluate(el=>el.scrollWidth>el.clientWidth+3);
+          if(overflow)throw new Error('Mobile subcategory filters overflow the page');
+          if(!await panel.locator('[data-featured-tab]').count()){
+            throw new Error('Active category filter panel has no live filter choices');
+          }
         }
       }
       // Regression checks for screenshot-confirmed layout failures.
