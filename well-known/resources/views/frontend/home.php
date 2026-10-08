@@ -380,6 +380,57 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
     </div>
 </section>
 
+<?php if (!empty($softwareHighlights)): ?>
+<section class="nv31-software" id="hazir-yazilimlar" aria-labelledby="nv31-software-heading">
+  <div class="container">
+    <div class="nv31-section-heading">
+      <div>
+        <span class="nv31-kicker"><?= icon('monitor',14) ?> HAZIR YAZILIM KATALOĞU</span>
+        <h2 id="nv31-software-heading">Hazır Yazılımlar <span>& Scriptler</span></h2>
+        <p>Yönetim panelli, sektöre özel dijital çözümlerimizi keşfedin. İhtiyacınıza uygun ürünü inceleyin.</p>
+      </div>
+      <a href="/kategori/hazir-yazilim-scriptleri" class="nv31-heading-link">Tüm Yazılımları Gör <?= icon('arrow-up-right',15) ?></a>
+    </div>
+    <div class="nv31-software-grid">
+      <?php foreach($softwareHighlights as $i=>$sw):
+        $price = !empty($sw['discount_price']) && (float)$sw['discount_price'] < (float)$sw['price'] ? $sw['discount_price'] : $sw['price'];
+        $short = trim(strip_tags((string)($sw['short_description'] ?: $sw['description'] ?? '')));
+      ?>
+      <article class="nv31-software-card">
+        <a href="/paket/<?= e($sw['slug']) ?>" class="nv31-software-image" aria-label="<?= e($sw['name']) ?> yazılımını incele">
+          <?php if(!empty($sw['image'])): ?>
+            <img src="<?= e(upload_url($sw['image'])) ?>" loading="lazy" alt="<?= e($sw['image_alt'] ?: $sw['name']) ?>">
+          <?php else: ?>
+            <span class="nv31-software-image-placeholder">
+              <span><?= icon('monitor',45) ?></span>
+              <span><?= icon('settings',19) ?></span>
+              <span><?= icon('globe',25) ?></span>
+            </span>
+          <?php endif; ?>
+          <span class="nv31-software-number"><?= str_pad((string)($i+1),2,'0',STR_PAD_LEFT) ?></span>
+          <span class="nv31-software-image-arrow"><?= icon('arrow-up-right',17) ?></span>
+        </a>
+        <div class="nv31-software-body">
+          <span class="nv31-software-tag"><?= icon('layers',11) ?> <?= e($sw['category_name']) ?></span>
+          <h3><a href="/paket/<?= e($sw['slug']) ?>"><?= e($sw['name']) ?></a></h3>
+          <p><?= e(mb_strimwidth($short, 0, 115, '…','UTF-8')) ?></p>
+          <div class="nv31-software-bottom">
+            <strong><?= money($price) ?></strong>
+            <a href="/paket/<?= e($sw['slug']) ?>" aria-label="<?= e($sw['name']) ?> detayları"><?= icon('arrow-right',16) ?></a>
+          </div>
+        </div>
+      </article>
+      <?php endforeach; ?>
+    </div>
+    <div class="nv31-software-foot">
+      <span><?= icon('shield-check',14) ?> Sektöre uygun yazılım çözümleri</span>
+      <span><?= icon('headphones',14) ?> Satış öncesi ve sonrası destek</span>
+      <a href="/kategori/hazir-yazilim-scriptleri">Tüm yazılım kategorileri <?= icon('arrow-right',12) ?></a>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
 <section class="yh6-stats">
     <div class="container">
         <div><?= icon('users',20) ?><span><strong>50.000+</strong><small>Mutlu Müşteri</small></span></div>
@@ -438,6 +489,45 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
             <a href="/kategoriler">İhtiyacınıza uygun hizmeti bulun <?= icon('arrow-right', 13) ?></a>
         </div>
     </div>
+</section>
+<?php endif; ?>
+
+<?php if (!empty($projectReferences)): ?>
+<section class="nv31-portfolio" id="referanslarimiz" aria-labelledby="nv31-portfolio-heading">
+  <div class="container">
+    <div class="nv31-section-heading">
+      <div>
+        <span class="nv31-kicker"><?= icon('award',14) ?> PROJE PORTFÖYÜMÜZ</span>
+        <h2 id="nv31-portfolio-heading">Referanslarımız <span>& Çalışmalarımız</span></h2>
+        <p>Hayata geçirdiğimiz gerçek projelerden bazıları. Sektörlere özel dijital tasarım ve yazılım çözümleri.</p>
+      </div>
+      <a href="/iletisim" class="nv31-heading-link">Projenizi Konuşalım <?= icon('arrow-up-right',15) ?></a>
+    </div>
+    <div class="nv31-portfolio-grid">
+      <?php foreach($projectReferences as $ref): ?>
+      <article class="nv31-portfolio-card">
+        <div class="nv31-portfolio-image">
+          <?php if(!empty($ref['image'])): ?>
+            <img src="<?= e(upload_url($ref['image'])) ?>" alt="<?= e($ref['title'].' proje görseli') ?>" loading="lazy">
+          <?php else: ?>
+            <div class="nv31-portfolio-placeholder"><?= icon('monitor',45) ?></div>
+          <?php endif; ?>
+          <?php if(!empty($ref['url'])): ?>
+          <a class="nv31-portfolio-arrow" href="<?= e($ref['url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($ref['title']) ?> projesini ziyaret et"><?= icon('arrow-up-right',16) ?></a>
+          <?php endif; ?>
+        </div>
+        <div class="nv31-portfolio-body">
+          <span class="nv31-portfolio-kind"><?= icon('layers',11) ?> <?= e($ref['category'] ?: 'Dijital proje') ?></span>
+          <h3><?= e($ref['title']) ?></h3>
+          <?php if(!empty($ref['description'])): ?><p><?= e($ref['description']) ?></p><?php endif; ?>
+          <?php if(!empty($ref['url'])): ?>
+            <a href="<?= e($ref['url']) ?>" target="_blank" rel="noopener noreferrer">Projeyi İncele <?= icon('arrow-right',12) ?></a>
+          <?php endif; ?>
+        </div>
+      </article>
+      <?php endforeach; ?>
+    </div>
+  </div>
 </section>
 <?php endif; ?>
 
