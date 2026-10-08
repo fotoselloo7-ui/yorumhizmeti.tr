@@ -162,6 +162,7 @@ class PackageController extends Controller
         }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
         $this->db->update('packages',$data,'id = ?',[(int)$id]);
+        \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('software_update','Hazır yazılım güncellendi: '.$data['name']);
         flash('success','Hazır yazılım güncellendi.');
         redirect('/admin/hazir-yazilimlar');
