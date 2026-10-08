@@ -330,7 +330,8 @@ for(const screen of screens){
                 // Agency's ready-scripts tile routes to a dedicated live catalog;
                 // legacy service cards still use their original ?alt= links.
                 return !(href.startsWith('/kategori/')&&href.includes('?alt='))
-                  && !(href.startsWith('/hazir-yazilimlar?tur=')&&href.split('=')[1]);
+                  && !(href.startsWith('/hazir-scriptler?category=')&&href.split('=')[1])
+                  && href!=='/hazir-yazilimlar';
               }),
               overflow:!!grid && grid.scrollWidth>grid.clientWidth+3,
               overlap:duplicateCard,
@@ -486,10 +487,11 @@ for(const screen of screens){
           else await agency.hover();
           const software=page.locator('#nv26-panel-agency .nv35-software-card');
           if((await software.count())!==1 ||
-             !(await software.locator('.nv27-service-parent[href="/hazir-yazilimlar"]').count()) ||
-             (await software.locator('.nv27-subcategory-link[href^="/hazir-yazilimlar?tur="]').count())!==4 ||
-             !(await software.locator('.nv27-category-footer[href="/hazir-yazilimlar"]').count())){
-            errors.push('Software is not the sixth normal agency category card');failed=true;
+             !(await software.locator('.nv27-service-parent[href="/hazir-scriptler"]').count()) ||
+             (await software.locator('.nv27-subcategory-link[href^="/hazir-scriptler?category="]').count()) < 2 ||
+             !(await software.locator('.nv27-subcategory-link[href="/hazir-yazilimlar"]').count()) ||
+             !(await software.locator('.nv27-category-footer[href="/hazir-scriptler"]').count())){
+            errors.push('Real Netvera scripts are not the sixth agency category, or service-page link was lost');failed=true;
           }
           if(await page.locator('#nv26-panel-agency .nv33-software-feature').count()){
             errors.push('Obsolete wide software banner still occupies the menu top');failed=true;
