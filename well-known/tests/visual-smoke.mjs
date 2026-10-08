@@ -772,6 +772,20 @@ try {
     showcasePage.waitForURL('**/admin',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').click()
   ]);
+  // Netvera staging: new admin routes must load even before importing
+  // external public catalog. Live PayTR must never be requested by this test.
+  await showcasePage.goto(origin+'/admin/netvera-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.getByText('Netvera Hazır Yazılımlar',{exact:false}).count()))
+    throw new Error('Netvera admin catalog route not available');
+  await showcasePage.goto(origin+'/admin/netvera-yazilimlar/ekle',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('form[action="/admin/netvera-yazilimlar/kaydet"]').count()))
+    throw new Error('Netvera rich script editor not available');
+  await showcasePage.goto(origin+'/hazir-scriptler',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv40-store').count()))
+    throw new Error('Legacy indexed scripts route missing');
+  await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('[name="nvseo_secondary_keywords"]').count()))
+    throw new Error('Native service SEO extension missing');
   // Older scripts added under the existing Web Site category must show up
   // automatically, WITHOUT installing the 23 new categories or selecting a
   // special featured flag. This reproduces the user's local problem.
