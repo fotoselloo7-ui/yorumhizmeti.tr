@@ -90,3 +90,31 @@
 @media(max-width:960px){
   .site-header .mobile-menu-btn{display:flex!important}
 }
+
+/* V26 social menu is intentionally a DIFFERENT module than the agency columns. */
+.nv26-social-mega-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;max-width:100%}
+.nv26-social-mega-card{--brand:#6845de;--wash:#f2edff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;min-height:112px;gap:4px;padding:12px 8px;border:1px solid rgba(32,48,97,.04);border-radius:13px;background:var(--wash);color:var(--brand);text-align:center;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease}
+.nv26-social-mega-card:hover{transform:translateY(-3px);box-shadow:0 13px 22px rgba(29,39,80,.10);color:var(--brand)}
+.nv26-social-mega-icon{display:grid;place-items:center;width:42px;height:42px;margin-bottom:6px;border-radius:11px;background:rgba(255,255,255,.75);color:var(--brand)}
+.nv26-social-mega-card strong{color:var(--brand);font-size:11px;line-height:1.35;overflow-wrap:anywhere;font-weight:800}
+.nv26-social-mega-card small{color:var(--brand);opacity:.7;font-size:9px}
+.nv26-social-instagram{--brand:#df2c7c;--wash:#ffedf4}
+.nv26-social-tiktok{--brand:#191b26;--wash:#e9e9eb}
+.nv26-social-youtube{--brand:#e92334;--wash:#ffebed}
+.nv26-social-facebook{--brand:#1877f2;--wash:#e9f2ff}
+.nv26-social-twitter{--brand:#237bbb;--wash:#eaf4ff}
+.nv26-social-threads{--brand:#15161a;--wash:#ececed}
+.nv26-social-telegram{--brand:#2699d4;--wash:#e7f7ff}
+.nv26-social-spotify{--brand:#129e45;--wash:#e8f9ed}
+.nv26-social-linkedin{--brand:#146cb2;--wash:#e7f4fc}
+.nv26-social-discord{--brand:#5960df;--wash:#eef0ff}
+.nv26-social-twitch{--brand:#8643dc;--wash:#f3ecff}
+.nv26-social-whatsapp{--brand:#1aad5f;--wash:#e9fbef}
+.nv26-social-pinterest{--brand:#df2a3a;--wash:#ffecf0}
+.nv26-social-snapchat{--brand:#998a00;--wash:#fffbe5}
+.nv26-social-soundcloud{--brand:#e87525;--wash:#fff1e8}
+.nv26-social-github{--brand:#1f2734;--wash:#eaedf1}
+@media(max-width:1150px){.nv26-social-mega-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}}
+@media(max-width:750px){.nv26-social-mega-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.nv26-social-mega-card{min-height:103px}}
+@media(max-width:440px){.nv26-social-mega-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.nv26-social-mega-card{transition:none}.nv26-social-mega-card:hover{transform:none}}

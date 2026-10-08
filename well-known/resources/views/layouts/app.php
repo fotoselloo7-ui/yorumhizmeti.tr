@@ -191,6 +191,17 @@
                   <div><strong><?= e($nv26Label) ?></strong><p><?= e($nv26Group['description']) ?></p></div>
                   <a href="/kategoriler?grup=<?= e($nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
                 </div>
+                <?php if ($nv26Group['key'] === 'social'): ?>
+                <div class="nv26-social-mega-grid" aria-label="Sosyal medya platformları">
+                  <?php foreach ($nv26Group['categories'] as $nv26Cat): ?>
+                  <a href="<?= e($nv26Cat['url']) ?>" class="nv26-social-mega-card nv26-social-<?= e($nv26Cat['style']) ?>">
+                    <span class="nv26-social-mega-icon"><?= icon($nv26Cat['icon'], 27) ?></span>
+                    <strong><?= e($nv26Cat['name']) ?></strong>
+                    <small><?= count($nv26Cat['children']) ? count($nv26Cat['children']).' alt hizmet' : 'Hizmetleri gör' ?></small>
+                  </a>
+                  <?php endforeach; ?>
+                </div>
+                <?php else: ?>
                 <div class="nv26-mega-columns">
                   <?php foreach ($nv26Cols as $nv26Column): ?>
                   <div class="nv26-mega-column">
@@ -216,6 +227,7 @@
                   </div>
                   <?php endforeach; ?>
                 </div>
+                <?php endif; ?>
               </section>
             </div>
             <?php endforeach; ?>
