@@ -10,6 +10,7 @@
     const panes = [...switcher.querySelectorAll('[data-featured-pane]')];
     const title = switcher.querySelector('[data-featured-title]');
     const subtitle = switcher.querySelector('[data-featured-subtitle]');
+    const kindLabel = switcher.querySelector('[data-featured-kind]');
     const avatar = switcher.querySelector('[data-featured-avatar]');
     const platformClasses = [
       'instagram','tiktok','youtube','facebook','twitter','threads','telegram',
@@ -44,8 +45,9 @@
 
       const current = Math.min(cards.length, 1 + Math.round(track.scrollLeft / Math.max(step(track), 1)));
       if (status) status.textContent = current + ' / ' + cards.length;
-      if (prev) prev.setAttribute('aria-label', 'Önceki paketler');
-      if (next) next.setAttribute('aria-label', 'Sonraki paketler');
+      const noun = pane.dataset.kind === 'software' ? 'yazılımlar' : 'paketler';
+      if (prev) prev.setAttribute('aria-label', 'Önceki ' + noun);
+      if (next) next.setAttribute('aria-label', 'Sonraki ' + noun);
     };
 
     const scrollTrack = (pane, direction, userInitiated = false) => {
@@ -129,6 +131,7 @@
       const id = tab.dataset.featuredTab;
       const name = tab.dataset.title || 'Hizmetler';
       const platformClass = tab.dataset.class || 'default';
+      const isSoftware = tab.dataset.kind === 'software';
       showGroup(tab.dataset.featuredParentGroup, false);
 
       tabs.forEach(item => {
@@ -144,7 +147,12 @@
         if (active) requestAnimationFrame(() => updateControls(pane));
       });
       if (title) title.textContent = name;
-      if (subtitle) subtitle.textContent = name + ' kategorisindeki öne çıkan paketleri inceleyin.';
+      if (kindLabel) kindLabel.textContent = isSoftware ? 'Öne Çıkan Yazılımlar' : 'Öne Çıkan Paketler';
+      if (subtitle) subtitle.textContent = isSoftware
+        ? (name === 'Hazır Yazılımlar & Scriptler'
+            ? 'Gerçek NetVera yazılımlarını, ekran görüntülerini ve fiyatlarını inceleyin.'
+            : name + ' kategorisindeki gerçek yazılımları inceleyin.')
+        : name + ' kategorisindeki öne çıkan paketleri inceleyin.';
       if (avatar) {
         platformClasses.forEach(cls => avatar.classList.remove(cls));
         avatar.classList.add(platformClass);
