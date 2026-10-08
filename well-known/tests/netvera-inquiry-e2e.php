@@ -40,7 +40,8 @@ try{
         'message'=>'Netvera staging CRM end to end test.','website'=>''
     ]);
     $result=json_decode($body,true);
-    test($status===200 && ($result['ok']??false)===true,'chat created');
+    test($status===200 && ($result['ok']??false)===true,
+        'chat created, HTTP '.$status.' response='.mb_substr(strip_tags($body),0,300));
     $id=(int)($result['inquiry_id']??0);
     test($id>0,'created chat ID');
     [$status,$body]=httpRequest($base.'/netvera/canli-destek/mesajlar?id='.$id,$cookie);
