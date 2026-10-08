@@ -2,17 +2,28 @@
 if (!function_exists('yvCatDesign')) {
     function yvCatDesign(array $cat): array {
         $s=mb_strtolower(($cat['slug']??'').' '.($cat['name']??''));
-        if(str_contains($s,'instagram')) return ['instagram','instagram','#e1306c'];
-        if(str_contains($s,'tiktok')) return ['tiktok','tiktok','#111'];
-        if(str_contains($s,'youtube')) return ['youtube','youtube','#e60000'];
-        if(str_contains($s,'facebook')) return ['facebook','facebook','#1877f2'];
-        if(str_contains($s,'twitter')||str_contains($s,' x ')) return ['twitter','twitter','#111'];
-        if(str_contains($s,'google')||str_contains($s,'seo')) return ['google','google','#4285f4'];
-        if(str_contains($s,'web')||str_contains($s,'site')) return ['web','globe','#2868ff'];
-        return ['default',$cat['icon_key']??'package','#6750e7'];
-    }
-}
-[$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
+        if(str_contains($s,'instagram')) return ['instagram','instagram','#E1306C'];
+        if(str_contains($s,'tiktok')) return ['tiktok','tiktok','#111111'];
+        if(str_contains($s,'youtube')) return ['youtube','youtube','#FF0000'];
+        if(str_contains($s,'facebook')) return ['facebook','facebook','#1877F2'];
+        if(str_contains($s,'twitter')||str_contains($s,' x ')) return ['twitter','twitter','#111111'];
+        if(str_contains($s,'threads')) return ['threads','threads','#111111'];
+        if(str_contains($s,'telegram')) return ['telegram','telegram','#229ED9'];
+        if(str_contains($s,'spotify')) return ['spotify','spotify','#1DB954'];
+        if(str_contains($s,'discord')) return ['discord','discord','#5865F2'];
+        if(str_contains($s,'linkedin')) return ['linkedin','linkedin','#0A66C2'];
+        if(str_contains($s,'twitch')) return ['twitch','twitch','#9147FF'];
+        if(str_contains($s,'dijital reklam')||str_contains($s,'dijital-reklam')) return ['ads','ads','#F97316'];
+        if(str_contains($s,'itibar')) return ['reputation','reputation','#0F766E'];
+        if(str_contains($s,'e-ticaret')||str_contains($s,'eticaret')) return ['ecommerce','store','#10B981'];
+        if(str_contains($s,'mobil uygulama')||str_contains($s,'mobil-uygulama')) return ['mobileapp','mobile-app','#6366F1'];
+        if(str_contains($s,'içerik')||str_contains($s,'icerik')) return ['content','content-create','#F97316'];
+        if(str_contains($s,'grafik')) return ['graphic','palette','#EC4899'];
+        if(str_contains($s,'yerel')) return ['local','local-business','#16A34A'];
+        if(str_contains($s,'google')||str_contains($s,'seo')) return ['google','google','#4285F4'];
+        if(str_contains($s,'web')||str_contains($s,'site')) return ['web','globe','#2868FF'];
+        return ['default',$cat['icon_key']??'package','#6750E7'];
+    }[$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
 $categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
 $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
