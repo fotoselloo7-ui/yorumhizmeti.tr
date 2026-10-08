@@ -7,6 +7,18 @@ class PackageController extends Controller
 {
     public function show(string $slug): void
     {
+        // Önceki YorumHizmeti yazılım demo paketi: Netvera'daki esas ürünün
+        // tek indekslenebilir URL'sine 301. Hizmet paketleri aynen kalır.
+        $softwareAliases=[
+            'netvera-haber-sitesi-script-yazilimi'=>'haber-sitesi-scripti',
+        ];
+        if (isset($softwareAliases[$slug])) {
+            $target=$softwareAliases[$slug];
+            if (\App\Services\NetveraBridgeService::find($target)) {
+                header('Location: /hazir-scriptler/'.rawurlencode($target),true,301);
+                exit;
+            }
+        }
         $db = Database::getInstance();
         $package = $db->fetch("
             SELECT p.*, c.name AS category_name, c.slug AS category_slug
