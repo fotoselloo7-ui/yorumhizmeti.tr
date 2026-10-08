@@ -15,7 +15,7 @@ class IconService
         'globe'=>['solid','globe'],'star'=>['regular','star'],'star-fill'=>['solid','star'],'heart'=>['regular','heart'],
         'external-link'=>['solid','arrow-up-right-from-square'],'lock'=>['solid','lock'],
         'unlock'=>['solid','lock-open'],'log-out'=>['solid','right-from-bracket'],'log-in'=>['solid','right-to-bracket'],
-        'shield'=>['solid','shield-halved'],'credit-card'=>['regular','credit-card'],'truck'=>['solid','truck-fast'],
+        'shield'=>['solid','shield-halved'],'landmark'=>['solid','building-columns'],'credit-card'=>['regular','credit-card'],'truck'=>['solid','truck-fast'],
         'headphones'=>['solid','headset'],'message-circle'=>['regular','comment-dots'],
         'help-circle'=>['regular','circle-question'],'bar-chart'=>['solid','chart-column'],
         'bar-chart-2'=>['solid','chart-column'],'file-text'=>['regular','file-lines'],'image'=>['regular','image'],
