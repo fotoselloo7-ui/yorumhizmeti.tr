@@ -58,6 +58,27 @@ $nv40ExternalLive=!in_array($nv40Host,['netvera.tr','www.netvera.tr'],true);
             <?php endif; ?>
           </div>
         </div>
+        <?php if(\App\Services\NetveraInquiryService::ready()): ?>
+          <section class="nv-product-offer" id="teklif-al" aria-label="Yazılım teklif talebi">
+            <h2><?= icon('message-square',16) ?> Bu Yazılım İçin Teklif Alın</h2>
+            <p>Kurulum, lisans ve proje detaylarını birlikte netleştirelim. Talebiniz NetVera satış ekibinin yönetim paneline ulaşır.</p>
+            <form method="post" action="/netvera/canli-destek/gonder">
+              <?= csrfField() ?>
+              <input type="hidden" name="source_type" value="offer">
+              <input type="hidden" name="product_slug" value="<?= e($product['slug']) ?>">
+              <input type="text" class="nv-chat-honeypot" name="website" autocomplete="off" tabindex="-1" aria-hidden="true">
+              <div class="nv-product-offer-grid">
+                <label>Adınız<input name="name" required minlength="2" maxlength="140" autocomplete="name" placeholder="Adınız Soyadınız"></label>
+                <label>E-posta veya Telefon<input name="contact" required minlength="5" maxlength="190" placeholder="Size ulaşabileceğimiz bilgi"></label>
+              </div>
+              <label class="nv-offer-message">Proje / Kurulum Talebiniz
+                <textarea name="message" required minlength="5" maxlength="3000" placeholder="İhtiyacınızı kısaca anlatın..."></textarea>
+              </label>
+              <button type="submit"><?= icon('send',14) ?> Teklif Talebi Gönder</button>
+              <p class="nv-offer-policy">Gönderdiğiniz bilgiler yalnızca teklifinizi yanıtlamak için kullanılır. <a href="/sayfa/kvkk">KVKK</a></p>
+            </form>
+          </section>
+        <?php endif; ?>
       </div>
     </div>
   </div></section>
