@@ -47,7 +47,10 @@ final class NetveraSeoBridge
         foreach([
             'secondary_keywords'=>1000,'robots'=>90,'geo_summary'=>500,
             'entity_topics'=>500,'service_area'=>300,'author_name'=>120,
-            'author_type'=>30,'author_url'=>500,'same_as_urls'=>1500
+            'author_type'=>30,'author_url'=>500,'same_as_urls'=>1500,
+            'content_intent'=>100,'main_question'=>300,'direct_answer'=>800,
+            'sources'=>2500,'reviewer_name'=>120,'last_reviewed'=>35,
+            'image_title'=>240
         ] as $field=>$limit){
             $data[$field]=mb_substr(trim((string)($input['nvseo_'.$field]??'')),0,$limit,'UTF-8');
         }
@@ -66,6 +69,18 @@ final class NetveraSeoBridge
             if(self::urlAllowed($candidate))$profiles[]=$candidate;
         }
         $data['same_as_urls']=implode("\n",array_slice(array_unique($profiles),0,15));
+        // An editorial readiness snapshot is informative, not a ranking promise.
+        // It is recomputed from the actual saved article, never accepted as a
+        // trusted score from a hidden form field.
+        if($type==='blog'){
+            $post=Database::getInstance()->fetch("SELECT * FROM blog_posts WHERE id=? LIMIT 1",[$id]);
+            if($post){
+                $assessment=BlogQualityScoreService::evaluate($post,$data);
+                $data['quality_scores']=$assessment['scores'];
+                $data['quality_checked_at']=date('c');
+            }
+        }
+
         $pdo=Database::getInstance()->getPdo();
         $pdo->exec("CREATE TABLE IF NOT EXISTS nv_editorial_seo (
             entity_type VARCHAR(30) NOT NULL, entity_id INT UNSIGNED NOT NULL,
