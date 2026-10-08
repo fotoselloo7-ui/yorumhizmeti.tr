@@ -197,6 +197,116 @@ function package_display_name(array $package): string
     return 'Dijital Hizmet Paketi';
 }
 
+
+/**
+ * Demo vitrinde boş görsel alanlarını konuya uygun stok görsellerle doldurur.
+ * DB alanlarını değiştirmez; gerçek görsel yüklendiğinde otomatik olarak devreden çıkar.
+ */
+function demo_visual_url(string $text = '', string $kind = 'card'): string
+{
+    $s = mb_strtolower($text . ' ' . $kind, 'UTF-8');
+
+    if (str_contains($s, 'instagram') || str_contains($s, 'sosyal medya')) {
+        return 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1400&q=86';
+    }
+    if (str_contains($s, 'tiktok') || str_contains($s, 'reels') || str_contains($s, 'video')) {
+        return 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=86';
+    }
+    if (str_contains($s, 'youtube') || str_contains($s, 'icerik') || str_contains($s, 'içerik')) {
+        return 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1400&q=86';
+    }
+    if (str_contains($s, 'web') || str_contains($s, 'seo') || str_contains($s, 'site') || str_contains($s, 'kod')) {
+        return 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=86';
+    }
+    if (str_contains($s, 'google') || str_contains($s, 'harita') || str_contains($s, 'işletme') || str_contains($s, 'isletme')) {
+        return 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=86';
+    }
+    if (str_contains($s, 'reklam') || str_contains($s, 'pazarlama') || str_contains($s, 'analiz') || str_contains($s, 'trend')) {
+        return 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=86';
+    }
+    if (str_contains($s, 'destek') || str_contains($s, 'iletisim') || str_contains($s, 'iletişim')) {
+        return 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1400&q=86';
+    }
+
+    return 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=86';
+}
+
+/**
+ * Sadece demo görünümünü dolu göstermek için kullanılan sanal blog kartları.
+ * Gerçek içerik sayısı yeterli olduğunda kullanılmaz.
+ */
+function demo_blog_posts(): array
+{
+    return [
+        [
+            'title' => 'Instagram Etkileşimini Artırmanın 10 Etkili Yolu',
+            'slug' => 'sosyal-medya-pazarlamasi-2024-trendleri',
+            'excerpt' => 'Daha fazla beğeni, yorum ve görünürlük için uygulanabilir Instagram stratejileri.',
+            'category_name' => 'Instagram',
+            'category_slug' => 'instagram',
+            'published_at' => date('Y-m-d H:i:s', strtotime('-2 days')),
+            'views' => 18700,
+            'image' => null,
+            'image_alt' => 'Instagram etkileşim stratejileri'
+        ],
+        [
+            'title' => 'TikTok’ta Keşfete Çıkma Taktikleri',
+            'slug' => 'sosyal-medya-pazarlamasi-2024-trendleri',
+            'excerpt' => 'Kısa video içeriklerin daha fazla kişiye ulaşması için içerik ve yayınlama taktikleri.',
+            'category_name' => 'TikTok',
+            'category_slug' => 'tiktok',
+            'published_at' => date('Y-m-d H:i:s', strtotime('-4 days')),
+            'views' => 16100,
+            'image' => null,
+            'image_alt' => 'TikTok keşfet taktikleri'
+        ],
+        [
+            'title' => 'Web Siteniz İçin SEO İpuçları',
+            'slug' => 'seo-nedir-baslangic-rehberi',
+            'excerpt' => 'Teknik yapıdan içeriğe kadar sitenizi arama sonuçlarında güçlendirecek temel adımlar.',
+            'category_name' => 'Web Site / SEO',
+            'category_slug' => 'seo-rehberi',
+            'published_at' => date('Y-m-d H:i:s', strtotime('-6 days')),
+            'views' => 14300,
+            'image' => null,
+            'image_alt' => 'Web sitesi SEO ipuçları'
+        ],
+        [
+            'title' => 'YouTube Kanalınızı Organik Olarak Büyütün',
+            'slug' => 'sosyal-medya-pazarlamasi-2024-trendleri',
+            'excerpt' => 'İçerik planı, başlık, küçük resim ve yayın ritmiyle kanal büyümesini hızlandırın.',
+            'category_name' => 'YouTube',
+            'category_slug' => 'youtube',
+            'published_at' => date('Y-m-d H:i:s', strtotime('-8 days')),
+            'views' => 11900,
+            'image' => null,
+            'image_alt' => 'YouTube kanal büyütme'
+        ],
+        [
+            'title' => 'Müşteri Yorumlarıyla Güven Nasıl Artırılır?',
+            'slug' => 'google-isletme-profili-nasil-optimize-edilir',
+            'excerpt' => 'Gerçek müşteri geri bildirimlerini güven ve dönüşüm avantajına dönüştürmenin yolları.',
+            'category_name' => 'Google İşletme Profili',
+            'category_slug' => 'google-isletme-profili',
+            'published_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
+            'views' => 9800,
+            'image' => null,
+            'image_alt' => 'Müşteri yorumları ve güven'
+        ],
+        [
+            'title' => 'Dijital Reklamda Dönüşüm Odaklı Kampanya Kurulumu',
+            'slug' => 'sosyal-medya-pazarlamasi-2024-trendleri',
+            'excerpt' => 'Bütçe, hedef kitle ve kreatifleri aynı stratejide buluşturan kampanya yaklaşımı.',
+            'category_name' => 'Dijital Pazarlama',
+            'category_slug' => 'sosyal-medya',
+            'published_at' => date('Y-m-d H:i:s', strtotime('-12 days')),
+            'views' => 8700,
+            'image' => null,
+            'image_alt' => 'Dijital reklam kampanyası'
+        ],
+    ];
+}
+
 /**
  * Tarih formatla
  */
