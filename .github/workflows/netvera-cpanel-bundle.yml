@@ -41,6 +41,8 @@ jobs:
           rsync -a --exclude='*.php~' --exclude='*.bak' well-known/public/ release/Netvera-Premium/public/
           cp well-known/.htaccess well-known/composer.json release/Netvera-Premium/
           cp well-known/database/netvera-public-catalog.json release/Netvera-Premium/database/
+          # Empty base-schema only; NEVER include the committed production-looking SQL backup.
+          cp well-known/database/install.sql release/Netvera-Premium/database/
           cp well-known/database/migrations/netvera-legacy-bridge-v1.sql release/Netvera-Premium/database/migrations/
           cp well-known/database/migrations/netvera-inquiries-v1.sql release/Netvera-Premium/database/migrations/
           # Required production third-party libraries; don't ship an environment or credential.
@@ -57,6 +59,9 @@ jobs:
             uploads must be preserved. Never overwrite/delete them.
           - Staging MySQL must be separately created and supplied via
             hosting's secure environment variables.
+          - The clean, EMPTY base schema is database/install.sql. Use it ONLY
+            on the fresh, separate staging database. Never import over a
+            live Netvera or Yorumhizmeti production database.
           - Netvera-Premium/public should be the site document root;
             otherwise use Netvera-Premium/.htaccess rewrite.
           - After setup /hazir-scriptler displays 16 real Netvera products,
