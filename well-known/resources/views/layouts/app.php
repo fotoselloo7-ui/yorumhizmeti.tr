@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -278,6 +279,7 @@
 
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
+    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>"></script>
     <?= setting('footer_script') ?>
 </body>
 </html>
