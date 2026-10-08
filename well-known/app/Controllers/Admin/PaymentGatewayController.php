@@ -44,15 +44,24 @@ class PaymentGatewayController extends Controller
     public function savePaytrSettings(): void
     {
         Csrf::check();
+        $manager = new PaymentGatewayManager();
+        $gateway = $manager->getGateway('paytr');
+        if(!$gateway){
+            flash('error','PayTR ödeme sağlayıcısı kayıtlı değil.');
+            redirect('/admin/odeme-modulleri');return;
+        }
+        $old = json_decode((string)($gateway['settings']??'{}'), true) ?: [];
+        // Masked secret inputs intentionally submit empty values when the admin
+        // is not rotating keys. Never accidentally erase working credentials.
         $settings = [
-            'merchant_id' => trim($_POST['merchant_id'] ?? ''),
-            'merchant_key' => trim($_POST['merchant_key'] ?? ''),
-            'merchant_salt' => trim($_POST['merchant_salt'] ?? ''),
-            'test_mode' => $_POST['test_mode'] ?? '1',
+            'merchant_id' => trim((string)($_POST['merchant_id']??'')) ?: (string)($old['merchant_id']??''),
+            'merchant_key' => trim((string)($_POST['merchant_key']??'')) ?: (string)($old['merchant_key']??''),
+            'merchant_salt' => trim((string)($_POST['merchant_salt']??'')) ?: (string)($old['merchant_salt']??''),
+            'test_mode' => ($_POST['test_mode']??'1')==='0'?'0':'1',
         ];
-        (new PaymentGatewayManager())->updateSettings('paytr', $settings);
-        logActivity('paytr_settings', 'PayTR ayarları güncellendi.');
-        flash('success', 'PayTR ayarları kaydedildi.');
+        $manager->updateSettings('paytr', $settings);
+        logActivity('paytr_settings', 'PayTR ayarları güncellendi (gizli bilgiler loglanmadı).');
+        flash('success', 'PayTR ayarları kaydedildi. Gizli alanlar boş bırakıldığında eski değerleri korunur.');
         redirect('/admin/paytr-ayarlari');
     }
 
