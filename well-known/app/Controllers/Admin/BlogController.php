@@ -33,6 +33,7 @@ class BlogController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
         
         $postId = $this->db->insert('blog_posts', $data);
+        \App\Services\NetveraSeoBridge::save('blog',(int)$postId,$_POST);
         $this->syncTags((int)$postId, $_POST['tags'] ?? []);
 
         logActivity('blog_create', 'Blog yazısı oluşturuldu: ' . $data['title']);
