@@ -251,30 +251,33 @@
                     error_log('Footer payment methods: ' . $e->getMessage());
                 }
                 ?>
-                <div class="footer-payments-v4 footer-payment-logos" aria-label="Aktif ödeme yöntemleri">
-                    <?php if($cardGatewayEnabled): ?>
-                        <span class="footer-payment-mark" title="Visa" aria-label="Visa">
-                            <svg viewBox="0 0 84 28" role="img" aria-label="Visa" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 4 15 24h8L30 4h-7l-4 14L15 4zM33 4l-4 20h7l4-20zM58 4c-3-1-7-2-11-1-5 1-7 4-7 7 0 6 11 6 10 9-1 2-6 2-11 0l-1 5c7 3 16 2 20-2 5-7-8-10-7-13 0-1 3-2 7-1zM68 4 56 24h8l2-4h9l1 4h7L78 4zm1 11 4-7 1 7z" fill="#153F90"/>
-                            </svg>
+                <div class="footer-payments-v4 footer-payment-logos footer-payment-visual-v23" aria-label="Ödeme sistemi logoları">
+                    <div class="footer-payment-heading-v23">
+                        <strong>Ödeme Yöntemleri</strong>
+                        <small>Desteklenen kart ağları ve ödeme altyapısı</small>
+                    </div>
+                    <div class="footer-payment-brands-v23" aria-label="Kart markaları">
+                        <span class="footer-payment-mark" title="Visa">
+                            <img src="<?= asset('img/payments/visa.svg') ?>" alt="Visa" width="80" height="48" loading="lazy">
                         </span>
-                        <span class="footer-payment-mark" title="Mastercard" aria-label="Mastercard">
-                            <svg viewBox="0 0 84 28" role="img" aria-label="Mastercard" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="35" cy="14" r="11" fill="#EB001B"/><circle cx="49" cy="14" r="11" fill="#F79E1B"/><path d="M42 5.5a11 11 0 0 1 0 17 11 11 0 0 1 0-17" fill="#FF5F00"/>
-                                <text x="42" y="27" text-anchor="middle" font-family="Arial,sans-serif" font-size="5.8" font-weight="bold" fill="#18274F">mastercard</text>
-                            </svg>
+                        <span class="footer-payment-mark" title="Mastercard">
+                            <img src="<?= asset('img/payments/mastercard.svg') ?>" alt="Mastercard" width="80" height="48" loading="lazy">
                         </span>
-                        <span class="footer-payment-mark" title="TROY" aria-label="TROY">
-                            <svg viewBox="0 0 84 28" role="img" aria-label="TROY" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7 7h14v4h-5v12h-4V11H7zM24 7h10c9 0 9 11 3 13l5 3h-8l-6-5v5h-4zm4 4v6h6c4 0 4-6 0-6zM48 7h10c12 0 12 16 0 16H48zm5 4v8h5c6 0 6-8 0-8zM68 7l5 7 5-7h5l-8 11v5h-4v-5L63 7z" fill="#17345E"/>
-                                <path d="M76 4h4v4h-4z" fill="#20C997"/>
-                            </svg>
+                        <span class="footer-payment-mark" title="TROY">
+                            <img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="80" height="48" loading="lazy">
                         </span>
-                    <?php endif; ?>
-                    <?php if($bankGatewayEnabled): ?>
-                        <span class="footer-payment-bank"><?= icon('landmark', 16) ?><span>Havale / EFT</span></span>
-                    <?php endif; ?>
-                    <span class="footer-payment-security"><?= icon('shield', 15) ?> Güvenli ödeme altyapısı</span>
+                        <?php if($bankGatewayEnabled): ?>
+                            <span class="footer-payment-bank"><?= icon('landmark', 16) ?><span>Havale / EFT</span></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="footer-payment-info-v23">
+                        <?php if(!$cardGatewayEnabled): ?>
+                            <span class="footer-payment-offline-v23"><?= icon('info',12) ?> Kartla ödeme şu anda aktif değil</span>
+                        <?php else: ?>
+                            <span class="footer-payment-online-v23"><?= icon('check-circle',12) ?> Kartlı ödeme aktif</span>
+                        <?php endif; ?>
+                        <span class="footer-payment-security"><?= icon('shield', 15) ?> Güvenli işlem</span>
+                    </div>
                 </div>
                 <div class="footer-legal-v9"><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a><a href="/sayfa/mesafeli-satis-sozlesmesi">Kullanım Şartları</a><a href="/sayfa/iade-teslimat-politikasi">İade Politikası</a></div>
             </div>
