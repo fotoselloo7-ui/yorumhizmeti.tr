@@ -79,7 +79,8 @@ jobs:
           [ "$($db -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('nv_public_inquiries','nv_public_inquiry_replies','nv_editorial_seo')")" = 3 ]
           curl -fsS http://127.0.0.1:8006/hazir-scriptler > /tmp/netvera-products.html
           [ "$(grep -o 'class="nv40-product-card"' /tmp/netvera-products.html | wc -l)" -eq 16 ]
-          curl -fsS http://127.0.0.1:8006/hazir-scriptler/haber-sitesi-scripti | grep -q 'SoftwareApplication'
+          curl -fsS http://127.0.0.1:8006/hazir-scriptler/haber-sitesi-scripti > /tmp/netvera-detail.html
+          grep -q 'SoftwareApplication' /tmp/netvera-detail.html
           curl -fsS http://127.0.0.1:8006/ > /tmp/netvera-home.html
           grep -q 'Hazır Yazılımlar &amp; Scriptler' /tmp/netvera-home.html
           curl -fsS http://127.0.0.1:8006/blog > /tmp/netvera-blog.html
