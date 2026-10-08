@@ -14,7 +14,7 @@
     </div>
    </div>
    <div class="yv-hero-art yv-blog-detail-art-v12">
-    <img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog detail')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>">
+    <img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog detail')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"<?= !empty($nvSeoData['image_title']) ? ' title="'.e($nvSeoData['image_title']).'"' : '' ?>>
     <div class="yv-blog-detail-shade-v12"></div>
     <div class="yv-float a"><?= icon('bookmark',13) ?> Kaydet & paylaş</div>
    </div>
