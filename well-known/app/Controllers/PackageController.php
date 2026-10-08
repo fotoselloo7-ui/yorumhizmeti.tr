@@ -58,6 +58,7 @@ class PackageController extends Controller
             'metaDescription' => $package['seo_description'] ?: excerpt(strip_tags($package['short_description'] ?? ''), 160),
             'canonicalUrl' => url('/paket/' . $package['slug']),
             'schema' => $schema,
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$package['id']),
             'package' => $package,
             'fields' => $fields,
             'variantPackages' => $variantPackages,
