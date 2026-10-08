@@ -925,6 +925,48 @@ try {
     showcasePage.waitForURL('**/admin',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').click()
   ]);
+  // Blog editor integration: scores update, fields survive save/reopen,
+  // and answer/source are visible on the published article.
+  await showcasePage.goto(origin+'/admin/blog/ekle',{waitUntil:'domcontentloaded'});
+  if((await showcasePage.locator('[data-quality-meter]').count())!==3)
+    throw new Error('Blog SEO/GEO/AIO analysis fields missing');
+  await showcasePage.locator('#title').fill('CI Editoryal Kalite ve GEO Test Rehberi');
+  await showcasePage.locator('#slug').fill('ci-editorial-geo-qa');
+  await showcasePage.locator('#blog_category_id').selectOption({index:1});
+  await showcasePage.locator('#seo_title').fill('CI Editoryal Kalite ve GEO Kontrol Rehberi | NetVera');
+  await showcasePage.locator('#seo_description').fill('Editoryal içerik kalitesi, güvenilir kaynaklar ve yapay zekâ aramaları için doğrulanabilir özetlerin kullanıldığı örnek blog içerik kontrolüdür.');
+  await showcasePage.locator('#seo_focus_keyword').fill('editoryal kalite');
+  await showcasePage.locator('#excerpt').fill('Editoryal kalite, içerik derinliği, kaynaklar ve arama görünürlüğü hazırlığını kontrol etmek için oluşturulmuş örnek yazı.');
+  await showcasePage.locator('#raw_content').fill('Editoryal kalite için doğrulanabilir örnek metin.\n\n## Editoryal kalite rehberi\n\n### Kontrol maddeleri\n\n- Kaynakları değerlendirin\n- Güncelliği sağlayın\n\n[NetVera yazılımları](/hazir-scriptler).');
+  await showcasePage.locator('[name=nvseo_content_intent]').selectOption('bilgi');
+  await showcasePage.locator('[name=nvseo_main_question]').fill('Editoryal kalite nasıl kontrol edilir?');
+  await showcasePage.locator('[name=nvseo_direct_answer]').fill('Editoryal kalite, güvenilir kaynaklar, doğru başlık yapısı ve kullanıcı niyetinin karşılanmasıyla kontrol edilir.');
+  await showcasePage.locator('[name=nvseo_geo_summary]').fill('Bu makale, doğru kaynaklarla desteklenen bir içerik değerlendirme yaklaşımını açıklar.');
+  await showcasePage.locator('[name=nvseo_sources]').fill('https://example.org/research');
+  await showcasePage.locator('[name=nvseo_author_name]').fill('NetVera Editoryal Test');
+  await showcasePage.locator('[name=nvseo_entity_topics]').fill('SEO, GEO, NetVera');
+  await showcasePage.locator('#status').selectOption('active');
+  await showcasePage.waitForTimeout(350);
+  const editorialScores=await showcasePage.locator('[data-quality-value]').allTextContents();
+  if(editorialScores.length!==3||editorialScores.some(s=>s.trim()==='0 / 100'))
+    throw new Error('Live editorial scoring not responding: '+editorialScores.join(','));
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/blog',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('button.adm-btn-save').click()
+  ]);
+  const articleRow=showcasePage.locator('.adm-blog-desktop tr').filter({hasText:'CI Editoryal Kalite ve GEO Test Rehberi'});
+  if(!(await articleRow.count()))throw new Error('Admin GEO article not persisted');
+  await articleRow.locator('a[href$="/duzenle"]').click();
+  if((await showcasePage.locator('[name=nvseo_main_question]').inputValue())!=='Editoryal kalite nasıl kontrol edilir?'
+    || !(await showcasePage.locator('#raw_content').inputValue()).includes('## Editoryal kalite rehberi'))
+    throw new Error('Editor lost SEO/GEO metadata or original Markdown');
+  await showcasePage.goto(origin+'/blog/ci-editorial-geo-qa',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv44-answer-box').count()) ||
+     !(await showcasePage.locator('.nv44-sources a[href="https://example.org/research"]').count()) ||
+     !(await showcasePage.getByText('NetVera Editoryal Test',{exact:false}).count()))
+    throw new Error('Saved GEO answer, verified sources or author not rendered publicly');
+  console.log('PASS blog SEO/GEO/AIO live editor, persistence, verified public answer and sources');
+
   // Netvera staging: new admin routes must load even before importing
   // external public catalog. Live PayTR must never be requested by this test.
   await showcasePage.goto(origin+'/admin/netvera-yazilimlar',{waitUntil:'domcontentloaded'});
