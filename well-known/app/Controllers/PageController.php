@@ -3,6 +3,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Database;
 use App\Core\Csrf;
+use App\Services\LeadCaptureService;
 
 class PageController extends Controller
 {
@@ -46,7 +47,37 @@ class PageController extends Controller
     public function contactPost(): void
     {
         Csrf::check();
-        flash('success', 'Mesajınız gönderildi. En kısa sürede dönüş yapacağız.');
+        if (trim((string)($_POST['website_url'] ?? '')) !== '') {
+            redirect('/iletisim');
+        }
+
+        $name = trim((string)($_POST['name'] ?? ''));
+        $email = mb_strtolower(trim((string)($_POST['email'] ?? '')), 'UTF-8');
+        $subject = trim((string)($_POST['subject'] ?? ''));
+        $message = trim((string)($_POST['message'] ?? ''));
+
+        if (mb_strlen($name) < 2 || mb_strlen($name) > 120
+            || !filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 190
+            || mb_strlen($subject) < 3 || mb_strlen($subject) > 190
+            || mb_strlen($message) < 10 || mb_strlen($message) > 10000
+            || ($_POST['privacy_consent'] ?? '') !== '1') {
+            flash('contact_error', 'Bilgileri kontrol edin, KVKK bilgilendirmesini onaylayın ve en az 10 karakterlik mesaj yazın.');
+            redirect('/iletisim');
+        }
+
+        if (time() - (int)($_SESSION['last_contact_at'] ?? 0) < 30) {
+            flash('contact_error', 'Yeni mesaj göndermeden önce lütfen kısa bir süre bekleyin.');
+            redirect('/iletisim');
+        }
+
+        try {
+            LeadCaptureService::saveContact($name, $email, $subject, $message);
+            $_SESSION['last_contact_at'] = time();
+            flash('contact_success', 'Mesajınız kaydedildi. Ekibimiz en kısa sürede inceleyecek.');
+        } catch (\Throwable $e) {
+            error_log('Contact save failed: ' . $e->getMessage());
+            flash('contact_error', 'Mesajınız kaydedilemedi. Lütfen daha sonra tekrar deneyin veya e-posta ile iletişim kurun.');
+        }
         redirect('/iletisim');
     }
 }
