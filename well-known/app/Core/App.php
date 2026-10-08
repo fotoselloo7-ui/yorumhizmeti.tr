@@ -148,6 +148,8 @@ class App
         $r->get('/admin/netvera-yazilimlar/ekle', 'Admin\\NetveraScriptController@create');
         $r->get('/admin/netvera-yazilimlar/{id}/duzenle', 'Admin\\NetveraScriptController@edit');
         $r->post('/admin/netvera-yazilimlar/kaydet', 'Admin\\NetveraScriptController@save');
+        $r->post('/admin/netvera-yazilimlar/galeri/ekle', 'Admin\\NetveraScriptController@galleryAdd');
+        $r->post('/admin/netvera-yazilimlar/galeri/gizle', 'Admin\\NetveraScriptController@galleryHide');
         $r->get('/admin/hazir-yazilimlar', 'Admin\\SoftwareShowcaseController@index');
         $r->post('/admin/hazir-yazilimlar/kategorileri-kur', 'Admin\\SoftwareShowcaseController@install');
         $r->post('/admin/hazir-yazilimlar/kur-ve-ekle', 'Admin\\SoftwareShowcaseController@setupThenCreate');
