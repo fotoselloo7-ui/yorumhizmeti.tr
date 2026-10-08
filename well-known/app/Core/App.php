@@ -36,6 +36,10 @@ class App
 
         // ── Frontend ──
         $r->get('/', 'HomeController@index');
+        // Legacy Netvera SEO compatibility, staged and separate from service packages.
+        $r->get('/hazir-scriptler', 'NetveraScriptController@index');
+        $r->get('/hazir-scriptler/{mainSlug}/{subSlug}', 'NetveraScriptController@subCategoryPage');
+        $r->get('/hazir-scriptler/{slug}', 'NetveraScriptController@detail');
         $r->get('/hazir-yazilimlar', 'SoftwareController@index');
         $r->get('/kategoriler', 'CategoryController@index');
         $r->get('/kategori/{slug}', 'CategoryController@show');

@@ -63,6 +63,7 @@
     <link rel="stylesheet" href="<?= asset('css/software-showcase-v31.css') ?>?v=32.1">
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=35.1">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=40.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
