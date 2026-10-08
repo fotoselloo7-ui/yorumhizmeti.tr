@@ -13,13 +13,67 @@ class HomeController extends Controller
         // Kategoriler
         $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC LIMIT 8");
 
-        // Öne çıkan paketler (is_featured=1, max 10)
+        // Öne çıkan paketler: kategori bazlı dinamik gruplar.
+        // Yeni bir kategoriye aktif + öne çıkan paket eklendiğinde ana sayfa sekmesi otomatik oluşur.
         try {
-            $featuredPackages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.status = 'active' AND p.is_featured = 1 ORDER BY p.sort_order ASC LIMIT 10");
+            $featuredPackages = $db->fetchAll("
+                SELECT
+                    p.*,
+                    c.name AS category_name,
+                    c.slug AS category_slug,
+                    COALESCE(parent.id, c.id) AS featured_group_id,
+                    COALESCE(parent.name, c.name) AS featured_group_name,
+                    COALESCE(parent.slug, c.slug) AS featured_group_slug,
+                    COALESCE(parent.sort_order, c.sort_order) AS featured_group_sort
+                FROM packages p
+                INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+                LEFT JOIN categories parent ON c.parent_id = parent.id AND parent.status = 'active'
+                WHERE p.status = 'active' AND p.is_featured = 1
+                ORDER BY featured_group_sort ASC, p.sort_order ASC, p.id ASC
+                LIMIT 80
+            ");
         } catch (\Exception $e) {
-            // is_featured sütunu henüz yoksa fallback
-            $featuredPackages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.status = 'active' ORDER BY p.sort_order ASC LIMIT 10");
+            // Eski kurulumlarda is_featured yoksa aktif paketlerle aynı vitrini kur.
+            $featuredPackages = $db->fetchAll("
+                SELECT
+                    p.*,
+                    c.name AS category_name,
+                    c.slug AS category_slug,
+                    COALESCE(parent.id, c.id) AS featured_group_id,
+                    COALESCE(parent.name, c.name) AS featured_group_name,
+                    COALESCE(parent.slug, c.slug) AS featured_group_slug,
+                    COALESCE(parent.sort_order, c.sort_order) AS featured_group_sort
+                FROM packages p
+                INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+                LEFT JOIN categories parent ON c.parent_id = parent.id AND parent.status = 'active'
+                WHERE p.status = 'active'
+                ORDER BY featured_group_sort ASC, p.sort_order ASC, p.id ASC
+                LIMIT 80
+            ");
         }
+
+        $featuredPackageGroups = [];
+        foreach ($featuredPackages as $pkg) {
+            $groupId = (int)($pkg['featured_group_id'] ?? $pkg['category_id'] ?? 0);
+            if ($groupId <= 0) continue;
+
+            if (!isset($featuredPackageGroups[$groupId])) {
+                $featuredPackageGroups[$groupId] = [
+                    'category' => [
+                        'id' => $groupId,
+                        'name' => $pkg['featured_group_name'] ?? $pkg['category_name'] ?? 'Hizmetler',
+                        'slug' => $pkg['featured_group_slug'] ?? $pkg['category_slug'] ?? '',
+                    ],
+                    'packages' => [],
+                ];
+            }
+
+            // Masaüstünde referanstaki gibi dört ana kart; fazlası sekme içinde hazır tutulur.
+            if (count($featuredPackageGroups[$groupId]['packages']) < 8) {
+                $featuredPackageGroups[$groupId]['packages'][] = $pkg;
+            }
+        }
+        $featuredPackageGroups = array_values($featuredPackageGroups);
 
         // Son blog yazıları
         $latestPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.published_at DESC LIMIT 4");
@@ -131,6 +185,7 @@ class HomeController extends Controller
             'metaDescription' => setting('default_seo_description', 'Google, Instagram, TikTok, YouTube yorum ve etkileşim hizmetleri. Güvenli ödeme, hızlı teslimat.'),
             'categories' => $categories,
             'featuredPackages' => $featuredPackages,
+            'featuredPackageGroups' => $featuredPackageGroups,
             'homeCategoryBlocks' => $homeCategoryBlocks,
             'latestPosts' => $latestPosts,
             'faqs' => $faqs,
