@@ -25,6 +25,7 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
         <strong><?= icon('sliders',17) ?> Yazılımları Filtrele</strong>
         <a href="/hazir-scriptler">Temizle</a>
       </div>
+      <details class="nv40-filter-disclosure" open><summary><?= icon('sliders',14) ?> Kategoriler, fiyat ve sıralama <?= icon('chevron-down',14) ?></summary><div class="nv40-filter-inner">
       <nav class="nv40-category-links" aria-label="Yazılım kategorileri">
         <strong><?= icon('layers',15) ?> Kategoriler</strong>
         <a href="<?= e($nv40CategoryLink(null)) ?>" class="<?= $filterCategory === '' ? 'active' : '' ?>">Tüm Yazılımlar</a>
@@ -75,6 +76,7 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
         </fieldset>
         <button class="nv40-apply-filters" type="submit"><?= icon('check',15) ?> Filtreleri Uygula</button>
       </form>
+      </div></details>
       <a class="nv40-catalog-shortcut" href="/hazir-yazilimlar">Diğer Yazılımları Keşfet <?= icon('arrow-right',13) ?></a>
     </aside>
     <div class="nv40-store-main">
@@ -125,3 +127,14 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
     </div>
   </div></section>
 </main>
+<script>
+(function () {
+  var details = document.querySelector('.nv40-filter-disclosure');
+  if (!details || !window.matchMedia) return;
+  var mobile = window.matchMedia('(max-width: 750px)');
+  function fitWidth() { details.open = !mobile.matches; }
+  fitWidth();
+  if (mobile.addEventListener) mobile.addEventListener('change', fitWidth);
+  else if (mobile.addListener) mobile.addListener(fitWidth);
+}());
+</script>
