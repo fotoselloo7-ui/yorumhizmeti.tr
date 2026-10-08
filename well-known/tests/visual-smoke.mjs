@@ -135,6 +135,40 @@ for(const screen of screens){
   await ctx.close();
 }
 
+// Exercise real form submissions against isolated CI MySQL (never production).
+const formsContext=await browser.newContext({viewport:{width:1440,height:900}});
+const formsPage=await formsContext.newPage();
+for(const test of ['contact','newsletter']){
+  try{
+    if(test==='contact'){
+      await formsPage.goto(origin+'/iletisim',{waitUntil:'domcontentloaded'});
+      const form=formsPage.locator('.yv-contact-form form');
+      await form.locator('[name=name]').fill('Test Kullanıcısı');
+      await form.locator('[name=email]').fill('ci-kontrol@example.test');
+      await form.locator('[name=subject]').fill('Otomatik iletişim formu testi');
+      await form.locator('[name=message]').fill('Bu mesaj CI otomatik testlerinde kayıt işleminin gerçekten çalıştığını doğrular.');
+      await form.locator('[name=privacy_consent]').check();
+      await Promise.all([formsPage.waitForURL('**/iletisim',{waitUntil:'domcontentloaded'}),form.locator('button[type=submit]').click()]);
+      const ok=await formsPage.locator('.yv-form-feedback.success').filter({hasText:'kaydedildi'}).count()>0;
+      if(!ok)throw new Error('Contact message was not persisted or success confirmation missing');
+    }else{
+      await formsPage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+      const form=formsPage.locator('.footer-newsletter-signup');
+      await form.locator('[name=email]').fill('ci-bulten@example.test');
+      await form.locator('[name=newsletter_consent]').check();
+      await Promise.all([formsPage.waitForURL('**/#newsletter',{waitUntil:'domcontentloaded'}),form.locator('button[type=submit]').click()]);
+      const ok=await formsPage.locator('.footer-subscribe-v9 .yv-form-feedback.success').count()>0;
+      if(!ok)throw new Error('Newsletter was not stored or success confirmation missing');
+    }
+    results.push({route:'POST '+test,screen:'forms',status:200,errors:[]});
+    console.log('PASS functional form:',test);
+  }catch(e){
+    failed=true;results.push({route:'POST '+test,screen:'forms',status:0,errors:[String(e)]});
+    console.error('FAIL functional form:',test,String(e).slice(0,320));
+  }
+}
+await formsContext.close();
+
 fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({created:new Date().toISOString(),runs:results},null,2));
 const bad=results.filter(x=>x.status>=500||x.status===0||x.report?.rootScroll>x.report?.viewport+3||x.errors?.some(e=>e.includes('did not switch')));
 console.log(`\nREPORT: ${results.length} page/viewport combinations; critical failures: ${bad.length}; images and overflow details saved to report.json`);
