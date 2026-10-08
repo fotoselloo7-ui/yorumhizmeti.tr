@@ -120,6 +120,7 @@ class App
         // Admin Paketler
         $r->get('/admin/paketler', 'Admin\\PackageController@index');
         $r->post('/admin/paketler/toplu-islem', 'Admin\\PackageController@bulkAction');
+        $r->post('/admin/paketler/yayinla', 'Admin\\PackageController@publishCatalog');
         $r->get('/admin/paket/ekle', 'Admin\\PackageController@create');
         $r->post('/admin/paket/kaydet', 'Admin\\PackageController@store');
         $r->get('/admin/paket/{id}/duzenle', 'Admin\\PackageController@edit');
