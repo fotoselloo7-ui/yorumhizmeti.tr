@@ -303,6 +303,53 @@ for(const screen of screens){
         if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
         else await page.keyboard.press('Escape');
       }
+      // V29: all three headline service families, not Instagram/TikTok/Web Site.
+      if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
+        const promos=page.locator('.nv29-service-card');
+        const keys=await promos.evaluateAll(cards=>cards.map(el=>el.getAttribute('data-promo-group')));
+        if(JSON.stringify(keys)!==JSON.stringify(['social','agency','marketing'])){
+          errors.push('Three main service groups missing or out of order: '+keys.join(','));failed=true;
+        }
+        const state=await page.locator('.nv29-services').evaluate(section=>{
+          const all=[...section.querySelectorAll('.nv29-service-card')];
+          const boxes=all.map(el=>el.getBoundingClientRect());
+          const onePerRow=innerWidth<=700;
+          const collisions=boxes.some((b,i)=>boxes.slice(i+1).some(other=>
+            Math.min(b.right,other.right)-Math.max(b.left,other.left)>5 &&
+            Math.min(b.bottom,other.bottom)-Math.max(b.top,other.top)>5));
+          return {
+            collisions,onePerRow,overflow:section.scrollWidth>section.clientWidth+3,
+            cards:all.map(card=>{
+              const key=card.getAttribute('data-promo-group');
+              const cta=card.querySelector('.nv29-card-cta');
+              const chips=[...card.querySelectorAll('.nv29-service-chip')];
+              const art=card.querySelector('.nv29-visual');
+              const area=card.getBoundingClientRect();
+              const artwork=art?.getBoundingClientRect();
+              return {
+                key,
+                title:card.querySelector('h3')?.textContent?.trim(),
+                validCta:cta?.getAttribute('href')==='/kategoriler?grup='+key,
+                badChips:chips.filter(a=>!a.getAttribute('href')?.startsWith('/kategori/')).length,
+                tooManyChips:chips.length>4,
+                artVisible:!!artwork && artwork.width>35 && artwork.height>65,
+                narrow:area.width<270,
+                contentOverflow:card.scrollWidth>card.clientWidth+3,
+              };
+            }),
+          };
+        });
+        if(state.collisions||state.overflow||state.cards.some(x=>!x.validCta||x.badChips||x.tooManyChips||!x.artVisible||x.narrow||x.contentOverflow)){
+          errors.push('Premium service cards responsive/data defect: '+JSON.stringify(state));failed=true;
+        }
+        if(screen.name==='masaustu'){
+          const image=page.locator('.nv29-social-person');
+          if(!(await image.evaluate(el=>el.complete&&el.naturalWidth>0))){
+            errors.push('Social media promo model image did not load');failed=true;
+          }
+          await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});
+        }
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){
