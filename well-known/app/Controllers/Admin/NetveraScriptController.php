@@ -146,10 +146,9 @@ final class NetveraScriptController extends Controller
             flash('error','Galeri görseli yüklenemedi.');
             redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');return;
         }
-        $row=$this->db->fetch('SELECT MAX(legacy_id) AS max_id,MAX(sort_order) AS max_order FROM nv_legacy_script_images');
-        $newId=max(1,(int)($row['max_id']??0)+1);
+        $row=$this->db->fetch('SELECT MAX(sort_order) AS max_order FROM nv_legacy_script_images WHERE product_legacy_id=?',[$id]);
         $this->db->insert('nv_legacy_script_images',[
-            'legacy_id'=>$newId,'product_legacy_id'=>$id,
+            'product_legacy_id'=>$id,
             'image_path'=>$image,'alt_text'=>mb_substr(trim((string)($_POST['alt_text']??'')),0,290),
             'caption'=>mb_substr(trim((string)($_POST['caption']??'')),0,1500),
             'sort_order'=>(int)($row['max_order']??0)+1,'active'=>1
