@@ -32,17 +32,17 @@ class PaytrService implements PaymentGatewayInterface
         $merchantId = $this->settings['merchant_id'];
         $merchantKey = $this->settings['merchant_key'];
         $merchantSalt = $this->settings['merchant_salt'];
-        $testMode = $this->settings['test_mode'] ?? '1';
+        $testMode = (string)($this->settings['test_mode'] ?? '1') === '0' ? '0' : '1';
 
         $userIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         $merchantOid = $order['order_number'];
         $email = $user['email'];
-        $paymentAmount = intval($order['total_amount'] * 100); // kuruş
+        $paymentAmount = (int) round((float)$order['total_amount'] * 100); // kuruş
         $userName = $user['name'];
 
         $userBasket = base64_encode(json_encode([
-            [$order['order_number'], $order['total_amount'], 1]
-        ]));
+            [(string)$order['order_number'], number_format((float)$order['total_amount'], 2, '.', ''), 1]
+        ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
 
         $merchantOkUrl = url('/odeme/basarili');
         $merchantFailUrl = url('/odeme/basarisiz');
@@ -66,6 +66,10 @@ class PaytrService implements PaymentGatewayInterface
             'max_installment' => 0,
             'user_name' => $userName,
             'user_phone' => $user['phone'] ?? '',
+            'user_address' => trim((string)($user['address'] ?? '')) ?: 'Dijital hizmet / online teslimat',
+            'lang' => 'tr',
+            'timeout_limit' => 30,
+            'iframe_v2' => 1,
             'merchant_ok_url' => $merchantOkUrl,
             'merchant_fail_url' => $merchantFailUrl,
             'currency' => 'TL',
@@ -78,6 +82,9 @@ class PaytrService implements PaymentGatewayInterface
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $result = curl_exec($ch);
         curl_close($ch);
 
@@ -86,7 +93,7 @@ class PaytrService implements PaymentGatewayInterface
         }
 
         $response = json_decode($result, true);
-        if (($response['status'] ?? '') === 'success') {
+        if (($response['status'] ?? '') === 'success' && !empty($response['token'])) {
             return [
                 'success' => true,
                 'iframe_token' => $response['token'],
@@ -111,7 +118,13 @@ class PaytrService implements PaymentGatewayInterface
             $merchantKey, true
         ));
 
-        if ($hash !== ($data['hash'] ?? '')) {
+        if (!isset($data['merchant_oid'], $data['status'], $data['total_amount'], $data['hash'])
+            || !is_scalar($data['merchant_oid']) || !is_scalar($data['status'])
+            || !is_scalar($data['total_amount']) || !is_string($data['hash'])
+            || (string)$data['merchant_oid']===''
+            || !in_array($data['status'],['success','failed'],true)
+            || !ctype_digit((string)$data['total_amount'])
+            || !hash_equals($hash, (string)$data['hash'])) {
             return ['success' => false, 'error' => 'Hash doğrulaması başarısız.'];
         }
 
@@ -120,12 +133,13 @@ class PaytrService implements PaymentGatewayInterface
         if ($status === 'success') {
             return [
                 'success' => true,
+                'verified' => true,
                 'order_number' => $data['merchant_oid'] ?? '',
                 'transaction_id' => $data['merchant_oid'] ?? '',
                 'error' => null,
             ];
         }
 
-        return ['success' => false, 'error' => 'Ödeme başarısız.', 'order_number' => $data['merchant_oid'] ?? ''];
+        return ['success' => false, 'verified' => true, 'error' => 'Ödeme başarısız.', 'order_number' => $data['merchant_oid'] ?? ''];
     }
 }
