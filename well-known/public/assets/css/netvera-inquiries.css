@@ -1,0 +1,41 @@
+/* Isolated Netvera live chat and product quote UI, no global layout changes. */
+.nv-chat{position:fixed;right:24px;bottom:23px;z-index:1200;font-family:Poppins,system-ui,sans-serif}
+.nv-chat *{box-sizing:border-box}
+.nv-chat-toggle{display:flex;gap:9px;align-items:center;justify-content:center;min-height:49px;padding:12px 18px;border:0;border-radius:999px;background:linear-gradient(120deg,#6147de,#3471f3);color:white;box-shadow:0 10px 25px rgba(50,58,142,.27);font-weight:750;font-size:12px;cursor:pointer}
+.nv-chat-panel{width:min(370px,calc(100vw - 32px));max-height:min(590px,calc(100dvh - 120px));display:flex;flex-direction:column;overflow:hidden;border:1px solid #e5e6f3;border-radius:19px;background:#fff;box-shadow:0 22px 65px rgba(29,38,87,.19);margin-bottom:10px}
+.nv-chat-panel[hidden]{display:none!important}
+.nv-chat-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;background:linear-gradient(110deg,#42399e,#7353d9);color:#fff}
+.nv-chat-header>div{display:flex;flex-direction:column;gap:5px}
+.nv-chat-header strong{display:flex;align-items:center;gap:8px;font-size:14px}
+.nv-chat-header small{font-size:10px;color:#e6e3ff}
+.nv-chat-header button{display:grid;place-items:center;width:31px;height:31px;border:1px solid #ffffff55;background:#ffffff22;border-radius:9px;color:white;cursor:pointer}
+.nv-chat-messages{min-height:115px;max-height:230px;flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:15px;background:#f8f9fd}
+.nv-chat-bubble{max-width:90%;padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.65;overflow-wrap:anywhere;white-space:pre-wrap}
+.nv-chat-bubble.staff{background:#fff;color:#43506e;border:1px solid #e9ecf4;border-top-left-radius:3px}
+.nv-chat-bubble.visitor{align-self:flex-end;background:#eeeaff;color:#5544a4;border-top-right-radius:3px}
+.nv-chat-status{margin:0;padding:0 15px;color:#6658aa;font-size:10px;line-height:1.6}
+.nv-chat-status:empty{display:none}
+.nv-chat form{display:flex;flex-direction:column;gap:9px;padding:13px 15px 8px}
+.nv-chat-identity{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.nv-chat-identity[hidden]{display:none}
+.nv-chat form label{display:flex;flex-direction:column;gap:4px;color:#60708e;font-size:10px;font-weight:650}
+.nv-chat form input:not([type=hidden]),.nv-chat form textarea{width:100%;min-width:0;max-width:100%;padding:9px 10px;border:1px solid #dfe4ef;border-radius:9px;background:#fff;font:inherit;font-size:11px;color:#293a5a}
+.nv-chat form textarea{resize:vertical;min-height:65px}
+.nv-chat .nv-chat-send{min-height:39px;display:flex;gap:8px;align-items:center;justify-content:center;border:0;border-radius:9px;background:#6950df;color:#fff;font-size:11px;font-weight:750;cursor:pointer}
+.nv-chat .nv-chat-send:disabled{opacity:.6;cursor:wait}
+.nv-chat-panel footer{padding:8px 12px 11px;font-size:9px;color:#8b94a9;line-height:1.6;text-align:center}
+.nv-chat-panel footer a{color:#6550cc}
+.nv-chat-honeypot{position:absolute!important;left:-99999px;opacity:0;height:1px;width:1px}
+.nv-product-offer{padding:18px;margin-top:18px;border-radius:13px;border:1px solid #e5e6f2;background:#fbfaff}
+.nv-product-offer h2{font-size:15px;margin:0 0 7px;color:#324264}
+.nv-product-offer p{font-size:11px;line-height:1.7;color:#79849b;margin:0 0 12px}
+.nv-product-offer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.nv-product-offer label{display:flex;flex-direction:column;gap:6px;font-size:10px;font-weight:700;color:#5c6b88}
+.nv-product-offer input,.nv-product-offer textarea{width:100%;min-width:0;padding:11px;border:1px solid #dfe2f0;border-radius:9px;background:#fff;font-family:inherit;font-size:11px}
+.nv-product-offer textarea{min-height:90px;resize:vertical}
+.nv-product-offer .nv-offer-message{margin:12px 0}
+.nv-product-offer button{display:inline-flex;gap:7px;align-items:center;justify-content:center;border:0;border-radius:10px;padding:12px 16px;background:#6550db;color:#fff;font-size:11px;font-weight:800;cursor:pointer}
+.nv-product-offer .nv-offer-policy{font-size:9px;color:#7d8aa1;margin-top:10px}
+@media(max-width:750px){.nv-chat{right:15px;bottom:83px}.nv-chat-panel{max-height:min(550px,calc(100dvh - 150px))}}
+@media(max-width:420px){.nv-chat-toggle{padding:11px 14px;font-size:11px}.nv-chat-identity,.nv-product-offer-grid{grid-template-columns:1fr}.nv-chat-panel{width:calc(100vw - 26px)}.nv-chat{right:13px}.nv-product-offer{padding:13px}}
+@media(prefers-reduced-motion:reduce){.nv-chat-toggle{transition:none}}
