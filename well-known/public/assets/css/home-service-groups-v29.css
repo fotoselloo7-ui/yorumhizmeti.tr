@@ -125,3 +125,56 @@
  .nv29-service-card,.nv29-card-cta,.nv29-view-all,.nv29-service-chip{transition:none}
  .nv29-service-card:hover,.nv29-card-cta:hover,.nv29-service-chip:hover{transform:none}
 }
+
+/* V46 — lock all three main service CTAs to the same visual baseline.
+   Distinct paragraph lengths must not change button placement. */
+.nv29-services-grid .nv29-card-content{
+  flex:1 1 auto;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:34px 70px minmax(50px,1fr) 40px;
+  align-content:stretch;
+  align-items:start;
+  gap:9px;
+  min-width:0;
+}
+.nv29-services-grid .nv29-card-content>.nv29-eyebrow{
+  margin:0;
+  max-width:100%;
+  min-width:0;
+  justify-self:start;
+  align-self:start;
+}
+.nv29-services-grid .nv29-card-content>h3{
+  margin:0!important;
+  min-width:0;
+  max-height:70px;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+}
+.nv29-services-grid .nv29-card-content>p{
+  margin:0!important;
+  min-width:0;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:4;
+}
+.nv29-services-grid .nv29-card-content>.nv29-card-cta{
+  margin:0!important;
+  align-self:end;
+  justify-self:start;
+  min-height:40px;
+  max-width:100%;
+  white-space:nowrap;
+}
+@media(max-width:1150px){
+ .nv29-services-grid .nv29-card-content{grid-template-rows:34px 68px minmax(52px,1fr) 40px}
+}
+@media(max-width:380px){
+ .nv29-services-grid .nv29-card-content{grid-template-rows:30px 64px minmax(50px,1fr) 38px;gap:7px}
+ .nv29-services-grid .nv29-card-content>h3{max-height:64px}
+ .nv29-services-grid .nv29-card-content>.nv29-card-cta{min-height:38px}
+}
