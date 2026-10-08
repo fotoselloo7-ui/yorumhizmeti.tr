@@ -14,6 +14,58 @@ class PackageController extends Controller
         $this->renderAdmin('admin/packages/index', ['pageTitle' => 'Paketler', 'packages' => $packages, 'categories' => $categories]);
     }
 
+    /**
+     * Yüklü katalogu yayına al: fiyat, isim, slug ve tasarım verilerine dokunmaz.
+     * Yalnızca mevcut paket/kategori ilişkilerini görünür hale getirir.
+     * Yönetici POST + CSRF onayı gerekir; GitHub pull otomatik DB değiştirmez.
+     */
+    public function publishCatalog(): void
+    {
+        Csrf::check();
+        $pdo = $this->db->getPdo();
+        try {
+            $pdo->beginTransaction();
+            $missing = $this->db->fetch(
+                "SELECT COUNT(*) AS cnt FROM packages p
+                 LEFT JOIN categories c ON c.id = p.category_id
+                 WHERE c.id IS NULL"
+            );
+            // Yalnızca gerçekten paketi bulunan mevcut kategorileri aç.
+            $catCount = $this->db->query(
+                "UPDATE categories c SET c.status = 'active'
+                 WHERE EXISTS (SELECT 1 FROM packages p WHERE p.category_id = c.id)"
+            )->rowCount();
+            // Alt kategoriye bağlı paketlerde ana kategorinin de açık olması gerekir.
+            $parentCount = $this->db->query(
+                "UPDATE categories parent SET parent.status = 'active'
+                 WHERE EXISTS (
+                     SELECT 1 FROM categories child
+                     INNER JOIN packages p ON p.category_id = child.id
+                     WHERE child.parent_id = parent.id
+                 )"
+            )->rowCount();
+            $pkgCount = $this->db->query(
+                "UPDATE packages p
+                 INNER JOIN categories c ON c.id = p.category_id
+                 LEFT JOIN categories parent ON parent.id = c.parent_id
+                 SET p.status = 'active'
+                 WHERE c.status = 'active'
+                   AND (c.parent_id IS NULL OR parent.status = 'active')"
+            )->rowCount();
+            $pdo->commit();
+            $message = "{$pkgCount} paket ve " . ($catCount + $parentCount) . " kategori aktif hale getirildi. Mevcut fiyatlar ve paket içerikleri korundu.";
+            if ((int)($missing['cnt'] ?? 0) > 0) {
+                $message .= " " . (int)$missing['cnt'] . " paketin bağlı olduğu kategori bulunamıyor; bunları admin panelinden bir kategoriye taşıyın.";
+            }
+            flash('success', $message);
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            error_log('Catalog publishing failed: ' . $e->getMessage());
+            flash('error', 'Katalog yayınlanamadı; hiçbir değişiklik uygulanmadı. Sunucu hata kaydını kontrol edin.');
+        }
+        redirect('/admin/paketler');
+    }
+
     public function create(): void
     {
         $categories = $this->db->fetchAll("SELECT id, name FROM categories WHERE status = 'active' ORDER BY name");
