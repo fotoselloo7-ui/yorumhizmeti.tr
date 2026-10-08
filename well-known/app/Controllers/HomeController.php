@@ -14,7 +14,7 @@ class HomeController extends Controller
         $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC, id ASC");
 
         // Admin paketleri aynı veritabanından gelir; manuel/demo paket listesi yoktur.
-        // Her ana kategoride önce is_featured paketler, ardından diğer aktif paketler görünür.
+        // Kategori promosyonları aktif paketlerden; öne çıkan alanı ise yalnızca is_featured=1 kayıtlarından oluşur.
         // Küresel LIMIT, sonradan eklenen kategorileri görünmez kıldığı için kaldırıldı.
         $featuredPackages = $db->fetchAll("
             SELECT p.*, c.name AS category_name, c.slug AS category_slug,
@@ -33,6 +33,7 @@ class HomeController extends Controller
 
         $featuredPackageGroups = [];
         foreach ($featuredPackages as $pkg) {
+            if ((int)($pkg['is_featured'] ?? 0) !== 1) continue;
             $groupId = (int) $pkg['featured_group_id'];
             if ($groupId <= 0) continue;
             if (!isset($featuredPackageGroups[$groupId])) {
@@ -45,8 +46,8 @@ class HomeController extends Controller
                     'packages' => [],
                 ];
             }
-            // Referans tasarımdaki dört kartlık kompozisyonu değiştirmiyoruz.
-            if (count($featuredPackageGroups[$groupId]['packages']) < 4) {
+            // İlk dört kart masaüstünde görünür, gerisi kaydırıcıda tutulur.
+            if (count($featuredPackageGroups[$groupId]['packages']) < 16) {
                 $featuredPackageGroups[$groupId]['packages'][] = $pkg;
             }
         }
@@ -76,8 +77,8 @@ class HomeController extends Controller
         foreach ($candidateCategories as $cat) {
             $catId = (int) $cat['id'];
             $hasVisiblePackage = false;
-            foreach ($featuredPackageGroups as $g) {
-                if ((int)$g['category']['id'] === $catId) { $hasVisiblePackage = true; break; }
+            foreach ($featuredPackages as $p) {
+                if ((int)$p['featured_group_id'] === $catId) { $hasVisiblePackage = true; break; }
             }
             if (!$hasVisiblePackage) continue;
             $homeCategoryBlocks[] = ['category' => $cat];
