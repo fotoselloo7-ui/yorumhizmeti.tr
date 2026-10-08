@@ -231,26 +231,8 @@
                   <div class="nv27-service-main">
                     <div class="nv27-service-intro">
                       <div><span class="nv27-service-overline"><?= icon('grid',13) ?> HİZMET KATALOĞU</span><strong><?= e($nv26Label) ?></strong></div>
-                      <span class="nv27-service-count"><?= count($nv26Group['categories']) ?> kategori</span>
+                      <span class="nv27-service-count"><?= count($nv26Group['categories']) + ($nv27Agency && !in_array(\App\Services\SoftwareCatalogService::ROOT_SLUG, array_column($nv26Group['categories'], 'slug'), true) ? 1 : 0) ?> kategori</span>
                     </div>
-                    <?php if ($nv27Agency): ?>
-                    <div class="nv33-software-feature">
-                      <div class="nv33-software-feature-main">
-                        <span class="nv33-software-feature-icon"><?= icon('monitor',28) ?></span>
-                        <div class="nv33-software-feature-copy">
-                          <span class="nv33-software-feature-label">HAZIR ÜRÜNLER & WEB SCRIPTLERİ</span>
-                          <strong>Hazır Yazılımlar & Scriptler</strong>
-                          <small>Haber, emlak, e-ticaret, blog ve işletme yazılımları</small>
-                        </div>
-                        <a class="nv33-software-feature-cta" href="/hazir-yazilimlar">Tüm Yazılımlar <?= icon('arrow-right',14) ?></a>
-                      </div>
-                      <div class="nv33-software-feature-chips" aria-label="Hazır yazılım türleri">
-                        <?php foreach (array_slice(\App\Services\SoftwareCatalogService::definitions(),0,7) as [$scriptName,$scriptSlug]): ?>
-                        <a href="/hazir-yazilimlar?tur=<?= rawurlencode($scriptSlug) ?>"><?= e($scriptName) ?> <?= icon('arrow-up-right',11) ?></a>
-                        <?php endforeach; ?>
-                      </div>
-                    </div>
-                    <?php endif; ?>
                     <div class="nv27-service-grid">
                       <?php foreach ($nv26Group['categories'] as $nv26Cat):
                         if ($nv27Agency && ($nv26Cat['slug'] ?? '') === \App\Services\SoftwareCatalogService::ROOT_SLUG) continue;
@@ -291,6 +273,44 @@
                         </a>
                       </article>
                       <?php endforeach; ?>
+                      <?php if ($nv27Agency): ?>
+                      <?php
+                        // Keep the ready scripts entry as the sixth regular card,
+                        // even before the optional admin category installer runs.
+                        $nv35ScriptTypes = \App\Services\SoftwareCatalogService::definitions();
+                        $nv35ScriptExamples = array_filter(
+                          $nv35ScriptTypes,
+                          static fn($item) => in_array($item[1], [
+                            'haber-sitesi-scripti', 'emlak-sitesi-scripti',
+                            'e-ticaret-scripti', 'otel-rezervasyon-scripti'
+                          ], true)
+                        );
+                      ?>
+                      <article class="nv27-service-card nv27-style-software nv35-software-card" data-software-menu-card>
+                        <a href="/hazir-yazilimlar" class="nv27-service-parent">
+                          <span class="nv27-service-icon"><?= icon('monitor', 23) ?></span>
+                          <span class="nv27-service-parent-copy">
+                            <strong>Hazır Yazılımlar &amp; Scriptler</strong>
+                            <small>Sektöre özel yönetim panelli yazılımlar</small>
+                          </span>
+                          <span class="nv27-service-parent-arrow"><?= icon('arrow-up-right', 14) ?></span>
+                        </a>
+                        <div class="nv27-subcategory-area">
+                          <span class="nv27-subcategory-caption">ALT HİZMETLER</span>
+                          <div class="nv27-subcategory-grid">
+                            <?php foreach ($nv35ScriptExamples as [$scriptName, $scriptSlug, $scriptDescription, $scriptIcon]): ?>
+                            <a class="nv27-subcategory-link" href="/hazir-yazilimlar?tur=<?= rawurlencode($scriptSlug) ?>" title="<?= e($scriptDescription) ?>">
+                              <span class="nv27-subcategory-symbol"><?= icon($scriptIcon, 13) ?></span>
+                              <span><?= e($scriptName) ?></span>
+                            </a>
+                            <?php endforeach; ?>
+                          </div>
+                        </div>
+                        <a href="/hazir-yazilimlar" class="nv27-category-footer">
+                          Tüm <?= count($nv35ScriptTypes) ?> yazılım kategorisini keşfet <?= icon('arrow-right', 12) ?>
+                        </a>
+                      </article>
+                      <?php endif; ?>
                     </div>
                   </div>
                 </div>
