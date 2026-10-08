@@ -33,7 +33,8 @@ class CategoryController extends Controller
         $score = $seo->calculate($data);
         $data['seo_score'] = $score['score'];
 
-        $this->db->insert('categories', $data);
+        $newId = $this->db->insert('categories', $data);
+        \App\Services\NetveraSeoBridge::save('category', $newId, $_POST);
         logActivity('category_create', 'Kategori oluşturuldu: ' . $data['name']);
         flash('success', 'Kategori oluşturuldu.');
         redirect('/admin/kategoriler');
