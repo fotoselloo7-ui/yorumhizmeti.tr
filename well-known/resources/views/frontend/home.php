@@ -220,7 +220,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                 <div>
                     <span class="yh6-eyebrow">Kategoriye Göre Popüler Paketler</span>
                     <h2><span data-featured-title><?= e($firstFeaturedGroup['category']['name']) ?></span> Öne Çıkan Paketler</h2>
-                    <p data-featured-subtitle><?= e(($firstFeaturedGroup['category']['name'] ?? 'Hizmet') . ' kategorisindeki öne çıkarılan paketleri karşılaştırın.') ?></p>
+                    <p data-featured-subtitle><?= e(($firstFeaturedGroup['category']['name'] ?? 'Hizmet') . ' kategorisindeki öne çıkan paketleri inceleyin.') ?></p>
                 </div>
             </div>
 
@@ -267,8 +267,8 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                             data-url="/kategori/<?= e($filterCategory['slug']) ?>"
                             aria-selected="<?= $selected?'true':'false' ?>"
                             title="<?= e($filterCategory['name']) ?>">
-                        <?= icon($gico, 16) ?>
-                        <span><?= e($filterCategory['name']) ?></span>
+                        <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
+                        <span class="yh26-filter-name"><?= e($filterCategory['name']) ?></span>
                     </button>
                     <?php endforeach; ?>
                 </div>

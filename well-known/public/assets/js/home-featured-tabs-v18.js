@@ -93,14 +93,21 @@
     });
 
     // Hover changes only the visible filters; selecting a chip changes the featured cards.
-    const showGroup = key => {
-      if (!filterPanels.some(panel => panel.dataset.featuredFilterPanel === key)) return;
+    // Previewing a group also selects its first REAL featured category, so the
+    // filter heading can never say Social Media while showing Google packages.
+    const showGroup = (key, activateFirst = true) => {
+      const panel = filterPanels.find(item => item.dataset.featuredFilterPanel === key);
+      if (!panel) return;
       groupButtons.forEach(button => {
         const open = button.dataset.featuredGroup === key;
         button.classList.toggle('is-open', open);
         button.setAttribute('aria-expanded', String(open));
       });
-      filterPanels.forEach(panel => { panel.hidden = panel.dataset.featuredFilterPanel !== key; });
+      filterPanels.forEach(item => { item.hidden = item !== panel; });
+      if (activateFirst) {
+        const first = panel.querySelector('[data-featured-tab]');
+        if (first && !first.classList.contains('active')) switchTo(first);
+      }
     };
     groupButtons.forEach(button => {
       const key = button.dataset.featuredGroup;
@@ -112,7 +119,7 @@
       button.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
           const selected = tabs.find(tab => tab.classList.contains('active'));
-          if (selected) showGroup(selected.dataset.featuredParentGroup);
+          if (selected) showGroup(selected.dataset.featuredParentGroup, false);
           button.blur();
         }
       });
@@ -122,7 +129,7 @@
       const id = tab.dataset.featuredTab;
       const name = tab.dataset.title || 'Hizmetler';
       const platformClass = tab.dataset.class || 'default';
-      showGroup(tab.dataset.featuredParentGroup);
+      showGroup(tab.dataset.featuredParentGroup, false);
 
       tabs.forEach(item => {
         const active = item === tab;
@@ -137,7 +144,7 @@
         if (active) requestAnimationFrame(() => updateControls(pane));
       });
       if (title) title.textContent = name;
-      if (subtitle) subtitle.textContent = name + ' kategorisindeki öne çıkarılan paketleri karşılaştırın.';
+      if (subtitle) subtitle.textContent = name + ' kategorisindeki öne çıkan paketleri inceleyin.';
       if (avatar) {
         platformClasses.forEach(cls => avatar.classList.remove(cls));
         avatar.classList.add(platformClass);
