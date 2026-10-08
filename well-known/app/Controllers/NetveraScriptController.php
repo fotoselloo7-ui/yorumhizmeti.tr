@@ -33,12 +33,29 @@ class NetveraScriptController extends Controller
         $cat=trim((string)($_GET['category']??''));
         $categories=Catalog::categories();$categoryId=null;
         foreach($categories as $row)if($row['slug']===$cat)$categoryId=(int)$row['legacy_id'];
+
+        // Untrusted query parameters never become SQL identifiers or free-form clauses.
+        $priceFromQuery=static function(string $key):?float {
+            $raw=trim((string)($_GET[$key]??''));
+            if($raw==='' || !is_numeric($raw))return null;
+            $amount=(float)$raw;
+            return is_finite($amount)?min(100000000,max(0,$amount)):null;
+        };
+        $minPrice=$priceFromQuery('min_price');
+        $maxPrice=$priceFromQuery('max_price');
+        $minRating=max(0,min(5,(int)($_GET['min_rating']??0)));
+        $sort=(string)($_GET['sort']??'recommended');
+        if(!in_array($sort,['recommended','price_asc','price_desc','rating','newest'],true))
+            $sort='recommended';
+
         $this->render('frontend/netvera-scripts',[
             'pageTitle'=>'Hazır Scriptler ve Profesyonel Yazılımlar',
             'metaDescription'=>'Sektörel PHP web yazılımları, otomasyon, CMS ve hazır script ürünleri.',
             'canonicalUrl'=>url($canonicalPath),
-            'products'=>Catalog::all($q,$categoryId),
+            'products'=>Catalog::all($q,$categoryId,$minPrice,$maxPrice,$minRating,$sort),
             'categories'=>$categories,'filterCategory'=>$cat,'filterQuery'=>$q,
+            'filterMinPrice'=>$minPrice,'filterMaxPrice'=>$maxPrice,
+            'filterMinRating'=>$minRating,'filterSort'=>$sort,
         ]);
     }
 
