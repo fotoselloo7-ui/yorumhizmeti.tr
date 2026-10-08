@@ -39,7 +39,76 @@ final class SoftwareCatalogService
             ['Tur ve Seyahat Yazılımı', 'tur-seyahat-scripti', 'Tur listesi, seyahat acentesi ve rezervasyon yazılımları.', 'globe'],
             ['Dijital Ürün Satış Scripti', 'dijital-urun-satis-scripti', 'Lisans, yazılım, dijital dosya ve ürün satış platformları.', 'shopping-bag'],
             ['Servis ve Teknik Destek Scripti', 'teknik-servis-scripti', 'Teknik servis talebi, arıza kaydı ve servis CRM yazılımı.', 'settings'],
+            ['WordPress Temaları', 'wordpress-temalari', 'WordPress kurumsal, blog, haber, portföy ve e-ticaret temaları.', 'monitor'],
+            ['WordPress Eklentileri', 'wordpress-eklentileri', 'WordPress SEO, performans, güvenlik, form ve yönetim eklentileri.', 'settings'],
+            ['WooCommerce Eklentileri', 'woocommerce-eklentileri', 'WooCommerce ödeme, kargo, sipariş ve mağaza entegrasyonları.', 'shopping-cart'],
+            ['Shopify Temaları', 'shopify-temalari', 'Shopify mağazaları için mobil uyumlu vitrin ve tema çözümleri.', 'store'],
+            ['Shopify Uygulama ve Entegrasyonları', 'shopify-uygulamalari', 'Shopify mağaza otomasyonları ve üçüncü taraf entegrasyonları.', 'layers'],
+            ['HTML & Tailwind Web Şablonları', 'html-tailwind-sablonlari', 'Modern, mobil uyumlu statik HTML ve Tailwind şablonları.', 'code'],
+            ['Laravel Yönetim Paneli Şablonları', 'laravel-admin-panel-sablonlari', 'Laravel ve PHP yönetim paneli şablonları ve modülleri.', 'monitor'],
+            ['SaaS & Abonelik Yazılımları', 'saas-abonelik-scripti', 'Abonelik ve lisans yönetimli bulut yazılımları.', 'cloud'],
+            ['Masaüstü Bot ve Otomasyon', 'masaustu-bot-otomasyon', 'Windows ve masaüstü otomasyon, veri işleme ve iş akışı yazılımları.', 'settings'],
+            ['API ve Entegrasyon Modülleri', 'api-entegrasyon-modulleri', 'Ödeme, kargo, mesajlaşma ve üçüncü taraf API entegrasyonları.', 'code'],
+            ['Mobil Uygulama Şablonları', 'mobil-uygulama-sablonlari', 'Flutter, iOS ve Android uygulama arayüz ve başlangıç kitleri.', 'mobile-app'],
         ];
+    }
+
+    /**
+     * Stable editorial product taxonomy. Labels describe product types rather
+     * than suggesting that unavailable digital goods are on sale.
+     */
+    public static function taxonomyGroups(): array
+    {
+        return [
+            'Sektörel & Kurumsal Yazılımlar' => [
+                'haber-sitesi-scripti', 'blog-cms-scripti', 'kurumsal-site-scripti',
+                'emlak-sitesi-scripti', 'oto-galeri-scripti', 'otel-rezervasyon-scripti',
+                'restoran-qr-menu-scripti', 'guzellik-salonu-scripti',
+                'temizlik-firmasi-scripti', 'nakliye-lojistik-scripti',
+                'insaat-hafriyat-scripti', 'tur-seyahat-scripti',
+            ],
+            'E-Ticaret & Platformlar' => [
+                'e-ticaret-scripti', 'pazaryeri-ilan-scripti', 'dijital-urun-satis-scripti',
+                'randevu-rezervasyon-scripti', 'is-ilani-kariyer-scripti',
+            ],
+            'WordPress & Eklentiler' => [
+                'wordpress-temalari', 'wordpress-eklentileri', 'woocommerce-eklentileri',
+            ],
+            'Shopify & Web Şablonları' => [
+                'shopify-temalari', 'shopify-uygulamalari', 'html-tailwind-sablonlari',
+                'laravel-admin-panel-sablonlari',
+            ],
+            'Otomasyon & Yönetim' => [
+                'crm-musteri-yonetimi-scripti', 'smm-panel-scripti', 'sms-onay-scripti',
+                'teknik-servis-scripti', 'masaustu-bot-otomasyon', 'saas-abonelik-scripti',
+                'api-entegrasyon-modulleri',
+            ],
+            'Eğitim, Mobil & Topluluk' => [
+                'egitim-kurs-scripti', 'forum-topluluk-scripti', 'mobil-uygulama-sablonlari',
+            ],
+        ];
+    }
+
+    public static function softwareCategoryOptions(): array
+    {
+        $root = self::root();
+        if (!$root || $root['status'] !== 'active') return [];
+        return Database::getInstance()->fetchAll(
+            "SELECT id, name, slug, parent_id
+             FROM categories
+             WHERE status = 'active' AND (id = ? OR parent_id = ?)
+             ORDER BY CASE WHEN parent_id IS NULL THEN 1 ELSE 0 END,
+                      sort_order ASC, name ASC",
+            [(int)$root['id'], (int)$root['id']]
+        );
+    }
+
+    public static function isSoftwareCategory(int $id): bool
+    {
+        foreach (self::softwareCategoryOptions() as $row) {
+            if ((int)$row['id'] === $id) return true;
+        }
+        return false;
     }
 
     public static function root(): ?array
