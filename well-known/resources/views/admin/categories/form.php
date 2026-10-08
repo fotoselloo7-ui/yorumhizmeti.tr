@@ -113,6 +113,7 @@
                     </div>
                 </div>
             </div>
+            <?php require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
         </div>
 
         <!-- Sidebar -->
