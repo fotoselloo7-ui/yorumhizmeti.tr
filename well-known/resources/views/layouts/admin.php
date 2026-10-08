@@ -57,6 +57,9 @@
                 <a href="/admin/netvera-kategoriler" class="<?= isActive('/admin/netvera-kategoriler') ? 'active' : '' ?>">
                     <?= icon('folder',18) ?> Yazılım Kategorileri
                 </a>
+                <a href="/admin/netvera-gelen-kutusu" class="<?= isActive('/admin/netvera-gelen-kutusu') ? 'active' : '' ?>">
+                    <?= icon('message-circle',18) ?> Netvera Sohbet ve Teklifler
+                </a>
                 <a href="/admin/netvera-yazilimlar/ekle" class="<?= isActive('/admin/netvera-yazilimlar/ekle') ? 'active' : '' ?>">
                     <?= icon('plus',18) ?> Netvera Yazılım Ekle
                 </a>
