@@ -29,6 +29,44 @@ $nvseo=$nvSeoData??[];
   </div>
   <div class="form-group"><label>Yazar URL</label>
    <input name="nvseo_author_url" type="url" class="form-control" value="<?= e($nvseo['author_url']??'') ?>"></div>
+  <?php if(!empty($nvSeoIsBlog)): ?>
+  <div class="nv44-editorial-title"><?= icon('sparkles',15) ?> GEO / AIO İçerik Yapısı</div>
+  <p class="form-hint">Alanlar gerçek içerikle uyumlu olmalı. Arama sonuçlarında veya AI yanıtlarında görünme garantisi vermez.</p>
+  <div class="form-group">
+    <label for="nvseo_content_intent">Kullanıcı Arama Niyeti</label>
+    <select class="form-control" id="nvseo_content_intent" name="nvseo_content_intent">
+      <?php foreach([''=>'Seçiniz','bilgi'=>'Bilgi edinme','karsilastirma'=>'Karşılaştırma / değerlendirme','satin-alma'=>'Satın alma öncesi araştırma','yerel'=>'Yerel hizmet araştırması','rehber'=>'Nasıl yapılır / adım adım rehber'] as $value=>$label): ?>
+      <option value="<?= e($value) ?>" <?= ($nvseo['content_intent']??'')===$value?'selected':'' ?>><?= e($label) ?></option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="nvseo_main_question">Kullanıcının Ana Sorusu</label>
+    <textarea class="form-control" id="nvseo_main_question" name="nvseo_main_question" rows="2" maxlength="300" placeholder="Örneğin: Haber sitesi yazılımı hangi özelliklere sahip olmalı?"><?= e($nvseo['main_question']??'') ?></textarea>
+  </div>
+  <div class="form-group">
+    <label for="nvseo_direct_answer">Doğrudan Cevap / AIO Kısa Özet</label>
+    <textarea class="form-control" id="nvseo_direct_answer" name="nvseo_direct_answer" rows="4" maxlength="800" placeholder="Soruyu doğal biçimde cevaplayan, doğrulanabilir 2–4 cümle."><?= e($nvseo['direct_answer']??'') ?></textarea>
+  </div>
+  <div class="form-group">
+    <label for="nvseo_sources">Kaynaklar / Doğrulama Bağlantıları</label>
+    <textarea class="form-control" id="nvseo_sources" name="nvseo_sources" rows="3" maxlength="2500" placeholder="Her satıra kaynak URL'si"><?= e($nvseo['sources']??'') ?></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="nvseo_reviewer_name">Editör / Son Kontrol Eden</label>
+      <input class="form-control" id="nvseo_reviewer_name" name="nvseo_reviewer_name" maxlength="120" value="<?= e($nvseo['reviewer_name']??'') ?>" placeholder="Gerçek editör adı">
+    </div>
+    <div class="form-group">
+      <label for="nvseo_last_reviewed">Son İçerik Kontrolü</label>
+      <input class="form-control" id="nvseo_last_reviewed" type="date" name="nvseo_last_reviewed" value="<?= e($nvseo['last_reviewed']??'') ?>">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="nvseo_image_title">Görsel Title / Başlık</label>
+    <input class="form-control" id="nvseo_image_title" name="nvseo_image_title" maxlength="240" value="<?= e($nvseo['image_title']??'') ?>" placeholder="Kapak görselini açıklayan kısa başlık">
+  </div>
+  <?php endif; ?>
   <div class="form-group"><label>sameAs — Resmî Profiller (Her Satıra Bir URL)</label>
    <textarea name="nvseo_same_as_urls" rows="2" class="form-control"><?= e($nvseo['same_as_urls']??'') ?></textarea></div>
  </div>
