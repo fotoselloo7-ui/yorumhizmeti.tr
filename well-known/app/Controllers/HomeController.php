@@ -82,6 +82,30 @@ class HomeController extends Controller
             }
         }
 
+        // Balanced quick service links on the homepage: show social, agency and
+        // marketing categories, instead of only the first eight database rows.
+        $homeQuickCategories = [];
+        $homeQuickIds = [];
+        foreach (['social' => 4, 'agency' => 2, 'marketing' => 2] as $key => $limit) {
+            foreach (\App\Services\CatalogMenuService::groups() as $group) {
+                if ($group['key'] !== $key) continue;
+                foreach (array_slice($group['categories'], 0, $limit) as $cat) {
+                    $homeQuickCategories[] = $cat;
+                    $homeQuickIds[$cat['id']] = true;
+                }
+            }
+        }
+        if (count($homeQuickCategories) < 8) {
+            foreach (\App\Services\CatalogMenuService::groups() as $group) {
+                foreach ($group['categories'] as $cat) {
+                    if (isset($homeQuickIds[$cat['id']])) continue;
+                    $homeQuickCategories[] = $cat;
+                    $homeQuickIds[$cat['id']] = true;
+                    if (count($homeQuickCategories) >= 8) break 2;
+                }
+            }
+        }
+
         // Son blog yazıları
         $latestPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.published_at DESC LIMIT 4");
         if (count($latestPosts) < 4) {
@@ -195,6 +219,7 @@ class HomeController extends Controller
             'featuredNavGroups' => $featuredNavGroups,
             'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
             'homeCategoryBlocks' => $homeCategoryBlocks,
+            'homeQuickCategories' => $homeQuickCategories,
             'latestPosts' => $latestPosts,
             'faqs' => $faqs,
             'sections' => $sections,

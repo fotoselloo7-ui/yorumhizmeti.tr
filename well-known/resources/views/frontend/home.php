@@ -121,9 +121,9 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
     <div class="container">
         <div class="yh6-hero-grid">
             <div class="yh6-hero-copy">
-                <span class="yh6-eyebrow"><?= icon('award', 12) ?> Sosyal Kanıt, Daha Güçlü Markalar</span>
-                <h1>Yorumlarınızla <span>Daha Güçlü Bir İmaj Yaratın!</span></h1>
-                <p>Google, Instagram, TikTok, YouTube ve web siteniz için güvenilir yorum, beğeni ve etkileşim hizmetleriyle markanızı büyütün. Gerçek etkileşim, gerçek sonuçlar.</p>
+                <span class="yh6-eyebrow"><?= icon('award', 12) ?> Dijital Çözümler, Daha Güçlü Markalar</span>
+                <h1>Dijitalde <span>Daha Güçlü Bir Marka Yaratın!</span></h1>
+                <p>Web sitesi ve özel yazılımdan SEO, dijital reklam ve sosyal medya hizmetlerine kadar markanızın ihtiyaç duyduğu çözümleri tek noktadan keşfedin.</p>
                 <div class="yh6-hero-actions">
                     <a href="/kategoriler" class="yh6-btn primary">Hemen İncele <?= icon('arrow-right', 12) ?></a>
                     <a href="#how" class="yh6-btn ghost"><?= icon('play-circle', 14) ?> Nasıl Çalışır?</a>
@@ -157,13 +157,14 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
             </div>
         </div>
 
-        <div class="yh6-platform-bar">
-            <?php foreach (array_slice($categories,0,8) as $cat):
+        <div class="yh6-platform-bar" aria-label="Popüler dijital hizmet kategorileri">
+            <?php foreach (($homeQuickCategories ?? []) as $cat):
                 [$cls,$ico,$label] = yh6Platform($cat['slug'] ?? '', $cat['name'] ?? '');
+                $title = preg_replace('/\\s+Hizmetleri?$/u', '', (string)$cat['name']);
             ?>
-            <a href="/kategori/<?= e($cat['slug']) ?>" class="<?= e($cls) ?>">
-                <span><?= icon($ico, 23) ?></span>
-                <div><strong><?= e($label) ?></strong><small><?= e($cat['name']) ?></small></div>
+            <a href="<?= e($cat['url']) ?>" class="<?= e($cls) ?>">
+                <span><?= icon($cat['icon'], 23) ?></span>
+                <div><strong><?= e($title) ?></strong><small><?= e($cat['name']) ?></small></div>
             </a>
             <?php endforeach; ?>
         </div>
