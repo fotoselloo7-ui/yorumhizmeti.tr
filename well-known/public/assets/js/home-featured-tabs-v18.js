@@ -57,7 +57,7 @@
       if (direction < 0 && track.scrollLeft < 3) target = maxScroll;
       track.scrollTo({
         left: Math.max(0, Math.min(maxScroll, target)),
-        behavior: reducedMotion.matches ? 'instant' : 'smooth'
+        behavior: reducedMotion.matches ? 'auto' : 'smooth'
       });
       if (userInitiated) pauseTemporarily();
     };
