@@ -5,6 +5,23 @@ use App\Services\NetveraBridgeService as Catalog;
 
 class NetveraScriptController extends Controller
 {
+    /** Netvera'nın eski indeksli kısa adresleri, orijinal canonical ürüne gider. */
+    public function legacyNews(): void { $this->legacyRedirect('haber-sitesi-scripti'); }
+    public function legacyCleaning(): void { $this->legacyRedirect('netvera-temizlik-firmasi-script-yazilimi-pro'); }
+    public function legacyRealEstate(): void { $this->legacyRedirect('netvera-emlak-script-yazilimi-pro'); }
+
+    public function legacyRedirect(string $slug): void
+    {
+        $product=Catalog::find($slug);
+        if (!$product) {
+            http_response_code(404);
+            $this->render('frontend/404',['pageTitle'=>'Yazılım Bulunamadı']);
+            return;
+        }
+        header('Location: /hazir-scriptler/'.rawurlencode((string)$product['slug']),true,301);
+        exit;
+    }
+
     public function index(): void
     {
         $q=mb_substr(trim((string)($_GET['q']??'')),0,70);
