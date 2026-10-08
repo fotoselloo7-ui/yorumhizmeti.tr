@@ -1,0 +1,71 @@
+/* V28 — Icon glyph visibility & optical centering.
+   Keep the approved social media layout unchanged. These rules normalize only
+   square glyph wrappers, never the dimensions of ordinary text labels. */
+:is(.nv26-menu-shell,.nv26-catalog,.yh24-featured-subfilters,.yh6-platform-bar,.auth25-page,.site-header)
+:is(.nv26-menu-icon,.nv26-social-mega-icon,.nv26-tile-icon,.nv26-toolbar-icon,.nv26-section-icon,.yh26-filter-icon,.yh6-package-icon,.auth25-brandmark,.nv27-service-icon,.nv27-service-parent-arrow,.nv27-subcategory-symbol,.nv27-spotlight-glyph){
+  display:grid!important;
+  place-items:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  flex-shrink:0;
+  text-align:center!important;
+  padding:0;
+  line-height:1;
+}
+:is(.nv26-menu-shell,.nv26-catalog,.yh24-featured-subfilters,.yh6-platform-bar,.auth25-page,.site-header)
+:is(.nv26-menu-icon,.nv26-social-mega-icon,.nv26-tile-icon,.nv26-toolbar-icon,.nv26-section-icon,.yh26-filter-icon,.yh6-package-icon,.nv27-service-icon,.nv27-service-parent-arrow,.nv27-subcategory-symbol,.nv27-spotlight-glyph) > .icon{
+  display:inline-grid!important;
+  place-items:center!important;
+  width:1.25em!important;
+  min-width:1.25em!important;
+  height:1.25em!important;
+  margin:0!important;
+  vertical-align:middle!important;
+  line-height:1!important;
+  text-align:center!important;
+  flex:0 0 auto;
+}
+:is(.nv26-menu-shell,.nv26-catalog,.yh24-featured-subfilters,.yh6-platform-bar,.auth25-page,.site-header)
+:is(.nv26-menu-icon,.nv26-social-mega-icon,.nv26-tile-icon,.nv26-toolbar-icon,.nv26-section-icon,.yh26-filter-icon,.yh6-package-icon,.nv27-service-icon,.nv27-service-parent-arrow,.nv27-subcategory-symbol) > .icon::before{
+  display:block;
+  margin:0;
+  line-height:1;
+  text-align:center;
+}
+.nv27-service-parent-arrow{
+  background:var(--nv27-card-bg,#f2efff)!important;
+  color:var(--nv27-card-accent,#694ddd)!important;
+  width:26px!important;
+  height:26px!important;
+  flex:0 0 26px!important;
+  border-radius:8px!important;
+}
+.nv27-subcategory-link{
+  gap:8px;
+  padding:7px 8px;
+  min-height:39px;
+  font-size:10px;
+  line-height:1.45;
+}
+.nv27-subcategory-symbol{
+  width:25px!important;
+  height:25px!important;
+  flex:0 0 25px!important;
+  border:1px solid color-mix(in srgb,var(--nv27-card-accent,#654be3) 13%,white);
+  border-radius:7px!important;
+  background:var(--nv27-card-bg,#f1eeff)!important;
+  color:var(--nv27-card-accent,#654be3)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.38);
+}
+.nv27-subcategory-link:hover .nv27-subcategory-symbol{
+  border-color:color-mix(in srgb,var(--nv27-card-accent,#654be3) 25%,white);
+  background:#fff!important;
+}
+.nv27-subcategory-link>span:last-child{flex:1 1 0;min-width:0;overflow-wrap:anywhere}
+.nv27-service-icon{width:44px!important;height:44px!important;flex:0 0 44px!important}
+.nv27-service-parent{align-items:center}
+.nv27-service-parent-copy{align-self:center}
+.nv27-spotlight-glyph>.icon{transform:rotate(9deg)}
+.nv27-spotlight-cta>.icon,.nv27-category-footer>.icon{display:inline-grid!important;place-items:center!important;width:1.25em;min-width:1.25em;vertical-align:middle}
+@media(max-width:1240px){.nv27-subcategory-link{font-size:9px;gap:6px;padding:7px 6px}}
+@media(max-width:540px){.nv27-subcategory-link{font-size:10px}}

@@ -63,6 +63,20 @@ class IconService
 
     public static function render(string $name, int $size = 20, string $class = ''): string
     {
+        // Font Awesome 6 has no reliable .fa-arrow-up-right glyph on all CDNs.
+        // Ship a tiny native SVG for this widely reused arrow so it can never
+        // become the blank square seen in category menus.
+        if ($name === 'arrow-up-right') {
+            $px = max(8, min(80, (int)$size));
+            $safeClass = htmlspecialchars(trim($class), ENT_QUOTES, 'UTF-8');
+            return '<svg class="icon icon-arrow-up-right' . ($safeClass ? ' ' . $safeClass : '') . '"'
+                . ' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"'
+                . ' width="' . $px . '" height="' . $px . '"'
+                . ' fill="none" stroke="currentColor" stroke-width="2"'
+                . ' stroke-linecap="round" stroke-linejoin="round"'
+                . ' aria-hidden="true" focusable="false">'
+                . '<path d="M7 17 17 7M8 7h9v9"/></svg>';
+        }
         $item = self::$map[$name] ?? ['regular','circle'];
         $prefix = $item[0] === 'brands' ? 'fa-brands' : ($item[0] === 'regular' ? 'fa-regular' : 'fa-solid');
         $safeClass = trim($class);

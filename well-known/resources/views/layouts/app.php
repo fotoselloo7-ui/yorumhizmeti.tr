@@ -57,6 +57,7 @@
     <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.2">
     <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
     <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=27.1">
+    <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=28.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -243,7 +244,7 @@
                             <strong><?= e($nv26Cat['name']) ?></strong>
                             <small><?= e($nv27Description) ?></small>
                           </span>
-                          <span class="nv27-service-parent-arrow"><?= icon('arrow-up-right', 13) ?></span>
+                          <span class="nv27-service-parent-arrow"><?= icon('arrow-up-right', 14) ?></span>
                         </a>
                         <?php if ($nv27ChildCount > 0): ?>
                         <div class="nv27-subcategory-area">
@@ -252,7 +253,7 @@
                             <?php foreach (array_slice($nv26Cat['children'], 0, 4) as $nv26Sub): ?>
                             <a href="<?= e($nv26Sub['url']) ?>" class="nv27-subcategory-link"
                                title="<?= e($nv26Sub['name']) ?>">
-                              <span class="nv27-subcategory-symbol"><?= icon('arrow-up-right', 10) ?></span>
+                              <span class="nv27-subcategory-symbol"><?= icon($nv26Sub['icon'], 13) ?></span>
                               <span><?= e($nv26Sub['name']) ?></span>
                             </a>
                             <?php endforeach; ?>

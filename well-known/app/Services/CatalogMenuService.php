@@ -30,7 +30,7 @@ final class CatalogMenuService
                 $cat['children']=$children[$cat['id']]??[];
                 foreach ($cat['children'] as &$child) {
                     $child['style']=self::style($child,$cat);
-                    $child['icon']=self::icon($child,$cat);
+                    $child['icon']=self::subcategoryIcon($child);
                     $child['url']=$cat['url'].'?alt='.rawurlencode($child['slug']);
                 }
                 unset($child);
@@ -58,6 +58,47 @@ final class CatalogMenuService
             if(preg_match($pattern,$t))return $key;
         return 'default';
     }
+    /**
+     * Every child service gets its OWN relevant symbol. Parent platform keywords
+     * are deliberately excluded so "Google 5 Yıldız" shows a star, not another G.
+     * This is presentation-only; admin category data and URLs stay untouched.
+     */
+    public static function subcategoryIcon(array $child): string
+    {
+        $term = mb_strtolower(($child['slug'] ?? '') . ' ' . ($child['name'] ?? ''), 'UTF-8');
+        $rules = [
+            ['/yıldız|yildiz|5.?star|puan|rating/u', 'star-fill'],
+            ['/harita|maps?|konum|lokasyon|location/u', 'map-pin'],
+            ['/yorum|değerlendirme|degerlendirme|şikayet|sikayet|mesaj|review/u', 'message-circle'],
+            ['/analiz|analizler|audit|rapor|analytics|istatistik|performans/u', 'bar-chart'],
+            ['/backlink|bağlantı|baglanti|link.?building/u', 'link'],
+            ['/teknik|technical|altyapı|altyapi/u', 'settings'],
+            ['/yerel|local/u', 'map-pin'],
+            ['/meta|facebook/u', 'facebook'],
+            ['/instagram/u', 'instagram'],
+            ['/tiktok/u', 'tiktok'],
+            ['/youtube/u', 'youtube'],
+            ['/google.?ads|adwords|reklam|advert/u', 'ads'],
+            ['/seo|arama.?motoru/u', 'search'],
+            ['/profil|işletme|isletme/u', 'store'],
+            ['/qr.?kod|karekod/u', 'grid'],
+            ['/wordpress|web.?site|website|domain|hosting/u', 'globe'],
+            ['/e.?ticaret|eticaret|ecommerce|ürün|urun|sepet/u', 'store'],
+            ['/mobil|uygulama|ios|android/u', 'mobile-app'],
+            ['/tasarım|tasarim|grafik|logo/u', 'palette'],
+            ['/içerik|icerik|blog|makale|metin/u', 'content-create'],
+            ['/itibar|güven|guven|koruma/u', 'shield-check'],
+            ['/takipçi|takipci|followers|abone/u', 'users'],
+            ['/beğeni|begeni|like/u', 'heart'],
+            ['/görüntülen|goruntulen|izlenme|view/u', 'eye'],
+        ];
+        foreach ($rules as [$pattern, $icon]) {
+            if (preg_match($pattern, $term)) return $icon;
+        }
+        $configured = (string)($child['icon_key'] ?? '');
+        return IconService::has($configured) ? $configured : 'package';
+    }
+
     public static function icon(array $cat,?array $parent=null): string
     {
         $s=self::style($cat,$parent);

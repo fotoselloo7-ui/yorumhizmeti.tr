@@ -264,6 +264,45 @@ for(const screen of screens){
         if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
         else await page.keyboard.press('Escape');
       }
+      // V28 regression: submenu glyphs must exist and be centered inside
+      // their padded backgrounds, including the known-broken north-east arrow.
+      if(p.route==='/' && (screen.name==='masaustu'||screen.name==='mobil')){
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        for(const group of ['agency','marketing']){
+          const btn=page.locator('[data-mega-trigger][aria-controls="nv26-panel-'+group+'"]');
+          if(!await btn.count()) continue;
+          if(screen.name==='masaustu') await btn.hover();
+          else await btn.click();
+          const panel=page.locator('#nv26-panel-'+group);
+          const state=await panel.evaluate(root=>{
+            const centered=(wrapper,glyph)=>{
+              const b=wrapper.getBoundingClientRect(),g=glyph.getBoundingClientRect();
+              const dx=Math.abs((b.left+b.right)/2-(g.left+g.right)/2);
+              const dy=Math.abs((b.top+b.bottom)/2-(g.top+g.bottom)/2);
+              return dx<3.5 && dy<3.5 && g.width>4 && g.height>4;
+            };
+            const targets=[...root.querySelectorAll('.nv27-service-icon,.nv27-service-parent-arrow,.nv27-subcategory-symbol')];
+            const blanks=[];
+            for(const item of targets){
+              const glyph=item.querySelector('.icon');
+              if(!glyph){blanks.push('missing '+item.className);continue;}
+              const isSvg=glyph.tagName.toLowerCase()==='svg';
+              const pseudo=isSvg?'':getComputedStyle(glyph,'::before').content;
+              if(!isSvg && (!pseudo || pseudo==='none'||pseudo==='normal')){
+                blanks.push('unresolved '+glyph.className);
+              }
+              if(!centered(item,glyph))blanks.push('off-center '+item.className);
+            }
+            const sub=[...root.querySelectorAll('.nv27-subcategory-symbol .icon')];
+            return {total:targets.length,subIcons:sub.length,blanks:blanks.slice(0,12)};
+          });
+          if(state.total===0||state.subIcons===0||state.blanks.length){
+            errors.push(group+' missing or misaligned icons: '+JSON.stringify(state));failed=true;
+          }
+        }
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        else await page.keyboard.press('Escape');
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){
