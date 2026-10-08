@@ -1,0 +1,52 @@
+/* V31 lightweight responsive admin managers; shares existing admin cards and controls. */
+.adm31-help{display:flex;gap:11px;align-items:flex-start;margin:0 0 18px;padding:15px 17px;border:1px solid #e2dcff;border-radius:13px;background:#f6f3ff;color:#6948d9}
+.adm31-help strong{font-size:13px;color:#30355a}
+.adm31-help p{margin:6px 0 0;color:#748097;font-size:11px;line-height:1.7}
+.adm31-setup-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.adm31-setup-row strong{display:block;font-size:14px}
+.adm31-setup-row p{margin:5px 0;color:#65708c;font-size:12px}
+.adm31-setup-row small{font-size:10px;color:#8791a5}
+.adm31-setup-row form{flex:0 0 auto}
+.adm31-taxonomy{margin:18px 0 12px;padding:12px;border:1px solid #e6e9f3;border-radius:11px}
+.adm31-taxonomy summary{font-size:12px;color:#5f43d8;font-weight:700;cursor:pointer}
+.adm31-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.adm31-tags span{display:inline-flex;gap:6px;align-items:center;padding:7px 9px;border-radius:8px;background:#f4f5fb;color:#415071;font-size:10px}
+.adm31-switch{display:flex;align-items:center;gap:12px;margin-bottom:15px;padding:13px;border:1px solid #e7e8f3;border-radius:10px;background:#fafaff;cursor:pointer}
+.adm31-switch input{width:19px;height:19px}
+.adm31-switch span{display:flex;flex-direction:column;gap:4px}
+.adm31-switch strong{font-size:12px;color:#263154}
+.adm31-switch small{font-size:10px;color:#8a94aa}
+.adm31-package-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.adm31-package-row{display:flex;align-items:center;justify-content:space-between;gap:11px;min-width:0;padding:13px;border:1px solid #e6eaf4;border-radius:12px;background:#fff}
+.adm31-pkg-check{display:flex;align-items:center;gap:9px;min-width:0;cursor:pointer}
+.adm31-pkg-check input{width:18px;height:18px;flex:0 0 auto}
+.adm31-pkg-title{display:flex;flex-direction:column;gap:4px;min-width:0}
+.adm31-pkg-title strong{font-size:11px;line-height:1.45;color:#273554}
+.adm31-pkg-title small{font-size:10px;color:#8a97ac}
+.adm31-pkg-right{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.adm31-pkg-right label{display:flex;flex-direction:column;gap:3px;color:#72809b;font-size:9px}
+.adm31-pkg-right input{width:63px;min-height:33px;padding:5px;border:1px solid #dde2ed;border-radius:7px}
+.adm31-pkg-right a{color:#674bdb}
+.adm31-pkg-status{padding:5px 7px;border-radius:7px;font-size:9px;font-weight:700;white-space:nowrap}
+.adm31-pkg-status.on{background:#e4f8ef;color:#128365}
+.adm31-pkg-status.off{background:#fff1f0;color:#bf5c51}
+.adm31-savebar{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 19px;border-top:1px solid #e6e9f3}
+.adm31-savebar span{display:inline-flex;align-items:center;gap:7px;font-size:10px;color:#8994a9}
+.adm31-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px 15px;text-align:center;color:#6750d8}
+.adm31-empty strong{color:#2a3859;font-size:13px}
+.adm31-empty p{max-width:500px;color:#7b879e;font-size:11px;line-height:1.7}
+.adm31-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.adm31-reference-form label,.adm31-wide-label{display:flex;flex-direction:column;gap:7px;font-size:11px;font-weight:700;color:#374663}
+.adm31-reference-form input,.adm31-reference-form select,.adm31-reference-form textarea{width:100%}
+.adm31-reference-form .adm31-wide-label{margin:13px 0}
+.adm31-existing-refs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.adm31-ref-editor{padding:15px;border:1px solid #e7e9f3;border-radius:13px;background:#fff}
+.adm31-ref-heading{display:flex;align-items:center;gap:11px;margin-bottom:15px;padding-bottom:12px;border-bottom:1px solid #edf0f6}
+.adm31-ref-heading img,.adm31-ref-heading>span:first-child{display:grid;place-items:center;flex:0 0 66px;width:66px;height:52px;border-radius:9px;object-fit:cover;background:#f2f3ff;color:#6e4dde}
+.adm31-ref-heading>div{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
+.adm31-ref-heading strong{font-size:12px;color:#293756}
+.adm31-ref-heading small{font-size:10px;color:#8e98aa}
+.adm31-ref-editor .adm31-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.adm31-ref-editor>form:last-child{margin-top:10px}
+@media(max-width:1200px){.adm31-package-grid,.adm31-existing-refs{grid-template-columns:1fr}}
+@media(max-width:720px){.adm31-setup-row,.adm31-savebar{align-items:stretch;flex-direction:column}.adm31-setup-row form{width:100%}.adm31-form-grid,.adm31-ref-editor .adm31-form-grid{grid-template-columns:1fr}.adm31-package-row{align-items:flex-start;flex-direction:column}.adm31-pkg-right{width:100%;justify-content:space-between}}

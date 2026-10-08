@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
