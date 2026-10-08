@@ -167,6 +167,38 @@
                 <?= icon('save', 16) ?> <?= $isEdit ? 'Değişiklikleri Kaydet' : 'Yazıyı Yayınla' ?>
             </button>
 
+            <section class="adm-card nv44-quality-card" aria-label="Canlı SEO GEO AIO ve içerik kalite analizi">
+                <div class="adm-card-header"><h3><?= icon('bar-chart-2',17) ?> Makale Kalite Analizi</h3>
+                    <span id="nv44-overall-score" class="nv44-overall-score" aria-live="polite">0 / 100</span>
+                </div>
+                <div class="adm-card-body">
+                    <p class="nv44-quality-subtitle">Yazarken anlık hesaplanır. Puanlar içerik hazırlığı içindir, sıralama garantisi değildir.</p>
+                    <div class="nv44-quality-meters">
+                        <?php foreach(['seo'=>'Teknik SEO','geo'=>'GEO / AIO','content'=>'İçerik Kalitesi'] as $kind=>$name): ?>
+                        <div class="nv44-quality-meter" data-quality-meter="<?= e($kind) ?>">
+                            <div class="nv44-quality-meter-row"><strong><?= e($name) ?></strong><output data-quality-value>0</output></div>
+                            <div class="nv44-quality-track"><span data-quality-bar style="width:0%"></span></div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="nv44-quality-tabs" role="group" aria-label="Kalite kontrolü kriterleri">
+                        <button type="button" class="nv44-quality-tab active" data-quality-filter="seo" aria-pressed="true">SEO</button>
+                        <button type="button" class="nv44-quality-tab" data-quality-filter="geo" aria-pressed="false">GEO / AIO</button>
+                        <button type="button" class="nv44-quality-tab" data-quality-filter="content" aria-pressed="false">İçerik</button>
+                    </div>
+                    <ul id="nv44-quality-checks" class="nv44-quality-checks" aria-live="polite"></ul>
+                    <div class="nv44-serp">
+                        <strong><?= icon('search',13) ?> Arama Sonucu Önizlemesi</strong>
+                        <small id="nv44-serp-url">/blog/yazi-slug</small>
+                        <span id="nv44-serp-title">Makale SEO başlığı</span>
+                        <p id="nv44-serp-description">Meta açıklaması burada görüntülenir.</p>
+                    </div>
+                    <p class="nv44-words">Kelime sayısı: <strong id="nv44-word-count">0</strong></p>
+                </div>
+            </section>
+            <?php $nvSeoIsBlog=true; require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
+
+
             <div class="adm-card">
                 <div class="adm-card-header">
                     <h3><?= icon('settings', 16) ?> Yayın Durumu</h3>
@@ -288,8 +320,10 @@
 
         </div>
     </div>
-<?php require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
+
 </form>
+<link rel="stylesheet" href="<?= asset('css/blog-quality-v44.css') ?>?v=44.1">
+<script src="<?= asset('js/blog-quality-v44.js') ?>?v=44.1" defer></script>
 
 <!-- JS Kütüphaneleri (Select2 & TinyMCE) -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
