@@ -24,6 +24,11 @@ class NetveraScriptController extends Controller
 
     public function index(): void
     {
+        $this->renderCatalog('/hazir-scriptler');
+    }
+
+    private function renderCatalog(string $canonicalPath): void
+    {
         $q=mb_substr(trim((string)($_GET['q']??'')),0,70);
         $cat=trim((string)($_GET['category']??''));
         $categories=Catalog::categories();$categoryId=null;
@@ -31,7 +36,7 @@ class NetveraScriptController extends Controller
         $this->render('frontend/netvera-scripts',[
             'pageTitle'=>'Hazır Scriptler ve Profesyonel Yazılımlar',
             'metaDescription'=>'Sektörel PHP web yazılımları, otomasyon, CMS ve hazır script ürünleri.',
-            'canonicalUrl'=>url('/hazir-scriptler'),
+            'canonicalUrl'=>url($canonicalPath),
             'products'=>Catalog::all($q,$categoryId),
             'categories'=>$categories,'filterCategory'=>$cat,'filterQuery'=>$q,
         ]);
@@ -41,8 +46,20 @@ class NetveraScriptController extends Controller
     {
         // Preserve legacy 3-segment route. Missing category content receives
         // no synthetic products or redirect that would break indexed links.
+        $parent=null;
+        $child=null;
+        foreach (Catalog::categories() as $row) {
+            if ($row['slug']===$mainSlug) $parent=$row;
+            if ($row['slug']===$subSlug) $child=$row;
+        }
+        if (!$parent || !$child ||
+            (int)$child['parent_legacy_id']!==(int)$parent['legacy_id']) {
+            http_response_code(404);
+            $this->render('frontend/404',['pageTitle'=>'Yazılım Kategorisi Bulunamadı']);
+            return;
+        }
         $_GET['category']=$subSlug;
-        $this->index();
+        $this->renderCatalog('/hazir-scriptler/'.rawurlencode($mainSlug).'/'.rawurlencode($subSlug));
     }
 
     public function detail(string $slug): void
