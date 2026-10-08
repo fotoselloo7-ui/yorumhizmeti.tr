@@ -368,15 +368,40 @@ for(const screen of screens){
       // V34: the public ready-software category is a working page on clean
       // installs, and the agency menu always exposes its own fixed entry.
       if(p.route==='/hazir-yazilimlar' && ['mobil','masaustu'].includes(screen.name)){
-        if((await page.locator('.nv33-type').count())!==24 ||
-           !(await page.locator('.nv33-catalog-hero').count()) ||
-           !(await page.locator('#nv33-products').count())){
-          errors.push('Public script catalog is missing its 23 types or product area');failed=true;
+        if(!(await page.locator('.nv36-marketplace').count()) ||
+           !(await page.locator('.nv36-sidebar').count()) ||
+           !(await page.locator('.nv36-results-bar').count()) ||
+           !(await page.locator('#nv33-products').count()) ||
+           (await page.locator('.nv36-category-choice').count())!==35){
+          errors.push('Sidebar marketplace or 34 category types missing');failed=true;
         }
-        const link=page.locator('.nv33-type[href="/hazir-yazilimlar?tur=haber-sitesi-scripti"]');
-        if(!await link.count()){
-          errors.push('Script category type filter missing');failed=true;
+        const link=page.locator('.nv36-category-choice[href*="tur=haber-sitesi-scripti"]');
+        if(!await link.count())errors.push('Script category filter link missing');
+        const geo=await page.evaluate(()=>{
+          const sidebar=document.querySelector('.nv36-sidebar')?.getBoundingClientRect();
+          const products=document.querySelector('.nv36-results')?.getBoundingClientRect();
+          const hero=document.querySelector('.nv36-hero')?.getBoundingClientRect();
+          return {sidebarX:sidebar?.left,sideRight:sidebar?.right,productX:products?.left,productY:products?.top,
+            heroEnd:hero?.bottom,overflow:document.documentElement.scrollWidth>innerWidth+3};
+        });
+        if(geo.overflow||!(geo.productY<520) ||
+           (screen.name==='masaustu' && !(geo.productX>geo.sideRight))){
+          errors.push('Marketplace products below oversized filters or overflow: '+JSON.stringify(geo));failed=true;
         }
+        if(screen.name==='mobil'){
+          const toggle=page.locator('[data-software-filter-toggle]');
+          if(await toggle.getAttribute('aria-expanded')!=='false'){
+            errors.push('Mobile filters should be collapsed initially');failed=true;
+          }
+          await toggle.click();
+          if(await toggle.getAttribute('aria-expanded')!=='true'){
+            errors.push('Mobile filters did not expand');failed=true;
+          }
+        }
+        await page.locator('.nv36-marketplace').screenshot({
+          path:path.join(output,'software-marketplace-v36-'+screen.name+'.png'),
+          animations:'disabled'
+        });
       }
       if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
         if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
@@ -779,7 +804,12 @@ try {
   if(!(await showcasePage.getByText('Hazır Yazılımlar & Scriptler',{exact:true}).count()))
     throw new Error('Installed script category not visible in agency catalog');
 
-  await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
+  await showcasePage.goto(origin+'/admin/yazilim/ekle',{waitUntil:'domcontentloaded'});
+  const opts=await showcasePage.locator('select[name=category_id] option').allTextContents();
+  if(!opts.includes('Haber Sitesi Yazılımı') || opts.includes('Instagram Hizmetleri') ||
+     !opts.includes('WordPress Temaları')){
+    throw new Error('Dedicated software form leaked services or lacks software types: '+opts.slice(0,6));
+  }
   const productName='CI Yazılım Demo Paketi';
   const productSlug='ci-yazilim-demo-v31';
   await showcasePage.locator('input[name=name]').fill(productName);
@@ -788,13 +818,25 @@ try {
   await showcasePage.locator('textarea[name=short_description]').fill('CI için geçici yazılım vitrini testi, canlı satış ürünü değildir.');
   await showcasePage.locator('input[name=price]').fill('2500');
   await Promise.all([
-    showcasePage.waitForURL('**/admin/paketler',{waitUntil:'domcontentloaded'}),
+    showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
   ]);
   // New catalog-category products also appear without marking featured.
   await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
     throw new Error('New ready-script package requires an unnecessary manual feature selection');
+  // Real functional search, filtering and price sorting on live CI catalog.
+  await showcasePage.goto(origin+'/hazir-yazilimlar?q=Yaz%C4%B1l%C4%B1m',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv36-product-grid .nv31-software-card').count()))
+    throw new Error('Catalog search failed to show the software test record');
+  await showcasePage.goto(origin+'/hazir-yazilimlar?min=2000&max=2800&siralama=ucuz',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv36-product-grid a[href="/paket/'+productSlug+'"]').count()) ||
+     await showcasePage.locator('.nv36-product-grid a[href="/paket/'+legacySlug+'"]').count()){
+    throw new Error('Price filter did not isolate matching products');
+  }
+  await showcasePage.goto(origin+'/hazir-yazilimlar?tur=wordpress-temalari',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv33-catalog-empty').count()))
+    throw new Error('Empty WordPress subcategory should show helpful empty state');
   await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
   const productRow=showcasePage.locator('.adm31-package-row').filter({hasText:productName});
   if(!(await productRow.count()))throw new Error('Newly saved software package absent from showcase admin');
