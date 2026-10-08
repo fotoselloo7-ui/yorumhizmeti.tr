@@ -969,6 +969,41 @@ try {
   // Blog editor integration: scores update, fields survive save/reopen,
   // and answer/source are visible on the published article.
   await showcasePage.goto(origin+'/admin/blog/ekle',{waitUntil:'domcontentloaded'});
+  // The old editor used unloaded Remix icons and became a row of empty controls.
+  // Every toolbar action must now have a real human-readable label.
+  const toolbar=showcasePage.locator('.nv46-markdown-toolbar');
+  const editorToolbar=await toolbar.locator('button.md-btn').evaluateAll(buttons=>
+    buttons.map(el=>({
+      label:el.textContent.trim(),
+      aria:el.getAttribute('aria-label'),
+      shown:el.getBoundingClientRect().width>20&&el.getBoundingClientRect().height>24
+    })));
+  if(editorToolbar.length<10 || editorToolbar.some(x=>!x.label||!x.shown))
+    throw new Error('Admin article toolbar has missing/blank controls: '+JSON.stringify(editorToolbar));
+  const editStyles=await showcasePage.evaluate(()=>{
+    const form=document.querySelector('.nv46-blog-editor');
+    const label=form?.querySelector('.form-group label');
+    const input=form?.querySelector('input.form-control');
+    const raw=form?.querySelector('#raw_content');
+    const preview=form?.querySelector('.nv46-preview-pane');
+    return {
+      formExists:!!form,
+      labelFont:label?parseFloat(getComputedStyle(label).fontSize):0,
+      inputFont:input?parseFloat(getComputedStyle(input).fontSize):0,
+      textareaFont:raw?parseFloat(getComputedStyle(raw).fontSize):0,
+      hasPreview:!!preview,
+      editorWidth:raw?.getBoundingClientRect().width||0,
+      previewWidth:preview?.getBoundingClientRect().width||0
+    };
+  });
+  if(!editStyles.formExists || editStyles.labelFont<11 || editStyles.inputFont<11 ||
+     editStyles.textareaFont<12 || !editStyles.hasPreview ||
+     editStyles.editorWidth<180 || editStyles.previewWidth<180)
+    throw new Error('Admin article editing controls too small or broken: '+JSON.stringify(editStyles));
+  // Formatting actions must modify the actual Markdown and update live scoring.
+  await toolbar.locator('button[aria-label="Kalın metin"]').click();
+  if(!(await showcasePage.locator('#raw_content').inputValue()).includes('**metin**'))
+    throw new Error('Bold toolbar button does not modify Markdown editor');
   if((await showcasePage.locator('[data-quality-meter]').count())!==3)
     throw new Error('Blog SEO/GEO/AIO analysis fields missing');
   await showcasePage.locator('#title').fill('CI Editoryal Kalite ve GEO Test Rehberi');
