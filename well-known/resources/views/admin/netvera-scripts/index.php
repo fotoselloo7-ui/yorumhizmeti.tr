@@ -9,6 +9,7 @@
   <p style="font-size:12px;margin:8px 0 0">Orijinal ürün verileri, görselleri ve bağlantıları aktif. Yerel veritabanına aktarım henüz yapılmadığı için ürün düzenleme ve yeni yazılım kaydetme bu ekranda kapalıdır.</p>
   <a href="/admin/netvera-kategoriler" class="btn btn-outline btn-sm" style="margin-top:12px">Kategori ve Yerel Kurulum</a>
 </div></div>
+<?php endif; ?>
 <div class="adm-card">
  <div class="adm-card-header"><h3><?= icon('layers',17) ?> Yazılım Ürünleri (<?= count($products) ?>)</h3></div>
  <div class="adm-card-body">
@@ -27,4 +28,3 @@
   </table></div>
  </div>
 </div>
-<?php endif; ?>
