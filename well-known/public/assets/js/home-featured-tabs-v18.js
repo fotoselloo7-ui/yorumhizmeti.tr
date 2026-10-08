@@ -212,6 +212,10 @@
     };
 
     categoryRails.forEach(rail => {
+      // Prevent browser-native dragging of anchor labels; it steals pointer
+      // events from the horizontal rail and makes desktop swipe unreliable.
+      rail.querySelectorAll('a').forEach(link=>{link.draggable=false;});
+      rail.addEventListener('dragstart',e=>e.preventDefault());
       const wrapper = rail.closest('.nv43-rail-shell');
       wrapper?.querySelector('[data-featured-rail-prev]')?.addEventListener('click',() => {
         pauseTemporarily();moveRail(rail,-1);
@@ -235,6 +239,7 @@
           rail.classList.add('is-dragging');
           rail.setPointerCapture?.(e.pointerId);
         }
+        if(e.cancelable)e.preventDefault();
         rail.scrollLeft=pointer.left-dx;
         pauseTemporarily();
       });
@@ -245,6 +250,12 @@
           window.setTimeout(()=>{preventClick=false;},130);
         }
         rail.classList.remove('is-dragging');
+        if(pointer.moved){
+          // Delay re-enabling scroll snap so it cannot rubber-band to the
+          // previous tile immediately after the mouse button is released.
+          rail.classList.add('is-drag-released');
+          window.setTimeout(()=>rail.classList.remove('is-drag-released'),280);
+        }
         if(rail.hasPointerCapture?.(e.pointerId))rail.releasePointerCapture(e.pointerId);
         pointer=null;
         updateRailButtons(rail);
