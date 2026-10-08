@@ -310,19 +310,13 @@
                       <?php endforeach; ?>
                       <?php if ($nv27Agency): ?>
                       <?php
-                        // Keep the ready scripts entry as the sixth regular card,
-                        // even before the optional admin category installer runs.
-                        $nv35ScriptTypes = \App\Services\SoftwareCatalogService::definitions();
-                        $nv35ScriptExamples = array_filter(
-                          $nv35ScriptTypes,
-                          static fn($item) => in_array($item[1], [
-                            'haber-sitesi-scripti', 'emlak-sitesi-scripti',
-                            'e-ticaret-scripti', 'otel-rezervasyon-scripti'
-                          ], true)
-                        );
+                        // Use the real public Netvera script catalogue, with no demo categories.
+                        // Preserve the pre-existing service-package page as a secondary link.
+                        $nv35NetveraCategories = \App\Services\NetveraBridgeService::categories();
+                        $nv35RealSoftwareCount = count(\App\Services\NetveraBridgeService::all());
                       ?>
                       <article class="nv27-service-card nv27-style-software nv35-software-card" data-software-menu-card>
-                        <a href="/hazir-yazilimlar" class="nv27-service-parent">
+                        <a href="/hazir-scriptler" class="nv27-service-parent">
                           <span class="nv27-service-icon"><?= icon('monitor', 23) ?></span>
                           <span class="nv27-service-parent-copy">
                             <strong>Hazır Yazılımlar &amp; Scriptler</strong>
@@ -331,18 +325,22 @@
                           <span class="nv27-service-parent-arrow"><?= icon('arrow-up-right', 14) ?></span>
                         </a>
                         <div class="nv27-subcategory-area">
-                          <span class="nv27-subcategory-caption">ALT HİZMETLER</span>
+                          <span class="nv27-subcategory-caption">YAZILIM KATEGORİLERİ</span>
                           <div class="nv27-subcategory-grid">
-                            <?php foreach ($nv35ScriptExamples as [$scriptName, $scriptSlug, $scriptDescription, $scriptIcon]): ?>
-                            <a class="nv27-subcategory-link" href="/hazir-yazilimlar?tur=<?= rawurlencode($scriptSlug) ?>" title="<?= e($scriptDescription) ?>">
-                              <span class="nv27-subcategory-symbol"><?= icon($scriptIcon, 13) ?></span>
-                              <span><?= e($scriptName) ?></span>
+                            <?php foreach ($nv35NetveraCategories as $nv35Category): ?>
+                            <a class="nv27-subcategory-link" href="/hazir-scriptler?category=<?= rawurlencode((string)$nv35Category['slug']) ?>" title="<?= e($nv35Category['name']) ?>">
+                              <span class="nv27-subcategory-symbol"><?= icon('folder', 13) ?></span>
+                              <span><?= e($nv35Category['name']) ?></span>
                             </a>
                             <?php endforeach; ?>
+                            <a class="nv27-subcategory-link" href="/hazir-yazilimlar" title="Yazılım hizmet paketleri">
+                              <span class="nv27-subcategory-symbol"><?= icon('layers', 13) ?></span>
+                              <span>Yazılım Hizmet Paketleri</span>
+                            </a>
                           </div>
                         </div>
-                        <a href="/hazir-yazilimlar" class="nv27-category-footer">
-                          Tüm <?= count($nv35ScriptTypes) ?> yazılım kategorisini keşfet <?= icon('arrow-right', 12) ?>
+                        <a href="/hazir-scriptler" class="nv27-category-footer">
+                          <?= $nv35RealSoftwareCount ?> gerçek yazılımı incele <?= icon('arrow-right', 12) ?>
                         </a>
                       </article>
                       <?php endif; ?>
