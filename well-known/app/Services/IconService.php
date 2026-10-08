@@ -38,7 +38,11 @@ class IconService
         'power'=>['solid','power-off'],'rotate-ccw'=>['solid','rotate-left'],
         'whatsapp'=>['brands','whatsapp'],'instagram'=>['brands','instagram'],'facebook'=>['brands','facebook-f'],
         'tiktok'=>['brands','tiktok'],'google'=>['brands','google'],'youtube'=>['brands','youtube'],
-        'twitter'=>['brands','x-twitter']
+        'twitter'=>['brands','x-twitter'],'threads'=>['brands','threads'],'telegram'=>['brands','telegram'],
+        'spotify'=>['brands','spotify'],'discord'=>['brands','discord'],'linkedin'=>['brands','linkedin-in'],
+        'twitch'=>['brands','twitch'],'store'=>['solid','store'],'mobile-app'=>['solid','mobile-screen-button'],
+        'content-create'=>['solid','pen-nib'],'palette'=>['solid','palette'],'local-business'=>['solid','location-dot'],
+        'reputation'=>['solid','shield-halved'],'ads'=>['solid','bullhorn']
     ];
 
     public static function render(string $name, int $size = 20, string $class = ''): string
