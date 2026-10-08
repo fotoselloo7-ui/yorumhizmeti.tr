@@ -29,3 +29,31 @@
 <div class="form-group"><label><?= e($label) ?> JSON</label><textarea class="form-control" name="<?= $key ?>" rows="3"><?= e($d[$key]??'[]') ?></textarea></div><?php endforeach; ?>
 <button class="btn btn-primary" type="submit">Kaydet</button>
 </div></div></form>
+
+<?php if($edit && !empty($product['legacy_id'])): ?>
+<div class="adm-card" style="margin-top:18px">
+ <div class="adm-card-header"><h3><?= icon('image',17) ?> Ürün Ekran Görüntüleri</h3></div>
+ <div class="adm-card-body">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin-bottom:16px">
+   <?php foreach(($gallery??[]) as $img): ?>
+   <div style="border:1px solid #e5e6ee;border-radius:10px;overflow:hidden;padding:8px">
+    <img src="<?= e(upload_url($img['image_path'])) ?>" alt="<?= e($img['alt_text']?:'Yazılım ekran görüntüsü') ?>" style="width:100%;aspect-ratio:16/10;object-fit:contain">
+    <p style="font-size:10px;margin:7px 0"><?= e($img['alt_text']??'') ?></p>
+    <form method="POST" action="/admin/netvera-yazilimlar/galeri/gizle">
+     <?= csrfField() ?>
+     <input type="hidden" name="product_id" value="<?= (int)$product['legacy_id'] ?>">
+     <input type="hidden" name="image_id" value="<?= (int)$img['legacy_id'] ?>">
+     <button type="submit" class="btn btn-outline btn-sm">Gizle (dosyayı koru)</button>
+    </form>
+   </div><?php endforeach; ?>
+  </div>
+  <form method="POST" enctype="multipart/form-data" action="/admin/netvera-yazilimlar/galeri/ekle">
+   <?= csrfField() ?><input type="hidden" name="product_id" value="<?= (int)$product['legacy_id'] ?>">
+   <div class="form-group"><label>Yeni Ekran Görüntüsü</label><input type="file" required name="image" class="form-control" accept="image/jpeg,image/png,image/webp"></div>
+   <div class="form-group"><label>Alt Metin (SEO)</label><input name="alt_text" class="form-control" maxlength="290"></div>
+   <div class="form-group"><label>Açıklama</label><input name="caption" class="form-control" maxlength="1500"></div>
+   <button class="btn btn-primary" type="submit">Galeriye Ekle</button>
+  </form>
+ </div>
+</div>
+<?php endif; ?>
