@@ -163,7 +163,7 @@ final class NetveraScriptController extends Controller
         }
         try{
             $source=file_get_contents(BASE_PATH.'/database/migrations/netvera-legacy-bridge-v1.sql');
-            if($source===false)throw new \\RuntimeException('Migration file not found');
+            if($source===false)throw new \RuntimeException('Migration file not found');
             // This controlled local SQL contains only CREATE TABLE IF NOT EXISTS.
             // No user-supplied queries, customer data or payment-table changes.
             foreach(explode(';',$source) as $statement){
@@ -171,11 +171,11 @@ final class NetveraScriptController extends Controller
                 $statement=preg_replace('/^--[^\\r\\n]*(?:\\r?\\n|$)/m','',$statement);
                 if(trim($statement)==='')continue;
                 if(!preg_match('/^CREATE TABLE IF NOT EXISTS nv_legacy_/i',trim($statement)))
-                    throw new \\RuntimeException('Non-allowlisted migration statement');
+                    throw new \RuntimeException('Non-allowlisted migration statement');
                 $this->db->getPdo()->exec($statement);
             }
             flash('success','Staging içerik tabloları hazır. Mevcut kullanıcı, sipariş ve ödeme verilerine dokunulmadı.');
-        }catch(\\Throwable $e){
+        }catch(\Throwable $e){
             error_log('Netvera bridge staging schema setup failed: '.$e->getMessage());
             flash('error','Staging tablo kurulumu tamamlanamadı. Sunucu loglarını kontrol edin.');
         }
@@ -248,7 +248,7 @@ final class NetveraScriptController extends Controller
             }
             logActivity('netvera_category_save','Netvera kategori kaydı: '.$name);
             flash('success','Kategori kaydedildi; eski kategori slug ve ürün adresleri korunuyor.');
-        }catch(\\Throwable $e){
+        }catch(\Throwable $e){
             error_log('Netvera category save: '.$e->getMessage());
             flash('error','Kategori kaydedilemedi. Sunucu kayıtlarını kontrol edin.');
         }
