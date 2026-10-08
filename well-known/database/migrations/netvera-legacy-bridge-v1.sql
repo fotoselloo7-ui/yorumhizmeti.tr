@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS nv_legacy_script_products (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS nv_legacy_script_images (
- legacy_id INT UNSIGNED NOT NULL PRIMARY KEY,
+ legacy_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
  product_legacy_id INT UNSIGNED NOT NULL,
  image_path VARCHAR(600) NOT NULL,
  alt_text VARCHAR(300) NULL,
