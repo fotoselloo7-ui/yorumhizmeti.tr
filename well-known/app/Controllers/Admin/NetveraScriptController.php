@@ -104,7 +104,15 @@ final class NetveraScriptController extends Controller
         $oldPrice=($_POST['old_price']??'')===''?null:max(0,round((float)$_POST['old_price'],2));
         $image=$old['cover_image']??null;
         if(!empty($_FILES['image']['name'])){
-            $image=Upload::image($_FILES['image'],'scripts');
+            try{$uploaded=Upload::image($_FILES['image'],'scripts');}
+            catch(\Throwable $e){$uploaded=null;}
+            // A failed upload must never erase the existing indexed cover image.
+            if(!$uploaded){
+                flash('error','Kapak görseli yüklenemedi; mevcut görsel korunuyor.');
+                redirect($id?'/admin/netvera-yazilimlar/'.$id.'/duzenle':'/admin/netvera-yazilimlar/ekle');
+                return;
+            }
+            $image=$uploaded;
         }
         $newData=array_merge($newData,[
             'id'=>$id,'name'=>$name,'slug'=>$slug,'category_id'=>$category,
@@ -270,8 +278,9 @@ final class NetveraScriptController extends Controller
             redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');return;
         }
         try{$image=Upload::image($_FILES['image'],'scripts');}
-        catch(\Throwable $e){
-            flash('error','Galeri görseli yüklenemedi.');
+        catch(\Throwable $e){$image=null;}
+        if(!$image){
+            flash('error','Galeri görseli yüklenemedi. Orijinal galeri korunuyor.');
             redirect('/admin/netvera-yazilimlar/'.$id.'/duzenle');return;
         }
         $row=$this->db->fetch('SELECT MAX(sort_order) AS max_order FROM nv_legacy_script_images WHERE product_legacy_id=?',[$id]);
