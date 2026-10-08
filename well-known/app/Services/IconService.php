@@ -51,7 +51,14 @@ class IconService
         'arrow-up-right'=>['solid','arrow-up-right'],
         'monitor'=>['solid','desktop'],
         'share-2'=>['solid','share-nodes'],
-        'sliders-horizontal'=>['solid','sliders']
+        'sliders-horizontal'=>['solid','sliders'],
+        'pinterest'=>['brands','pinterest-p'],
+        'snapchat'=>['brands','snapchat'],
+        'soundcloud'=>['brands','soundcloud'],
+        'github'=>['brands','github'],
+        'bluesky'=>['brands','bluesky'],
+        'tumblr'=>['brands','tumblr'],
+        'kick'=>['solid','bolt']
     ];
 
     public static function render(string $name, int $size = 20, string $class = ''): string

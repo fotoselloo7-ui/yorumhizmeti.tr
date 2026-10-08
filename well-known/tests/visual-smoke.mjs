@@ -175,6 +175,48 @@ for(const screen of screens){
           }
         }
       }
+      // Mega menu is a separate keyboard/touch module from the category tile directory.
+      if((p.route==='/'||p.route==='/kategoriler') && ['masaustu','mobil'].includes(screen.name)){
+        const triggers=page.locator('#navMain [data-mega-trigger]');
+        if((await triggers.count())<2){
+          errors.push('Social and agency mega menu entries missing');failed=true;
+        }else if(screen.name==='masaustu'){
+          await triggers.first().hover();
+          const panel=page.locator('#navMain [data-mega-panel]:not([hidden])');
+          if((await panel.count())!==1 || !(await panel.locator('.nv26-mega-parent[href^="/kategori/"]').count())){
+            errors.push('Hover mega menu does not show real category links');failed=true;
+          }
+          await page.keyboard.press('Escape');
+          if(await page.locator('#navMain [data-mega-panel]:not([hidden])').count()){
+            errors.push('Mega menu Escape close failed');failed=true;
+          }
+        }else{
+          const btn=page.locator('#mobileMenuBtn');
+          await btn.click();
+          if(!(await page.locator('#navMain').evaluate(el=>el.classList.contains('open')))){
+            errors.push('Mobile navigation drawer did not open');failed=true;
+          }
+          await triggers.first().click();
+          if(!(await page.locator('#navMain [data-mega-panel]:not([hidden])').count())){
+            errors.push('Mobile group accordion did not expand');failed=true;
+          }
+          await btn.click();
+        }
+      }
+      if(p.route==='/kategoriler' && ['masaustu','mobil'].includes(screen.name)){
+        if(!(await page.locator('.nv26-catalog-group').count()) || !(await page.locator('.nv26-catalog-tile').count())){
+          errors.push('Live colorful category grid is missing');failed=true;
+        }
+        if(!(await page.locator('.nv26-catalog-tile a[href^="/kategori/"]').count())){
+          errors.push('Category tiles are not linked to catalog records');failed=true;
+        }
+        const dimensions=await page.locator('.nv26-catalog-tiles').first().evaluate(el=>({
+          width:el.clientWidth,scroll:el.scrollWidth
+        }));
+        if(dimensions.scroll>dimensions.width+3){
+          errors.push('Platform category tiles overflow their grid');failed=true;
+        }
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){

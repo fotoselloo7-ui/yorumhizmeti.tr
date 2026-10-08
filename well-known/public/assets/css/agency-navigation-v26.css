@@ -78,3 +78,15 @@
  .nv26-mega-top>a{white-space:normal}
 }
 @media(prefers-reduced-motion:reduce){.nv26-mega-panel{animation:none}.nv26-menu-trigger{transition:none}}
+
+/* Tablet consistency: the menu button and the second-row navigation never compete. */
+@media(min-width:961px) and (max-width:1024px){
+  .site-header .mobile-menu-btn{display:none!important}
+}
+@media(min-width:961px) and (max-width:1199px){
+  .nv26-quick summary{font-size:10px}
+  .nv26-menu-end{gap:3px}
+}
+@media(max-width:960px){
+  .site-header .mobile-menu-btn{display:flex!important}
+}
