@@ -239,7 +239,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
         <div class="yh6-blog-grid">
             <?php foreach(array_slice($latestPosts,0,4) as $post): [$postCls,$postIco,$postLabel]=yh6Platform($post['category_slug']??'', $post['category_name']??$post['title']); ?>
             <a href="/blog/<?= e($post['slug']) ?>" class="yh6-blog-card">
-                <div class="yh6-blog-image <?= e($postCls) ?>"><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><?php else: ?><span><?= icon($postIco,28) ?></span><?php endif; ?></div>
+                <div class="yh6-blog-image <?= e($postCls) ?>"><img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><span class="yh6-blog-image-badge"><?= icon($postIco,15) ?></span></div>
                 <div><small><?= e($post['category_name']??'Rehber') ?></small><h3><?= e($post['title']) ?></h3><p><?= e(excerpt(strip_tags($post['excerpt']??$post['content']??''),95)) ?></p><em><?= !empty($post['published_at'])?formatDate($post['published_at'],'d M Y'):'Güncel' ?> · 5 dk okuma</em></div>
             </a>
             <?php endforeach; ?>
