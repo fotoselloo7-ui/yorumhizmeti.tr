@@ -51,6 +51,7 @@
     <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/forms-functional-v20.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
