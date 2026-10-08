@@ -1,0 +1,70 @@
+name: Netvera Public Image Transfer
+
+on:
+  push:
+    branches: [staging/netvera-source-integration]
+    paths:
+      - '.github/workflows/netvera-media-mirror.yml'
+      - 'well-known/scripts/mirror-netvera-public-images.php'
+      - 'well-known/database/netvera-public-catalog.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: netvera-public-assets-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  migrate-public-images:
+    if: github.ref == 'refs/heads/staging/netvera-source-integration'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, fileinfo, gd
+          tools: none
+      - name: Confirm approved media manifest and safety gate
+        run: |
+          php -l well-known/scripts/mirror-netvera-public-images.php
+          php well-known/scripts/mirror-netvera-public-images.php
+      - name: Mirror Netvera original public image assets (3 attempts)
+        id: mirror
+        shell: bash
+        env:
+          NETVERA_MEDIA_MIRROR_ALLOWED: '1'
+        run: |
+          set +e
+          ok=1
+          for attempt in 1 2 3; do
+            echo "Media mirror attempt $attempt"
+            php well-known/scripts/mirror-netvera-public-images.php --apply
+            result=$?
+            if [ "$result" -eq 0 ]; then ok=0; break; fi
+            sleep 3
+          done
+          echo "mirror_exit=$ok" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Save only approved image folders to staging
+        shell: bash
+        run: |
+          git config user.name "netvera-migration-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- well-known/public/uploads/scripts well-known/public/uploads/blog
+          if ! git diff --cached --quiet; then
+            git commit -m "data(media): add original Netvera public product and blog images"
+            git push origin HEAD:staging/netvera-source-integration
+          else
+            echo "No new media images to commit."
+          fi
+      - name: Surface incomplete media transfers
+        if: steps.mirror.outputs.mirror_exit != '0'
+        run: |
+          echo "::warning::Some original public media URLs could not be fetched from netvera.tr. Existing media were preserved; import ZIP remains a fallback."
+          exit 1
