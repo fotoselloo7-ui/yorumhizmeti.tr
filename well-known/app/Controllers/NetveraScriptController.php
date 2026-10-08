@@ -89,9 +89,15 @@ class NetveraScriptController extends Controller
         }
         $data=Catalog::jsonFields($p);
         $reviews=Catalog::reviews((int)$p['legacy_id']);
+        $ogImage=Catalog::publicUrl($data['og_image']??null);
+        if(!$ogImage && str_starts_with((string)($data['og_image']??''),'/uploads/')){
+            $ogImage=url((string)$data['og_image']);
+        }
+        if(!$ogImage && !empty($p['cover_image']))$ogImage=url($p['cover_image']);
         $schema=[
             '@context'=>'https://schema.org','@type'=>'SoftwareApplication',
             'name'=>$p['name'],
+            'url'=>url('/hazir-scriptler/'.$p['slug']),
             'description'=>trim(strip_tags((string)($p['short_desc']??''))),
             'offers'=>[
                 '@type'=>'Offer','price'=>(float)$p['price'],
@@ -100,6 +106,8 @@ class NetveraScriptController extends Controller
             ],
             'applicationCategory'=>'BusinessApplication',
         ];
+        if(!empty($p['cover_image']))$schema['image']=url($p['cover_image']);
+        if(!empty($data['current_version']))$schema['softwareVersion']=(string)$data['current_version'];
         if($reviews){
             $schema['aggregateRating']=[
                 '@type'=>'AggregateRating',
@@ -112,9 +120,9 @@ class NetveraScriptController extends Controller
             'metaDescription'=>$p['meta_description'] ?: strip_tags((string)$p['short_desc']),
             'canonicalUrl'=>url('/hazir-scriptler/'.$p['slug']),
             'ogType'=>'product',
-            'ogTitle'=>$p['meta_title'] ?: $p['name'],
-            'ogDescription'=>$p['meta_description'] ?: strip_tags((string)$p['short_desc']),
-            'ogImage'=>!empty($p['cover_image'])?url($p['cover_image']):null,
+            'ogTitle'=>trim((string)($data['og_title']??'')) ?: ($p['meta_title'] ?: $p['name']),
+            'ogDescription'=>trim((string)($data['og_description']??'')) ?: ($p['meta_description'] ?: strip_tags((string)$p['short_desc'])),
+            'ogImage'=>$ogImage,
             'schema'=>json_encode($schema,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|
                 JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT),
             'product'=>$p,'productData'=>$data,
