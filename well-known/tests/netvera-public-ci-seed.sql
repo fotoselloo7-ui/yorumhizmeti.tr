@@ -13,3 +13,10 @@ INSERT INTO nv_legacy_script_products
  'Temizlik Scripti QA','Test','{"current_version":"1.0.0"}',2,1),
  (50,11,'netvera-emlak-script-yazilimi-pro','Emlak Scripti — QA','Test amaçlı','<p>Test</p>',3500,NULL,
  'Emlak Scripti QA','Test','{"current_version":"1.0.0"}',3,1);
+
+-- Synthetic approved-review fixtures for safe rating filters. Never real customers.
+INSERT INTO nv_legacy_public_reviews
+ (legacy_id,product_legacy_id,rating,comment,created_at)
+ VALUES
+ (801,47,5,'Yalnızca QA otomasyon verisi',NOW()),
+ (802,49,4,'Yalnızca QA otomasyon verisi',NOW());
