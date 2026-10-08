@@ -54,7 +54,8 @@
     <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.1
+    <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.2">
+    <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -419,7 +420,7 @@
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>"></script>
-    <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.1</script>
+    <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
     <?= setting('footer_script') ?>
 </body>
 </html>
