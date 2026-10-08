@@ -28,7 +28,7 @@
    <main>
     <article class="yv-content-card" style="max-width:none;margin:0">
      <?php if(!empty($toc)): ?><div class="blog-toc" style="margin-bottom:22px;padding:16px"><strong style="font-size:11px">İçindekiler</strong><ul style="margin:10px 0 0;padding-left:18px"><?php foreach($toc as $item): ?><li style="font-size:9px;margin:6px 0"><a href="#<?= e($item['id']??'') ?>"><?= e($item['text']??'') ?></a></li><?php endforeach; ?></ul></div><?php endif; ?>
-     <div class="blog-body"><?= $post['content'] ?></div>
+     <div class="blog-body nv42-article-body"><?= \App\Services\BlogContentRenderer::render((string)$post['content']) ?></div>
      <?php if(!empty($tags)): ?><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid #edf0f4"><?php foreach($tags as $tag): ?><a class="yv-blog-chip" href="/blog?tag=<?= e($tag['slug']) ?>">#<?= e($tag['name']) ?></a><?php endforeach; ?></div><?php endif; ?>
     </article>
 
