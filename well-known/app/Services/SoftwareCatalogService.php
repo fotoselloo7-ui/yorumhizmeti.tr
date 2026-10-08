@@ -97,10 +97,9 @@ final class SoftwareCatalogService
      * under Web Site Hizmetleri). Keep them discoverable until an admin moves
      * them to the new dedicated categories; never move or mutate product data.
      */
-    public static function eligiblePackages(): array
+    private static function allPackages(): array
     {
-        $rootId = (int)(self::root()['id'] ?? 0);
-        $rows = Database::getInstance()->fetchAll(
+        return Database::getInstance()->fetchAll(
             "SELECT p.*, c.name AS category_name, c.slug AS category_slug,
                     c.status AS category_status, c.parent_id AS category_parent_id,
                     parent.status AS parent_status
@@ -109,8 +108,14 @@ final class SoftwareCatalogService
              LEFT JOIN categories parent ON parent.id = c.parent_id
              ORDER BY p.sort_order ASC, p.id DESC"
         );
+    }
+
+    public static function eligiblePackages(): array
+    {
+        $rootId = (int)(self::root()['id'] ?? 0);
+        $selected = array_fill_keys(self::preferences()['ids'], true);
         $results = [];
-        foreach ($rows as $pkg) {
+        foreach (self::allPackages() as $pkg) {
             $inSoftwareFamily = $rootId > 0
                 && ((int)$pkg['category_id'] === $rootId
                     || (int)$pkg['category_parent_id'] === $rootId);
@@ -119,10 +124,21 @@ final class SoftwareCatalogService
                 (string)$pkg['category_name'] . ' ' . (string)$pkg['category_slug'],
                 'UTF-8'
             );
-            $isExistingSoftware = preg_match('/script|yazılım|yazilim|software|\\bcms\\b/u', $label) === 1;
-            if ($inSoftwareFamily || $isExistingSoftware) $results[] = $pkg;
+            // Regex is keyword discovery only. Admin may explicitly mark other
+            // products as software without editing or migrating categories.
+            $isExistingSoftware = preg_match('/script|yazılım|yazilim|software|cms/u', $label) === 1;
+            if ($inSoftwareFamily || $isExistingSoftware || isset($selected[(int)$pkg['id']])) {
+                $results[] = $pkg;
+            }
         }
         return $results;
+    }
+
+    public static function otherPackages(): array
+    {
+        $recognized = array_fill_keys(array_map('intval', array_column(self::eligiblePackages(), 'id')), true);
+        return array_values(array_filter(self::allPackages(), static fn($p) =>
+            !isset($recognized[(int)$p['id']])));
     }
 
     public static function publicPackages(): array
@@ -151,8 +167,8 @@ final class SoftwareCatalogService
 
     public static function save(array $ids, bool $enabled): void
     {
-        $eligible = array_column(self::eligiblePackages(), 'id');
-        $allowed = array_fill_keys(array_map('intval', $eligible), true);
+        $all = Database::getInstance()->fetchAll("SELECT id FROM packages");
+        $allowed = array_fill_keys(array_map('intval', array_column($all, 'id')), true);
         $selected = [];
         foreach ($ids as $id) {
             $id = (int)$id;
