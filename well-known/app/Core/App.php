@@ -11,6 +11,8 @@ class App
     {
         self::$instance = $this;
         $this->db = Database::getInstance();
+        // Automatic only on loopback local preview; no production writes.
+        \App\Services\NetveraLocalSetup::boot();
         $this->router = new Router();
         $this->registerRoutes();
     }
