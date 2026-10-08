@@ -180,6 +180,7 @@ class PackageController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $pkgId = $this->db->insert('packages', $data);
+        \App\Services\NetveraSeoBridge::save('package',(int)$pkgId,$_POST);
         logActivity('package_create', 'Paket oluşturuldu: ' . $data['name']);
         flash('success', 'Paket oluşturuldu.');
         redirect('/admin/paketler');
