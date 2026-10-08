@@ -7,6 +7,7 @@ const output = process.env.QA_OUTPUT || 'qa-artifacts';
 const runs = [
   { route:'/',slug:'anasayfa' },
   { route:'/kategoriler',slug:'tum-hizmetler' },
+  { route:'/hazir-yazilimlar',slug:'hazir-yazilimlar' },
   { route:'/kategori/instagram-hizmetleri',slug:'instagram' },
   { route:'/kategori/web-site-hizmetleri',slug:'web-site' },
   { route:'/paket/google-harita-yorum-toplama-baslangic-paketi-10-davet',slug:'paket-detay' },
@@ -34,7 +35,7 @@ for(const screen of screens){
   const ctx=await browser.newContext({viewport:{width:screen.w,height:screen.h},deviceScaleFactor:1});
   for(const p of runs){
     // Run a wide range of routes on mobile/desktop; tablet/wide sanity-check key pages.
-    if ((screen.name==='tablet'||screen.name==='genis') && !['anasayfa','tum-hizmetler','instagram','paket-detay','blog'].includes(p.slug)) continue;
+    if ((screen.name==='tablet'||screen.name==='genis') && !['anasayfa','tum-hizmetler','hazir-yazilimlar','instagram','paket-detay','blog'].includes(p.slug)) continue;
     const page=await ctx.newPage();
     const errors=[];
     page.on('pageerror',e=>errors.push('JS: '+e.message));
@@ -358,6 +359,34 @@ for(const screen of screens){
           await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});
         }
       }
+      // V34: the public ready-software category is a working page on clean
+      // installs, and the agency menu always exposes its own fixed entry.
+      if(p.route==='/hazir-yazilimlar' && ['mobil','masaustu'].includes(screen.name)){
+        if((await page.locator('.nv33-type').count())!==24 ||
+           !(await page.locator('.nv33-catalog-hero').count()) ||
+           !(await page.locator('#nv33-products').count())){
+          errors.push('Public script catalog is missing its 23 types or product area');failed=true;
+        }
+        const link=page.locator('.nv33-type[href="/hazir-yazilimlar?tur=haber-sitesi-scripti"]');
+        if(!await link.count()){
+          errors.push('Script category type filter missing');failed=true;
+        }
+      }
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        const agency=page.locator('[data-mega-trigger][aria-controls="nv26-panel-agency"]');
+        if(await agency.count()){
+          if(screen.name==='mobil') await agency.click();
+          else await agency.hover();
+          const software=page.locator('#nv26-panel-agency .nv33-software-feature');
+          if(!(await software.locator('a[href="/hazir-yazilimlar"]').count()) ||
+             (await software.locator('.nv33-software-feature-chips a[href^="/hazir-yazilimlar?tur="]').count())<5){
+            errors.push('Fixed software menu is missing even though agency category exists');failed=true;
+          }
+          if(screen.name==='masaustu') await page.keyboard.press('Escape');
+        }
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+      }
       // V32: service and portfolio sections exist even on a new, empty DB.
       if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
         const ready=await page.evaluate(()=>{
@@ -680,6 +709,28 @@ try {
     showcasePage.waitForURL('**/admin',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').click()
   ]);
+  // Older scripts added under the existing Web Site category must show up
+  // automatically, WITHOUT installing the 23 new categories or selecting a
+  // special featured flag. This reproduces the user's local problem.
+  await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
+  const legacyName='CI Eski Kategori Yazılım Scripti';
+  const legacySlug='ci-eski-kategori-yazilim-scripti';
+  await showcasePage.locator('input[name=name]').fill(legacyName);
+  await showcasePage.locator('input[name=slug]').fill(legacySlug);
+  await showcasePage.locator('select[name=category_id]').selectOption({label:'Web Site Hizmetleri'});
+  await showcasePage.locator('textarea[name=short_description]').fill('Geçici test yazılımı; eski kategoriden otomatik bulunmalıdır.');
+  await showcasePage.locator('input[name=price]').fill('1800');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/paketler',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count()))
+    throw new Error('Legacy-category ready script was NOT automatically displayed');
+  await showcasePage.goto(origin+'/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count()))
+    throw new Error('Legacy-category ready script missing from standalone software catalog');
+
   await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.locator('.adm31-setup-row form button[type=submit]').count()))throw new Error('Software category installer missing');
   await Promise.all([
@@ -702,6 +753,10 @@ try {
     showcasePage.waitForURL('**/admin/paketler',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
   ]);
+  // New catalog-category products also appear without marking featured.
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
+    throw new Error('New ready-script package requires an unnecessary manual feature selection');
   await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
   const productRow=showcasePage.locator('.adm31-package-row').filter({hasText:productName});
   if(!(await productRow.count()))throw new Error('Newly saved software package absent from showcase admin');
@@ -716,6 +771,9 @@ try {
   if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
     throw new Error('Saved script selection not displayed on storefront');
 
+  // Explicit manual selection takes priority over automatic defaults.
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count())
+    throw new Error('Manual software ordering did not replace automatic selection');
   await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
   const create=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
   await create.locator('[name=title]').fill('CI Web Referans Testi');
