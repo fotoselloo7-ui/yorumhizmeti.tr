@@ -1,0 +1,107 @@
+name: Netvera Local Setup QA
+
+on:
+  push:
+    branches: [main, staging/netvera-source-integration]
+    paths:
+      - 'well-known/app/Services/NetveraLocalSetup.php'
+      - 'well-known/app/Core/App.php'
+      - 'well-known/database/netvera-public-catalog.json'
+      - 'well-known/database/migrations/netvera-*.sql'
+      - '.github/workflows/netvera-local-bootstrap-qa.yml'
+  workflow_dispatch:
+
+jobs:
+  local-first-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: netvera_local_ci_only
+          MYSQL_DATABASE: local_netvera_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent -pnetvera_local_ci_only"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, fileinfo, curl, gd
+          tools: none
+      - name: Prepare disposable initial application database
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq default-mysql-client
+          mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci < yorumhizmeti_yorumhizmeti.sql
+          mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci -N -e "SELECT COUNT(*) FROM nv_public_inquiries" > /tmp/should-not-exist 2>/dev/null && exit 1 || true
+          mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci -N -e "SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM payment_gateways),(SELECT COUNT(*) FROM users)" > /tmp/untouched.before
+          cat > well-known/.env <<'EOF'
+          APP_NAME="Netvera Local QA"
+          APP_ENV=local
+          APP_DEBUG=true
+          APP_URL=http://127.0.0.1:8006
+          DB_HOST=127.0.0.1
+          DB_NAME=local_netvera_ci
+          DB_USER=root
+          DB_PASS=netvera_local_ci_only
+          DB_CHARSET=utf8mb4
+          LICENSE_ENABLED=false
+          LICENSE_LOCAL_BYPASS=true
+          EOF
+          php -S 127.0.0.1:8006 -t well-known/public well-known/tests/router.php > /tmp/netvera-local-php.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8006/ > /tmp/local-home.html; then exit 0; fi
+            sleep 2
+          done
+          tail -n 100 /tmp/netvera-local-php.log
+          exit 1
+
+      - name: Assert original catalog and all modules auto-initialize
+        shell: bash
+        run: |
+          set -euo pipefail
+          db="mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci -N"
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_legacy_script_products')" = 16 ]
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_legacy_script_categories')" = 3 ]
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_legacy_script_images')" = 41 ]
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_legacy_public_reviews')" = 2 ]
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_legacy_blog_meta')" = 5 ]
+          [ "$($db -e "SELECT COUNT(*) FROM nv_local_setup_state WHERE setup_key='netvera-public-v1'")" = 1 ]
+          [ "$($db -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('nv_public_inquiries','nv_public_inquiry_replies','nv_editorial_seo')")" = 3 ]
+          curl -fsS http://127.0.0.1:8006/hazir-scriptler > /tmp/netvera-products.html
+          [ "$(grep -o 'class="nv40-product-card"' /tmp/netvera-products.html | wc -l)" -eq 16 ]
+          curl -fsS http://127.0.0.1:8006/hazir-scriptler/haber-sitesi-scripti | grep -q 'SoftwareApplication'
+          curl -fsS http://127.0.0.1:8006/ > /tmp/netvera-home.html
+          grep -q 'Hazır Yazılımlar &amp; Scriptler' /tmp/netvera-home.html
+          curl -fsS http://127.0.0.1:8006/blog > /tmp/netvera-blog.html
+          [ "$($db -e 'SELECT COUNT(*) FROM blog_posts WHERE slug IN (SELECT original_slug FROM nv_legacy_blog_meta)')" = 5 ]
+          # 2nd request must not overwrite changes nor duplicate public rows.
+          $db -e "UPDATE nv_legacy_script_products SET price=1234.00 WHERE legacy_id=47"
+          curl -fsS http://127.0.0.1:8006/ >/dev/null
+          [ "$($db -e 'SELECT price FROM nv_legacy_script_products WHERE legacy_id=47')" = 1234.00 ]
+          [ "$($db -e 'SELECT COUNT(*) FROM nv_legacy_script_products')" = 16 ]
+          $db -e "SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM payment_gateways),(SELECT COUNT(*) FROM users)" > /tmp/untouched.after
+          diff -u /tmp/untouched.before /tmp/untouched.after
+          echo 'PASS: 16 products, 3 categories, 41 images, 5 blogs, CRM, SEO, editable product and untouched payment tables'
+
+      - name: Assert production and remote databases cannot auto-bootstrap
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -r 'require "well-known/app/Services/NetveraLocalSetup.php"; $_ENV=["APP_ENV"=>"production","DB_HOST"=>"127.0.0.1"]; $_SERVER["HTTP_HOST"]="127.0.0.1:8006"; if(\App\Services\NetveraLocalSetup::enabled())exit(1);'
+          php -r 'require "well-known/app/Services/NetveraLocalSetup.php"; $_ENV=["APP_ENV"=>"local","DB_HOST"=>"production-db.example.org"]; $_SERVER["HTTP_HOST"]="127.0.0.1:8006"; if(\App\Services\NetveraLocalSetup::enabled())exit(1);'
+          php -r 'require "well-known/app/Services/NetveraLocalSetup.php"; $_ENV=["APP_ENV"=>"local","DB_HOST"=>"127.0.0.1"]; $_SERVER["HTTP_HOST"]="netvera.tr"; if(\App\Services\NetveraLocalSetup::enabled())exit(1);'
+          echo 'PASS: production, remote-DB and public-host auto-bootstrap blocked'
+
+      - name: Show isolated PHP diagnostics on failure
+        if: failure()
+        run: tail -n 160 /tmp/netvera-local-php.log
