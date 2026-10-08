@@ -1,0 +1,344 @@
+/* ============================================================
+   YorumHizmeti.tr — SECTION RHYTHM & COMPACT HEROES V17
+   Fixes:
+   - visually colliding adjacent modules/sections
+   - over-saturated color transitions
+   - empty/tall non-home hero/slider areas
+   - homepage promo cards touching the stats strip
+   Loaded LAST.
+   ============================================================ */
+
+:root{
+  --section-separator:#f3f6fa;
+  --section-soft:#f8faff;
+  --section-gap:16px;
+  --module-gap:28px;
+}
+
+/* ---------- homepage: separate vivid promo cards from the stats band ---------- */
+.yh6-promos{
+  padding:30px 0 26px!important;
+  background:#fff!important;
+}
+.yh6-promo-grid{
+  gap:14px!important;
+}
+.yh6-stats{
+  padding:0 0 30px!important;
+  margin:0!important;
+  background:#fff!important;
+}
+.yh6-stats>.container{
+  padding:18px 24px!important;
+  border-radius:18px!important;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(91,117,255,.24),transparent 28%),
+    radial-gradient(circle at 92% 100%,rgba(139,92,246,.22),transparent 30%),
+    linear-gradient(105deg,#243fcf 0%,#5645da 52%,#7549d7 100%)!important;
+  box-shadow:0 14px 34px rgba(49,58,151,.15)!important;
+  overflow:hidden!important;
+}
+.yh6-stats>.container>div{
+  min-width:0!important;
+}
+.yh6-stats>.container>div+div{
+  border-left:1px solid rgba(255,255,255,.17)!important;
+}
+
+/* Home sections get a quiet breathing separator instead of hard color collisions */
+.yh6-reviews,
+.yh6-how,
+.yh6-blog,
+.yh6-faq,
+.yh6-final{
+  border-top:14px solid var(--section-separator)!important;
+}
+.yh6-reviews{padding-top:32px!important}
+.yh6-how,.yh6-blog,.yh6-faq{padding-top:32px!important}
+
+/* ---------- global module rhythm on non-home storefront pages ---------- */
+.yv-category-v5>section+section,
+.yv-product-v5>section+section,
+.yv-checkout-v5>section+section,
+.yv-blog-v8>section+section{
+  border-top:14px solid var(--section-separator)!important;
+}
+
+.yv-categories>.yv-category-search,
+.yv-simple-hero+.yv-contact,
+.yv-simple-hero+.yv-faq-page,
+.yv-simple-hero+.yv-content-page{
+  border-top:14px solid var(--section-separator)!important;
+}
+
+/* Within the all-services page, category cards and CTA/promo should not touch */
+.yv-category-search{
+  padding-top:24px!important;
+  padding-bottom:34px!important;
+}
+.yv-category-search .yv-category-grid{
+  margin-top:22px!important;
+}
+.yv-category-search .yv-promo{
+  margin-top:34px!important;
+}
+
+/* Category page: keep filter/cards/story/table/testimonials visually distinct */
+.yv-category-filter-v5{padding:16px 0!important;background:#fff!important}
+.yv-category-packages-v5{padding:28px 0 34px!important;background:#fff!important}
+.yv-category-story-v5{padding:32px 0!important;background:var(--section-soft)!important}
+.yv-category-compare-v5{padding:30px 0!important;background:#fff!important}
+.yv-category-reviews-v5{padding:30px 0!important;background:var(--section-soft)!important}
+.yv-category-faq-v5{padding:30px 0!important;background:#fff!important}
+.yv-category-cta-v5{padding:24px 0 30px!important;background:var(--section-soft)!important}
+
+/* Product detail rhythm */
+.yv-product-stage-v5{padding:28px 0!important;background:#fff!important}
+.yv-product-content-v5{padding:28px 0!important;background:var(--section-soft)!important}
+.yv-product-reviews-v5{padding:30px 0!important;background:#fff!important}
+.yv-product-why-v5{padding:30px 0!important;background:var(--section-soft)!important}
+.yv-product-faq-v5{padding:30px 0!important;background:#fff!important}
+.yv-product-related-v5{padding:30px 0 38px!important;background:var(--section-soft)!important}
+
+/* Blog rhythm */
+.yv-blog-categories-v8{padding:16px 0!important;background:#fff!important}
+.yv-blog-main-v8{padding:30px 0!important;background:var(--section-soft)!important}
+.yv-blog-benefits-v8{padding:30px 0!important;background:#fff!important}
+.yv-blog-faq-v8{padding:30px 0!important;background:var(--section-soft)!important}
+.yv-blog-final-v8{padding:26px 0 32px!important;background:#fff!important}
+
+/* Checkout rhythm: white cards on one neutral canvas, no abrupt saturated joins */
+.yv-checkout-main-v5{padding:26px 0 32px!important;background:#f7f9fc!important}
+.yv-checkout-proofbar-v5{padding:24px 0!important;background:#fff!important}
+.yv-checkout-reviews-v9{padding:30px 0 36px!important;background:var(--section-soft)!important}
+
+/* Generic informational pages */
+.yv-contact,.yv-faq-page,.yv-content-page{
+  padding-top:32px!important;
+  padding-bottom:38px!important;
+  background:#fff!important;
+}
+
+/* ============================================================
+   NON-HOME HERO / SLIDER COMPACTION
+   Homepage hero intentionally excluded.
+   ============================================================ */
+
+/* All services */
+.yv-page-hero{
+  padding:24px 0 20px!important;
+}
+.yv-page-hero .yv-hero-grid{
+  gap:34px!important;
+}
+.yv-hub-hero-art-v11{
+  min-height:250px!important;
+  height:250px!important;
+}
+.yv-hub-hero-cutout-v11{
+  height:96%!important;
+  width:58%!important;
+}
+
+/* Category pages */
+.yv-category-hero-v5{
+  padding:10px 0 18px!important;
+}
+.yv-category-hero-grid-v5{
+  padding-top:8px!important;
+  gap:32px!important;
+}
+.yv-category-hero-art-v5{
+  min-height:290px!important;
+  height:290px!important;
+}
+.yv-category-hero-woman-v5{
+  height:96%!important;
+  max-height:286px!important;
+}
+.yv-category-benefits-v5{
+  margin:14px 0!important;
+}
+
+/* Product detail */
+.yv-product-hero-v5{
+  padding:10px 0 18px!important;
+}
+.yv-product-hero-grid-v5{
+  padding-top:8px!important;
+  gap:28px!important;
+}
+.yv-product-hero-visual-v5{
+  min-height:280px!important;
+  height:280px!important;
+}
+
+/* Blog */
+.yv-blog-hero-v8{
+  padding:10px 0 0!important;
+}
+.yv-blog-hero-grid-v8{
+  min-height:286px!important;
+  gap:32px!important;
+}
+.yv-blog-hero-art-v8{
+  min-height:286px!important;
+  height:286px!important;
+}
+.yv-blog-woman-v8{
+  height:94%!important;
+  max-height:280px!important;
+}
+
+/* Contact, FAQ, legal/info pages */
+.yv-simple-hero{
+  padding-top:10px!important;
+  padding-bottom:10px!important;
+}
+.yv-simple-hero-visual-v12>.container{
+  min-height:250px!important;
+}
+.yv-simple-hero-art-v12{
+  min-height:240px!important;
+  height:240px!important;
+}
+.yv-simple-hero-art-v12 img{
+  height:94%!important;
+}
+
+/* Checkout hero is not a marketing slider, keep it compact */
+.yv-checkout-hero-v5{
+  padding:10px 0 14px!important;
+}
+.yv-checkout-hero-grid-v5{
+  padding:8px 0 4px!important;
+}
+
+/* ---------- soften color transitions and cards ---------- */
+.yh6-promo-card,
+.yv-category-card,
+.yv-category-package-card-v5,
+.yv-product-buy-v5,
+.yv-blog-post-card-v8,
+.yv-checkout-card-v5{
+  box-shadow:0 10px 26px rgba(28,40,80,.065)!important;
+}
+.yh6-promo-card{
+  border:1px solid rgba(20,28,60,.035)!important;
+}
+.yh6-promo-card.instagram{
+  background:linear-gradient(135deg,#ec3b86,#bd3fc0)!important;
+}
+.yh6-promo-card.tiktok{
+  background:linear-gradient(135deg,#122038,#243650)!important;
+}
+.yh6-promo-card.web{
+  background:linear-gradient(135deg,#ccecff,#86d2f5)!important;
+}
+
+/* Keep CTA bars visually separate from the sections above them */
+.yv-category-cta-v5>.container,
+.yv-blog-final-v8>.container,
+.yh6-final>.container{
+  border-radius:18px!important;
+}
+
+/* ---------- medium/tablet ---------- */
+@media(max-width:980px){
+  .yv-hub-hero-art-v11{
+    min-height:235px!important;
+    height:235px!important;
+  }
+  .yv-category-hero-art-v5{
+    min-height:255px!important;
+    height:255px!important;
+  }
+  .yv-category-hero-woman-v5{max-height:250px!important}
+  .yv-product-hero-visual-v5{
+    min-height:255px!important;
+    height:255px!important;
+  }
+  .yv-blog-hero-grid-v8{
+    min-height:0!important;
+  }
+  .yv-blog-hero-art-v8{
+    min-height:250px!important;
+    height:250px!important;
+  }
+  .yv-simple-hero-visual-v12>.container{
+    min-height:0!important;
+  }
+  .yv-simple-hero-art-v12{
+    min-height:225px!important;
+    height:225px!important;
+  }
+}
+
+/* ---------- mobile ---------- */
+@media(max-width:768px){
+  :root{--section-gap:12px;--module-gap:22px}
+
+  .yh6-promos{padding:22px 0!important}
+  .yh6-stats{padding-bottom:24px!important}
+  .yh6-stats>.container{
+    padding:14px!important;
+    border-radius:14px!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  .yh6-stats>.container>div+div{border-left:0!important}
+  .yh6-stats>.container>div{
+    padding:9px!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    border-radius:10px!important;
+    background:rgba(255,255,255,.05)!important;
+  }
+
+  .yv-category-v5>section+section,
+  .yv-product-v5>section+section,
+  .yv-checkout-v5>section+section,
+  .yv-blog-v8>section+section,
+  .yv-categories>.yv-category-search,
+  .yv-simple-hero+.yv-contact,
+  .yv-simple-hero+.yv-faq-page,
+  .yv-simple-hero+.yv-content-page{
+    border-top-width:10px!important;
+  }
+
+  .yv-page-hero{padding:18px 0 14px!important}
+  .yv-hub-hero-art-v11{min-height:220px!important;height:220px!important}
+  .yv-hub-hero-cutout-v11{width:68%!important}
+
+  .yv-category-hero-v5{padding:8px 0 14px!important}
+  .yv-category-hero-art-v5{min-height:225px!important;height:225px!important}
+  .yv-category-hero-woman-v5{max-height:220px!important}
+
+  .yv-product-hero-v5{padding:8px 0 14px!important}
+  .yv-product-hero-visual-v5{min-height:235px!important;height:235px!important}
+
+  .yv-blog-hero-v8{padding-top:8px!important}
+  .yv-blog-hero-art-v8{min-height:225px!important;height:225px!important}
+  .yv-blog-woman-v8{max-height:220px!important}
+
+  .yv-simple-hero-art-v12{min-height:210px!important;height:210px!important}
+
+  .yv-category-packages-v5,
+  .yv-category-story-v5,
+  .yv-category-compare-v5,
+  .yv-category-reviews-v5,
+  .yv-category-faq-v5,
+  .yv-product-stage-v5,
+  .yv-product-content-v5,
+  .yv-product-reviews-v5,
+  .yv-product-why-v5,
+  .yv-product-faq-v5,
+  .yv-product-related-v5,
+  .yv-blog-main-v8,
+  .yv-blog-benefits-v8,
+  .yv-blog-faq-v8,
+  .yv-checkout-main-v5,
+  .yv-checkout-reviews-v9{
+    padding-top:24px!important;
+    padding-bottom:24px!important;
+  }
+}
