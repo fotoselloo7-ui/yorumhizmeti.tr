@@ -16,6 +16,8 @@
 <div class="adm-catalog-status" role="status">
     <span><?= icon('package',14) ?> <strong><?= (int)($catalogStats['total']??0) ?></strong> kayıtlı paket</span>
     <span><?= icon('check-circle',14) ?> <strong><?= (int)($catalogStats['active']??0) ?></strong> aktif</span>
+    <span><?= icon('eye',14) ?> <strong><?= (int)($catalogStats['visible']??0) ?></strong> vitrinde</span>
+    <?php if(!empty($catalogStats['blocked'])): ?><span class="adm-catalog-alert"><?= icon('alert-circle',14) ?> <?= (int)$catalogStats['blocked'] ?> aktif paket kategori nedeniyle gizli</span><?php endif; ?>
     <span><?= icon('eye-off',14) ?> <strong><?= (int)($catalogStats['hidden']??0) ?></strong> pasif</span>
     <?php if(!empty($catalogStats['missing_category'])): ?><span class="adm-catalog-alert"><?= icon('alert-circle',14) ?> <?= (int)$catalogStats['missing_category'] ?> paketin kategorisi bulunamıyor</span><?php endif; ?>
     <a href="/kategoriler" target="_blank" rel="noopener"><?= icon('external-link',13) ?> Vitrini Aç</a>
@@ -74,7 +76,7 @@
             <tbody>
                 <?php foreach ($packages as $pkg): ?>
                 <tr>
-                    <td><input type="checkbox" name="ids[]" value="<?= $pkg['id'] ?>" class="pkg-checkbox" onchange="updatePkgBulkActions()"></td>
+                    <td><input type="checkbox" name="ids[]" value="<?= $pkg['id'] ?>" class="pkg-checkbox" onchange="updatePkgBulkActions(this)"></td>
                     <td>
                         <div class="adm-pkg-name">
                             <span class="font-semibold"><?= e(package_display_name($pkg)) ?></span>
@@ -107,16 +109,12 @@
                         <div class="adm-actions">
                             <a href="/admin/paket/<?= $pkg['id'] ?>/alanlar" class="adm-action-btn" title="Alanlar"><?= icon('list', 14) ?></a>
                             <a href="/admin/paket/<?= $pkg['id'] ?>/duzenle" class="adm-action-btn" title="Düzenle"><?= icon('edit', 14) ?></a>
-                            <form method="POST" action="/admin/paket/<?= $pkg['id'] ?>/sil" onsubmit="return confirm('Bu paketi silmek istediğinize emin misiniz?')"><?= csrfField() ?><button class="adm-action-btn adm-action-danger" title="Sil"><?= icon('trash', 14) ?></button></form>
+                            <button type="submit" class="adm-action-btn adm-action-danger" formaction="/admin/paket/<?= $pkg['id'] ?>/sil" formnovalidate onclick="return confirm('Bu paketi silmek istediğinize emin misiniz?')" title="Sil"><?= icon('trash', 14) ?></button>
                         </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
-    </div>
-</div>
-
         </table>
     </div>
 </div>
@@ -131,7 +129,7 @@
     <div class="adm-order-card-m">
         <div class="adm-order-card-m-top">
             <div style="display:flex; align-items:center; gap: 8px;">
-                <input type="checkbox" name="ids[]" value="<?= $pkg['id'] ?>" class="pkg-checkbox" onchange="updatePkgBulkActions()">
+                <input type="checkbox" name="ids[]" value="<?= $pkg['id'] ?>" class="pkg-checkbox" onchange="updatePkgBulkActions(this)">
                 <span class="font-semibold"><?= e(package_display_name($pkg)) ?></span>
                 <?php if (!empty($pkg['is_featured'])): ?>
                 <span class="adm-featured-badge"><?= icon('star', 10) ?></span>
@@ -166,7 +164,7 @@
         <div class="adm-card-m-actions">
             <a href="/admin/paket/<?= $pkg['id'] ?>/alanlar" class="adm-order-card-m-action" style="border-right: 1px solid var(--color-border);"><?= icon('list', 14) ?> Alanlar</a>
             <a href="/admin/paket/<?= $pkg['id'] ?>/duzenle" class="adm-order-card-m-action" style="border-right: 1px solid var(--color-border);"><?= icon('edit', 14) ?> Düzenle</a>
-            <form method="POST" action="/admin/paket/<?= $pkg['id'] ?>/sil" onsubmit="return confirm('Bu paketi silmek istediğinize emin misiniz?')" style="flex:1;margin:0;"><?= csrfField() ?><button class="adm-order-card-m-action" style="width:100%;color:var(--color-red);border:none;background:none;cursor:pointer;font-family:var(--font-family);"><?= icon('trash', 14) ?> Sil</button></form>
+            <button type="submit" class="adm-order-card-m-action" formaction="/admin/paket/<?= $pkg['id'] ?>/sil" formnovalidate onclick="return confirm('Bu paketi silmek istediğinize emin misiniz?')" style="flex:1;width:100%;color:var(--color-red);border:none;background:none;cursor:pointer;font-family:var(--font-family);"><?= icon('trash', 14) ?> Sil</button>
         </div>
     </div>
     <?php endforeach; ?>
@@ -184,8 +182,14 @@ function toggleAllPkgs(source) {
     updatePkgBulkActions();
 }
 
-function updatePkgBulkActions() {
-    const checkedCount = document.querySelectorAll('.pkg-checkbox:checked').length;
+function updatePkgBulkActions(source = null) {
+    // Desktop and mobile render the same records: mirror selection between layouts.
+    if (source) {
+        document.querySelectorAll('.pkg-checkbox').forEach(cb => {
+            if (cb !== source && cb.value === source.value) cb.checked = source.checked;
+        });
+    }
+    const checkedCount = new Set([...document.querySelectorAll('.pkg-checkbox:checked')].map(cb => cb.value)).size;
     const bulkBar = document.getElementById('bulkPkgActions');
     const countSpan = document.getElementById('selectedPkgCount');
     

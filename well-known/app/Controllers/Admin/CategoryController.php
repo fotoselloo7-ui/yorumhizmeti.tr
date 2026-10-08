@@ -79,9 +79,17 @@ class CategoryController extends Controller
     public function delete(string $id): void
     {
         Csrf::check();
-        $this->db->delete('categories', 'id = ?', [(int) $id]);
-        logActivity('category_delete', 'Kategori silindi: ID ' . $id);
-        flash('success', 'Kategori silindi.');
+        $categoryId = (int) $id;
+        $hasPackages = $this->db->fetch("SELECT id FROM packages WHERE category_id = ? LIMIT 1", [$categoryId]);
+        $hasChildren = $this->db->fetch("SELECT id FROM categories WHERE parent_id = ? LIMIT 1", [$categoryId]);
+        if ($hasPackages || $hasChildren) {
+            $this->db->update('categories', ['status' => 'inactive'], 'id = ?', [$categoryId]);
+            flash('warning', 'Bu kategori bağlı paket veya alt kategoriler içerdiği için silinmedi, pasife alındı.');
+        } else {
+            $this->db->delete('categories', 'id = ?', [$categoryId]);
+            flash('success', 'Kategori silindi.');
+        }
+        logActivity('category_delete', 'Kategori silme/pasife alma işlemi: ID ' . $id);
         redirect('/admin/kategoriler');
     }
 
@@ -106,7 +114,11 @@ class CategoryController extends Controller
             redirect('/admin/kategoriler');
         }
 
-        $ids = array_map('intval', $ids);
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn($id) => $id > 0)));
+        if (!$ids) {
+            flash('error', 'Geçerli bir kategori seçin.');
+            redirect('/admin/kategoriler');
+        }
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
         
         $successCount = 0;

@@ -55,7 +55,7 @@
             <tbody>
                 <?php foreach ($categories as $cat): ?>
                 <tr>
-                    <td><input type="checkbox" name="ids[]" value="<?= $cat['id'] ?>" class="cat-checkbox" onchange="updateCatBulkActions()"></td>
+                    <td><input type="checkbox" name="ids[]" value="<?= $cat['id'] ?>" class="cat-checkbox" onchange="updateCatBulkActions(this)"></td>
                     <td class="text-sm text-secondary">#<?= $cat['id'] ?></td>
                     <td>
                         <div class="adm-icon-cell"><?= icon($cat['icon_key'] ?? 'package', 18) ?></div>
@@ -84,7 +84,7 @@
                     <td>
                         <div class="adm-actions">
                             <a href="/admin/kategori/<?= $cat['id'] ?>/duzenle" class="adm-action-btn" title="Düzenle"><?= icon('edit', 14) ?></a>
-                            <form method="POST" action="/admin/kategori/<?= $cat['id'] ?>/sil" onsubmit="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')"><?= csrfField() ?><button class="adm-action-btn adm-action-danger" title="Sil"><?= icon('trash', 14) ?></button></form>
+                            <button type="submit" class="adm-action-btn adm-action-danger" formaction="/admin/kategori/<?= $cat['id'] ?>/sil" formnovalidate onclick="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')" title="Sil"><?= icon('trash', 14) ?></button>
                         </div>
                     </td>
                 </tr>
@@ -104,7 +104,7 @@
     <div class="adm-order-card-m">
         <div class="adm-order-card-m-top">
             <div class="flex-center gap-2">
-                <input type="checkbox" name="ids[]" value="<?= $cat['id'] ?>" class="cat-checkbox" onchange="updateCatBulkActions()">
+                <input type="checkbox" name="ids[]" value="<?= $cat['id'] ?>" class="cat-checkbox" onchange="updateCatBulkActions(this)">
                 <div class="adm-icon-cell"><?= icon($cat['icon_key'] ?? 'package', 16) ?></div>
                 <span class="font-semibold"><?= e($cat['name']) ?></span>
             </div>
@@ -139,10 +139,7 @@
         </div>
         <div class="adm-card-m-actions">
             <a href="/admin/kategori/<?= $cat['id'] ?>/duzenle" class="adm-order-card-m-action" style="border-right: 1px solid var(--color-border);"><?= icon('edit', 14) ?> Düzenle</a>
-            <form method="POST" action="/admin/kategori/<?= $cat['id'] ?>/sil" onsubmit="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')" style="flex:1;margin:0;">
-                <?= csrfField() ?>
-                <button class="adm-order-card-m-action" style="width:100%;color:var(--color-red);border:none;background:none;cursor:pointer;font-family:var(--font-family);"><?= icon('trash', 14) ?> Sil</button>
-            </form>
+            <button type="submit" class="adm-order-card-m-action" formaction="/admin/kategori/<?= $cat['id'] ?>/sil" formnovalidate onclick="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')" style="flex:1;width:100%;color:var(--color-red);border:none;background:none;cursor:pointer;font-family:var(--font-family);"><?= icon('trash', 14) ?> Sil</button>
         </div>
     </div>
     <?php endforeach; ?>
@@ -161,8 +158,13 @@ function toggleAllCats(source) {
     updateCatBulkActions();
 }
 
-function updateCatBulkActions() {
-    const checkedCount = document.querySelectorAll('.cat-checkbox:checked').length;
+function updateCatBulkActions(source = null) {
+    if (source) {
+        document.querySelectorAll('.cat-checkbox').forEach(cb => {
+            if (cb !== source && cb.value === source.value) cb.checked = source.checked;
+        });
+    }
+    const checkedCount = new Set([...document.querySelectorAll('.cat-checkbox:checked')].map(cb => cb.value)).size;
     const bulkBar = document.getElementById('bulkCatActions');
     const countSpan = document.getElementById('selectedCatCount');
     

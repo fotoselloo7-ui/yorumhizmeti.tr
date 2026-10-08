@@ -28,7 +28,13 @@ class CategoryController extends Controller
     public function show(string $slug): void
     {
         $db = Database::getInstance();
-        $category = $db->fetch("SELECT * FROM categories WHERE slug = ? AND status = 'active'", [$slug]);
+        $category = $db->fetch("
+            SELECT c.*
+            FROM categories c
+            LEFT JOIN categories parent ON c.parent_id = parent.id
+            WHERE c.slug = ? AND c.status = 'active'
+              AND (c.parent_id IS NULL OR parent.status = 'active')
+        ", [$slug]);
         if (!$category) { $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);

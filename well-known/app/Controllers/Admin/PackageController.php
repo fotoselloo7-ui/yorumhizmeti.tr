@@ -9,11 +9,23 @@ class PackageController extends Controller
 {
     public function index(): void
     {
-        $packages = $this->db->fetchAll("SELECT p.*, c.name as category_name, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.sort_order ASC, p.id DESC");
+        $packages = $this->db->fetchAll("
+            SELECT p.*, c.name AS category_name, c.icon_key,
+                   c.status AS category_status, parent.status AS parent_status,
+                   CASE WHEN p.status = 'active' AND c.status = 'active'
+                             AND (c.parent_id IS NULL OR parent.status = 'active')
+                        THEN 1 ELSE 0 END AS is_visible
+            FROM packages p
+            LEFT JOIN categories c ON p.category_id = c.id
+            LEFT JOIN categories parent ON c.parent_id = parent.id
+            ORDER BY p.sort_order ASC, p.id DESC
+        ");
         $categories = $this->db->fetchAll("SELECT id, name, parent_id FROM categories WHERE status = 'active' ORDER BY parent_id ASC, name ASC");
         $catalogStats = [
             'total' => count($packages),
             'active' => count(array_filter($packages, static fn($p) => $p['status'] === 'active')),
+            'visible' => count(array_filter($packages, static fn($p) => (int)$p['is_visible'] === 1)),
+            'blocked' => count(array_filter($packages, static fn($p) => $p['status'] === 'active' && (int)$p['is_visible'] !== 1)),
             'hidden' => count(array_filter($packages, static fn($p) => $p['status'] !== 'active')),
             'missing_category' => count(array_filter($packages, static fn($p) => empty($p['category_name']))),
         ];
@@ -118,10 +130,17 @@ class PackageController extends Controller
     public function delete(string $id): void
     {
         Csrf::check();
-        $this->db->delete('packages', 'id = ?', [(int) $id]);
-        $this->db->delete('package_fields', 'package_id = ?', [(int) $id]);
-        logActivity('package_delete', 'Paket silindi: ID ' . $id);
-        flash('success', 'Paket silindi.');
+        $packageId = (int) $id;
+        $hasOrders = $this->db->fetch("SELECT id FROM order_items WHERE package_id = ? LIMIT 1", [$packageId]);
+        if ($hasOrders) {
+            $this->db->update('packages', ['status' => 'inactive'], 'id = ?', [$packageId]);
+            flash('warning', 'Bu paket sipariş geçmişinde bulunduğu için silinmedi, pasife alındı.');
+        } else {
+            $this->db->delete('package_fields', 'package_id = ?', [$packageId]);
+            $this->db->delete('packages', 'id = ?', [$packageId]);
+            flash('success', 'Paket silindi.');
+        }
+        logActivity('package_delete', 'Paket silme/pasife alma işlemi: ID ' . $id);
         redirect('/admin/paketler');
     }
 
@@ -179,7 +198,11 @@ class PackageController extends Controller
             redirect('/admin/paketler');
         }
 
-        $ids = array_map('intval', $ids);
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn($id) => $id > 0)));
+        if (!$ids) {
+            flash('error', 'Geçerli bir paket seçin.');
+            redirect('/admin/paketler');
+        }
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
         
         $successCount = 0;

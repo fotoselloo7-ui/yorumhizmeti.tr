@@ -209,6 +209,75 @@ try {
   console.error('FAIL admin menu hide/restore:',String(e).slice(0,350));
 } finally { await adminContext.close(); }
 
+// Regression: the admin catalog must use one valid bulk form on desktop and mobile.
+const catalogContext = await browser.newContext({viewport:{width:1440,height:900}});
+const catalogPage = await catalogContext.newPage();
+catalogPage.on('dialog', dialog => dialog.accept());
+try {
+  await catalogPage.goto(origin + '/admin/giris', {waitUntil:'domcontentloaded'});
+  await catalogPage.locator('input[name=email]').fill('admin@yorumhizmeti.tr');
+  await catalogPage.locator('input[name=password]').fill('qa-test-menu-only');
+  await Promise.all([
+    catalogPage.waitForURL('**/admin', {waitUntil:'domcontentloaded'}),
+    catalogPage.locator('form button[type=submit]').click()
+  ]);
+  await catalogPage.goto(origin + '/admin/paketler', {waitUntil:'domcontentloaded'});
+  if ((await catalogPage.locator('#bulkPkgForm .adm-pkg-desktop').count()) !== 1 ||
+      (await catalogPage.locator('#bulkPkgForm .adm-pkg-mobile').count()) !== 1) {
+    throw new Error('Desktop and mobile catalog are not inside the same valid bulk form');
+  }
+  if ((await catalogPage.locator('#bulkPkgForm button[formaction*="/sil"]').count()) < 2) {
+    throw new Error('Package delete buttons are not real POST form overrides');
+  }
+  const firstPkg = catalogPage.locator('.adm-pkg-desktop .pkg-checkbox').first();
+  const packageId = await firstPkg.getAttribute('value');
+  if (!packageId) throw new Error('No catalog package to test');
+  await firstPkg.check();
+  if ((await catalogPage.locator('#selectedPkgCount').innerText()).trim() !== '1') {
+    throw new Error('One package selected was counted more than once');
+  }
+  if (!(await catalogPage.locator('.adm-pkg-mobile .pkg-checkbox[value="' + packageId + '"]').isChecked())) {
+    throw new Error('Desktop package selection did not synchronize with mobile');
+  }
+  await catalogPage.locator('#bulkPkgActionSelect').selectOption('unfeatured');
+  await Promise.all([
+    catalogPage.waitForNavigation({waitUntil:'domcontentloaded'}),
+    catalogPage.locator('#bulkPkgActions button[type=submit]').click()
+  ]);
+  const row = () => catalogPage.locator('.adm-pkg-desktop .pkg-checkbox[value="' + packageId + '"]').locator('xpath=ancestor::tr');
+  if (await row().locator('.adm-featured-badge').count()) {
+    throw new Error('Bulk unfeature did not update saved catalog state');
+  }
+  await catalogPage.locator('.adm-pkg-desktop .pkg-checkbox[value="' + packageId + '"]').check();
+  await catalogPage.locator('#bulkPkgActionSelect').selectOption('featured');
+  await Promise.all([
+    catalogPage.waitForNavigation({waitUntil:'domcontentloaded'}),
+    catalogPage.locator('#bulkPkgActions button[type=submit]').click()
+  ]);
+  if (!(await row().locator('.adm-featured-badge').count())) {
+    throw new Error('Bulk feature did not restore featured package');
+  }
+  await catalogPage.goto(origin + '/admin/kategoriler', {waitUntil:'domcontentloaded'});
+  if ((await catalogPage.locator('#bulkCatForm .adm-cat-desktop').count()) !== 1 ||
+      (await catalogPage.locator('#bulkCatForm .adm-cat-mobile').count()) !== 1) {
+    throw new Error('Category editor has broken/nested forms');
+  }
+  const firstCat = catalogPage.locator('.adm-cat-desktop .cat-checkbox').first();
+  const catId = await firstCat.getAttribute('value');
+  if (!catId) throw new Error('No category to test');
+  await firstCat.check();
+  if ((await catalogPage.locator('#selectedCatCount').innerText()).trim() !== '1' ||
+      !(await catalogPage.locator('.adm-cat-mobile .cat-checkbox[value="' + catId + '"]').isChecked())) {
+    throw new Error('Category selection double counted or not synchronized');
+  }
+  results.push({route:'Admin catalog/package/category bridge',screen:'integration',status:200,errors:[]});
+  console.log('PASS valid admin bulk forms, featured package toggles and responsive selections');
+} catch(e) {
+  failed=true;
+  results.push({route:'Admin catalog/package/category bridge',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL admin catalog integration:',String(e).slice(0,400));
+} finally { await catalogContext.close(); }
+
 // Validate the visible mobile package slider (not just presence of HTML controls).
 const sliderContext=await browser.newContext({viewport:{width:390,height:844}});
 const sliderPage=await sliderContext.newPage();

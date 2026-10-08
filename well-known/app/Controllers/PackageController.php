@@ -8,12 +8,27 @@ class PackageController extends Controller
     public function show(string $slug): void
     {
         $db = Database::getInstance();
-        $package = $db->fetch("SELECT p.*, c.name as category_name, c.slug as category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.slug = ? AND p.status = 'active'", [$slug]);
+        $package = $db->fetch("
+            SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            FROM packages p
+            INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+            LEFT JOIN categories parent ON c.parent_id = parent.id
+            WHERE p.slug = ? AND p.status = 'active'
+              AND (c.parent_id IS NULL OR parent.status = 'active')
+        ", [$slug]);
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
         $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order ASC", [$package['id']]);
         $variantPackages = $db->fetchAll("SELECT id, name, slug, price, discount_price, seo_title, og_title FROM packages WHERE category_id = ? AND status = 'active' ORDER BY sort_order ASC LIMIT 3", [$package['category_id']]);
-        $relatedPackages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug FROM packages p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id != ? AND p.status = 'active' ORDER BY (p.category_id = ?) ASC, p.is_featured DESC, p.sort_order ASC LIMIT 4", [$package['id'], $package['category_id']]);
+        $relatedPackages = $db->fetchAll("
+            SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            FROM packages p
+            INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+            LEFT JOIN categories parent ON c.parent_id = parent.id
+            WHERE p.id != ? AND p.status = 'active'
+              AND (c.parent_id IS NULL OR parent.status = 'active')
+            ORDER BY (p.category_id = ?) DESC, p.is_featured DESC, p.sort_order ASC LIMIT 4
+        ", [$package['id'], $package['category_id']]);
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
         $testimonialSection = null;
         try {
