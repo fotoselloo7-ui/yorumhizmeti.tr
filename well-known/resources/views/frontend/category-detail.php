@@ -107,12 +107,47 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
  </div>
 </section>
 
-<section class="yv-category-story-v5">
+<section class="yv-category-story-v5 yh-story-premium-v23" aria-labelledby="yh23-story-heading">
  <div class="container">
   <div class="yv-category-story-grid-v5">
-   <div class="yv-category-phone-art-v5 <?= e($platformClass) ?>"><div class="phone"><div class="screen"><span><?= icon($platformIcon,45) ?></span><b>+12.5K</b><small>Bu hafta</small><i></i><i></i><i></i><i></i></div></div><div class="stat"><?= icon('trending-up',14) ?><strong>Daha güçlü etkileşim</strong><small>Markanız için görünürlük artışı</small></div></div>
-   <div class="yv-category-story-copy-v5"><div class="yv-kicker">Neden YorumHizmeti.tr?</div><h2><?= e($category['name']) ?> ile markanızı <span>güvenle büyütün.</span></h2><p>Kaliteli hizmet altyapımız, hızlı teslimat yaklaşımımız ve şeffaf sipariş sürecimizle hedeflerinize daha kolay ulaşın.</p><ul><li><?= icon('check-circle',14) ?> Gerçek ve aktif hesaplar</li><li><?= icon('check-circle',14) ?> Hızlı teslimat</li><li><?= icon('check-circle',14) ?> %100 güvenli altyapı</li><li><?= icon('check-circle',14) ?> Düşüş garantisi</li><li><?= icon('check-circle',14) ?> 7/24 canlı destek</li></ul></div>
-   <div class="yv-category-side-benefits-v5"><h3><?= e($category['name']) ?>'da sizi bir adım öne taşır</h3><div><?= icon('trending-up',13) ?> Daha fazla görünürlük</div><div><?= icon('users',13) ?> Güçlü sosyal kanıt</div><div><?= icon('heart',13) ?> Gerçek etkileşim artışı</div><div><?= icon('award',13) ?> Marka bilinirliği</div><div><?= icon('zap',13) ?> Keşfet şansı</div></div>
+   <div class="yv-category-phone-art-v5 <?= e($platformClass) ?>" aria-label="<?= e($category['name']) ?> tanıtım görseli">
+    <div class="yh23-art-halo" aria-hidden="true"></div>
+    <div class="yh23-visual-label"><?= icon('sparkles',13) ?> Dijital büyüme</div>
+    <div class="phone" aria-hidden="true">
+     <div class="screen">
+      <span><?= icon($platformIcon,40) ?></span>
+      <small>Örnek etkileşim analizi</small>
+      <b>+12.5K</b>
+      <div class="yh23-mini-graph" aria-hidden="true">
+       <i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+     </div>
+    </div>
+    <div class="stat">
+     <span class="yh23-stat-icon"><?= icon('trending-up',16) ?></span>
+     <div><strong>Daha güçlü etkileşim</strong><small>Markanızın görünürlüğünü artırın</small></div>
+    </div>
+   </div>
+   <div class="yv-category-story-copy-v5">
+    <div class="yv-kicker">Neden YorumHizmeti.tr?</div>
+    <h2 id="yh23-story-heading"><?= e($category['name']) ?> ile markanızı <span>güvenle büyütün.</span></h2>
+    <p>Kaliteli hizmet altyapımız, hızlı teslimat yaklaşımımız ve şeffaf sipariş sürecimizle hedeflerinize daha kolay ulaşın.</p>
+    <ul>
+     <li><?= icon('check-circle',15) ?> Gerçek ve aktif hesaplar</li>
+     <li><?= icon('check-circle',15) ?> Hızlı teslimat</li>
+     <li><?= icon('check-circle',15) ?> Güvenli sipariş süreci</li>
+     <li><?= icon('check-circle',15) ?> Düşüş garantisi</li>
+     <li><?= icon('check-circle',15) ?> 7/24 canlı destek</li>
+    </ul>
+   </div>
+   <aside class="yv-category-side-benefits-v5" aria-label="<?= e($category['name']) ?> avantajları">
+    <h3><?= e($category['name']) ?> ile bir adım öne çıkın</h3>
+    <div><?= icon('trending-up',16) ?> <span>Daha fazla görünürlük</span></div>
+    <div><?= icon('users',16) ?> <span>Güçlü sosyal kanıt</span></div>
+    <div><?= icon('heart',16) ?> <span>Gerçek etkileşim artışı</span></div>
+    <div><?= icon('award',16) ?> <span>Marka bilinirliği</span></div>
+    <div><?= icon('zap',16) ?> <span>Keşfet şansı</span></div>
+   </aside>
   </div>
  </div>
 </section>
