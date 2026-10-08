@@ -143,6 +143,7 @@ class PackageController extends Controller
             'pageTitle' => 'Hazır Yazılım Düzenle', 'package' => $package,
             'categories' => $categories,'fields' => $fields,
             'softwareOnly' => true,'seoResult' => (new SeoScoreService())->calculate($package),
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$id),
         ]);
     }
 
