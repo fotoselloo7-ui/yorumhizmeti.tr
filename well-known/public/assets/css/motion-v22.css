@@ -72,7 +72,7 @@
   from{opacity:.78;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}
 }
 @keyframes yh22-soft-appear{
-  from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}
+  from{opacity:.3}to{opacity:1}
 }
 
 /* Existing card design, only subtle interaction improvements. */
