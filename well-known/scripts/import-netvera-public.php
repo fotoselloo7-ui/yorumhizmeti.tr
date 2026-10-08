@@ -41,6 +41,7 @@ $counts=[];
 foreach($sections as $key)$counts[$key]=count($data[$key]);
 echo json_encode($counts,JSON_UNESCAPED_UNICODE)."\n";
 if(!in_array('--apply',$argv,true)){echo "DRY RUN; no writes.\n";exit(0);}
+// CLI operator must explicitly opt into a disposable staging DB; never production.
 if((string)($_ENV['NETVERA_IMPORT_ALLOWED']??getenv('NETVERA_IMPORT_ALLOWED'))!=='1'
  || strtolower((string)($_ENV['APP_ENV']??'local'))==='production'){
     fwrite(STDERR,"Staging opt-in required; production import blocked.\n");exit(3);
@@ -113,12 +114,14 @@ try {
             $id=$db->insert('blog_posts',[
                 'blog_category_id'=>$categoryIdMap[(int)$r['category_id']]??null,
                 'title'=>$r['title'],'slug'=>$r['slug'],'excerpt'=>$r['excerpt'],
-                'content'=>$r['content'],'image'=>$r['image'],'status'=>'active',
+                'content'=>$r['content'],'raw_content'=>$r['content'],
+                'image'=>preg_replace('~^/?uploads/~','',(string)$r['image']),'status'=>'active',
                 'published_at'=>$r['published_at'],'seo_title'=>$r['seo_title'],
                 'seo_description'=>$r['seo_description'],
                 'seo_focus_keyword'=>$r['focus_keyword'],
                 'canonical_url'=>$r['canonical_url'],'og_title'=>$r['og_title'],
-                'og_description'=>$r['og_description'],'og_image'=>$r['og_image']
+                'og_description'=>$r['og_description'],
+                'og_image'=>preg_replace('~^/?uploads/~','',(string)$r['og_image'])
             ]);
         }else $id=(int)$old['id'];
         nvImportRow($pdo,'nv_legacy_blog_meta',[
