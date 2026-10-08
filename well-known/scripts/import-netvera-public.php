@@ -57,7 +57,8 @@ function nvImportRow(PDO $pdo,string $table,array $record):void {
     $cols=array_keys($record);
     $sql='INSERT INTO '.$table.' ('.implode(',',$cols).') VALUES ('
         .implode(',',array_fill(0,count($cols),'?')).') ON DUPLICATE KEY UPDATE ';
-    $sql.=implode(',',array_map(static fn($c)=>$c.'=VALUES('.$c.')',$cols));
+    $pk=$cols[0];
+    $sql.=$pk.'='.$pk; // Import is repeatable; never overwrite edits.
     $pdo->prepare($sql)->execute(array_values($record));
 }
 $categoryIdMap=[];
