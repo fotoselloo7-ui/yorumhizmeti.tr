@@ -206,8 +206,11 @@ function demo_visual_url(string $text = '', string $kind = 'card'): string
 {
     $s = mb_strtolower($text . ' ' . $kind, 'UTF-8');
 
-    if (str_contains($s, 'instagram') || str_contains($s, 'sosyal medya')) {
-        return 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1400&q=86';
+    if (str_contains($s, 'instagram')) {
+        return asset('img/blog-instagram-growth.svg');
+    }
+    if (str_contains($s, 'sosyal medya') || str_contains($s, 'trend') || str_contains($s, 'pazarlama')) {
+        return asset('img/blog-social-strategy.svg');
     }
     if (str_contains($s, 'tiktok') || str_contains($s, 'reels') || str_contains($s, 'video')) {
         return 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=86';
