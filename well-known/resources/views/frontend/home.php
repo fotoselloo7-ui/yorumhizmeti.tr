@@ -362,6 +362,11 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                     <?php foreach($softwareGroup['products'] as $product): ?>
                         <?= yh41SoftwareCard($product) ?>
                     <?php endforeach; ?>
+                    <?php if (!$softwareGroup['products']): ?>
+                        <div class="yh41-software-empty">Bu kategoride henüz yayındaki bir yazılım bulunmuyor.
+                            <a href="/hazir-scriptler">Tüm yazılımlara göz at <?= icon('arrow-right', 12) ?></a>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="yh18-carousel-row">
                     <div class="yh18-carousel-controls" aria-label="Yazılımları kaydır">
