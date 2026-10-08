@@ -41,6 +41,8 @@ class App
         $r->get('/haber-sitesi-scripti', 'NetveraScriptController@legacyNews');
         $r->get('/temizlik-firmasi-scripti-web-site-yazilimi', 'NetveraScriptController@legacyCleaning');
         $r->get('/emlak-scripti-hazir-emlak-sitesi-yazilimi', 'NetveraScriptController@legacyRealEstate');
+        $r->post('/netvera/canli-destek/gonder', 'NetveraInquiryController@send');
+        $r->get('/netvera/canli-destek/mesajlar', 'NetveraInquiryController@messages');
         $r->get('/hazir-scriptler', 'NetveraScriptController@index');
         $r->get('/hazir-scriptler/{mainSlug}/{subSlug}', 'NetveraScriptController@subCategoryPage');
         $r->get('/hazir-scriptler/{slug}', 'NetveraScriptController@detail');
@@ -144,6 +146,10 @@ class App
         $r->post('/admin/paket/{id}/alanlar-kaydet', 'Admin\\PackageController@saveFields');
 
         // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
+        $r->get('/admin/netvera-gelen-kutusu', 'Admin\\NetveraInboxController@index');
+        $r->get('/admin/netvera-gelen-kutusu/{id}', 'Admin\\NetveraInboxController@detail');
+        $r->post('/admin/netvera-gelen-kutusu/{id}/yanit', 'Admin\\NetveraInboxController@reply');
+        $r->post('/admin/netvera-gelen-kutusu/{id}/durum', 'Admin\\NetveraInboxController@state');
         $r->get('/admin/netvera-kategoriler', 'Admin\\NetveraScriptController@categories');
         $r->post('/admin/netvera-kategoriler/kaydet', 'Admin\\NetveraScriptController@saveCategory');
         $r->post('/admin/netvera-kategoriler/staging-kur', 'Admin\\NetveraScriptController@installBridge');
