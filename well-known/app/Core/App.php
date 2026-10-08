@@ -140,6 +140,10 @@ class App
         $r->post('/admin/paket/{id}/alanlar-kaydet', 'Admin\\PackageController@saveFields');
 
         // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
+        $r->get('/admin/netvera-yazilimlar', 'Admin\\NetveraScriptController@index');
+        $r->get('/admin/netvera-yazilimlar/ekle', 'Admin\\NetveraScriptController@create');
+        $r->get('/admin/netvera-yazilimlar/{id}/duzenle', 'Admin\\NetveraScriptController@edit');
+        $r->post('/admin/netvera-yazilimlar/kaydet', 'Admin\\NetveraScriptController@save');
         $r->get('/admin/hazir-yazilimlar', 'Admin\\SoftwareShowcaseController@index');
         $r->post('/admin/hazir-yazilimlar/kategorileri-kur', 'Admin\\SoftwareShowcaseController@install');
         $r->post('/admin/hazir-yazilimlar/kur-ve-ekle', 'Admin\\SoftwareShowcaseController@setupThenCreate');
