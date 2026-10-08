@@ -72,6 +72,8 @@ jobs:
           DB_CHARSET=utf8mb4
           LICENSE_ENABLED=false
           LICENSE_LOCAL_BYPASS=true
+          # Keep synthetic 3-product browser fixture intact; local bootstrap has its own integration test.
+          NETVERA_LOCAL_AUTO_SETUP=0
           EOF
           mkdir -p well-known/storage/cache well-known/storage/logs well-known/public/uploads
           php -S 127.0.0.1:8006 -t well-known/public well-known/tests/router.php > /tmp/yorum-qa-php.log 2>&1 &
