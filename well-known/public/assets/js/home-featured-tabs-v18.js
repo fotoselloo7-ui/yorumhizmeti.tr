@@ -230,14 +230,15 @@
         pointer={id:e.pointerId,x:e.clientX,left:rail.scrollLeft,moved:false};
         pauseTemporarily();
       });
-      rail.addEventListener('pointermove',e=>{
+      window.addEventListener('pointermove',e=>{
         if (!pointer || e.pointerId!==pointer.id)return;
         const dx=e.clientX-pointer.x;
         if(!pointer.moved && Math.abs(dx)<7)return;
         if(!pointer.moved){
           pointer.moved=true;
           rail.classList.add('is-dragging');
-          rail.setPointerCapture?.(e.pointerId);
+          // Global pointer tracking survives leaving the rail without
+          // retargeting the browser's native anchor click event.
         }
         if(e.cancelable)e.preventDefault();
         rail.scrollLeft=pointer.left-dx;
@@ -256,12 +257,12 @@
           rail.classList.add('is-drag-released');
           window.setTimeout(()=>rail.classList.remove('is-drag-released'),280);
         }
-        if(rail.hasPointerCapture?.(e.pointerId))rail.releasePointerCapture(e.pointerId);
+
         pointer=null;
         updateRailButtons(rail);
       };
-      rail.addEventListener('pointerup',finish);
-      rail.addEventListener('pointercancel',finish);
+      window.addEventListener('pointerup',finish);
+      window.addEventListener('pointercancel',finish);
       rail.addEventListener('click',e=>{
         if(preventClick){
           e.preventDefault();
