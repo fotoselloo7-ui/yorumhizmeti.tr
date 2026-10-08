@@ -208,6 +208,60 @@ for(const screen of screens){
   await ctx.close();
 }
 
+// Verify the exact laptop/tablet widths where the customer saw the portrait
+// covering benefit pills; normal homepage smoke viewports cannot catch this.
+const authVisualContext = await browser.newContext({deviceScaleFactor:1});
+const authVisualPage = await authVisualContext.newPage();
+for (const screen of [{w:1150,h:766,name:'laptop-1150'},{w:1024,h:768,name:'laptop-1024'}]){
+  await authVisualPage.setViewportSize({width:screen.w,height:screen.h});
+  for (const route of ['/giris','/kayit']){
+    try {
+      const response = await authVisualPage.goto(origin+route,{waitUntil:'domcontentloaded'});
+      await authVisualPage.evaluate(() => document.fonts?.ready);
+      const result = await authVisualPage.evaluate(() => {
+        const showcase = document.querySelector('.auth25-showcase');
+        const artwork = showcase?.querySelector('.auth25-art');
+        const visual = artwork?.getBoundingClientRect();
+        const r = selector => showcase?.querySelector(selector)?.getBoundingClientRect();
+        const features = [...(showcase?.querySelectorAll('.auth25-benefits>span') || [])];
+        const targets = [
+          ['headline',r('.auth25-showcase-main h2')],
+          ['description',r('.auth25-showcase-main p')],
+          ...features.map((el,i) => ['benefit-'+i,el.getBoundingClientRect()]),
+          ['trust-card',r('.auth25-float')],
+        ];
+        const overlaps = (visual && getComputedStyle(artwork).display!=='none')
+          ? targets.filter(([name, box]) => {
+              if(!box)return false;
+              return Math.min(visual.right,box.right)-Math.max(visual.left,box.left)>4 &&
+                     Math.min(visual.bottom,box.bottom)-Math.max(visual.top,box.top)>4;
+            }).map(([name])=>name):[];
+        const panel = document.querySelector('.auth25-panel')?.getBoundingClientRect();
+        const left = showcase?.getBoundingClientRect();
+        const portrait = showcase?.querySelector('.auth25-art img');
+        return {overlaps,portraitLoaded:!!portrait?.naturalWidth,portraitVisible:!!visual,
+          panelAligned:!!panel&&!!left&&panel.left>=left.right-2,
+          horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
+      });
+      if(response.status()>=400 || result.overlaps.length || !result.portraitLoaded ||
+         !result.panelAligned || result.horizontalOverflow){
+        throw new Error('Auth layout defect '+JSON.stringify({status:response.status(),...result}));
+      }
+      await authVisualPage.screenshot({
+        path:path.join(output,'auth-'+screen.name+'-'+(route==='/giris'?'login':'register')+'.png'),
+        fullPage:true,animations:'disabled'
+      });
+      results.push({route,screen:screen.name,status:response.status(),errors:[]});
+      console.log('PASS auth visual composition:',screen.name,route,'portrait clear of copy and badges');
+    } catch(e){
+      failed=true;
+      results.push({route,screen:screen.name,status:0,errors:[String(e)]});
+      console.error('FAIL auth visual composition:',screen.name,route,String(e).slice(0,390));
+    }
+  }
+}
+await authVisualContext.close();
+
 // Exercise real form submissions against isolated CI MySQL (never production).
 const formsContext=await browser.newContext({viewport:{width:1440,height:900}});
 const formsPage=await formsContext.newPage();

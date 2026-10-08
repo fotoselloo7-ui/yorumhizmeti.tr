@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/auth-premium-v25.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/auth-premium-v25.css') ?>?v=25.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body class="auth25-body">
