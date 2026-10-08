@@ -334,7 +334,15 @@ for(const screen of screens){
                 tooManyChips:chips.length>4,
                 artVisible:!!artwork && artwork.width>35 && artwork.height>65,
                 narrow:area.width<270,
-                contentOverflow:card.scrollWidth>card.clientWidth+3,
+                // Intentional clipped decoration may enlarge scrollWidth.
+                // Check the actual content and CTA against the card and chip row.
+                contentOverflow:(()=>{
+                  const content=card.querySelector('.nv29-card-content')?.getBoundingClientRect();
+                  const footer=card.querySelector('.nv29-service-chips')?.getBoundingClientRect();
+                  if(!content||!footer)return true;
+                  return content.left<area.left-2 || content.right>area.right+2 ||
+                    content.bottom>footer.top+4 || footer.bottom>area.bottom+3;
+                })(),
               };
             }),
           };
