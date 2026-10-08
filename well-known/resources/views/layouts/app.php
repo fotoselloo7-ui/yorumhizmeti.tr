@@ -213,13 +213,22 @@
                     <span><?= icon('headphones', 12) ?> 7/24 Canlı Destek</span>
                 </div>
 
-                <div class="footer-col footer-subscribe-v9">
+                <div class="footer-col footer-subscribe-v9" id="newsletter">
                     <h4>E-Bülten</h4>
                     <p>Kampanya ve yeniliklerden haberdar olun.</p>
-                    <div class="footer-newsletter-form">
-                        <input type="email" aria-label="E-posta" placeholder="E-posta adresiniz">
-                        <button type="button" aria-label="Gönder"><?= icon('arrow-right', 12) ?></button>
-                    </div>
+                    <?php if(!empty($flash['newsletter_success'])): ?><div class="yv-form-feedback success" role="status"><?= e($flash['newsletter_success']) ?></div><?php endif; ?>
+                    <?php if(!empty($flash['newsletter_error'])): ?><div class="yv-form-feedback error" role="alert"><?= e($flash['newsletter_error']) ?></div><?php endif; ?>
+                    <form method="POST" action="/bulten/kayit" class="footer-newsletter-signup">
+                        <?= csrfField() ?>
+                        <input type="hidden" name="source" value="footer">
+                        <input type="hidden" name="return_to" value="<?= str_starts_with($_SERVER['REQUEST_URI']??'', '/blog') ? '/blog' : '/' ?>">
+                        <div class="yv-honeypot" aria-hidden="true"><label>Web sitesi<input name="website_url" type="text" tabindex="-1" autocomplete="off"></label></div>
+                        <div class="footer-newsletter-form">
+                            <input type="email" name="email" aria-label="E-posta" placeholder="E-posta adresiniz" autocomplete="email" required>
+                            <button type="submit" aria-label="Bültene kaydol"><?= icon('arrow-right', 12) ?></button>
+                        </div>
+                        <label class="yv-opt-in footer-opt-in"><input type="checkbox" name="newsletter_consent" value="1" required><span><a href="/sayfa/kvkk" target="_blank" rel="noopener">KVKK bilgilendirmesini</a> okudum; bülten almak istiyorum.</span></label>
+                    </form>
                 </div>
             </div>
 
