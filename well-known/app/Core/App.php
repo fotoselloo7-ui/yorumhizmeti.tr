@@ -37,6 +37,10 @@ class App
         // ── Frontend ──
         $r->get('/', 'HomeController@index');
         // Legacy Netvera SEO compatibility, staged and separate from service packages.
+        // Netvera'nın önceden Google'a indekslenmiş kök ürün adresleri.
+        $r->get('/haber-sitesi-scripti', 'NetveraScriptController@legacyNews');
+        $r->get('/temizlik-firmasi-scripti-web-site-yazilimi', 'NetveraScriptController@legacyCleaning');
+        $r->get('/emlak-scripti-hazir-emlak-sitesi-yazilimi', 'NetveraScriptController@legacyRealEstate');
         $r->get('/hazir-scriptler', 'NetveraScriptController@index');
         $r->get('/hazir-scriptler/{mainSlug}/{subSlug}', 'NetveraScriptController@subCategoryPage');
         $r->get('/hazir-scriptler/{slug}', 'NetveraScriptController@detail');
