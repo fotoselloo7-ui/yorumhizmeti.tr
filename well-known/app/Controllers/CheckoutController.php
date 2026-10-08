@@ -257,8 +257,9 @@ class CheckoutController extends Controller
             // PayTR total_amount can exceed payment_amount for instalments;
             // never approve an underpayment, even with a valid signed callback.
             $originalAmount=(string)($_POST['payment_amount']??'');
-            if ($expected<1 || $paid<$expected ||
-                ($originalAmount!=='' && (!ctype_digit($originalAmount) || (int)$originalAmount!==$expected))){
+            if (!empty($result['success']) &&
+                ($expected<1 || $paid<$expected ||
+                 ($originalAmount!=='' && (!ctype_digit($originalAmount) || (int)$originalAmount!==$expected)))){
                 $pdo->rollBack();
                 http_response_code(422);
                 echo 'AMOUNT MISMATCH';
