@@ -7,7 +7,7 @@
     <a href="/admin/blog" class="btn btn-light btn-sm"><?= icon('arrow-left', 16) ?> Geri Dön</a>
 </div>
 
-<form method="POST" action="<?= $isEdit ? '/admin/blog/' . $post['id'] . '/guncelle' : '/admin/blog/kaydet' ?>" enctype="multipart/form-data">
+<form class="nv46-blog-editor" method="POST" action="<?= $isEdit ? '/admin/blog/' . $post['id'] . '/guncelle' : '/admin/blog/kaydet' ?>" enctype="multipart/form-data">
     <?= csrfField() ?>
     
     <div class="adm-form-layout">
@@ -30,7 +30,7 @@
                         <div class="form-hint">Boş bırakırsanız başlıktan otomatik üretilir. Aynı isimde varsa sonuna sayı eklenir.</div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="nv46-basic-fields">
                         <div class="form-group">
                             <label for="blog_category_id">Kategori</label>
                             <select name="blog_category_id" id="blog_category_id" class="form-control">
@@ -62,8 +62,8 @@
             </div>
 
             <div class="adm-card">
-                <div class="adm-card-header" style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3><?= icon('align-left', 18) ?> Akıllı Makale Editörü</h3>
+                <div class="adm-card-header nv46-section-header">
+                    <h3><?= icon('file-text', 18) ?> Akıllı Makale Editörü</h3>
                     <div style="display:flex; gap:10px;">
                         <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('inline_image_upload').click()">
                             <?= icon('image', 16) ?> Makale İçi Görsel Ekle
@@ -92,30 +92,32 @@
                     </div>
                 </div>
                 <!-- Markdown Toolbar -->
-                <div class="md-toolbar" style="display:flex; gap:4px; padding:8px 15px; background:#f8f9fa; border-top:1px solid var(--color-border); flex-wrap:wrap;">
+                <div class="md-toolbar nv46-markdown-toolbar" role="toolbar" aria-label="Makale biçimlendirme araçları">
                     <button type="button" class="md-btn" onclick="mdInsert('## ', '')" title="H2 Başlık"><b>H2</b></button>
                     <button type="button" class="md-btn" onclick="mdInsert('### ', '')" title="H3 Başlık"><b>H3</b></button>
-                    <span style="width:1px; background:var(--color-border); margin:0 4px;"></span>
-                    <button type="button" class="md-btn" onclick="mdWrap('**', '**')" title="Kalın"><i class="ri-bold"></i></button>
-                    <button type="button" class="md-btn" onclick="mdWrap('*', '*')" title="İtalik"><i class="ri-italic"></i></button>
-                    <span style="width:1px; background:var(--color-border); margin:0 4px;"></span>
-                    <button type="button" class="md-btn" onclick="mdInsert('- ', '')" title="Liste Öğesi"><i class="ri-list-unordered"></i></button>
-                    <button type="button" class="md-btn" onclick="mdInsert('1. ', '')" title="Sıralı Liste"><i class="ri-list-ordered"></i></button>
-                    <button type="button" class="md-btn" onclick="mdInsert('> ', '')" title="Alıntı"><i class="ri-double-quotes-l"></i></button>
-                    <span style="width:1px; background:var(--color-border); margin:0 4px;"></span>
-                    <button type="button" class="md-btn" onclick="mdWrap('[', '](url)')" title="Link"><i class="ri-link"></i></button>
-                    <button type="button" class="md-btn" onclick="document.getElementById('inline_image_upload').click()" title="Görsel"><i class="ri-image-add-line"></i></button>
-                    <span style="width:1px; background:var(--color-border); margin:0 4px;"></span>
+                    <span class="nv46-toolbar-divider" aria-hidden="true"></span>
+                    <button type="button" class="md-btn" onclick="mdWrap('**', '**')" title="Kalın metin" aria-label="Kalın metin"><b class="nv46-format-symbol">B</b><span>Kalın</span></button>
+                    <button type="button" class="md-btn" onclick="mdWrap('*', '*')" title="İtalik metin" aria-label="İtalik metin"><em class="nv46-format-symbol">I</em><span>İtalik</span></button>
+                    <span class="nv46-toolbar-divider" aria-hidden="true"></span>
+                    <button type="button" class="md-btn" onclick="mdInsert('- ', '')" title="Madde işaretli liste" aria-label="Madde işaretli liste"><?= icon('list',14) ?><span>Liste</span></button>
+                    <button type="button" class="md-btn" onclick="mdInsert('1. ', '')" title="Numaralı liste" aria-label="Numaralı liste"><b class="nv46-format-symbol">1.</b><span>Numaralı</span></button>
+                    <button type="button" class="md-btn" onclick="mdInsert('> ', '')" title="Alıntı ekle" aria-label="Alıntı ekle"><b class="nv46-format-symbol">“</b><span>Alıntı</span></button>
+                    <span class="nv46-toolbar-divider" aria-hidden="true"></span>
+                    <button type="button" class="md-btn" onclick="mdWrap('[', '](url)')" title="Bağlantı ekle" aria-label="Bağlantı ekle"><?= icon('link',14) ?><span>Bağlantı</span></button>
+                    <button type="button" class="md-btn" onclick="document.getElementById('inline_image_upload').click()" title="Görsel ekle" aria-label="Görsel ekle"><?= icon('image',14) ?><span>Görsel</span></button>
+                    <span class="nv46-toolbar-divider" aria-hidden="true"></span>
                     <button type="button" class="md-btn" onclick="mdInsert('\n[info]Bilgi metni[/info]\n', '')" title="Info Kutusu">Info</button>
                     <button type="button" class="md-btn" onclick="mdInsert('\n[cta title=&quot;Başlık&quot; text=&quot;Açıklama&quot; url=&quot;/&quot; button=&quot;İncele&quot;]\n', '')" title="CTA">CTA</button>
                 </div>
                 <div class="adm-card-body" style="padding: 0;">
-                    <div class="editor-container" style="display: flex; flex-direction: row; border-top: 1px solid var(--color-border);">
-                        <div class="editor-pane" style="flex: 1; border-right: 1px solid var(--color-border);">
+                    <div class="editor-container nv46-editor-container">
+                        <div class="editor-pane nv46-editor-pane">
+                            <div class="nv46-pane-title"><?= icon('edit',14) ?> Markdown İçeriği</div>
                             <textarea name="raw_content" id="raw_content" class="form-control" style="width:100%; height: 600px; border:none; resize:none; padding:15px; font-family: monospace; font-size: 14px;" placeholder="Makalenizi buraya yazın veya yapıştırın. (Markdown destekler)"><?= e($post['raw_content'] ?? '') ?></textarea>
                         </div>
-                        <div class="preview-pane" style="flex: 1; height: 600px; overflow-y: auto; padding: 15px; background: #fdfdfd;">
-                            <div id="live_preview" class="article-content" style="max-width: 100%; margin: 0;">
+                        <div class="preview-pane nv46-preview-pane">
+                            <div class="nv46-pane-title"><?= icon('eye',14) ?> Canlı Önizleme</div>
+                            <div id="live_preview" class="article-content nv46-live-preview">
                                 <!-- Canlı önizleme buraya gelecek -->
                             </div>
                         </div>
@@ -130,7 +132,7 @@
             <div class="adm-card">
                 <div class="adm-card-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <h3><?= icon('help-circle', 18) ?> Sıkça Sorulan Sorular (FAQ)</h3>
-                    <button type="button" class="btn btn-light btn-sm" onclick="addFaqRow()"><?= icon('add', 16) ?> Soru Ekle</button>
+                    <button type="button" class="btn btn-light btn-sm" onclick="addFaqRow()"><?= icon('plus', 16) ?> Soru Ekle</button>
                 </div>
                 <div class="adm-card-body">
                     <p class="text-sm text-secondary mb-3">Bu alana eklediğiniz sorular otomatik olarak sayfanın sonuna şık bir akordiyon ve Google FAQ Schema olarak eklenecektir.</p>
@@ -141,7 +143,7 @@
                             foreach ($faqs as $i => $faq):
                         ?>
                         <div class="faq-row" style="background: #f8f9fa; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; margin-bottom: 15px; position: relative;">
-                            <button type="button" class="btn btn-danger btn-sm" style="position: absolute; right: 15px; top: 15px; padding: 4px 8px;" onclick="this.parentElement.remove()"><?= icon('delete-bin', 14) ?></button>
+                            <button type="button" class="btn btn-danger btn-sm" style="position: absolute; right: 15px; top: 15px; padding: 4px 8px;" onclick="this.parentElement.remove()"><?= icon('trash', 14) ?></button>
                             <div class="form-group">
                                 <label>Soru</label>
                                 <input type="text" name="faq_questions[]" class="form-control" value="<?= e($faq['question']) ?>" required>
@@ -323,6 +325,7 @@
 
 </form>
 <link rel="stylesheet" href="<?= asset('css/blog-quality-v44.css') ?>?v=44.1">
+<link rel="stylesheet" href="<?= asset('css/blog-editor-v46.css') ?>?v=46.1">
 <script src="<?= asset('js/blog-quality-v44.js') ?>?v=44.1" defer></script>
 
 <!-- JS Kütüphaneleri (Select2 & TinyMCE) -->
@@ -541,6 +544,7 @@ function mdInsert(prefix, suffix) {
     ta.selectionStart = start + prefix.length;
     ta.selectionEnd = start + prefix.length + sel.length;
     ta.focus();
+    ta.dispatchEvent(new Event('input', {bubbles:true}));
     clearTimeout(window._mdTimer);
     window._mdTimer = setTimeout(function(){ updatePreview(); }, 500);
 }
@@ -556,6 +560,7 @@ function mdWrap(before, after) {
     ta.selectionStart = start + before.length;
     ta.selectionEnd = start + before.length + sel.length;
     ta.focus();
+    ta.dispatchEvent(new Event('input', {bubbles:true}));
     clearTimeout(window._mdTimer);
     window._mdTimer = setTimeout(function(){ updatePreview(); }, 500);
 }
