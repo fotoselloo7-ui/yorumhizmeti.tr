@@ -75,7 +75,7 @@ final class NetveraScriptController extends Controller
           'og_title','og_description','og_image','buy_url',
         ];
         foreach($knownFields as $key){
-            $value=trim((string)($_POST[$key]??''));
+            $value=trim((string)($_POST[$key]??($newData[$key]??'')));
             $newData[$key]=mb_substr($value,0,in_array($key,['install_info','tags','secondary_keywords'],true)?1000:500);
         }
         foreach(['modules_json','specs_json','license_json','faq_json'] as $key){
