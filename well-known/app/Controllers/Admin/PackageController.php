@@ -195,7 +195,8 @@ class PackageController extends Controller
         $seo = (new SeoScoreService())->calculate($package);
 
         $this->renderAdmin('admin/packages/form', [
-            'pageTitle' => 'Paket Düzenle', 'package' => $package, 'categories' => $categories, 'fields' => $fields, 'seoResult' => $seo
+            'pageTitle' => 'Paket Düzenle', 'package' => $package, 'categories' => $categories, 'fields' => $fields, 'seoResult' => $seo,
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$id)
         ]);
     }
 
