@@ -378,10 +378,42 @@ for(const screen of screens){
         if(await agency.count()){
           if(screen.name==='mobil') await agency.click();
           else await agency.hover();
-          const software=page.locator('#nv26-panel-agency .nv33-software-feature');
-          if(!(await software.locator('a[href="/hazir-yazilimlar"]').count()) ||
-             (await software.locator('.nv33-software-feature-chips a[href^="/hazir-yazilimlar?tur="]').count())<5){
-            errors.push('Fixed software menu is missing even though agency category exists');failed=true;
+          const software=page.locator('#nv26-panel-agency .nv35-software-card');
+          if((await software.count())!==1 ||
+             !(await software.locator('.nv27-service-parent[href="/hazir-yazilimlar"]').count()) ||
+             (await software.locator('.nv27-subcategory-link[href^="/hazir-yazilimlar?tur="]').count())!==4 ||
+             !(await software.locator('.nv27-category-footer[href="/hazir-yazilimlar"]').count())){
+            errors.push('Software is not the sixth normal agency category card');failed=true;
+          }
+          if(await page.locator('#nv26-panel-agency .nv33-software-feature').count()){
+            errors.push('Obsolete wide software banner still occupies the menu top');failed=true;
+          }
+          if(screen.name==='masaustu'){
+            const measured=await page.locator('#nv26-panel-agency').evaluate(panel=>{
+              const grid=panel.querySelector('.nv27-service-grid');
+              const cards=[...grid?.querySelectorAll(':scope > .nv27-service-card')||[]];
+              const last=cards[cards.length-1]?.getBoundingClientRect();
+              const previous=cards[cards.length-2]?.getBoundingClientRect();
+              const firstRowThird=cards[2]?.getBoundingClientRect();
+              const columns=getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+              return {
+                cards:cards.length,columns,
+                lastChildIsSoftware:cards[cards.length-1]?.matches('.nv35-software-card'),
+                sharesLastRow:!!last&&!!previous&&Math.abs(last.top-previous.top)<4,
+                alignsThirdColumn:!!last&&!!firstRowThird&&Math.abs(last.left-firstRowThird.left)<4,
+                clipped:panel.scrollHeight>panel.clientHeight+6,
+                viewportRight:last?.right,
+              };
+            });
+            if(measured.cards!==6||measured.columns!==3||
+               !measured.lastChildIsSoftware||!measured.sharesLastRow||
+               !measured.alignsThirdColumn||measured.clipped){
+              errors.push('Agency grid/card positioning defect: '+JSON.stringify(measured));failed=true;
+            }
+            await page.locator('#nv26-panel-agency').screenshot({
+              path:path.join(output,'agency-software-as-sixth-card-v35.png'),
+              animations:'disabled'
+            });
           }
           if(screen.name==='masaustu') await page.keyboard.press('Escape');
         }

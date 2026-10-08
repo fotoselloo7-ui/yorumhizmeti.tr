@@ -1,16 +1,20 @@
-/* V33: permanent ready-software entry inside the existing agency mega menu. */
-.nv33-software-feature{position:relative;display:flex;flex-direction:column;gap:12px;margin:0 0 17px;padding:14px 15px;border:1px solid #d8d7ff;border-radius:14px;background:radial-gradient(ellipse at 97% 0,rgba(119,93,232,.17),transparent 36%),linear-gradient(115deg,#f5f3ff,#eef3ff);box-shadow:0 9px 21px rgba(78,59,165,.065);min-width:0}
-.nv33-software-feature-main{display:flex;align-items:center;gap:12px;min-width:0}
-.nv33-software-feature-icon{display:grid;place-items:center;flex:0 0 47px;width:47px;height:47px;border-radius:12px;color:#fff;background:linear-gradient(135deg,#4e6afa,#8f45e2);box-shadow:0 8px 17px rgba(92,75,202,.21)}
-.nv33-software-feature-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
-.nv33-software-feature-label{color:#6f50de;font-size:8px;font-weight:800;letter-spacing:.075em}
-.nv33-software-feature-copy strong{color:#202b54;font-size:13px;font-weight:800;line-height:1.36}
-.nv33-software-feature-copy small{color:#818fae;font-size:10px;line-height:1.5}
-.nv33-software-feature-cta{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:9px 11px;flex:0 0 auto;border-radius:10px;background:linear-gradient(120deg,#5866e9,#904add);color:#fff!important;text-decoration:none;font-size:10px;font-weight:800}
-.nv33-software-feature-cta:hover{box-shadow:0 10px 20px rgba(99,69,212,.18);filter:brightness(1.06)}
-.nv33-software-feature-chips{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
-.nv33-software-feature-chips a{display:inline-flex;align-items:center;gap:5px;padding:8px 9px;border:1px solid #e0e1f6;border-radius:8px;background:rgba(255,255,255,.79);color:#526185;text-decoration:none;font-size:9px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
-.nv33-software-feature-chips a:hover{color:#6345d8;border-color:#c9c1f7;background:#fff}
+/* V35 — sixth card integrated in the existing Ajans & Yazılım grid.
+   Uses the same nv27 styles and layout as the other five cards. */
+.nv27-style-software{--nv27-card-accent:#6d4ae2;--nv27-card-bg:#f1ebff}
+.nv35-software-card .nv27-service-icon,
+.nv35-software-card .nv27-service-parent-arrow,
+.nv35-software-card .nv27-subcategory-symbol{display:grid;place-items:center}
+.nv35-software-card .nv27-subcategory-symbol{background:#efe9ff;color:#6d4ae2}
+.nv35-software-card .nv27-service-parent-copy small{min-height:28px}
+.nv35-software-card .nv27-category-footer{color:#6d4ae2}
+@media(min-width:1081px){
+  /* The previous full-width banner pushed the second row outside the viewport.
+     Two uniform rows now fit the natural height of the dropdown. */
+  .nv27-pro-panel--agency{max-height:min(820px, calc(100dvh - 88px))}
+}
+@media(max-width:600px){
+  .nv35-software-card .nv27-service-parent-copy small{min-height:0}
+}
 
 /* New dedicated catalog stays navigable even before optional database install. */
 .nv33-catalog{background:#fff}
