@@ -1,0 +1,241 @@
+/* ============================================================
+   YorumHizmeti.tr — VISUAL DEMO V12
+   Fills empty visual slots so the complete design can be reviewed.
+   Loaded after fidelity layers.
+   ============================================================ */
+
+/* ---------- shared image behavior ---------- */
+.yh6-blog-image img,
+.yv-blog-post-image-v8 img,
+.yv-blog-featured-photo-v12,
+.yv-blog-popular-v8 img,
+.yv-blog-detail-art-v12 img,
+.yv-product-demo-photo-v12,
+.yv-product-thumbs-v12 img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* ---------- homepage blog visuals ---------- */
+.yh6-blog-image{position:relative!important}
+.yh6-blog-image img{transition:transform .35s ease}
+.yh6-blog-card:hover .yh6-blog-image img{transform:scale(1.045)}
+.yh6-blog-image-badge{
+  position:absolute;
+  left:9px;
+  bottom:9px;
+  width:30px;height:30px;
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  color:#5e48df;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 8px 20px rgba(24,35,77,.16);
+  backdrop-filter:blur(10px)
+}
+
+/* ---------- blog index ---------- */
+.yv-blog-featured-media-v8{position:relative!important;overflow:hidden!important}
+.yv-blog-featured-photo-v12{position:absolute;inset:0;z-index:1}
+.yv-blog-featured-media-v8:after{
+  content:"";
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(90deg,rgba(55,42,160,.30),transparent 48%),linear-gradient(180deg,transparent 55%,rgba(15,20,45,.22))
+}
+.yv-blog-featured-overlay-v12{
+  position:absolute;
+  z-index:4;
+  right:18px;
+  bottom:18px;
+  min-width:112px;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:13px;
+  background:rgba(255,255,255,.92);
+  box-shadow:0 14px 30px rgba(24,32,74,.18);
+  backdrop-filter:blur(12px)
+}
+.yv-blog-featured-overlay-v12>span{
+  width:28px;height:28px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:7px;background:#eef3ff;color:#6048df
+}
+.yv-blog-featured-overlay-v12 strong{display:block;color:#171d39;font-size:19px;line-height:1}
+.yv-blog-featured-overlay-v12 em{display:block;margin-top:4px;color:#ffad0b;font-style:normal;font-size:9px;letter-spacing:1px}
+
+.yv-blog-post-image-v8{position:relative!important;overflow:hidden!important}
+.yv-blog-post-image-v8 img{position:absolute;inset:0}
+.yv-blog-post-image-v8:after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,transparent 55%,rgba(11,17,39,.42))
+}
+.yv-blog-post-image-v8>b{position:absolute!important;z-index:3!important;left:10px!important;bottom:9px!important;top:auto!important}
+.yv-blog-post-brand-v12{
+  position:absolute;z-index:3;right:10px;top:10px;
+  width:30px;height:30px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  color:#654ce3;background:rgba(255,255,255,.94);
+  box-shadow:0 8px 18px rgba(24,32,74,.14)
+}
+.yv-blog-post-card-v8:hover .yv-blog-post-image-v8 img{transform:scale(1.045)}
+.yv-blog-post-image-v8 img{transition:transform .35s ease}
+
+.yv-blog-popular-v8>span{
+  overflow:hidden!important;
+  border-radius:8px!important;
+  background:#edf1f8!important
+}
+.yv-blog-popular-v8>span img{object-fit:cover!important}
+
+/* ---------- blog detail ---------- */
+.yv-blog-detail-art-v12{
+  position:relative!important;
+  min-height:300px!important;
+  overflow:hidden!important;
+  background:#edf2ff!important;
+  box-shadow:0 16px 36px rgba(25,38,81,.10)!important
+}
+.yv-blog-detail-art-v12 img{position:absolute;inset:0}
+.yv-blog-detail-shade-v12{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(120deg,rgba(47,42,128,.12),transparent 48%,rgba(244,46,145,.09))
+}
+.yv-blog-detail-art-v12 .yv-float{z-index:3!important}
+
+/* ---------- product detail photo gallery ---------- */
+.yv-product-gallery-demo-v12{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  background:#eaf1ff
+}
+.yv-product-demo-photo-v12{position:absolute;inset:0}
+.yv-product-demo-gradient-v12{
+  position:absolute;inset:0;z-index:1;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,255,255,.52),transparent 26%),
+    linear-gradient(90deg,rgba(42,43,130,.15),transparent 48%,rgba(244,46,145,.08))
+}
+.yv-product-gallery-demo-v12 .logo{
+  position:absolute;z-index:4!important;left:24px;top:24px;
+  width:60px;height:60px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.95);color:#5f49df;
+  box-shadow:0 16px 32px rgba(25,34,78,.18)
+}
+.yv-product-gallery-demo-v12 .review{
+  position:absolute;z-index:4!important;left:24px;bottom:25px;
+  min-width:170px;padding:12px 14px;border-radius:13px;
+  background:rgba(255,255,255,.94);color:#ffad0b;
+  box-shadow:0 16px 34px rgba(25,34,78,.17);
+  backdrop-filter:blur(12px)
+}
+.yv-product-gallery-demo-v12 .review b,
+.yv-product-gallery-demo-v12 .review small{display:block;color:#202944}
+.yv-product-gallery-demo-v12 .review b{margin-top:5px;font-size:9px}
+.yv-product-gallery-demo-v12 .review small{margin-top:2px;font-size:7px;color:#778198}
+.yv-product-gallery-demo-v12 .business{
+  position:absolute;z-index:4!important;right:22px;bottom:25px;
+  min-width:148px;padding:11px 13px;border-radius:13px;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 16px 34px rgba(25,34,78,.17);
+  backdrop-filter:blur(12px)
+}
+.yv-product-gallery-demo-v12 .business strong,
+.yv-product-gallery-demo-v12 .business span,
+.yv-product-gallery-demo-v12 .business small{display:block}
+.yv-product-gallery-demo-v12 .business strong{font-size:9px;color:#202944}
+.yv-product-gallery-demo-v12 .business span{margin-top:4px;color:#ffad0b;font-size:8px}
+.yv-product-gallery-demo-v12 .business small{margin-top:2px;color:#7a8499;font-size:7px}
+
+.yv-product-thumbs-v12 span{
+  padding:0!important;
+  overflow:hidden!important;
+  background:#eef2f8!important
+}
+.yv-product-thumbs-v12 img{object-fit:cover!important}
+.yv-product-thumbs-v12 span:nth-last-child(-n+2) img{object-fit:contain!important;background:linear-gradient(135deg,#ffe8f2,#ece7ff)!important}
+
+/* ---------- contact / FAQ / content pages ---------- */
+.yv-simple-hero-visual-v12{overflow:hidden!important}
+.yv-simple-hero-visual-v12>.container{
+  display:grid!important;
+  grid-template-columns:1fr .85fr!important;
+  gap:36px!important;
+  align-items:center!important;
+  min-height:310px!important
+}
+.yv-simple-hero-copy-v12{position:relative;z-index:3}
+.yv-simple-hero-art-v12{
+  position:relative;
+  align-self:stretch;
+  min-height:300px
+}
+.yv-simple-hero-art-v12 .blob{
+  position:absolute;right:3%;top:6%;
+  width:84%;height:90%;
+  border-radius:46% 54% 42% 58%/48% 44% 56% 52%;
+  background:
+    radial-gradient(circle at 29% 22%,rgba(255,255,255,.94),transparent 28%),
+    linear-gradient(145deg,#ffdceb,#eadcff 56%,#e2efff)
+}
+.yv-simple-hero-art-v12 img{
+  position:absolute;z-index:2;
+  right:11%;bottom:0;
+  width:62%;height:96%;
+  object-fit:contain;object-position:center bottom;
+  filter:drop-shadow(0 20px 26px rgba(53,39,105,.13))
+}
+.yv-simple-hero-art-v12>span{
+  position:absolute;z-index:4;right:2%;bottom:22%;
+  display:flex;align-items:center;gap:7px;
+  padding:10px 12px;border-radius:12px;
+  background:rgba(255,255,255,.95);color:#28324e;
+  box-shadow:0 14px 30px rgba(28,39,82,.15);
+  font-size:8px;font-weight:800
+}
+.yv-faq-lead-v12{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:390px!important;
+  padding-bottom:170px!important
+}
+.yv-faq-lead-v12>img{
+  position:absolute;
+  right:-7%;bottom:-8px;
+  width:72%;height:210px;
+  object-fit:contain;object-position:right bottom;
+  filter:drop-shadow(0 14px 24px rgba(0,0,0,.16))
+}
+
+/* ---------- make every visual feel intentionally filled ---------- */
+.yv-category-card,
+.yh6-promo-card,
+.yv-blog-post-card-v8,
+.yh6-blog-card,
+.yv-product-related-card-v5{overflow:hidden}
+.yv-category-card:before{
+  content:"";
+  position:absolute;
+  left:-15%;bottom:-55%;
+  width:75%;height:115%;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:50%
+}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .yv-simple-hero-visual-v12>.container{grid-template-columns:1fr!important;gap:10px!important}
+  .yv-simple-hero-art-v12{min-height:250px}
+  .yv-simple-hero-art-v12 img{right:18%;width:52%}
+}
+@media(max-width:650px){
+  .yv-blog-featured-overlay-v12{right:10px;bottom:10px;min-width:96px}
+  .yv-product-gallery-demo-v12 .review{left:10px;bottom:10px;min-width:145px}
+  .yv-product-gallery-demo-v12 .business{right:10px;bottom:10px;min-width:125px}
+  .yv-product-gallery-demo-v12 .logo{left:10px;top:10px;width:48px;height:48px}
+  .yv-simple-hero-art-v12{min-height:220px}
+  .yv-simple-hero-art-v12 img{right:7%;width:70%;height:94%}
+  .yv-faq-lead-v12{min-height:340px!important}
+}
