@@ -71,6 +71,9 @@
                 <a href="/admin/destek" class="<?= isActive('/admin/destek') ?>">
                     <?= icon('headphones', 18) ?> Destek Talepleri
                 </a>
+                <a href="/admin/mesajlar" class="<?= isActive('/admin/mesaj') ? 'active' : '' ?>">
+                    <?= icon('mail', 18) ?> İletişim ve E-Bülten
+                </a>
 
                 <div class="sidebar-section">İçerik</div>
                 <a href="/admin/ana-sayfa" class="<?= isActive('/admin/ana-sayfa') ?>">
