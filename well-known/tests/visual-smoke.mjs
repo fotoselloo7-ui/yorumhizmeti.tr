@@ -509,6 +509,27 @@ for(const screen of screens){
         if(state.collisions||state.overflow||state.cards.some(x=>!x.validCta||x.badChips||x.tooManyChips||!x.artVisible||x.narrow||x.contentOverflow)){
           errors.push('Premium service cards responsive/data defect: '+JSON.stringify(state));failed=true;
         }
+        // Regression: differently sized headlines/descriptions must NEVER
+        // stagger the three CTA buttons or their chip-footer baselines.
+        if(['masaustu','genis'].includes(screen.name)){
+          const positions=await promos.evaluateAll(cards=>cards.map(card=>{
+            const button=card.querySelector('.nv29-card-cta')?.getBoundingClientRect();
+            const foot=card.querySelector('.nv29-service-chips')?.getBoundingClientRect();
+            const header=card.querySelector('.nv29-card-content h3')?.getBoundingClientRect();
+            const root=card.getBoundingClientRect();
+            return {ctaTop:button?.top,ctaBottom:button?.bottom,footerTop:foot?.top,
+                    headerTop:header?.top,cardBottom:root.bottom};
+          }));
+          for(const property of ['ctaTop','ctaBottom','footerTop']){
+            const values=positions.map(p=>p[property]);
+            const diff=Math.max(...values)-Math.min(...values);
+            if(diff>2.5)throw new Error('Three home promo '+property+' elements are staggered by '+diff.toFixed(1)+'px: '+JSON.stringify(positions));
+          }
+          if(positions.some(p=>p.ctaBottom>p.footerTop-10))
+            throw new Error('Service CTA touches category chips footer');
+          if(positions.some(p=>p.ctaTop<=p.headerTop))
+            throw new Error('Service CTA overlaps heading');
+        }
         if(screen.name==='masaustu'){
           const image=page.locator('.nv29-social-person');
           if(!(await image.evaluate(el=>el.complete&&el.naturalWidth>0))){
