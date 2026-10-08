@@ -43,11 +43,11 @@
       <label class="adm31-switch"><input type="checkbox" name="enabled" value="1" <?= $prefs['enabled'] ? 'checked' : '' ?>>
         <span><strong>Yazılım kartları aktif</strong><small>Kapatırsan yalnız ürün kartları gizlenir; ana sayfadaki Hazır Yazılımlar bölümü görünür kalır.</small></span>
       </label>
-      <?php if(empty($packages)): ?>
+      <?php if(empty($packages) && empty($otherPackages)): ?>
         <div class="adm31-empty">
           <?= icon('package',26) ?>
-          <strong>Henüz bu kategoride yazılım paketi yok.</strong>
-          <p>Önce kategorileri kur. Ardından Paket Ekle ekranında Hazır Yazılımlar altından bir kategori seç ve gerçek yazılım ürününü kaydet.</p>
+          <strong>Henüz hazır yazılım olarak tanımlanan paket yok.</strong>
+          <p>Hazır Yazılımlar kategorisine ürün ekleyebilir ya da aşağıdaki diğer paketler listesinden mevcut bir yazılımı seçebilirsin.</p>
         </div>
       <?php else: ?>
         <p class="form-hint"><strong><?= empty($prefs['ids']) ? 'Otomatik vitrin etkin:' : 'Özel sıralama etkin:' ?></strong> <?= empty($prefs['ids']) ? 'Uygun aktif yazılımlar sırayla kendiliğinden gösterilir. Hiç işaretleme yapman gerekmez.' : 'Sadece seçtiğin ürünler girdiğin sıra ile gösterilir. Otomatiğe dönmek için seçimleri temizleyip kaydet.' ?></p>
@@ -67,6 +67,29 @@
         </div>
         <?php endforeach; ?>
         </div>
+      <?php endif; ?>
+      <?php if (!empty($otherPackages)): ?>
+      <details class="adm34-other-products">
+        <summary><?= icon('plus',14) ?> Diğer kategorilerdeki paketlerden yazılım seç (<?= count($otherPackages) ?>)</summary>
+        <p>Ürünün adı sadece “Demo” veya “Örnek Paket” ise otomatik tanınmaz. Gerçekten bir yazılımsa buradan seç; kategori ve ürün bilgileri değiştirilmez.</p>
+        <div class="adm31-package-grid">
+        <?php foreach($otherPackages as $pkg):
+          $active = ($pkg['status'] ?? '')==='active' && ($pkg['category_status'] ?? '')==='active'
+            && ($pkg['category_parent_id'] === null || ($pkg['parent_status'] ?? '')==='active');
+        ?>
+          <div class="adm31-package-row">
+            <label class="adm31-pkg-check">
+              <input type="checkbox" name="featured[]" value="<?= (int)$pkg['id'] ?>">
+              <span class="adm31-pkg-title"><strong><?= e($pkg['name']) ?></strong><small><?= e($pkg['category_name']) ?></small></span>
+            </label>
+            <div class="adm31-pkg-right">
+              <span class="adm31-pkg-status <?= $active?'on':'off' ?>"><?= $active?'Yayında':'Pasif' ?></span>
+              <label>Sıra <input name="positions[<?= (int)$pkg['id'] ?>]" type="number" min="1" max="9999" value="999" aria-label="<?= e($pkg['name']) ?> vitrin sırası"></label>
+            </div>
+          </div>
+        <?php endforeach; ?>
+        </div>
+      </details>
       <?php endif; ?>
     </div>
     <div class="adm31-savebar">

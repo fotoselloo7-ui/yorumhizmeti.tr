@@ -14,6 +14,7 @@ class SoftwareShowcaseController extends Controller
             'root' => SoftwareCatalogService::root(),
             'categories' => SoftwareCatalogService::definitions(),
             'packages' => SoftwareCatalogService::eligiblePackages(),
+            'otherPackages' => SoftwareCatalogService::otherPackages(),
             'prefs' => SoftwareCatalogService::preferences(),
         ]);
     }

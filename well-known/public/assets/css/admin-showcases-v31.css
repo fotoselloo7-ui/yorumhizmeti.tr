@@ -50,3 +50,9 @@
 .adm31-ref-editor>form:last-child{margin-top:10px}
 @media(max-width:1200px){.adm31-package-grid,.adm31-existing-refs{grid-template-columns:1fr}}
 @media(max-width:720px){.adm31-setup-row,.adm31-savebar{align-items:stretch;flex-direction:column}.adm31-setup-row form{width:100%}.adm31-form-grid,.adm31-ref-editor .adm31-form-grid{grid-template-columns:1fr}.adm31-package-row{align-items:flex-start;flex-direction:column}.adm31-pkg-right{width:100%;justify-content:space-between}}
+
+/* V34: legacy packages can explicitly be promoted to the software showcase. */
+.adm34-other-products{margin-top:19px;padding:14px;border:1px solid #dedaf8;border-radius:12px;background:#fbfaff}
+.adm34-other-products summary{cursor:pointer;display:flex;align-items:center;gap:7px;color:#6246d3;font-size:12px;font-weight:800}
+.adm34-other-products p{margin:11px 0;color:#8490a9;font-size:11px;line-height:1.7}
+.adm34-other-products .adm31-package-grid{margin-top:11px}
