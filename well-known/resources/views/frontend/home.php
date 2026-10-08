@@ -432,7 +432,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
         <?php if (!empty($softwarePreviewCategories)): ?>
         <div class="nv32-service-list" aria-label="Hazır yazılım kategorileri">
           <?php foreach ($softwarePreviewCategories as $softwareCategory): ?>
-          <a href="<?= e($softwareCatalogUrl) ?>?alt=<?= rawurlencode($softwareCategory['slug']) ?>">
+          <a href="/hazir-yazilimlar?tur=<?= rawurlencode($softwareCategory['slug']) ?>">
             <?= icon($softwareCategory['icon_key'] ?: 'monitor',14) ?> <?= e($softwareCategory['name']) ?> <?= icon('arrow-up-right',12) ?>
           </a>
           <?php endforeach; ?>

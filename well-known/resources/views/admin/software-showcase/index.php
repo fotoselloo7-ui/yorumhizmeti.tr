@@ -3,13 +3,13 @@
     <p class="text-sm text-secondary">Sektöre özel yazılım kategorileri, ayrı vitrin seçimi ve sürükleme gerektirmeyen sıra yönetimi.</p>
   </div>
   <div class="adm-page-top-badges">
-    <a href="/" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><?= icon('external-link',14) ?> Vitrini Gör</a>
+    <a href="/hazir-yazilimlar" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><?= icon('external-link',14) ?> Yazılım Kataloğunu Gör</a>
     <a href="/admin/paket/ekle" class="btn btn-primary btn-sm"><?= icon('plus',14) ?> Yazılım Paketi Ekle</a>
   </div>
 </div>
 <div class="adm31-help">
   <strong><?= icon('info',16) ?> Kurulum ve yayın akışı</strong>
-  <p>1. Yazılım kategorilerini bir kez oluşturun. 2. Yeni yazılım paketlerini ilgili alt kategoriye kaydedin. 3. Aşağıdan ana sayfada gösterilecekleri işaretleyip sıralayın. Sadece aktif paketler yayınlanır.</p>
+  <p>Aktif ve adı yazılım/script olan ürünler ilk kayıttan itibaren otomatik yayınlanır. Özel sıralama için aşağıdan istediğin paketleri seçebilirsin. Eski Web Site kategorilerine eklenmiş yazılım ürünleri de algılanır. Yeni sektör kategorilerini aşağıdaki butonla oluşturabilirsin.</p>
 </div>
 <div class="adm-card">
   <div class="adm-card-header"><h3><?= icon('layers',18) ?> Hazır Yazılım Kategorileri</h3></div>
@@ -41,7 +41,7 @@
     <div class="adm-card-header"><h3><?= icon('star-fill',18) ?> Ana Sayfada Öne Çıkan Hazır Yazılımlar</h3></div>
     <div class="adm-card-body">
       <label class="adm31-switch"><input type="checkbox" name="enabled" value="1" <?= $prefs['enabled'] ? 'checked' : '' ?>>
-        <span><strong>Yazılım vitrini aktif</strong><small>İşaret kaldırıldığında ana sayfadaki bölüm gizlenir; seçimler korunur.</small></span>
+        <span><strong>Yazılım kartları aktif</strong><small>Kapatırsan yalnız ürün kartları gizlenir; ana sayfadaki Hazır Yazılımlar bölümü görünür kalır.</small></span>
       </label>
       <?php if(empty($packages)): ?>
         <div class="adm31-empty">
@@ -50,7 +50,7 @@
           <p>Önce kategorileri kur. Ardından Paket Ekle ekranında Hazır Yazılımlar altından bir kategori seç ve gerçek yazılım ürününü kaydet.</p>
         </div>
       <?php else: ?>
-        <p class="form-hint">Listeyi sıra numarasına göre yönet. Daha küçük sayı daha önce görünür. Bu vitrin normal öne çıkan paket seçiminden bağımsızdır.</p>
+        <p class="form-hint"><strong><?= empty($prefs['ids']) ? 'Otomatik vitrin etkin:' : 'Özel sıralama etkin:' ?></strong> <?= empty($prefs['ids']) ? 'Uygun aktif yazılımlar sırayla kendiliğinden gösterilir. Hiç işaretleme yapman gerekmez.' : 'Sadece seçtiğin ürünler girdiğin sıra ile gösterilir. Otomatiğe dönmek için seçimleri temizleyip kaydet.' ?></p>
         <div class="adm31-package-grid">
         <?php foreach($packages as $pkg):
           $active = $pkg['status']==='active' && $pkg['category_status']==='active' && (($root['status']??'inactive')==='active');
@@ -70,7 +70,7 @@
       <?php endif; ?>
     </div>
     <div class="adm31-savebar">
-      <span><?= icon('info',14) ?> Kaydettiğin seçili yazılımlar ana sayfada yalnızca aktifse gösterilir.</span>
+      <span><?= icon('info',14) ?> Hiç seçim yoksa aktif yazılımlar otomatik gösterilir; elle seçilenler özel sırayla yayınlanır.</span>
       <button type="submit" class="btn btn-primary"><?= icon('save',16) ?> Vitrini ve Sıralamayı Kaydet</button>
     </div>
   </div>

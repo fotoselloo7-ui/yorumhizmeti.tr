@@ -187,9 +187,7 @@ class HomeController extends Controller
         // Both remain hidden on the storefront until the admin publishes data.
         $softwareHighlights = \App\Services\SoftwareCatalogService::featured();
         $softwareRoot = \App\Services\SoftwareCatalogService::root();
-        $softwareCatalogUrl = !empty($softwareRoot) && ($softwareRoot['status'] ?? '') === 'active'
-            ? '/kategori/' . \App\Services\SoftwareCatalogService::ROOT_SLUG
-            : '/kategoriler?grup=agency';
+        $softwareCatalogUrl = '/hazir-yazilimlar';
         $softwarePreviewCategories = [];
         if (($softwareRoot['status'] ?? '') === 'active') {
             $softwarePreviewCategories = $db->fetchAll(

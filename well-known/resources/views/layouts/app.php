@@ -232,8 +232,27 @@
                       <div><span class="nv27-service-overline"><?= icon('grid',13) ?> HİZMET KATALOĞU</span><strong><?= e($nv26Label) ?></strong></div>
                       <span class="nv27-service-count"><?= count($nv26Group['categories']) ?> kategori</span>
                     </div>
+                    <?php if ($nv27Agency): ?>
+                    <div class="nv33-software-feature">
+                      <div class="nv33-software-feature-main">
+                        <span class="nv33-software-feature-icon"><?= icon('monitor',28) ?></span>
+                        <div class="nv33-software-feature-copy">
+                          <span class="nv33-software-feature-label">HAZIR ÜRÜNLER & WEB SCRIPTLERİ</span>
+                          <strong>Hazır Yazılımlar & Scriptler</strong>
+                          <small>Haber, emlak, e-ticaret, blog ve işletme yazılımları</small>
+                        </div>
+                        <a class="nv33-software-feature-cta" href="/hazir-yazilimlar">Tüm Yazılımlar <?= icon('arrow-right',14) ?></a>
+                      </div>
+                      <div class="nv33-software-feature-chips" aria-label="Hazır yazılım türleri">
+                        <?php foreach (array_slice(\App\Services\SoftwareCatalogService::definitions(),0,7) as [$scriptName,$scriptSlug]): ?>
+                        <a href="/hazir-yazilimlar?tur=<?= rawurlencode($scriptSlug) ?>"><?= e($scriptName) ?> <?= icon('arrow-up-right',11) ?></a>
+                        <?php endforeach; ?>
+                      </div>
+                    </div>
+                    <?php endif; ?>
                     <div class="nv27-service-grid">
                       <?php foreach ($nv26Group['categories'] as $nv26Cat):
+                        if ($nv27Agency && ($nv26Cat['slug'] ?? '') === \App\Services\SoftwareCatalogService::ROOT_SLUG) continue;
                           $nv27ChildCount = count($nv26Cat['children']);
                           $nv27Description = trim(strip_tags((string)($nv26Cat['description'] ?? '')));
                           $nv27Description = $nv27Description !== ''
