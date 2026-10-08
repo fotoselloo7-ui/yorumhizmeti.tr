@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Instagram etkileşim ve içerik stratejisi illüstrasyonu">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fc5a91"/><stop offset=".45" stop-color="#bf40d9"/><stop offset="1" stop-color="#5442df"/></linearGradient>
+<linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#ffd25e"/><stop offset=".33" stop-color="#ff4f80"/><stop offset=".7" stop-color="#b52adb"/><stop offset="1" stop-color="#584aff"/></linearGradient>
+<filter id="shadow"><feDropShadow dx="0" dy="21" stdDeviation="27" flood-color="#300a61" flood-opacity=".27"/></filter>
+</defs>
+<rect width="1200" height="680" fill="url(#bg)"/>
+<circle cx="310" cy="116" r="270" fill="#fff" opacity=".11"/><circle cx="1090" cy="540" r="310" fill="#fff" opacity=".11"/>
+<g opacity=".18" fill="none" stroke="#fff" stroke-width="2"><circle cx="985" cy="150" r="205"/><circle cx="985" cy="150" r="158"/><circle cx="985" cy="150" r="115"/></g>
+<g transform="translate(405 32) rotate(-10 205 302)" filter="url(#shadow)">
+<rect x="0" y="0" width="418" height="618" rx="59" fill="#151332" stroke="#ebcaff" stroke-width="9"/>
+<rect x="19" y="19" width="380" height="581" rx="40" fill="#fff8ff"/>
+<rect x="145" y="19" width="120" height="20" rx="10" fill="#151332"/>
+<rect x="46" y="68" width="325" height="278" rx="22" fill="url(#g)"/>
+<circle cx="209" cy="203" r="81" stroke="#fff" stroke-width="24" fill="none"/>
+<rect x="133" y="129" width="155" height="155" rx="49" fill="none" stroke="#fff" stroke-width="20"/>
+<circle cx="270" cy="149" r="14" fill="#fff"/>
+<rect x="46" y="375" width="226" height="17" rx="8" fill="#273566" opacity=".90"/>
+<rect x="46" y="410" width="300" height="12" rx="6" fill="#bcc0da"/>
+<rect x="46" y="437" width="262" height="12" rx="6" fill="#d7d9ec"/>
+<rect x="46" y="487" width="66" height="65" rx="17" fill="#fee4ef"/><rect x="130" y="487" width="66" height="65" rx="17" fill="#eae6ff"/><rect x="214" y="487" width="66" height="65" rx="17" fill="#e3f4ff"/><rect x="298" y="487" width="66" height="65" rx="17" fill="#e2ffed"/>
+</g>
+<g filter="url(#shadow)">
+<rect x="90" y="136" width="230" height="100" rx="24" fill="#fff"/>
+<circle cx="137" cy="186" r="31" fill="#ffe0ef"/><path d="M137 210l-18-18a14 14 0 0118-21 14 14 0 0118 21z" fill="#ff3191"/>
+<text x="179" y="181" fill="#24204b" font-family="Arial" font-size="27" font-weight="700">+25K</text><text x="179" y="208" fill="#9091b1" font-family="Arial" font-size="15">Beğeni</text>
+<rect x="862" y="350" width="245" height="102" rx="25" fill="#fff"/>
+<circle cx="909" cy="401" r="29" fill="#e3faff"/>
+<path d="M898 401h22m-11-11v22" stroke="#379cee" stroke-width="6" stroke-linecap="round"/>
+<text x="953" y="396" fill="#232c5a" font-family="Arial" font-size="24" font-weight="700">+68%</text>
+<text x="953" y="421" fill="#9298b1" font-family="Arial" font-size="13">Erişim artışı</text>
+</g>
+<circle cx="974" cy="143" r="54" fill="url(#g)"/><path d="M949 162v-39l47 20z" fill="#fff"/>
+<g opacity=".68"><circle cx="147" cy="448" r="11" fill="#fff"/><circle cx="188" cy="480" r="7" fill="#fff"/><circle cx="1080" cy="535" r="13" fill="#fff"/></g>
+</svg>
