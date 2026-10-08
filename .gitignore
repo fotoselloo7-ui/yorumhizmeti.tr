@@ -1,0 +1,13 @@
+# Never commit local credentials, session/cache data or QA artifacts
+.env
+**/.env
+.env.local
+**/.env.local
+!**/.env.example
+node_modules/
+**/node_modules/
+qa-artifacts/
+well-known/storage/cache/*
+well-known/storage/logs/*
+well-known/public/uploads/*
+!well-known/public/uploads/.gitkeep
