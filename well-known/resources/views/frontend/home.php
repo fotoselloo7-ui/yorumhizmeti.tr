@@ -294,36 +294,103 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
             <?php foreach ($featuredNavGroups as $navGroup):
                 $groupOpen = ($navGroup['key'] === $initialFeaturedNavGroup);
             ?>
-            <div class="yh24-featured-filter-panel"
+            <div class="yh24-featured-filter-panel nv43-featured-panel"
                  id="yh24-filter-<?= e($navGroup['key']) ?>"
                  data-featured-filter-panel="<?= e($navGroup['key']) ?>"
                  <?= $groupOpen?'':'hidden' ?>>
-                <span class="yh24-featured-filter-caption"><?= icon('sliders-horizontal', 14) ?> <?= e($navGroup['title']) ?></span>
-                <div class="yh24-featured-filter-list" role="tablist" aria-label="<?= e($navGroup['title']) ?> alt kategorileri">
-                    <?php foreach ($navGroup['categories'] as $filterCategory):
-                        [$gcls,$gico,$glabel] = yh6Platform($filterCategory['slug']??'', $filterCategory['name']??'');
-                        $isSoftware = (($filterCategory['kind'] ?? '') === 'software');
-                        if ($isSoftware) {
-                            $gcls = 'software';
-                            $gico = $filterCategory['icon'] ?? 'monitor';
-                        }
-                        $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
-                    ?>
-                    <button type="button"
-                            class="yh18-featured-tab yh24-featured-filter <?= $selected?'active':'' ?> <?= e($gcls) ?>"
-                            data-featured-tab="<?= (int)$filterCategory['id'] ?>"
-                            data-featured-parent-group="<?= e($navGroup['key']) ?>"
-                            data-title="<?= e($filterCategory['name']) ?>"
-                            data-class="<?= e($gcls) ?>"
-                            data-kind="<?= $isSoftware ? 'software' : 'package' ?>"
-                            data-url="<?= e($filterCategory['url'] ?? '/kategori/'.$filterCategory['slug']) ?>"
-                            aria-selected="<?= $selected?'true':'false' ?>"
-                            title="<?= e($filterCategory['name']) ?>">
-                        <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
-                        <span class="yh26-filter-name"><?= e($filterCategory['name']) ?></span>
-                    </button>
-                    <?php endforeach; ?>
+                <div class="nv43-rail-heading">
+                    <span class="yh24-featured-filter-caption"><?= icon('sliders-horizontal', 14) ?> <?= e($navGroup['title']) ?> <small>ANA KATEGORİLER</small></span>
+                    <span class="nv43-rail-instruction"><?= icon('mouse-pointer-2', 12) ?> Tutup kaydırabilir veya okları kullanabilirsiniz</span>
                 </div>
+                <div class="nv43-rail-shell">
+                    <button type="button" class="nv43-rail-arrow" data-featured-rail-prev aria-label="Önceki ana kategoriler"><?= icon('chevron-left',18) ?></button>
+                    <div class="yh24-featured-filter-list nv43-root-rail" data-featured-rail data-featured-rail-kind="root"
+                         role="tablist" aria-label="<?= e($navGroup['title']) ?> ana kategoriler">
+                        <?php foreach ($navGroup['categories'] as $filterCategory):
+                            [$gcls,$gico,$glabel] = yh6Platform($filterCategory['slug']??'', $filterCategory['name']??'');
+                            $isSoftware = (($filterCategory['kind'] ?? '') === 'software');
+                            if ($isSoftware) {
+                                $gcls = 'software';
+                                $gico = $filterCategory['icon'] ?? 'monitor';
+                            } elseif (!empty($filterCategory['icon'])) {
+                                $gico = $filterCategory['icon'];
+                            }
+                            $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
+                        ?>
+                        <button type="button"
+                                class="yh18-featured-tab yh24-featured-filter nv43-category-card <?= $selected?'active':'' ?> <?= e($gcls) ?>"
+                                data-featured-tab="<?= (int)$filterCategory['id'] ?>"
+                                data-featured-root-id="<?= (int)$filterCategory['id'] ?>"
+                                data-featured-parent-group="<?= e($navGroup['key']) ?>"
+                                data-title="<?= e($filterCategory['name']) ?>"
+                                data-class="<?= e($gcls) ?>"
+                                data-kind="<?= $isSoftware ? 'software' : 'package' ?>"
+                                data-url="<?= e($filterCategory['url'] ?? '/kategori/'.$filterCategory['slug']) ?>"
+                                aria-selected="<?= $selected?'true':'false' ?>"
+                                title="<?= e($filterCategory['name']) ?>">
+                            <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
+                            <span class="yh26-filter-name"><?= e($filterCategory['name']) ?></span>
+                            <?php if(!empty($featuredChildCategories[(int)$filterCategory['id']])): ?>
+                            <span class="nv43-subcategory-indicator"><?= icon('chevron-right',11) ?> Alt kategoriler</span>
+                            <?php endif; ?>
+                        </button>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="nv43-rail-arrow" data-featured-rail-next aria-label="Sonraki ana kategoriler"><?= icon('chevron-right',18) ?></button>
+                </div>
+                <?php foreach(($featuredChildCategories ?? []) as $parentId=>$children):
+                    $hasParentInGroup=false;
+                    foreach($navGroup['categories'] as $nc) {
+                        if((int)$nc['id']===(int)$parentId){$hasParentInGroup=true;break;}
+                        if((int)($nc['id']??0)===-100000 && (int)$parentId < -100000){$hasParentInGroup=true;break;}
+                    }
+                    if(!$hasParentInGroup || !$children)continue;
+                    $showChildren=$groupOpen && (int)$parentId===(int)$firstFeaturedGroup['category']['id'];
+                ?>
+                <div class="nv43-child-panel" data-featured-children-for="<?= (int)$parentId ?>"
+                     <?= $showChildren?'':'hidden' ?>>
+                    <div class="nv43-rail-heading nv43-child-heading">
+                        <span><?= icon('corner-down-right',14) ?> ALT KATEGORİLER</span>
+                        <a href="<?= e((int)$parentId===-100000?'/hazir-scriptler':'/kategoriler') ?>" class="nv43-rail-all">
+                            Tümünü gör <?= icon('arrow-up-right',13) ?>
+                        </a>
+                    </div>
+                    <div class="nv43-rail-shell nv43-child-shell">
+                        <button type="button" class="nv43-rail-arrow" data-featured-rail-prev aria-label="Önceki alt kategoriler"><?= icon('chevron-left',16) ?></button>
+                        <div class="nv43-child-rail" data-featured-rail data-featured-rail-kind="child"
+                             role="tablist" aria-label="Alt kategoriler">
+                        <?php foreach($children as $child):
+                            $childType=$child['kind']??'package';
+                            $childRoot=$childType==='software'?-100000:(int)($child['parent_featured_id']??0);
+                            $childUrl=$child['url']??'/kategori/'.rawurlencode((string)$child['slug']);
+                            $childIcon=$child['icon']??'folder';
+                            if($childType==='link'): ?>
+                            <a class="nv43-subcategory-link" href="<?= e($childUrl) ?>"
+                               title="<?= e($child['name']) ?>" data-menu-link>
+                                <?= icon($childIcon, 15) ?> <span><?= e($child['name']) ?></span>
+                                <?= icon('arrow-up-right',12) ?>
+                            </a>
+                            <?php else: ?>
+                            <button class="nv43-subcategory-link nv43-subcategory-tab"
+                                    type="button" data-featured-tab="<?= (int)$child['id'] ?>"
+                                    data-featured-root-id="<?= $childRoot ?>"
+                                    data-featured-parent-id="<?= (int)$child['parent_featured_id'] ?>"
+                                    data-featured-parent-group="<?= e($navGroup['key']) ?>"
+                                    data-title="<?= e($child['name']) ?>"
+                                    data-kind="<?= e($childType) ?>"
+                                    data-class="<?= $childType==='software'?'software':'default' ?>"
+                                    data-url="<?= e($childUrl) ?>"
+                                    aria-selected="false"
+                                    title="<?= e($child['name']) ?>">
+                                <?= icon($childIcon, 15) ?> <span><?= e($child['name']) ?></span>
+                            </button>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        </div>
+                        <button type="button" class="nv43-rail-arrow" data-featured-rail-next aria-label="Sonraki alt kategoriler"><?= icon('chevron-right',16) ?></button>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
             <?php endforeach; ?>
         </div>
@@ -348,6 +415,38 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                 <div class="yh18-featured-footer">
                     <a href="/kategori/<?= e($group['category']['slug']) ?>" class="yh18-all-link">
                         <?= e($group['category']['name']) ?> kategorisindeki tüm paketleri gör <?= icon('arrow-right', 11) ?>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+
+            <?php foreach(($featuredChildPackageGroups ?? []) as $childGroup): ?>
+            <div class="yh18-featured-pane nv43-child-package-pane" hidden
+                 data-featured-pane="<?= (int)$childGroup['category']['id'] ?>"
+                 data-kind="package">
+                <div class="yh18-featured-grid" data-featured-track role="region"
+                     aria-label="<?= e($childGroup['category']['name']) ?> paketleri">
+                    <?php foreach($childGroup['packages'] as $pidx=>$pkg): ?>
+                        <?= yh18FeaturedCard($pkg,$pidx===0 && (int)($pkg['is_featured']??0)===1) ?>
+                    <?php endforeach; ?>
+                    <?php if(!$childGroup['packages']): ?>
+                        <div class="nv43-empty-category">
+                            <strong><?= e($childGroup['category']['name']) ?></strong>
+                            <p>Bu kategoride henüz yayındaki paket bulunmuyor.</p>
+                            <a href="<?= e($childGroup['category']['url']) ?>">Kategoriyi incele <?= icon('arrow-right',14) ?></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="yh18-carousel-row">
+                    <div class="yh18-carousel-controls">
+                        <button type="button" class="yh18-slide-arrow" data-slide-prev aria-label="Önceki paketler"><?= icon('chevron-left',18) ?></button>
+                        <span data-slide-count>1 / <?= count($childGroup['packages']) ?></span>
+                        <button type="button" class="yh18-slide-arrow" data-slide-next aria-label="Sonraki paketler"><?= icon('chevron-right',18) ?></button>
+                    </div>
+                </div>
+                <div class="yh18-featured-footer">
+                    <a href="<?= e($childGroup['category']['url']) ?>" class="yh18-all-link">
+                        <?= e($childGroup['category']['name']) ?> kategorisine git <?= icon('arrow-right',11) ?>
                     </a>
                 </div>
             </div>
