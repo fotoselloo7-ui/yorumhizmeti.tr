@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body>
