@@ -991,8 +991,10 @@ try {
     showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
   ]);
   await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
-  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count()))
-    throw new Error('Legacy-category ready script was NOT automatically displayed');
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count())
+    throw new Error('Test service package incorrectly leaked into real Netvera scripts showcase');
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+    throw new Error('Authentic Netvera script missing from homepage software showcase');
   await showcasePage.goto(origin+'/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count()))
     throw new Error('Legacy-category ready script missing from standalone software catalog');
@@ -1033,10 +1035,13 @@ try {
     showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
   ]);
-  // New catalog-category products also appear without marking featured.
+  // New package-type software remains in the separate /hazir-yazilimlar
+  // store; it must not replace the authentic Netvera public script showcase.
   await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
-  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
-    throw new Error('New ready-script package requires an unnecessary manual feature selection');
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count())
+    throw new Error('Package-type demo incorrectly replaced authentic software');
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+    throw new Error('Real Netvera product link absent from main showcase');
   // Real functional search, filtering and price sorting on live CI catalog.
   await showcasePage.goto(origin+'/hazir-yazilimlar?q=Yaz%C4%B1l%C4%B1m',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.locator('.nv36-product-grid .nv31-software-card').count()))
@@ -1060,12 +1065,13 @@ try {
   ]);
   await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
   if(await showcasePage.locator('.nv32-software-intro').count())throw new Error('Empty script presentation remained visible after selection');
-  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
-    throw new Error('Saved script selection not displayed on storefront');
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count())
+    throw new Error('Legacy package showcase selection overrode authentic Netvera products');
 
-  // Explicit manual selection takes priority over automatic defaults.
+  // The package showroom can be reordered independently without touching
+  // homepage's authentic product URLs.
   if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count())
-    throw new Error('Manual software ordering did not replace automatic selection');
+    throw new Error('Old demo package unexpectedly present in software showcase');
   await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
   const create=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
   await create.locator('[name=title]').fill('CI Web Referans Testi');
