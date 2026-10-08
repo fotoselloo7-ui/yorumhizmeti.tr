@@ -207,6 +207,7 @@ class PackageController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $this->db->update('packages', $data, 'id = ?', [(int) $id]);
+        \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('package_update', 'Paket güncellendi: ' . $data['name']);
         flash('success', 'Paket güncellendi.');
         redirect('/admin/paketler');
