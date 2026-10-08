@@ -156,6 +156,23 @@ final class NetveraBridgeService
     }
 
 
+    /**
+     * Homepage promotion flag lives on each real software product and is
+     * maintained by the existing admin "Öne çıkan yazılım" toggle.
+     * The full catalogue /hazir-scriptler intentionally remains unchanged.
+     */
+    public static function featured(int $limit = 12): array
+    {
+        $selected = [];
+        foreach (self::all() as $product) {
+            $properties = self::jsonFields($product);
+            if ((int)($properties['is_featured'] ?? 0) !== 1) continue;
+            $selected[] = $product;
+            if (count($selected) >= max(1, min(24, $limit))) break;
+        }
+        return $selected;
+    }
+
     /** Apply the identical allowlisted search facets to the first-install snapshot. */
     private static function filterFallback(
         string $q, ?int $categoryId, ?float $minPrice, ?float $maxPrice,
