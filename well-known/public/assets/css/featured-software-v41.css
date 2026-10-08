@@ -110,6 +110,21 @@
   overflow:hidden;
 }
 .yh41-software-rating{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:9px;color:#9a6a10;font-weight:700}
+.yh41-software-empty{
+  width:min(100%,640px);
+  min-height:190px;
+  padding:30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+  border:1px dashed #d9d5ec;
+  border-radius:15px;
+  color:#64708a;
+  font-size:12px;
+  background:#fbfaff;
+}
+.yh41-software-empty a{display:inline-flex;align-items:center;gap:6px;color:#624ad8;font-weight:800}
 .yh41-software-bottom{margin-top:auto;padding:10px 2px 2px;border-top:1px solid #eef0f6}
 .yh41-software-bottom .yh18-card-price{margin-bottom:9px}
 .yh41-software-bottom .yh18-card-price strong{font-size:17px}
