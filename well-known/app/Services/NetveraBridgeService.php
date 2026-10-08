@@ -132,7 +132,7 @@ final class NetveraBridgeService
             'rating' => 'COALESCE(rv.review_count, 0) DESC, COALESCE(rv.average_rating, 0) DESC, p.sort_order ASC'
         ][$sort] ?? 'p.sort_order ASC, p.legacy_id DESC';
 
-        return Database::getInstance()->fetchAll(
+        $records=Database::getInstance()->fetchAll(
             "SELECT p.*, c.name AS category_name, c.slug AS category_slug,
                     COALESCE(rv.average_rating, 0) AS average_rating,
                     COALESCE(rv.review_count, 0) AS review_count
@@ -146,6 +146,13 @@ final class NetveraBridgeService
              WHERE ".implode(' AND ', $where)."
              ORDER BY ".$order, $args
         );
+        // On a fresh installation the tables may exist but the isolated
+        // public-content import has not run yet. Show the real catalogue.
+        $total=Database::getInstance()->fetch("SELECT COUNT(*) AS c FROM nv_legacy_script_products");
+        if ((int)($total['c']??0)===0) return self::filterFallback(
+            $q,$categoryId,$minPrice,$maxPrice,$minRating,$sort
+        );
+        return $records;
     }
 
 
