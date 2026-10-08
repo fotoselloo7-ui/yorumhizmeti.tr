@@ -122,6 +122,10 @@ class App
         $r->get('/admin/paketler', 'Admin\\PackageController@index');
         $r->post('/admin/paketler/toplu-islem', 'Admin\\PackageController@bulkAction');
         $r->post('/admin/paketler/yayinla', 'Admin\\PackageController@publishCatalog');
+        $r->get('/admin/yazilim/ekle', 'Admin\\PackageController@createSoftware');
+        $r->post('/admin/yazilim/kaydet', 'Admin\\PackageController@storeSoftware');
+        $r->get('/admin/yazilim/{id}/duzenle', 'Admin\\PackageController@editSoftware');
+        $r->post('/admin/yazilim/{id}/guncelle', 'Admin\\PackageController@updateSoftware');
         $r->get('/admin/paket/ekle', 'Admin\\PackageController@create');
         $r->post('/admin/paket/kaydet', 'Admin\\PackageController@store');
         $r->get('/admin/paket/{id}/duzenle', 'Admin\\PackageController@edit');

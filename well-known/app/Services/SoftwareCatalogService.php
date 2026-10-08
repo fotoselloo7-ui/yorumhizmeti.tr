@@ -106,7 +106,7 @@ final class SoftwareCatalogService
     public static function isSoftwareCategory(int $id): bool
     {
         foreach (self::softwareCategoryOptions() as $row) {
-            if ((int)$row['id'] === $id) return true;
+            if ((int)$row['id'] === $id && $row['parent_id'] !== null) return true;
         }
         return false;
     }

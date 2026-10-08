@@ -82,6 +82,88 @@ class PackageController extends Controller
         redirect('/admin/paketler');
     }
 
+    // Dedicated ready-software editor. The underlying package/order/SEO system
+    // is reused; only the permitted category list is restricted.
+    public function createSoftware(): void
+    {
+        $categories = array_values(array_filter(
+            \App\Services\SoftwareCatalogService::softwareCategoryOptions(),
+            static fn(array $cat): bool => $cat['parent_id'] !== null
+        ));
+        if (!$categories) {
+            flash('warning', 'Önce Hazır Yazılım Vitrini ekranından eksik yazılım kategorilerini kurun.');
+            redirect('/admin/hazir-yazilimlar');
+            return;
+        }
+        $this->renderAdmin('admin/packages/form', [
+            'pageTitle' => 'Hazır Yazılım Ekle',
+            'package' => null,
+            'categories' => $categories,
+            'fields' => [],
+            'softwareOnly' => true,
+        ]);
+    }
+
+    public function storeSoftware(): void
+    {
+        Csrf::check();
+        $data = $this->getPackageData();
+        if (!\App\Services\SoftwareCatalogService::isSoftwareCategory((int)$data['category_id'])) {
+            flash('error','Yazılım eklerken yalnızca Hazır Yazılımlar alt kategorileri seçilebilir.');
+            redirect('/admin/yazilim/ekle');
+            return;
+        }
+        if (!empty($_FILES['image']['name'])) {
+            $data['image'] = Upload::image($_FILES['image'], 'packages');
+        }
+        $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
+        $this->db->insert('packages', $data);
+        logActivity('software_create', 'Hazır yazılım oluşturuldu: '.$data['name']);
+        flash('success','Hazır yazılım eklendi. Aktifse yazılım kataloğunda otomatik görünür.');
+        redirect('/admin/hazir-yazilimlar');
+    }
+
+    public function editSoftware(string $id): void
+    {
+        $package = $this->db->fetch("SELECT * FROM packages WHERE id = ?", [(int)$id]);
+        if (!$package || !\App\Services\SoftwareCatalogService::isSoftwareCategory((int)$package['category_id'])) {
+            flash('warning','Bu ürün yazılım alt kategorilerinden birinde değil; genel paket düzenleyicisinden açın.');
+            redirect('/admin/hazir-yazilimlar');
+            return;
+        }
+        $categories = array_values(array_filter(
+            \App\Services\SoftwareCatalogService::softwareCategoryOptions(),
+            static fn(array $cat): bool => $cat['parent_id'] !== null
+        ));
+        $fields = $this->db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order",[(int)$id]);
+        $this->renderAdmin('admin/packages/form',[
+            'pageTitle' => 'Hazır Yazılım Düzenle', 'package' => $package,
+            'categories' => $categories,'fields' => $fields,
+            'softwareOnly' => true,'seoResult' => (new SeoScoreService())->calculate($package),
+        ]);
+    }
+
+    public function updateSoftware(string $id): void
+    {
+        Csrf::check();
+        $existing = $this->db->fetch("SELECT category_id FROM packages WHERE id = ?", [(int)$id]);
+        $data = $this->getPackageData();
+        if (!$existing || !\App\Services\SoftwareCatalogService::isSoftwareCategory((int)$existing['category_id']) ||
+            !\App\Services\SoftwareCatalogService::isSoftwareCategory((int)$data['category_id'])) {
+            flash('error','Yalnızca Hazır Yazılımlar kategorisindeki ürünler bu ekrandan güncellenebilir.');
+            redirect('/admin/hazir-yazilimlar');
+            return;
+        }
+        if (!empty($_FILES['image']['name'])) {
+            $data['image'] = Upload::image($_FILES['image'],'packages');
+        }
+        $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
+        $this->db->update('packages',$data,'id = ?',[(int)$id]);
+        logActivity('software_update','Hazır yazılım güncellendi: '.$data['name']);
+        flash('success','Hazır yazılım güncellendi.');
+        redirect('/admin/hazir-yazilimlar');
+    }
+
     public function create(): void
     {
         $categories = $this->db->fetchAll("SELECT id, name FROM categories WHERE status = 'active' ORDER BY name");

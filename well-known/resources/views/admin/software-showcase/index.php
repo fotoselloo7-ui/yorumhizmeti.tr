@@ -4,7 +4,7 @@
   </div>
   <div class="adm-page-top-badges">
     <a href="/hazir-yazilimlar" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><?= icon('external-link',14) ?> Yazılım Kataloğunu Gör</a>
-    <a href="/admin/paket/ekle" class="btn btn-primary btn-sm"><?= icon('plus',14) ?> Yazılım Paketi Ekle</a>
+    <a href="/admin/yazilim/ekle" class="btn btn-primary btn-sm"><?= icon('plus',14) ?> Yazılım Paketi Ekle</a>
   </div>
 </div>
 <div class="adm31-help">
@@ -22,7 +22,7 @@
       </div>
       <form method="POST" action="/admin/hazir-yazilimlar/kategorileri-kur" onsubmit="return confirm('Eksik yazılım kategorilerini oluşturmak istiyor musunuz? Mevcut kategoriler korunur.')">
         <?= csrfField() ?>
-        <button type="submit" class="btn btn-primary"><?= icon('plus',15) ?> <?= $root ? 'Eksik Kategorileri Tamamla' : '23 Kategoriyi Kur' ?></button>
+        <button type="submit" class="btn btn-primary"><?= icon('plus',15) ?> <?= $root ? 'Eksik Kategorileri Tamamla' : count($categories).' Kategoriyi Kur' ?></button>
       </form>
     </div>
     <details class="adm31-taxonomy"><summary><?= icon('grid',15) ?> Yazılım Alt Kategorilerini Gör (<?= count($categories) ?>)</summary>
@@ -62,7 +62,7 @@
           <div class="adm31-pkg-right">
             <span class="adm31-pkg-status <?= $active?'on':'off' ?>"><?= $active?'Yayında':'Gizli/Pasif' ?></span>
             <label>Sıra <input aria-label="<?= e($pkg['name']) ?> sıra numarası" name="positions[<?= (int)$pkg['id'] ?>]" type="number" min="1" max="9999" value="<?= $rank!==false?($rank+1):999 ?>"></label>
-            <a href="/admin/paket/<?= (int)$pkg['id'] ?>/duzenle" title="Paketi düzenle"><?= icon('edit',16) ?></a>
+            <a href="<?= \App\Services\SoftwareCatalogService::isSoftwareCategory((int)$pkg['category_id']) ? '/admin/yazilim/' . (int)$pkg['id'] . '/duzenle' : '/admin/paket/' . (int)$pkg['id'] . '/duzenle' ?>" title="Ürünü düzenle"><?= icon('edit',16) ?></a>
           </div>
         </div>
         <?php endforeach; ?>

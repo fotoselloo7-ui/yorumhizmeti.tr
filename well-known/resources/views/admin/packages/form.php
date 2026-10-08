@@ -1,15 +1,16 @@
 <?php $isEdit = !empty($package); ?>
+<?php $softwareOnly = !empty($softwareOnly); ?>
 <div class="adm-page-top">
     <div class="adm-page-top-left">
-        <a href="/admin/paketler" class="btn btn-outline btn-sm"><?= icon('arrow-left', 14) ?> Geri</a>
-        <h2><?= $isEdit ? icon('edit', 22) . ' Paket Düzenle' : icon('plus', 22) . ' Paket Ekle' ?></h2>
+        <a href="<?= $softwareOnly ? '/admin/hazir-yazilimlar' : '/admin/paketler' ?>" class="btn btn-outline btn-sm"><?= icon('arrow-left', 14) ?> Geri</a>
+        <h2><?= $softwareOnly ? ($isEdit ? icon('edit',22).' Hazır Yazılım Düzenle' : icon('plus',22).' Hazır Yazılım Ekle') : ($isEdit ? icon('edit', 22) . ' Paket Düzenle' : icon('plus', 22) . ' Paket Ekle') ?></h2>
     </div>
     <?php if ($isEdit): ?>
     <a href="/admin/paket/<?= $package['id'] ?>/alanlar" class="btn btn-outline btn-sm"><?= icon('list', 14) ?> Sipariş Alanları</a>
     <?php endif; ?>
 </div>
 
-<form method="POST" action="<?= $isEdit ? '/admin/paket/' . $package['id'] . '/guncelle' : '/admin/paket/kaydet' ?>" enctype="multipart/form-data">
+<form method="POST" action="<?= $softwareOnly ? ($isEdit ? '/admin/yazilim/' . (int)$package['id'] . '/guncelle' : '/admin/yazilim/kaydet') : ($isEdit ? '/admin/paket/' . $package['id'] . '/guncelle' : '/admin/paket/kaydet') ?>" enctype="multipart/form-data">
     <?= csrfField() ?>
     <div class="adm-form-layout">
         <!-- Main Content -->
@@ -28,13 +29,16 @@
                         <div class="form-hint">Boş bırakırsanız isimden otomatik üretilir.</div>
                     </div>
                     <div class="form-group">
-                        <label>Kategori</label>
+                        <label><?= $softwareOnly ? 'Hazır Yazılım Kategorisi' : 'Kategori' ?></label>
                         <select name="category_id" class="form-control" required>
-                            <option value="">Kategori Seçin</option>
+                            <option value=""><?= $softwareOnly ? 'Yazılım alt kategorisi seçin' : 'Kategori Seçin' ?></option>
                             <?php foreach ($categories as $c): ?>
                             <option value="<?= $c['id'] ?>" <?= ($package['category_id'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= e($c['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <?php if ($softwareOnly): ?>
+                        <div class="form-hint">Bu ekranda yalnızca Hazır Yazılımlar & Scriptler alt kategorileri listelenir; sosyal medya hizmetleri karışmaz.</div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label>Kısa Açıklama</label>
@@ -164,7 +168,7 @@
             <div class="adm-card" style="position: sticky; top: 76px;">
                 <div class="adm-card-body">
                     <button type="submit" class="btn btn-primary btn-block btn-lg"><?= icon('save', 18) ?> <?= $isEdit ? 'Güncelle' : 'Kaydet' ?></button>
-                    <a href="/admin/paketler" class="btn btn-outline btn-block btn-sm" style="margin-top: var(--space-3);"><?= icon('x', 14) ?> Vazgeç</a>
+                    <a href="<?= $softwareOnly ? '/admin/hazir-yazilimlar' : '/admin/paketler' ?>" class="btn btn-outline btn-block btn-sm" style="margin-top: var(--space-3);"><?= icon('x', 14) ?> Vazgeç</a>
                     <?php if ($isEdit): ?>
                     <a href="/admin/paket/<?= $package['id'] ?>/alanlar" class="btn btn-light btn-block btn-sm" style="margin-top: var(--space-2);"><?= icon('list', 14) ?> Sipariş Alanları</a>
                     <?php endif; ?>
