@@ -68,7 +68,8 @@ if (!function_exists('yvBlogPlatform')) {
             <a href="/blog/<?= e($featured['slug']) ?>">Yazıyı Oku <?= icon('arrow-right',11) ?></a>
           </div>
           <div class="yv-blog-featured-media-v8">
-            <?php if(!empty($featured['image'])): ?><img src="<?= e(upload_url($featured['image'])) ?>" alt="<?= e($featured['image_alt']??$featured['title']) ?>"><?php else: ?><div class="yv-blog-phone-art-v8"><span><?= icon('google',42) ?></span><strong>4.8</strong><em>★★★★★</em></div><?php endif; ?>
+            <img class="yv-blog-featured-photo-v12" src="<?= e(!empty($featured['image']) ? upload_url($featured['image']) : demo_visual_url($featured['title'].' '.($featured['category_name']??''),'featured blog')) ?>" alt="<?= e($featured['image_alt']??$featured['title']) ?>">
+            <div class="yv-blog-featured-overlay-v12"><span><?= icon('trending-up',18) ?></span><strong>4.8</strong><em>★★★★★</em></div>
           </div>
         </article>
         <?php endif; ?>
@@ -79,7 +80,7 @@ if (!function_exists('yvBlogPlatform')) {
         <div class="yv-blog-post-grid-v8">
           <?php foreach($gridPosts as $post): [$cls,$ico]=yvBlogPlatform($post['category_name']??$post['title']); ?>
           <a class="yv-blog-post-card-v8 <?= e($cls) ?>" href="/blog/<?= e($post['slug']) ?>">
-            <div class="yv-blog-post-image-v8"><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><?php else: ?><span><?= icon($ico,34) ?></span><?php endif; ?><b><?= e($post['category_name']??'Rehber') ?></b></div>
+            <div class="yv-blog-post-image-v8"><img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog card')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><span class="yv-blog-post-brand-v12"><?= icon($ico,16) ?></span><b><?= e($post['category_name']??'Rehber') ?></b></div>
             <div class="yv-blog-post-body-v8"><h3><?= e($post['title']) ?></h3><p><?= e(excerpt(strip_tags($post['excerpt']??$post['content']??''),105)) ?></p><div><span><?= icon('calendar',10) ?> <?= !empty($post['published_at'])?formatDate($post['published_at'],'d M Y'):'Güncel' ?></span><span><?= icon('eye',10) ?> <?= number_format((int)($post['views']??0)) ?> okunma</span></div></div>
           </a>
           <?php endforeach; ?>
@@ -92,7 +93,7 @@ if (!function_exists('yvBlogPlatform')) {
       </main>
 
       <aside class="yv-blog-sidebar-v8">
-        <section class="yv-blog-side-card-v8"><div class="yv-blog-side-title-v8"><h3><?= icon('trending-up',14) ?> Popüler Yazılar</h3><a href="/blog">Tümünü Gör</a></div><?php foreach($popularPosts as $i=>$post): ?><a class="yv-blog-popular-v8" href="/blog/<?= e($post['slug']) ?>"><b><?= $i+1 ?></b><span><?php if(!empty($post['image'])): ?><img src="<?= e(upload_url($post['image'])) ?>" alt=""><?php else: ?><?= icon('file-text',18) ?><?php endif; ?></span><div><strong><?= e(excerpt($post['title'],48)) ?></strong><small><?= number_format((int)($post['views']??0)) ?> okunma</small></div></a><?php endforeach; ?></section>
+        <section class="yv-blog-side-card-v8"><div class="yv-blog-side-title-v8"><h3><?= icon('trending-up',14) ?> Popüler Yazılar</h3><a href="/blog">Tümünü Gör</a></div><?php foreach($popularPosts as $i=>$post): ?><a class="yv-blog-popular-v8" href="/blog/<?= e($post['slug']) ?>"><b><?= $i+1 ?></b><span><img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog thumb')) ?>" alt="<?= e($post['title']) ?>"></span><div><strong><?= e(excerpt($post['title'],48)) ?></strong><small><?= number_format((int)($post['views']??0)) ?> okunma</small></div></a><?php endforeach; ?></section>
 
         <?php if(!empty($recentComments)): ?><section class="yv-blog-side-card-v8"><div class="yv-blog-side-title-v8"><h3><?= icon('message-circle',14) ?> Son Yorumlar</h3><a href="#">Tümünü Gör</a></div><?php foreach(array_slice($recentComments,0,5) as $i=>$review): ?><div class="yv-blog-comment-v8"><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><div><strong><?= e($review['name']??'Müşteri') ?></strong><p><?= e(excerpt($review['text']??'',52)) ?></p></div><small><?= $i<2?'2 saat önce':'1 gün önce' ?></small></div><?php endforeach; ?></section><?php endif; ?>
 
