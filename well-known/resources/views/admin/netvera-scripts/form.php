@@ -21,5 +21,9 @@
 <?php foreach(['demo_url'=>'Demo URL','demo_video_url'=>'Demo Video','current_version'=>'Sürüm','last_updated_on'=>'Güncelleme Tarihi','install_type'=>'Kurulum Tipi','install_info'=>'Kurulum Bilgileri'] as $key=>$label): ?>
 <div class="form-group"><label><?= e($label) ?></label><input class="form-control" name="<?= $key ?>" value="<?= e($d[$key]??'') ?>"></div>
 <?php endforeach; ?></div></div>
+<div class="adm-card"><div class="adm-card-header"><h3>Lisans, Destek & SEO</h3></div><div class="adm-card-body">
+<?php foreach(['support_duration_type'=>'Destek Tipi','support_duration_months'=>'Destek Süresi','update_duration_type'=>'Güncelleme Tipi','update_duration_months'=>'Güncelleme Süresi','buy_url'=>'Satış URL','secondary_keywords'=>'Yardımcı Kelimeler','tags'=>'Etiketler','og_title'=>'OG Başlık','og_description'=>'OG Açıklama','og_image'=>'OG Görseli'] as $key=>$label): ?>
+<div class="form-group"><label><?= e($label) ?></label><input class="form-control" name="<?= $key ?>" value="<?= e($d[$key]??'') ?>"></div><?php endforeach; ?>
+</div></div>
 <button class="btn btn-primary" type="submit">Kaydet</button>
 </div></div></form>
