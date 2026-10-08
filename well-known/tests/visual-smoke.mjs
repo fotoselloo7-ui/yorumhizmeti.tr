@@ -164,6 +164,46 @@ for(const screen of screens){
           if(!switcher.changed){errors.push('Featured grouped filter did not switch packages');failed=true}
         }
       }
+      // Regression: "Ajans & Yazılım" must expose the REAL Netvera scripts
+      // as selectable panels, not just old service-package categories.
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        const agency = page.locator('[data-featured-group="agency"]');
+        if(!(await agency.count()))throw new Error('Agency featured switcher group missing');
+        await agency.click();
+        const filters = page.locator('[data-featured-filter-panel="agency"]');
+        const softwareTabs = filters.locator('[data-featured-tab][data-kind="software"]');
+        const scriptTabCount = await softwareTabs.count();
+        // CI fixture has two actual script categories plus the catalogue root;
+        // an imported source DB will have three plus the root.
+        if(scriptTabCount < 3) throw new Error('Netvera software and original categories missing from featured section: '+scriptTabCount);
+        const rootSoftwareTab = softwareTabs.first();
+        const rootId = await rootSoftwareTab.getAttribute('data-featured-tab');
+        if((await rootSoftwareTab.getAttribute('data-url'))!=='/hazir-scriptler')
+          throw new Error('Netvera tab missing original catalogue route');
+        await rootSoftwareTab.click();
+        const softwarePane = page.locator('[data-featured-pane="'+rootId+'"]:not([hidden])');
+        if(!(await softwarePane.count()))throw new Error('Netvera featured software tab did not activate its real pane');
+        if(!(await softwarePane.locator('a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+          throw new Error('Original indexed software product is missing from featured cards');
+        if(!(await page.locator('[data-featured-kind]').textContent())?.includes('Yazılımlar'))
+          throw new Error('Software tab kept the package-only heading');
+        if((await softwarePane.locator('[data-netvera-software-card]').count())<3)
+          throw new Error('Real software cards did not render from CI product records');
+        // All categories are selectable, even if one has no active products.
+        const lastSoftwareTab = softwareTabs.last();
+        const lastId=await lastSoftwareTab.getAttribute('data-featured-tab');
+        await lastSoftwareTab.click();
+        if(!(await page.locator('[data-featured-pane="'+lastId+'"]:not([hidden])').count()))
+          throw new Error('Last original Netvera software category cannot be selected');
+        const featuredOverflow=await page.locator('.yh24-featured-subfilters').evaluate(el=>el.scrollWidth>el.clientWidth+4);
+        if(featuredOverflow) throw new Error('Netvera featured filters overflow '+screen.name);
+        // Return to existing original service packages: software tabs must not
+        // overwrite package cards, headings or links.
+        const packageTab=filters.locator('[data-featured-tab][data-kind="package"]').first();
+        await packageTab.click();
+        if(!await page.locator('[data-featured-kind]').textContent().then(text=>text.includes('Paketler')))
+          throw new Error('Switching back from Netvera software to packages failed');
+      }
       if(p.route==='/' && screen.name==='mobil'){
         const groups=page.locator('[data-featured-group]');
         if(await groups.count()){
