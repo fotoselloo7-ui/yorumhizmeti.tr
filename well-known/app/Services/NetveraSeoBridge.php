@@ -17,6 +17,7 @@ final class NetveraSeoBridge
                 "SELECT extra_json FROM nv_editorial_seo WHERE entity_type=? AND entity_id=?",
                 [$type,$id]
             );
+            if(!$row && $type==='blog')throw new \RuntimeException('Legacy blog SEO fallback');
             $value=$row?json_decode($row['extra_json'],true):[];
             return self::$cache[$key]=is_array($value)?$value:[];
         }catch(\Throwable $e){
