@@ -1,0 +1,57 @@
+/* NetVera heritage product editor: isolated from service-package UI. */
+.nvpa{max-width:1280px;margin:auto;color:#23334e;font-family:Poppins,system-ui,sans-serif}
+.nvpa *{box-sizing:border-box}
+.nvpa-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:20px}
+.nvpa-top h2{font-size:clamp(19px,2.2vw,25px);letter-spacing:-.035em;margin:4px 0}
+.nvpa-top p{color:#74819a;font-size:12px;line-height:1.6;margin:0}
+.nvpa-eyebrow{font-size:10px;letter-spacing:.08em;font-weight:800;color:#6951d8}
+.nvpa-top-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.nvpa-top-actions .btn{white-space:nowrap}
+.nvpa-layout{display:grid;grid-template-columns:minmax(0,1fr) 305px;gap:17px;align-items:start}
+.nvpa-main,.nvpa-side{display:flex;flex-direction:column;min-width:0;gap:16px}
+.nvpa-card{min-width:0;border:1px solid #e7eaf1;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 7px 20px rgba(27,44,85,.035);margin-bottom:17px}
+.nvpa-main>.nvpa-card,.nvpa-side>.nvpa-card{margin-bottom:0}
+.nvpa-card>.adm-card-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 19px;border-bottom:1px solid #edf0f5}
+.nvpa-card>.adm-card-header h3{display:flex;align-items:center;gap:8px;margin:0;color:#273858;font-size:13px;font-weight:800}
+.nvpa-card>.adm-card-header>span{font-size:10px;color:#91a0b8;white-space:nowrap}
+.nvpa-card>.adm-card-body{padding:17px 19px}
+.nvpa-field{display:flex;flex-direction:column;gap:6px;min-width:0;margin:0 0 16px}
+.nvpa-field:last-child{margin-bottom:0}
+.nvpa-field label{display:block;color:#465674;font-size:11px;font-weight:750}
+.nvpa-field label b{color:#d54d65}
+.nvpa-field .form-control{display:block;width:100%;min-width:0;max-width:100%;min-height:43px;border:1px solid #e0e5ef;border-radius:10px;padding:10px 12px;font-family:inherit;font-size:12px;background:#fff;color:#283958;line-height:1.55}
+.nvpa-field textarea.form-control{resize:vertical;min-height:92px}
+.nvpa-field textarea.nvpa-long{min-height:230px}
+.nvpa-field .form-control:focus-visible{outline:2px solid #876eea;outline-offset:1px;border-color:#b2a2ef}
+.nvpa-field .form-control[readonly]{background:#f5f7fc;color:#60738f;cursor:not-allowed}
+.nvpa-field input[type=file]{padding:8px}
+.nvpa-field small,.nvpa .adm-card-body>small{font-size:10px;line-height:1.6;color:#8c97aa}
+.nvpa-field small a{color:#7554da;font-weight:700;text-decoration:none}
+.nvpa-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+.nvpa-checks{display:flex;flex-wrap:wrap;gap:10px;margin:7px 0 13px}
+.nvpa-checks-stack{display:flex;flex-direction:column;gap:7px;margin:0 0 19px}
+.nvpa-checks label{display:flex;gap:8px;align-items:center;line-height:1.5;padding:9px 11px;border:1px solid #e8ecf3;border-radius:9px;background:#fbfcff;font-size:11px;color:#576780;cursor:pointer}
+.nvpa-checks input{accent-color:#6f50dc;flex-shrink:0}
+.nvpa-note{display:flex;align-items:flex-start;gap:9px;padding:11px 12px;border-radius:10px;border:1px solid #e3e7f2;background:#f8faff;font-size:11px;line-height:1.65;color:#71809c}
+.nvpa-note .icon{flex-shrink:0;margin-top:1px}
+.nvpa-cover{overflow:hidden;border:1px solid #e5e8f3;border-radius:11px;background:#f7f8fc;margin-bottom:13px}
+.nvpa-cover img{display:block;max-width:100%;width:100%;max-height:190px;object-fit:contain}
+.nvpa-sticky-save{display:flex;flex-direction:column;gap:9px;padding:14px;background:#fff;border:1px solid #e7eaf2;border-radius:13px;position:sticky;top:20px}
+.nvpa-sticky-save .btn{width:100%;justify-content:center;min-height:42px}
+.nvpa-sticky-save small{font-size:9px;text-align:center;color:#8a97ab}
+.nvpa #nvpa-product-form>.nvpa-card{margin-top:17px}
+.nvpa #nvpa-product-form>.nvpa-card>.adm-card-body>p{font-size:11px;color:#79859b;line-height:1.65}
+.nvpa-json{font-family:ui-monospace,SFMono-Regular,Consolas,monospace!important;font-size:11px!important;min-height:145px!important;tab-size:2}
+.nvpa-error{padding:12px;border:1px solid #e6b4ba;color:#982f47;background:#fff6f7;border-radius:9px;font-size:12px}
+.nvpa-bottom-save{display:flex;justify-content:flex-end;margin:15px 0 22px}
+.nvpa-bottom-save>.btn{min-width:188px;min-height:43px}
+.nvpa-gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.nvpa-gallery-item{min-width:0;border:1px solid #e5e9f2;border-radius:11px;padding:9px;overflow:hidden}
+.nvpa-gallery-item img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:7px}
+.nvpa-gallery-item p{font-size:10px;color:#7d89a0;line-height:1.5;overflow-wrap:anywhere;min-height:16px}
+.nvpa-gallery-item button{font-size:10px;white-space:normal}
+.nvpa-gallery-form{padding-top:12px;border-top:1px solid #edf0f6}
+@media(max-width:1050px){.nvpa-layout{grid-template-columns:minmax(0,1fr) 270px}}
+@media(max-width:780px){.nvpa-layout{grid-template-columns:minmax(0,1fr)}.nvpa-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.nvpa-sticky-save{position:static;grid-column:1/-1}.nvpa-card>.adm-card-body{padding:15px}}
+@media(max-width:510px){.nvpa-two,.nvpa-side{grid-template-columns:minmax(0,1fr)}.nvpa-top{align-items:flex-start}.nvpa-card>.adm-card-header{padding:13px}.nvpa-card>.adm-card-header>span{display:none}.nvpa-card>.adm-card-body{padding:13px}.nvpa-sticky-save{grid-column:auto}.nvpa-bottom-save>.btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.nvpa *{scroll-behavior:auto}}
