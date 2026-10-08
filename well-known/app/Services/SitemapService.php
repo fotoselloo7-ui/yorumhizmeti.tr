@@ -25,7 +25,36 @@ class SitemapService
         // Paketler
         $packages = $db->fetchAll("SELECT slug, updated_at FROM packages WHERE status = 'active'");
         foreach ($packages as $pkg) {
+            // The imported canonical software product owns this legacy demo path.
+            if ($pkg['slug']==='netvera-haber-sitesi-script-yazilimi' &&
+                NetveraBridgeService::find('haber-sitesi-scripti')) continue;
             $xml .= $this->url($baseUrl . '/paket/' . $pkg['slug'], '0.7', 'weekly', $pkg['updated_at']);
+        }
+
+        // Preserve Netvera's indexed software URLs in the exact original structure.
+        if (NetveraBridgeService::ready()) {
+            $xml .= $this->url($baseUrl . '/hazir-scriptler', '0.9', 'weekly');
+            foreach (NetveraBridgeService::all() as $script) {
+                $public=NetveraBridgeService::jsonFields($script);
+                $updated=(string)($public['updated_at']??$public['last_updated_on']??'');
+                $xml .= $this->url(
+                    $baseUrl.'/hazir-scriptler/'.$script['slug'],
+                    '0.8','weekly',$updated?:null
+                );
+            }
+            foreach (NetveraBridgeService::categories() as $cat) {
+                if (!$cat['parent_legacy_id']) continue;
+                $parent=null;
+                foreach (NetveraBridgeService::categories() as $root) {
+                    if ((int)$root['legacy_id']===(int)$cat['parent_legacy_id']) {
+                        $parent=$root;break;
+                    }
+                }
+                if ($parent) $xml .= $this->url(
+                    $baseUrl.'/hazir-scriptler/'.$parent['slug'].'/'.$cat['slug'],
+                    '0.6','monthly'
+                );
+            }
         }
 
         // Blog
