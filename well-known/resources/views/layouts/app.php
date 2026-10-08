@@ -54,6 +54,7 @@
     <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.1
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -116,11 +117,21 @@
                     <?= e(setting('site_name', 'Yorum Hizmeti')) ?>
                 </a>
 
-                <nav class="nav-main" id="navMain" aria-label="Ana menü">
-                    <?php foreach(\App\Services\NavigationService::items() as $navItem): ?>
-                    <a href="<?= e($navItem['url']) ?>" class="<?= isActive($navItem['url']) ? 'active' : '' ?>"><?= e($navItem['label']) ?></a>
-                    <?php endforeach; ?>
-                </nav>
+                <?php
+                $nv26NavItems = \App\Services\NavigationService::items();
+                $nv26Groups = \App\Services\CatalogMenuService::groups();
+                $nv26NavPrefs = [];
+                $nv26ExtraLinks = [];
+                $nv26QuickLinks = [];
+                foreach ($nv26NavItems as $navItem) {
+                    $nv26NavPrefs[$navItem['key']] = $navItem;
+                    if (str_starts_with($navItem['key'], 'category_')) $nv26QuickLinks[] = $navItem;
+                    elseif (!str_starts_with($navItem['key'], 'group_')) $nv26ExtraLinks[] = $navItem;
+                }
+                ?>
+                <div class="nv26-header-context">
+                    <span><?= icon('shield-check', 14) ?> Güvenli dijital hizmetler</span>
+                </div>
 
                 <form class="header-search-v4" action="/kategoriler" method="GET">
                     <?= icon('search', 13) ?>
@@ -155,6 +166,77 @@
             </div>
         </div>
     </header>
+
+    <!-- Responsive two-level agency navigation: all links originate in live active admin categories. -->
+    <nav class="nv26-menu-shell" id="navMain" aria-label="Hizmetler menüsü">
+      <div class="container nv26-menu-container">
+        <div class="nv26-menu-bar">
+          <div class="nv26-menu-groups">
+            <?php foreach ($nv26Groups as $nv26Group):
+                $nv26Key = 'group_' . $nv26Group['key'];
+                if (!isset($nv26NavPrefs[$nv26Key])) continue;
+                $nv26Label = $nv26NavPrefs[$nv26Key]['label'];
+                $nv26Cols = array_chunk($nv26Group['categories'], max(1, (int)ceil(count($nv26Group['categories']) / 4)));
+            ?>
+            <div class="nv26-menu-entry" data-mega-entry>
+              <button type="button" class="nv26-menu-trigger" data-mega-trigger
+                aria-expanded="false" aria-controls="nv26-panel-<?= e($nv26Group['key']) ?>">
+                <?= icon($nv26Group['icon'], 16) ?>
+                <span><?= e($nv26Label) ?></span>
+                <?= icon('chevron-down', 12) ?>
+              </button>
+              <section class="nv26-mega-panel" id="nv26-panel-<?= e($nv26Group['key']) ?>" data-mega-panel hidden aria-label="<?= e($nv26Label) ?>">
+                <div class="nv26-mega-top">
+                  <div><strong><?= e($nv26Label) ?></strong><p><?= e($nv26Group['description']) ?></p></div>
+                  <a href="/kategoriler?grup=<?= e($nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
+                </div>
+                <div class="nv26-mega-columns">
+                  <?php foreach ($nv26Cols as $nv26Column): ?>
+                  <div class="nv26-mega-column">
+                    <?php foreach ($nv26Column as $nv26Cat): ?>
+                    <div class="nv26-mega-category">
+                      <a class="nv26-mega-parent" href="<?= e($nv26Cat['url']) ?>">
+                        <span class="nv26-menu-icon <?= e($nv26Cat['style']) ?>"><?= icon($nv26Cat['icon'], 19) ?></span>
+                        <span><strong><?= e($nv26Cat['name']) ?></strong><small>Hizmet paketlerini keşfet</small></span>
+                        <?= icon('chevron-right', 12) ?>
+                      </a>
+                      <?php if (!empty($nv26Cat['children'])): ?>
+                      <div class="nv26-mega-children">
+                        <?php foreach (array_slice($nv26Cat['children'], 0, 4) as $nv26Sub): ?>
+                        <a href="<?= e($nv26Sub['url']) ?>"><?= icon('arrow-right', 10) ?> <?= e($nv26Sub['name']) ?></a>
+                        <?php endforeach; ?>
+                        <?php if (count($nv26Cat['children']) > 4): ?>
+                        <a class="nv26-mega-more" href="<?= e($nv26Cat['url']) ?>">Tüm alt hizmetler <?= icon('arrow-right', 11) ?></a>
+                        <?php endif; ?>
+                      </div>
+                      <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
+                  </div>
+                  <?php endforeach; ?>
+                </div>
+              </section>
+            </div>
+            <?php endforeach; ?>
+          </div>
+          <div class="nv26-menu-end">
+            <?php foreach ($nv26ExtraLinks as $navItem): ?>
+              <a class="nv26-simple-link <?= isActive($navItem['url']) ? 'active':'' ?>" href="<?= e($navItem['url']) ?>"><?= e($navItem['label']) ?></a>
+            <?php endforeach; ?>
+            <?php if (!empty($nv26QuickLinks)): ?>
+            <details class="nv26-quick">
+              <summary><?= icon('grid', 14) ?> Hızlı Erişim <?= icon('chevron-down', 11) ?></summary>
+              <div class="nv26-quick-list">
+                <?php foreach ($nv26QuickLinks as $navItem): ?>
+                <a href="<?= e($navItem['url']) ?>"><?= e($navItem['label']) ?></a>
+                <?php endforeach; ?>
+              </div>
+            </details>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    </nav>
 
     <!-- Flash Messages -->
     <?php if (!empty($flash)): ?>
@@ -337,6 +419,7 @@
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>"></script>
+    <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.1</script>
     <?= setting('footer_script') ?>
 </body>
 </html>
