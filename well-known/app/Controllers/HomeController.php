@@ -183,6 +183,11 @@ class HomeController extends Controller
             ];
         }
 
+        // Independent software showcase and real client references.
+        // Both remain hidden on the storefront until the admin publishes data.
+        $softwareHighlights = \App\Services\SoftwareCatalogService::featured();
+        $projectReferences = array_slice(\App\Services\ReferencesService::all(true), 0, 8);
+
         // SSS
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
 
@@ -264,6 +269,8 @@ class HomeController extends Controller
             'featuredNavGroups' => $featuredNavGroups,
             'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
             'homePromoGroups' => $homePromoGroups,
+            'softwareHighlights' => $softwareHighlights,
+            'projectReferences' => $projectReferences,
             'homeQuickCategories' => $homeQuickCategories,
             'latestPosts' => $latestPosts,
             'faqs' => $faqs,
