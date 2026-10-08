@@ -51,7 +51,8 @@ class BlogController extends Controller
         $postTags = array_column($this->db->fetchAll("SELECT tag_id FROM blog_post_tags WHERE post_id = ?", [(int)$id]), 'tag_id');
         
         $seo = (new SeoScoreService())->calculate($post);
-        $this->renderAdmin('admin/blog/form', ['pageTitle' => 'Yazı Düzenle', 'post' => $post, 'categories' => $categories, 'tags' => $tags, 'postTags' => $postTags, 'seoResult' => $seo]);
+        $this->renderAdmin('admin/blog/form', ['pageTitle' => 'Yazı Düzenle', 'post' => $post, 'categories' => $categories, 'tags' => $tags, 'postTags' => $postTags, 'seoResult' => $seo,
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('blog',(int)$id)]);
     }
 
     public function update(string $id): void
