@@ -50,6 +50,9 @@
                 <a href="/admin/hazir-yazilimlar" class="<?= isActive('/admin/hazir-yazilimlar') ? 'active' : '' ?>">
                     <?= icon('monitor', 18) ?> Hazır Yazılım Vitrini
                 </a>
+                <a href="/admin/netvera-yazilimlar" class="<?= isActive('/admin/netvera-yazilimlar') ? 'active' : '' ?>">
+                    <?= icon('layers',18) ?> Netvera Yazılımları
+                </a>
                 <a href="/admin/yazilim/ekle" class="<?= isActive('/admin/yazilim/ekle') ? 'active' : '' ?>">
                     <?= icon('plus', 18) ?> Yeni Yazılım Ekle
                 </a>
