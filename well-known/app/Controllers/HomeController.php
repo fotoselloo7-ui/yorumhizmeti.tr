@@ -74,6 +74,9 @@ class HomeController extends Controller
                 'icon'=>$catalogGroup['icon'],'categories'=>[]
             ];
             foreach($catalogGroup['categories'] as $root){
+                // The database-based package showcase created a second identical
+                // software root. The true Netvera script root is added below.
+                if (($root['slug']??'') === \App\Services\SoftwareCatalogService::ROOT_SLUG) continue;
                 $id=(int)$root['id'];
                 $root['kind']='package';
                 $root['icon']=$root['icon']??'package';
@@ -271,9 +274,13 @@ class HomeController extends Controller
 
         // Independent software showcase and real client references.
         // Both remain hidden on the storefront until the admin publishes data.
-        $softwareHighlights = \App\Services\SoftwareCatalogService::featured();
+        // This public section sells REAL Netvera scripts, not the test package
+        // named "NetVera Haber Sitesi Script Yazılımı" under Web Site Hizmetleri.
+        // Existing package store /hazir-yazilimlar and its admin selection remain
+        // intact; only this script showcase is sourced from the Netvera catalogue.
+        $softwareHighlights = array_slice($netveraProducts,0,12);
         $softwareRoot = \App\Services\SoftwareCatalogService::root();
-        $softwareCatalogUrl = '/hazir-yazilimlar';
+        $softwareCatalogUrl = '/hazir-scriptler';
         $softwarePreviewCategories = [];
         if (($softwareRoot['status'] ?? '') === 'active') {
             $softwarePreviewCategories = $db->fetchAll(
