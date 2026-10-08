@@ -1,11 +1,14 @@
 <div class="adm-page-top">
  <div><h2><?= icon('monitor',21) ?> Netvera Hazır Yazılımlar</h2>
  <p class="text-sm text-secondary">Orijinal slug, ürün görselleri, lisans, demo ve SEO alanlarını koruyan bağımsız yazılım kataloğu.</p></div>
- <a href="/admin/netvera-yazilimlar/ekle" class="btn btn-primary btn-sm"><?= icon('plus',15) ?> Yeni Yazılım Ekle</a>
+ <?php if($ready): ?><a href="/admin/netvera-yazilimlar/ekle" class="btn btn-primary btn-sm"><?= icon('plus',15) ?> Yeni Yazılım Ekle</a><?php endif; ?>
 </div>
 <?php if(!$ready): ?>
-<div class="adm-card"><div class="adm-card-body">Netvera içerik tabloları henüz staging veritabanında kurulu değil. Gerçek ödeme yapılandırmasını içermeyen güvenli içerik aktarımını çalıştırın.</div></div>
-<?php else: ?>
+<div class="adm-card" style="margin-bottom:14px"><div class="adm-card-body">
+  <strong><?= icon('info',15) ?> Gerçek NetVera ürünleri önizleme modunda</strong>
+  <p style="font-size:12px;margin:8px 0 0">Orijinal ürün verileri, görselleri ve bağlantıları aktif. Yerel veritabanına aktarım henüz yapılmadığı için ürün düzenleme ve yeni yazılım kaydetme bu ekranda kapalıdır.</p>
+  <a href="/admin/netvera-kategoriler" class="btn btn-outline btn-sm" style="margin-top:12px">Kategori ve Yerel Kurulum</a>
+</div></div>
 <div class="adm-card">
  <div class="adm-card-header"><h3><?= icon('layers',17) ?> Yazılım Ürünleri (<?= count($products) ?>)</h3></div>
  <div class="adm-card-body">
@@ -18,7 +21,7 @@
      <td><code><?= e($product['slug']) ?></code></td>
      <td><?= money($product['price']) ?></td>
      <td><?= (int)$product['active']?'Yayında':'Pasif' ?></td>
-     <td><a class="btn btn-outline btn-sm" href="/admin/netvera-yazilimlar/<?= (int)$product['legacy_id'] ?>/duzenle"><?= icon('edit',13) ?> Düzenle</a>
+     <td><?php if($ready): ?><a class="btn btn-outline btn-sm" href="/admin/netvera-yazilimlar/<?= (int)$product['legacy_id'] ?>/duzenle"><?= icon('edit',13) ?> Düzenle</a><?php endif; ?>
        <a class="btn btn-light btn-sm" target="_blank" rel="noopener" href="/hazir-scriptler/<?= e($product['slug']) ?>"><?= icon('external-link',12) ?> Gör</a></td>
     </tr><?php endforeach; ?></tbody>
   </table></div>
