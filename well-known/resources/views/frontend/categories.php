@@ -1,96 +1,78 @@
 <?php
-function yvCategoryMeta(array $cat): array {
-    $s = mb_strtolower(($cat['slug'] ?? '') . ' ' . ($cat['name'] ?? ''));
-    if (str_contains($s,'instagram')) return ['instagram','instagram'];
-    if (str_contains($s,'tiktok')) return ['tiktok','tiktok'];
-    if (str_contains($s,'youtube')) return ['youtube','youtube'];
-    if (str_contains($s,'facebook')) return ['facebook','facebook'];
-    if (str_contains($s,'twitter') || str_contains($s,' x ')) return ['twitter','twitter'];
-    if (str_contains($s,'threads')) return ['threads','threads'];
-    if (str_contains($s,'telegram')) return ['telegram','telegram'];
-    if (str_contains($s,'spotify')) return ['spotify','spotify'];
-    if (str_contains($s,'discord')) return ['discord','discord'];
-    if (str_contains($s,'linkedin')) return ['linkedin','linkedin'];
-    if (str_contains($s,'twitch')) return ['twitch','twitch'];
-    if (str_contains($s,'google')) return ['google','google'];
-    if (str_contains($s,'seo')) return ['seo','bar-chart'];
-    if (str_contains($s,'dijital reklam') || str_contains($s,'dijital-reklam')) return ['ads','ads'];
-    if (str_contains($s,'itibar')) return ['reputation','reputation'];
-    if (str_contains($s,'e-ticaret') || str_contains($s,'eticaret')) return ['ecommerce','store'];
-    if (str_contains($s,'mobil uygulama') || str_contains($s,'mobil-uygulama')) return ['mobileapp','mobile-app'];
-    if (str_contains($s,'içerik') || str_contains($s,'icerik')) return ['content','content-create'];
-    if (str_contains($s,'grafik')) return ['graphic','palette'];
-    if (str_contains($s,'yerel')) return ['local','local-business'];
-    if (str_contains($s,'web') || str_contains($s,'site')) return ['web','globe'];
-    return ['default',$cat['icon_key'] ?? 'package'];
-}
+$allCatalogGroups = \App\Services\CatalogMenuService::groups();
+$catalogGroups = $catalogGroups ?? $allCatalogGroups;
+$activeCatalogGroup = $activeCatalogGroup ?? '';
+$searchQuery = $searchQuery ?? '';
 ?>
-<div class="yv-categories">
-<section class="yv-page-hero">
-  <div class="container">
-    <div class="yv-hero-grid">
-      <div>
-        <div class="yv-kicker"><?= icon('grid',12) ?> Dijital hizmet kataloğu</div>
-        <h1>Tüm <span>Hizmetler</span></h1>
-        <p>Sosyal medya, Google ve web siteniz için ihtiyacınız olan hizmetleri tek noktadan keşfedin. Güvenli ödeme, hızlı teslimat ve sade satın alma deneyimi.</p>
-        <div class="yv-trust-row">
-          <span class="yv-trust-pill"><?= icon('shield',13) ?> %100 güvenli ödeme</span>
-          <span class="yv-trust-pill"><?= icon('zap',13) ?> Hızlı teslimat</span>
-          <span class="yv-trust-pill"><?= icon('headphones',13) ?> 7/24 destek</span>
-        </div>
-      </div>
-      <div class="yv-hero-art yv-hub-hero-art-v11">
-        <div class="yv-hub-blob-v11"></div>
-        <img class="yv-hub-hero-cutout-v11" src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="YorumHizmeti dijital hizmetler" loading="eager">
-        <div class="yv-float a"><?= icon('star-fill',14) ?> Güçlü sosyal kanıt</div>
-        <div class="yv-float b"><?= icon('trending-up',14) ?> Markanı büyüt</div>
-        <div class="yv-float c"><?= icon('check-circle',14) ?> Tek panel, kolay işlem</div>
-      </div>
+<main class="nv26-catalog">
+  <section class="nv26-catalog-hero"><div class="container nv26-catalog-hero-inner">
+    <div><span class="nv26-catalog-kicker"><?= icon('layers',15) ?> YorumHizmeti Dijital Hizmet Merkezi</span>
+      <h1>İhtiyacınıza uygun <span>hizmeti keşfedin.</span></h1>
+      <p>Sosyal medya platformlarından web sitesi ve yazılım çözümlerine, SEO ve dijital pazarlamaya kadar tüm hizmetler bir arada.</p>
     </div>
-  </div>
-</section>
-
-<section class="yv-category-search">
- <div class="container">
-  <div class="yv-filter-shell">
-   <div class="search-box"><?= icon('search',17) ?><input id="categorySearch" type="text" value="<?= e($searchQuery ?? '') ?>" placeholder="Hizmet veya platform ara..."></div>
-   <a class="yv-btn yv-btn-primary" href="#categories"><?= icon('grid',13) ?> Kategorileri keşfet</a>
-  </div>
- </div>
-</section>
-
-<section id="categories">
- <div class="container">
-  <?php if(!empty($categories)): ?>
-  <div class="yv-category-grid" id="platformGrid">
-   <?php foreach($categories as $cat): [$cls,$ico]=yvCategoryMeta($cat); ?>
-   <a class="yv-category-card <?= e($cls) ?>" data-name="<?= e(mb_strtolower($cat['name'])) ?>" href="/kategori/<?= e($cat['slug']) ?>">
-     <div class="yv-cat-icon"><?= icon($ico,22) ?></div>
-     <h2><?= e($cat['name']) ?></h2>
-     <p><?= e(excerpt(strip_tags($cat['description'] ?? ($cat['name'].' hizmetleri ve paketleri')),80)) ?></p>
-     <span>Hizmetleri gör <?= icon('arrow-right',11) ?></span>
-   </a>
-   <?php endforeach; ?>
-  </div>
-  <?php else: ?>
-  <div class="yv-empty" style="margin:34px 0 70px"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>Hizmet bulunamadı</h2><p>"<?= e($searchQuery ?? '') ?>" aramanızla eşleşen kategori bulunamadı.</p><a class="yv-btn yv-btn-primary" href="/kategoriler">Tüm hizmetleri göster</a></div>
-  <?php endif; ?>
-
-  <div class="yv-promo">
-   <div class="yv-promo-copy">
-    <div class="yv-kicker" style="background:rgba(255,255,255,.12);color:#fff">Premium çözümler</div>
-    <h2>Sosyal medyada daha güçlü bir marka görünümü.</h2>
-    <p>Gerçek ihtiyaçlara göre ayrılmış hizmet grupları, hızlı satın alma ve güven veren modern deneyim.</p>
-    <a href="#categories" class="yv-btn yv-btn-light">Hemen incele <?= icon('arrow-right',12) ?></a>
-   </div>
-   <div class="yv-promo-art yv-promo-art-v11"><div class="yv-promo-art-blob-v11"></div><img src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt="Dijital marka görünümü"></div>
-  </div>
- </div>
-</section>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
- const i=document.getElementById('categorySearch'), cards=[...document.querySelectorAll('.yv-category-card')];
- if(!i)return;i.addEventListener('input',()=>{const q=i.value.toLocaleLowerCase('tr-TR').trim();cards.forEach(c=>c.style.display=(c.dataset.name||'').includes(q)?'flex':'none')});
-});
-</script>
+    <a class="nv26-catalog-hero-link" href="#categories">Kategorileri keşfet <?= icon('arrow-right',15) ?></a>
+  </div></section>
+  <section id="categories" class="nv26-catalog-body"><div class="container">
+    <div class="nv26-catalog-toolbar">
+      <div class="nv26-catalog-toolbar-title"><span class="nv26-toolbar-icon"><?= icon('grid',20) ?></span>
+        <div><strong>Tüm Hizmet Kategorileri</strong><small>Platformlara ve ihtiyaçlarınıza göre keşfedin.</small></div>
+      </div>
+      <form class="nv26-catalog-search" method="GET" action="/kategoriler" role="search">
+        <?php if($activeCatalogGroup!==''): ?><input type="hidden" name="grup" value="<?= e($activeCatalogGroup) ?>"><?php endif; ?>
+        <?= icon('search',17) ?><input type="search" name="q" value="<?= e($searchQuery) ?>" placeholder="Hizmet veya platform ara..." aria-label="Hizmet kategorisi ara">
+        <button type="submit" aria-label="Ara"><?= icon('arrow-right',15) ?></button>
+      </form>
+    </div>
+    <nav class="nv26-catalog-tabs" aria-label="Hizmet grupları">
+      <a href="/kategoriler#categories" class="<?= $activeCatalogGroup===''?'active':'' ?>" <?= $activeCatalogGroup===''?'aria-current="page"':'' ?>><?= icon('grid',14) ?> Tüm Hizmetler</a>
+      <?php foreach($allCatalogGroups as $group): ?>
+      <a href="/kategoriler?grup=<?= e($group['key']) ?>#categories" class="<?= $activeCatalogGroup===$group['key']?'active':'' ?>" <?= $activeCatalogGroup===$group['key']?'aria-current="page"':'' ?>>
+        <?= icon($group['icon'],14) ?> <?= e($group['label']) ?>
+      </a>
+      <?php endforeach; ?>
+    </nav>
+    <?php if(empty($catalogGroups)): ?>
+    <div class="nv26-catalog-empty"><h2>Aramanızla eşleşen kategori bulunamadı.</h2>
+      <p>Farklı bir arama yapabilir veya tüm kategorileri keşfedebilirsiniz.</p><a href="/kategoriler">Tüm hizmetleri görüntüle</a>
+    </div>
+    <?php endif; ?>
+    <?php foreach($catalogGroups as $group): ?>
+    <section class="nv26-catalog-group" id="group-<?= e($group['key']) ?>" aria-labelledby="title-<?= e($group['key']) ?>">
+      <div class="nv26-catalog-group-head">
+        <div class="nv26-catalog-group-heading"><span class="nv26-section-icon"><?= icon($group['icon'],19) ?></span>
+          <div><small>Hizmet Kategorileri</small><h2 id="title-<?= e($group['key']) ?>"><?= e($group['label']) ?></h2>
+            <p><?= e($group['description']) ?></p></div>
+        </div>
+        <span class="nv26-catalog-count"><?= count($group['categories']) ?> kategori</span>
+      </div>
+      <div class="nv26-catalog-tiles">
+        <?php foreach($group['categories'] as $cat): ?>
+        <article class="nv26-catalog-tile nv26-tile-<?= e($cat['style']) ?>">
+          <a class="nv26-tile-top" href="<?= e($cat['url']) ?>">
+            <span class="nv26-tile-icon"><?= icon($cat['icon'],27) ?></span>
+            <strong><?= e($cat['name']) ?></strong>
+            <small><?= count($cat['children']) ? count($cat['children']).' alt hizmet' : 'Paketleri incele' ?></small>
+          </a>
+          <?php if(!empty($cat['children'])): ?>
+          <div class="nv26-tile-sub">
+            <?php foreach(array_slice($cat['children'],0,2) as $sub): ?>
+            <a href="<?= e($sub['url']) ?>"><?= e($sub['name']) ?></a>
+            <?php endforeach; ?>
+            <?php if(count($cat['children'])>2): ?><a href="<?= e($cat['url']) ?>">Diğerleri <?= icon('arrow-right',10) ?></a><?php endif; ?>
+          </div>
+          <?php endif; ?>
+        </article>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php endforeach; ?>
+    <aside class="nv26-catalog-banner">
+      <div><span><?= icon('sparkles',15) ?> YorumHizmeti Premium</span>
+        <h2>Markanız için dijital çözümler <em>tek adreste.</em></h2>
+        <p>Web sitesi, yazılım, sosyal medya ve dijital büyüme hizmetlerini keşfedin.</p>
+        <a href="/iletisim">Projenizi konuşalım <?= icon('arrow-right',13) ?></a>
+      </div>
+      <div class="nv26-banner-icons" aria-hidden="true"><span><?= icon('instagram',27) ?></span><span><?= icon('globe',27) ?></span><span><?= icon('bar-chart',27) ?></span><span><?= icon('palette',27) ?></span></div>
+    </aside>
+  </div></section>
+</main>
