@@ -70,6 +70,7 @@
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=35.1">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=40.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=1">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -551,6 +552,10 @@
             </a>
         </div>
     </nav>
+
+    <?php if(\App\Services\NetveraInquiryService::ready()): ?>
+        <?php require BASE_PATH.'/resources/views/frontend/partials/netvera-live-chat.php'; ?>
+    <?php endif; ?>
 
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
