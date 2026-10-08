@@ -53,6 +53,35 @@ class HomeController extends Controller
         }
         $featuredPackageGroups = array_values($featuredPackageGroups);
 
+        // Yalnızca sunum grubu: admin kategori ağacına, fiyatlara ve paketlere dokunma.
+        $featuredNavGroups = [
+            'digital' => ['key'=>'digital','title'=>'Dijital Hizmetler','icon'=>'sparkles','categories'=>[]],
+            'social'  => ['key'=>'social','title'=>'Sosyal Medya','icon'=>'share-2','categories'=>[]],
+            'web'     => ['key'=>'web','title'=>'Web Site Hizmetleri','icon'=>'monitor','categories'=>[]],
+        ];
+        foreach ($featuredPackageGroups as $group) {
+            $term = mb_strtolower(($group['category']['slug'] ?? '') . ' ' . ($group['category']['name'] ?? ''), 'UTF-8');
+            if (preg_match('/instagram|tiktok|youtube|facebook|twitter|threads|telegram|spotify|discord|linkedin|twitch|pinterest|snapchat|whatsapp|sosyal.?medya/u', $term)) {
+                $bucket = 'social';
+            } elseif (preg_match('/web.?site|website|web.?tasar|web.?geliş|e.?ticaret|eticaret|ecommerce|wordpress|woocommerce|shopify|hosting|domain|alan.?ad|internet.?site|site.?kurulum/u', $term)) {
+                $bucket = 'web';
+            } else {
+                $bucket = 'digital';
+            }
+            $featuredNavGroups[$bucket]['categories'][] = $group['category'];
+        }
+        // Boş gruplar görünmez. Her filtre gerçek öne çıkarılmış pakete karşılık gelir.
+        $featuredNavGroups = array_values(array_filter($featuredNavGroups, static fn($g) => count($g['categories']) > 0));
+        $initialFeaturedNavGroup = $featuredNavGroups[0]['key'] ?? 'digital';
+        foreach ($featuredNavGroups as $navGroup) {
+            foreach ($navGroup['categories'] as $category) {
+                if ((int)$category['id'] === (int)($featuredPackageGroups[0]['category']['id'] ?? 0)) {
+                    $initialFeaturedNavGroup = $navGroup['key'];
+                    break 2;
+                }
+            }
+        }
+
         // Son blog yazıları
         $latestPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.published_at DESC LIMIT 4");
         if (count($latestPosts) < 4) {
@@ -163,6 +192,8 @@ class HomeController extends Controller
             'categories' => $categories,
             'featuredPackages' => $featuredPackages,
             'featuredPackageGroups' => $featuredPackageGroups,
+            'featuredNavGroups' => $featuredNavGroups,
+            'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
             'homeCategoryBlocks' => $homeCategoryBlocks,
             'latestPosts' => $latestPosts,
             'faqs' => $faqs,

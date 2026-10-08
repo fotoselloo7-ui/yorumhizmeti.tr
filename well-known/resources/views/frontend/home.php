@@ -224,23 +224,56 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                 </div>
             </div>
 
-            <div class="yh18-featured-tabs" role="tablist" aria-label="Öne çıkan paket kategorileri">
-                <?php foreach($featuredPackageGroups as $gidx=>$group):
-                    [$gcls,$gico,$glabel] = yh6Platform($group['category']['slug']??'', $group['category']['name']??'');
-                ?>
-                <button type="button"
-                        class="yh18-featured-tab <?= $gidx===0?'active':'' ?> <?= e($gcls) ?>"
-                        data-featured-tab="<?= e((string)$group['category']['id']) ?>"
-                        data-title="<?= e($group['category']['name']) ?>"
-                        data-url="/kategori/<?= e($group['category']['slug']) ?>"
-                        data-class="<?= e($gcls) ?>"
-                        aria-selected="<?= $gidx===0?'true':'false' ?>"
-                        title="<?= e($group['category']['name']) ?>">
-                    <?= icon($gico, 18) ?>
-                    <span><?= e($glabel) ?></span>
-                </button>
-                <?php endforeach; ?>
+            <nav class="yh24-featured-navigation" aria-label="Öne çıkan paket grupları">
+                <div class="yh24-featured-groups" role="group" aria-label="Hizmet türünü seçin">
+                    <?php foreach ($featuredNavGroups as $navGroup):
+                        $groupOpen = ($navGroup['key'] === $initialFeaturedNavGroup);
+                    ?>
+                    <button type="button"
+                            class="yh24-featured-group <?= $groupOpen?'is-open':'' ?>"
+                            data-featured-group="<?= e($navGroup['key']) ?>"
+                            aria-controls="yh24-filter-<?= e($navGroup['key']) ?>"
+                            aria-expanded="<?= $groupOpen?'true':'false' ?>"
+                            aria-label="<?= e($navGroup['title']) ?> alt kategorilerini göster">
+                        <?= icon($navGroup['icon'], 17) ?>
+                        <span><?= e($navGroup['title']) ?></span>
+                        <?= icon('chevron-down', 13) ?>
+                    </button>
+                    <?php endforeach; ?>
+                </div>
+            </nav>
+        </div>
+
+        <div class="yh24-featured-subfilters" aria-label="Kategori filtreleri">
+            <?php foreach ($featuredNavGroups as $navGroup):
+                $groupOpen = ($navGroup['key'] === $initialFeaturedNavGroup);
+            ?>
+            <div class="yh24-featured-filter-panel"
+                 id="yh24-filter-<?= e($navGroup['key']) ?>"
+                 data-featured-filter-panel="<?= e($navGroup['key']) ?>"
+                 <?= $groupOpen?'':'hidden' ?>>
+                <span class="yh24-featured-filter-caption"><?= icon('sliders-horizontal', 14) ?> <?= e($navGroup['title']) ?></span>
+                <div class="yh24-featured-filter-list" role="tablist" aria-label="<?= e($navGroup['title']) ?> alt kategorileri">
+                    <?php foreach ($navGroup['categories'] as $filterCategory):
+                        [$gcls,$gico,$glabel] = yh6Platform($filterCategory['slug']??'', $filterCategory['name']??'');
+                        $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
+                    ?>
+                    <button type="button"
+                            class="yh18-featured-tab yh24-featured-filter <?= $selected?'active':'' ?> <?= e($gcls) ?>"
+                            data-featured-tab="<?= (int)$filterCategory['id'] ?>"
+                            data-featured-parent-group="<?= e($navGroup['key']) ?>"
+                            data-title="<?= e($filterCategory['name']) ?>"
+                            data-class="<?= e($gcls) ?>"
+                            data-url="/kategori/<?= e($filterCategory['slug']) ?>"
+                            aria-selected="<?= $selected?'true':'false' ?>"
+                            title="<?= e($filterCategory['name']) ?>">
+                        <?= icon($gico, 16) ?>
+                        <span><?= e($filterCategory['name']) ?></span>
+                    </button>
+                    <?php endforeach; ?>
+                </div>
             </div>
+            <?php endforeach; ?>
         </div>
 
         <div class="yh18-featured-panes">

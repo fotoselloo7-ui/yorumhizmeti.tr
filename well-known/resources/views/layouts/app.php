@@ -53,6 +53,7 @@
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php

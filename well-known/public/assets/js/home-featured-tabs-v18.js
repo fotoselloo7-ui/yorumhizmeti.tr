@@ -5,6 +5,8 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (switcher) {
     const tabs = [...switcher.querySelectorAll('[data-featured-tab]')];
+    const groupButtons = [...switcher.querySelectorAll('[data-featured-group]')];
+    const filterPanels = [...switcher.querySelectorAll('[data-featured-filter-panel]')];
     const panes = [...switcher.querySelectorAll('[data-featured-pane]')];
     const title = switcher.querySelector('[data-featured-title]');
     const subtitle = switcher.querySelector('[data-featured-subtitle]');
@@ -90,10 +92,37 @@
       track.addEventListener('wheel', pauseTemporarily, {passive:true});
     });
 
+    // Hover changes only the visible filters; selecting a chip changes the featured cards.
+    const showGroup = key => {
+      if (!filterPanels.some(panel => panel.dataset.featuredFilterPanel === key)) return;
+      groupButtons.forEach(button => {
+        const open = button.dataset.featuredGroup === key;
+        button.classList.toggle('is-open', open);
+        button.setAttribute('aria-expanded', String(open));
+      });
+      filterPanels.forEach(panel => { panel.hidden = panel.dataset.featuredFilterPanel !== key; });
+    };
+    groupButtons.forEach(button => {
+      const key = button.dataset.featuredGroup;
+      button.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'mouse' || event.pointerType === 'pen') showGroup(key);
+      });
+      button.addEventListener('focus', () => showGroup(key));
+      button.addEventListener('click', () => { showGroup(key); pauseTemporarily(); });
+      button.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          const selected = tabs.find(tab => tab.classList.contains('active'));
+          if (selected) showGroup(selected.dataset.featuredParentGroup);
+          button.blur();
+        }
+      });
+    });
+
     const switchTo = tab => {
       const id = tab.dataset.featuredTab;
       const name = tab.dataset.title || 'Hizmetler';
       const platformClass = tab.dataset.class || 'default';
+      showGroup(tab.dataset.featuredParentGroup);
 
       tabs.forEach(item => {
         const active = item === tab;
@@ -125,10 +154,12 @@
       tab.addEventListener('keydown', e => {
         if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(e.key)) return;
         e.preventDefault();
-        const next = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1
-          : (index + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
-        tabs[next].focus();
-        switchTo(tabs[next]);
+        const groupTabs = tabs.filter(item => item.dataset.featuredParentGroup === tab.dataset.featuredParentGroup);
+        const current = groupTabs.indexOf(tab);
+        const next = e.key === 'Home' ? 0 : e.key === 'End' ? groupTabs.length - 1
+          : (current + (e.key === 'ArrowRight' ? 1 : -1) + groupTabs.length) % groupTabs.length;
+        groupTabs[next].focus();
+        switchTo(groupTabs[next]);
       });
     });
 
