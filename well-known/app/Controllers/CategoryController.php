@@ -118,6 +118,7 @@ class CategoryController extends Controller
             'ogTitle' => $category['og_title'] ?: $category['name'],
             'ogDescription' => $category['og_description'] ?: $category['seo_description'],
             'category' => $category,
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('category',(int)$category['id']),
             'packages' => $packages,
             'subCategories' => $subCategories,
             'selectedSubCategory' => $selectedSubCategory,
