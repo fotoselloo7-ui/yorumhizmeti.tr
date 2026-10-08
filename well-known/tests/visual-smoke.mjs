@@ -14,6 +14,7 @@ const runs = [
   { route:'/kategori/web-site-hizmetleri',slug:'web-site' },
   { route:'/paket/google-harita-yorum-toplama-baslangic-paketi-10-davet',slug:'paket-detay' },
   { route:'/blog',slug:'blog' },
+  { route:'/blog/yapay-zeka-haber-yazilimi-otomatik-haber-sitesi',slug:'netvera-blog-markdown' },
   { route:'/iletisim',slug:'iletisim' },
   { route:'/sss',slug:'sss' },
   { route:'/sepet',slug:'sepet' },
@@ -219,6 +220,67 @@ for(const screen of screens){
             throw new Error('Active category filter panel has no live filter choices');
           }
         }
+      }
+      // New featured taxonomy follows mega-menu parent->child hierarchy.
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        const categoryPanel=page.locator('[data-featured-filter-panel="agency"]');
+        const rootRail=categoryPanel.locator('.nv43-root-rail');
+        const categoryRoots=await rootRail.locator('[data-featured-tab]').count();
+        if(categoryRoots<2)throw new Error('Real service/software roots missing from featured rail');
+        const boxes=await rootRail.locator('.nv43-category-card').evaluateAll(tiles=>
+          tiles.map(el=>({y:Math.round(el.getBoundingClientRect().top),
+                         x:Math.round(el.getBoundingClientRect().left)})));
+        if(boxes.length>1 && boxes.some(box=>Math.abs(box.y-boxes[0].y)>3))
+          throw new Error('Main featured category tiles wrapped into second row');
+        const collapsed=await categoryPanel.locator('[data-featured-children-for="-100000"]').getAttribute('hidden');
+        if(collapsed===null)throw new Error('Software subcategories shown before selecting software root');
+        await page.locator('[data-featured-group="agency"]').click();
+        await categoryPanel.locator('.nv43-root-rail [data-featured-tab][data-kind="software"]').click();
+        const subMenu=categoryPanel.locator('[data-featured-children-for="-100000"]');
+        if(await subMenu.getAttribute('hidden')!==null)
+          throw new Error('Software menu nested child rail did not open');
+        const softwareChildren=await subMenu.locator('.nv43-subcategory-tab').count();
+        const softwareTypes=await subMenu.locator('a[href^="/hazir-yazilimlar?tur="]').count();
+        if(softwareChildren<2||softwareTypes<30)
+          throw new Error('Original subcategories or ready software menu items omitted: '+softwareChildren+' / '+softwareTypes);
+        const panels=await page.locator('[data-featured-pane="-100000"]').count();
+        if(panels!==1)throw new Error('Legacy software panes still duplicated inside package loop: '+panels);
+        const rootStats=await rootRail.evaluate(el=>({
+          wrap:getComputedStyle(el).flexWrap,
+          scrollWidth:el.scrollWidth,viewport:el.clientWidth
+        }));
+        if(rootStats.wrap!=='nowrap'||rootStats.scrollWidth<rootStats.viewport)
+          throw new Error('Featured categories not configured as horizontal carousel');
+        if(screen.name==='masaustu'){
+          await rootRail.evaluate(el=>{el.scrollLeft=0;});
+          const rect=await rootRail.boundingBox();
+          await page.mouse.move(rect.x+rect.width*.73,rect.y+rect.height*.6);
+          await page.mouse.down();
+          await page.mouse.move(rect.x+rect.width*.31,rect.y+rect.height*.6,{steps:9});
+          await page.mouse.up();
+          const dragged=await rootRail.evaluate(el=>el.scrollLeft);
+          if(dragged<20)throw new Error('Mouse grab-and-drag did not move horizontal categories: '+dragged);
+        }else{
+          const next=categoryPanel.locator('.nv43-rail-shell').first().locator('[data-featured-rail-next]');
+          await rootRail.evaluate(el=>{el.scrollLeft=0;});
+          if(await next.isDisabled())throw new Error('Mobile horizontal featured navigation disabled');
+          await next.click();
+          await page.waitForTimeout(350);
+          if((await rootRail.evaluate(el=>el.scrollLeft))<8)
+            throw new Error('Mobile featured category carousel next arrow failed');
+        }
+      }
+      if(p.slug==='netvera-blog-markdown'){
+        const article=page.locator('.nv42-article-body');
+        const headings=await article.locator('h2,h3').count();
+        const figures=await article.locator('figure.nv-blog-figure img').count();
+        if(headings<7||figures<1)
+          throw new Error('Real Netvera Markdown article failed heading/image conversion: '+headings+'/'+figures);
+        const raw=await article.innerText();
+        if(raw.includes('## Yapay zeka haber yazılımı')||raw.includes('**Yapay zeka haber'))
+          throw new Error('Markdown syntax still printed as raw blog text');
+        if(!(await article.locator('blockquote').count()))
+          throw new Error('Markdown quotation was not rendered');
       }
       // Regression: account pages must be centered, legible and truly split on desktop.
       if((p.route==='/giris'||p.route==='/kayit') && (screen.name==='masaustu'||screen.name==='mobil')){
