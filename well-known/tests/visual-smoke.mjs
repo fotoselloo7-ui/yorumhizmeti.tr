@@ -249,17 +249,21 @@ for(const screen of screens){
           wrap:getComputedStyle(el).flexWrap,
           scrollWidth:el.scrollWidth,viewport:el.clientWidth
         }));
-        if(rootStats.wrap!=='nowrap'||rootStats.scrollWidth<rootStats.viewport)
-          throw new Error('Featured categories not configured as horizontal carousel');
+        if(rootStats.wrap!=='nowrap')
+          throw new Error('Main category rail unexpectedly wraps');
+        const childRail=subMenu.locator('.nv43-child-rail');
+        const childStats=await childRail.evaluate(el=>({width:el.scrollWidth,viewport:el.clientWidth}));
+        if(childStats.width<=childStats.viewport+50)
+          throw new Error('Nested software menu links are not horizontally scrollable');
         if(screen.name==='masaustu'){
-          await rootRail.evaluate(el=>{el.scrollLeft=0;});
-          const rect=await rootRail.boundingBox();
+          await childRail.evaluate(el=>{el.scrollLeft=0;});
+          const rect=await childRail.boundingBox();
           await page.mouse.move(rect.x+rect.width*.73,rect.y+rect.height*.6);
           await page.mouse.down();
           await page.mouse.move(rect.x+rect.width*.31,rect.y+rect.height*.6,{steps:9});
           await page.mouse.up();
-          const dragged=await rootRail.evaluate(el=>el.scrollLeft);
-          if(dragged<20)throw new Error('Mouse grab-and-drag did not move horizontal categories: '+dragged);
+          const dragged=await childRail.evaluate(el=>el.scrollLeft);
+          if(dragged<20)throw new Error('Mouse grab-and-drag did not move the nested software rail: '+dragged);
         }else{
           const next=categoryPanel.locator('.nv43-rail-shell').first().locator('[data-featured-rail-next]');
           await rootRail.evaluate(el=>{el.scrollLeft=0;});
