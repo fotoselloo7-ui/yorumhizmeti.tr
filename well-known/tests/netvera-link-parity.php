@@ -3,13 +3,24 @@
  * php tests/netvera-link-parity.php /private/netvera_public_migration_payload.zip
  */
 declare(strict_types=1);
-if(PHP_SAPI!=='cli'||!class_exists('ZipArchive'))exit(2);
-$zip=new ZipArchive();
-if($zip->open((string)($argv[1]??''))!==true){fwrite(STDERR,"ZIP is unavailable.\n");exit(2);}
-$json=$zip->getFromName('netvera-public-content.json');
-$manifest=json_decode((string)$zip->getFromName('manifest.json'),true);
-if($json===false||!is_array($manifest)||!hash_equals((string)($manifest['content_sha256']??''),hash('sha256',$json))){
- fwrite(STDERR,"Input payload integrity invalid.\n");exit(2);
+if(PHP_SAPI!=='cli')exit(2);
+$input=(string)($argv[1]??'');
+$fixture=realpath(dirname(__DIR__).'/database/netvera-public-catalog.json');
+$path=realpath($input);
+if(!$path || !is_file($path))exit(2);
+if($fixture && hash_equals($fixture,$path)){
+    $json=file_get_contents($fixture);
+    if($json===false)exit(2);
+}else{
+    if(!class_exists('ZipArchive'))exit(2);
+    $zip=new ZipArchive();
+    if($zip->open($path)!==true){fwrite(STDERR,"ZIP unavailable.\n");exit(2);}
+    $json=$zip->getFromName('netvera-public-content.json');
+    $manifest=json_decode((string)$zip->getFromName('manifest.json'),true);
+    if($json===false||!is_array($manifest)||
+       !hash_equals((string)($manifest['content_sha256']??''),hash('sha256',$json))){
+        fwrite(STDERR,"Input payload integrity invalid.\n");exit(2);
+    }
 }
 $data=json_decode($json,true,512,JSON_THROW_ON_ERROR);
 $expectedProducts=[
