@@ -26,7 +26,7 @@ final class NetveraBridgeService
             foreach (['products','categories','images','approved_reviews','blog_posts','blog_categories'] as $section)
                 if (!isset($data[$section]) || !is_array($data[$section])) return $cached = [];
             return $cached = $data;
-        } catch (\\Throwable $e) {
+        } catch (\Throwable $e) {
             error_log('Netvera public catalogue invalid: '.get_class($e));
             return $cached = [];
         }
