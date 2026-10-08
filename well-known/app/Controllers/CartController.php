@@ -16,7 +16,11 @@ class CartController extends Controller
         if (!empty($cart)) {
             $db = Database::getInstance();
             foreach ($cart as $key => $item) {
-                $pkg = $db->fetch("SELECT * FROM packages WHERE id = ? AND status = 'active'", [$item['id']]);
+                $pkg = $db->fetch("SELECT p.* FROM packages p
+                 INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+                 LEFT JOIN categories parent ON parent.id = c.parent_id
+                 WHERE p.id = ? AND p.status = 'active'
+                   AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
                 if ($pkg) {
                     $price = $pkg['discount_price'] && $pkg['discount_price'] < $pkg['price'] ? $pkg['discount_price'] : $pkg['price'];
                     $qty = $item['quantity'] ?? 1;
@@ -28,6 +32,7 @@ class CartController extends Controller
 
         $this->render('frontend/cart', [
             'pageTitle' => 'Sepet - ' . setting('site_name'),
+            'paymentOptions' => (new \App\Services\PaymentGatewayManager())->getCheckoutOptions(),
             'cartItems' => $cartItems,
             'total' => $total,
         ]);
@@ -39,7 +44,11 @@ class CartController extends Controller
         $packageId = (int) ($_POST['package_id'] ?? 0);
         $quantity = max(1, (int) ($_POST['quantity'] ?? 1));
 
-        $pkg = Database::getInstance()->fetch("SELECT * FROM packages WHERE id = ? AND status = 'active'", [$packageId]);
+        $pkg = Database::getInstance()->fetch("SELECT p.* FROM packages p
+                 INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+                 LEFT JOIN categories parent ON parent.id = c.parent_id
+                 WHERE p.id = ? AND p.status = 'active'
+                   AND (c.parent_id IS NULL OR parent.status = 'active')", [$packageId]);
         if (!$pkg) {
             flash('error', 'Paket bulunamadı.');
             redirect('/');
@@ -57,7 +66,7 @@ class CartController extends Controller
         }
 
         if (!$found) {
-            $cart[] = ['id' => $packageId, 'quantity' => min($quantity, $pkg['max_quantity'])];
+            $cart[] = ['id' => $packageId, 'quantity' => max(1, min($quantity, (int)$pkg['max_quantity']))];
         }
 
         $_SESSION['cart'] = $cart;
@@ -75,7 +84,11 @@ class CartController extends Controller
 
         $item = $_SESSION['cart'][$key];
         $pkg = Database::getInstance()->fetch(
-            "SELECT min_quantity, max_quantity, status FROM packages WHERE id = ? AND status = 'active'",
+            "SELECT p.min_quantity, p.max_quantity, p.status FROM packages p
+             INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+             LEFT JOIN categories parent ON parent.id = c.parent_id
+             WHERE p.id = ? AND p.status = 'active'
+               AND (c.parent_id IS NULL OR parent.status = 'active')",
             [(int)($item['id'] ?? 0)]
         );
         if (!$pkg) {

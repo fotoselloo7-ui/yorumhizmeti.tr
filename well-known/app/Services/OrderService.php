@@ -18,7 +18,7 @@ class OrderService
         $totalAmount = 0;
 
         foreach ($cartItems as $item) {
-            $price = $item['discount_price'] ?? $item['price'];
+            $price = $this->effectivePrice($item);
             $totalAmount += $price * ($item['quantity'] ?? 1);
         }
 
@@ -34,7 +34,7 @@ class OrderService
         ]);
 
         foreach ($cartItems as $item) {
-            $price = $item['discount_price'] ?? $item['price'];
+            $price = $this->effectivePrice($item);
             $qty = $item['quantity'] ?? 1;
 
             $orderItemId = $this->db->insert('order_items', [
@@ -93,6 +93,13 @@ class OrderService
             'note' => $note,
             'created_by' => $createdBy,
         ]);
+    }
+
+    private function effectivePrice(array $item): float
+    {
+        $regular = (float) $item['price'];
+        $discount = isset($item['discount_price']) ? (float) $item['discount_price'] : 0.0;
+        return $discount > 0 && $discount < $regular ? $discount : $regular;
     }
 
     private function generateOrderNumber(): string

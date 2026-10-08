@@ -141,14 +141,17 @@ class PaymentGatewayManager
                         'is_default' => (bool) $gw['is_default'],
                     ];
                 }
-            } else {
-                // Manuel ödeme (Havale/EFT)
-                $options[] = [
-                    'key' => $gw['gateway_key'],
-                    'name' => $gw['name'],
-                    'type' => 'manual',
-                    'is_default' => false,
-                ];
+            } elseif ($gw['gateway_key'] === 'bank_transfer') {
+                // Banka hesabı bulunmayan havale modülünü müşteriye sunma.
+                $service = $this->getService('bank_transfer');
+                if ($service && $service->isConfigured()) {
+                    $options[] = [
+                        'key' => 'bank_transfer',
+                        'name' => $gw['name'],
+                        'type' => 'manual',
+                        'is_default' => false,
+                    ];
+                }
             }
         }
 

@@ -21,7 +21,11 @@ class CheckoutController extends Controller
         $cartItems = [];
         $total = 0;
         foreach ($cart as $key => $item) {
-            $pkg = $db->fetch("SELECT * FROM packages WHERE id = ? AND status = 'active'", [$item['id']]);
+            $pkg = $db->fetch("SELECT p.* FROM packages p
+                 INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+                 LEFT JOIN categories parent ON parent.id = c.parent_id
+                 WHERE p.id = ? AND p.status = 'active'
+                   AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
             if ($pkg) {
                 $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
                 $qty = $item['quantity'] ?? 1;
@@ -29,6 +33,12 @@ class CheckoutController extends Controller
                 $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields, 'cart_key' => $key]);
                 $total += $price * $qty;
             }
+        }
+
+        if (!$cartItems) {
+            flash('error', 'Sepetinizde şu anda satışta olan bir paket bulunmuyor.');
+            redirect('/sepet');
+            return;
         }
 
         $gatewayManager = new PaymentGatewayManager();
@@ -64,12 +74,34 @@ class CheckoutController extends Controller
 
         $db = Database::getInstance();
         $user = Auth::user();
-        $paymentGateway = $_POST['payment_gateway'] ?? '';
+        $paymentGateway = trim((string)($_POST['payment_gateway'] ?? ''));
+        $gatewayManager = new PaymentGatewayManager();
+        $selectedPayment = null;
+        foreach ($gatewayManager->getCheckoutOptions() as $option) {
+            if ($option['key'] === $paymentGateway) {
+                $selectedPayment = $option;
+                break;
+            }
+        }
+        if (!$selectedPayment) {
+            flash('error', 'Seçilen ödeme yöntemi şu anda kullanılamıyor. Lütfen geçerli bir yöntem seçin.');
+            redirect('/odeme');
+            return;
+        }
+        if (($_POST['terms_accepted'] ?? '') !== '1') {
+            flash('error', 'Sipariş oluşturmak için satış sözleşmesini kabul etmeniz gerekiyor.');
+            redirect('/odeme');
+            return;
+        }
 
         // Sipariş itemlerini hazırla
         $orderItems = [];
         foreach ($cart as $item) {
-            $pkg = $db->fetch("SELECT * FROM packages WHERE id = ? AND status = 'active'", [$item['id']]);
+            $pkg = $db->fetch("SELECT p.* FROM packages p
+                 INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+                 LEFT JOIN categories parent ON parent.id = c.parent_id
+                 WHERE p.id = ? AND p.status = 'active'
+                   AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
             if (!$pkg) continue;
             $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
 
@@ -91,7 +123,13 @@ class CheckoutController extends Controller
             $orderItems[] = $orderItem;
         }
 
-        $paymentMethod = $paymentGateway === 'bank_transfer' ? 'bank_transfer' : 'online';
+        if (!$orderItems || count($orderItems) !== count($cart)) {
+            flash('error', 'Sepetinizde artık satışta olmayan paketler var. Lütfen sepetinizi güncelleyin.');
+            redirect('/sepet');
+            return;
+        }
+
+        $paymentMethod = $selectedPayment['type'] === 'manual' ? 'bank_transfer' : 'online';
 
         $orderService = new OrderService();
         $orderId = $orderService->createOrder(
@@ -126,8 +164,8 @@ class CheckoutController extends Controller
         $service = $gatewayManager->getService($paymentGateway);
 
         if (!$service || !$service->isConfigured()) {
-            flash('error', 'Ödeme modülü yapılandırılmamış. Lütfen Havale/EFT ile ödeme yapın.');
-            redirect('/odeme/basarili?method=bank_transfer&order=' . $order['order_number']);
+            flash('error', 'Online ödeme şu anda başlatılamıyor. Siparişiniz ödeme bekliyor; destek ekibinden yardım alabilirsiniz.');
+            redirect('/siparis/' . $orderId);
             return;
         }
 

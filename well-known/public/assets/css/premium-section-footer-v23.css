@@ -266,3 +266,15 @@
 @media(prefers-reduced-motion:reduce){
   .yh-story-premium-v23 .yv-category-side-benefits-v5>div{transition:none!important;transform:none!important}
 }
+/* V24 - Authentic payment marks in cart and checkout; retain existing layout scale. */
+.yv-checkout-payments-v5.yv-payment-networks-v24{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.yv-checkout-payments-v5.yv-payment-networks-v24>span{min-height:40px;padding:4px 7px;border-radius:9px}
+.yv-payment-networks-v24 img{display:block;width:100%;height:31px;object-fit:contain}
+.yv-checkout-payments-v5.yv-payment-transfer-v24{display:flex}
+.yv-checkout-payments-v5.yv-payment-transfer-v24>span{display:flex;align-items:center;gap:8px;min-height:37px;width:100%;font-size:11px;color:#475477}
+.yv-checkout-pay-v5:disabled{opacity:.55;cursor:not-allowed;filter:grayscale(.2)}
+@media(max-width:420px){
+  .yv-checkout-payments-v5.yv-payment-networks-v24{gap:5px}
+  .yv-checkout-payments-v5.yv-payment-networks-v24>span{min-height:35px;padding:3px 5px}
+  .yv-payment-networks-v24 img{height:28px}
+}
