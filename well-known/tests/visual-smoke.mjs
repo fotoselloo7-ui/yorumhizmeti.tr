@@ -925,6 +925,26 @@ try {
     showcasePage.waitForURL('**/admin',{waitUntil:'domcontentloaded'}),
     showcasePage.locator('form button[type=submit]').click()
   ]);
+  // Main homepage only shows genuine Netvera items enabled in the existing
+  // per-product "Öne çıkan yazılım" admin switch. The normal catalog keeps all.
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  const spotlight=showcasePage.locator('.nv31-software-grid .nv31-software-card');
+  const highlightCount=await spotlight.count();
+  if(highlightCount!==2)throw new Error('Homepage promoted script count wrong: '+highlightCount);
+  if(await spotlight.locator('a[href="/hazir-scriptler/netvera-temizlik-firmasi-script-yazilimi-pro"]').count())
+    throw new Error('Disabled homepage highlight leaked into featured showcase');
+  if(!(await spotlight.locator('a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+    throw new Error('Enabled script not featured');
+  await showcasePage.goto(origin+'/hazir-scriptler',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('a[href="/hazir-scriptler/netvera-temizlik-firmasi-script-yazilimi-pro"]').count()))
+    throw new Error('Unfeatured script incorrectly hidden from full catalog');
+  await showcasePage.goto(origin+'/odeme/paytr-onizleme',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv45-checkout .nv45-preview-alert').count()))
+    throw new Error('Local PayTR branded payment preview not present');
+  if(await showcasePage.locator('#paytriframe').count())
+    throw new Error('Local preview unexpectedly opened a live card entry iframe');
+  console.log('PASS featured script toggle and separate full catalog, branded PayTR preview');
+
   // Blog editor integration: scores update, fields survive save/reopen,
   // and answer/source are visible on the published article.
   await showcasePage.goto(origin+'/admin/blog/ekle',{waitUntil:'domcontentloaded'});
