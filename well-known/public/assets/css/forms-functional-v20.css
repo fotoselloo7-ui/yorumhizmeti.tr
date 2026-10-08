@@ -1,0 +1,29 @@
+/* Lead capture forms: real consent, readable validation, no layout leaks. */
+.yv-honeypot{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important;pointer-events:none!important}
+.yv-opt-in{display:flex;align-items:flex-start;gap:9px;max-width:100%;margin:12px 0 14px;color:#51607a;font:500 11px/1.65 Poppins,sans-serif;cursor:pointer}
+.yv-opt-in input[type=checkbox]{appearance:auto!important;display:inline-block!important;flex:0 0 16px!important;width:16px!important;height:16px!important;min-width:16px!important;margin:2px 0 0!important;accent-color:#6d43ed!important;cursor:pointer}
+.yv-opt-in span{min-width:0}
+.yv-opt-in a{color:#6550db!important;text-decoration:underline!important;text-underline-offset:2px}
+.yv-form-feedback{position:relative;max-width:100%;margin:9px 0 12px;padding:10px 12px;border:1px solid;border-radius:10px;font-size:11px;font-weight:600;line-height:1.6;overflow-wrap:anywhere}
+.yv-form-feedback.success{color:#076b4e;background:#e6fff4;border-color:#a3ecc9}
+.yv-form-feedback.error{color:#a12949;background:#fff0f4;border-color:#f3baca}
+.footer-newsletter-signup{width:100%;margin:0}
+.footer-newsletter-signup .footer-newsletter-form{width:100%;max-width:100%!important;margin:0!important;display:grid;grid-template-columns:minmax(0,1fr) 40px!important}
+.footer-newsletter-form input{min-width:0!important;width:100%!important}
+.footer-newsletter-form button{cursor:pointer;display:flex;align-items:center;justify-content:center}
+.footer-opt-in{margin:9px 0 0!important;color:#b0bad4!important;font-size:9px!important;line-height:1.5!important}
+.footer-opt-in input[type=checkbox]{height:14px!important;width:14px!important;min-width:14px!important;flex-basis:14px!important}
+.footer-opt-in a{color:#d5ddff!important}
+.site-footer .yv-form-feedback{font-size:10px;line-height:1.45}
+.yv-blog-news-v8 form{display:grid;gap:10px}
+.yv-blog-news-v8 form>input[type=email]{width:100%;max-width:100%;min-height:40px}
+.yv-blog-news-v8 .blog-opt-in{margin:0;line-height:1.5}
+.yv-blog-news-v8 .blog-opt-in span{font-size:10px}
+.yv-blog-news-v8 button[type=submit]{min-height:40px;cursor:pointer}
+.yv-contact-form form{position:relative}
+.yv-contact-form .yv-opt-in{margin:12px 0 18px}
+@media(max-width:768px){
+ .yv-opt-in{font-size:12px;line-height:1.6}
+ .footer-opt-in{font-size:10px!important}
+ .footer-newsletter-form input{font-size:12px!important}
+}
