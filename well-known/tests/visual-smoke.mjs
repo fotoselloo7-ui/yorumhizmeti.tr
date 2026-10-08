@@ -252,9 +252,15 @@ for(const screen of screens){
         if(rootStats.wrap!=='nowrap')
           throw new Error('Main category rail unexpectedly wraps');
         const childRail=subMenu.locator('.nv43-child-rail');
-        const childStats=await childRail.evaluate(el=>({width:el.scrollWidth,viewport:el.clientWidth}));
+        const childStats=await childRail.evaluate(el=>({
+          width:el.scrollWidth,viewport:el.clientWidth,
+          display:getComputedStyle(el).display,
+          parentDisplay:getComputedStyle(el.parentElement).display,
+          subMenuHidden:!!el.closest('[hidden]'),
+          childCount:el.children.length
+        }));
         if(childStats.width<=childStats.viewport+50)
-          throw new Error('Nested software menu links are not horizontally scrollable');
+          throw new Error('Nested software menu not scrollable: '+JSON.stringify(childStats));
         if(screen.name==='masaustu'){
           await childRail.evaluate(el=>{el.scrollLeft=0;});
           const rect=await childRail.boundingBox();
