@@ -61,7 +61,22 @@ for(const screen of screens){
           })
           .slice(0,12)
           .map(el=>({tag:el.tagName,cls:String(el.className).slice(0,80),r:Math.round(el.getBoundingClientRect().right)}));
+        const geom = {};
+        for (const selector of [
+          '.container','.yh6-hero','.yh6-hero-grid','.yh6-hero-art','.yh6-platform-bar','.yh6-why',
+          '.yv-category-hero-v5','.yv-category-hero-grid-v5','.yv-category-hero-art-v5','.yv-category-hero-woman-v5',
+          '.yv-blog-hero-grid-v8','.yv-blog-hero-art-v8','.yv-blog-woman-v8',
+          '.yv-product-hero-grid-v5','.yv-product-hero-visual-v5',
+          '.yh18-featured-head','.yh18-featured-tabs','.site-footer','.footer-grid-v9'
+        ]){
+          const el=document.querySelector(selector);
+          if (!el) continue;
+          const b=el.getBoundingClientRect();
+          const st=getComputedStyle(el);
+          geom[selector]={x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.width),h:Math.round(b.height),display:st.display,grid:st.gridTemplateColumns,overflow:st.overflow};
+        }
         return {
+          geom,
           title:document.title,
           h1:(document.querySelector('h1')?.textContent||'').trim().slice(0,100),
           bodyText:(main.innerText||'').slice(0,200),
