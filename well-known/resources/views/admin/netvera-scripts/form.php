@@ -17,5 +17,9 @@
 <?php foreach(['is_active','is_featured','is_popular','is_new','demo_is_active','demo_is_public'] as $k): ?>
 <label><input type="checkbox" name="<?= $k ?>" value="1" <?= !empty($k==='is_active'?($product['active']??1):($d[$k]??0))?'checked':'' ?>> <?= e($k) ?></label>
 <?php endforeach; ?>
+<div class="adm-card"><div class="adm-card-header"><h3>Demo ve Sürüm Bilgileri</h3></div><div class="adm-card-body">
+<?php foreach(['demo_url'=>'Demo URL','demo_video_url'=>'Demo Video','current_version'=>'Sürüm','last_updated_on'=>'Güncelleme Tarihi','install_type'=>'Kurulum Tipi','install_info'=>'Kurulum Bilgileri'] as $key=>$label): ?>
+<div class="form-group"><label><?= e($label) ?></label><input class="form-control" name="<?= $key ?>" value="<?= e($d[$key]??'') ?>"></div>
+<?php endforeach; ?></div></div>
 <button class="btn btn-primary" type="submit">Kaydet</button>
 </div></div></form>
