@@ -351,6 +351,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                     </a>
                 </div>
             </div>
+            <?php endforeach; ?>
 
             <?php foreach(($featuredSoftwareGroups ?? []) as $softwareGroup): ?>
             <div class="yh18-featured-pane yh41-software-pane"
@@ -381,7 +382,6 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                     </a>
                 </div>
             </div>
-            <?php endforeach; ?>
             <?php endforeach; ?>
         </div>
     </div>
