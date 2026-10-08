@@ -61,6 +61,7 @@ class App
 
         // Ödeme
         $r->get('/odeme', 'CheckoutController@index');
+        $r->get('/odeme/paytr-onizleme', 'CheckoutController@paytrPreview');
         $r->post('/odeme/islem', 'CheckoutController@process');
         $r->get('/odeme/basarili', 'CheckoutController@success');
         $r->get('/odeme/basarisiz', 'CheckoutController@fail');
