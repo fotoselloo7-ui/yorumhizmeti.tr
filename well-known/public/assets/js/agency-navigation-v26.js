@@ -33,7 +33,8 @@
     entry.addEventListener('pointerleave', event => {
       if (window.matchMedia('(min-width: 961px) and (hover: hover)').matches && event.pointerType === 'mouse') close();
     });
-    entry.addEventListener('focusin', () => open(entry));
+    // Only explicit click/Enter/Space opens a panel. Opening on focus first
+    // caused touch/click to immediately toggle an already-open panel closed.
     panel.addEventListener('click', e => {
       if (e.target.closest('a')) {
         close();

@@ -183,7 +183,7 @@ for(const screen of screens){
         }else if(screen.name==='masaustu'){
           await triggers.first().hover();
           const panel=page.locator('#navMain [data-mega-panel]:not([hidden])');
-          if((await panel.count())!==1 || !(await panel.locator('.nv26-mega-parent[href^="/kategori/"]').count())){
+          if((await panel.count())!==1 || !(await panel.locator('a.nv26-mega-parent[href^="/kategori/"], a.nv26-social-mega-card[href^="/kategori/"]').count())){
             errors.push('Hover mega menu does not show real category links');failed=true;
           }
           await page.keyboard.press('Escape');
@@ -358,7 +358,7 @@ try {
     adminPage.locator('#navMenuEditor button[type=submit]').click()
   ]);
   await adminPage.goto(origin + '/', {waitUntil:'domcontentloaded'});
-  if (await adminPage.locator('.nav-main a[href="/blog"]').count()) throw new Error('Hidden admin menu item still visible in header');
+  if (await adminPage.locator('.nv26-menu-shell .nv26-simple-link[href="/blog"]').count()) throw new Error('Hidden admin menu item still visible in header');
 
   await adminPage.goto(origin + '/admin/menu', {waitUntil:'domcontentloaded'});
   await adminPage.locator('input[name="enabled[]"][value="blog"]').evaluate(input => {
@@ -369,7 +369,7 @@ try {
     adminPage.locator('#navMenuEditor button[type=submit]').click()
   ]);
   await adminPage.goto(origin + '/', {waitUntil:'domcontentloaded'});
-  if (!(await adminPage.locator('.nav-main a[href="/blog"]').count())) throw new Error('Restored menu item did not return to storefront');
+  if (!(await adminPage.locator('.nv26-menu-shell .nv26-simple-link[href="/blog"]').count())) throw new Error('Restored menu item did not return to storefront');
   results.push({route:'Admin menu hide/restore',screen:'integration',status:200,errors:[]});
   console.log('PASS admin menu hide/restore');
 } catch(e) {
