@@ -4,9 +4,21 @@
         <p class="text-sm text-secondary">Tüm hizmet paketlerinizi yönetin.</p>
     </div>
     <div class="adm-page-top-badges">
+        <form method="POST" action="/admin/paketler/yayinla" style="margin:0" onsubmit="return confirm('Mevcut tüm kayıtlı paketler ile ilişkili kategorileri aktif edip vitrinde yayımlamak istiyor musunuz? Fiyatlar ve paket detayları değişmeyecek.')">
+            <?= csrfField() ?>
+            <button type="submit" class="btn btn-primary btn-sm"><?= icon('check-circle',14) ?> Kataloğu Yayına Al</button>
+        </form>
         <a href="/admin/import" class="btn btn-outline btn-sm"><?= icon('upload', 14) ?> Excel/CSV İçe Aktar</a>
         <a href="/admin/paket/ekle" class="btn btn-primary btn-sm"><?= icon('plus', 16) ?> Paket Ekle</a>
     </div>
+</div>
+
+<div class="adm-catalog-status" role="status">
+    <span><?= icon('package',14) ?> <strong><?= (int)($catalogStats['total']??0) ?></strong> kayıtlı paket</span>
+    <span><?= icon('check-circle',14) ?> <strong><?= (int)($catalogStats['active']??0) ?></strong> aktif</span>
+    <span><?= icon('eye-off',14) ?> <strong><?= (int)($catalogStats['hidden']??0) ?></strong> pasif</span>
+    <?php if(!empty($catalogStats['missing_category'])): ?><span class="adm-catalog-alert"><?= icon('alert-circle',14) ?> <?= (int)$catalogStats['missing_category'] ?> paketin kategorisi bulunamıyor</span><?php endif; ?>
+    <a href="/kategoriler" target="_blank" rel="noopener"><?= icon('external-link',13) ?> Vitrini Aç</a>
 </div>
 
 <?php if (empty($packages)): ?>
@@ -65,7 +77,7 @@
                     <td><input type="checkbox" name="ids[]" value="<?= $pkg['id'] ?>" class="pkg-checkbox" onchange="updatePkgBulkActions()"></td>
                     <td>
                         <div class="adm-pkg-name">
-                            <span class="font-semibold"><?= e($pkg['name']) ?></span>
+                            <span class="font-semibold"><?= e(package_display_name($pkg)) ?></span>
                             <?php if (!empty($pkg['is_featured'])): ?>
                             <span class="adm-featured-badge"><?= icon('star', 10) ?> Öne Çıkan</span>
                             <?php endif; ?>
@@ -120,7 +132,7 @@
         <div class="adm-order-card-m-top">
             <div style="display:flex; align-items:center; gap: 8px;">
                 <input type="checkbox" name="ids[]" value="<?= $pkg['id'] ?>" class="pkg-checkbox" onchange="updatePkgBulkActions()">
-                <span class="font-semibold"><?= e($pkg['name']) ?></span>
+                <span class="font-semibold"><?= e(package_display_name($pkg)) ?></span>
                 <?php if (!empty($pkg['is_featured'])): ?>
                 <span class="adm-featured-badge"><?= icon('star', 10) ?></span>
                 <?php endif; ?>
