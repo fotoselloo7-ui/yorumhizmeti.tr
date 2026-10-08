@@ -278,7 +278,7 @@ class HomeController extends Controller
         // named "NetVera Haber Sitesi Script Yazılımı" under Web Site Hizmetleri.
         // Existing package store /hazir-yazilimlar and its admin selection remain
         // intact; only this script showcase is sourced from the Netvera catalogue.
-        $softwareHighlights = array_slice($netveraProducts,0,12);
+        $softwareHighlights = \App\Services\NetveraBridgeService::featured(12);
         $softwareRoot = \App\Services\SoftwareCatalogService::root();
         $softwareCatalogUrl = '/hazir-scriptler';
         $softwarePreviewCategories = [];
