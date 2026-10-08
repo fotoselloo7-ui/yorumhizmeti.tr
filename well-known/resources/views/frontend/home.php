@@ -248,10 +248,17 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
             <div class="yh18-featured-pane <?= $gidx===0?'active':'' ?>"
                  data-featured-pane="<?= e((string)$group['category']['id']) ?>"
                  <?= $gidx===0?'':'hidden' ?>>
-                <div class="yh18-featured-grid">
-                    <?php foreach(array_slice($group['packages'],0,4) as $pidx=>$pkg): ?>
+                <div class="yh18-featured-grid" data-featured-track role="region" aria-label="<?= e($group['category']['name']) ?> öne çıkan paketler">
+                    <?php foreach($group['packages'] as $pidx=>$pkg): ?>
                         <?= yh18FeaturedCard($pkg, $pidx===1) ?>
                     <?php endforeach; ?>
+                </div>
+                <div class="yh18-carousel-row">
+                    <div class="yh18-carousel-controls" aria-label="Paket kaydırma">
+                        <button type="button" class="yh18-slide-arrow" data-slide-prev aria-label="Önceki paketler"><?= icon('chevron-left',18) ?></button>
+                        <span data-slide-count aria-live="off">1 / <?= count($group['packages']) ?></span>
+                        <button type="button" class="yh18-slide-arrow" data-slide-next aria-label="Sonraki paketler"><?= icon('chevron-right',18) ?></button>
+                    </div>
                 </div>
                 <div class="yh18-featured-footer">
                     <a href="/kategori/<?= e($group['category']['slug']) ?>" class="yh18-all-link">
