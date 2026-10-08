@@ -4,7 +4,14 @@
   </div>
   <div class="adm-page-top-badges">
     <a href="/hazir-yazilimlar" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><?= icon('external-link',14) ?> Yazılım Kataloğunu Gör</a>
-    <a href="/admin/yazilim/ekle" class="btn btn-primary btn-sm"><?= icon('plus',14) ?> Yazılım Paketi Ekle</a>
+    <?php if (!empty($softwareCategoryReady)): ?>
+    <a href="/admin/yazilim/ekle" class="btn btn-primary btn-sm"><?= icon('plus',14) ?> Yeni Yazılım Ekle</a>
+    <?php else: ?>
+    <form method="POST" action="/admin/hazir-yazilimlar/kur-ve-ekle" class="adm36-start-form">
+      <?= csrfField() ?>
+      <button class="btn btn-primary btn-sm" type="submit"><?= icon('plus',14) ?> Kategorileri Kur ve Yazılım Ekle</button>
+    </form>
+    <?php endif; ?>
   </div>
 </div>
 <div class="adm31-help">
@@ -53,7 +60,8 @@
         <p class="form-hint"><strong><?= empty($prefs['ids']) ? 'Otomatik vitrin etkin:' : 'Özel sıralama etkin:' ?></strong> <?= empty($prefs['ids']) ? 'Uygun aktif yazılımlar sırayla kendiliğinden gösterilir. Hiç işaretleme yapman gerekmez.' : 'Sadece seçtiğin ürünler girdiğin sıra ile gösterilir. Otomatiğe dönmek için seçimleri temizleyip kaydet.' ?></p>
         <div class="adm31-package-grid">
         <?php foreach($packages as $pkg):
-          $active = $pkg['status']==='active' && $pkg['category_status']==='active' && (($root['status']??'inactive')==='active');
+          $active = $pkg['status']==='active' && $pkg['category_status']==='active'
+            && ($pkg['category_parent_id'] === null || ($pkg['parent_status'] ?? '') === 'active');
           $rank = array_search((int)$pkg['id'], $prefs['ids'], true);
         ?>
         <div class="adm31-package-row">

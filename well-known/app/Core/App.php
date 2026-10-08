@@ -138,6 +138,7 @@ class App
         // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
         $r->get('/admin/hazir-yazilimlar', 'Admin\\SoftwareShowcaseController@index');
         $r->post('/admin/hazir-yazilimlar/kategorileri-kur', 'Admin\\SoftwareShowcaseController@install');
+        $r->post('/admin/hazir-yazilimlar/kur-ve-ekle', 'Admin\\SoftwareShowcaseController@setupThenCreate');
         $r->post('/admin/hazir-yazilimlar/kaydet', 'Admin\\SoftwareShowcaseController@save');
         $r->get('/admin/referanslar', 'Admin\\ReferencesController@index');
         $r->post('/admin/referanslar/ekle', 'Admin\\ReferencesController@store');

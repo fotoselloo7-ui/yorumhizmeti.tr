@@ -16,7 +16,24 @@ class SoftwareShowcaseController extends Controller
             'packages' => SoftwareCatalogService::eligiblePackages(),
             'otherPackages' => SoftwareCatalogService::otherPackages(),
             'prefs' => SoftwareCatalogService::preferences(),
+            'softwareCategoryReady' => count(SoftwareCatalogService::softwareCategoryOptions()) > 1,
         ]);
+    }
+
+    /** Explicit, CSRF-protected, one-click first setup and editor launch. */
+    public function setupThenCreate(): void
+    {
+        Csrf::check();
+        try {
+            $result = SoftwareCatalogService::installCategories();
+            flash('success', 'Yazılım kategorileri hazır. ' . $result['created']
+                . ' eksik kategori oluşturuldu; mevcut kategori, ürün ve linkler korunuyor.');
+            redirect('/admin/yazilim/ekle');
+        } catch (\Throwable $e) {
+            error_log('Ready software one-click setup: ' . $e->getMessage());
+            flash('error', 'Yazılım kategorileri hazırlanamadı. Sunucu hata kayıtlarını kontrol edin.');
+            redirect('/admin/hazir-yazilimlar');
+        }
     }
 
     public function install(): void

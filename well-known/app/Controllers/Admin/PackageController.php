@@ -91,8 +91,10 @@ class PackageController extends Controller
             static fn(array $cat): bool => $cat['parent_id'] !== null
         ));
         if (!$categories) {
-            flash('warning', 'Önce Hazır Yazılım Vitrini ekranından eksik yazılım kategorilerini kurun.');
-            redirect('/admin/hazir-yazilimlar');
+            $this->renderAdmin('admin/software-showcase/setup',[
+                'pageTitle'=>'Yazılım Ekle — İlk Kurulum',
+                'categoryCount'=>count(\App\Services\SoftwareCatalogService::definitions()),
+            ]);
             return;
         }
         $this->renderAdmin('admin/packages/form', [
