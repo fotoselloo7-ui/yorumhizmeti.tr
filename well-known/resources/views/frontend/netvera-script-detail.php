@@ -73,7 +73,12 @@ $nv40ExternalLive=!in_array($nv40Host,['netvera.tr','www.netvera.tr'],true);
     <div class="nv40-info-layout">
       <div class="nv40-info-main">
         <section class="nv40-info-card" id="ozellikler"><h2>Yazılım Hakkında</h2>
-          <div class="nv40-article"><?= nl2br(e(trim(strip_tags((string)$product['description'])))) ?></div>
+          <div class="nv40-article"><?php
+            $description=(string)($product['description']??'');
+            echo preg_match('~</?[a-z][^>]*>~i',$description)
+              ? \App\Services\SanitizerService::cleanHtml($description)
+              : nl2br(e($description));
+          ?></div>
         </section>
         <?php if($modules): ?><section class="nv40-info-card" id="moduller"><h2>Yazılım Modülleri</h2>
           <div class="nv40-feature-list">
