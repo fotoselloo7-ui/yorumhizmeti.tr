@@ -53,8 +53,14 @@
                 <a href="/admin/netvera-yazilimlar" class="<?= isActive('/admin/netvera-yazilimlar') ? 'active' : '' ?>">
                     <?= icon('layers',18) ?> Netvera Yazılımları
                 </a>
+                <a href="/admin/netvera-kategoriler" class="<?= isActive('/admin/netvera-kategoriler') ? 'active' : '' ?>">
+                    <?= icon('folder',18) ?> Yazılım Kategorileri
+                </a>
+                <a href="/admin/netvera-yazilimlar/ekle" class="<?= isActive('/admin/netvera-yazilimlar/ekle') ? 'active' : '' ?>">
+                    <?= icon('plus',18) ?> Netvera Yazılım Ekle
+                </a>
                 <a href="/admin/yazilim/ekle" class="<?= isActive('/admin/yazilim/ekle') ? 'active' : '' ?>">
-                    <?= icon('plus', 18) ?> Yeni Yazılım Ekle
+                    <?= icon('package',18) ?> Paket Tipi Yazılım Ekle
                 </a>
                 <a href="/admin/import" class="<?= isActive('/admin/import') ?>">
                     <?= icon('upload', 18) ?> İçe Aktar
