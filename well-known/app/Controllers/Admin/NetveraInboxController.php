@@ -36,7 +36,7 @@ final class NetveraInboxController extends Controller
     {
         Csrf::check();
         $row=Inbox::ready()?$this->db->fetch(
-            'SELECT id FROM nv_public_inquiries WHERE id=?',[(int)$id]
+            'SELECT id,source_type FROM nv_public_inquiries WHERE id=?',[(int)$id]
         ):null;
         if(!$row){redirect('/admin/netvera-gelen-kutusu');return;}
         $message=mb_substr(trim((string)($_POST['message']??'')),0,3000,'UTF-8');
@@ -46,7 +46,9 @@ final class NetveraInboxController extends Controller
         }
         Inbox::reply((int)$id,'admin',$message);
         logActivity('netvera_inbox_reply','Netvera talebine yanıt: #'.$id);
-        flash('success','Yanıt kaydedildi; ziyaretçi açık sohbetinden görebilir.');
+        flash('success',$row['source_type']==='offer'
+            ?'Teklif yanıtı kaydedildi. Teklif sahibine iletişim adresi üzerinden ayrıca dönüş yapın.'
+            :'Yanıt kaydedildi; ziyaretçi açık sohbetinden görebilir.');
         redirect('/admin/netvera-gelen-kutusu/'.$id);
     }
 
