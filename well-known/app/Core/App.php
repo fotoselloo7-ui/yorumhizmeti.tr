@@ -91,6 +91,7 @@ class App
         $r->get('/sss', 'PageController@faq');
         $r->get('/iletisim', 'PageController@contact');
         $r->post('/iletisim', 'PageController@contactPost');
+        $r->post('/bulten/kayit', 'NewsletterController@subscribe');
         $r->get('/sayfa/{slug}', 'PageController@show');
 
         // SEO
