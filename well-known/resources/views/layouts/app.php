@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
