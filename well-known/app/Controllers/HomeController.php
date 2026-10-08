@@ -154,7 +154,7 @@ class HomeController extends Controller
                 foreach ($groupCategories as $cat) {
                     if (isset($usedIds[$cat['id']]) || $cat['style'] !== $preferredStyle) continue;
                     $chips[] = [
-                        'name' => preg_replace('/\\s+Hizmetleri?$/u', '', (string)$cat['name']),
+                        'name' => preg_replace('/\s+Hizmetleri?$/u', '', (string)$cat['name']),
                         'url' => $cat['url'],
                         'icon' => $cat['icon'],
                     ];
@@ -166,7 +166,7 @@ class HomeController extends Controller
                 if (count($chips) >= 4) break;
                 if (isset($usedIds[$cat['id']])) continue;
                 $chips[] = [
-                    'name' => preg_replace('/\\s+Hizmetleri?$/u', '', (string)$cat['name']),
+                    'name' => preg_replace('/\s+Hizmetleri?$/u', '', (string)$cat['name']),
                     'url' => $cat['url'],
                     'icon' => $cat['icon'],
                 ];
