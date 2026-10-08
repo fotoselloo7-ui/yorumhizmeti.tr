@@ -8,7 +8,7 @@ use App\Services\NetveraBridgeService as Catalog;
 
 final class NetveraInquiryController extends Controller
 {
-    private function json(int $code,array $data):void
+    private function respondJson(int $code,array $data):void
     {
         http_response_code($code);
         header('Content-Type: application/json; charset=UTF-8');
@@ -23,11 +23,11 @@ final class NetveraInquiryController extends Controller
         Csrf::check();
         $isAjax=($_POST['transport']??'')==='json';
         if(!Inbox::ready()){
-            if($isAjax){$this->json(503,['ok'=>false,'error'=>'Destek sistemi hazırlanıyor.']);return;}
+            if($isAjax){$this->respondJson(503,['ok'=>false,'error'=>'Destek sistemi hazırlanıyor.']);return;}
             flash('error','Destek sistemi hazırlanıyor.');redirect('/iletisim');return;
         }
         if(!empty($_POST['website'])){ // Honeypot: no persistent data
-            if($isAjax){$this->json(200,['ok'=>true,'message'=>'Talebiniz alındı.']);return;}
+            if($isAjax){$this->respondJson(200,['ok'=>true,'message'=>'Talebiniz alındı.']);return;}
             redirect('/iletisim');return;
         }
         $message=mb_substr(trim((string)($_POST['message']??'')),0,3000,'UTF-8');
@@ -51,7 +51,7 @@ final class NetveraInquiryController extends Controller
         if($id===0 && $type==='offer' && ($slug===''||!Catalog::find($slug)))
             $error='Geçerli bir yazılım seçin.';
         if($error!==''){
-            if($isAjax){$this->json(422,['ok'=>false,'error'=>$error]);return;}
+            if($isAjax){$this->respondJson(422,['ok'=>false,'error'=>$error]);return;}
             flash('error',$error);redirect('/iletisim');return;
         }
         try{
@@ -63,14 +63,14 @@ final class NetveraInquiryController extends Controller
             }
             $log[]=$now;$_SESSION['nv_inbox_times']=$log;
             if($isAjax){
-                $this->json(200,['ok'=>true,'inquiry_id'=>$id,'message'=>'Mesajınız kaydedildi.']);
+                $this->respondJson(200,['ok'=>true,'inquiry_id'=>$id,'message'=>'Mesajınız kaydedildi.']);
                 return;
             }
             flash('success',$type==='offer'?'Yazılım teklif talebiniz alındı.':'Mesajınız alındı.');
             redirect($slug?'/hazir-scriptler/'.rawurlencode($slug):'/iletisim');
         }catch(\Throwable $e){
             error_log('Netvera inquiry send failed: '.get_class($e));
-            if($isAjax){$this->json(500,['ok'=>false,'error'=>'Mesaj şu an kaydedilemedi.']);return;}
+            if($isAjax){$this->respondJson(500,['ok'=>false,'error'=>'Mesaj şu an kaydedilemedi.']);return;}
             flash('error','Talep kaydedilemedi.');redirect('/iletisim');
         }
     }
@@ -79,8 +79,8 @@ final class NetveraInquiryController extends Controller
     {
         $id=max(0,(int)($_GET['id']??0));
         $inquiry=Inbox::visibleToVisitor($id);
-        if(!$inquiry){$this->json(404,['ok'=>false,'error'=>'Sohbet bulunamadı.']);return;}
-        $this->json(200,[
+        if(!$inquiry){$this->respondJson(404,['ok'=>false,'error'=>'Sohbet bulunamadı.']);return;}
+        $this->respondJson(200,[
             'ok'=>true,'id'=>$id,'status'=>$inquiry['status'],
             'messages'=>Inbox::replies($id)
         ]);
