@@ -23,7 +23,9 @@ if (!function_exists('yvCatDesign')) {
         if(str_contains($s,'google')||str_contains($s,'seo')) return ['google','google','#4285F4'];
         if(str_contains($s,'web')||str_contains($s,'site')) return ['web','globe','#2868FF'];
         return ['default',$cat['icon_key']??'package','#6750E7'];
-    }[$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
+    }
+}
+[$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
 $categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
 $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
@@ -47,7 +49,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
     <a class="yv-btn yv-btn-primary" href="#packages">Hemen Paketleri İncele <?= icon('arrow-right',12) ?></a>
    </div>
    <div class="yv-category-hero-art-v5">
-    <div class="yv-category-hero-woman-v5" style="--cat-hero-image:url('<?= e($categoryHeroImage) ?>')"></div>
+    <img class="yv-category-hero-woman-v5" src="<?= e($categoryHeroCutout) ?>" alt="<?= e($category['name']) ?>" loading="eager">
     <span class="yv-category-brand-orbit-v5 main"><?= icon($platformIcon,34) ?></span>
     <span class="yv-category-brand-orbit-v5 small one"><?= icon('heart',18) ?></span>
     <span class="yv-category-brand-orbit-v5 small two"><?= icon('trending-up',18) ?></span>
