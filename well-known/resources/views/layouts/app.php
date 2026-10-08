@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.2">
     <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
+    <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=27.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -191,7 +192,7 @@
                 <span><?= e($nv26Label) ?></span>
                 <?= icon('chevron-down', 12) ?>
               </button>
-              <section class="nv26-mega-panel" id="nv26-panel-<?= e($nv26Group['key']) ?>" data-mega-panel hidden aria-label="<?= e($nv26Label) ?>">
+              <section class="nv26-mega-panel <?= $nv26Group['key']==='social'?'':'nv27-pro-panel nv27-pro-panel--'.e($nv26Group['key']) ?>" id="nv26-panel-<?= e($nv26Group['key']) ?>" data-mega-panel hidden aria-label="<?= e($nv26Label) ?>">
                 <div class="nv26-mega-top">
                   <div><strong><?= e($nv26Label) ?></strong><p><?= e($nv26Group['description']) ?></p></div>
                   <a href="/kategoriler?grup=<?= e($nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
@@ -207,30 +208,67 @@
                   <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <div class="nv26-mega-columns">
-                  <?php foreach ($nv26Cols as $nv26Column): ?>
-                  <div class="nv26-mega-column">
-                    <?php foreach ($nv26Column as $nv26Cat): ?>
-                    <div class="nv26-mega-category">
-                      <a class="nv26-mega-parent" href="<?= e($nv26Cat['url']) ?>">
-                        <span class="nv26-menu-icon <?= e($nv26Cat['style']) ?>"><?= icon($nv26Cat['icon'], 19) ?></span>
-                        <span><strong><?= e($nv26Cat['name']) ?></strong><small>Hizmet paketlerini keşfet</small></span>
-                        <?= icon('chevron-right', 12) ?>
-                      </a>
-                      <?php if (!empty($nv26Cat['children'])): ?>
-                      <div class="nv26-mega-children">
-                        <?php foreach (array_slice($nv26Cat['children'], 0, 4) as $nv26Sub): ?>
-                        <a href="<?= e($nv26Sub['url']) ?>"><?= icon('arrow-right', 10) ?> <?= e($nv26Sub['name']) ?></a>
-                        <?php endforeach; ?>
-                        <?php if (count($nv26Cat['children']) > 4): ?>
-                        <a class="nv26-mega-more" href="<?= e($nv26Cat['url']) ?>">Tüm alt hizmetler <?= icon('arrow-right', 11) ?></a>
-                        <?php endif; ?>
+                <?php $nv27Agency = ($nv26Group['key'] === 'agency'); ?>
+                <div class="nv27-service-layout nv27-service-layout--<?= e($nv26Group['key']) ?>">
+                  <aside class="nv27-service-spotlight" aria-label="<?= e($nv26Label) ?> kategorileri">
+                    <div class="nv27-spotlight-top">
+                      <span class="nv27-spotlight-badge"><?= icon($nv27Agency ? 'layers' : 'trending-up', 15) ?> <?= $nv27Agency?'Dijital ajans çözümleri':'Dijital büyüme çözümleri' ?></span>
+                      <div class="nv27-spotlight-glyph" aria-hidden="true">
+                        <?= icon($nv27Agency ? 'monitor' : 'bar-chart', 58) ?>
                       </div>
-                      <?php endif; ?>
+                      <strong><?= $nv27Agency?'Fikrinizden dijital ürüne.':'Dijitalde daha görünür olun.' ?></strong>
+                      <p><?= $nv27Agency?'Web sitesi, uygulama, tasarım ve içerik hizmetlerini ihtiyacınıza göre keşfedin.':'SEO, reklam ve yerel işletme hizmetlerini tek noktadan inceleyin.' ?></p>
                     </div>
-                    <?php endforeach; ?>
+                    <a href="/kategoriler?grup=<?= e($nv26Group['key']) ?>" class="nv27-spotlight-cta">
+                      Tüm kategorileri gör <?= icon('arrow-right', 14) ?>
+                    </a>
+                  </aside>
+                  <div class="nv27-service-main">
+                    <div class="nv27-service-intro">
+                      <div><span class="nv27-service-overline"><?= icon('grid',13) ?> HİZMET KATALOĞU</span><strong><?= e($nv26Label) ?></strong></div>
+                      <span class="nv27-service-count"><?= count($nv26Group['categories']) ?> kategori</span>
+                    </div>
+                    <div class="nv27-service-grid">
+                      <?php foreach ($nv26Group['categories'] as $nv26Cat):
+                          $nv27ChildCount = count($nv26Cat['children']);
+                          $nv27Description = trim(strip_tags((string)($nv26Cat['description'] ?? '')));
+                          $nv27Description = $nv27Description !== ''
+                              ? mb_strimwidth($nv27Description, 0, 75, '…', 'UTF-8')
+                              : ($nv27ChildCount > 0 ? $nv27ChildCount.' alt hizmet ve paket seçeneği' : 'Hizmet seçeneklerini keşfedin');
+                      ?>
+                      <article class="nv27-service-card nv27-style-<?= e($nv26Cat['style']) ?>">
+                        <a href="<?= e($nv26Cat['url']) ?>" class="nv27-service-parent">
+                          <span class="nv27-service-icon"><?= icon($nv26Cat['icon'], 23) ?></span>
+                          <span class="nv27-service-parent-copy">
+                            <strong><?= e($nv26Cat['name']) ?></strong>
+                            <small><?= e($nv27Description) ?></small>
+                          </span>
+                          <span class="nv27-service-parent-arrow"><?= icon('arrow-up-right', 13) ?></span>
+                        </a>
+                        <?php if ($nv27ChildCount > 0): ?>
+                        <div class="nv27-subcategory-area">
+                          <span class="nv27-subcategory-caption">ALT HİZMETLER</span>
+                          <div class="nv27-subcategory-grid">
+                            <?php foreach (array_slice($nv26Cat['children'], 0, 4) as $nv26Sub): ?>
+                            <a href="<?= e($nv26Sub['url']) ?>" class="nv27-subcategory-link"
+                               title="<?= e($nv26Sub['name']) ?>">
+                              <span class="nv27-subcategory-symbol"><?= icon('arrow-up-right', 10) ?></span>
+                              <span><?= e($nv26Sub['name']) ?></span>
+                            </a>
+                            <?php endforeach; ?>
+                          </div>
+                        </div>
+                        <?php else: ?>
+                        <p class="nv27-category-empty">Kategorideki paket ve hizmetleri inceleyin.</p>
+                        <?php endif; ?>
+                        <a href="<?= e($nv26Cat['url']) ?>" class="nv27-category-footer">
+                          <?= $nv27ChildCount > 4 ? 'Tüm '.$nv27ChildCount.' alt hizmeti keşfet' : 'Kategori paketlerini incele' ?>
+                          <?= icon('arrow-right', 12) ?>
+                        </a>
+                      </article>
+                      <?php endforeach; ?>
+                    </div>
                   </div>
-                  <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
               </section>

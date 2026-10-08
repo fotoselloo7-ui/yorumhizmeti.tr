@@ -230,6 +230,40 @@ for(const screen of screens){
           errors.push('Homepage quick service cards have no background: '+invisibleQuickCards.join(', '));failed=true;
         }
       }
+      // Distinct premium agency / marketing dropdowns; social tiles are unchanged.
+      if(p.route==='/' && (screen.name==='masaustu'||screen.name==='mobil')){
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        for(const group of ['agency','marketing']){
+          const btn=page.locator('[aria-controls="nv26-panel-'+group+'"][data-mega-trigger]');
+          if(!await btn.count()) continue; // An admin can deliberately hide a group.
+          if(screen.name==='masaustu') await btn.hover();
+          else await btn.click();
+          const panel=page.locator('#nv26-panel-'+group);
+          if(await panel.isHidden()){errors.push(group+' premium dropdown did not open');failed=true;continue;}
+          const info=await panel.evaluate(root=>{
+            const cards=[...root.querySelectorAll('.nv27-service-card')];
+            const links=[...root.querySelectorAll('.nv27-subcategory-link')];
+            const grid=root.querySelector('.nv27-service-grid');
+            const cardBoxes=cards.map(el=>el.getBoundingClientRect());
+            const duplicateCard=cardBoxes.some((rect,i)=>cardBoxes.slice(i+1).some(other=>
+              Math.min(rect.right,other.right)-Math.max(rect.left,other.left)>4 &&
+              Math.min(rect.bottom,other.bottom)-Math.max(rect.top,other.top)>4));
+            return {cards:cards.length,childLinks:links.length,
+              badHref:links.some(a=>!/^\\/kategori\\/[^?]+\\?alt=/.test(a.getAttribute('href')||'')),
+              overflow:!!grid && grid.scrollWidth>grid.clientWidth+3,
+              overlap:duplicateCard,
+              hasSpotlight:!!root.querySelector('.nv27-service-spotlight')};
+          });
+          if(!info.cards||!info.hasSpotlight||info.overflow||info.overlap||info.badHref){
+            errors.push(group+' premium layout or category links invalid: '+JSON.stringify(info));failed=true;
+          }
+          if(screen.name==='masaustu'){
+            await page.screenshot({path:path.join(output,'premium-menu-'+group+'-desktop.png'),animations:'disabled'});
+          }
+        }
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        else await page.keyboard.press('Escape');
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){
