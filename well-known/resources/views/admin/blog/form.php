@@ -161,6 +161,11 @@
                 </div>
             </div>
             
+            <!-- Detailed SEO/GEO/AIO editorial data belongs alongside the article,
+                 not as an endless stack in the narrow right sidebar. -->
+            <section class="nv46-seo-extras" aria-label="Gelişmiş içerik ve GEO alanları">
+                <?php $nvSeoIsBlog=true; require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
+            </section>
         </div>
 
         <!-- Sidebar (Right) -->
@@ -198,7 +203,7 @@
                     <p class="nv44-words">Kelime sayısı: <strong id="nv44-word-count">0</strong></p>
                 </div>
             </section>
-            <?php $nvSeoIsBlog=true; require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
+
 
 
             <div class="adm-card">
