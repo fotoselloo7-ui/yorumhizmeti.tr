@@ -59,6 +59,7 @@ final class NetveraInquiryController extends Controller
                 Inbox::reply($id,'visitor',$message);
             }else{
                 $id=Inbox::create($type,$name,$contact,$message,$slug?:null);
+                if($type==='chat')$_SESSION['nv_active_chat_id']=$id;
             }
             $log[]=$now;$_SESSION['nv_inbox_times']=$log;
             if($isAjax){
