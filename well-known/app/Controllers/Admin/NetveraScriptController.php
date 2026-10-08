@@ -25,10 +25,15 @@ final class NetveraScriptController extends Controller
 
     public function create():void
     {
+        $categories=NetveraBridgeService::categories();
+        if(!$categories){
+            flash('error','Yazılım eklemeden önce Netvera kategorisini oluşturun veya mevcut içerikleri aktarın.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
         $this->renderAdmin('admin/netvera-scripts/form',[
             'pageTitle'=>'Netvera Yazılımı Ekle',
             'product'=>null,'data'=>[],
-            'categories'=>NetveraBridgeService::categories()
+            'categories'=>$categories
         ]);
     }
 
@@ -127,6 +132,129 @@ final class NetveraScriptController extends Controller
         flash('success','Netvera yazılım kaydı kaydedildi. Ödeme sistemi değiştirilmedi.');
         redirect('/admin/netvera-yazilimlar');
     }
+    /** Isolated legacy categories. The original indexed slug is immutable on edit. */
+    public function categories():void
+    {
+        $ready=NetveraBridgeService::ready();
+        $categories=$ready?$this->db->fetchAll(
+            'SELECT c.*, (SELECT COUNT(*) FROM nv_legacy_script_products p
+             WHERE p.category_legacy_id=c.legacy_id) AS product_count
+             FROM nv_legacy_script_categories c ORDER BY c.sort_order,c.legacy_id'
+        ):[];
+        $this->renderAdmin('admin/netvera-scripts/categories',[
+            'pageTitle'=>'Netvera Yazılım Kategorileri',
+            'ready'=>$ready,'categories'=>$categories
+        ]);
+    }
+
+    /** One-click schema initialization is restricted to a disposable staging database. */
+    public function installBridge():void
+    {
+        Csrf::check();
+        $env=strtolower(trim((string)($_ENV['APP_ENV']??'production')));
+        if(!in_array($env,['staging','testing','development','local'],true) ||
+            (string)($_ENV['NETVERA_IMPORT_ALLOWED']??'')!=='1'){
+            flash('error','Bu kurulum yalnızca ayrı staging veritabanında APP_ENV=staging ve NETVERA_IMPORT_ALLOWED=1 ile yapılabilir.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        if(NetveraBridgeService::ready()){
+            flash('success','Netvera içerik tabloları zaten kurulu.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        try{
+            $source=file_get_contents(BASE_PATH.'/database/migrations/netvera-legacy-bridge-v1.sql');
+            if($source===false)throw new \\RuntimeException('Migration file not found');
+            // This controlled local SQL contains only CREATE TABLE IF NOT EXISTS.
+            // No user-supplied queries, customer data or payment-table changes.
+            foreach(explode(';',$source) as $statement){
+                $statement=trim($statement);
+                $statement=preg_replace('/^--[^\\r\\n]*(?:\\r?\\n|$)/m','',$statement);
+                if(trim($statement)==='')continue;
+                if(!preg_match('/^CREATE TABLE IF NOT EXISTS nv_legacy_/i',trim($statement)))
+                    throw new \\RuntimeException('Non-allowlisted migration statement');
+                $this->db->getPdo()->exec($statement);
+            }
+            flash('success','Staging içerik tabloları hazır. Mevcut kullanıcı, sipariş ve ödeme verilerine dokunulmadı.');
+        }catch(\\Throwable $e){
+            error_log('Netvera bridge staging schema setup failed: '.$e->getMessage());
+            flash('error','Staging tablo kurulumu tamamlanamadı. Sunucu loglarını kontrol edin.');
+        }
+        redirect('/admin/netvera-kategoriler');
+    }
+
+    public function saveCategory():void
+    {
+        Csrf::check();
+        if(!NetveraBridgeService::ready()){
+            flash('error','Önce güvenli staging içerik tablolarını kurun.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        $id=max(0,(int)($_POST['id']??0));
+        $original=$id?$this->db->fetch(
+            'SELECT * FROM nv_legacy_script_categories WHERE legacy_id=?',[$id]
+        ):null;
+        if($id&&!$original){
+            flash('error','Kategori bulunamadı.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        $name=mb_substr(trim((string)($_POST['name']??'')),0,240,'UTF-8');
+        if($name===''){
+            flash('error','Kategori adı zorunludur.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        $slug=$original?(string)$original['slug']:slugify(trim((string)($_POST['slug']??''))?:$name);
+        if($slug===''){
+            flash('error','Geçerli bir kategori adresi oluşturulamadı.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        $existingSlug=$this->db->fetch(
+            'SELECT legacy_id FROM nv_legacy_script_categories WHERE slug=? AND legacy_id<>?',
+            [$slug,$id]
+        );
+        if($existingSlug){
+            flash('error','Bu kategori SEO adresi zaten kullanılıyor.');
+            redirect('/admin/netvera-kategoriler');return;
+        }
+        $parentId=$original?($original['parent_legacy_id']??null):
+            max(0,(int)($_POST['parent_legacy_id']??0));
+        if(!$original && $parentId){
+            $parent=$this->db->fetch(
+                'SELECT legacy_id,parent_legacy_id FROM nv_legacy_script_categories WHERE legacy_id=?',
+                [$parentId]
+            );
+            // Maximum two-level category tree, matching the original URL contract.
+            if(!$parent || !empty($parent['parent_legacy_id'])){
+                flash('error','Geçerli bir üst kategori seçin.');
+                redirect('/admin/netvera-kategoriler');return;
+            }
+        }
+        $record=[
+            'parent_legacy_id'=>$parentId?:null,'name'=>$name,'slug'=>$slug,
+            'description'=>trim((string)($_POST['description']??'')),
+            'meta_title'=>mb_substr(trim((string)($_POST['meta_title']??'')),0,255,'UTF-8'),
+            'meta_description'=>trim((string)($_POST['meta_description']??'')),
+            'sort_order'=>(int)($_POST['sort_order']??0),
+            'active'=>isset($_POST['active'])?1:0
+        ];
+        try{
+            if($original){
+                $this->db->update('nv_legacy_script_categories',$record,'legacy_id=?',[$id]);
+            }else{
+                // The legacy category key intentionally is not AUTO_INCREMENT;
+                // preserve all imported IDs and allocate a new non-overlapping ID.
+                $last=$this->db->fetch('SELECT COALESCE(MAX(legacy_id),0) AS max_id FROM nv_legacy_script_categories');
+                $record['legacy_id']=(int)$last['max_id']+1;
+                $this->db->insert('nv_legacy_script_categories',$record);
+            }
+            logActivity('netvera_category_save','Netvera kategori kaydı: '.$name);
+            flash('success','Kategori kaydedildi; eski kategori slug ve ürün adresleri korunuyor.');
+        }catch(\\Throwable $e){
+            error_log('Netvera category save: '.$e->getMessage());
+            flash('error','Kategori kaydedilemedi. Sunucu kayıtlarını kontrol edin.');
+        }
+        redirect('/admin/netvera-kategoriler');
+    }
+
     /** Product gallery: add images, never delete original files used by indexed URLs. */
     public function galleryAdd():void
     {
