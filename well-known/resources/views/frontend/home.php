@@ -67,6 +67,49 @@ if (!function_exists('yh6PackageCard')) {
     }
 }
 
+if (!function_exists('yh18FeaturedCard')) {
+    function yh18FeaturedCard(array $pkg, bool $favorite = false): string {
+        [$cls,$ico,$label] = yh6Platform($pkg['category_slug'] ?? '', $pkg['category_name'] ?? $pkg['name'] ?? '');
+        $price = yh6PackagePrice($pkg);
+        $old = (!empty($pkg['discount_price']) && $pkg['discount_price'] < $pkg['price']) ? (float)$pkg['price'] : null;
+        $discount = ($old && $old > 0) ? round((1 - $price / $old) * 100) : null;
+        $delivery = trim((string)($pkg['delivery_time'] ?? ''));
+        $short = trim(strip_tags((string)($pkg['short_description'] ?? '')));
+        ob_start(); ?>
+        <article class="yh18-featured-card <?= e($cls) ?>">
+            <?php if ($favorite): ?><span class="yh18-favorite">Favori Paket</span><?php endif; ?>
+            <div class="yh18-card-brand">
+                <span class="yh18-card-icon"><?= icon($ico, 22) ?></span>
+                <div>
+                    <small><?= e($label) ?></small>
+                    <h3><?= e(package_display_name($pkg)) ?></h3>
+                </div>
+            </div>
+
+            <?php if ($short !== ''): ?>
+            <p class="yh18-card-summary"><?= e(excerpt($short, 112)) ?></p>
+            <?php endif; ?>
+
+            <div class="yh18-card-features">
+                <span><?= icon('check-circle', 13) ?><b>Aktif ve güvenli hizmet</b></span>
+                <span><?= icon('zap', 13) ?><b><?= e($delivery !== '' ? $delivery : 'Hızlı teslimat') ?></b></span>
+                <span><?= icon('shield', 13) ?><b>Şifresiz sipariş</b></span>
+                <span><?= icon('headphones', 13) ?><b>7/24 müşteri desteği</b></span>
+            </div>
+
+            <div class="yh18-card-bottom">
+                <div class="yh18-card-price">
+                    <?php if ($old): ?><del><?= money($old) ?></del><?php endif; ?>
+                    <strong><?= money($price) ?></strong>
+                    <?php if ($discount): ?><em>%<?= $discount ?> indirim</em><?php endif; ?>
+                </div>
+                <a href="/paket/<?= e($pkg['slug']) ?>" class="yh18-card-cta">Paketi İncele <?= icon('arrow-right', 11) ?></a>
+            </div>
+        </article>
+        <?php return ob_get_clean();
+    }
+}
+
 $heroCutout = asset('img/hero-woman-cutout.png');
 
 $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['extra'] : [];
@@ -161,16 +204,62 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
     </div>
 </section>
 
-<?php if (!empty($featuredPackages)): ?>
-<section class="yh6-featured" id="featured">
-    <div class="yh6-featured-glow g1"></div><div class="yh6-featured-glow g2"></div>
+<?php if (!empty($featuredPackageGroups)): ?>
+<section class="yh18-featured" id="featured" data-featured-switcher>
     <div class="container">
-        <div class="yh6-section-head light">
-            <div><span class="yh6-eyebrow dark">En Popüler Hizmetler</span><h2>Öne Çıkan Paketler</h2><p>En çok tercih edilen, yüksek memnuniyetli sosyal medya hizmet paketlerimizi keşfedin.</p></div>
-            <a href="/kategoriler" class="yh6-btn white">Tüm Paketleri Gör <?= icon('arrow-right', 11) ?></a>
+        <?php
+        $firstFeaturedGroup = $featuredPackageGroups[0];
+        [$firstFeaturedClass,$firstFeaturedIcon,$firstFeaturedLabel] = yh6Platform(
+            $firstFeaturedGroup['category']['slug'] ?? '',
+            $firstFeaturedGroup['category']['name'] ?? ''
+        );
+        ?>
+        <div class="yh18-featured-head">
+            <div class="yh18-featured-title">
+                <span class="yh18-featured-avatar <?= e($firstFeaturedClass) ?>" data-featured-avatar><?= icon($firstFeaturedIcon, 24) ?></span>
+                <div>
+                    <span class="yh6-eyebrow">Kategoriye Göre Popüler Paketler</span>
+                    <h2><span data-featured-title><?= e($firstFeaturedGroup['category']['name']) ?></span> Öne Çıkan Paketler</h2>
+                    <p data-featured-subtitle><?= e(($firstFeaturedGroup['category']['name'] ?? 'Hizmet') . ' kategorisindeki öne çıkarılan paketleri karşılaştırın.') ?></p>
+                </div>
+            </div>
+
+            <div class="yh18-featured-tabs" role="tablist" aria-label="Öne çıkan paket kategorileri">
+                <?php foreach($featuredPackageGroups as $gidx=>$group):
+                    [$gcls,$gico,$glabel] = yh6Platform($group['category']['slug']??'', $group['category']['name']??'');
+                ?>
+                <button type="button"
+                        class="yh18-featured-tab <?= $gidx===0?'active':'' ?> <?= e($gcls) ?>"
+                        data-featured-tab="<?= e((string)$group['category']['id']) ?>"
+                        data-title="<?= e($group['category']['name']) ?>"
+                        data-url="/kategori/<?= e($group['category']['slug']) ?>"
+                        data-class="<?= e($gcls) ?>"
+                        aria-selected="<?= $gidx===0?'true':'false' ?>"
+                        title="<?= e($group['category']['name']) ?>">
+                    <?= icon($gico, 18) ?>
+                    <span><?= e($glabel) ?></span>
+                </button>
+                <?php endforeach; ?>
+            </div>
         </div>
-        <div class="yh6-featured-grid">
-            <?php foreach(array_slice($featuredPackages,0,4) as $pkg): ?><?= yh6PackageCard($pkg) ?><?php endforeach; ?>
+
+        <div class="yh18-featured-panes">
+            <?php foreach($featuredPackageGroups as $gidx=>$group): ?>
+            <div class="yh18-featured-pane <?= $gidx===0?'active':'' ?>"
+                 data-featured-pane="<?= e((string)$group['category']['id']) ?>"
+                 <?= $gidx===0?'':'hidden' ?>>
+                <div class="yh18-featured-grid">
+                    <?php foreach(array_slice($group['packages'],0,4) as $pidx=>$pkg): ?>
+                        <?= yh18FeaturedCard($pkg, $pidx===1) ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="yh18-featured-footer">
+                    <a href="/kategori/<?= e($group['category']['slug']) ?>" class="yh18-all-link">
+                        <?= e($group['category']['name']) ?> kategorisindeki tüm paketleri gör <?= icon('arrow-right', 11) ?>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
