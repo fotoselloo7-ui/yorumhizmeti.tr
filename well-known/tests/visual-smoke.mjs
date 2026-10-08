@@ -144,6 +144,37 @@ for(const screen of screens){
           }
         }
       }
+      // Regression: account pages must be centered, legible and truly split on desktop.
+      if((p.route==='/giris'||p.route==='/kayit') && (screen.name==='masaustu'||screen.name==='mobil')){
+        const auth=page.locator('.auth25-shell');
+        if(!(await auth.count()))throw new Error('Premium account layout missing');
+        const box=await auth.evaluate(el=>{
+          const r=el.getBoundingClientRect();
+          const left=el.querySelector('.auth25-showcase').getBoundingClientRect();
+          const right=el.querySelector('.auth25-panel').getBoundingClientRect();
+          return {x:r.x,w:r.width,right:r.right,viewport:innerWidth,leftRight:left.right,rightX:right.x,
+            panelWidth:right.width,formWidth:el.querySelector('.auth25-form').getBoundingClientRect().width};
+        });
+        if(box.x < -2||box.right > box.viewport + 2||box.formWidth<245){
+          errors.push('Account page overflows or has too narrow a form');failed=true;
+        }
+        if(screen.name==='masaustu'&&(box.rightX<box.leftRight-2||box.panelWidth<350)){
+          errors.push('Account page two-column layout collapsed on desktop');failed=true;
+        }
+        if(p.route==='/giris'){
+          const pw=page.locator('#password'),toggle=page.locator('[data-auth-toggle="password"]');
+          await pw.fill('qa-visible');
+          await toggle.click();
+          if(await pw.getAttribute('type')!=='text'){errors.push('Password show button did not reveal password');failed=true;}
+          await toggle.click();
+          if(await pw.getAttribute('type')!=='password'){errors.push('Password hide button did not conceal password');failed=true;}
+        }
+        if(p.route==='/kayit'){
+          if((await page.locator('#name').count())!==1||(await page.locator('#password_confirmation').count())!==1){
+            errors.push('Registration fields missing');failed=true;
+          }
+        }
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){
