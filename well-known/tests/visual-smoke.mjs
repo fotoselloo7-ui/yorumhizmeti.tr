@@ -169,6 +169,69 @@ for(const test of ['contact','newsletter']){
 }
 await formsContext.close();
 
+// Validate the real admin-to-front-end menu connection against the isolated CI database.
+const adminContext = await browser.newContext({viewport:{width:1440,height:900}});
+const adminPage = await adminContext.newPage();
+try {
+  await adminPage.goto(origin + '/admin/giris', {waitUntil:'domcontentloaded'});
+  await adminPage.locator('input[name=email]').fill('admin@yorumhizmeti.tr');
+  await adminPage.locator('input[name=password]').fill('qa-test-menu-only');
+  await Promise.all([
+    adminPage.waitForURL('**/admin', {waitUntil:'domcontentloaded'}),
+    adminPage.locator('form button[type=submit]').click()
+  ]);
+  await adminPage.goto(origin + '/admin/menu', {waitUntil:'domcontentloaded'});
+  if ((await adminPage.locator('.adm-nav-item').count()) < 3) throw new Error('Menu management items not rendered');
+  const toggle = adminPage.locator('input[name="enabled[]"][value="blog"]');
+  await toggle.evaluate(input => { input.checked = false; input.dispatchEvent(new Event('change',{bubbles:true})); });
+  await Promise.all([
+    adminPage.waitForURL('**/admin/menu', {waitUntil:'domcontentloaded'}),
+    adminPage.locator('#navMenuEditor button[type=submit]').click()
+  ]);
+  await adminPage.goto(origin + '/', {waitUntil:'domcontentloaded'});
+  if (await adminPage.locator('.nav-main a[href="/blog"]').count()) throw new Error('Hidden admin menu item still visible in header');
+
+  await adminPage.goto(origin + '/admin/menu', {waitUntil:'domcontentloaded'});
+  await adminPage.locator('input[name="enabled[]"][value="blog"]').evaluate(input => {
+    input.checked = true; input.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await Promise.all([
+    adminPage.waitForURL('**/admin/menu', {waitUntil:'domcontentloaded'}),
+    adminPage.locator('#navMenuEditor button[type=submit]').click()
+  ]);
+  await adminPage.goto(origin + '/', {waitUntil:'domcontentloaded'});
+  if (!(await adminPage.locator('.nav-main a[href="/blog"]').count())) throw new Error('Restored menu item did not return to storefront');
+  results.push({route:'Admin menu hide/restore',screen:'integration',status:200,errors:[]});
+  console.log('PASS admin menu hide/restore');
+} catch(e) {
+  failed=true;
+  results.push({route:'Admin menu hide/restore',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL admin menu hide/restore:',String(e).slice(0,350));
+} finally { await adminContext.close(); }
+
+// Validate the visible mobile package slider (not just presence of HTML controls).
+const sliderContext=await browser.newContext({viewport:{width:390,height:844}});
+const sliderPage=await sliderContext.newPage();
+try {
+  await sliderPage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  const track=sliderPage.locator('[data-featured-pane]:not([hidden]) [data-featured-track]');
+  const count=await track.locator('.yh18-featured-card').count();
+  if(count<2)throw new Error('CI featured seed did not create a multi-card carousel');
+  await track.scrollIntoViewIfNeeded();
+  const initial=await track.evaluate(el=>({left:el.scrollLeft, max:el.scrollWidth-el.clientWidth}));
+  if(initial.max<15)throw new Error('Multi-card carousel has no horizontal overflow on mobile');
+  await sliderPage.locator('[data-featured-pane]:not([hidden]) [data-slide-next]').click();
+  await sliderPage.waitForTimeout(450);
+  const moved=await track.evaluate(el=>el.scrollLeft);
+  if(moved<10)throw new Error('Carousel next button did not scroll the cards');
+  results.push({route:'Featured package carousel',screen:'mobil',status:200,errors:[]});
+  console.log('PASS featured package slider, card count:',count,'scrolled:',Math.round(moved));
+} catch(e) {
+  failed=true;
+  results.push({route:'Featured package carousel',screen:'mobil',status:0,errors:[String(e)]});
+  console.error('FAIL featured carousel:',String(e).slice(0,350));
+} finally{await sliderContext.close();}
+
 fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({created:new Date().toISOString(),runs:results},null,2));
 const bad=results.filter(x=>x.status>=500||x.status===0||x.report?.rootScroll>x.report?.viewport+3||x.errors?.some(e=>e.includes('did not switch')));
 console.log(`\nREPORT: ${results.length} page/viewport combinations; critical failures: ${bad.length}; images and overflow details saved to report.json`);
