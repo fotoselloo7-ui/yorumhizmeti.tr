@@ -92,20 +92,48 @@ final class SoftwareCatalogService
         }
     }
 
+    /**
+     * Existing software products may live in older categories (e.g. a demo script
+     * under Web Site Hizmetleri). Keep them discoverable until an admin moves
+     * them to the new dedicated categories; never move or mutate product data.
+     */
     public static function eligiblePackages(): array
     {
-        $root = self::root();
-        if (!$root) return [];
-        $db = Database::getInstance();
-        return $db->fetchAll(
+        $rootId = (int)(self::root()['id'] ?? 0);
+        $rows = Database::getInstance()->fetchAll(
             "SELECT p.*, c.name AS category_name, c.slug AS category_slug,
-                    c.status AS category_status
+                    c.status AS category_status, c.parent_id AS category_parent_id,
+                    parent.status AS parent_status
              FROM packages p
-             INNER JOIN categories c ON p.category_id = c.id
-             WHERE c.id = ? OR c.parent_id = ?
-             ORDER BY c.sort_order ASC, p.sort_order ASC, p.id ASC",
-            [(int)$root['id'], (int)$root['id']]
+             INNER JOIN categories c ON c.id = p.category_id
+             LEFT JOIN categories parent ON parent.id = c.parent_id
+             ORDER BY p.sort_order ASC, p.id DESC"
         );
+        $results = [];
+        foreach ($rows as $pkg) {
+            $inSoftwareFamily = $rootId > 0
+                && ((int)$pkg['category_id'] === $rootId
+                    || (int)$pkg['category_parent_id'] === $rootId);
+            $label = mb_strtolower(
+                (string)$pkg['name'] . ' ' . (string)$pkg['slug'] . ' ' .
+                (string)$pkg['category_name'] . ' ' . (string)$pkg['category_slug'],
+                'UTF-8'
+            );
+            $isExistingSoftware = preg_match('/script|yazılım|yazilim|software|\\bcms\\b/u', $label) === 1;
+            if ($inSoftwareFamily || $isExistingSoftware) $results[] = $pkg;
+        }
+        return $results;
+    }
+
+    public static function publicPackages(): array
+    {
+        $list = [];
+        foreach (self::eligiblePackages() as $pkg) {
+            if (($pkg['status'] ?? '') !== 'active' || ($pkg['category_status'] ?? '') !== 'active') continue;
+            if ($pkg['category_parent_id'] !== null && ($pkg['parent_status'] ?? '') !== 'active') continue;
+            $list[] = $pkg;
+        }
+        return $list;
     }
 
     public static function preferences(): array
@@ -137,17 +165,19 @@ final class SoftwareCatalogService
         );
     }
 
+    /**
+     * Homepage defaults to active software products, ordered by package sort.
+     * Explicit admin selections override the automatic order. Disabling the
+     * showcase still works and is different from an empty selection.
+     */
     public static function featured(): array
     {
         $prefs = self::preferences();
-        if (!$prefs['enabled'] || !$prefs['ids']) return [];
+        if (!$prefs['enabled']) return [];
         $eligible = [];
-        foreach (self::eligiblePackages() as $pkg) {
-            if ($pkg['status'] !== 'active' || $pkg['category_status'] !== 'active') continue;
-            $root = self::root();
-            if (($root['status'] ?? 'inactive') !== 'active') continue;
-            $eligible[(int)$pkg['id']] = $pkg;
-        }
+        foreach (self::publicPackages() as $pkg) $eligible[(int)$pkg['id']] = $pkg;
+        if (!$prefs['ids']) return array_slice(array_values($eligible), 0, 12);
+
         $out = [];
         foreach ($prefs['ids'] as $id) {
             if (isset($eligible[$id])) $out[] = $eligible[$id];
