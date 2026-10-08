@@ -11,65 +11,42 @@ class HomeController extends Controller
         $db = Database::getInstance();
 
         // Kategoriler
-        $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC LIMIT 8");
+        $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC, id ASC");
 
-        // Öne çıkan paketler: kategori bazlı dinamik gruplar.
-        // Yeni bir kategoriye aktif + öne çıkan paket eklendiğinde ana sayfa sekmesi otomatik oluşur.
-        try {
-            $featuredPackages = $db->fetchAll("
-                SELECT
-                    p.*,
-                    c.name AS category_name,
-                    c.slug AS category_slug,
-                    COALESCE(parent.id, c.id) AS featured_group_id,
-                    COALESCE(parent.name, c.name) AS featured_group_name,
-                    COALESCE(parent.slug, c.slug) AS featured_group_slug,
-                    COALESCE(parent.sort_order, c.sort_order) AS featured_group_sort
-                FROM packages p
-                INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
-                LEFT JOIN categories parent ON c.parent_id = parent.id AND parent.status = 'active'
-                WHERE p.status = 'active' AND p.is_featured = 1
-                ORDER BY featured_group_sort ASC, p.sort_order ASC, p.id ASC
-                LIMIT 80
-            ");
-        } catch (\Exception $e) {
-            // Eski kurulumlarda is_featured yoksa aktif paketlerle aynı vitrini kur.
-            $featuredPackages = $db->fetchAll("
-                SELECT
-                    p.*,
-                    c.name AS category_name,
-                    c.slug AS category_slug,
-                    COALESCE(parent.id, c.id) AS featured_group_id,
-                    COALESCE(parent.name, c.name) AS featured_group_name,
-                    COALESCE(parent.slug, c.slug) AS featured_group_slug,
-                    COALESCE(parent.sort_order, c.sort_order) AS featured_group_sort
-                FROM packages p
-                INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
-                LEFT JOIN categories parent ON c.parent_id = parent.id AND parent.status = 'active'
-                WHERE p.status = 'active'
-                ORDER BY featured_group_sort ASC, p.sort_order ASC, p.id ASC
-                LIMIT 80
-            ");
-        }
+        // Admin paketleri aynı veritabanından gelir; manuel/demo paket listesi yoktur.
+        // Her ana kategoride önce is_featured paketler, ardından diğer aktif paketler görünür.
+        // Küresel LIMIT, sonradan eklenen kategorileri görünmez kıldığı için kaldırıldı.
+        $featuredPackages = $db->fetchAll("
+            SELECT p.*, c.name AS category_name, c.slug AS category_slug,
+                   COALESCE(parent.id, c.id) AS featured_group_id,
+                   COALESCE(parent.name, c.name) AS featured_group_name,
+                   COALESCE(parent.slug, c.slug) AS featured_group_slug,
+                   COALESCE(parent.sort_order, c.sort_order) AS featured_group_sort
+            FROM packages p
+            INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
+            LEFT JOIN categories parent ON c.parent_id = parent.id
+            WHERE p.status = 'active'
+              AND (c.parent_id IS NULL OR parent.status = 'active')
+            ORDER BY featured_group_sort ASC, featured_group_id ASC,
+                     p.is_featured DESC, p.sort_order ASC, p.id ASC
+        ");
 
         $featuredPackageGroups = [];
         foreach ($featuredPackages as $pkg) {
-            $groupId = (int)($pkg['featured_group_id'] ?? $pkg['category_id'] ?? 0);
+            $groupId = (int) $pkg['featured_group_id'];
             if ($groupId <= 0) continue;
-
             if (!isset($featuredPackageGroups[$groupId])) {
                 $featuredPackageGroups[$groupId] = [
                     'category' => [
                         'id' => $groupId,
-                        'name' => $pkg['featured_group_name'] ?? $pkg['category_name'] ?? 'Hizmetler',
-                        'slug' => $pkg['featured_group_slug'] ?? $pkg['category_slug'] ?? '',
+                        'name' => $pkg['featured_group_name'],
+                        'slug' => $pkg['featured_group_slug'],
                     ],
                     'packages' => [],
                 ];
             }
-
-            // Masaüstünde referanstaki gibi dört ana kart; fazlası sekme içinde hazır tutulur.
-            if (count($featuredPackageGroups[$groupId]['packages']) < 8) {
+            // Referans tasarımdaki dört kartlık kompozisyonu değiştirmiyoruz.
+            if (count($featuredPackageGroups[$groupId]['packages']) < 4) {
                 $featuredPackageGroups[$groupId]['packages'][] = $pkg;
             }
         }
@@ -84,28 +61,27 @@ class HomeController extends Controller
             }
         }
 
-        // Ana Sayfa Özel Kategori Blokları (Instagram, Web Tasarım, TikTok vb.)
+        // Üç mevcut promo kartının TASARIMI korunur; kayıtlar admin kategorilerinden seçilir.
+        // Önce Instagram, TikTok, Web Site; bunlar yoksa aktif paketli ilk kategoriler.
         $homeCategoryBlocks = [];
-        $targetSlugs = ['instagram-hizmetleri', 'tiktok-hizmetleri', 'web-site-hizmetleri'];
-        foreach ($targetSlugs as $tslug) {
-            $cat = $db->fetch("SELECT * FROM categories WHERE slug = ? AND status = 'active'", [$tslug]);
-            if ($cat) {
-                // Bu kategorinin ve alt kategorilerinin paketlerini getir
-                $catPackages = $db->fetchAll("
-                    SELECT p.*, c.name as category_name, c.slug as category_slug 
-                    FROM packages p 
-                    LEFT JOIN categories c ON p.category_id = c.id 
-                    WHERE (c.id = ? OR c.parent_id = ?) AND p.status = 'active' 
-                    ORDER BY p.sort_order ASC LIMIT 8
-                ", [$cat['id'], $cat['id']]);
-                
-                if (!empty($catPackages)) {
-                    $homeCategoryBlocks[] = [
-                        'category' => $cat,
-                        'packages' => $catPackages
-                    ];
-                }
+        $preferredSlugs = ['instagram-hizmetleri','tiktok-hizmetleri','web-site-hizmetleri'];
+        $candidateCategories = [];
+        foreach ($categories as $cat) $candidateCategories[(int)$cat['id']] = $cat;
+        uasort($candidateCategories, static function ($a, $b) use ($preferredSlugs) {
+            $aa = array_search($a['slug'], $preferredSlugs, true);
+            $bb = array_search($b['slug'], $preferredSlugs, true);
+            return ($aa === false ? 99 : $aa) <=> ($bb === false ? 99 : $bb)
+                ?: ((int)$a['sort_order'] <=> (int)$b['sort_order']);
+        });
+        foreach ($candidateCategories as $cat) {
+            $catId = (int) $cat['id'];
+            $hasVisiblePackage = false;
+            foreach ($featuredPackageGroups as $g) {
+                if ((int)$g['category']['id'] === $catId) { $hasVisiblePackage = true; break; }
             }
+            if (!$hasVisiblePackage) continue;
+            $homeCategoryBlocks[] = ['category' => $cat];
+            if (count($homeCategoryBlocks) === 3) break;
         }
 
         // SSS
