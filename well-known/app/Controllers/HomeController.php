@@ -186,6 +186,19 @@ class HomeController extends Controller
         // Independent software showcase and real client references.
         // Both remain hidden on the storefront until the admin publishes data.
         $softwareHighlights = \App\Services\SoftwareCatalogService::featured();
+        $softwareRoot = \App\Services\SoftwareCatalogService::root();
+        $softwareCatalogUrl = !empty($softwareRoot) && ($softwareRoot['status'] ?? '') === 'active'
+            ? '/kategori/' . \App\Services\SoftwareCatalogService::ROOT_SLUG
+            : '/kategoriler?grup=agency';
+        $softwarePreviewCategories = [];
+        if (($softwareRoot['status'] ?? '') === 'active') {
+            $softwarePreviewCategories = $db->fetchAll(
+                "SELECT name, slug, icon_key FROM categories
+                 WHERE parent_id = ? AND status = 'active'
+                 ORDER BY sort_order ASC, id ASC LIMIT 6",
+                [(int)$softwareRoot['id']]
+            );
+        }
         $projectReferences = array_slice(\App\Services\ReferencesService::all(true), 0, 8);
 
         // SSS
@@ -270,6 +283,8 @@ class HomeController extends Controller
             'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
             'homePromoGroups' => $homePromoGroups,
             'softwareHighlights' => $softwareHighlights,
+            'softwareCatalogUrl' => $softwareCatalogUrl,
+            'softwarePreviewCategories' => $softwarePreviewCategories,
             'projectReferences' => $projectReferences,
             'homeQuickCategories' => $homeQuickCategories,
             'latestPosts' => $latestPosts,

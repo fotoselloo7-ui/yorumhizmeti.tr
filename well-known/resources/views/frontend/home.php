@@ -380,7 +380,6 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
     </div>
 </section>
 
-<?php if (!empty($softwareHighlights)): ?>
 <section class="nv31-software" id="hazir-yazilimlar" aria-labelledby="nv31-software-heading">
   <div class="container">
     <div class="nv31-section-heading">
@@ -389,8 +388,9 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
         <h2 id="nv31-software-heading">Hazır Yazılımlar <span>& Scriptler</span></h2>
         <p>Yönetim panelli, sektöre özel dijital çözümlerimizi keşfedin. İhtiyacınıza uygun ürünü inceleyin.</p>
       </div>
-      <a href="/kategori/hazir-yazilim-scriptleri" class="nv31-heading-link">Tüm Yazılımları Gör <?= icon('arrow-up-right',15) ?></a>
+      <a href="<?= e($softwareCatalogUrl) ?>" class="nv31-heading-link">Tüm Yazılımları Gör <?= icon('arrow-up-right',15) ?></a>
     </div>
+    <?php if (!empty($softwareHighlights)): ?>
     <div class="nv31-software-grid">
       <?php foreach($softwareHighlights as $i=>$sw):
         $price = !empty($sw['discount_price']) && (float)$sw['discount_price'] < (float)$sw['price'] ? $sw['discount_price'] : $sw['price'];
@@ -422,14 +422,54 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
       </article>
       <?php endforeach; ?>
     </div>
+    <?php else: ?>
+    <div class="nv32-software-intro">
+      <div class="nv32-intro-main">
+        <span class="nv32-intro-kicker"><?= icon('layers',15) ?> SEKTÖRÜNÜZE UYGUN DİJİTAL ALTYAPI</span>
+        <h3>İşinize uygun yazılımı <span>birlikte seçelim.</span></h3>
+        <p>Haber portalı, e-ticaret, emlak, otel ve kurumsal web çözümlerini tek bir çatı altında keşfedin. Yazılım ürünleri yayına alındığında burada sıralı olarak listelenecek.</p>
+        <a class="nv32-primary-cta" href="<?= e($softwareCatalogUrl) ?>">Yazılım Kategorilerini Keşfet <?= icon('arrow-right',16) ?></a>
+        <?php if (!empty($softwarePreviewCategories)): ?>
+        <div class="nv32-service-list" aria-label="Hazır yazılım kategorileri">
+          <?php foreach ($softwarePreviewCategories as $softwareCategory): ?>
+          <a href="<?= e($softwareCatalogUrl) ?>?alt=<?= rawurlencode($softwareCategory['slug']) ?>">
+            <?= icon($softwareCategory['icon_key'] ?: 'monitor',14) ?> <?= e($softwareCategory['name']) ?> <?= icon('arrow-up-right',12) ?>
+          </a>
+          <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="nv32-feature-pills" aria-label="Çözüm alanları">
+          <span><?= icon('monitor',14) ?> Kurumsal web yazılımları</span>
+          <span><?= icon('store',14) ?> E-ticaret çözümleri</span>
+          <span><?= icon('settings',14) ?> Yönetim panelli sistemler</span>
+        </div>
+        <?php endif; ?>
+      </div>
+      <div class="nv32-intro-visual" aria-hidden="true">
+        <div class="nv32-visual-halo"></div>
+        <div class="nv32-screen">
+          <div class="nv32-screen-bar"><i></i><i></i><i></i><span></span></div>
+          <div class="nv32-screen-body">
+            <aside><i></i><i></i><i></i><i></i></aside>
+            <main>
+              <span class="nv32-screen-line"></span>
+              <div class="nv32-screen-columns"><span></span><span></span><span></span></div>
+              <div class="nv32-screen-bars"><b></b><b></b><b></b><b></b><b></b></div>
+            </main>
+          </div>
+        </div>
+        <span class="nv32-visual-mini nv32-mini-a"><?= icon('settings',18) ?></span>
+        <span class="nv32-visual-mini nv32-mini-b"><?= icon('globe',20) ?></span>
+      </div>
+    </div>
+    <?php endif; ?>
     <div class="nv31-software-foot">
       <span><?= icon('shield-check',14) ?> Sektöre uygun yazılım çözümleri</span>
       <span><?= icon('headphones',14) ?> Satış öncesi ve sonrası destek</span>
-      <a href="/kategori/hazir-yazilim-scriptleri">Tüm yazılım kategorileri <?= icon('arrow-right',12) ?></a>
+      <a href="<?= e($softwareCatalogUrl) ?>">Tüm yazılım kategorileri <?= icon('arrow-right',12) ?></a>
     </div>
   </div>
 </section>
-<?php endif; ?>
 
 <section class="yh6-stats">
     <div class="container">
@@ -492,17 +532,17 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
 </section>
 <?php endif; ?>
 
-<?php if (!empty($projectReferences)): ?>
 <section class="nv31-portfolio" id="referanslarimiz" aria-labelledby="nv31-portfolio-heading">
   <div class="container">
     <div class="nv31-section-heading">
       <div>
         <span class="nv31-kicker"><?= icon('award',14) ?> PROJE PORTFÖYÜMÜZ</span>
         <h2 id="nv31-portfolio-heading">Referanslarımız <span>& Çalışmalarımız</span></h2>
-        <p>Hayata geçirdiğimiz gerçek projelerden bazıları. Sektörlere özel dijital tasarım ve yazılım çözümleri.</p>
+        <p><?= !empty($projectReferences) ? 'Hayata geçirdiğimiz projelerden örnekler. Sektörlere özel dijital tasarım ve yazılım çözümleri.' : 'Dijital projelerimizin portföyünü bu alanda paylaşacağız. Size özel proje fikirlerini birlikte şekillendirelim.' ?></p>
       </div>
       <a href="/iletisim" class="nv31-heading-link">Projenizi Konuşalım <?= icon('arrow-up-right',15) ?></a>
     </div>
+    <?php if (!empty($projectReferences)): ?>
     <div class="nv31-portfolio-grid">
       <?php foreach($projectReferences as $ref): ?>
       <article class="nv31-portfolio-card">
@@ -527,9 +567,24 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
       </article>
       <?php endforeach; ?>
     </div>
+    <?php else: ?>
+    <div class="nv32-portfolio-intro">
+      <div class="nv32-portfolio-art" aria-hidden="true">
+        <span class="nv32-portfolio-orb nv32-orb-one"><?= icon('monitor',31) ?></span>
+        <span class="nv32-portfolio-orb nv32-orb-two"><?= icon('palette',23) ?></span>
+        <span class="nv32-portfolio-orb nv32-orb-three"><?= icon('layers',25) ?></span>
+        <div class="nv32-portfolio-frames"><div><span></span><span></span><span></span></div><div><span></span><span></span><span></span></div></div>
+      </div>
+      <div class="nv32-portfolio-copy">
+        <span class="nv32-intro-kicker"><?= icon('award',14) ?> YENİ PROJELERE AÇIĞIZ</span>
+        <h3>Bir sonraki dijital projeyi <span>birlikte hayata geçirelim.</span></h3>
+        <p>Web tasarım, özel yazılım ve dijital büyüme alanlarında işletmenizin ihtiyaçlarını konuşalım. Yayınlanan müşteri çalışmalarını daha sonra bu bölümde görüntüleyebilirsiniz.</p>
+        <a class="nv32-primary-cta" href="/iletisim">Projenizi Anlatın <?= icon('arrow-right',15) ?></a>
+      </div>
+    </div>
+    <?php endif; ?>
   </div>
 </section>
-<?php endif; ?>
 
 <section class="nv30-process" id="how" aria-labelledby="nv30-process-title">
     <div class="container">
