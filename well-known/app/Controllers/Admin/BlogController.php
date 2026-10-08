@@ -65,6 +65,7 @@ class BlogController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
         
         $this->db->update('blog_posts', $data, 'id = ?', [(int) $id]);
+        \App\Services\NetveraSeoBridge::save('blog',(int)$id,$_POST);
         $this->syncTags((int)$id, $_POST['tags'] ?? []);
 
         logActivity('blog_update', 'Blog yazısı güncellendi: ' . $data['title']);
