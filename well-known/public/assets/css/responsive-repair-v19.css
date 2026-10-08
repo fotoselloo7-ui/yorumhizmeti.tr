@@ -1,0 +1,178 @@
+/* ============================================================
+   V19 — BROWSER-VERIFIED RESPONSIVE REPAIR
+   Root cause: absolutely positioned artwork children collapse
+   shrink-to-fit grid items to 0px on desktop. Mobile home service
+   strip is visually shifted outside its section due to inherited
+   bottom/left offsets. Measurements: Playwright 390/768/1440/1920.
+   ============================================================ */
+
+/* Give art-grid items an actual width (0px desktop bug). */
+.yv-category-hero-grid-v5 > .yv-category-hero-art-v5,
+.yv-blog-hero-grid-v8 > .yv-blog-hero-art-v8,
+.yv-product-hero-grid-v5 > .yv-product-hero-visual-v5,
+.yv-hero-grid > .yv-hub-hero-art-v11 {
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:720px!important;
+  justify-self:end!important;
+  box-sizing:border-box!important;
+}
+.yv-category-hero-art-v5 .yv-category-hero-woman-v5,
+.yv-blog-hero-art-v8 .yv-blog-woman-v8 {
+  display:block!important;
+  width:65%!important;
+  max-width:none!important;
+  right:16%!important;
+  bottom:0!important;
+  height:96%!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  background:none!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+.yv-category-hero-grid-v5,
+.yv-blog-hero-grid-v8,
+.yv-product-hero-grid-v5{
+  min-width:0!important;
+}
+.yv-category-hero-grid-v5 > div:first-child,
+.yv-blog-hero-copy-v8,
+.yv-product-hero-copy-v5{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+/* Product/device mockup: keep all floating labels within its artwork. */
+.yv-product-hero-visual-v5{
+  overflow:hidden!important;
+  isolation:isolate!important;
+  border-radius:24px!important;
+}
+.yv-category-hero-art-v5,
+.yv-blog-hero-art-v8{
+  isolation:isolate!important;
+  overflow:hidden!important;
+  border-radius:24px!important;
+}
+
+/* Fix inherited absolute-position offsets after service bar became relative. */
+.yh6-hero .yh6-platform-bar {
+  position:static!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  margin:16px 0 0!important;
+  width:100%!important;
+  max-width:100%!important;
+}
+.yh6-hero{
+  padding-bottom:30px!important;
+}
+.yh6-why{
+  padding-top:48px!important;
+  padding-bottom:50px!important;
+}
+
+/* Footer and content layouts stay inside the centered 1440px frame. */
+.site-footer .container,
+.yv-category-hero-v5 > .container,
+.yv-blog-hero-v8 > .container,
+.yv-product-hero-v5 > .container{
+  min-width:0!important;
+}
+.footer-newsletter-form input{min-width:0!important}
+.footer-grid-v9 > *{min-width:0!important}
+
+/* Typography: previously 7-9px labels remained unreadable on screenshot. */
+.nav-main a{font-size:12px!important;letter-spacing:0!important}
+.nv-topbar{font-size:11px!important}
+.footer-col a,.footer-contact-v9 span,.footer-subscribe-v9 p,
+.footer-brand p{font-size:11px!important;line-height:1.65!important}
+.footer-col h4{font-size:12px!important}
+.footer-bottom,.footer-legal-v9 a{font-size:10px!important}
+.footer-newsletter-form input{font-size:11px!important}
+.yh6-package-card li,.yv-category-package-card-v5 li{font-size:11px!important}
+.yv-category-package-card-v5 h3{line-height:1.35!important}
+.yh18-card-features>span,.yh18-card-summary,.yh18-card-cta{font-size:11px!important}
+.yh18-card-brand h3{font-size:14px!important}
+.yh18-featured-title p,.yh18-all-link{font-size:11px!important}
+.yh18-featured-tab{font-size:11px!important}
+.yv-category-hero-v5 p,.yv-blog-hero-copy-v8>p,
+.yv-product-hero-v5 p{font-size:13px!important;line-height:1.65!important}
+.yv-category-benefits-v5 b,.yv-product-proof-v5 b{font-size:10px!important}
+.yv-category-benefits-v5 small,.yv-product-proof-v5 small{font-size:9px!important}
+.yv-blog-post-body-v8 p,.yh6-blog-card p{font-size:11px!important}
+.yv-blog-post-body-v8 h3{font-size:13px!important}
+.yh6-blog-card h3{font-size:13px!important}
+.yh6-why-copy>p,.yh6-section-head p{font-size:12px!important}
+.yh6-hero-copy>p{font-size:13px!important}
+.yh6-hero-metrics strong{font-size:11px!important}
+.yh6-hero-metrics small{font-size:9px!important}
+.yh6-platform-bar strong{font-size:11px!important}
+.yh6-platform-bar small{font-size:9px!important}
+
+@media(max-width:1180px){
+  .yv-category-hero-grid-v5 > .yv-category-hero-art-v5,
+  .yv-blog-hero-grid-v8 > .yv-blog-hero-art-v8,
+  .yv-product-hero-grid-v5 > .yv-product-hero-visual-v5,
+  .yv-hero-grid > .yv-hub-hero-art-v11{
+    justify-self:center!important;
+    width:100%!important;
+    max-width:720px!important;
+  }
+}
+
+@media(max-width:768px){
+  .yh6-hero{padding-top:12px!important;padding-bottom:20px!important}
+  .yh6-hero-grid{row-gap:14px!important}
+  .yh6-hero-copy{padding:8px 0 8px!important}
+  .yh6-hero-art{margin:0!important}
+  .yh6-hero .yh6-platform-bar{margin:12px 0 0!important}
+  .yh6-platform-bar a{min-height:66px!important}
+  .yh6-why{padding-top:30px!important;padding-bottom:32px!important}
+  .yh6-why-copy h2{font-size:clamp(26px,7vw,36px)!important}
+
+  /* Avoid floating support buttons covering forms, prices and navigation. */
+  .floating-contact{display:none!important}
+  body{padding-bottom:env(safe-area-inset-bottom, 0px)}
+  .mobile-bottom-nav{
+    z-index:100!important;
+    padding-bottom:env(safe-area-inset-bottom, 0px)!important;
+  }
+
+  .yv-category-hero-art-v5,
+  .yv-blog-hero-art-v8,
+  .yv-product-hero-visual-v5{
+    width:100%!important;
+    max-width:100%!important;
+    justify-self:stretch!important;
+  }
+  .yv-category-hero-art-v5 .yv-category-hero-woman-v5,
+  .yv-blog-hero-art-v8 .yv-blog-woman-v8{
+    width:70%!important;
+    right:10%!important;
+  }
+  .yh18-featured-tabs{
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-inline:contain;
+  }
+  .yh18-featured-head{gap:16px!important}
+  .yh18-featured-tab{min-width:46px}
+  .footer-col a,.footer-contact-v9 span{font-size:12px!important}
+  .footer-bottom{font-size:10px!important}
+}
+
+/* Prefer fewer transitions for motion-sensitive visitors. */
+@media(prefers-reduced-motion:reduce){
+  .yh18-featured-pane,.yh18-featured-card,
+  .yv-category-package-card-v5,.yh6-package-card{
+    animation:none!important;
+    transition:none!important;
+  }
+}
