@@ -161,6 +161,11 @@ class App
         $r->post('/admin/blog-kategorisi/{id}/sil', 'Admin\\BlogController@deleteCategory');
 
         // Admin Ayarlar
+        // Üst menü yönetimi: admin girişi ve CSRF zorunlu.
+        $r->get('/admin/menu', 'Admin\\NavigationController@index');
+        $r->post('/admin/menu/kaydet', 'Admin\\NavigationController@save');
+        $r->post('/admin/menu/sifirla', 'Admin\\NavigationController@reset');
+
         $r->get('/admin/site-ayarlari', 'Admin\\SettingsController@site');
         $r->post('/admin/site-ayarlari/kaydet', 'Admin\\SettingsController@saveSite');
         $r->get('/admin/smtp-ayarlari', 'Admin\\SettingsController@smtp');
