@@ -13,8 +13,9 @@
      <?php if(!empty($post['reading_time'])): ?><span class="yv-trust-pill"><?= icon('clock',11) ?> <?= (int)$post['reading_time'] ?> dk okuma</span><?php endif; ?>
     </div>
    </div>
-   <div class="yv-hero-art" style="<?= !empty($post['image']) ? "background-image:url('".e(upload_url($post['image']))."');background-size:cover;background-position:center" : '' ?>">
-    <?php if(empty($post['image'])): ?><div class="yv-featured-media" style="position:absolute;inset:0"></div><?php endif; ?>
+   <div class="yv-hero-art yv-blog-detail-art-v12">
+    <img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog detail')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>">
+    <div class="yv-blog-detail-shade-v12"></div>
     <div class="yv-float a"><?= icon('bookmark',13) ?> Kaydet & paylaş</div>
    </div>
   </div>
@@ -41,7 +42,7 @@
    <aside>
     <?php if(!empty($latestPosts)): ?><div class="yv-sidebar-card"><h3><?= icon('clock',13) ?> Son Yazılar</h3><?php foreach($latestPosts as $i=>$lp): ?><div class="yv-popular-item"><span class="yv-popular-num"><?= $i+1 ?></span><a href="/blog/<?= e($lp['slug']) ?>"><?= e($lp['title']) ?></a></div><?php endforeach; ?></div><?php endif; ?>
     <?php if(!empty($categories)): ?><div class="yv-sidebar-card"><h3><?= icon('folder',13) ?> Kategoriler</h3><div style="display:flex;gap:6px;flex-wrap:wrap"><?php foreach($categories as $cat): ?><a class="yv-blog-chip" href="/blog?category=<?= e($cat['slug']) ?>"><?= e($cat['name']) ?></a><?php endforeach; ?></div></div><?php endif; ?>
-    <?php if(!empty($popularPackages)): ?><div class="yv-sidebar-card"><h3><?= icon('shopping-cart',13) ?> Popüler Paketler</h3><?php foreach($popularPackages as $pkg): ?><a href="/paket/<?= e($pkg['slug']) ?>" style="display:block;padding:9px 0;border-bottom:1px solid #edf0f4"><strong style="font-size:8px;color:#25304d"><?= e($pkg['name']) ?></strong><span style="display:block;margin-top:3px;font-size:8px;color:#664be8"><?= money((!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']) ?></span></a><?php endforeach; ?></div><?php endif; ?>
+    <?php if(!empty($popularPackages)): ?><div class="yv-sidebar-card"><h3><?= icon('shopping-cart',13) ?> Popüler Paketler</h3><?php foreach($popularPackages as $pkg): ?><a href="/paket/<?= e($pkg['slug']) ?>" style="display:block;padding:9px 0;border-bottom:1px solid #edf0f4"><strong style="font-size:8px;color:#25304d"><?= e(package_display_name($pkg)) ?></strong><span style="display:block;margin-top:3px;font-size:8px;color:#664be8"><?= money((!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']) ?></span></a><?php endforeach; ?></div><?php endif; ?>
    </aside>
   </div>
  </div>
