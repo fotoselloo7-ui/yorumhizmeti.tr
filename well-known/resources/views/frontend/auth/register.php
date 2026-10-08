@@ -1,4 +1,41 @@
-<div class="auth-wrapper"><div class="auth-shell-v4">
-<div class="auth-art-v4 register"><a href="/" class="auth-logo-v4"><span>Y</span> YorumHizmeti.tr</a><div class="auth-art-copy"><div class="yv-kicker" style="background:rgba(255,255,255,.1);color:#fff">Ücretsiz üyelik</div><h2>Dijital hizmetlerinizi daha kolay yönetin.</h2><p>Hesabınızı oluşturun, paketleri keşfedin ve tüm sipariş sürecini tek yerden takip edin.</p><div class="auth-proof-v4"><span><?= icon('zap',13) ?> Hızlı</span><span><?= icon('shield',13) ?> Güvenli</span><span><?= icon('user',13) ?> Kolay</span></div></div></div>
-<div class="auth-card"><div class="yv-kicker"><?= icon('user',11) ?> Yeni hesap</div><h1>Kayıt Ol</h1><p class="subtitle">Birkaç adımda ücretsiz hesabınızı oluşturun.</p><?php if(!empty($flash['error'])): ?><div class="alert alert-error"><?= icon('alert-circle',16) ?><span><?= e($flash['error']) ?></span></div><?php endif; ?><?php if(!empty($flash['errors'])): ?><div class="alert alert-error"><?= icon('alert-circle',16) ?><div><?php foreach($flash['errors'] as $err): ?><div><?= e($err) ?></div><?php endforeach; ?></div></div><?php endif; ?><form method="POST" action="/kayit"><?= csrfField() ?><div class="form-group"><label for="name">Ad Soyad</label><input type="text" id="name" name="name" class="form-control" value="<?= e($flash['old']['name']??'') ?>" required></div><div class="form-group"><label for="email">E-posta</label><input type="email" id="email" name="email" class="form-control" value="<?= e($flash['old']['email']??'') ?>" required></div><div class="form-group"><label for="phone">Telefon <span class="text-secondary text-xs">(opsiyonel)</span></label><input type="tel" id="phone" name="phone" class="form-control" value="<?= e($flash['old']['phone']??'') ?>"></div><div class="form-row"><div class="form-group"><label for="password">Şifre</label><input type="password" id="password" name="password" class="form-control" placeholder="En az 6 karakter" required></div><div class="form-group"><label for="password_confirmation">Şifre Tekrar</label><input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required></div></div><button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:12px"><?= icon('user',16) ?> Kayıt Ol</button></form><p class="text-center text-sm" style="margin-top:20px;color:#7b8498">Zaten hesabınız var mı? <a href="/giris">Giriş Yap</a></p></div>
-</div></div>
+<main class="auth-wrapper auth25-page"><div class="auth25-shell auth25-register">
+<section class="auth25-showcase" aria-label="Üyelik avantajları">
+<a class="auth25-brand" href="/" aria-label="Ana sayfa"><span class="auth25-brandmark">Y</span><span><strong><?= e(setting('site_name','YorumHizmeti.tr')) ?></strong><small>Dijital hizmet platformu</small></span></a>
+<div class="auth25-orbit auth25-orbit-one" aria-hidden="true"></div><div class="auth25-orbit auth25-orbit-two" aria-hidden="true"></div>
+<div class="auth25-showcase-main">
+<span class="auth25-eyebrow"><?= icon('sparkles',15) ?> Ücretsiz üyelik</span>
+<h2>Dijital dünyada <em>güçlenmeye başlayın.</em></h2>
+<p>Tek bir hesapla hizmet paketlerini keşfedin, sipariş oluşturun ve tüm süreci rahatça takip edin.</p>
+<div class="auth25-benefits">
+<span><?= icon('shield-check',16) ?> Güvenli hesap</span><span><?= icon('package-check',16) ?> Sipariş takibi</span><span><?= icon('headphones',16) ?> Destek merkezi</span>
+</div>
+</div>
+<div class="auth25-art" aria-hidden="true"><div class="auth25-art-ring"></div><img src="<?= asset('img/hero-woman-cutout.png') ?>" alt="" loading="eager"></div>
+<div class="auth25-float"><span><?= icon('check-circle',19) ?></span><div><strong>Yeni hesabınız sizi bekliyor</strong><small>Her şey tek, düzenli bir panelde.</small></div></div>
+<a href="/" class="auth25-back"><?= icon('arrow-left',14) ?> Ana sayfaya dön</a>
+</section>
+<section class="auth25-panel" aria-labelledby="auth-title"><div class="auth25-panel-body">
+<a class="auth25-mobile-logo" href="/"><span class="auth25-brandmark">Y</span><strong><?= e(setting('site_name','YorumHizmeti.tr')) ?></strong></a>
+<span class="auth25-tag"><?= icon('user-plus',14) ?> Yeni Hesap</span>
+<h1 id="auth-title">Hesabınızı oluşturun.</h1>
+<p class="auth25-lead">Ücretsiz kaydolun, hizmetleri tek panelden yönetin.</p>
+<?php if(!empty($flash['error'])): ?><div class="auth25-alert" role="alert"><?= icon('alert-circle',17) ?><span><?= e($flash['error']) ?></span></div><?php endif; ?>
+<?php if(!empty($flash['errors'])): ?><div class="auth25-alert" role="alert"><?= icon('alert-circle',17) ?><div><?php foreach($flash['errors'] as $err): ?><div><?= e($err) ?></div><?php endforeach; ?></div></div><?php endif; ?>
+<form method="POST" action="/kayit" class="auth25-form" data-register-form>
+<?= csrfField() ?>
+<div class="auth25-field"><label for="name">Ad soyad</label><div class="auth25-input-wrap"><span class="auth25-field-icon"><?= icon('user-round',17) ?></span><input id="name" name="name" type="text" value="<?= e($flash['old']['name']??'') ?>" placeholder="Adınız ve soyadınız" autocomplete="name" minlength="2" maxlength="100" required></div></div>
+<div class="auth25-fields-two">
+<div class="auth25-field"><label for="email">E-posta adresi</label><div class="auth25-input-wrap"><span class="auth25-field-icon"><?= icon('mail',17) ?></span><input id="email" name="email" type="email" value="<?= e($flash['old']['email']??'') ?>" placeholder="ornek@email.com" autocomplete="email" inputmode="email" required></div></div>
+<div class="auth25-field"><label for="phone">Telefon <span class="auth25-optional">(isteğe bağlı)</span></label><div class="auth25-input-wrap"><span class="auth25-field-icon"><?= icon('phone',17) ?></span><input id="phone" name="phone" type="tel" value="<?= e($flash['old']['phone']??'') ?>" placeholder="05xx xxx xx xx" autocomplete="tel" maxlength="20"></div></div>
+</div>
+<div class="auth25-fields-two">
+<div class="auth25-field"><label for="password">Şifre</label><div class="auth25-input-wrap"><span class="auth25-field-icon"><?= icon('lock',17) ?></span><input id="password" name="password" type="password" placeholder="En az 6 karakter" autocomplete="new-password" minlength="6" required><button class="auth25-eye" type="button" data-auth-toggle="password" aria-label="Şifreyi göster" aria-pressed="false"><?= icon('eye',17) ?></button></div></div>
+<div class="auth25-field"><label for="password_confirmation">Şifre tekrarı</label><div class="auth25-input-wrap"><span class="auth25-field-icon"><?= icon('lock',17) ?></span><input id="password_confirmation" name="password_confirmation" type="password" placeholder="En az 6 karakter" autocomplete="new-password" minlength="6" required><button class="auth25-eye" type="button" data-auth-toggle="password_confirmation" aria-label="Şifreyi göster" aria-pressed="false"><?= icon('eye',17) ?></button></div></div>
+</div>
+<p class="auth25-hint"><?= icon('info',14) ?> En az 6 karakterli güçlü bir şifre oluşturun.</p>
+<button class="auth25-submit" type="submit"><?= icon('user-plus',17) ?><span>Ücretsiz Hesap Oluştur</span><?= icon('arrow-right',17) ?></button>
+</form>
+<p class="auth25-switch">Zaten hesabınız var mı? <a href="/giris">Giriş yapın <?= icon('arrow-up-right',13) ?></a></p>
+<div class="auth25-secure"><?= icon('shield-check',15) ?> Kişisel bilgileriniz güvenle saklanır.</div>
+</div><footer class="auth25-footer"><span>© <?= date('Y') ?> <?= e(setting('site_name','YorumHizmeti.tr')) ?></span><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a></footer>
+</section></div></main>

@@ -15,11 +15,13 @@
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/auth-premium-v25.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
-<body>
+<body class="auth25-body">
     <?= $content ?>
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
+    <script src="<?= asset('js/auth-premium-v25.js') ?>"></script>
 </body>
 </html>
