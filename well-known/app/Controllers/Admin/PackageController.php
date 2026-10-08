@@ -43,12 +43,10 @@ class PackageController extends Controller
             )->rowCount();
             // Alt kategoriye bağlı paketlerde ana kategorinin de açık olması gerekir.
             $parentCount = $this->db->query(
-                "UPDATE categories parent SET parent.status = 'active'
-                 WHERE EXISTS (
-                     SELECT 1 FROM categories child
-                     INNER JOIN packages p ON p.category_id = child.id
-                     WHERE child.parent_id = parent.id
-                 )"
+                "UPDATE categories parent
+                 INNER JOIN categories child ON child.parent_id = parent.id
+                 INNER JOIN packages p ON p.category_id = child.id
+                 SET parent.status = 'active'"
             )->rowCount();
             $pkgCount = $this->db->query(
                 "UPDATE packages p
