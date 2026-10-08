@@ -12,7 +12,7 @@ INSERT INTO nv_legacy_script_products
  (49,11,'netvera-temizlik-firmasi-script-yazilimi-pro','Temizlik Firması Scripti — QA','Test amaçlı','<p>Test</p>',3000,NULL,
  'Temizlik Scripti QA','Test','{"current_version":"1.0.0","is_featured":0}',2,1),
  (50,11,'netvera-emlak-script-yazilimi-pro','Emlak Scripti — QA','Test amaçlı','<p>Test</p>',3500,NULL,
- 'Emlak Scripti QA','Test','{"current_version":"1.0.0"}',3,1);
+ 'Emlak Scripti QA','Test','{"current_version":"1.0.0","is_featured":1}',3,1);
 
 -- Synthetic approved-review fixtures for safe rating filters. Never real customers.
 INSERT INTO nv_legacy_public_reviews
