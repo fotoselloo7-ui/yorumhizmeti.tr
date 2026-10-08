@@ -1,0 +1,298 @@
+/* ============================================================
+   YorumHizmeti.tr — CATEGORY BRAND SYSTEM V15
+   Fixes generic slate cards by assigning each platform/service
+   its own recognizable color + icon language.
+   Loaded last.
+   ============================================================ */
+
+.yv-category-card,
+.yv-category-package-icon-v5,
+.yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5 .screen>span,
+.yh6-package-icon,
+.yv-product-related-card-v5 .art{
+  --brand-a:#63718d;
+  --brand-b:#303a50;
+  --brand-glow:rgba(99,113,141,.22);
+}
+
+/* established platform identities */
+.yv-category-card.threads,
+.yv-category-package-icon-v5.threads,
+.yv-category-hero-v5.threads .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.threads .screen>span,
+.yh6-package-icon.threads,
+.yv-product-related-card-v5.threads .art{
+  --brand-a:#111111;--brand-b:#2b2b2b;--brand-glow:rgba(0,0,0,.24)
+}
+
+.yv-category-card.telegram,
+.yv-category-package-icon-v5.telegram,
+.yv-category-hero-v5.telegram .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.telegram .screen>span,
+.yh6-package-icon.telegram,
+.yv-product-related-card-v5.telegram .art{
+  --brand-a:#2AABEE;--brand-b:#229ED9;--brand-glow:rgba(34,158,217,.26)
+}
+
+.yv-category-card.spotify,
+.yv-category-package-icon-v5.spotify,
+.yv-category-hero-v5.spotify .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.spotify .screen>span,
+.yh6-package-icon.spotify,
+.yv-product-related-card-v5.spotify .art{
+  --brand-a:#1DB954;--brand-b:#121212;--brand-glow:rgba(29,185,84,.28)
+}
+
+.yv-category-card.discord,
+.yv-category-package-icon-v5.discord,
+.yv-category-hero-v5.discord .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.discord .screen>span,
+.yh6-package-icon.discord,
+.yv-product-related-card-v5.discord .art{
+  --brand-a:#5865F2;--brand-b:#404EED;--brand-glow:rgba(88,101,242,.28)
+}
+
+.yv-category-card.linkedin,
+.yv-category-package-icon-v5.linkedin,
+.yv-category-hero-v5.linkedin .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.linkedin .screen>span,
+.yh6-package-icon.linkedin,
+.yv-product-related-card-v5.linkedin .art{
+  --brand-a:#0A66C2;--brand-b:#004182;--brand-glow:rgba(10,102,194,.26)
+}
+
+.yv-category-card.twitch,
+.yv-category-package-icon-v5.twitch,
+.yv-category-hero-v5.twitch .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.twitch .screen>span,
+.yh6-package-icon.twitch,
+.yv-product-related-card-v5.twitch .art{
+  --brand-a:#9147FF;--brand-b:#6441A5;--brand-glow:rgba(145,71,255,.27)
+}
+
+/* service identities */
+.yv-category-card.ads,
+.yv-category-package-icon-v5.ads,
+.yv-category-hero-v5.ads .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.ads .screen>span,
+.yh6-package-icon.ads,
+.yv-product-related-card-v5.ads .art{
+  --brand-a:#F97316;--brand-b:#EF4444;--brand-glow:rgba(249,115,22,.25)
+}
+
+.yv-category-card.reputation,
+.yv-category-package-icon-v5.reputation,
+.yv-category-hero-v5.reputation .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.reputation .screen>span,
+.yh6-package-icon.reputation,
+.yv-product-related-card-v5.reputation .art{
+  --brand-a:#0F766E;--brand-b:#14B8A6;--brand-glow:rgba(20,184,166,.24)
+}
+
+.yv-category-card.ecommerce,
+.yv-category-package-icon-v5.ecommerce,
+.yv-category-hero-v5.ecommerce .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.ecommerce .screen>span,
+.yh6-package-icon.ecommerce,
+.yv-product-related-card-v5.ecommerce .art{
+  --brand-a:#10B981;--brand-b:#059669;--brand-glow:rgba(16,185,129,.25)
+}
+
+.yv-category-card.mobileapp,
+.yv-category-package-icon-v5.mobileapp,
+.yv-category-hero-v5.mobileapp .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.mobileapp .screen>span,
+.yh6-package-icon.mobileapp,
+.yv-product-related-card-v5.mobileapp .art{
+  --brand-a:#6366F1;--brand-b:#8B5CF6;--brand-glow:rgba(99,102,241,.26)
+}
+
+.yv-category-card.content,
+.yv-category-package-icon-v5.content,
+.yv-category-hero-v5.content .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.content .screen>span,
+.yh6-package-icon.content,
+.yv-product-related-card-v5.content .art{
+  --brand-a:#F97316;--brand-b:#EC4899;--brand-glow:rgba(236,72,153,.24)
+}
+
+.yv-category-card.graphic,
+.yv-category-package-icon-v5.graphic,
+.yv-category-hero-v5.graphic .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.graphic .screen>span,
+.yh6-package-icon.graphic,
+.yv-product-related-card-v5.graphic .art{
+  --brand-a:#EC4899;--brand-b:#8B5CF6;--brand-glow:rgba(236,72,153,.26)
+}
+
+.yv-category-card.local,
+.yv-category-package-icon-v5.local,
+.yv-category-hero-v5.local .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.local .screen>span,
+.yh6-package-icon.local,
+.yv-product-related-card-v5.local .art{
+  --brand-a:#16A34A;--brand-b:#0EA5E9;--brand-glow:rgba(22,163,74,.24)
+}
+
+/* top-level category cards */
+.yv-category-card.threads,
+.yv-category-card.telegram,
+.yv-category-card.spotify,
+.yv-category-card.discord,
+.yv-category-card.linkedin,
+.yv-category-card.twitch,
+.yv-category-card.ads,
+.yv-category-card.reputation,
+.yv-category-card.ecommerce,
+.yv-category-card.mobileapp,
+.yv-category-card.content,
+.yv-category-card.graphic,
+.yv-category-card.local{
+  background:
+    radial-gradient(circle at 82% 12%,rgba(255,255,255,.13),transparent 28%),
+    linear-gradient(145deg,var(--brand-a),var(--brand-b))!important;
+  box-shadow:0 12px 30px var(--brand-glow)!important;
+}
+.yv-category-card.threads:hover,
+.yv-category-card.telegram:hover,
+.yv-category-card.spotify:hover,
+.yv-category-card.discord:hover,
+.yv-category-card.linkedin:hover,
+.yv-category-card.twitch:hover,
+.yv-category-card.ads:hover,
+.yv-category-card.reputation:hover,
+.yv-category-card.ecommerce:hover,
+.yv-category-card.mobileapp:hover,
+.yv-category-card.content:hover,
+.yv-category-card.graphic:hover,
+.yv-category-card.local:hover{
+  box-shadow:0 22px 46px var(--brand-glow)!important;
+}
+.yv-category-card .yv-cat-icon{
+  background:rgba(255,255,255,.16)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.08);
+}
+.yv-category-card .yv-cat-icon .icon{color:#fff!important}
+
+/* category detail brand blocks */
+.yv-category-package-icon-v5.threads,
+.yv-category-package-icon-v5.telegram,
+.yv-category-package-icon-v5.spotify,
+.yv-category-package-icon-v5.discord,
+.yv-category-package-icon-v5.linkedin,
+.yv-category-package-icon-v5.twitch,
+.yv-category-package-icon-v5.ads,
+.yv-category-package-icon-v5.reputation,
+.yv-category-package-icon-v5.ecommerce,
+.yv-category-package-icon-v5.mobileapp,
+.yv-category-package-icon-v5.content,
+.yv-category-package-icon-v5.graphic,
+.yv-category-package-icon-v5.local,
+.yv-category-hero-v5.threads .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.telegram .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.spotify .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.discord .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.linkedin .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.twitch .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.ads .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.reputation .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.ecommerce .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.mobileapp .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.content .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.graphic .yv-category-brand-orbit-v5.main,
+.yv-category-hero-v5.local .yv-category-brand-orbit-v5.main,
+.yv-category-phone-art-v5.threads .screen>span,
+.yv-category-phone-art-v5.telegram .screen>span,
+.yv-category-phone-art-v5.spotify .screen>span,
+.yv-category-phone-art-v5.discord .screen>span,
+.yv-category-phone-art-v5.linkedin .screen>span,
+.yv-category-phone-art-v5.twitch .screen>span,
+.yv-category-phone-art-v5.ads .screen>span,
+.yv-category-phone-art-v5.reputation .screen>span,
+.yv-category-phone-art-v5.ecommerce .screen>span,
+.yv-category-phone-art-v5.mobileapp .screen>span,
+.yv-category-phone-art-v5.content .screen>span,
+.yv-category-phone-art-v5.graphic .screen>span,
+.yv-category-phone-art-v5.local .screen>span{
+  background:linear-gradient(135deg,var(--brand-a),var(--brand-b))!important;
+  color:#fff!important;
+  box-shadow:0 12px 26px var(--brand-glow)!important;
+}
+
+/* home/package related platform badges */
+.yh6-package-icon.threads,
+.yh6-package-icon.telegram,
+.yh6-package-icon.spotify,
+.yh6-package-icon.discord,
+.yh6-package-icon.linkedin,
+.yh6-package-icon.twitch,
+.yh6-package-icon.ads,
+.yh6-package-icon.reputation,
+.yh6-package-icon.ecommerce,
+.yh6-package-icon.mobileapp,
+.yh6-package-icon.content,
+.yh6-package-icon.graphic,
+.yh6-package-icon.local,
+.yv-product-related-card-v5 .art.threads,
+.yv-product-related-card-v5 .art.telegram,
+.yv-product-related-card-v5 .art.spotify,
+.yv-product-related-card-v5 .art.discord,
+.yv-product-related-card-v5 .art.linkedin,
+.yv-product-related-card-v5 .art.twitch,
+.yv-product-related-card-v5 .art.ads,
+.yv-product-related-card-v5 .art.reputation,
+.yv-product-related-card-v5 .art.ecommerce,
+.yv-product-related-card-v5 .art.mobileapp,
+.yv-product-related-card-v5 .art.content,
+.yv-product-related-card-v5 .art.graphic,
+.yv-product-related-card-v5 .art.local{
+  background:linear-gradient(135deg,var(--brand-a),var(--brand-b))!important;
+  color:#fff!important;
+}
+
+/* identity accents on category page */
+.yv-category-hero-v5.threads,
+.yv-category-hero-v5.telegram,
+.yv-category-hero-v5.spotify,
+.yv-category-hero-v5.discord,
+.yv-category-hero-v5.linkedin,
+.yv-category-hero-v5.twitch,
+.yv-category-hero-v5.ads,
+.yv-category-hero-v5.reputation,
+.yv-category-hero-v5.ecommerce,
+.yv-category-hero-v5.mobileapp,
+.yv-category-hero-v5.content,
+.yv-category-hero-v5.graphic,
+.yv-category-hero-v5.local{
+  --cat-brand-a:var(--brand-a);
+  --cat-brand-b:var(--brand-b);
+}
+.yv-category-hero-v5.threads .yv-cat-title-accent,
+.yv-category-hero-v5.telegram .yv-cat-title-accent,
+.yv-category-hero-v5.spotify .yv-cat-title-accent,
+.yv-category-hero-v5.discord .yv-cat-title-accent,
+.yv-category-hero-v5.linkedin .yv-cat-title-accent,
+.yv-category-hero-v5.twitch .yv-cat-title-accent,
+.yv-category-hero-v5.ads .yv-cat-title-accent,
+.yv-category-hero-v5.reputation .yv-cat-title-accent,
+.yv-category-hero-v5.ecommerce .yv-cat-title-accent,
+.yv-category-hero-v5.mobileapp .yv-cat-title-accent,
+.yv-category-hero-v5.content .yv-cat-title-accent,
+.yv-category-hero-v5.graphic .yv-cat-title-accent,
+.yv-category-hero-v5.local .yv-cat-title-accent{
+  background:linear-gradient(90deg,var(--brand-a),var(--brand-b))!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+
+/* semantic service icons get a little more visual distinction */
+.yv-category-card.ads .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+.yv-category-card.reputation .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+.yv-category-card.ecommerce .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+.yv-category-card.mobileapp .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+.yv-category-card.content .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+.yv-category-card.graphic .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+.yv-category-card.local .yv-cat-icon{background:rgba(255,255,255,.18)!important}
