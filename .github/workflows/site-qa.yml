@@ -52,6 +52,9 @@ jobs:
           qa_hash=$(php -r 'echo password_hash("qa-test-menu-only", PASSWORD_DEFAULT);')
           mysql --host=127.0.0.1 --port=3306 -uroot -pqa_test_only_password yorumhizmeti_ci -e "UPDATE admins SET password='${qa_hash}', must_change_password=0 WHERE id=1;"
           mysql --host=127.0.0.1 --port=3306 -uroot -pqa_test_only_password yorumhizmeti_ci -e "UPDATE packages SET is_featured=1 WHERE status='active';"
+          # SEO route parity: use synthetic data only, never live payment or customer SQL.
+          mysql --host=127.0.0.1 --port=3306 -uroot -pqa_test_only_password yorumhizmeti_ci < well-known/database/migrations/netvera-legacy-bridge-v1.sql
+          mysql --host=127.0.0.1 --port=3306 -uroot -pqa_test_only_password yorumhizmeti_ci < well-known/tests/netvera-public-ci-seed.sql
 
 
       - name: Configure isolated local test environment
