@@ -71,6 +71,54 @@ class HomeController extends Controller
                 $featuredNavGroups[$key]['categories'][] = $group['category'];
             }
         }
+
+        // The featured-package switcher and the actual Netvera software catalogue
+        // have different storage models. Show both here without creating fake
+        // packages, prices, ratings or changing the admin's featured selections.
+        $featuredSoftwareGroups = [];
+        $netveraProducts = \App\Services\NetveraBridgeService::all();
+        $netveraCategories = \App\Services\NetveraBridgeService::categories();
+        if ($netveraProducts && isset($featuredNavGroups['agency'])) {
+            $softwareRoot = [
+                'id' => -100000, 'name' => 'Hazır Yazılımlar & Scriptler',
+                'slug' => 'hazir-scriptler', 'url' => '/hazir-scriptler',
+                'kind' => 'software', 'icon' => 'monitor',
+            ];
+            $featuredNavGroups['agency']['categories'][] = $softwareRoot;
+            $featuredSoftwareGroups[] = [
+                'category' => $softwareRoot, 'products' => $netveraProducts,
+            ];
+
+            foreach ($netveraCategories as $netveraCategory) {
+                $catId = (int) $netveraCategory['legacy_id'];
+                $categoryProducts = array_values(array_filter(
+                    $netveraProducts,
+                    static function (array $product) use ($catId, $netveraCategories): bool {
+                        $productCategory = (int) $product['category_legacy_id'];
+                        if ($productCategory === $catId) return true;
+                        // A parent category also displays items in its child category.
+                        foreach ($netveraCategories as $child) {
+                            if ((int) $child['legacy_id'] === $productCategory
+                                && (int) $child['parent_legacy_id'] === $catId) return true;
+                        }
+                        return false;
+                    }
+                ));
+                $catIdUrl = '/hazir-scriptler?category='.rawurlencode((string)$netveraCategory['slug']);
+                $tabCategory = [
+                    'id' => -100000 - $catId,
+                    'name' => $netveraCategory['name'],
+                    'slug' => $netveraCategory['slug'],
+                    'url' => $catIdUrl,
+                    'kind' => 'software',
+                    'icon' => (int)$netveraCategory['parent_legacy_id'] > 0 ? 'code' : 'layers',
+                ];
+                $featuredNavGroups['agency']['categories'][] = $tabCategory;
+                $featuredSoftwareGroups[] = [
+                    'category' => $tabCategory, 'products' => $categoryProducts,
+                ];
+            }
+        }
         $featuredNavGroups = array_values(array_filter($featuredNavGroups, static fn($g) => !empty($g['categories'])));
         $initialFeaturedNavGroup = $featuredNavGroups[0]['key'] ?? 'marketing';
         foreach ($featuredNavGroups as $navGroup) {
@@ -277,6 +325,7 @@ class HomeController extends Controller
             'categories' => $categories,
             'featuredPackages' => $featuredPackages,
             'featuredPackageGroups' => $featuredPackageGroups,
+            'featuredSoftwareGroups' => $featuredSoftwareGroups,
             'featuredNavGroups' => $featuredNavGroups,
             'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
             'homePromoGroups' => $homePromoGroups,
