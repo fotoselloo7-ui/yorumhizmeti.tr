@@ -198,6 +198,7 @@ class BlogController extends Controller
             'noindex' => $post['noindex'] == 1,
             'schema' => json_encode($schemas, JSON_UNESCAPED_UNICODE),
             'post' => $post,
+            'nvSeoData' => \App\Services\NetveraSeoBridge::get('blog',(int)$post['id']),
             'tags' => $tags,
             'toc' => $toc,
             'faqs' => $faqs,
