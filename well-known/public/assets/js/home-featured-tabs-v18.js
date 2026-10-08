@@ -223,46 +223,42 @@
       wrapper?.querySelector('[data-featured-rail-next]')?.addEventListener('click',() => {
         pauseTemporarily();moveRail(rail,1);
       });
-      let pointer=null;
+      // Desktop: mouse events are reliable even on a rail full of buttons and
+      // anchor tags. Mobile: leave touch swiping entirely to native scrolling.
+      let mouse=null;
       let preventClick=false;
-      rail.addEventListener('pointerdown',e=>{
-        if (e.pointerType==='touch' || e.button!==0)return;
-        pointer={id:e.pointerId,x:e.clientX,left:rail.scrollLeft,moved:false};
+      rail.addEventListener('mousedown',event=>{
+        if(event.button!==0)return;
+        mouse={startX:event.clientX,startLeft:rail.scrollLeft,moved:false};
         pauseTemporarily();
       });
-      window.addEventListener('pointermove',e=>{
-        if (!pointer || e.pointerId!==pointer.id)return;
-        const dx=e.clientX-pointer.x;
-        if(!pointer.moved && Math.abs(dx)<7)return;
-        if(!pointer.moved){
-          pointer.moved=true;
-          rail.classList.add('is-dragging');
-          // Global pointer tracking survives leaving the rail without
-          // retargeting the browser's native anchor click event.
+      window.addEventListener('mousemove',event=>{
+        if(!mouse)return;
+        if(!(event.buttons&1)){
+          mouse=null;rail.classList.remove('is-dragging');return;
         }
-        if(e.cancelable)e.preventDefault();
-        rail.scrollLeft=pointer.left-dx;
+        const dx=event.clientX-mouse.startX;
+        if(!mouse.moved && Math.abs(dx)<5)return;
+        mouse.moved=true;
+        if(event.cancelable)event.preventDefault();
+        rail.classList.add('is-dragging');
+        // Set scrollLeft synchronously: the manual gesture must always win
+        // against snap, animation, link dragging and hover auto-rotation.
+        rail.scrollLeft=mouse.startLeft-dx;
         pauseTemporarily();
-      });
-      const finish=e=>{
-        if(!pointer || e.pointerId!==pointer.id)return;
-        if(pointer.moved){
+      },{passive:false});
+      window.addEventListener('mouseup',()=>{
+        if(!mouse)return;
+        if(mouse.moved){
           preventClick=true;
-          window.setTimeout(()=>{preventClick=false;},130);
-        }
-        rail.classList.remove('is-dragging');
-        if(pointer.moved){
-          // Delay re-enabling scroll snap so it cannot rubber-band to the
-          // previous tile immediately after the mouse button is released.
+          window.setTimeout(()=>{preventClick=false;},200);
           rail.classList.add('is-drag-released');
-          window.setTimeout(()=>rail.classList.remove('is-drag-released'),280);
+          window.setTimeout(()=>rail.classList.remove('is-drag-released'),300);
         }
-
-        pointer=null;
+        mouse=null;
+        rail.classList.remove('is-dragging');
         updateRailButtons(rail);
-      };
-      window.addEventListener('pointerup',finish);
-      window.addEventListener('pointercancel',finish);
+      });
       rail.addEventListener('click',e=>{
         if(preventClick){
           e.preventDefault();
