@@ -36,6 +36,7 @@ class App
 
         // ── Frontend ──
         $r->get('/', 'HomeController@index');
+        $r->get('/hazir-yazilimlar', 'SoftwareController@index');
         $r->get('/kategoriler', 'CategoryController@index');
         $r->get('/kategori/{slug}', 'CategoryController@show');
         $r->get('/paket/{slug}', 'PackageController@show');
