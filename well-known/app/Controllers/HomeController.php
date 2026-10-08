@@ -54,25 +54,25 @@ class HomeController extends Controller
         $featuredPackageGroups = array_values($featuredPackageGroups);
 
         // Yalnızca sunum grubu: admin kategori ağacına, fiyatlara ve paketlere dokunma.
-        $featuredNavGroups = [
-            'digital' => ['key'=>'digital','title'=>'Dijital Hizmetler','icon'=>'sparkles','categories'=>[]],
-            'social'  => ['key'=>'social','title'=>'Sosyal Medya','icon'=>'share-2','categories'=>[]],
-            'web'     => ['key'=>'web','title'=>'Web Site Hizmetleri','icon'=>'monitor','categories'=>[]],
-        ];
-        foreach ($featuredPackageGroups as $group) {
-            $term = mb_strtolower(($group['category']['slug'] ?? '') . ' ' . ($group['category']['name'] ?? ''), 'UTF-8');
-            if (preg_match('/instagram|tiktok|youtube|facebook|twitter|threads|telegram|spotify|discord|linkedin|twitch|pinterest|snapchat|whatsapp|sosyal.?medya/u', $term)) {
-                $bucket = 'social';
-            } elseif (preg_match('/web.?site|website|web.?tasar|web.?geliş|e.?ticaret|eticaret|ecommerce|wordpress|woocommerce|shopify|hosting|domain|alan.?ad|internet.?site|site.?kurulum/u', $term)) {
-                $bucket = 'web';
-            } else {
-                $bucket = 'digital';
-            }
-            $featuredNavGroups[$bucket]['categories'][] = $group['category'];
+        // Reuse the same social/agency/marketing taxonomy as the mega menu and category page.
+        // Display only categories whose active packages are marked as featured.
+        $featuredNavGroups = [];
+        foreach (\App\Services\CatalogMenuService::groups() as $catalogGroup) {
+            $featuredNavGroups[$catalogGroup['key']] = [
+                'key' => $catalogGroup['key'],
+                'title' => $catalogGroup['short'],
+                'icon' => $catalogGroup['icon'],
+                'categories' => [],
+            ];
         }
-        // Boş gruplar görünmez. Her filtre gerçek öne çıkarılmış pakete karşılık gelir.
-        $featuredNavGroups = array_values(array_filter($featuredNavGroups, static fn($g) => count($g['categories']) > 0));
-        $initialFeaturedNavGroup = $featuredNavGroups[0]['key'] ?? 'digital';
+        foreach ($featuredPackageGroups as $group) {
+            $key = \App\Services\CatalogMenuService::bucket($group['category']);
+            if (isset($featuredNavGroups[$key])) {
+                $featuredNavGroups[$key]['categories'][] = $group['category'];
+            }
+        }
+        $featuredNavGroups = array_values(array_filter($featuredNavGroups, static fn($g) => !empty($g['categories'])));
+        $initialFeaturedNavGroup = $featuredNavGroups[0]['key'] ?? 'marketing';
         foreach ($featuredNavGroups as $navGroup) {
             foreach ($navGroup['categories'] as $category) {
                 if ((int)$category['id'] === (int)($featuredPackageGroups[0]['category']['id'] ?? 0)) {
