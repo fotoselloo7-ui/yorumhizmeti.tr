@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS nv_legacy_script_categories (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS nv_legacy_script_products (
- legacy_id INT UNSIGNED NOT NULL PRIMARY KEY,
+ legacy_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
  category_legacy_id INT UNSIGNED NOT NULL,
  slug VARCHAR(250) NOT NULL UNIQUE,
  name VARCHAR(300) NOT NULL,
