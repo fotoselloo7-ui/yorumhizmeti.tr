@@ -291,6 +291,7 @@
 /* Desktop free-drag should never snap back to the nearest child link.
    Arrow and autoplay retain their explicit smooth scroll behavior. */
 #featured .nv43-child-rail{scroll-snap-type:none!important;scroll-behavior:auto}
+#featured .nv43-child-rail,#featured .nv43-child-rail *{user-select:none;-webkit-user-select:none}
 @media(prefers-reduced-motion:reduce){
   #featured [data-featured-rail]{scroll-behavior:auto}
   #featured .nv43-child-panel{animation:none}
