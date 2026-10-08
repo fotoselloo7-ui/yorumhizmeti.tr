@@ -794,12 +794,21 @@ try {
   if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count()))
     throw new Error('Legacy-category ready script missing from standalone software catalog');
 
-  await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
-  if(!(await showcasePage.locator('.adm31-setup-row form button[type=submit]').count()))throw new Error('Software category installer missing');
+  // On a fresh DB, the direct "Add Software" route shows a one-click setup
+  // instead of silently redirecting to the showcase (the user's reported issue).
+  await showcasePage.goto(origin+'/admin/yazilim/ekle',{waitUntil:'domcontentloaded'});
+  const firstUse=showcasePage.locator('form[action="/admin/hazir-yazilimlar/kur-ve-ekle"]');
+  if(!(await firstUse.count()) || !(await firstUse.locator('button[type=submit]').count()))
+    throw new Error('First-use software creation page does not show its setup action');
   await Promise.all([
-    showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
-    showcasePage.locator('.adm31-setup-row form button[type=submit]').click()
+    showcasePage.waitForURL('**/admin/yazilim/ekle',{waitUntil:'domcontentloaded'}),
+    firstUse.locator('button[type=submit]').click()
   ]);
+  if(!(await showcasePage.locator('select[name=category_id]').count()))
+    throw new Error('One-click category setup did not open ready software editor');
+  await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('a[href="/admin/yazilim/ekle"]').count()))
+    throw new Error('Software showcase does not expose the create button after setup');
   await showcasePage.goto(origin+'/kategoriler?grup=agency',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.getByText('Hazır Yazılımlar & Scriptler',{exact:true}).count()))
     throw new Error('Installed script category not visible in agency catalog');
