@@ -72,6 +72,8 @@
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=40.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
+    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -558,7 +560,7 @@
 
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
-    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>"></script>
+    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=43.1"></script>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
     <?= setting('footer_script') ?>
 </body>
