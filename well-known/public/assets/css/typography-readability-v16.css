@@ -1,0 +1,325 @@
+/* ============================================================
+   YorumHizmeti.tr — TYPOGRAPHY READABILITY V16
+   Screenshot/readability audit:
+   many secondary labels were only 5–9px. This layer raises the
+   small UI copy roughly +2px while preserving the premium hierarchy.
+   Loaded LAST.
+   ============================================================ */
+
+:root{
+  --type-micro:8px;
+  --type-xs:9px;
+  --type-sm:10px;
+  --type-body:11px;
+  --type-body-lg:12px;
+}
+
+/* ---------- header / navigation / footer ---------- */
+.nv-topbar-main,.nv-topbar-meta{font-size:9px!important}
+.nav-main a{font-size:10px!important}
+.header-search-v4 input{font-size:9px!important}
+.header-actions .btn-label{font-size:9px!important}
+
+.footer-brand p{font-size:9px!important;line-height:1.7!important}
+.footer-col h4{font-size:10px!important}
+.footer-col a{font-size:9px!important;line-height:1.65!important}
+.footer-newsletter-v4>div:first-child strong{font-size:10px!important}
+.footer-newsletter-v4>div:first-child small{font-size:8px!important}
+.footer-newsletter-form input{font-size:9px!important}
+.footer-payments-v4 span{font-size:8px!important}
+.footer-bottom{font-size:8px!important}
+.footer-contact-v9 span{font-size:9px!important}
+.footer-subscribe-v9 p,.footer-legal-v9 a{font-size:8px!important}
+
+/* ---------- shared UI ---------- */
+.yv-kicker{font-size:9px!important}
+.breadcrumb,.pkg-breadcrumb{font-size:9px!important}
+.yv-float{font-size:10px!important}
+.yv-trust-pill{font-size:10px!important}
+.yv-chip{font-size:10px!important}
+.yv-section-head-v5 p{font-size:9px!important;line-height:1.7!important}
+.yv-link-button{font-size:9px!important}
+.premium-faq-question{font-size:9px!important}
+.premium-faq-answer{font-size:9px!important;line-height:1.7!important}
+
+/* ---------- homepage ---------- */
+.yh6-eyebrow{font-size:10px!important}
+.yh6-btn{font-size:11px!important}
+.yh6-link{font-size:10px!important}
+.yh6-hero-metrics strong{font-size:10px!important}
+.yh6-hero-metrics small{font-size:8px!important}
+.yh6-review-float strong{font-size:10px!important}
+.yh6-review-float small,.yh6-growth-float small{font-size:8px!important}
+.yh6-platform-bar strong{font-size:10px!important}
+.yh6-platform-bar small{font-size:8px!important}
+.yh6-why-copy li{font-size:11px!important;line-height:1.55!important}
+.yh6-browser-top b{font-size:10px!important}
+.yh6-browser-top em{font-size:8px!important}
+.yh6-dash-stats small,.yh6-dash-stats b{font-size:8px!important}
+.yh6-dash-services b{font-size:9px!important}
+.yh6-dash-services small{font-size:8px!important}
+.yh6-section-head p{font-size:10px!important;line-height:1.65!important}
+.yh6-package-badge{font-size:8px!important}
+.yh6-package-card li{font-size:9px!important;line-height:1.5!important}
+.yh6-rating span{font-size:10px!important}
+.yh6-rating small{font-size:8px!important}
+.yh6-price del{font-size:9px!important}
+.yh6-price em{font-size:8px!important}
+.yh6-package-cta{font-size:10px!important}
+.yh6-promo-copy>span{font-size:8px!important}
+.yh6-promo-copy p{font-size:10px!important;line-height:1.6!important}
+.yh6-promo-copy em{font-size:9px!important}
+.yh6-promo-chips small{font-size:7px!important}
+.yh6-stats small{font-size:8px!important}
+.yh6-review-top>span,.yh6-review-top b{font-size:10px!important}
+.yh6-review-top em{font-size:9px!important}
+.yh6-review-grid p{font-size:9px!important;line-height:1.6!important}
+.yh6-review-grid>article>small{font-size:8px!important}
+.yh6-how-intro p{font-size:9px!important;line-height:1.65!important}
+.yh6-how-grid strong{font-size:10px!important}
+.yh6-how-grid small{font-size:8px!important;line-height:1.55!important}
+.yh6-blog-card small{font-size:8px!important}
+.yh6-blog-card h3{font-size:11px!important;line-height:1.4!important}
+.yh6-blog-card p{font-size:8px!important;line-height:1.6!important}
+.yh6-blog-card em{font-size:8px!important}
+.yh6-faq-item button{font-size:9px!important}
+.yh6-faq-item>div{font-size:9px!important;line-height:1.7!important}
+.yh6-final p{font-size:9px!important;line-height:1.6!important}
+.yh6-avatar-proof>span{font-size:9px!important}
+.yh6-avatar-proof strong{font-size:11px!important}
+.yh6-avatar-proof small{font-size:8px!important}
+
+/* ---------- all services / category hub ---------- */
+.yv-category-card p{font-size:11px!important;line-height:1.55!important}
+.yv-category-card span:last-child{font-size:10px!important}
+.yv-services-search input,.yv-services-filter select{font-size:11px!important}
+.yv-services-platform strong{font-size:11px!important}
+.yv-services-platform small{font-size:9px!important}
+.yv-sale-pill{font-size:9px!important}
+.yv-promo-note{font-size:10px!important}
+.yv-promo-note small{font-size:9px!important}
+.yv-services-promo-list div{font-size:10px!important}
+.yv-popular-service-top b{font-size:8px!important}
+.yv-popular-service-body p{font-size:9px!important;line-height:1.55!important}
+.yv-popular-service-body>div span{font-size:8px!important}
+.yv-popular-service-body em{font-size:9px!important}
+.yv-services-group-copy strong{font-size:10px!important}
+.yv-services-group-copy small{font-size:8px!important}
+.yv-services-proof-copy p{font-size:11px!important;line-height:1.65!important}
+.yv-services-proof-stats small{font-size:8px!important}
+.yv-services-cta small{font-size:9px!important}
+
+/* ---------- category detail ---------- */
+.yv-category-brand-v5 small{font-size:10px!important}
+.yv-category-benefits-v5 b{font-size:9px!important}
+.yv-category-benefits-v5 small{font-size:8px!important}
+.yv-category-float-v5{font-size:9px!important}
+.yv-category-chip-row-v5 a{font-size:9px!important}
+.yv-category-search-form-v5>input,
+.yv-category-search-form-v5 select{font-size:9px!important}
+.yv-package-ribbon-v5{font-size:8px!important}
+.yv-category-package-card-v5 li{font-size:10px!important;line-height:1.5!important}
+.yv-category-delivery-v5{font-size:9px!important}
+.yv-category-price-v5 del{font-size:9px!important}
+.yv-category-price-v5>span{font-size:8px!important}
+.yv-category-package-card-v5 em{font-size:9px!important}
+.yv-category-phone-art-v5 .screen small{font-size:10px!important}
+.yv-category-phone-art-v5 .stat strong{font-size:10px!important}
+.yv-category-phone-art-v5 .stat small{font-size:8px!important}
+.yv-category-story-copy-v5>p{font-size:10px!important;line-height:1.7!important}
+.yv-category-story-copy-v5 li{font-size:9px!important;line-height:1.55!important}
+.yv-category-side-benefits-v5 div{font-size:9px!important}
+.yv-compare-table-wrap-v5 th,.yv-compare-table-wrap-v5 td{font-size:9px!important}
+.yv-category-review-grid-v5 b{font-size:10px!important}
+.yv-category-review-grid-v5 em{font-size:9px!important}
+.yv-category-review-grid-v5 p{font-size:9px!important;line-height:1.6!important}
+.yv-category-cta-v5 small{font-size:9px!important}
+
+/* ---------- product detail ---------- */
+.yv-product-brand-v5 small{font-size:10px!important}
+.yv-product-proof-v5 b{font-size:9px!important}
+.yv-product-proof-v5 small{font-size:8px!important}
+.yv-product-device-v5 .rating small{font-size:9px!important}
+.yv-product-float-v5{font-size:9px!important}
+.yv-product-gallery-fallback-v5 .review b{font-size:11px!important}
+.yv-product-gallery-fallback-v5 .review small{font-size:9px!important}
+.yv-product-gallery-fallback-v5 .business small{font-size:9px!important}
+.yv-product-info-strip-v5 strong{font-size:10px!important}
+.yv-product-info-strip-v5 small{font-size:8px!important}
+.yv-product-badges-v5 span,.yv-product-badges-v5 b{font-size:8px!important}
+.yv-product-rating-v5 b{font-size:10px!important}
+.yv-product-rating-v5 span{font-size:9px!important}
+.yv-product-price-v5 del{font-size:10px!important}
+.yv-product-price-v5 span{font-size:9px!important}
+.yv-product-buy-v5>p{font-size:10px!important;line-height:1.6!important}
+.yv-form-group label{font-size:9px!important}
+.yv-buy-form-v5 .form-control{font-size:9px!important}
+.yv-product-add-v5,.yv-product-now-v5{font-size:10px!important}
+.yv-product-mini-trust-v5 strong{font-size:8px!important}
+.yv-product-mini-trust-v5 small{font-size:8px!important}
+.yv-product-tabs-v5 span{font-size:10px!important}
+.yv-product-copy-v5 .blog-content,.yv-product-copy-v5 p{font-size:11px!important;line-height:1.75!important}
+.yv-product-gains-v5 span{font-size:9px!important}
+.yv-product-rating-summary-v5 small{font-size:9px!important}
+.yv-product-review-grid-v5 b{font-size:10px!important}
+.yv-product-review-grid-v5 em{font-size:9px!important}
+.yv-product-review-grid-v5 p{font-size:9px!important;line-height:1.6!important}
+.yv-product-why-stats-v5 b{font-size:10px!important}
+.yv-product-why-stats-v5 small{font-size:8px!important}
+.yv-product-related-card-v5 small{font-size:8px!important}
+.yv-product-related-card-v5 li{font-size:9px!important}
+.yv-product-related-card-v5 em{font-size:9px!important}
+.yv-product-variants-v9>label{font-size:9px!important}
+.yv-product-variants-v9 strong{font-size:9px!important}
+.yv-product-variants-v9 small{font-size:9px!important}
+.yv-product-qty-v9>label{font-size:9px!important}
+
+/* ---------- cart ---------- */
+.yv-cart-product p{font-size:10px!important}
+.yv-qty-pill{font-size:11px!important}
+.yv-summary-row{font-size:11px!important}
+.yv-secure-list div{font-size:10px!important}
+.yv-user-box small{font-size:10px!important}
+.yv-dynamic-fields label{font-size:10px!important}
+.yv-payment-option strong{font-size:11px!important}
+.yv-payment-option small{font-size:9px!important}
+.yv-cart-row-v5 .copy>a{font-size:11px!important}
+.yv-cart-row-v5 .copy small{font-size:9px!important}
+.yv-cart-row-v5 .copy em{font-size:8px!important}
+.yv-cart-row-v5 .qty{font-size:10px!important}
+.yv-cart-note-v5 strong{font-size:9px!important}
+.yv-cart-note-v5 small{font-size:8px!important}
+.yv-cart-note-v5>a{font-size:9px!important}
+.yv-cart-summary-benefits-v5 div{font-size:9px!important}
+
+/* ---------- checkout ---------- */
+.yv-checkout-hero-grid-v5 p{font-size:11px!important;line-height:1.65!important}
+.yv-checkout-shield-v5 strong{font-size:11px!important}
+.yv-checkout-shield-v5 small{font-size:8px!important}
+.yv-checkout-steps-v5>div>b{font-size:9px!important}
+.yv-checkout-steps-v5>div strong{font-size:10px!important}
+.yv-checkout-steps-v5>div small{font-size:8px!important}
+.yv-checkout-card-head-v5 small{font-size:8px!important}
+.yv-checkout-card-head-v5>b{font-size:9px!important}
+.yv-checkout-product-v5 strong{font-size:10px!important}
+.yv-checkout-product-v5 small{font-size:8px!important}
+.yv-checkout-user-v5 label{font-size:8px!important}
+.yv-checkout-user-v5 .form-control{font-size:9px!important}
+.yv-checkout-login-state-v5{font-size:8px!important}
+.yv-checkout-field-group-v5 h3{font-size:11px!important}
+.yv-checkout-payment-v5 strong{font-size:9px!important}
+.yv-checkout-payment-v5 small{font-size:8px!important}
+.yv-checkout-safe-v5 strong{font-size:9px!important}
+.yv-checkout-safe-v5 small{font-size:8px!important}
+.yv-checkout-terms-v5{font-size:9px!important}
+.yv-checkout-summary-row-v5{font-size:9px!important}
+.yv-checkout-ssl-v5{font-size:8px!important}
+.yv-checkout-payments-v5 span{font-size:8px!important}
+.yv-checkout-why-v5 strong{font-size:9px!important}
+.yv-checkout-why-v5 small{font-size:8px!important}
+.yv-checkout-support-v5 small,.yv-checkout-support-v5 p,.yv-checkout-support-v5 a{font-size:9px!important}
+.yv-checkout-proofbar-v5 strong{font-size:10px!important}
+.yv-checkout-proofbar-v5 small{font-size:8px!important}
+.yv-checkout-campaign-v9 strong{font-size:9px!important}
+.yv-checkout-campaign-v9 small{font-size:8px!important}
+.yv-checkout-campaign-v9 em{font-size:8px!important}
+.yv-checkout-review-grid-v9 article>div>span,
+.yv-checkout-review-grid-v9 b,
+.yv-checkout-review-grid-v9 em,
+.yv-checkout-review-grid-v9 p{font-size:9px!important}
+.yv-checkout-qty-v9 b{font-size:9px!important}
+
+/* ---------- blog ---------- */
+.yv-blog-hero-copy-v8>p{font-size:11px!important;line-height:1.7!important}
+.yv-blog-search-v8 input,.yv-blog-search-v8 button{font-size:9px!important}
+.yv-blog-hot-v8 small,.yv-blog-hot-v8 span{font-size:8px!important}
+.yv-blog-chip-grid-v8 a{font-size:8px!important}
+.yv-blog-featured-copy-v8>span{font-size:8px!important}
+.yv-blog-featured-copy-v8 p{font-size:10px!important;line-height:1.65!important}
+.yv-blog-featured-meta-v8 small{font-size:8px!important}
+.yv-blog-featured-copy-v8>a{font-size:9px!important}
+.yv-blog-head-v8 p{font-size:9px!important}
+.yv-blog-head-v8>a{font-size:8px!important}
+.yv-blog-post-image-v8 b{font-size:8px!important}
+.yv-blog-post-body-v8 h3{font-size:11px!important;line-height:1.4!important}
+.yv-blog-post-body-v8 p{font-size:8px!important;line-height:1.6!important}
+.yv-blog-post-body-v8>div{font-size:8px!important}
+.yv-blog-side-title-v8 a{font-size:8px!important}
+.yv-blog-popular-v8>b{font-size:8px!important}
+.yv-blog-popular-v8 strong{font-size:9px!important}
+.yv-blog-popular-v8 small{font-size:7px!important}
+.yv-blog-comment-v8>span{font-size:8px!important}
+.yv-blog-comment-v8 strong{font-size:9px!important}
+.yv-blog-comment-v8 p{font-size:8px!important}
+.yv-blog-comment-v8>small{font-size:7px!important}
+.yv-blog-news-v8 p{font-size:9px!important}
+.yv-blog-news-v8 input{font-size:8px!important}
+.yv-blog-news-v8 button{font-size:9px!important}
+.yv-blog-news-v8>small{font-size:7px!important}
+.yv-blog-benefits-v8>div>p{font-size:8px!important}
+.yv-blog-benefits-v8 b{font-size:9px!important}
+.yv-blog-benefits-v8 small{font-size:8px!important}
+.yv-blog-faq-grid-v8 button{font-size:9px!important}
+.yv-blog-faq-grid-v8 p{font-size:8px!important;line-height:1.65!important}
+.yv-blog-final-v8 small{font-size:8px!important}
+.yv-blog-final-v8>a{font-size:9px!important}
+.yv-blog-avatars-v8>span{font-size:8px!important}
+.yv-blog-avatars-v8>b{font-size:9px!important}
+.yv-blog-avatars-v8 b small{font-size:7px!important}
+
+/* ---------- contact / forms / FAQ ---------- */
+.yv-contact-item strong{font-size:11px!important}
+.yv-contact-item a,.yv-contact-item small{font-size:10px!important}
+.yv-form-group label{font-size:9px!important}
+.yv-form-group input,.yv-form-group textarea,.yv-form-group select{font-size:11px!important}
+.yv-faq-lead p{font-size:11px!important;line-height:1.7!important}
+
+/* ---------- account / support panels ---------- */
+.panel-user-info span{font-size:9px!important}
+.panel-nav a{font-size:11px!important}
+.panel-welcome-text p{font-size:11px!important}
+.panel-stat-label{font-size:10px!important}
+.panel-action-card span{font-size:10px!important}
+.panel-card-link{font-size:10px!important}
+.panel-list-title{font-size:11px!important}
+.panel-list-meta,.panel-list-amount{font-size:10px!important}
+.panel-form label{font-size:10px!important}
+.form-hint{font-size:9px!important}
+.panel-whatsapp-content strong{font-size:11px!important}
+.panel-whatsapp-content p{font-size:10px!important}
+.panel-page-header p{font-size:10px!important}
+.panel-order-number{font-size:10px!important}
+.panel-order-card-action{font-size:10px!important}
+.order-item-info>div:first-child{font-size:11px!important}
+.summary-row{font-size:10px!important}
+.panel-info-box strong{font-size:11px!important}
+.panel-info-box p{font-size:10px!important}
+.panel-file-placeholder{font-size:10px!important}
+.panel-chat-bubble{font-size:11px!important;line-height:1.6!important}
+.panel-chat-sender{font-size:10px!important}
+.panel-chat-time{font-size:9px!important}
+.panel-empty-state p{font-size:11px!important}
+.panel-ticket-order{font-size:9px!important}
+.panel-pagination a,.panel-pagination span{font-size:10px!important}
+.status-badge{font-size:9px!important}
+.panel-chat-text{font-size:11px!important}
+.panel-reply-filename{font-size:9px!important}
+
+/* ---------- auth ---------- */
+.auth-card .form-group label{font-size:11px!important}
+.auth-card .alert{font-size:10px!important}
+.auth-card .text-sm{font-size:10px!important}
+
+/* ---------- mobile: keep readability, don't shrink back down ---------- */
+@media(max-width:768px){
+  .nav-main a{font-size:10px!important}
+  .yh6-section-head p,
+  .yv-section-head-v5 p,
+  .yv-blog-head-v8 p{font-size:10px!important}
+  .yh6-package-card li,
+  .yv-category-package-card-v5 li,
+  .yv-product-related-card-v5 li{font-size:9px!important}
+  .premium-faq-question,
+  .premium-faq-answer{font-size:9px!important}
+  .panel-nav a{font-size:11px!important}
+}
