@@ -119,7 +119,8 @@ class PackageController extends Controller
             $data['image'] = Upload::image($_FILES['image'], 'packages');
         }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
-        $this->db->insert('packages', $data);
+        $id=$this->db->insert('packages',$data);
+        \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('software_create', 'Hazır yazılım oluşturuldu: '.$data['name']);
         flash('success','Hazır yazılım eklendi. Aktifse yazılım kataloğunda otomatik görünür.');
         redirect('/admin/hazir-yazilimlar');
