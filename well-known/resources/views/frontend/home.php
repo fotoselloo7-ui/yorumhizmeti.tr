@@ -306,33 +306,79 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
 </section>
 <?php endif; ?>
 
-<?php if (!empty($homeCategoryBlocks)): ?>
-<section class="yh6-promos">
+<section class="nv29-services" aria-labelledby="nv29-services-title">
     <div class="container">
-        <div class="yh6-promo-grid">
-        <?php foreach(array_slice($homeCategoryBlocks,0,3) as $idx=>$block):
-            $cat=$block['category']; [$cls,$ico,$label]=yh6Platform($cat['slug']??'', $cat['name']??'');
-            $promoCutout = $idx === 1 ? asset('img/support-woman-cutout.png') : asset('img/hero-woman-cutout.png');
-        ?>
-            <a href="/kategori/<?= e($cat['slug']) ?>" class="yh6-promo-card <?= e($cls) ?>">
-                <div class="yh6-promo-copy">
-                    <span><?= $idx===0?'MARKANI ÖNE ÇIKARIN':($idx===1?'TRENDLERDE YERİNİZİ ALIN':'PROFESYONEL ÇÖZÜMLER') ?></span>
-                    <h3><?= e($cat['name']) ?></h3>
-                    <p><?= e(excerpt(strip_tags($cat['description'] ?? 'Markanızın görünürlüğünü artıran güçlü dijital hizmetler.'), 100)) ?></p>
-                    <em>Paketleri İncele <?= icon('arrow-right', 10) ?></em>
+        <div class="nv29-section-intro">
+            <div>
+                <span class="nv29-section-kicker"><?= icon('sparkles', 14) ?> HER İHTİYACA UYGUN DİJİTAL ÇÖZÜMLER</span>
+                <h2 id="nv29-services-title">Tek platform, <span>üç güçlü uzmanlık alanı.</span></h2>
+            </div>
+            <a href="/kategoriler" class="nv29-view-all">Tüm Hizmetleri Keşfet <?= icon('arrow-up-right', 15) ?></a>
+        </div>
+        <div class="nv29-services-grid" aria-label="Dijital hizmet ana kategorileri">
+        <?php foreach (($homePromoGroups ?? []) as $promo): ?>
+            <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>">
+                <div class="nv29-card-glow" aria-hidden="true"></div>
+                <div class="nv29-card-content">
+                    <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 12) ?> <?= e($promo['eyebrow']) ?></span>
+                    <h3><?= e($promo['title']) ?></h3>
+                    <p><?= e($promo['description']) ?></p>
+                    <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">
+                        <?= e($promo['cta']) ?> <?= icon('arrow-right', 15) ?>
+                    </a>
                 </div>
-                <?php if($idx < 2): ?>
-                <div class="yh6-promo-visual"><span class="yh6-promo-orb"><?= icon($ico,24) ?></span><img class="yh6-promo-cutout" src="<?= e($promoCutout) ?>" alt="<?= e($cat['name']) ?>"></div>
+
+                <?php if ($promo['key'] === 'social'): ?>
+                <div class="nv29-visual nv29-visual-social" aria-hidden="true">
+                    <span class="nv29-visual-disc"></span>
+                    <img src="<?= asset('img/hero-woman-cutout.png') ?>" class="nv29-social-person" alt="" loading="lazy" width="240" height="285">
+                    <span class="nv29-social-float nv29-float-instagram"><?= icon('instagram', 22) ?></span>
+                    <span class="nv29-social-float nv29-float-tiktok"><?= icon('tiktok', 20) ?></span>
+                </div>
+                <?php elseif ($promo['key'] === 'agency'): ?>
+                <div class="nv29-visual nv29-visual-agency" aria-hidden="true">
+                    <div class="nv29-agency-window">
+                        <div class="nv29-window-top"><i></i><i></i><i></i><span></span></div>
+                        <div class="nv29-window-body">
+                            <div class="nv29-window-sidebar"><b></b><b></b><b></b><b></b></div>
+                            <div class="nv29-window-main">
+                                <span class="nv29-window-label"></span>
+                                <div class="nv29-window-chart"><i></i><i></i><i></i><i></i><i></i></div>
+                                <div class="nv29-window-tiles"><b></b><b></b><b></b></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="nv29-agency-device"><span></span><b></b></span>
+                    <span class="nv29-visual-mini nv29-agency-code"><?= icon('code', 17) ?></span>
+                </div>
                 <?php else: ?>
-                <div class="yh6-promo-visual device"><div class="yh6-device-stack"><i></i><b></b><span></span></div></div>
+                <div class="nv29-visual nv29-visual-marketing" aria-hidden="true">
+                    <div class="nv29-analytics-card">
+                        <div class="nv29-analytics-top"><span class="nv29-analytics-dot"></span><span class="nv29-analytics-line"></span><?= icon('trending-up', 16) ?></div>
+                        <svg class="nv29-analytics-graph" viewBox="0 0 210 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 84H200M10 57H200M10 30H200" stroke="currentColor" stroke-opacity=".14" stroke-dasharray="3 5"/>
+                            <path d="M10 89L46 74L79 80L111 46L141 57L175 26L199 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="199" cy="16" r="6" fill="white" stroke="currentColor" stroke-width="3"/>
+                        </svg>
+                        <div class="nv29-analytics-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                    </div>
+                    <span class="nv29-visual-mini nv29-marketing-search"><?= icon('search', 21) ?></span>
+                    <span class="nv29-visual-mini nv29-marketing-target"><?= icon('trending-up', 19) ?></span>
+                </div>
                 <?php endif; ?>
-                <div class="yh6-promo-chips"><small>Hızlı Teslimat</small><small>Güvenli Hizmet</small><small>7/24 Destek</small></div>
-            </a>
+
+                <div class="nv29-service-chips" aria-label="<?= e($promo['title']) ?> alt kategorileri">
+                    <?php foreach ($promo['chips'] as $chip): ?>
+                    <a href="<?= e($chip['url']) ?>" title="<?= e($chip['name']) ?>" class="nv29-service-chip">
+                        <?= icon($chip['icon'], 12) ?> <span><?= e($chip['name']) ?></span>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </article>
         <?php endforeach; ?>
         </div>
     </div>
 </section>
-<?php endif; ?>
 
 <section class="yh6-stats">
     <div class="container">

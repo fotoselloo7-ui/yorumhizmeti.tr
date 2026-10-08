@@ -115,27 +115,72 @@ class HomeController extends Controller
             }
         }
 
-        // Üç mevcut promo kartının TASARIMI korunur; kayıtlar admin kategorilerinden seçilir.
-        // Önce Instagram, TikTok, Web Site; bunlar yoksa aktif paketli ilk kategoriler.
-        $homeCategoryBlocks = [];
-        $preferredSlugs = ['instagram-hizmetleri','tiktok-hizmetleri','web-site-hizmetleri'];
-        $candidateCategories = [];
-        foreach ($categories as $cat) $candidateCategories[(int)$cat['id']] = $cat;
-        uasort($candidateCategories, static function ($a, $b) use ($preferredSlugs) {
-            $aa = array_search($a['slug'], $preferredSlugs, true);
-            $bb = array_search($b['slug'], $preferredSlugs, true);
-            return ($aa === false ? 99 : $aa) <=> ($bb === false ? 99 : $bb)
-                ?: ((int)$a['sort_order'] <=> (int)$b['sort_order']);
-        });
-        foreach ($candidateCategories as $cat) {
-            $catId = (int) $cat['id'];
-            $hasVisiblePackage = false;
-            foreach ($featuredPackages as $p) {
-                if ((int)$p['featured_group_id'] === $catId) { $hasVisiblePackage = true; break; }
+        // Three permanent promotional service families, backed by the same live
+        // catalog as the mega menu. Category chips only link to ACTIVE records.
+        $promoConfig = [
+            'social' => [
+                'title' => 'Sosyal Medya Hizmetleri',
+                'eyebrow' => 'MARKANI SOSYALDE BÜYÜT',
+                'description' => 'Instagram, TikTok, YouTube ve diğer platformlarda etkileşiminizi ve görünürlüğünüzü artıran çözümler.',
+                'cta' => 'Paketleri İncele',
+                'preferred' => ['instagram', 'tiktok', 'youtube', 'facebook'],
+            ],
+            'agency' => [
+                'title' => 'Ajans & Yazılım',
+                'eyebrow' => 'DİJİTAL ALTYAPINI KUR',
+                'description' => 'Web sitesi, e-ticaret, özel yazılım, mobil uygulama ve tasarım için profesyonel çözümler.',
+                'cta' => 'Hizmetleri İncele',
+                'preferred' => ['web', 'ecommerce', 'mobileapp', 'graphic'],
+            ],
+            'marketing' => [
+                'title' => 'SEO & Dijital Pazarlama',
+                'eyebrow' => 'DİJİTALDE DAHA GÖRÜNÜR OL',
+                'description' => 'SEO, reklam yönetimi, yerel işletme ve dijital büyüme hizmetleriyle markanızı öne çıkarın.',
+                'cta' => 'Çözümleri İncele',
+                'preferred' => ['seo', 'ads', 'local', 'reputation'],
+            ],
+        ];
+        $homePromoGroups = [];
+        $menuGroups = [];
+        foreach (\App\Services\CatalogMenuService::groups() as $group) {
+            $menuGroups[$group['key']] = $group;
+        }
+        foreach ($promoConfig as $key => $config) {
+            $groupCategories = $menuGroups[$key]['categories'] ?? [];
+            $chips = [];
+            $usedIds = [];
+            // Prioritize well-known services, without assuming those records exist.
+            foreach ($config['preferred'] as $preferredStyle) {
+                foreach ($groupCategories as $cat) {
+                    if (isset($usedIds[$cat['id']]) || $cat['style'] !== $preferredStyle) continue;
+                    $chips[] = [
+                        'name' => preg_replace('/\\s+Hizmetleri?$/u', '', (string)$cat['name']),
+                        'url' => $cat['url'],
+                        'icon' => $cat['icon'],
+                    ];
+                    $usedIds[$cat['id']] = true;
+                    break;
+                }
             }
-            if (!$hasVisiblePackage) continue;
-            $homeCategoryBlocks[] = ['category' => $cat];
-            if (count($homeCategoryBlocks) === 3) break;
+            foreach ($groupCategories as $cat) {
+                if (count($chips) >= 4) break;
+                if (isset($usedIds[$cat['id']])) continue;
+                $chips[] = [
+                    'name' => preg_replace('/\\s+Hizmetleri?$/u', '', (string)$cat['name']),
+                    'url' => $cat['url'],
+                    'icon' => $cat['icon'],
+                ];
+                $usedIds[$cat['id']] = true;
+            }
+            $homePromoGroups[] = [
+                'key' => $key,
+                'title' => $config['title'],
+                'eyebrow' => $config['eyebrow'],
+                'description' => $config['description'],
+                'cta' => $config['cta'],
+                'url' => '/kategoriler?grup=' . $key,
+                'chips' => array_slice($chips, 0, 4),
+            ];
         }
 
         // SSS
@@ -218,7 +263,7 @@ class HomeController extends Controller
             'featuredPackageGroups' => $featuredPackageGroups,
             'featuredNavGroups' => $featuredNavGroups,
             'initialFeaturedNavGroup' => $initialFeaturedNavGroup,
-            'homeCategoryBlocks' => $homeCategoryBlocks,
+            'homePromoGroups' => $homePromoGroups,
             'homeQuickCategories' => $homeQuickCategories,
             'latestPosts' => $latestPosts,
             'faqs' => $faqs,
