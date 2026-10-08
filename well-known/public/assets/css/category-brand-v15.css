@@ -296,3 +296,36 @@
 .yv-category-card.content .yv-cat-icon{background:rgba(255,255,255,.18)!important}
 .yv-category-card.graphic .yv-cat-icon{background:rgba(255,255,255,.18)!important}
 .yv-category-card.local .yv-cat-icon{background:rgba(255,255,255,.18)!important}
+
+
+/* hero-level variables for inheritance */
+.yv-category-hero-v5.threads{--brand-a:#111111;--brand-b:#2b2b2b;--brand-glow:rgba(0,0,0,.24)}
+.yv-category-hero-v5.telegram{--brand-a:#2AABEE;--brand-b:#229ED9;--brand-glow:rgba(34,158,217,.26)}
+.yv-category-hero-v5.spotify{--brand-a:#1DB954;--brand-b:#121212;--brand-glow:rgba(29,185,84,.28)}
+.yv-category-hero-v5.discord{--brand-a:#5865F2;--brand-b:#404EED;--brand-glow:rgba(88,101,242,.28)}
+.yv-category-hero-v5.linkedin{--brand-a:#0A66C2;--brand-b:#004182;--brand-glow:rgba(10,102,194,.26)}
+.yv-category-hero-v5.twitch{--brand-a:#9147FF;--brand-b:#6441A5;--brand-glow:rgba(145,71,255,.27)}
+.yv-category-hero-v5.ads{--brand-a:#F97316;--brand-b:#EF4444;--brand-glow:rgba(249,115,22,.25)}
+.yv-category-hero-v5.reputation{--brand-a:#0F766E;--brand-b:#14B8A6;--brand-glow:rgba(20,184,166,.24)}
+.yv-category-hero-v5.ecommerce{--brand-a:#10B981;--brand-b:#059669;--brand-glow:rgba(16,185,129,.25)}
+.yv-category-hero-v5.mobileapp{--brand-a:#6366F1;--brand-b:#8B5CF6;--brand-glow:rgba(99,102,241,.26)}
+.yv-category-hero-v5.content{--brand-a:#F97316;--brand-b:#EC4899;--brand-glow:rgba(236,72,153,.24)}
+.yv-category-hero-v5.graphic{--brand-a:#EC4899;--brand-b:#8B5CF6;--brand-glow:rgba(236,72,153,.26)}
+.yv-category-hero-v5.local{--brand-a:#16A34A;--brand-b:#0EA5E9;--brand-glow:rgba(22,163,74,.24)}
+
+/* platform-tinted accents on detail pages */
+.yv-category-hero-v5.threads .yv-category-float-v5.a,
+.yv-category-hero-v5.telegram .yv-category-float-v5.a,
+.yv-category-hero-v5.spotify .yv-category-float-v5.a,
+.yv-category-hero-v5.discord .yv-category-float-v5.a,
+.yv-category-hero-v5.linkedin .yv-category-float-v5.a,
+.yv-category-hero-v5.twitch .yv-category-float-v5.a,
+.yv-category-hero-v5.ads .yv-category-float-v5.a,
+.yv-category-hero-v5.reputation .yv-category-float-v5.a,
+.yv-category-hero-v5.ecommerce .yv-category-float-v5.a,
+.yv-category-hero-v5.mobileapp .yv-category-float-v5.a,
+.yv-category-hero-v5.content .yv-category-float-v5.a,
+.yv-category-hero-v5.graphic .yv-category-float-v5.a,
+.yv-category-hero-v5.local .yv-category-float-v5.a{
+  background:linear-gradient(100deg,var(--brand-a),var(--brand-b))!important;
+}
