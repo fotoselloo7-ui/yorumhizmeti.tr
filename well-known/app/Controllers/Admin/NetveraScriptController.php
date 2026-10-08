@@ -13,7 +13,9 @@ final class NetveraScriptController extends Controller
 {
     public function index():void
     {
-        $products=NetveraBridgeService::all();
+        $products=NetveraBridgeService::ready()
+            ? $this->db->fetchAll("SELECT * FROM nv_legacy_script_products ORDER BY sort_order,legacy_id DESC")
+            : [];
         $this->renderAdmin('admin/netvera-scripts/index',[
             'pageTitle'=>'Netvera Yazılımları',
             'products'=>$products,
