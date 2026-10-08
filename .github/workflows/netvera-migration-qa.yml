@@ -7,6 +7,8 @@ on:
       - 'well-known/database/netvera-public-catalog.json'
       - 'well-known/scripts/import-netvera-public.php'
       - 'well-known/app/Services/NetveraBridgeService.php'
+      - 'well-known/app/Services/NetveraBlogSnapshot.php'
+      - 'well-known/app/Controllers/BlogController.php'
       - 'well-known/database/migrations/netvera-legacy-bridge-v1.sql'
       - 'well-known/database/migrations/netvera-inquiries-v1.sql'
       - 'well-known/app/Controllers/NetveraInquiryController.php'
@@ -57,6 +59,24 @@ jobs:
           LICENSE_ENABLED=false
           LICENSE_LOCAL_BYPASS=true
           EOF
+      - name: Fresh installation exposes all 16 original scripts and 5 blogs before SQL import
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -S 127.0.0.1:8916 -t well-known/public well-known/tests/router.php >/tmp/netvera-fresh-qa.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid 2>/dev/null || true' EXIT
+          sleep 2
+          curl -fsS http://127.0.0.1:8916/hazir-scriptler > /tmp/netvera-fresh-list.html
+          count=$(grep -o 'class="nv40-product-card"' /tmp/netvera-fresh-list.html | wc -l)
+          [ "$count" -eq 16 ] || { echo "Expected 16 genuine software cards, found $count"; exit 1; }
+          curl -fsS http://127.0.0.1:8916/hazir-scriptler/haber-sitesi-scripti > /tmp/netvera-fresh-product.html
+          grep -q 'SoftwareApplication' /tmp/netvera-fresh-product.html
+          curl -fsS http://127.0.0.1:8916/blog/yapay-zeka-haber-yazilimi-otomatik-haber-sitesi > /tmp/netvera-fresh-blog.html
+          grep -q 'Yapay Zeka Haber' /tmp/netvera-fresh-blog.html
+          curl -fsS 'http://127.0.0.1:8916/hazir-scriptler?min_price=9000&sort=price_desc' > /tmp/netvera-fresh-price.html
+          grep -q 'nv40-product-card' /tmp/netvera-fresh-price.html
+          echo "PASS: 16 real software cards + indexed detail + indexed blog on a completely unimported database"
       - name: Verify authentic catalog, private-column exclusions and dry run
         run: |
           php -l well-known/scripts/import-netvera-public.php
