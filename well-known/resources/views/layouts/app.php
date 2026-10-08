@@ -129,6 +129,11 @@
                     if (str_starts_with($navItem['key'], 'category_')) $nv26QuickLinks[] = $navItem;
                     elseif (!str_starts_with($navItem['key'], 'group_')) $nv26ExtraLinks[] = $navItem;
                 }
+                // Respect the custom order configured in Admin > Menü Yönetimi.
+                usort($nv26Groups, static fn(array $a, array $b): int =>
+                    (($nv26NavPrefs['group_'.$a['key']]['sort'] ?? 9999)
+                      <=> ($nv26NavPrefs['group_'.$b['key']]['sort'] ?? 9999))
+                );
                 ?>
                 <div class="nv26-header-context">
                     <span><?= icon('shield-check', 14) ?> Güvenli dijital hizmetler</span>
