@@ -76,6 +76,9 @@
                 </a>
 
                 <div class="sidebar-section">İçerik</div>
+                <a href="/admin/menu" class="<?= isActive('/admin/menu') ?>">
+                    <?= icon('menu',18) ?> Menü Yönetimi
+                </a>
                 <a href="/admin/ana-sayfa" class="<?= isActive('/admin/ana-sayfa') ?>">
                     <?= icon('home', 18) ?> Ana Sayfa Yönetimi
                 </a>
