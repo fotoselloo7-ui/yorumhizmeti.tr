@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         navMain.querySelectorAll('a').forEach(function (link) {
             link.addEventListener('click', function () {
                 navMain.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
             });
         });
 
@@ -27,6 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('click', function (e) {
             if (!menuBtn.contains(e.target) && !navMain.contains(e.target)) {
                 navMain.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && navMain.classList.contains('open')) {
+                navMain.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.focus();
             }
         });
     }
@@ -114,7 +123,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Smooth scroll for anchor links ──
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
-            var target = document.querySelector(this.getAttribute('href'));
+            var href = this.getAttribute('href');
+            // "#" is a placeholder, not a valid querySelector selector.
+            if (!href || href === '#' || href.length < 2) {
+                e.preventDefault();
+                return;
+            }
+            var target = document.getElementById(href.slice(1));
             if (target) {
                 e.preventDefault();
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -196,7 +211,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (fileInput && filePlaceholder) {
         fileInput.addEventListener('change', function () {
             if (this.files.length) {
-                filePlaceholder.querySelector('span').textContent = this.files[0].name;
+                const label = filePlaceholder.querySelector('span');
+                if (label) label.textContent = this.files[0].name;
             }
         });
     }
