@@ -42,7 +42,16 @@ class IconService
         'spotify'=>['brands','spotify'],'discord'=>['brands','discord'],'linkedin'=>['brands','linkedin-in'],
         'twitch'=>['brands','twitch'],'store'=>['solid','store'],'mobile-app'=>['solid','mobile-screen-button'],
         'content-create'=>['solid','pen-nib'],'palette'=>['solid','palette'],'local-business'=>['solid','location-dot'],
-        'reputation'=>['solid','shield-halved'],'ads'=>['solid','bullhorn']
+        'reputation'=>['solid','shield-halved'],'ads'=>['solid','bullhorn'],
+        // Auth V25 and grouped storefront filters: render real Font Awesome glyphs.
+        'sparkles'=>['solid','wand-magic-sparkles'],
+        'package-check'=>['solid','box-open'],
+        'user-plus'=>['solid','user-plus'],
+        'user-round'=>['regular','user'],
+        'arrow-up-right'=>['solid','arrow-up-right'],
+        'monitor'=>['solid','desktop'],
+        'share-2'=>['solid','share-nodes'],
+        'sliders-horizontal'=>['solid','sliders']
     ];
 
     public static function render(string $name, int $size = 20, string $class = ''): string
