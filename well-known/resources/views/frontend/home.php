@@ -84,7 +84,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
 
             <div class="yh6-hero-art">
                 <div class="yh6-hero-blob"></div>
-                <div class="yh6-hero-person" style="--yh6-hero-image:url('<?= e($heroImage) ?>')"></div>
+                <img class="yh6-hero-person" src="<?= e($heroCutout) ?>" alt="YorumHizmeti dijital hizmetler" loading="eager" fetchpriority="high">
 
                 <span class="yh6-social-float instagram"><?= icon('instagram', 27) ?></span>
                 <span class="yh6-social-float tiktok"><?= icon('tiktok', 24) ?></span>
