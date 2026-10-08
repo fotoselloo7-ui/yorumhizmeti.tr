@@ -25,8 +25,14 @@ spl_autoload_register(function (string $class) {
     }
 });
 
+// Composer packages are optional in CI, but required for mail and spreadsheet
+// integrations on real cPanel installs. Load them only when present.
+if (is_file(BASE_PATH . '/vendor/autoload.php')) {
+    require_once BASE_PATH . '/vendor/autoload.php';
+}
+
 // Helpers yükle
-require BASE_PATH . '/app/Core/Helpers.php';
+require_once BASE_PATH . '/app/Core/Helpers.php';
 
 // .env yükle (Composer paket gerektirmez)
 $envFile = BASE_PATH . '/.env';
