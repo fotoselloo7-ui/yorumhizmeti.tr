@@ -55,10 +55,48 @@ class BlogController extends Controller
         $posts = $db->fetchAll($sql, $params);
         $categories = $db->fetchAll("SELECT * FROM blog_categories WHERE status = 'active' ORDER BY sort_order ASC");
         $popularPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.views DESC, bp.published_at DESC LIMIT 5");
+        // Show authentic Netvera posts on first launch before isolated DB import.
+        // Existing DB posts always win by their original indexed slug.
+        $legacyPosts=\App\Services\NetveraBlogSnapshot::all();
+        $knownSlugs=array_fill_keys(array_column($posts,'slug'),true);
+        $added=0;
+        foreach($legacyPosts as $original){
+            $slug=$original['slug'];
+            $existing=$db->fetch('SELECT id FROM blog_posts WHERE slug=? LIMIT 1',[$slug]);
+            if($existing)continue; // Editor/unpublished item must never be resurrected.
+            if(!empty($_GET['tag']))continue;
+            if(!empty($_GET['category']) && $original['category_slug']!==(string)$_GET['category'])continue;
+            if(!empty($_GET['q']) && mb_stripos($original['title'].' '.$original['excerpt'],
+                (string)$_GET['q'],0,'UTF-8')===false)continue;
+            $added++;
+            if($page===1 && !isset($knownSlugs[$slug])){
+                $posts[]=$original;
+                $knownSlugs[$slug]=true;
+            }
+        }
+        $total+=$added;
+        usort($posts,static fn($a,$b)=>strcmp((string)$b['published_at'],(string)$a['published_at']));
+        if($page===1)$posts=array_slice($posts,0,$perPage);
+        $popularSlugs=array_fill_keys(array_column($popularPosts,'slug'),true);
+        foreach($legacyPosts as $original){
+            if(count($popularPosts)>=5)break;
+            if(!isset($popularSlugs[$original['slug']])){
+                $popularPosts[]=$original;
+                $popularSlugs[$original['slug']]=true;
+            }
+        }
+        $existingCategories=array_fill_keys(array_column($categories,'slug'),true);
+        foreach(\App\Services\NetveraBlogSnapshot::categories() as $oldCategory){
+            if(!isset($existingCategories[$oldCategory['slug']])){
+                $categories[]=$oldCategory;
+                $existingCategories[$oldCategory['slug']]=true;
+            }
+        }
+
 
         // Demo kurulumunda gerçek içerik azsa tasarımın dolu halini göstermek için
         // sadece filtresiz ilk sayfada sanal kartlarla vitrini tamamla.
-        if ($page === 1 && empty($_GET['category']) && empty($_GET['tag']) && empty($_GET['q'])) {
+        if (!$posts && !$legacyPosts && $page === 1 && empty($_GET['category']) && empty($_GET['tag']) && empty($_GET['q'])) {
             $demoPosts = demo_blog_posts();
             foreach ($demoPosts as $demoPost) {
                 if (count($posts) >= 9) break;
@@ -103,10 +141,20 @@ class BlogController extends Controller
     {
         $db = Database::getInstance();
         $post = $db->fetch("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.slug = ? AND bp.status = 'active'", [$slug]);
-        if (!$post) { $this->render('frontend/404', ['pageTitle' => 'Yazı Bulunamadı']); return; }
+        $snapshotPost=false;
+        if (!$post) {
+            $post=\App\Services\NetveraBlogSnapshot::find($slug);
+            $snapshotPost=(bool)$post;
+        }
+        if (!$post) {
+            http_response_code(404);
+            $this->render('frontend/404', ['pageTitle' => 'Yazı Bulunamadı']);
+            return;
+        }
 
-        // Hit arttırma
-        $db->query("UPDATE blog_posts SET views = views + 1 WHERE id = ?", [$post['id']]);
+        // Never update real DB for the read-only original Netvera snapshot.
+        if (!$snapshotPost)
+            $db->query("UPDATE blog_posts SET views = views + 1 WHERE id = ?", [$post['id']]);
         
         // Tags
         $tags = $db->fetchAll("SELECT bt.* FROM blog_tags bt JOIN blog_post_tags bpt ON bt.id = bpt.tag_id WHERE bpt.post_id = ?", [$post['id']]);
@@ -198,7 +246,7 @@ class BlogController extends Controller
             'noindex' => $post['noindex'] == 1,
             'schema' => json_encode($schemas, JSON_UNESCAPED_UNICODE),
             'post' => $post,
-            'nvSeoData' => \App\Services\NetveraSeoBridge::get('blog',(int)$post['id']),
+            'nvSeoData' => $snapshotPost ? [] : \App\Services\NetveraSeoBridge::get('blog',(int)$post['id']),
             'tags' => $tags,
             'toc' => $toc,
             'faqs' => $faqs,
