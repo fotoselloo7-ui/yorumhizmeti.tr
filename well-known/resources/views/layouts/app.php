@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
