@@ -102,6 +102,23 @@ for(const screen of screens){
           if(!switcher.changed){errors.push('Featured category tab did not switch content');failed=true}
         }
       }
+      // Regression checks for screenshot-confirmed layout failures.
+      const g=report.geom||{};
+      if(screen.w>=1180){
+        for(const key of ['.yv-category-hero-art-v5','.yv-blog-hero-art-v8','.yv-product-hero-visual-v5']){
+          if(g[key] && g[key].w<180){
+            errors.push('Collapsed hero artwork: '+key+' width='+g[key].w);
+            failed=true;
+          }
+        }
+      }
+      if(p.route==='/' && screen.w<=768 && g['.yh6-platform-bar'] && g['.yh6-why']){
+        const stripBottom=g['.yh6-platform-bar'].y+g['.yh6-platform-bar'].h;
+        if(stripBottom>g['.yh6-why'].y+3){
+          errors.push('Homepage service strip overlaps next section by '+(stripBottom-g['.yh6-why'].y)+'px');
+          failed=true;
+        }
+      }
       const record={route:p.route,screen:screen.name,status,url:fullUrl,report,switcher,errors};
       results.push(record);
       const shot=path.join(output,`${p.slug}-${screen.name}.png`);
