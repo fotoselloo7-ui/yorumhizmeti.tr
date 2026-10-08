@@ -1,0 +1,81 @@
+name: Netvera cPanel Release Bundle
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [staging/netvera-source-integration]
+    paths:
+      - '.github/workflows/netvera-cpanel-bundle.yml'
+      - 'well-known/app/**'
+      - 'well-known/resources/**'
+      - 'well-known/public/**'
+      - 'well-known/database/netvera-public-catalog.json'
+      - 'well-known/database/migrations/netvera-*.sql'
+      - 'well-known/composer.json'
+      - 'well-known/.htaccess'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    if: github.ref == 'refs/heads/staging/netvera-source-integration'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, curl, gd, zip, xml, intl, fileinfo
+          tools: composer:v2
+      - name: Build public-only complete PHP cPanel package
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zip rsync
+          mkdir -p release/Netvera-Premium/app release/Netvera-Premium/resources release/Netvera-Premium/public release/Netvera-Premium/database/migrations
+          cp -a well-known/app/. release/Netvera-Premium/app/
+          cp -a well-known/resources/. release/Netvera-Premium/resources/
+          rsync -a --exclude='*.php~' --exclude='*.bak' well-known/public/ release/Netvera-Premium/public/
+          cp well-known/.htaccess well-known/composer.json release/Netvera-Premium/
+          cp well-known/database/netvera-public-catalog.json release/Netvera-Premium/database/
+          cp well-known/database/migrations/netvera-legacy-bridge-v1.sql release/Netvera-Premium/database/migrations/
+          cp well-known/database/migrations/netvera-inquiries-v1.sql release/Netvera-Premium/database/migrations/
+          # Required production third-party libraries; don't ship an environment or credential.
+          composer install --working-dir=release/Netvera-Premium --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
+          cat > release/NETVERA-KURULUM.txt <<'DOC'
+          NETVERA PREMIUM - PUBLIC CATALOG STAGING DELIVERY
+
+          Bu paket staging onizleme icindir; canli PayTR ve lisans
+          entegrasyonu orijinal kodla kontrol edilmeden canliya gecmeyin.
+
+          - Netvera-Premium dizinini mevcut sitenin dosyalarinin uzerine
+            silerek degil, AYRI bir alt alana yerlestirin.
+          - Existing production .env, DB, payment credentials and public
+            uploads must be preserved. Never overwrite/delete them.
+          - Staging MySQL must be separately created and supplied via
+            hosting's secure environment variables.
+          - Netvera-Premium/public should be the site document root;
+            otherwise use Netvera-Premium/.htaccess rewrite.
+          - After setup /hazir-scriptler displays 16 real Netvera products,
+            without running any catalog SQL migration.
+          - All 63 original public product/blog assets are embedded.
+          - Original catalog fixture is in database/netvera-public-catalog.json.
+          - Live orders, PayTR callbacks and license activation remain
+            disabled for final old-PHP code parity validation.
+          DOC
+          # Deliberately omit all private .env, sql backups, customer uploads,
+          # existing production order/payment data and CI fixture database.
+          if find release -type f | grep -E '/\.env$|/yorumhizmeti_yorumhizmeti\.sql$|/alac6ayazilimtr_netvera\.sql$'; then
+            echo "Sensitive file entered deployment package"; exit 1
+          fi
+          (cd release && zip -q -r Netvera-Premium-cPanel-Staging.zip Netvera-Premium NETVERA-KURULUM.txt)
+          du -h release/Netvera-Premium-cPanel-Staging.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Netvera-Premium-cPanel-Staging
+          path: release/Netvera-Premium-cPanel-Staging.zip
+          retention-days: 30
+          if-no-files-found: error
