@@ -63,9 +63,9 @@ final class NetveraScriptController extends Controller
         if($name===''){flash('error','Yazılım adı boş olamaz.');redirect('/admin/netvera-yazilimlar');return;}
         $slug=trim((string)($_POST['slug']??''));
         $slug=slugify($slug?:$name);
-        if($old && $slug!==$old['slug'] && empty($_POST['allow_slug_change'])){
-            $slug=$old['slug'];
-        }
+        // Never silently change indexed Netvera product paths. Renames require
+        // an explicit, audited 301-mapping migration rather than a form checkbox.
+        if($old) $slug=(string)$old['slug'];
         $collision=$this->db->fetch('SELECT legacy_id FROM nv_legacy_script_products WHERE slug=? AND legacy_id<>? LIMIT 1',[$slug,$id]);
         if($collision){flash('error','Bu slug başka ürüne ait.');redirect('/admin/netvera-yazilimlar');return;}
         $newData=$old?NetveraBridgeService::jsonFields($old):[];
