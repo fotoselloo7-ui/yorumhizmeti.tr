@@ -358,6 +358,41 @@ for(const screen of screens){
           await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});
         }
       }
+      // V32: service and portfolio sections exist even on a new, empty DB.
+      if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
+        const ready=await page.evaluate(()=>{
+          const software=document.querySelector('#hazir-yazilimlar');
+          const refs=document.querySelector('#referanslarimiz');
+          const containerFit=root=>{
+            const r=root.getBoundingClientRect();
+            return r.width>260 && r.left>=-3 && r.right<=innerWidth+3;
+          };
+          return {
+            softwarePresent:!!software,
+            referencesPresent:!!refs,
+            emptySoftware:!!software?.querySelector('.nv32-software-intro'),
+            emptyReferences:!!refs?.querySelector('.nv32-portfolio-intro'),
+            softwareProducts:software?.querySelectorAll('.nv31-software-card').length||0,
+            references:refs?.querySelectorAll('.nv31-portfolio-card').length||0,
+            badLinks:[...document.querySelectorAll('.nv32-software-intro a,.nv32-portfolio-intro a')]
+              .filter(el=>!el.getAttribute('href') || el.getAttribute('href')==='#' ||
+                (el.getAttribute('href')||'').includes('/kategori/hazir-yazilim-scriptleri') &&
+                !el.closest('.nv32-service-list') && !document.querySelector('.nv32-service-list a')).length,
+            aligned:software&&refs&&containerFit(software)&&containerFit(refs),
+            overflow:[software,refs].filter(Boolean).some(el=>el.scrollWidth>el.clientWidth+6),
+          };
+        });
+        if(!ready.softwarePresent||!ready.referencesPresent||!ready.aligned||
+          ready.overflow||ready.badLinks||
+          !(ready.softwareProducts||ready.emptySoftware)||
+          !(ready.references||ready.emptyReferences)){
+          failed=true;errors.push('V32 homepage sections missing on fresh database: '+JSON.stringify(ready));
+        }
+        if(screen.name==='masaustu'){
+          await page.locator('#hazir-yazilimlar').screenshot({path:path.join(output,'software-empty-state-v32.png'),animations:'disabled'});
+          await page.locator('#referanslarimiz').screenshot({path:path.join(output,'references-empty-state-v32.png'),animations:'disabled'});
+        }
+      }
       // V30: reviews and four-step service journey must be visible and usable
       // at all four viewport sizes, with no fake/inert review action.
       if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
@@ -677,6 +712,7 @@ try {
     showcasePage.locator('.adm31-showcase-form button[type=submit]').click()
   ]);
   await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(await showcasePage.locator('.nv32-software-intro').count())throw new Error('Empty script presentation remained visible after selection');
   if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count()))
     throw new Error('Saved script selection not displayed on storefront');
 
@@ -696,6 +732,8 @@ try {
   await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
   if(!(await showcasePage.locator('.nv31-portfolio-card').filter({hasText:'CI Web Referans Testi'}).count()))
     throw new Error('Published reference missing from storefront');
+  if(await showcasePage.locator('.nv32-portfolio-intro').count())
+    throw new Error('Empty reference presentation remained visible after publishing a project');
 
   await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-desktop.png'),fullPage:true,animations:'disabled'});
   await showcasePage.setViewportSize({width:390,height:844});
