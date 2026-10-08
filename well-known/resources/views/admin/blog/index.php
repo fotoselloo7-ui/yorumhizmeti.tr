@@ -12,6 +12,7 @@
         <div class="adm-empty-sm" style="padding: var(--space-8);"><?= icon('file-text', 32) ?><p>Henüz blog yazısı eklenmemiş.</p></div>
     </div>
 </div>
+<?php endif; ?>
 <!-- Desktop Table -->
 <div class="adm-card adm-blog-desktop">
     <div class="adm-card-body" style="padding: 0;">
@@ -125,4 +126,4 @@
     </div>
     <?php endforeach; ?>
 </div>
-<?php endif; ?>
+
