@@ -358,6 +358,49 @@ for(const screen of screens){
           await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});
         }
       }
+      // V30: reviews and four-step service journey must be visible and usable
+      // at all four viewport sizes, with no fake/inert review action.
+      if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
+        const v30=await page.evaluate(()=>{
+          const reviewSection=document.querySelector('.nv30-feedback');
+          const stepSection=document.querySelector('.nv30-process');
+          const steps=[...(stepSection?.querySelectorAll('.nv30-step')||[])];
+          const cards=[...(reviewSection?.querySelectorAll('.nv30-review-card')||[])];
+          const check=sel=>{
+            const el=document.querySelector(sel);
+            if(!el)return null;
+            const r=el.getBoundingClientRect();
+            return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};
+          };
+          const overlap=boxes=>boxes.some((r,i)=>boxes.slice(i+1).some(other=>
+            Math.min(r.right,other.right)-Math.max(r.left,other.left)>3 &&
+            Math.min(r.bottom,other.bottom)-Math.max(r.top,other.top)>3
+          ));
+          const rects=els=>els.map(el=>el.getBoundingClientRect());
+          return {
+            steps:steps.length,
+            reviews:cards.length,
+            oldModules:document.querySelectorAll('section.yh6-reviews,section.yh6-how').length,
+            badLinks:[...document.querySelectorAll('.nv30-feedback a,.nv30-process a')]
+              .filter(a=>!a.getAttribute('href') || a.getAttribute('href')==='#').length,
+            stepOverlap:overlap(rects(steps)),
+            reviewOverlap:overlap(rects(cards)),
+            oldTooSmall:[...document.querySelectorAll('.nv30-review-card blockquote,.nv30-step p')]
+              .some(el=>parseFloat(getComputedStyle(el).fontSize)<9.8),
+            sectionOverflow:[reviewSection,stepSection]
+              .filter(Boolean).some(el=>el.scrollWidth>el.clientWidth+8),
+            stepCard:check('.nv30-step'),
+          };
+        });
+        if(v30.steps!==4||v30.oldModules||v30.badLinks||v30.stepOverlap||
+           v30.reviewOverlap||v30.oldTooSmall||v30.sectionOverflow||!v30.stepCard){
+          errors.push('Premium reviews/steps failure: '+JSON.stringify(v30));failed=true;
+        }
+        if(screen.name==='masaustu'){
+          await page.locator('.nv30-process').screenshot({path:path.join(output,'premium-process-v30.png'),animations:'disabled'});
+          if(v30.reviews) await page.locator('.nv30-feedback').screenshot({path:path.join(output,'premium-reviews-v30.png'),animations:'disabled'});
+        }
+      }
       // Regression checks for screenshot-confirmed layout failures.
       const g=report.geom||{};
       if(screen.w>=1180){

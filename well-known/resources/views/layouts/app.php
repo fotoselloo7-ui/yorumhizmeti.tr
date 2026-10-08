@@ -59,6 +59,7 @@
     <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=27.1">
     <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=28.1">
     <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=29.1">
+    <link rel="stylesheet" href="<?= asset('css/premium-trust-steps-v30.css') ?>?v=30.1">
 
     <!-- Dynamic Theme Colors -->
     <?php

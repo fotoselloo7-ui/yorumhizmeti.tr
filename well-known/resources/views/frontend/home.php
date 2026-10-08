@@ -391,30 +391,99 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
 </section>
 
 <?php if (!empty($reviews)): ?>
-<section class="yh6-reviews">
+<section class="nv30-feedback" id="nv30-feedback" aria-labelledby="nv30-feedback-title">
     <div class="container">
-        <div class="yh6-section-head"><div><span class="yh6-eyebrow">Gerçek Kullanıcı Deneyimleri</span><h2>Müşterilerimiz Ne Diyor?</h2><p>Binlerce müşterimizin arasında siz de yerinizi alın. Gerçek yorumlar, gerçek başarı hikayeleri.</p></div><a href="#" class="yh6-link">Tüm Yorumları Gör <?= icon('arrow-right',10) ?></a></div>
-        <div class="yh6-review-grid">
-            <?php foreach(array_slice($reviews,0,4) as $review): ?>
-            <article>
-                <div class="yh6-review-top"><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><div><b><?= e($review['name']??'Müşteri') ?></b><em>★★★★★</em></div></div>
-                <p><?= e($review['text']??'') ?></p>
-                <small><?= e($review['role']??'Doğrulanmış müşteri') ?></small>
+        <div class="nv30-section-head">
+            <div class="nv30-head-copy">
+                <span class="nv30-section-kicker"><?= icon('message-circle', 14) ?> MÜŞTERİ DENEYİMLERİ</span>
+                <h2 id="nv30-feedback-title">Bizimle çalışanlar <span>neler söylüyor?</span></h2>
+                <p>Hizmetlerimiz hakkında müşterilerimizin paylaştığı deneyimlere göz atın.</p>
+            </div>
+            <a class="nv30-outline-link" href="/kategoriler">Hizmetleri Keşfet <?= icon('arrow-up-right', 14) ?></a>
+        </div>
+        <div class="nv30-review-grid" aria-label="Müşteri yorumları">
+            <?php foreach(array_slice($reviews, 0, 4) as $index=>$review):
+                $reviewName = trim((string)($review['name'] ?? 'Müşteri'));
+                $reviewInitial = mb_strtoupper(mb_substr($reviewName !== '' ? $reviewName : 'M', 0, 1, 'UTF-8'), 'UTF-8');
+                $reviewRole = trim((string)($review['role'] ?? ''));
+                $reviewText = trim((string)($review['text'] ?? ''));
+                $reviewRating = isset($review['rating']) && is_numeric($review['rating'])
+                    ? max(0, min(5, (int)$review['rating'])) : null;
+                if ($reviewText === '') continue;
+            ?>
+            <article class="nv30-review-card <?= $index === 0 ? 'nv30-review-primary' : '' ?>">
+                <div class="nv30-review-topline">
+                    <span class="nv30-review-quote" aria-hidden="true"><?= icon('message-circle', 23) ?></span>
+                    <?php if ($reviewRating !== null && $reviewRating > 0): ?>
+                        <span class="nv30-review-stars" aria-label="<?= (int)$reviewRating ?> üzerinden 5 yıldız">
+                            <?php for($r=0;$r<$reviewRating;$r++): ?><?= icon('star-fill', 12) ?><?php endfor; ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                <blockquote><?= e($reviewText) ?></blockquote>
+                <div class="nv30-review-author">
+                    <span class="nv30-review-avatar" aria-hidden="true"><?= e($reviewInitial) ?></span>
+                    <div class="nv30-review-author-info">
+                        <strong><?= e($reviewName !== '' ? $reviewName : 'Müşteri') ?></strong>
+                        <?php if ($reviewRole !== ''): ?><small><?= e($reviewRole) ?></small><?php else: ?><small>Müşteri yorumu</small><?php endif; ?>
+                    </div>
+                    <span class="nv30-review-decoration" aria-hidden="true"><?= icon('message-circle', 16) ?></span>
+                </div>
             </article>
             <?php endforeach; ?>
+        </div>
+        <div class="nv30-feedback-foot">
+            <span><?= icon('shield-check', 15) ?> Açık ve anlaşılır sipariş takibi</span>
+            <span><?= icon('headphones', 15) ?> Destek merkezine kolay erişim</span>
+            <a href="/kategoriler">İhtiyacınıza uygun hizmeti bulun <?= icon('arrow-right', 13) ?></a>
         </div>
     </div>
 </section>
 <?php endif; ?>
 
-<section class="yh6-how" id="how">
+<section class="nv30-process" id="how" aria-labelledby="nv30-process-title">
     <div class="container">
-        <div class="yh6-how-intro"><span class="yh6-eyebrow">Sadece 4 Adımda</span><h2>Nasıl Çalışır?</h2><p>Hızlı, güvenli ve kolay bir şekilde hizmete satın alın.</p></div>
-        <div class="yh6-how-grid">
-            <div><b>1</b><span><?= icon('search',17) ?></span><strong>Paket Seçimi</strong><small>İhtiyacınıza uygun paketi belirleyin.</small></div>
-            <div><b>2</b><span><?= icon('credit-card',17) ?></span><strong>Güvenli Ödeme</strong><small>Kredi kartı veya havale ile güvenle ödeme yapın.</small></div>
-            <div><b>3</b><span><?= icon('zap',17) ?></span><strong>Hızlı Teslimat</strong><small>Siparişiniz en kısa sürede tamamlanır.</small></div>
-            <div><b>4</b><span><?= icon('check-circle',17) ?></span><strong>Sonuçları Görün</strong><small>Hesabınızdan sonuçlarınızı takip edin.</small></div>
+        <div class="nv30-section-head nv30-process-head">
+            <div class="nv30-head-copy">
+                <span class="nv30-section-kicker"><?= icon('zap', 14) ?> 4 BASİT ADIM</span>
+                <h2 id="nv30-process-title">Nasıl <span>çalışır?</span></h2>
+                <p>Hizmet seçiminizden sipariş takibine kadar süreç tek bir panelde ilerler.</p>
+            </div>
+            <div class="nv30-process-head-mark"><?= icon('shield-check', 17) ?> Kolay ve güvenli işlem</div>
+        </div>
+
+        <div class="nv30-process-grid" aria-label="Hizmet alma aşamaları">
+            <article class="nv30-step nv30-step-first">
+                <div class="nv30-step-top"><span class="nv30-step-icon"><?= icon('search', 22) ?></span><span class="nv30-step-number">01</span></div>
+                <div class="nv30-step-content"><h3>Hizmetinizi Seçin</h3><p>İhtiyacınıza uygun kategoriyi ve hizmet paketini keşfedin.</p></div>
+                <div class="nv30-step-bottom"><?= icon('check-circle', 13) ?> Hizmet keşfi</div>
+            </article>
+            <article class="nv30-step">
+                <div class="nv30-step-top"><span class="nv30-step-icon"><?= icon('credit-card', 22) ?></span><span class="nv30-step-number">02</span></div>
+                <div class="nv30-step-content"><h3>Güvenle Ödeyin</h3><p>Ödeme seçeneklerinden size uygun olanı seçerek siparişinizi oluşturun.</p></div>
+                <div class="nv30-step-bottom"><?= icon('shield-check', 13) ?> Güvenli işlem</div>
+            </article>
+            <article class="nv30-step">
+                <div class="nv30-step-top"><span class="nv30-step-icon"><?= icon('zap', 22) ?></span><span class="nv30-step-number">03</span></div>
+                <div class="nv30-step-content"><h3>Siparişiniz İşleme Alınsın</h3><p>Hizmetinizin durumunu hesabınız üzerinden kolayca takip edin.</p></div>
+                <div class="nv30-step-bottom"><?= icon('clock', 13) ?> Sipariş takibi</div>
+            </article>
+            <article class="nv30-step">
+                <div class="nv30-step-top"><span class="nv30-step-icon"><?= icon('check-circle', 22) ?></span><span class="nv30-step-number">04</span></div>
+                <div class="nv30-step-content"><h3>Sonuçları Görün</h3><p>Hizmet tamamlandığında sipariş ayrıntılarını panelinizden inceleyin.</p></div>
+                <div class="nv30-step-bottom"><?= icon('eye', 13) ?> Sonuçlarınız</div>
+            </article>
+        </div>
+
+        <div class="nv30-process-cta">
+            <div class="nv30-process-cta-copy">
+                <span class="nv30-process-cta-icon"><?= icon('sparkles', 21) ?></span>
+                <div><strong>Bir sonraki adımda markanız için doğru hizmeti seçin.</strong><small>Tüm kategorileri tek noktadan inceleyebilirsiniz.</small></div>
+            </div>
+            <div class="nv30-process-actions">
+                <a class="nv30-process-primary-link" href="/kategoriler">Hizmetleri İncele <?= icon('arrow-right', 14) ?></a>
+                <a class="nv30-process-secondary-link" href="/sss">Sık Sorulan Sorular <?= icon('arrow-up-right', 13) ?></a>
+            </div>
         </div>
     </div>
 </section>
