@@ -15,7 +15,7 @@
     const platformClasses = [
       'instagram','tiktok','youtube','facebook','twitter','threads','telegram',
       'spotify','discord','linkedin','twitch','google','web','seo','ecommerce',
-      'mobileapp','content','graphic','local','default'
+      'mobileapp','content','graphic','local','software','default'
     ];
 
     let visible = false;
