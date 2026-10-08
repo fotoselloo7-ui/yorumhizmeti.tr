@@ -272,8 +272,12 @@ for(const screen of screens){
           if(dragged<20)throw new Error('Mouse grab-and-drag did not move the nested software rail: '+dragged);
         }else{
           const next=categoryPanel.locator('.nv43-rail-shell').first().locator('[data-featured-rail-next]');
-          await rootRail.evaluate(el=>{el.scrollLeft=0;});
-          if(await next.isDisabled())throw new Error('Mobile horizontal featured navigation disabled');
+          await rootRail.evaluate(el=>{
+            el.scrollLeft=0;
+            el.dispatchEvent(new Event('scroll',{bubbles:false}));
+          });
+          await page.waitForTimeout(130); // Native scroll event updates arrow state on the next frame.
+          if(await next.isDisabled())throw new Error('Mobile horizontal featured navigation disabled after scroll reset');
           await next.click();
           await page.waitForTimeout(350);
           if((await rootRail.evaluate(el=>el.scrollLeft))<8)
