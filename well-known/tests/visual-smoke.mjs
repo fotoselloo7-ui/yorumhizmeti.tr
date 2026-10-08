@@ -278,6 +278,48 @@ try {
   console.error('FAIL admin catalog integration:',String(e).slice(0,400));
 } finally { await catalogContext.close(); }
 
+// End-to-end checkout guard: registering, selecting a live package and rejecting a forged gateway.
+const checkoutContext = await browser.newContext({viewport:{width:1440,height:900}});
+const shopper = await checkoutContext.newPage();
+try {
+  await shopper.goto(origin + '/kayit', {waitUntil:'domcontentloaded'});
+  const uniqueEmail = 'qa-catalog-' + Date.now() + '@example.test';
+  await shopper.locator('input[name=name]').fill('Katalog Test Kullanıcısı');
+  await shopper.locator('input[name=email]').fill(uniqueEmail);
+  await shopper.locator('input[name=password]').fill('qa-checkout-only');
+  await shopper.locator('input[name=password_confirmation]').fill('qa-checkout-only');
+  await Promise.all([
+    shopper.waitForURL('**/hesabim', {waitUntil:'domcontentloaded'}),
+    shopper.locator('form button[type=submit]').click()
+  ]);
+  await shopper.goto(origin + '/paket/google-harita-yorum-toplama-baslangic-paketi-10-davet', {waitUntil:'domcontentloaded'});
+  if (!(await shopper.locator('#packageForm').count())) throw new Error('Live product purchase form missing');
+  await shopper.locator('#packageForm').evaluate(async form => {
+    const response = await fetch(form.action, {method:'POST', body:new FormData(form)});
+    if (!response.ok) throw new Error('Cart add POST returned ' + response.status);
+  });
+  await shopper.goto(origin + '/sepet', {waitUntil:'domcontentloaded'});
+  if (!(await shopper.locator('.yv-cart-row-v5').count())) throw new Error('Selected live package did not reach the cart');
+  await shopper.goto(origin + '/odeme', {waitUntil:'domcontentloaded'});
+  const checkout = shopper.locator('#checkoutForm');
+  if (!(await checkout.count())) throw new Error('Cart did not reach checkout');
+  const token = await checkout.locator('input[name="_csrf_token"]').inputValue();
+  const invalid = await checkoutContext.request.post(origin + '/odeme/islem', {
+    form: {_csrf_token:token, payment_gateway:'unknown_gateway_qa', terms_accepted:'1'},
+    maxRedirects:0
+  });
+  const destination = invalid.headers()['location'] || '';
+  if (invalid.status() !== 302 || !destination.endsWith('/odeme')) {
+    throw new Error('Forged payment method was not rejected before creating an order: ' + invalid.status() + ' ' + destination);
+  }
+  results.push({route:'Storefront cart and checkout payment guard',screen:'integration',status:200,errors:[]});
+  console.log('PASS customer registration, package-to-cart route and invalid payment rejection');
+} catch (e) {
+  failed=true;
+  results.push({route:'Storefront cart and checkout payment guard',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL checkout integration:',String(e).slice(0,400));
+} finally { await checkoutContext.close(); }
+
 // Validate the visible mobile package slider (not just presence of HTML controls).
 const sliderContext=await browser.newContext({viewport:{width:390,height:844}});
 const sliderPage=await sliderContext.newPage();

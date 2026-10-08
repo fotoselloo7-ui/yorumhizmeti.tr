@@ -15,19 +15,26 @@ class CartController extends Controller
 
         if (!empty($cart)) {
             $db = Database::getInstance();
-            foreach ($cart as $key => $item) {
+            $validCart = [];
+            foreach ($cart as $item) {
                 $pkg = $db->fetch("SELECT p.* FROM packages p
                  INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
                  LEFT JOIN categories parent ON parent.id = c.parent_id
                  WHERE p.id = ? AND p.status = 'active'
-                   AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
+                   AND (c.parent_id IS NULL OR parent.status = 'active')", [(int)($item['id'] ?? 0)]);
                 if ($pkg) {
                     $price = $pkg['discount_price'] && $pkg['discount_price'] < $pkg['price'] ? $pkg['discount_price'] : $pkg['price'];
-                    $qty = $item['quantity'] ?? 1;
-                    $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'cart_key' => $key]);
+                    $min = max(1, (int)$pkg['min_quantity']);
+                    $max = max($min, (int)$pkg['max_quantity']);
+                    $qty = max($min, min($max, (int)($item['quantity'] ?? $min)));
+                    $cartKey = count($validCart);
+                    $validCart[] = ['id' => (int)$pkg['id'], 'quantity' => $qty];
+                    $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'cart_key' => $cartKey]);
                     $total += $price * $qty;
                 }
             }
+            // Discontinued packages must not remain as invisible, unremovable cart entries.
+            $_SESSION['cart'] = $validCart;
         }
 
         $this->render('frontend/cart', [
@@ -55,18 +62,21 @@ class CartController extends Controller
             return;
         }
 
+        $min = max(1, (int)$pkg['min_quantity']);
+        $max = max($min, (int)$pkg['max_quantity']);
+        $quantity = max($min, min($max, $quantity));
         $cart = $_SESSION['cart'] ?? [];
         $found = false;
         foreach ($cart as &$item) {
             if ($item['id'] == $packageId) {
-                $item['quantity'] = min($item['quantity'] + $quantity, $pkg['max_quantity']);
+                $item['quantity'] = max($min, min((int)$item['quantity'] + $quantity, $max));
                 $found = true;
                 break;
             }
         }
 
         if (!$found) {
-            $cart[] = ['id' => $packageId, 'quantity' => max(1, min($quantity, (int)$pkg['max_quantity']))];
+            $cart[] = ['id' => $packageId, 'quantity' => $quantity];
         }
 
         $_SESSION['cart'] = $cart;

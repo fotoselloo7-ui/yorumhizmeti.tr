@@ -35,8 +35,8 @@ class CheckoutController extends Controller
             }
         }
 
-        if (!$cartItems) {
-            flash('error', 'Sepetinizde şu anda satışta olan bir paket bulunmuyor.');
+        if (!$cartItems || count($cartItems) !== count($cart)) {
+            flash('error', 'Sepetinizde artık satışta olmayan paketler var. Lütfen sepetinizi güncelleyin.');
             redirect('/sepet');
             return;
         }
@@ -106,7 +106,9 @@ class CheckoutController extends Controller
             $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
 
             $orderItem = $pkg;
-            $orderItem['quantity'] = $item['quantity'] ?? 1;
+            $minQty = max(1, (int)$pkg['min_quantity']);
+            $maxQty = max($minQty, (int)$pkg['max_quantity']);
+            $orderItem['quantity'] = max($minQty, min($maxQty, (int)($item['quantity'] ?? $minQty)));
 
             // Dinamik alanlar
             $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ?", [$pkg['id']]);
