@@ -182,6 +182,11 @@ class App
         $r->get('/admin/import/ornek-sablon', 'Admin\\SettingsController@downloadExampleTemplate');
 
         // Admin Destek
+        // İletişim gelen kutusu ve bülten aboneleri
+        $r->get('/admin/mesajlar', 'Admin\\MessageController@index');
+        $r->post('/admin/mesaj/{id}/okundu', 'Admin\\MessageController@markRead');
+        $r->post('/admin/bulten/{id}/iptal', 'Admin\\MessageController@unsubscribe');
+
         $r->get('/admin/destek', 'Admin\\SettingsController@supportIndex');
         $r->get('/admin/destek/{id}', 'Admin\\SettingsController@supportShow');
         $r->post('/admin/destek/{id}/yanit', 'Admin\\SettingsController@supportReply');
