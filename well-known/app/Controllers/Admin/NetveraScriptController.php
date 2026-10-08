@@ -13,13 +13,17 @@ final class NetveraScriptController extends Controller
 {
     public function index():void
     {
-        $products=NetveraBridgeService::ready()
+        $tablesReady=NetveraBridgeService::ready();
+        $products=$tablesReady
             ? $this->db->fetchAll("SELECT * FROM nv_legacy_script_products ORDER BY sort_order,legacy_id DESC")
             : [];
+        // Show authentic 16 imported-source products on localhost even before
+        // administrator runs the opt-in database import.
+        if (!$products) $products=NetveraBridgeService::all();
         $this->renderAdmin('admin/netvera-scripts/index',[
             'pageTitle'=>'Netvera Yazılımları',
             'products'=>$products,
-            'ready'=>NetveraBridgeService::ready()
+            'ready'=>$tablesReady
         ]);
     }
 
