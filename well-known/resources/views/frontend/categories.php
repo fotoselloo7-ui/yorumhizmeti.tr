@@ -6,8 +6,21 @@ function yvCategoryMeta(array $cat): array {
     if (str_contains($s,'youtube')) return ['youtube','youtube'];
     if (str_contains($s,'facebook')) return ['facebook','facebook'];
     if (str_contains($s,'twitter') || str_contains($s,' x ')) return ['twitter','twitter'];
+    if (str_contains($s,'threads')) return ['threads','threads'];
+    if (str_contains($s,'telegram')) return ['telegram','telegram'];
+    if (str_contains($s,'spotify')) return ['spotify','spotify'];
+    if (str_contains($s,'discord')) return ['discord','discord'];
+    if (str_contains($s,'linkedin')) return ['linkedin','linkedin'];
+    if (str_contains($s,'twitch')) return ['twitch','twitch'];
     if (str_contains($s,'google')) return ['google','google'];
     if (str_contains($s,'seo')) return ['seo','bar-chart'];
+    if (str_contains($s,'dijital reklam') || str_contains($s,'dijital-reklam')) return ['ads','ads'];
+    if (str_contains($s,'itibar')) return ['reputation','reputation'];
+    if (str_contains($s,'e-ticaret') || str_contains($s,'eticaret')) return ['ecommerce','store'];
+    if (str_contains($s,'mobil uygulama') || str_contains($s,'mobil-uygulama')) return ['mobileapp','mobile-app'];
+    if (str_contains($s,'içerik') || str_contains($s,'icerik')) return ['content','content-create'];
+    if (str_contains($s,'grafik')) return ['graphic','palette'];
+    if (str_contains($s,'yerel')) return ['local','local-business'];
     if (str_contains($s,'web') || str_contains($s,'site')) return ['web','globe'];
     return ['default',$cat['icon_key'] ?? 'package'];
 }
