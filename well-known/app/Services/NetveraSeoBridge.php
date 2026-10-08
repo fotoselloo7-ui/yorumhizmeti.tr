@@ -19,7 +19,24 @@ final class NetveraSeoBridge
             );
             $value=$row?json_decode($row['extra_json'],true):[];
             return self::$cache[$key]=is_array($value)?$value:[];
-        }catch(\Throwable $e){return [];}
+        }catch(\Throwable $e){
+          if($type==='blog'){
+            try{
+              $row=Database::getInstance()->fetch("SELECT original_author,robots,secondary_keywords,source_json FROM nv_legacy_blog_meta WHERE blog_post_id=?",[$id]);
+              if($row){
+                $source=json_decode((string)$row['source_json'],true)?:[];
+                return self::$cache[$key]=[
+                  'author_name'=>$row['original_author']??'',
+                  'author_type'=>$source['author_type']??'Organization',
+                  'author_url'=>$source['author_url']??'',
+                  'robots'=>$row['robots']??'',
+                  'secondary_keywords'=>$row['secondary_keywords']??''
+                ];
+              }
+            }catch(\Throwable $ignored){}
+          }
+          return [];
+        }
     }
 
     public static function save(string $type,int $id,array $input):void
