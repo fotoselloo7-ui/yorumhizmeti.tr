@@ -8,6 +8,8 @@ const runs = [
   { route:'/',slug:'anasayfa' },
   { route:'/kategoriler',slug:'tum-hizmetler' },
   { route:'/hazir-yazilimlar',slug:'hazir-yazilimlar' },
+  { route:'/hazir-scriptler',slug:'netvera-yazilimlar' },
+  { route:'/hazir-scriptler/haber-sitesi-scripti',slug:'netvera-haber-detay' },
   { route:'/kategori/instagram-hizmetleri',slug:'instagram' },
   { route:'/kategori/web-site-hizmetleri',slug:'web-site' },
   { route:'/paket/google-harita-yorum-toplama-baslangic-paketi-10-davet',slug:'paket-detay' },
@@ -90,6 +92,39 @@ for(const screen of screens){
             .slice(0,12).map(a=>(a.textContent||a.getAttribute('aria-label')||'').trim().slice(0,50))
         };
       });
+      // NetVera staged heritage storefront: guard real SQL facets and mobile first fold.
+      if (p.route === '/hazir-scriptler' && ['mobil','masaustu'].includes(screen.name)) {
+        const catalogueCount = await page.locator('.nv40-product-card').count();
+        if (catalogueCount !== 3) throw new Error('Netvera QA products missing: '+catalogueCount);
+        const drawer = page.locator('.nv40-filter-disclosure');
+        if (screen.name === 'mobil') {
+          if (await drawer.getAttribute('open') !== null) {
+            errors.push('Netvera mobile sidebar did not collapse'); failed = true;
+          }
+          await drawer.locator('summary').click();
+          if (await drawer.getAttribute('open') === null)
+            throw new Error('Netvera mobile filter disclosure cannot open');
+          await drawer.locator('summary').click();
+        } else {
+          const sidebar = await page.locator('.nv40-categories').boundingBox();
+          const grid = await page.locator('.nv40-product-grid').boundingBox();
+          if (!sidebar || !grid || sidebar.x + sidebar.width > grid.x + 12)
+            throw new Error('Netvera desktop catalogue not beside compact sidebar');
+        }
+        const filtered = await ctx.newPage();
+        try {
+          await filtered.goto(origin+'/hazir-scriptler?min_price=3500&sort=price_asc',{waitUntil:'domcontentloaded'});
+          const cards = await filtered.locator('.nv40-product-card h3').allTextContents();
+          if (cards.length !== 2 || !cards[0].includes('Emlak') || !cards[1].includes('Haber'))
+            throw new Error('Netvera price SQL filter or numeric sort incorrect: '+cards.join('|'));
+          await filtered.goto(origin+'/hazir-scriptler?min_rating=5',{waitUntil:'domcontentloaded'});
+          const rated = await filtered.locator('.nv40-product-card h3').allTextContents();
+          if (rated.length !== 1 || !rated[0].includes('Haber'))
+            throw new Error('Netvera approved review filter incorrect: '+rated.join('|'));
+        } finally {
+          await filtered.close();
+        }
+      }
       let switcher=null;
       if(p.route==='/' && screen.name==='masaustu'){
         const tabs=page.locator('[data-featured-tab]');
