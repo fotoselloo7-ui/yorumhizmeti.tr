@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>">
 
     <!-- Dynamic Theme Colors -->
     <?php
