@@ -1,6 +1,5 @@
 <div class="adm-page-top">
   <div><h2><?= icon('handshake',22) ?> Bayilik ve İş Ortakları</h2>
-    <p class="text-sm text-secondary">Başvuruları onaylayın, bayi seviyelerini belirleyin ve geçmiş hakları şeffaf biçimde izleyin.</p>
   </div>
   <a class="btn btn-outline btn-sm" href="/admin/netvera-musteriler"><?= icon('users',15) ?> NetVera Eski Müşterileri</a>
 </div>
@@ -16,7 +15,6 @@
     <h3><?= icon('users',18) ?> Başvurular ve İş Ortakları (<?= count($dealers) ?>)</h3>
   </div>
   <div class="adm-card-body">
-    <p class="text-sm text-secondary">Eski NetVera bayi hesabı otomatik olarak onaylanmaz. Sadece süper yönetici yeni programdaki bayilik durumunu ve oranını değiştirebilir. Komisyon ödemeleri bu ekrandan yapılmaz.</p>
     <div class="table-responsive"><table class="adm-table" style="min-width:850px">
       <thead><tr><th>Müşteri</th><th>Referans Kodu</th><th>Ziyaret</th><th>Durum</th><th>Seviye</th><th>Komisyon Oranı</th><th>İşlem</th></tr></thead>
       <tbody>
