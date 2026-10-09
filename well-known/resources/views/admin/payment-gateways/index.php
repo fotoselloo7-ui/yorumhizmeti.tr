@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('credit-card', 24) ?> Ödeme Modülleri</h2>
-        <p class="text-sm text-secondary">Online POS sağlayıcılarından sadece birini varsayılan olarak seçebilirsiniz. Havale/EFT ayrıca açılıp kapatılabilir.</p>
     </div>
 </div>
 
