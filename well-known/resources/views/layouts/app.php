@@ -76,6 +76,7 @@
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <link rel="stylesheet" href="<?= asset('css/home-service-alignment-v45.css') ?>?v=45.1">
+    <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
