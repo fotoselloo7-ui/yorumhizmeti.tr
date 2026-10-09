@@ -5,7 +5,7 @@
 </div>
 <?php if(!$ready): ?>
 <div class="adm-card" style="margin-top:20px"><div class="adm-card-body">
-  <h3><?= icon('database',18) ?> Bayilik yönetimi veritabanı kurulumu bekleniyor</h3>
+  <h3><?= icon('handshake',18) ?> Bayilik Yönetimi</h3>
   
   <?php if($canApprove): ?><form method="post" action="/admin/bayilik/kur"><?= csrfField() ?><button class="btn btn-primary" type="submit"><?= icon('database',16) ?> Bayilik Modülünü Etkinleştir</button></form><?php endif; ?>
 </div></div>
