@@ -1,7 +1,6 @@
 <div class="adm-page-top" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
   <div>
     <h2><?= icon('layers',20) ?> Netvera Yazılım Kategorileri</h2>
-    <p class="text-sm text-secondary">Eski kategori bağlantıları ve ürün slug'ları korunur. Bu bölüm hizmet paketlerinden bağımsızdır.</p>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap">
     <a class="btn btn-outline btn-sm" href="/admin/netvera-yazilimlar">Yazılımlara Dön</a>
@@ -79,7 +78,6 @@
             <label style="display:flex;align-items:center;gap:8px;margin:12px 0">
               <input type="checkbox" name="active" value="1" <?= (int)$cat['active']?'checked':'' ?>> Kategori yayında
             </label>
-            <p class="text-sm text-secondary">Önceden indekslenen kategori slug'ı, üst kategori ilişkisi ve bağlı ürünlerin URL'leri değişmez.</p>
             <button class="btn btn-primary btn-sm" type="submit"><?= icon('save',14) ?> Değişiklikleri Kaydet</button>
           </form>
         </details>
