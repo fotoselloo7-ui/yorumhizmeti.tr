@@ -17,28 +17,28 @@ INSERT INTO `payment_gateways` (`gateway_key`, `name`, `description`, `type`, `i
 
 -- ─── Banka Hesapları ───
 INSERT INTO `bank_accounts` (`bank_name`, `account_holder`, `iban`, `branch`, `status`, `sort_order`) VALUES
-('Ziraat Bankası', 'Yorum Hizmeti', 'TR00 0000 0000 0000 0000 0000 00', 'Online', 'active', 1),
-('Garanti BBVA', 'Yorum Hizmeti', 'TR00 0000 0000 0000 0000 0000 00', 'Online', 'active', 2);
+('Ziraat Bankası', 'NetVera Teknoloji Yazılım', 'TR00 0000 0000 0000 0000 0000 00', 'Online', 'active', 1),
+('Garanti BBVA', 'NetVera Teknoloji Yazılım', 'TR00 0000 0000 0000 0000 0000 00', 'Online', 'active', 2);
 
 -- ─── Site Ayarları ───
 INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
-('site_name', 'Yorum Hizmeti', 'general'),
-('site_slogan', 'Dijital Hizmetlerde Güvenilir Çözüm Ortağınız', 'general'),
+('site_name', 'NetVera Teknoloji Yazılım', 'general'),
+('site_slogan', 'Web Yazılımı, Sosyal Medya ve Dijital Pazarlama Çözümleri', 'general'),
 ('site_logo', '', 'general'),
 ('site_favicon', '', 'general'),
 ('site_email', 'info@yorumhizmeti.tr', 'general'),
 ('site_phone', '+90 500 000 00 00', 'general'),
 ('site_whatsapp', '905000000000', 'general'),
 ('site_address', 'İstanbul, Türkiye', 'general'),
-('site_url', 'https://yorumhizmeti.tr', 'general'),
-('footer_text', '© 2024 Yorum Hizmeti. Tüm hakları saklıdır.', 'general'),
+('site_url', 'https://netvera.tr', 'general'),
+('footer_text', '© NetVera Teknoloji Yazılım. Tüm hakları saklıdır.', 'general'),
 ('instagram_url', '', 'social'),
 ('facebook_url', '', 'social'),
 ('youtube_url', '', 'social'),
 ('tiktok_url', '', 'social'),
 ('x_url', '', 'social'),
-('default_seo_title', 'Yorum Hizmeti - Dijital Hizmetlerde Güvenilir Çözüm Ortağınız', 'seo'),
-('default_seo_description', 'Google, Instagram, TikTok, YouTube ve daha fazlası için profesyonel dijital hizmetler. Güvenilir, hızlı ve uygun fiyatlı çözümler.', 'seo'),
+('default_seo_title', 'NetVera Teknoloji Yazılım | Sosyal Medya, SEO ve Dijital Hizmetler', 'seo'),
+('default_seo_description', 'NetVera Teknoloji Yazılım ile Instagram, TikTok, YouTube, SEO, dijital reklam ve web çözümlerini keşfedin. Paket kapsamlarını ve hizmet koşullarını inceleyin.', 'seo'),
 ('default_og_image', '', 'seo'),
 ('maintenance_mode', '0', 'general'),
 ('header_script', '', 'scripts'),
@@ -53,14 +53,14 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 
 -- ─── Kategoriler ───
 INSERT INTO `categories` (`name`, `slug`, `description`, `icon_key`, `sort_order`, `status`, `seo_title`, `seo_description`) VALUES
-('Google Hizmetleri', 'google-hizmetleri', 'Google İşletme Profili, Google Harita ve Google SEO hizmetleri', 'globe', 1, 'active', 'Google Hizmetleri - Yorum Hizmeti', 'Profesyonel Google hizmetleri ile işletmenizi dijitalde öne çıkarın.'),
-('Instagram Hizmetleri', 'instagram-hizmetleri', 'Instagram büyüme, etkileşim ve yönetim hizmetleri', 'camera', 2, 'active', 'Instagram Hizmetleri - Yorum Hizmeti', 'Instagram hesabınızı profesyonel olarak büyütün.'),
-('TikTok Hizmetleri', 'tiktok-hizmetleri', 'TikTok büyüme ve etkileşim hizmetleri', 'video', 3, 'active', 'TikTok Hizmetleri - Yorum Hizmeti', 'TikTok hesabınızı hızla büyütün.'),
-('YouTube Hizmetleri', 'youtube-hizmetleri', 'YouTube kanal büyüme ve video tanıtım hizmetleri', 'play-circle', 4, 'active', 'YouTube Hizmetleri - Yorum Hizmeti', 'YouTube kanalınızı profesyonel olarak büyütün.'),
-('Facebook Hizmetleri', 'facebook-hizmetleri', 'Facebook sayfa yönetimi ve büyüme hizmetleri', 'thumbs-up', 5, 'active', 'Facebook Hizmetleri - Yorum Hizmeti', 'Facebook sayfanızı güçlendirin.'),
-('SEO Hizmetleri', 'seo-hizmetleri', 'Arama motoru optimizasyonu ve site içi SEO hizmetleri', 'search', 6, 'active', 'SEO Hizmetleri - Yorum Hizmeti', 'Profesyonel SEO hizmetleri ile Google''da üst sıralara çıkın.'),
-('Dijital Reklam', 'dijital-reklam', 'Google Ads, Facebook Ads ve dijital reklam yönetimi', 'target', 7, 'active', 'Dijital Reklam Hizmetleri - Yorum Hizmeti', 'Etkili dijital reklam kampanyaları ile müşterilerinize ulaşın.'),
-('İtibar Yönetimi', 'itibar-yonetimi', 'Online itibar yönetimi ve olumsuz yorum temizleme', 'shield', 8, 'active', 'İtibar Yönetimi - Yorum Hizmeti', 'Online itibarınızı profesyonel olarak yönetin.');
+('Google Hizmetleri', 'google-hizmetleri', 'Google İşletme Profili, Google Harita ve Google SEO hizmetleri', 'globe', 1, 'active', 'Google Hizmetleri - NetVera', 'Profesyonel Google hizmetleri ile işletmenizi dijitalde öne çıkarın.'),
+('Instagram Hizmetleri', 'instagram-hizmetleri', 'Instagram büyüme, etkileşim ve yönetim hizmetleri', 'camera', 2, 'active', 'Instagram Hizmetleri - NetVera', 'Instagram hesabınızı profesyonel olarak büyütün.'),
+('TikTok Hizmetleri', 'tiktok-hizmetleri', 'TikTok büyüme ve etkileşim hizmetleri', 'video', 3, 'active', 'TikTok Hizmetleri - NetVera', 'TikTok hesabınızı hızla büyütün.'),
+('YouTube Hizmetleri', 'youtube-hizmetleri', 'YouTube kanal büyüme ve video tanıtım hizmetleri', 'play-circle', 4, 'active', 'YouTube Hizmetleri - NetVera', 'YouTube kanalınızı profesyonel olarak büyütün.'),
+('Facebook Hizmetleri', 'facebook-hizmetleri', 'Facebook sayfa yönetimi ve büyüme hizmetleri', 'thumbs-up', 5, 'active', 'Facebook Hizmetleri - NetVera', 'Facebook sayfanızı güçlendirin.'),
+('SEO Hizmetleri', 'seo-hizmetleri', 'Arama motoru optimizasyonu ve site içi SEO hizmetleri', 'search', 6, 'active', 'SEO Hizmetleri - NetVera', 'Profesyonel SEO hizmetleri ile Google''da üst sıralara çıkın.'),
+('Dijital Reklam', 'dijital-reklam', 'Google Ads, Facebook Ads ve dijital reklam yönetimi', 'target', 7, 'active', 'Dijital Reklam Hizmetleri - NetVera', 'Etkili dijital reklam kampanyaları ile müşterilerinize ulaşın.'),
+('İtibar Yönetimi', 'itibar-yonetimi', 'Online itibar yönetimi ve olumsuz yorum temizleme', 'shield', 8, 'active', 'İtibar Yönetimi - NetVera', 'Online itibarınızı profesyonel olarak yönetin.');
 
 -- ─── Örnek Paketler ───
 INSERT INTO `packages` (`category_id`, `name`, `slug`, `short_description`, `description`, `price`, `discount_price`, `delivery_time`, `min_quantity`, `max_quantity`, `badge`, `status`, `sort_order`, `seo_title`, `seo_description`, `seo_focus_keyword`) VALUES
@@ -122,11 +122,11 @@ INSERT INTO `faqs` (`question`, `answer`, `sort_order`, `status`) VALUES
 
 -- ─── Sayfalar ───
 INSERT INTO `pages` (`title`, `slug`, `content`, `status`, `seo_title`, `seo_description`) VALUES
-('Hakkımızda', 'hakkimizda', '<h2>Hakkımızda</h2><p>Yorum Hizmeti olarak, dijital dünyada işletmelerin büyümesine yardımcı olan profesyonel hizmetler sunuyoruz. Google, sosyal medya, SEO ve dijital reklam alanlarında uzman ekibimizle müşterilerimize güvenilir ve etkili çözümler üretiyoruz.</p><h3>Misyonumuz</h3><p>İşletmelerin dijital varlığını güçlendirmek ve sürdürülebilir büyüme sağlamak için kaliteli, şeffaf ve güvenilir hizmet sunmaktır.</p><h3>Vizyonumuz</h3><p>Türkiye''nin en güvenilir dijital hizmet platformu olmak.</p>', 'active', 'Hakkımızda - Yorum Hizmeti', 'Yorum Hizmeti hakkında bilgi edinin. Dijital hizmetlerde güvenilir çözüm ortağınız.'),
-('Gizlilik Politikası', 'gizlilik-politikasi', '<h2>Gizlilik Politikası</h2><p>Bu gizlilik politikası, yorumhizmeti.tr web sitesinin kullanıcı verilerini nasıl topladığını, kullandığını ve koruduğunu açıklamaktadır.</p><p>Kişisel verileriniz 6698 sayılı KVKK kapsamında korunmaktadır.</p>', 'active', 'Gizlilik Politikası - Yorum Hizmeti', 'Yorum Hizmeti gizlilik politikası ve veri koruma bilgileri.'),
-('Mesafeli Satış Sözleşmesi', 'mesafeli-satis-sozlesmesi', '<h2>Mesafeli Satış Sözleşmesi</h2><p>Bu sözleşme, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında düzenlenmiştir.</p>', 'active', 'Mesafeli Satış Sözleşmesi - Yorum Hizmeti', 'Yorum Hizmeti mesafeli satış sözleşmesi.'),
-('KVKK Aydınlatma Metni', 'kvkk', '<h2>KVKK Aydınlatma Metni</h2><p>6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, kişisel verilerinizin işlenmesine ilişkin aydınlatma metnidir.</p>', 'active', 'KVKK Aydınlatma Metni - Yorum Hizmeti', 'KVKK kapsamında kişisel verilerin korunması hakkında bilgilendirme.'),
-('İade ve Teslimat Politikası', 'iade-teslimat-politikasi', '<h2>İade ve Teslimat Politikası</h2><p>Hizmet başlamadan önce tam iade yapılmaktadır. Hizmet başladıktan sonra iade koşulları değerlendirilir.</p><h3>Teslimat</h3><p>Dijital hizmetlerimiz, sipariş onayından sonra belirtilen süre içinde teslim edilmektedir.</p>', 'active', 'İade ve Teslimat Politikası - Yorum Hizmeti', 'Yorum Hizmeti iade ve teslimat politikası.');
+('Hakkımızda', 'hakkimizda', '<h2>Hakkımızda</h2><p>Yorum Hizmeti olarak, dijital dünyada işletmelerin büyümesine yardımcı olan profesyonel hizmetler sunuyoruz. Google, sosyal medya, SEO ve dijital reklam alanlarında uzman ekibimizle müşterilerimize güvenilir ve etkili çözümler üretiyoruz.</p><h3>Misyonumuz</h3><p>İşletmelerin dijital varlığını güçlendirmek ve sürdürülebilir büyüme sağlamak için kaliteli, şeffaf ve güvenilir hizmet sunmaktır.</p><h3>Vizyonumuz</h3><p>Türkiye''nin en güvenilir dijital hizmet platformu olmak.</p>', 'active', 'Hakkımızda - NetVera', 'Yorum Hizmeti hakkında bilgi edinin. Dijital hizmetlerde güvenilir çözüm ortağınız.'),
+('Gizlilik Politikası', 'gizlilik-politikasi', '<h2>Gizlilik Politikası</h2><p>Bu gizlilik politikası, yorumhizmeti.tr web sitesinin kullanıcı verilerini nasıl topladığını, kullandığını ve koruduğunu açıklamaktadır.</p><p>Kişisel verileriniz 6698 sayılı KVKK kapsamında korunmaktadır.</p>', 'active', 'Gizlilik Politikası - NetVera', 'Yorum Hizmeti gizlilik politikası ve veri koruma bilgileri.'),
+('Mesafeli Satış Sözleşmesi', 'mesafeli-satis-sozlesmesi', '<h2>Mesafeli Satış Sözleşmesi</h2><p>Bu sözleşme, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında düzenlenmiştir.</p>', 'active', 'Mesafeli Satış Sözleşmesi - NetVera', 'Yorum Hizmeti mesafeli satış sözleşmesi.'),
+('KVKK Aydınlatma Metni', 'kvkk', '<h2>KVKK Aydınlatma Metni</h2><p>6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, kişisel verilerinizin işlenmesine ilişkin aydınlatma metnidir.</p>', 'active', 'KVKK Aydınlatma Metni - NetVera', 'KVKK kapsamında kişisel verilerin korunması hakkında bilgilendirme.'),
+('İade ve Teslimat Politikası', 'iade-teslimat-politikasi', '<h2>İade ve Teslimat Politikası</h2><p>Hizmet başlamadan önce tam iade yapılmaktadır. Hizmet başladıktan sonra iade koşulları değerlendirilir.</p><h3>Teslimat</h3><p>Dijital hizmetlerimiz, sipariş onayından sonra belirtilen süre içinde teslim edilmektedir.</p>', 'active', 'İade ve Teslimat Politikası - NetVera', 'Yorum Hizmeti iade ve teslimat politikası.');
 
 -- ─── Mail Şablonları ───
 INSERT INTO `email_templates` (`template_key`, `name`, `subject`, `body`, `variables`, `status`) VALUES
