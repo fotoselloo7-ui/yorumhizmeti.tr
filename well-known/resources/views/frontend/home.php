@@ -971,6 +971,16 @@ if (!empty($projectReferences)) {
  const cards=Array.from(root.querySelectorAll('[data-ref-card]'));
  const formatPanel=root.querySelector('[data-ref-format-panel]');
  const empty=root.querySelector('[data-ref-empty]');
+ function resetPlayer(card){
+   const slot=card.querySelector('[data-embed-slot]');
+   const preview=card.querySelector('[data-ref-play]');
+   if(!slot||slot.hidden)return;
+   slot.replaceChildren();
+   slot.hidden=true;
+   if(preview)preview.hidden=false;
+   card.classList.remove('nv51-is-playing');
+ }
+
  let group=groups.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.refGroup||'agency';
  let service='all',format='all';
  function apply(){
@@ -990,6 +1000,7 @@ if (!empty($projectReferences)) {
      const permitted=card.dataset.refGroup===group &&
        (service==='all'||card.dataset.refService===service) &&
        (!social||format==='all'||(format==='reels'?t==='instagram_reel':t==='instagram_post'||t==='image'));
+     if(!permitted)resetPlayer(card);
      card.hidden=!permitted;
      if(permitted)found++;
    });
@@ -1005,11 +1016,12 @@ if (!empty($projectReferences)) {
    try{const u=new URL(url);if(u.protocol!=='https:'||u.hostname!=='www.instagram.com'||!/^\/(?:p|reel)\/[A-Za-z0-9_-]+\/embed\/$/.test(u.pathname))return;}catch(e){return}
    const slot=button.parentElement.querySelector('[data-embed-slot]');if(!slot)return;
    const frame=document.createElement('iframe');
-   frame.src=url;frame.title='Instagram gönderisi';frame.loading='lazy';
-   frame.allow='encrypted-media; picture-in-picture';
+   frame.src=url+'?autoplay=1';frame.title='Instagram gönderisi';frame.loading='lazy';
+   frame.allow='autoplay; encrypted-media; picture-in-picture';
    frame.referrerPolicy='strict-origin-when-cross-origin';
    frame.setAttribute('allowfullscreen','');
    button.hidden=true;slot.hidden=false;slot.appendChild(frame);
+   button.closest('[data-ref-card]')?.classList.add('nv51-is-playing');
  }));
  apply();
 })();
