@@ -14,17 +14,13 @@
     <?php endif; ?>
   </div>
 </div>
-<div class="adm31-help">
-  <strong><?= icon('info',16) ?> Kurulum ve yayın akışı</strong>
-  <p>Aktif ve adı yazılım/script olan ürünler ilk kayıttan itibaren otomatik yayınlanır. Özel sıralama için aşağıdan istediğin paketleri seçebilirsin. Eski Web Site kategorilerine eklenmiş yazılım ürünleri de algılanır. Yeni sektör kategorilerini aşağıdaki butonla oluşturabilirsin.</p>
-</div>
 <div class="adm-card">
   <div class="adm-card-header"><h3><?= icon('layers',18) ?> Hazır Yazılım Kategorileri</h3></div>
   <div class="adm-card-body">
     <div class="adm31-setup-row">
       <div>
         <strong><?= $root ? e($root['name']) : 'Hazır Yazılımlar & Scriptler' ?></strong>
-        <p><?= $root ? 'Ana kategori kayıtlı. Eksik alt kategorileri güvenle tamamlayabilirsiniz.' : 'Yeni ana kategori henüz mevcut veritabanında kurulmamış.' ?></p>
+        <p><?= $root ? 'Ana kategori kayıtlı. Eksik alt kategorileri güvenle tamamlayabilirsiniz.' : 'Yazılım kategorilerini buradan yönetebilirsiniz.' ?></p>
         <small>Toplam <?= count($categories) ?> planlı alt kategori · Mevcut kategorilerin başlıkları, sıraları ve içerikleri değiştirilmez.</small>
       </div>
       <form method="POST" action="/admin/hazir-yazilimlar/kategorileri-kur" onsubmit="return confirm('Eksik yazılım kategorilerini oluşturmak istiyor musunuz? Mevcut kategoriler korunur.')">
