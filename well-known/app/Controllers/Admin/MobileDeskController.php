@@ -73,7 +73,7 @@ final class MobileDeskController extends Controller
         }else{
             $row=$this->db->fetch("SELECT o.id,o.order_number,o.order_status,o.payment_status,o.total_amount,o.created_at,u.name AS visitor_name
                  FROM orders o LEFT JOIN users u ON u.id=o.user_id WHERE o.id=?",[$num]);
-            $messages=$row?$this->db->fetchAll("SELECT package_name,quantity,unit_price,total_price FROM order_items WHERE order_id=? ORDER BY id",[$num]):[];
+            $messages=$row?$this->db->fetchAll("SELECT package_name,quantity,price,total FROM order_items WHERE order_id=? ORDER BY id",[$num]):[];
         }
         if(!$row){$this->send(['error'=>'Kayıt bulunamadı'],404);return;}
         $this->send(['ok'=>true,'item'=>$row,'messages'=>$messages]);
