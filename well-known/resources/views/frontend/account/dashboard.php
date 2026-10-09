@@ -48,6 +48,8 @@
                     </div>
                 </div>
 
+                <?php include __DIR__.'/partials/netvera-owned-software.php'; ?>
+
                 <?php include __DIR__.'/partials/netvera-legacy-history.php'; ?>
 
                 <!-- Quick Actions -->
