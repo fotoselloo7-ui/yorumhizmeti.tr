@@ -51,6 +51,17 @@ verify(Refs::externalPlayer('https://youtu.be/dQw4w9WgXcQ')['url']
     'YouTube share URL converts to privacy-enhanced on-site embed');
 verify(Refs::externalPlayer('https://www.youtube.com/shorts/dQw4w9WgXcQ')['provider']==='YouTube',
     'YouTube Shorts URL supported');
+verify(Refs::externalPlayer('https://www.youtube.com/shorts/dQw4w9WgXcQ')['aspect']==='portrait',
+    'YouTube Shorts link gives 9:16 modal');
+verify(Refs::externalPlayer('https://m.youtube.com/shorts/dQw4w9WgXcQ?feature=share')['aspect']==='portrait',
+    'mobile YouTube Shorts share link gives 9:16 modal');
+verify(Refs::externalPlayer('https://www.youtube.com/watch?v=dQw4w9WgXcQ')['aspect']==='landscape',
+    'normal YouTube watch link gives 16:9 modal');
+verify(Refs::externalPlayer('https://youtu.be/dQw4w9WgXcQ')['aspect']==='landscape',
+    'short share URL defaults to standard YouTube 16:9');
+verify(Refs::externalPlayer('https://www.youtube.com/embed/dQw4w9WgXcQ')['aspect']==='landscape',
+    'YouTube iframe URLs remain widescreen');
+
 verify(Refs::externalPlayer('https://vimeo.com/123456789')['type']==='iframe',
     'Vimeo share URL supported');
 verify(Refs::externalPlayer('https://vimeo.com/123456789/abcde12345')['url']
