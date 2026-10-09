@@ -48,6 +48,14 @@ final class NetveraBrandSettings
             'web yazılımı, sosyal medya ve dijital pazarlama çözümleri',
             'google yorum, sosyal medya ve dijital güven hizmetleri'
         ],true) || (str_contains($lower,'google yorum') && str_contains($lower,'sosyal medya'));
+        // The previous platform used long Google Yorum + social-media marketing
+        // titles in the DB, including ones prefixed by the new company name.
+        // Match ONLY global site/meta defaults, never per-product editorial SEO.
+        if(in_array($key,['default_seo_title','default_seo_description',
+                          'seo_og_title','seo_og_description','brand_positioning'],true)){
+            if(preg_match('/google\\s+yorum|yorum\\s+(?:sat[ıi]n|hizmet|ve\\s+sosyal)|dijital\\s+güven\\s+hizmet/iu',$value))
+                return true;
+        }
         if($key==='default_seo_title'||$key==='seo_og_title')return in_array($lower,[
             'netvera teknoloji yazılım | sosyal medya, seo ve dijital hizmetler',
             'netvera teknoloji yazılım'
