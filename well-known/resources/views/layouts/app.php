@@ -89,7 +89,7 @@
     <link rel="stylesheet" href="<?= asset('css/reviews-v68.css') ?>?v=68.1">
 
     <link rel="stylesheet" href="<?= asset('css/theme-runtime-v71.css') ?>?v=71.1">
-    <link rel="stylesheet" href="<?= asset('css/netvera-premium-v76.css') ?>?v=76.2">
+    <link rel="stylesheet" href="<?= asset('css/netvera-premium-v76.css') ?>?v=76.3">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
