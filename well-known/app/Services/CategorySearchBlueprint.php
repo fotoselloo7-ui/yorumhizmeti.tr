@@ -261,10 +261,71 @@ final class CategorySearchBlueprint {
     'answer' => 'Ürün verileri, kategori yapısı, fiyat ve stok yönetimi, ödeme deneyimi, analitik ve müşteri hizmetleri birlikte değerlendirilir.',  ],
 ];
   }
+  /**
+   * Resolve real-world category variations without creating routes or rewriting existing slugs.
+   * More specific purchase intents take precedence over generic platform categories.
+   */
+  public static function profileForCategory(array $category): ?array {
+    if(self::isSoftware($category))return null;
+    $profiles=self::profiles();
+    $slug=mb_strtolower(trim((string)($category['slug']??'')),'UTF-8');
+    if(isset($profiles[$slug]))return $profiles[$slug];
+    $name=mb_strtolower(trim((string)($category['name']??'')),'UTF-8');
+    $text=$slug.' '.$name;
+    $has=static fn(string $term):bool=>str_contains($text,$term);
+    foreach([
+       ['instagram',['instagram'],[
+         ['instagram-reels-izlenme',['reels','izlenme']],
+         ['instagram-takipci',['takipçi','takipci','takipc','followers']],
+         ['instagram-begeni',['beğeni','begeni','begeni']],
+         ['instagram-yorum',['yorum','comment']],
+         ['instagram-hizmetleri',[]]
+       ]],
+       ['tiktok',['tiktok','tik-tok'],[
+         ['tiktok-takipci',['takipçi','takipci','takipc']],
+         ['tiktok-izlenme',['izlenme','görüntülenme','goruntulenme']],
+         ['tiktok-hizmetleri',[]]
+       ]],
+       ['youtube',['youtube'],[
+         ['youtube-abone',['abone','subscriber']],
+         ['youtube-izlenme',['izlenme','görüntülenme','goruntulenme']],
+         ['youtube-hizmetleri',[]]
+       ]],
+       ['facebook',['facebook'],[
+         ['facebook-begeni',['beğeni','begeni']],
+         ['facebook-hizmetleri',[]]
+       ]]
+    ] as [$platform,$aliases,$rules]) {
+      if(!array_filter($aliases,$has))continue;
+      foreach($rules as [$profileKey,$terms]) {
+        if(!$terms || array_filter($terms,$has))
+          return $profiles[$profileKey]??null;
+      }
+    }
+    foreach([
+      'threads'=>'threads-hizmetleri','telegram'=>'telegram-hizmetleri',
+      'twitter'=>'twitter-hizmetleri','spotify'=>'spotify-hizmetleri',
+      'discord'=>'discord-hizmetleri','linkedin'=>'linkedin-hizmetleri',
+      'twitch'=>'twitch-hizmetleri'
+    ] as $phrase=>$profileKey){
+      if($has($phrase))return $profiles[$profileKey]??null;
+    }
+    if($has('sosyal')&&($has('yönetim')||$has('yonetim')))return $profiles['sosyal-medya-yonetimi']??null;
+    if($has('sosyal medya'))return $profiles['sosyal-medya-hizmetleri']??null;
+    if($has('yerel')&&$has('seo'))return $profiles['yerel-seo']??null;
+    if($has('google')&&($has('harita')||$has('işletme')||$has('isletme')))return $profiles['google-hizmetleri']??null;
+    if($has('seo'))return $profiles['seo-hizmetleri']??null;
+    if($has('reklam'))return $profiles['dijital-reklam']??null;
+    if($has('itibar'))return $profiles['itibar-yonetimi']??null;
+    if($has('grafik')||$has('tasarım'))return $profiles['grafik-tasarim']??null;
+    if($has('içerik')||$has('icerik'))return $profiles['icerik-uretimi']??null;
+    return null;
+  }
+
   /** Server-side launch defaults for unedited service categories. URL, product data and software categories remain untouched. */
   public static function decorate(array $category): array {
     if(self::isSoftware($category))return $category;
-    $profile=self::profiles()[strtolower((string)($category['slug']??''))]??null;
+    $profile=self::profileForCategory($category);
     if(!$profile)return $category;
     $title=trim((string)($category['seo_title']??''));
     if($title==='' || preg_match('/Yorum\s*Hizmeti|YorumHizmeti/iu',$title))
@@ -285,7 +346,8 @@ final class CategorySearchBlueprint {
     foreach($categories as $row) {
       $slug=strtolower((string)$row['slug']);
       if(self::isSoftware($row))continue;
-      if(isset($profiles[$slug]))$found[]=array_merge($row,['suggestion'=>$profiles[$slug]]);
+      $profile=self::profileForCategory($row);
+      if($profile)$found[]=array_merge($row,['suggestion'=>$profile]);
     }
     return $found;
   }
