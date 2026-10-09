@@ -901,15 +901,19 @@ if (!empty($projectReferences)) {
         $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
         $embedUrl = \App\Services\ReferencesService::instagramEmbed((string)($ref['url']??''), $refMedia);
         $hasInstagram = $embedUrl !== null;
-        $hostedPlayer = $hasInstagram
-            ? \App\Services\ReferencesService::externalPlayer((string)($ref['external_video_url'] ?? ''))
-            : null;
+        $isYouTube = $refMedia === 'youtube_video';
+        $hostedPlayer = $isYouTube
+            ? \App\Services\ReferencesService::externalPlayer((string)($ref['url'] ?? ''))
+            : ($hasInstagram ? \App\Services\ReferencesService::externalPlayer((string)($ref['external_video_url'] ?? '')) : null);
         $localVideo = (string)($ref['video'] ?? '');
         // Only first-party files written by the reference upload endpoint may play natively.
         if (!preg_match('~^/uploads/references/videos/[A-Za-z0-9_.-]+\.(?:mp4|webm)$~D', $localVideo)) {
             $localVideo = '';
         }
+        $hasVideoMedia = $hasInstagram || $isYouTube;
         $isWebsite = $refMedia === 'website' && !empty($ref['url']);
+        $hasOnsitePlayer = $hasVideoMedia && (!empty($hostedPlayer) || $localVideo !== '');
+        $instagramOnly = $hasInstagram && !$hasOnsitePlayer;
         $cover = (string)($ref['image']??'');
         $logo = (string)($ref['logo']??'');
         $target = trim((string)($ref['url']??''));
@@ -925,8 +929,7 @@ if (!empty($projectReferences)) {
                data-ref-card
                data-ref-placements="<?= e(json_encode($refPublicPlacements, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"
                data-ref-kind="<?= e($refMedia) ?>"
-               <?php if ($hasInstagram): ?>
-               data-ref-embed="<?= e($embedUrl) ?>"
+               <?php if ($hasVideoMedia): ?>
                data-ref-external-url="<?= e($hostedPlayer['url'] ?? '') ?>"
                data-ref-external-type="<?= e($hostedPlayer['type'] ?? '') ?>"
                data-ref-external-provider="<?= e($hostedPlayer['provider'] ?? '') ?>"
@@ -939,18 +942,23 @@ if (!empty($projectReferences)) {
            aria-label="<?= e($ref['title']) ?> müşteri sitesine git">
         <?php endif; ?>
 
-        <div class="nv31-portfolio-image nv51-cover <?= $hasInstagram?'nv51-instagram-media':'' ?>">
-          <?php if ($hasInstagram): ?>
+        <div class="nv31-portfolio-image nv51-cover <?= $hasVideoMedia?'nv51-instagram-media':'' ?>">
+          <?php if ($hasVideoMedia): ?>
+          <?php if ($instagramOnly): ?>
+          <a class="nv51-play-embed" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
+             aria-label="<?= e($ref['title']) ?> videosunu Instagram'da izle (yeni sekme)">
+          <?php else: ?>
           <button type="button" class="nv51-play-embed" data-ref-play
-                  aria-label="<?= e($ref['title']) ?> <?= $refMedia==='instagram_reel'?'Reels videosunu':'Instagram gönderisini' ?> kendi penceremizde oynat">
+                  aria-label="<?= e($ref['title']) ?> videosunu sitemizde izle">
+          <?php endif; ?>
             <?php if ($cover): ?>
               <img src="<?= e(upload_url($cover)) ?>" alt="<?= e($ref['title']) ?> kapak görseli" loading="lazy" decoding="async">
             <?php else: ?>
-              <span class="nv51-social-placeholder"><?= icon('instagram',35) ?></span>
+              <span class="nv51-social-placeholder"><?= icon($isYouTube?'youtube':'instagram',35) ?></span>
             <?php endif; ?>
-            <span class="nv51-play-icon"><?= icon($refMedia==='instagram_reel'?'play':'instagram',23) ?></span>
-            <span class="nv51-media-tag"><?= e($refMedia==='instagram_reel'?'Reels':'Instagram Post') ?></span>
-          </button>
+            <span class="nv51-play-icon"><?= icon($refMedia==='instagram_post'?'instagram':'play',23) ?></span>
+            <span class="nv51-media-tag"><?= e($isYouTube?'YouTube Video':($refMedia==='instagram_reel'?'Reels':'Instagram Post')) ?></span>
+          <?php if ($instagramOnly): ?></a><?php else: ?></button><?php endif; ?>
 
           <?php else: ?>
             <?php if ($cover): ?>
@@ -970,13 +978,16 @@ if (!empty($projectReferences)) {
         </div>
 
         <div class="nv31-portfolio-body nv51-reference-body">
-          <span class="nv31-portfolio-kind"><?= icon($hasInstagram?'instagram':($isWebsite?'globe':'layers'),12) ?> <span data-ref-service-label><?= e($serviceLabel) ?></span></span>
+          <span class="nv31-portfolio-kind"><?= icon($isYouTube?'youtube':($hasInstagram?'instagram':($isWebsite?'globe':'layers')),12) ?> <span data-ref-service-label><?= e($serviceLabel) ?></span></span>
           <h3><?= e($ref['title']) ?></h3>
           <?php if(!empty($ref['description'])): ?><p><?= e($ref['description']) ?></p><?php endif; ?>
           <?php if($isWebsite): ?>
             <span class="nv51-reference-action">Müşteri Sitesini Ziyaret Et <?= icon('arrow-up-right',13) ?></span>
-          <?php elseif ($hasInstagram): ?>
-            <button type="button" class="nv51-reference-action nv52-watch-action" data-ref-play><?= icon('play',12) ?> Videoyu Sitemizde İzle <?= icon('arrow-right',12) ?></button>
+          <?php elseif ($instagramOnly): ?>
+            <a class="nv51-reference-action nv52-watch-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
+               aria-label="<?= e($ref['title']) ?> videosunu Instagram'da izle (yeni sekme)"><?= icon('play',12) ?> Videoyu İzle <?= icon('arrow-up-right',12) ?></a>
+          <?php elseif ($hasOnsitePlayer): ?>
+            <button type="button" class="nv51-reference-action nv52-watch-action" data-ref-play><?= icon('play',12) ?> Videoyu İzle <?= icon('arrow-right',12) ?></button>
           <?php elseif ($target): ?>
             <a class="nv51-reference-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer">Çalışmayı Gör <?= icon('arrow-up-right',13) ?></a>
           <?php endif; ?>
@@ -1045,12 +1056,11 @@ if (!empty($projectReferences)) {
  }
  function openPlayer(card,trigger){
    if(!card||!modal||!stage)return;
-   const embed=card.dataset.refEmbed||'';
    const videoPath=card.dataset.refVideo||'';
    const externalUrl=card.dataset.refExternalUrl||'';
    const externalType=card.dataset.refExternalType||'';
    const externalProvider=card.dataset.refExternalProvider||'';
-   if(!embed && !videoPath && !externalUrl)return;
+   if(!videoPath && !externalUrl)return;
    previousFocus=trigger;
    clearPlayer();
    modalTitle.textContent=card.dataset.refTitle||'Referans videosu';
@@ -1101,25 +1111,6 @@ if (!empty($projectReferences)) {
      if(note)note.textContent='Video burada, kendi oynatıcımızda açılıyor.';
      modal.showModal();
      video.play().catch(()=>{});
-   }else{
-     let url;
-     try{
-       url=new URL(embed);
-       if(url.protocol!=='https:'||url.hostname!=='www.instagram.com'||
-          !new RegExp('^/(?:p|reel)/[A-Za-z0-9_-]+/embed/$').test(url.pathname))return;
-     }catch(e){return}
-     const frame=document.createElement('iframe');
-     frame.title='Instagram içerik oynatıcısı';
-     frame.src=url.href;
-     frame.loading='eager';
-     frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
-     frame.referrerPolicy='strict-origin-when-cross-origin';
-     // Never permit the embedded player to send visitors to instagram.com.
-     frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-presentation');
-     frame.setAttribute('allowfullscreen','');
-     stage.appendChild(frame);
-     if(note)note.textContent='Instagram, Reels oynatmayı dış sitelerde engelleyebiliyor. Kesintisiz izleme için admin paneline harici bir YouTube, Bunny Stream veya Cloudflare Stream bağlantısı ekleyin; bizim sunucuya MP4 yüklemek gerekmez.';
-     modal.showModal();
    }
  }
 
@@ -1143,7 +1134,7 @@ if (!empty($projectReferences)) {
      try{placements=JSON.parse(card.dataset.refPlacements||'[]')}catch(e){placements=[]}
      const matched=placements.find(p=>p.group===group && (service==='all'||p.service===service));
      const permitted=!!matched &&
-       (!social||format==='all'||(format==='reels'?t==='instagram_reel':t==='instagram_post'||t==='image'));
+       (!social||format==='all'||(format==='reels'?t==='instagram_reel'||t==='youtube_video':t==='instagram_post'||t==='image'));
      if(matched){
        const label=card.querySelector('[data-ref-service-label]');
        if(label)label.textContent=matched.label||'Dijital Proje';
