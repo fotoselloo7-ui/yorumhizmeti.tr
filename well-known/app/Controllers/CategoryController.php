@@ -53,6 +53,7 @@ class CategoryController extends Controller
               AND (c.parent_id IS NULL OR parent.status = 'active')
         ", [$slug]);
         if (!$category) { $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
+        $category = \App\Services\CategorySearchBlueprint::decorate($category);
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
 
