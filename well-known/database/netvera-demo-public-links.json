@@ -1,0 +1,54 @@
+{
+  "note": "Only explicitly public demo destinations; credentials are excluded from this public repository.",
+  "demos": [
+    {
+      "slug": "hafriyat-yazilimi",
+      "demo_url": "https://demokepce.netvera.tr",
+      "demo_admin_url": "https://demokepce.netvera.tr/yonetim"
+    },
+    {
+      "slug": "bobinajci-sitesi-yazilimi",
+      "demo_url": "https://bobinajcisitesi.netvera.tr",
+      "demo_admin_url": "https://bobinajcisitesi.netvera.tr/admin"
+    },
+    {
+      "slug": "netvera-smm-panel-paket-satis-scripti",
+      "demo_url": "https://smmpaketsatis.netvera.tr",
+      "demo_admin_url": "https://smmpaketsatis.netvera.tr/admin"
+    },
+    {
+      "slug": "mimarlik-ic-mimarlik-web-site-scripti",
+      "demo_url": "https://mimar.netvera.tr",
+      "demo_user_url": "https://mimar.netvera.tr/admin"
+    },
+    {
+      "slug": "oto-cekici-yazilimi",
+      "demo_url": "https://otocekici.netvera.tr",
+      "demo_admin_url": "https://otocekici.netvera.tr/admin"
+    },
+    {
+      "slug": "haber-sitesi-scripti",
+      "demo_url": "https://guncelgundem.tr"
+    },
+    {
+      "slug": "netvera-nakliye-script-yazilimi-pro",
+      "demo_url": "https://nakliye.netvera.tr/",
+      "demo_admin_url": "https://nakliye.netvera.tr/admin"
+    },
+    {
+      "slug": "netvera-temizlik-firmasi-script-yazilimi-pro",
+      "demo_url": "https://temizlikci.netvera.tr/",
+      "demo_admin_url": "https://temizlikci.netvera.tr/admin"
+    },
+    {
+      "slug": "netvera-emlak-script-yazilimi-pro",
+      "demo_url": "https://emlak.netvera.tr",
+      "demo_admin_url": "https://emlak.netvera.tr/admin"
+    },
+    {
+      "slug": "insaat-firmasi-scripti",
+      "demo_url": "https://insaat.netvera.tr",
+      "demo_admin_url": "https://insaat.netvera.tr/admin"
+    }
+  ]
+}
