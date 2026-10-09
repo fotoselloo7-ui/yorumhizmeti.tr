@@ -156,7 +156,7 @@ if ($nv60ShowAccounts) {
         </section>
         <?php endif; ?>
         <?php if($nv40InquiryReady): ?>
-          <section class="nv40-info-card nv60-offer-panel" id="teklif-al" role="tabpanel" aria-labelledby="nv60-tab-teklif-al" tabindex="0" data-nv60-panel="teklif-al">
+          <section class="nv40-info-card nv60-offer-panel nv-product-offer" id="teklif-al" role="tabpanel" aria-labelledby="nv60-tab-teklif-al" tabindex="0" data-nv60-panel="teklif-al">
             <h2><?= icon('message-square',16) ?> Bu Yazılım İçin Teklif Alın</h2>
             <p>Kurulum, lisans ve proje detaylarını birlikte netleştirelim. Talebinizi satış ekibimize iletin; sizinle kurulum ve lisans seçeneklerini görüşelim.</p>
             <form method="post" action="/netvera/canli-destek/gonder">
