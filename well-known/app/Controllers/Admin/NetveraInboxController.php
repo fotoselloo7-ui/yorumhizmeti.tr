@@ -54,6 +54,38 @@ final class NetveraInboxController extends Controller
         ]);
     }
 
+    /** Original desktop live-chat experience, alongside (not replaced by) the mobile PWA. */
+    public function conversation(string $id):void
+    {
+        header('Cache-Control: private, no-store');
+        header('X-Robots-Tag: noindex');
+        $num=ctype_digit($id)?(int)$id:0;
+        $row=$num>0&&Inbox::ready()?$this->db->fetch(
+            "SELECT id,source_type,visitor_name,visitor_contact,status,updated_at
+             FROM nv_public_inquiries WHERE id=? AND source_type='chat' LIMIT 1",[$num]
+        ):null;
+        if(!$row){$this->json(['ok'=>false,'message'=>'Sohbet bulunamadı.'],404);return;}
+        $this->json(['ok'=>true,'chat'=>$row,'messages'=>Inbox::replies($num)]);
+    }
+
+    public function conversationReply(string $id):void
+    {
+        header('Cache-Control: private, no-store');
+        Csrf::check();
+        $num=ctype_digit($id)?(int)$id:0;
+        $row=$num>0&&Inbox::ready()?$this->db->fetch(
+            "SELECT id FROM nv_public_inquiries WHERE id=? AND source_type='chat' LIMIT 1",[$num]
+        ):null;
+        if(!$row){$this->json(['ok'=>false,'message'=>'Sohbet bulunamadı.'],404);return;}
+        $message=trim((string)($_POST['message']??''));
+        if(mb_strlen($message,'UTF-8')<2||mb_strlen($message,'UTF-8')>3000){
+            $this->json(['ok'=>false,'message'=>'Mesaj 2–3000 karakter olmalı.'],422);return;
+        }
+        Inbox::reply($num,'admin',$message);
+        logActivity('netvera_inbox_inline_reply','Canlı sohbet yanıtı: #'.$num);
+        $this->json(['ok'=>true]);
+    }
+
     public function reply(string $id):void
     {
         Csrf::check();
