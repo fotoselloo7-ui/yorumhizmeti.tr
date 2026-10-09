@@ -366,16 +366,72 @@
             <?php foreach ($nv26ExtraLinks as $navItem): ?>
               <a class="nv26-simple-link <?= isActive($navItem['url']) ? 'active':'' ?>" href="<?= e($navItem['url']) ?>"><?= e($navItem['label']) ?></a>
             <?php endforeach; ?>
-            <?php if (!empty($nv26QuickLinks)): ?>
-            <details class="nv26-quick">
-              <summary><?= icon('grid', 14) ?> Hızlı Erişim <?= icon('chevron-down', 11) ?></summary>
-              <div class="nv26-quick-list">
-                <?php foreach ($nv26QuickLinks as $navItem): ?>
-                <a href="<?= e($navItem['url']) ?>"><?= e($navItem['label']) ?></a>
-                <?php endforeach; ?>
+            <?php
+              // Active live categories, categorized exactly like the main mega menu.
+              // Prefer the administrator's enabled custom quick links when present.
+              $nv56QuickGroups = [];
+              $nv56Visible = array_fill_keys(array_map(static fn($item) => (string)$item['url'], $nv26QuickLinks), true);
+              foreach ($nv26Groups as $nv56Group) {
+                  $nv56Choices = [];
+                  foreach ($nv56Group['categories'] as $nv56Cat) {
+                      $nv56Link = (string)($nv56Cat['url'] ?? '');
+                      if ($nv56Link === '') continue;
+                      // If the admin explicitly configured shortcuts for this group,
+                      // show only enabled shortcuts; otherwise choose popular live roots.
+                      $nv56Choices[] = [
+                          'label' => (string)$nv56Cat['name'],
+                          'url' => $nv56Link,
+                          'icon' => (string)($nv56Cat['icon'] ?? 'package'),
+                          'explicit' => isset($nv56Visible[$nv56Link])
+                      ];
+                  }
+                  usort($nv56Choices, static fn($a,$b) => ((int)$b['explicit'] <=> (int)$a['explicit']));
+                  if ($nv56Choices) {
+                      $nv56QuickGroups[] = [
+                          'key' => (string)$nv56Group['key'],
+                          'label' => (string)$nv56Group['short'],
+                          'icon' => (string)$nv56Group['icon'],
+                          'links' => array_slice($nv56Choices,0,4)
+                      ];
+                  }
+              }
+              $nv56Actions = [
+                 ['url' => '/siparislerim', 'label' => 'Siparişlerim', 'icon' => 'package'],
+                 ['url' => '/destek', 'label' => 'Destek Merkezi', 'icon' => 'headphones'],
+                 ['url' => '/hazir-scriptler', 'label' => 'Hazır Yazılımlar', 'icon' => 'monitor']
+              ];
+            ?>
+            <details class="nv26-quick nv56-quick">
+              <summary aria-label="Hızlı erişim menüsünü aç">
+                <?= icon('grid', 14) ?> Hızlı Erişim <?= icon('chevron-down', 11) ?>
+              </summary>
+              <div class="nv26-quick-list nv56-quick-panel">
+                <div class="nv56-quick-top">
+                    <strong><?= icon('zap', 16) ?> Sık Kullanılan İşlemler</strong>
+                    <small>Hizmet, sipariş ve desteğe tek tıkla ulaşın.</small>
+                </div>
+                <div class="nv56-quick-actions" aria-label="Hızlı işlemler">
+                  <?php foreach ($nv56Actions as $nv56Action): ?>
+                  <a href="<?= e($nv56Action['url']) ?>" class="nv56-quick-action">
+                    <?= icon($nv56Action['icon'],16) ?><span><?= e($nv56Action['label']) ?></span><?= icon('arrow-up-right',12) ?>
+                  </a>
+                  <?php endforeach; ?>
+                </div>
+                <div class="nv56-quick-groups">
+                  <?php foreach ($nv56QuickGroups as $nv56Group): ?>
+                  <section class="nv56-quick-group" aria-label="<?= e($nv56Group['label']) ?>">
+                    <h3><?= icon($nv56Group['icon'],14) ?> <?= e($nv56Group['label']) ?></h3>
+                    <?php foreach ($nv56Group['links'] as $nv56Link): ?>
+                    <a href="<?= e($nv56Link['url']) ?>" class="nv56-quick-category">
+                      <?= icon($nv56Link['icon'],14) ?><span><?= e($nv56Link['label']) ?></span>
+                    </a>
+                    <?php endforeach; ?>
+                  </section>
+                  <?php endforeach; ?>
+                </div>
+                <a class="nv56-quick-all" href="/kategoriler">Tüm aktif kategorileri görüntüle <?= icon('arrow-right',14) ?></a>
               </div>
             </details>
-            <?php endif; ?>
           </div>
         </div>
       </div>
