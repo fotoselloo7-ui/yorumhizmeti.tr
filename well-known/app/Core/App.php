@@ -87,6 +87,9 @@ class App
         $r->post('/hesabim/guncelle', 'AccountController@update');
         $r->post('/hesabim/sifre-degistir', 'AccountController@changePassword');
         $r->get('/siparislerim', 'AccountController@orders');
+        $r->get('/bayilik', 'DealerController@index');
+        $r->post('/bayilik/basvur', 'DealerController@apply');
+        $r->get('/bayi/{code}', 'DealerController@referral');
         $r->get('/siparis/{id}', 'AccountController@orderDetail');
 
         // Destek
@@ -220,6 +223,8 @@ class App
         $r->post('/admin/banka-hesabi/kaydet', 'Admin\\SettingsController@storeBankAccount');
         $r->post('/admin/banka-hesabi/{id}/sil', 'Admin\\SettingsController@deleteBankAccount');
         $r->get('/admin/netvera-musteriler', 'Admin\\NetveraCustomersController@index');
+        $r->get('/admin/bayilik', 'Admin\\DealerController@index');
+        $r->post('/admin/bayilik/{id}/karar', 'Admin\\DealerController@review');
         $r->get('/admin/uyeler', 'Admin\\SettingsController@users');
         $r->get('/admin/admin-kullanicilari', 'Admin\\SettingsController@adminUsers');
         $r->get('/admin/sayfalar', 'Admin\\SettingsController@pages');
