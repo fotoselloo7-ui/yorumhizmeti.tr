@@ -32,7 +32,7 @@
                 </select>
             </div>
             
-            <p class="form-hint">Merchant Key ve Salt alanlarını boş bırakırsanız kayıtlı bilgiler korunur.</p>
+            
             <button type="submit" class="adm-action-btn adm-btn-save" style="width: 100%; justify-content: center; margin-top: 1.5rem;">
                 <?= icon('save', 16) ?> Ayarları Kaydet
             </button>
