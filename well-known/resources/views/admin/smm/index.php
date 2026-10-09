@@ -5,7 +5,7 @@ $esc = static fn($value) => e((string)$value);
 <div class="smm-admin">
   <div class="adm-page-top">
     <div class="adm-page-top-left"><div><h2>Servis &amp; API Merkezi</h2>
-      <p class="text-secondary">Tedarikçi kataloglarını içeride yönetin; müşteriye yalnızca kendi markanız, paket içeriğiniz ve satış fiyatınız gösterilir.</p></div></div>
+      </div></div>
     <?php if ($ready): ?>
     <form method="post" action="/admin/smm/calistir"><?= csrfField() ?>
       <button class="btn btn-primary" type="submit"><?= icon('refresh-cw',16) ?> Sipariş Kuyruğunu Çalıştır</button>
@@ -15,7 +15,7 @@ $esc = static fn($value) => e((string)$value);
 
   <?php if (!$ready): ?>
   <div class="adm-card"><div class="adm-card-body">
-    <h3>İlk kurulum</h3><p>Yalnızca yeni entegrasyon tabloları eklenir. Mevcut ürünler, kullanıcılar ve SEO adresleri korunur.</p>
+    <h3>SMM Modülünü Etkinleştir</h3>
     <form method="post" action="/admin/smm/kur"><?= csrfField() ?><button class="btn btn-primary" type="submit">Veritabanı Modülünü Kur</button></form>
   </div></div>
   <?php else: ?>
@@ -29,11 +29,11 @@ $esc = static fn($value) => e((string)$value);
   <?php if ($canEditProviders): ?>
   <div class="adm-card" id="smm-providers"><div class="adm-card-header"><h3><?= icon('plug',18) ?> Tedarikçi API Bağlantısı</h3></div>
    <div class="adm-card-body">
-    <p class="text-secondary">Standart API v2 (POST + form-encoded) desteklenir. Anahtar sunucu tarafında AES-256-GCM ile şifrelenir; ekranda geri gösterilmez.</p>
+    
     <form class="smm-form" id="smm-provider-form" method="post" action="/admin/smm/tedarikci/kaydet">
       <?= csrfField() ?>
       <div class="smm-form-grid">
-        <div class="form-group"><label>Tedarikçi ID (düzenleme için)</label><input class="form-control" type="number" min="0" name="id" id="smm-provider-id" value="0"><small>Yeni kayıt için 0</small></div>
+        <div class="form-group"><label>Tedarikçi ID (düzenleme için)</label><input class="form-control" type="number" min="0" name="id" id="smm-provider-id" value="0"></div>
         <div class="form-group"><label>Görünen yönetim adı</label><input class="form-control" name="name" id="smm-provider-name" required maxlength="120" placeholder="Tedarikçi 1"></div>
         <div class="form-group"><label>API uç noktası (HTTPS)</label><input class="form-control" name="endpoint" id="smm-provider-endpoint" type="url" required placeholder="https://tedarikci.com/api/v2"></div>
         <div class="form-group"><label>API Anahtarı</label><input class="form-control" name="api_key" type="password" autocomplete="new-password" placeholder="Yeni anahtar / değiştirmek için doldur"></div>
@@ -59,12 +59,12 @@ $esc = static fn($value) => e((string)$value);
        </div>
      </div>
     <?php endforeach; ?>
-    <?php if (!$providers): ?><p>Henüz tedarikçi eklenmemiş. Sınırsız sayıda API hesabı bağlayabilirsiniz.</p><?php endif; ?>
+    <?php if (!$providers): ?><p>Henüz tedarikçi yok.</p><?php endif; ?>
     </div></div>
   </div>
 
   <div class="adm-card"><div class="adm-card-header"><h3><?= icon('folder',18) ?> Sosyal Medya Kategorileri</h3></div>
-   <div class="adm-card-body"><p class="text-secondary">İsterseniz Instagram, TikTok, YouTube vb. mevcut kategoriyi seçin; yeni kategori otomatik olarak “Sosyal Medya Hizmetleri” altında açılır.</p>
+   <div class="adm-card-body">
     <form method="post" action="/admin/smm/kategori/ekle" class="smm-inline"><?= csrfField() ?>
       <input class="form-control" name="name" maxlength="120" required placeholder="Örnek: Instagram Takipçi"><button class="btn btn-outline" type="submit">Alt Kategori Ekle</button>
     </form>
@@ -105,7 +105,7 @@ $esc = static fn($value) => e((string)$value);
   <div class="adm-card" id="smm-bulk">
     <div class="adm-card-header"><h3><?= icon('layers',18) ?> Seçili Servisleri Toplu Paket Olarak Ekle</h3><span class="text-sm text-secondary" id="smm-selected-count">0 servis seçildi</span></div>
     <div class="adm-card-body">
-      <p class="text-secondary">Yukarıdaki listeden 1–80 servisi seç. <strong>API servis adları müşteriye kopyalanmaz.</strong> Paketler platform / hizmet türü / adet başlığıyla taslak oluşturulur; kısa açıklama, detay ve kart özellikleri tüm seçilen paketlerde sizin yazdığınız metin olur. Fiyat ve SEO'yu sonradan paket editöründe ayrı değiştirebilirsin.</p>
+      
       <form id="smm-bulk-form" method="post" action="/admin/smm/paket/toplu-ekle" class="smm-form">
         <?= csrfField() ?>
         <input type="hidden" name="provider_filter" value="<?= (int)$currentProvider ?>">
@@ -114,13 +114,13 @@ $esc = static fn($value) => e((string)$value);
             <option value="">Hedef kategori seç</option>
             <?php foreach($categories as $c): ?><option value="<?= (int)$c['id'] ?>"><?= $esc($c['name']) ?></option><?php endforeach; ?>
           </select></div>
-          <div class="form-group"><label>Ortak Teslimat Adedi</label><input class="form-control" type="number" name="fulfillment_quantity" min="0" value="0" required><small>0 = her servisin minimum adedini kullan. Sınır dışındaki servis atlanır.</small></div>
+          <div class="form-group"><label>Ortak Teslimat Adedi</label><input class="form-control" type="number" name="fulfillment_quantity" min="0" value="0" required></div>
           <div class="form-group"><label>Ortak Satış Fiyatı (TL)</label><input class="form-control" type="number" name="price" min="1" step="0.01" required placeholder="249.90"></div>
           <div class="form-group"><label>İsteğe Bağlı Marka Öneki</label><input class="form-control" name="label_prefix" maxlength="60" placeholder="Ör. Premium"></div>
         </div>
         <div class="form-group"><label>Ortak Kısa Açıklama — Sadece Sizin Metniniz</label><textarea class="form-control" name="short_description" maxlength="500" rows="2" minlength="10" required placeholder="Seçili paketlerin kart özetinde gösterilecek açıklama"></textarea></div>
         <div class="form-group"><label>Ortak Detaylı Paket Açıklaması (HTML)</label><textarea class="form-control" name="description" rows="5" required placeholder="<h2>Paket Hakkında</h2><p>Kendi hizmet açıklamanız...</p>"></textarea></div>
-        <div class="form-group"><label>Ortak Kart Özellikleri (Her Satır Bir Özellik)</label><textarea class="form-control" name="highlight_lines" rows="7" maxlength="1600" placeholder="Şifre paylaşmadan sipariş&#10;Müşteri panelinden takip&#10;Tahmini teslimat bilgisi&#10;Destek ekibimizle iletişim"></textarea><small>8 satır eklerseniz 4+4 kaydırıcıda gösterilir. En fazla 12 satır.</small></div>
+        <div class="form-group"><label>Ortak Kart Özellikleri (Her Satır Bir Özellik)</label><textarea class="form-control" name="highlight_lines" rows="7" maxlength="1600" placeholder="Şifre paylaşmadan sipariş&#10;Müşteri panelinden takip&#10;Tahmini teslimat bilgisi&#10;Destek ekibimizle iletişim"></textarea></div>
         <div class="form-group"><label>Ortak Teslim Süresi</label><input class="form-control" name="delivery_time" maxlength="100" placeholder="Ör. 1–3 gün (gerçek süreye uygun yazın)"></div>
         <button type="submit" class="btn btn-primary"><?= icon('plus',16) ?> Seçili Servislerden Paketleri Oluştur</button>
       </form>
@@ -129,7 +129,7 @@ $esc = static fn($value) => e((string)$value);
 
   <div class="adm-card" id="smm-new-package">
    <div class="adm-card-header"><h3><?= icon('package',18) ?> Özgün Satış Paketi Oluştur</h3></div>
-   <div class="adm-card-body"><p class="text-secondary">API servisi yalnızca arka planda teslimat için kullanılır. Başlık, SEO, açıklama ve TL fiyatı size aittir. Kaydettiğiniz paketi mevcut Paketler editöründe dilediğiniz gibi geliştirebilirsiniz.</p>
+   <div class="adm-card-body">
     <form method="post" action="/admin/smm/paket/olustur" class="smm-form">
       <?= csrfField() ?><input type="hidden" name="provider_filter" value="<?= (int)$currentProvider ?>">
       <div class="smm-form-grid">
@@ -174,7 +174,7 @@ $esc = static fn($value) => e((string)$value);
   </div>
 
   <div class="adm-card"><div class="adm-card-header"><h3><?= icon('shopping-cart',18) ?> API Siparişleri &amp; Manuel Kontrol</h3></div>
-    <div class="adm-card-body"><p class="text-secondary">Sadece <strong>ödemesi onaylanmış</strong> siparişler gönderilir. Belirsiz bağlantı hatalarında ikinci kez otomatik satın alma yapılmaz. Müşteri iadeleri ayrıca yönetilir.</p>
+    <div class="adm-card-body">
     <div class="smm-table-wrap"><table class="smm-table"><thead><tr><th>İç Sipariş</th><th>Servis / Tedarikçi</th><th>Durum</th><th>Son işlem</th><th>İşlemler</th></tr></thead><tbody>
     <?php foreach ($jobs as $j): ?><tr>
       <td><a href="/admin/siparis/<?= (int)$j['order_id'] ?>"><?= $esc($j['order_number']) ?></a><small><?= $esc($j['payment_status']) ?></small></td>
