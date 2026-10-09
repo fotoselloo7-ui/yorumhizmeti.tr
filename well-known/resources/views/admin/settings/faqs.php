@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('help-circle', 24) ?> SSS Yönetimi</h2>
-        <p class="text-sm text-secondary">Sıkça Sorulan Soruları ekleyin ve düzenleyin.</p>
     </div>
 </div>
 
