@@ -8,6 +8,12 @@ on:
       - 'well-known/scripts/import-netvera-private-customers.php'
       - 'well-known/tests/netvera-private-synthetic-fixture.sql'
       - 'well-known/database/migrations/netvera-private-customer-v1.sql'
+      - 'well-known/database/migrations/netvera-dealer-program-v2.sql'
+      - 'well-known/app/Services/DealerProgramService.php'
+      - 'well-known/app/Controllers/DealerController.php'
+      - 'well-known/app/Controllers/Admin/DealerController.php'
+      - 'well-known/resources/views/frontend/account/dealer.php'
+      - 'well-known/resources/views/admin/dealers/index.php'
       - 'well-known/app/Services/LegacyCustomerService.php'
       - 'well-known/app/Controllers/Admin/NetveraCustomersController.php'
       - 'well-known/resources/views/frontend/account/partials/netvera-legacy-history.php'
@@ -49,6 +55,7 @@ jobs:
           db() { mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only "$@"; }
           db -e "CREATE DATABASE netvera_private_target_qa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
           db netvera_private_target_qa < yorumhizmeti_yorumhizmeti.sql
+          db netvera_private_target_qa < well-known/database/migrations/netvera-dealer-program-v2.sql
           db netvera_private_source_qa < well-known/tests/netvera-private-synthetic-fixture.sql
           qa_hash=$(php -r 'echo password_hash("synthetic-only-qa-password", PASSWORD_BCRYPT);')
           db netvera_private_source_qa -e "UPDATE customers SET password_hash='${qa_hash}'; UPDATE admin_users SET password_hash='${qa_hash}'"
@@ -103,6 +110,9 @@ jobs:
           [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliate_clicks')" = 1 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_order_referrals')" = 1 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_admin_map')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_dealer_accounts')" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_dealer_accounts WHERE status='pending' AND commission_rate=0 AND legacy_affiliate_id=6")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_dealer_audit WHERE action='legacy_import'")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM admins WHERE email='qa-admin@example.test' AND role='super_admin'")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM admins WHERE email='admin@yorumhizmeti.tr'")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE payment_status='paid' AND license_key_encrypted IS NOT NULL AND license_key_encrypted<>'QA-LICENSE-NOT-REAL'")" = 1 ]
@@ -113,6 +123,8 @@ jobs:
           [ "$(db 'SELECT COUNT(*) FROM nv_private_orders')" = 3 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_order_items')" = 2 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliates')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_dealer_accounts')" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_dealer_audit WHERE action='legacy_import'")" = 1 ]
           native_after=$(db "SELECT CONCAT((SELECT COUNT(*) FROM orders),':',(SELECT COUNT(*) FROM order_items),':',(SELECT COUNT(*) FROM payment_gateways))")
           [ "$native_before" = "$native_after" ]
           echo "PASS: source isolation, user/admin mapping, license encryption, preserved guest order, dealer, support, referral, idempotency and untouched native payments"
