@@ -9,8 +9,8 @@ $nv40ListTitle=static function($entry):string {
         ? trim((string)($entry['title']??$entry['name']??$entry['label']??$entry['text']??''))
         : trim((string)$entry);
 };
-$nv40Host=strtolower((string)($_SERVER['HTTP_HOST']??''));
-$nv40ExternalLive=!in_array($nv40Host,['netvera.tr','www.netvera.tr'],true);
+$nv40InquiryReady=\App\Services\NetveraInquiryService::ready();
+$nv40OfferHref=$nv40InquiryReady?'#teklif-al':'/iletisim';
 $nv60PublicDemo=[];
 if ($nv40DemoAllowed) {
     // Public preview destinations only, never private demo passwords or customer login data.
@@ -25,8 +25,29 @@ if ($nv40DemoAllowed) {
         }
     }
 }
-$nv60DemoAdminUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['demo_admin_url']??null);
-$nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['demo_user_url']??null);
+$nv60DemoAdminUrl=\App\Services\NetveraBridgeService::publicUrl($productData['demo_admin_url']??$nv60PublicDemo['demo_admin_url']??null);
+$nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($productData['demo_user_url']??$nv60PublicDemo['demo_user_url']??null);
+$nv60ShowAccounts=$nv40DemoAllowed && !empty($productData['demo_credentials_public']);
+$nv60DemoAccounts=[];
+if ($nv60ShowAccounts) {
+    foreach ([
+        ['label'=>'Kullanıcı Demo Hesabı','username'=>$productData['demo_username']??'', 'password'=>$productData['demo_password']??'','url'=>$nv60DemoUserUrl?:$demoUrl],
+        ['label'=>'Yönetim Paneli Demo Hesabı','username'=>$productData['demo_admin_username']??'', 'password'=>$productData['demo_admin_password']??'','url'=>$nv60DemoAdminUrl?:$demoUrl]
+    ] as $nv60Account) {
+        if (trim((string)$nv60Account['username'])!=='' || trim((string)$nv60Account['password'])!=='') $nv60DemoAccounts[]=$nv60Account;
+    }
+    $nv60ExtraAccounts=json_decode((string)($productData['demo_accounts_json']??'[]'),true);
+    if (is_array($nv60ExtraAccounts)) foreach (array_slice($nv60ExtraAccounts,0,6) as $nv60Extra) {
+        if (!is_array($nv60Extra)) continue;
+        $nv60User=trim((string)($nv60Extra['username']??''));
+        if ($nv60User==='') continue;
+        $nv60DemoAccounts[]=[
+            'label'=>mb_substr((string)($nv60Extra['label']??'Demo Hesabı'),0,80),
+            'username'=>$nv60User,'password'=>(string)($nv60Extra['password']??''),
+            'url'=>\App\Services\NetveraBridgeService::publicUrl($nv60Extra['url']??'')?:$demoUrl
+        ];
+    }
+}
 ?>
 <main class="nv40-detail">
   <section class="nv40-product-hero"><div class="container">
@@ -64,37 +85,13 @@ $nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['
           <small>Yazılım Fiyatı</small>
           <div><strong><?= money($nv40Price) ?></strong>
             <?php if($nv40Old>$nv40Price): ?><del><?= money($nv40Old) ?></del><?php endif; ?></div>
-          <p>Ödeme sağlayıcısı canlı Netvera'da korunuyor. Bu staging görünümünden ödeme alınmaz.</p>
+          <p>Profesyonel yazılım, kurulum ve lisans seçenekleri hakkında teklif alın veya canlı demoyu inceleyin.</p>
           <div class="nv40-cta-row">
+            <a href="<?= e($nv40OfferHref) ?>" class="nv40-cta-primary" <?= $nv40InquiryReady?'data-nv60-jump-tab="teklif-al"':'' ?>><?= icon('message-square',16) ?> Teklif Al</a>
             <?php if($nv40DemoAllowed): ?><a href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer" class="nv40-cta-demo"><?= icon('external-link',16) ?> Canlı Demo</a><?php endif; ?>
-            <?php if($nv40ExternalLive): ?>
-            <a href="https://netvera.tr<?= e($nv40Url) ?>" target="_blank" rel="noopener noreferrer" class="nv40-cta-primary">Netvera'daki Ürünü Aç <?= icon('arrow-up-right',16) ?></a>
-            <?php else: ?>
-            <a href="/iletisim" class="nv40-cta-primary">Satış Ekibiyle İletişim <?= icon('arrow-right',16) ?></a>
-            <?php endif; ?>
           </div>
         </div>
-        <?php if(\App\Services\NetveraInquiryService::ready()): ?>
-          <section class="nv-product-offer" id="teklif-al" aria-label="Yazılım teklif talebi">
-            <h2><?= icon('message-square',16) ?> Bu Yazılım İçin Teklif Alın</h2>
-            <p>Kurulum, lisans ve proje detaylarını birlikte netleştirelim. Talebiniz NetVera satış ekibinin yönetim paneline ulaşır.</p>
-            <form method="post" action="/netvera/canli-destek/gonder">
-              <?= csrfField() ?>
-              <input type="hidden" name="source_type" value="offer">
-              <input type="hidden" name="product_slug" value="<?= e($product['slug']) ?>">
-              <input type="text" class="nv-chat-honeypot" name="website" autocomplete="off" tabindex="-1" aria-hidden="true">
-              <div class="nv-product-offer-grid">
-                <label>Adınız<input name="name" required minlength="2" maxlength="140" autocomplete="name" placeholder="Adınız Soyadınız"></label>
-                <label>E-posta veya Telefon<input name="contact" required minlength="5" maxlength="190" placeholder="Size ulaşabileceğimiz bilgi"></label>
-              </div>
-              <label class="nv-offer-message">Proje / Kurulum Talebiniz
-                <textarea name="message" required minlength="5" maxlength="3000" placeholder="İhtiyacınızı kısaca anlatın..."></textarea>
-              </label>
-              <button type="submit"><?= icon('send',14) ?> Teklif Talebi Gönder</button>
-              <p class="nv-offer-policy">Gönderdiğiniz bilgiler yalnızca teklifinizi yanıtlamak için kullanılır. <a href="/sayfa/kvkk">KVKK</a></p>
-            </form>
-          </section>
-        <?php endif; ?>
+
       </div>
     </div>
   </div></section>
@@ -102,6 +99,7 @@ $nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['
     <nav class="nv40-anchor-nav nv60-product-tabs" aria-label="Yazılım ayrıntıları" role="tablist" data-nv60-tabs>
       <button type="button" role="tab" id="nv60-tab-ozellikler" aria-controls="ozellikler" aria-selected="true" tabindex="0" data-nv60-tab="ozellikler">Ürün Açıklaması</button>
       <?php if($nv40DemoAllowed): ?><button type="button" role="tab" id="nv60-tab-demo" aria-controls="demo" aria-selected="false" tabindex="-1" data-nv60-tab="demo">Canlı Demo</button><?php endif; ?>
+      <?php if($nv40InquiryReady): ?><button type="button" role="tab" id="nv60-tab-teklif-al" aria-controls="teklif-al" aria-selected="false" tabindex="-1" data-nv60-tab="teklif-al">Teklif Al</button><?php endif; ?>
       <?php if($modules): ?><button type="button" role="tab" id="nv60-tab-moduller" aria-controls="moduller" aria-selected="false" tabindex="-1" data-nv60-tab="moduller">Modüller</button><?php endif; ?>
       <?php if($technical): ?><button type="button" role="tab" id="nv60-tab-teknik" aria-controls="teknik" aria-selected="false" tabindex="-1" data-nv60-tab="teknik">Teknik Özellikler</button><?php endif; ?>
       <?php if($license): ?><button type="button" role="tab" id="nv60-tab-lisans" aria-controls="lisans" aria-selected="false" tabindex="-1" data-nv60-tab="lisans">Lisans</button><?php endif; ?>
@@ -142,8 +140,41 @@ $nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['
             </a>
             <?php endif; ?>
           </div>
-          <p class="nv60-demo-disclaimer">Demo kullanıcı adı ve şifreleri bu herkese açık GitHub Pages kopyasına yerleştirilmez. Varsa yetkilendirilmiş deneme hesaplarının güncel giriş bilgileri için <a href="https://netvera.tr<?= e($nv40Url) ?>" target="_blank" rel="noopener noreferrer">NetVera'daki ürün sayfasına</a> bakabilirsiniz.</p>
+          <?php if($nv60DemoAccounts): ?>
+          <div class="nv60-demo-accounts" aria-label="Herkese açık tanıtım demo hesapları">
+            <?php foreach($nv60DemoAccounts as $nv60Account): ?>
+            <div class="nv60-demo-account">
+              <h3><?= icon('key',15) ?> <?= e($nv60Account['label']) ?></h3>
+              <?php if(!empty($nv60Account['username'])): ?><div class="nv60-demo-credential"><strong>Kullanıcı Adı</strong><code><?= e($nv60Account['username']) ?></code></div><?php endif; ?>
+              <?php if(!empty($nv60Account['password'])): ?><div class="nv60-demo-credential"><strong>Demo Şifresi</strong><code><?= e($nv60Account['password']) ?></code></div><?php endif; ?>
+            </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endif; ?>
+          <?php if(!empty($productData['demo_note'])): ?><p class="nv60-demo-disclaimer"><?= nl2br(e((string)$productData['demo_note'])) ?></p><?php endif; ?>
+          <?php if(!$nv60DemoAccounts): ?><p class="nv60-demo-disclaimer">Yönetim panelinden herkese açık demo hesabı tanımlanmadı. Demo sitesini bağlantılardan inceleyebilir, gerektiğinde satış ekibinden giriş bilgisi isteyebilirsiniz.</p><?php endif; ?>
         </section>
+        <?php endif; ?>
+        <?php if($nv40InquiryReady): ?>
+          <section class="nv40-info-card nv60-offer-panel" id="teklif-al" role="tabpanel" aria-labelledby="nv60-tab-teklif-al" tabindex="0" data-nv60-panel="teklif-al">
+            <h2><?= icon('message-square',16) ?> Bu Yazılım İçin Teklif Alın</h2>
+            <p>Kurulum, lisans ve proje detaylarını birlikte netleştirelim. Talebinizi satış ekibimize iletin; sizinle kurulum ve lisans seçeneklerini görüşelim.</p>
+            <form method="post" action="/netvera/canli-destek/gonder">
+              <?= csrfField() ?>
+              <input type="hidden" name="source_type" value="offer">
+              <input type="hidden" name="product_slug" value="<?= e($product['slug']) ?>">
+              <input type="text" class="nv-chat-honeypot" name="website" autocomplete="off" tabindex="-1" aria-hidden="true">
+              <div class="nv-product-offer-grid">
+                <label>Adınız<input name="name" required minlength="2" maxlength="140" autocomplete="name" placeholder="Adınız Soyadınız"></label>
+                <label>E-posta veya Telefon<input name="contact" required minlength="5" maxlength="190" placeholder="Size ulaşabileceğimiz bilgi"></label>
+              </div>
+              <label class="nv-offer-message">Proje / Kurulum Talebiniz
+                <textarea name="message" required minlength="5" maxlength="3000" placeholder="İhtiyacınızı kısaca anlatın..."></textarea>
+              </label>
+              <button type="submit"><?= icon('send',14) ?> Teklif Talebi Gönder</button>
+              <p class="nv-offer-policy">Gönderdiğiniz bilgiler yalnızca teklifinizi yanıtlamak için kullanılır. <a href="/sayfa/kvkk">KVKK</a></p>
+            </form>
+          </section>
         <?php endif; ?>
         <?php if($modules): ?><section class="nv40-info-card" id="moduller" role="tabpanel" aria-labelledby="nv60-tab-moduller" tabindex="0" data-nv60-panel="moduller"><h2>Yazılım Modülleri</h2>
           <div class="nv40-feature-list">
@@ -153,11 +184,17 @@ $nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['
         <?php if($technical): ?><section class="nv40-info-card" id="teknik" role="tabpanel" aria-labelledby="nv60-tab-teknik" tabindex="0" data-nv60-panel="teknik"><h2>Teknik Özellikler</h2>
           <div class="nv40-spec-list">
           <?php foreach($technical as $key=>$spec):
-            $name=is_array($spec)?($spec['label']??$spec['name']??$spec['key']??''):(is_string($key)?$key:'');
-            $value=is_array($spec)?($spec['value']??$spec['text']??''):$spec;
+            $name=is_array($spec)?trim((string)($spec['label']??$spec['name']??$spec['key']??'')):(is_string($key)?trim($key):'');
+            $value=is_array($spec)?($spec['value']??$spec['text']??$spec['title']??''):$spec;
             if(is_array($value))$value=implode(', ',array_filter($value,'is_scalar'));
-            if($value===''||!is_scalar($value))continue; ?>
-            <div><strong><?= e((string)$name) ?></strong><span><?= e((string)$value) ?></span></div>
+            if(!is_scalar($value))continue;
+            $value=trim((string)$value);
+            if($value==='')continue;
+            if($name===''): ?>
+            <div class="nv61-spec-feature"><?= icon('check-circle',16) ?><span><?= e($value) ?></span></div>
+            <?php else: ?>
+            <div class="nv61-spec-pair"><strong><?= e($name) ?></strong><span><?= e($value) ?></span></div>
+            <?php endif; ?>
           <?php endforeach; ?></div></section><?php endif; ?>
         <?php if($license): ?><section class="nv40-info-card" id="lisans" role="tabpanel" aria-labelledby="nv60-tab-lisans" tabindex="0" data-nv60-panel="lisans"><h2>Lisans ve Kullanım Hakları</h2>
           <div class="nv40-feature-list"><?php foreach($license as $entry):$title=$nv40ListTitle($entry);if($title==='')continue; ?>
