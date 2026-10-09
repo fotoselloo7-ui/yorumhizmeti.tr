@@ -1,0 +1,19 @@
+{
+  "name": "NetVera Cep — Destek ve Sipariş",
+  "short_name": "NetVera Cep",
+  "start_url": "/admin/cep",
+  "scope": "/admin/cep",
+  "display": "standalone",
+  "background_color": "#f7f9ff",
+  "theme_color": "#12234b",
+  "lang": "tr",
+  "description": "Yönetici canlı destek, destek talepleri ve sipariş takibi",
+  "icons": [
+    {
+      "src": "/assets/img/nv-desk-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
