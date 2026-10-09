@@ -248,7 +248,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 
             <div class="yh6-hero-art">
                 <div class="yh6-hero-blob"></div>
-                <img class="yh6-hero-person" src="<?= e($heroCutout) ?>" alt="YorumHizmeti dijital hizmetler" loading="eager" fetchpriority="high">
+                <img class="yh6-hero-person" src="<?= e($heroCutout) ?>" alt="NetVera dijital hizmetler" loading="eager" fetchpriority="high">
 
                 <span class="yh6-social-float instagram"><?= icon('instagram', 27) ?></span>
                 <span class="yh6-social-float tiktok"><?= icon('tiktok', 24) ?></span>
@@ -344,7 +344,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
         <div class="yh6-why-grid">
             <div class="yh6-why-copy">
                 <span class="yh6-eyebrow">Markanız İçin En İyisi</span>
-                <h2>Neden YorumHizmeti?</h2>
+                <h2>Neden NetVera?</h2>
                 <p>Sosyal kanıt, günümüz dijital dünyasında başarının anahtarıdır. Markanızın güvenilirliğini artırmak için hızlı, güvenli ve etkili çözümler sunuyoruz.</p>
                 <ul>
                     <li><?= icon('check-circle', 14) ?> Gerçek ve kaliteli etkileşimler</li>
@@ -1267,7 +1267,7 @@ if (!empty($projectReferences)) {
     <div class="container">
         <div class="yh6-final-copy">
             <span class="yh6-eyebrow">Daha Güçlü Bir Marka İçin</span>
-            <h2 id="home-final-title">YorumHizmeti.tr ile Dijital Varlığınızı Güçlendirin</h2>
+            <h2 id="home-final-title">NetVera Teknoloji Yazılım ile Dijital Varlığınızı Güçlendirin</h2>
             <p>Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web sitesi çözümlerinden SEO hizmetlerine kadar ihtiyacınız olan dijital hizmetler tek platformda.</p>
         </div>
         <div class="yh6-final-actions">
