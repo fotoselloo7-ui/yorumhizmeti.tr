@@ -1582,6 +1582,45 @@ try {
   console.error('FAIL checkout integration:',String(e).slice(0,400));
 } finally { await checkoutContext.close(); }
 
+// Product detail: sections are now real in-place tabs, not page-jump anchors.
+// Run against the synthetic script product (no private NetVera credentials).
+const productTabContext=await browser.newContext({viewport:{width:1280,height:800}});
+const productTabPage=await productTabContext.newPage();
+try {
+  const response=await productTabPage.goto(origin+'/hazir-scriptler/haber-sitesi-scripti',{waitUntil:'domcontentloaded'});
+  if(response?.status()!==200)throw new Error('Test script product detail returned non-200');
+  const tabNav=productTabPage.locator('.nv40-product-body [data-nv60-tabs]');
+  if(await tabNav.count()!==1)throw new Error('In-place product tabs missing');
+  const original=productTabPage.locator('[data-nv60-panel="ozellikler"]');
+  const review=productTabPage.locator('[data-nv60-panel="yorumlar"]');
+  if(!(await original.isVisible())||(await review.isVisible()))
+    throw new Error('Default product description tab visibility incorrect');
+  await tabNav.scrollIntoViewIfNeeded();
+  const scrollBefore=await productTabPage.evaluate(()=>window.scrollY);
+  await tabNav.locator('[data-nv60-tab="yorumlar"]').click();
+  const scrollAfter=await productTabPage.evaluate(()=>window.scrollY);
+  if(!(await review.isVisible())||await original.isVisible())
+    throw new Error('Switching review tab does not replace product content in place');
+  if(Math.abs(scrollAfter-scrollBefore)>50)
+    throw new Error('Tab click unexpectedly scrolls down the page');
+  if(await tabNav.locator('[data-nv60-tab="yorumlar"]').getAttribute('aria-selected')!=='true')
+    throw new Error('Tab aria-selected state not updated');
+  await tabNav.locator('[data-nv60-tab="ozellikler"]').click();
+  if(!(await original.isVisible())||await review.isVisible())
+    throw new Error('Switching back to product description failed');
+  const readable=await original.locator('.nv40-article').evaluate(el=>{
+    const cs=getComputedStyle(el);
+    return {fontSize:parseFloat(cs.fontSize),color:cs.color,visibility:cs.visibility};
+  });
+  if(readable.fontSize<12||readable.visibility!=='visible')
+    throw new Error('Product description is too small or invisible '+JSON.stringify(readable));
+  console.log('PASS product detail tabs, no page jump, accessible selection and article legibility');
+} catch(e) {
+  failed=true;
+  results.push({route:'NetVera software product in-place tabs',screen:'masaustu',status:0,errors:[String(e)]});
+  console.error('FAIL product detail tabs:',String(e).slice(0,650));
+} finally {await productTabContext.close();}
+
 // Validate the visible mobile package slider (not just presence of HTML controls).
 const sliderContext=await browser.newContext({viewport:{width:390,height:844}});
 const sliderPage=await sliderContext.newPage();
