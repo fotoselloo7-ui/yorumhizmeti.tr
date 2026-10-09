@@ -61,15 +61,7 @@
                     <div class="form-group mb-0">
                         <label for="extra_data">JSON Veri</label>
                         <textarea name="extra_data" id="extra_data" class="form-control" rows="10" style="font-family: monospace; font-size: var(--font-size-sm);"><?= e($section['extra_data'] ?? '[]') ?></textarea>
-                        <span class="form-hint">
-                            <?php if ($section['section_key'] === 'testimonials'): ?>
-                                Format: [{"name":"Ad", "role":"Unvan", "text":"Yorum", "stars":5}]
-                            <?php elseif ($section['section_key'] === 'info_center'): ?>
-                                Format: [{"title":"Başlık", "desc":"Açıklama", "link":"/blog"}]
-                            <?php else: ?>
-                                JSON formatında ek veri girebilirsiniz.
-                            <?php endif; ?>
-                        </span>
+                        
                     </div>
                 </div>
             </div>
