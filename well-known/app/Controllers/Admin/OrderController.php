@@ -36,11 +36,12 @@ class OrderController extends Controller
         $logs = $this->db->fetchAll("SELECT * FROM order_status_logs WHERE order_id = ? ORDER BY created_at DESC", [(int) $id]);
         $payments = $this->db->fetchAll("SELECT * FROM payments WHERE order_id = ?", [(int) $id]);
         $bankNotifications = $this->db->fetchAll("SELECT * FROM bank_transfer_notifications WHERE order_id = ? ORDER BY created_at DESC", [(int) $id]);
+        $smmJobs = \App\Services\SmmFulfillmentService::jobs((int)$id);
 
         $this->renderAdmin('admin/orders/detail', [
             'pageTitle' => 'Sipariş #' . $order['order_number'],
             'order' => $order, 'items' => $items, 'fields' => $fields,
-            'logs' => $logs, 'payments' => $payments, 'bankNotifications' => $bankNotifications,
+            'logs' => $logs, 'payments' => $payments, 'bankNotifications' => $bankNotifications, 'smmJobs' => $smmJobs,
         ]);
     }
 
