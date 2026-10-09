@@ -2,14 +2,14 @@
  * Keep every featured package exactly the same height as its grid peers.
  */
 .yh18-featured-card:not(.yh41-software-card){min-height:355px}
-.yh18-card-features.yh67-card-benefits{display:block;min-height:162px;position:relative}
-.yh67-benefit-pages{min-height:144px}
-.yh67-benefit-page{display:grid;grid-template-rows:repeat(4,minmax(36px,auto));min-height:144px}
+.yh18-card-features.yh67-card-benefits{display:block;min-height:180px;position:relative}
+.yh67-benefit-pages{min-height:156px}
+.yh67-benefit-page{display:grid;grid-template-rows:repeat(4,39px);height:156px;min-height:156px}
 .yh67-benefit-page[hidden]{display:none!important}
-.yh67-benefit-page>span{padding:8px 18px;min-height:36px;display:flex;align-items:center;gap:8px;
+.yh67-benefit-page>span{padding:5px 18px;height:39px;min-height:39px;display:flex;align-items:center;gap:8px;
   border-bottom:1px solid #eef1f6;color:#53607b;font-size:10px;line-height:1.4}
 .yh67-benefit-page>span .icon{flex:0 0 auto;color:#5862df}
-.yh67-benefit-page>span b{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.yh67-benefit-page>span b{font-weight:600;min-width:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .yh67-benefit-nav{height:24px;display:flex;align-items:center;justify-content:center;gap:7px;
   background:#f9fbff;border-bottom:1px solid #eef1f6}
 .yh67-benefit-nav small{color:#6a7390;font-size:9px;min-width:35px;text-align:center;font-weight:700}
@@ -19,5 +19,8 @@
 .yh67-benefit-arrow:focus-visible{outline-color:#6658c9}
 .yh18-featured-card .yh18-card-bottom{margin-top:auto}
 .yh18-featured-card .yh18-card-summary{min-height:47px}
-.yh18-featured-card .yh18-card-brand{min-height:76px}
+.yh18-featured-card:not(.yh41-software-card) .yh18-card-brand{min-height:76px}
+.yh18-featured-card:not(.yh41-software-card) .yh18-card-brand h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.yh18-featured-card:not(.yh41-software-card) .yh18-card-summary{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nv67-category-package-summary{font-size:12px;line-height:1.5;color:#64748b;margin:8px 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:420px){.yh67-benefit-page>span{font-size:10px;line-height:1.35}.yh18-featured-card:not(.yh41-software-card){min-height:360px}}
