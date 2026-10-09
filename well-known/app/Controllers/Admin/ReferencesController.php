@@ -60,6 +60,11 @@ class ReferencesController extends Controller
             if (!ReferencesService::instagramEmbed($url, $media)) {
                 throw new \InvalidArgumentException('Herkese açık Instagram gönderi veya Reels bağlantısını (https://www.instagram.com/p/... ya da /reel/...) girin.');
             }
+        } elseif ($media === 'youtube_video') {
+            $youtubePlayer = ReferencesService::externalPlayer($url);
+            if (!$youtubePlayer || $youtubePlayer['provider'] !== 'YouTube') {
+                throw new \InvalidArgumentException('YouTube videosu veya Shorts bağlantısını girin (youtube.com ya da youtu.be).');
+            }
         } elseif ($media === 'website' && $url === '') {
             throw new \InvalidArgumentException('Web sitesi veya yazılım referanslarında müşteri sitesi bağlantısı zorunludur.');
         }
