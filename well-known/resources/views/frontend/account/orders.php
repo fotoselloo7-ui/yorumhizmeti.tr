@@ -12,6 +12,8 @@
                     <a href="/kategoriler" class="btn btn-primary btn-sm"><?= icon('shopping-cart', 16) ?> Yeni Sipariş</a>
                 </div>
 
+                <?php include __DIR__.'/partials/netvera-legacy-history.php'; ?>
+
                 <?php if (empty($orders)): ?>
                 <div class="panel-empty-state">
                     <div class="panel-empty-icon"><?= icon('package', 48) ?></div>
