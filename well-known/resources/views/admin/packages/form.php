@@ -26,7 +26,6 @@
                     <div class="form-group">
                         <label>Slug</label>
                         <input type="text" name="slug" class="form-control" value="<?= e($package['slug'] ?? '') ?>" placeholder="Otomatik oluşturulur">
-                        <div class="form-hint">Boş bırakırsanız isimden otomatik üretilir.</div>
                     </div>
                     <div class="form-group">
                         <label><?= $softwareOnly ? 'Hazır Yazılım Kategorisi' : 'Kategori' ?></label>
@@ -37,7 +36,6 @@
                             <?php endforeach; ?>
                         </select>
                         <?php if ($softwareOnly): ?>
-                        <div class="form-hint">Bu ekranda yalnızca Hazır Yazılımlar & Scriptler alt kategorileri listelenir; sosyal medya hizmetleri karışmaz.</div>
                         <?php endif; ?>
                     </div>
                     <div class="form-group">
@@ -49,7 +47,6 @@
                         <textarea name="highlight_lines" class="form-control" rows="8" maxlength="1600" placeholder="Şifresiz işlem&#10;Gönderi bağlantısıyla sipariş&#10;Tahmini teslimat süresi&#10;Sipariş takibi"><?=
                             e(!empty($package) ? \App\Services\PackageHighlightsService::text((int)$package['id']) : '')
                         ?></textarea>
-                        <div class="form-hint">Her satır ayrı bir kart özelliğidir. 4 özellik bir anda gösterilir; 5–12 satır girerseniz müşteri küçük ileri/geri oklarıyla diğerlerini görür. Boş bırakıldığında nötr varsayılan açıklamalar kullanılır. Bu metinler tamamen size aittir.</div>
                     </div>
                     <div class="form-group">
                         <label>Detay Açıklama (HTML)</label>
@@ -70,7 +67,6 @@
                         <div class="form-group">
                             <label>İndirimli Fiyat (₺)</label>
                             <input type="number" name="discount_price" step="0.01" class="form-control" value="<?= $package['discount_price'] ?? '' ?>" placeholder="Opsiyonel">
-                            <div class="form-hint">Boş bırakırsanız indirim uygulanmaz.</div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -91,7 +87,6 @@
                         <div class="form-group">
                             <label>Badge</label>
                             <input type="text" name="badge" class="form-control" value="<?= e($package['badge'] ?? '') ?>" placeholder="ör: Popüler">
-                            <div class="form-hint">Paket kartında gösterilecek etiket.</div>
                         </div>
                     </div>
                 </div>
@@ -127,7 +122,6 @@
                             <input type="checkbox" name="is_featured" value="1" <?= !empty($package['is_featured']) ? 'checked' : '' ?>>
                             <span><?= icon('star', 16) ?> Öne Çıkan Paket</span>
                         </label>
-                        <div class="form-hint">İşaretlerseniz bu paket ana sayfada gösterilir.</div>
                     </div>
                 </div>
             </div>
@@ -155,12 +149,10 @@
                     <div class="form-group">
                         <label>SEO Başlığı</label>
                         <input type="text" name="seo_title" class="form-control" value="<?= e($package['seo_title'] ?? '') ?>" placeholder="Sayfa başlığı...">
-                        <div class="form-hint">35-60 karakter önerilir</div>
                     </div>
                     <div class="form-group">
                         <label>Meta Açıklama</label>
                         <textarea name="seo_description" class="form-control" rows="2" placeholder="Arama motorlarında görünen açıklama..."><?= e($package['seo_description'] ?? '') ?></textarea>
-                        <div class="form-hint">120-160 karakter önerilir</div>
                     </div>
                     <div class="form-group">
                         <label>Odak Anahtar Kelime</label>
