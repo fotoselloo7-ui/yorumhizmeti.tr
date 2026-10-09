@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('layout', 24) ?> Sayfalar</h2>
-        <p class="text-sm text-secondary">Kurumsal sayfalarınızı (Hakkımızda, KVKK vb.) yönetin.</p>
     </div>
 </div>
 
