@@ -168,3 +168,6 @@
  .nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-cover{height:500px!important}
  .nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-embed-slot{min-height:500px!important}
 }
+
+/* Decorative logo never blocks clicks on the cover/video. */
+.nv51-corner-logo{pointer-events:none}
