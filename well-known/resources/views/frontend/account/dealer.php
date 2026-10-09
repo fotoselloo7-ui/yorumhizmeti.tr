@@ -4,14 +4,14 @@
     <main class="panel-content">
       <div class="panel-welcome">
         <div class="panel-welcome-text"><h1>Bayilik & İş Ortaklığı</h1>
-          <p>İş ortağı başvurunuzu takip edin, referans bağlantınızı yönetin ve geçmiş NetVera haklarınızı görüntüleyin.</p>
+          
         </div>
         <div class="panel-welcome-actions"><a href="/hazir-scriptler" class="btn btn-outline btn-sm"><?= icon('monitor',15) ?> Yazılımlar</a></div>
       </div>
       <?php if(!$dealerReady): ?>
         <div class="nv62-dealer-card">
           <h2><?= icon('database',18) ?> Bayilik modülü kurulumu bekliyor</h2>
-          <p>Eski müşteri ve komisyon geçmişiniz korunur; yeni başvuru ve referans bağlantısı modülü yöneticinin veritabanı kurulumundan sonra açılır.</p>
+          
         </div>
       <?php elseif(!$dealer): ?>
         <div class="nv62-dealer-card nv62-dealer-apply">
@@ -40,13 +40,13 @@
         <?php $refUrl='/bayi/'.rawurlencode((string)$dealer['referral_code']); ?>
         <div class="nv62-dealer-card nv62-dealer-linkbox">
           <h2><?= icon('link',18) ?> Size Özel Referans Bağlantısı</h2>
-          <p>Müşterilerinizi yazılım kataloğumuza yönlendirmek için bu bağlantıyı kullanın.</p>
+          
           <div class="nv62-copybar"><input id="nv62-dealer-link" readonly value="<?= e($refUrl) ?>" aria-label="Referans bağlantınız">
             <button type="button" data-nv62-copy><?= icon('copy',15) ?> Kopyala</button></div>
           <small>Ziyaret sayısı satış veya komisyon değildir. Komisyonlar yalnızca doğrulanmış sipariş ve sözleşme şartlarına göre hesaplanır.</small>
         </div>
         <?php else: ?>
-        <div class="nv62-dealer-card"><p>Referans kodu ve komisyon koşulları hesabınız onaylandıktan sonra etkinleşir. Sorularınız için <a href="/destek/yeni">destek talebi</a> oluşturabilirsiniz.</p></div>
+        <div class="nv62-dealer-card"><strong>Bayilik durumu: <?= e($stateNames[$dealerState]??$dealerState) ?></strong></div>
         <?php endif; ?>
       <?php endif; ?>
 
@@ -59,7 +59,7 @@
           <div><span>Ödenmiş geçmiş komisyon</span><strong><?= money((float)$legacy['paid_total']) ?></strong></div>
           <div><span>Bekleyen geçmiş komisyon</span><strong><?= money((float)$legacy['pending_total']) ?></strong></div>
         </div>
-        <p class="nv62-dealer-note">Bu tutarlar eski NetVera kayıtlarının geçmiş görünümüdür. Bayilik başvurusu ya da onayı otomatik bakiye aktarımı, yeni hak ediş veya ödeme oluşturmaz.</p>
+        
       </div>
       <?php endif; ?>
     </main>
