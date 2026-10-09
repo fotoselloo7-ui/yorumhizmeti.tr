@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('file-text', 24) ?> Blog Yazıları</h2>
-        <p class="text-sm text-secondary">Sitenizdeki blog içeriklerini yönetin.</p>
     </div>
     <a href="/admin/blog/ekle" class="btn btn-primary btn-sm"><?= icon('plus', 16) ?> Yeni Blog Yazısı</a>
 </div>
