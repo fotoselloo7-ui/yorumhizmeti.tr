@@ -17,7 +17,7 @@ final class DealerProgramService
     {
         try {
             foreach (['nv_dealer_accounts','nv_dealer_audit','nv_dealer_referral_events'] as $table) {
-                $q = self::db()->prepare('SHOW TABLES LIKE ?');
+                $q = self::db()->prepare('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? LIMIT 1');
                 $q->execute([$table]);
                 if (!$q->fetchColumn()) return false;
             }
