@@ -102,6 +102,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: pages-preview
+      - name: Allow GitHub Actions artifact metadata to settle
+        run: sleep 18
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
