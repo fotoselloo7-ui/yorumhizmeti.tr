@@ -232,7 +232,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
         <div class="yh6-hero-grid">
             <div class="yh6-hero-copy">
                 <span class="yh6-eyebrow"><?= icon('award', 12) ?> NetVera Teknoloji Yazılım</span>
-                <h1>Yazılım, Dijital Ajans ve <span>Sosyal Medya Hizmetleri</span></h1>
+                <h1 class="nv75-hero-heading"><span class="nv75-hero-line">Yazılım,</span><span class="nv75-hero-line nv75-hero-middle">Dijital Ajans ve</span><span class="nv75-hero-line nv75-hero-highlight">Sosyal Medya Hizmetleri</span></h1>
                 <p>Hazır ve özel yazılım çözümleri, SEO, dijital reklam yönetimi ve Instagram, TikTok, YouTube hizmetleri NetVera Teknoloji Yazılım çatısı altında.</p>
                 <div class="yh6-hero-actions">
                     <a href="/kategoriler" class="yh6-btn primary">Hemen İncele <?= icon('arrow-right', 12) ?></a>
@@ -339,34 +339,75 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
     </div>
 </section>
 
-<section class="yh6-why">
+<section class="yh6-why nv75-why" aria-labelledby="nv75-why-heading">
     <div class="container">
         <div class="yh6-why-grid">
             <div class="yh6-why-copy">
-                <span class="yh6-eyebrow">Markanız İçin En İyisi</span>
-                <h2>Neden NetVera?</h2>
-                <p>NetVera; yazılım geliştirme, profesyonel dijital ajans çözümleri ve sosyal medya hizmetlerini birlikte sunar. Her sektör için ihtiyaca uygun hizmetleri karşılaştırabilirsiniz.</p>
-                <ul>
-                    <li><?= icon('check-circle', 14) ?> Hazır ve özel yazılım çözümleri</li>
-                    <li><?= icon('check-circle', 14) ?> Dijital ajans, reklam ve içerik yönetimi</li>
-                    <li><?= icon('check-circle', 14) ?> Instagram, TikTok ve YouTube hizmetleri</li>
-                    <li><?= icon('check-circle', 14) ?> Teknik SEO ve arama görünürlüğü</li>
-                    <li><?= icon('check-circle', 14) ?> Paket kapsamı ve sipariş takibi</li>
-                </ul>
-                <a href="/kategoriler" class="yh6-btn primary">Hizmetlerimizi Keşfet <?= icon('arrow-right', 12) ?></a>
+                <span class="yh6-eyebrow nv75-why-eyebrow"><?= icon('sparkles',14) ?> NetVera'yı Keşfedin</span>
+                <h2 id="nv75-why-heading">Dijital dünyada <span>tüm çözümler bir arada.</span></h2>
+                <p>Birden fazla ajans veya yazılım sağlayıcısı arasında kaybolmadan; web altyapısından SEO ve reklam yönetimine, sosyal medya paketlerinden destek süreçlerine kadar ihtiyaçlarınızı tek noktada yönetin.</p>
+                <div class="nv75-benefits" aria-label="NetVera hizmet alanları">
+                    <article class="nv75-benefit">
+                        <span class="nv75-benefit-icon nv75-benefit-purple"><?= icon('code-2',19) ?></span>
+                        <div><strong>Yazılım ve web çözümleri</strong><small>Hazır scriptler ve özel geliştirme</small></div>
+                    </article>
+                    <article class="nv75-benefit">
+                        <span class="nv75-benefit-icon nv75-benefit-blue"><?= icon('search-check',19) ?></span>
+                        <div><strong>SEO ve görünürlük</strong><small>Teknik SEO, GEO ve içerik stratejisi</small></div>
+                    </article>
+                    <article class="nv75-benefit">
+                        <span class="nv75-benefit-icon nv75-benefit-pink"><?= icon('megaphone',19) ?></span>
+                        <div><strong>Dijital reklam yönetimi</strong><small>Google Ads ve sosyal medya kampanyaları</small></div>
+                    </article>
+                    <article class="nv75-benefit">
+                        <span class="nv75-benefit-icon nv75-benefit-indigo"><?= icon('share-2',19) ?></span>
+                        <div><strong>Sosyal medya hizmetleri</strong><small>Instagram, TikTok ve YouTube</small></div>
+                    </article>
+                    <article class="nv75-benefit nv75-benefit-wide">
+                        <span class="nv75-benefit-icon nv75-benefit-cyan"><?= icon('headphones',19) ?></span>
+                        <div><strong>Sipariş ve destek takibi</strong><small>Hizmet ayrıntıları, süreç yönetimi ve iletişim tek yerde</small></div>
+                        <?= icon('arrow-up-right',17) ?>
+                    </article>
+                </div>
+                <a href="/kategoriler" class="yh6-btn primary nv75-why-cta">Hizmet Alanlarını İncele <?= icon('arrow-right',15) ?></a>
             </div>
 
-            <div class="yh6-dashboard">
-                <div class="yh6-browser">
-                    <div class="yh6-browser-top"><span></span><span></span><span></span><b>NetVera Hizmet Alanları</b><em>3 Ana Sektör</em></div>
-                    <div class="yh6-dash-stats"><div><small>Yazılım</small><strong>Web</strong><b>Özel & Hazır</b></div><div><small>Dijital Ajans</small><strong>SEO</strong><b>Reklam & Tasarım</b></div><div><small>Sosyal Medya</small><strong>SMM</strong><b>Platform Paketleri</b></div></div>
-                    <div class="yh6-chart"><svg viewBox="0 0 600 180" preserveAspectRatio="none"><polyline fill="none" stroke="#7b5cff" stroke-width="7" points="0,145 70,125 135,130 210,90 275,105 340,70 405,92 475,54 540,72 600,38"/><polyline fill="none" stroke="#4ca7ff" stroke-width="4" points="0,155 70,142 135,146 210,111 275,121 340,87 405,104 475,74 540,86 600,59"/></svg></div>
+            <div class="yh6-dashboard nv75-why-dashboard">
+                <div class="yh6-browser nv75-ecosystem">
+                    <div class="yh6-browser-top">
+                        <span></span><span></span><span></span>
+                        <b>NetVera Dijital Ekosistemi</b>
+                        <em>3 Hizmet Grubu</em>
+                    </div>
+                    <div class="nv75-ecosystem-body">
+                        <div class="nv75-ecosystem-heading">
+                            <span class="nv75-ecosystem-mark"><?= icon('layers',21) ?></span>
+                            <div><strong>Tek marka, farklı uzmanlıklar.</strong><small>İhtiyacınız olan hizmete doğrudan ulaşın.</small></div>
+                        </div>
+                        <div class="nv75-ecosystem-items">
+                            <a href="/hazir-scriptler" class="nv75-ecosystem-item">
+                                <span class="nv75-ecosystem-item-icon nv75-purple"><?= icon('monitor',20) ?></span>
+                                <div><small>01 / Yazılım</small><strong>Hazır Scriptler ve Web Çözümleri</strong><em>Yönetim panelli, sektörel yazılımlar</em></div>
+                                <?= icon('arrow-up-right',17) ?>
+                            </a>
+                            <a href="/kategoriler" class="nv75-ecosystem-item">
+                                <span class="nv75-ecosystem-item-icon nv75-blue"><?= icon('chart-no-axes-combined',20) ?></span>
+                                <div><small>02 / Dijital Ajans</small><strong>SEO, Reklam ve İçerik</strong><em>Markanız için bütünleşik dijital hizmetler</em></div>
+                                <?= icon('arrow-up-right',17) ?>
+                            </a>
+                            <a href="/kategoriler" class="nv75-ecosystem-item">
+                                <span class="nv75-ecosystem-item-icon nv75-pink"><?= icon('instagram',20) ?></span>
+                                <div><small>03 / Sosyal Medya</small><strong>Takipçi, Beğeni ve İzlenme</strong><em>Platforma göre hizmet seçenekleri</em></div>
+                                <?= icon('arrow-up-right',17) ?>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="yh6-dash-services">
-                    <div><span class="google"><?= icon('google',15) ?></span><b>Google SEO</b><small>İşletme & Teknik SEO</small></div>
-                    <div><span class="instagram"><?= icon('instagram',15) ?></span><b>Instagram Hizmetleri</b><small>Takipçi & Beğeni</small></div>
-                    <div><span class="tiktok"><?= icon('tiktok',15) ?></span><b>TikTok Hizmetleri</b><small>Takipçi & İzlenme</small></div>
-                    <div><span class="youtube"><?= icon('youtube',15) ?></span><b>YouTube Hizmetleri</b><small>Abone & Video</small></div>
+                <div class="yh6-dash-services nv75-platform-services">
+                    <div><span class="google"><?= icon('google',17) ?></span><b>Google SEO</b><small>Arama ve işletme görünürlüğü</small></div>
+                    <div><span class="instagram"><?= icon('instagram',17) ?></span><b>Instagram</b><small>Takipçi ve etkileşim</small></div>
+                    <div><span class="tiktok"><?= icon('tiktok',17) ?></span><b>TikTok</b><small>Video ve profil hizmetleri</small></div>
+                    <div><span class="youtube"><?= icon('youtube',17) ?></span><b>YouTube</b><small>Kanal ve video hizmetleri</small></div>
                 </div>
             </div>
         </div>
