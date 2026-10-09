@@ -1,0 +1,109 @@
+/* V45 — Keep every pixel of uploaded Netvera article covers visible.
+   Scoped to home blog section. Existing posts, URLs and crop choices in the
+   admin media library are unchanged. */
+.yh6-blog .yh6-blog-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  align-items:stretch;
+}
+.yh6-blog .yh6-blog-card{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  overflow:hidden;
+  border:1px solid #e3e8f2;
+  border-radius:15px;
+  box-shadow:0 12px 30px rgba(20,41,85,.045);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.yh6-blog .yh6-blog-card:hover{
+  transform:translateY(-3px);
+  border-color:#d1ccfa;
+  box-shadow:0 17px 34px rgba(30,42,90,.085);
+}
+.yh6-blog .yh6-blog-image{
+  position:relative;
+  display:block;
+  flex:0 0 auto;
+  width:100%;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  background:linear-gradient(135deg,#f7f8fe,#eef2fa);
+  border-bottom:1px solid #eef0f7;
+}
+.yh6-blog .yh6-blog-image img{
+  display:block;
+  position:absolute;
+  inset:0;
+  box-sizing:border-box;
+  width:100%;
+  height:100%;
+  max-width:100%;
+  padding:3px;
+  margin:0;
+  object-fit:contain!important;
+  object-position:center!important;
+  border:0;
+  border-radius:0;
+}
+.yh6-blog .yh6-blog-image-badge{
+  position:absolute;
+  z-index:2;
+  bottom:9px;
+  left:9px;
+  top:auto;
+  right:auto;
+  flex:0 0 auto;
+  box-shadow:0 5px 14px rgba(25,33,92,.13);
+}
+.yh6-blog .yh6-blog-card>div:last-child{
+  flex:1;
+  min-height:0;
+  padding:13px 14px 15px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.yh6-blog .yh6-blog-card small{font-size:9px;line-height:1.4}
+.yh6-blog .yh6-blog-card h3{
+  min-height:0;
+  font-size:clamp(12px,1vw,14px);
+  line-height:1.46;
+  margin:9px 0;
+  color:#172548;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+}
+.yh6-blog .yh6-blog-card p{
+  min-height:0;
+  font-size:11px;
+  line-height:1.65;
+  margin:0 0 12px;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+}
+.yh6-blog .yh6-blog-card em{
+  margin-top:auto;
+  font-size:9px;
+  line-height:1.5;
+}
+@media(max-width:1050px){
+  .yh6-blog .yh6-blog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .yh6-blog .yh6-blog-card h3{font-size:13px}
+}
+@media(max-width:550px){
+  .yh6-blog .yh6-blog-grid{grid-template-columns:1fr;gap:12px}
+  .yh6-blog .yh6-blog-card>div:last-child{padding:12px 13px 14px}
+  .yh6-blog .yh6-blog-card h3{font-size:14px}
+  .yh6-blog .yh6-blog-card p{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .yh6-blog .yh6-blog-card{transition:none}
+  .yh6-blog .yh6-blog-card:hover{transform:none}
+}
