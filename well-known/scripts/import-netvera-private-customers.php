@@ -124,9 +124,15 @@ try {
             throw new RuntimeException('Legacy password algorithm unsupported (customer ID '.(int)$row['id'].')');
         $found=$one($new,'SELECT id FROM users WHERE email=?',[$email]);
         if($found){
-            $collisions++;
-            if($get('NETVERA_MERGE_EXISTING_EMAILS')!=='1')
-                throw new RuntimeException('Existing email collision. Review identities then set NETVERA_MERGE_EXISTING_EMAILS=1');
+            $prior=$one($new,'SELECT new_user_id FROM nv_private_user_map WHERE old_customer_id=?',[(int)$row['id']]);
+            $knownUserId=(int)($prior['new_user_id']??0);
+            if($knownUserId>0 && $knownUserId!==(int)$found['id'])
+                throw new RuntimeException('Old-to-new customer mapping changed unexpectedly');
+            // A mapped account can be safely imported again. A new collision
+            // requires an independent manual identity verification first.
+            if($knownUserId===0 && $get('NETVERA_MERGE_EXISTING_EMAILS')!=='1')
+                throw new RuntimeException('Unverified email collision; do not assign purchases without identity review');
+            if($knownUserId===0) $collisions++;
             $userId=(int)$found['id'];
         }else{
             $oldStatus=(string)$row['status'];
@@ -229,6 +235,6 @@ try {
 } catch(Throwable $error){
     if(isset($new) && $new->inTransaction())$new->rollBack();
     // No raw personal data, keys, payment references or SQL query values in CLI output.
-    fwrite(STDERR,"Private import stopped safely: ".$error->getMessage()."\n");
+    fwrite(STDERR,"Private import stopped safely (".get_class($error)."). No customer data logged.\n");
     exit(1);
 }
