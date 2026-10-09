@@ -210,3 +210,18 @@
  .yh-home-v6 .yh49-category-link:hover .yh49-category-icon,
  .nv30-step:hover .nv30-step-icon{transform:none!important}
 }
+
+/* Reduced motion: no instant icon spin or elevation on hover either. */
+@media (prefers-reduced-motion:reduce){
+ #featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i),
+ #featured .nv43-subcategory-link:is(:hover,:focus-visible) :is(.icon,svg):first-child,
+ #featured .yh24-featured-group:hover>.icon:first-child,
+ .yh-home-v6 .yh49-category-link:hover .yh49-category-icon :is(.icon,svg,i),
+ .nv51-main-filter:hover :is(.icon,svg,i),
+ .nv29-service-card:hover .nv29-eyebrow .icon,
+ .nv30-step:hover .nv30-step-icon :is(.icon,svg,i),
+ .yh6-faq-item [data-faq-trigger]:hover .yh6-faq-toggle-icon,
+ :is(.nv27-service-card,.yv-category-card,.nv31-software-card,.nv51-reference-card,.nv30-step,.yh6-blog-card):hover{
+  transform:none!important;
+ }
+}
