@@ -243,6 +243,98 @@ final class SmmCatalogService
         }
     }
 
+    /** Import selected supplier services as separate private-linked PUBLIC brand packages. */
+    public static function bulkPublish(array $data): array
+    {
+        if (!self::installed()) throw new \RuntimeException('SMM tablolarını önce kurun.');
+        $ids=$data['service_ids']??[];
+        if (!is_array($ids)) throw new \RuntimeException('Servis seçimi geçersiz.');
+        $ids=array_values(array_unique(array_filter(array_map('intval',$ids),static fn($x)=>$x>0)));
+        if (!$ids || count($ids)>80) throw new \RuntimeException('Toplu işlemde 1–80 servis seçebilirsiniz.');
+        $short=trim((string)($data['short_description']??''));
+        $detail=trim((string)($data['description']??''));
+        if (mb_strlen($short)<10 || $detail==='') throw new \RuntimeException('Tüm paketler için özgün kısa ve detay açıklama zorunludur.');
+        $features=trim((string)($data['highlight_lines']??''));
+        $bullets=array_values(array_filter(array_map('trim',preg_split('/\r\n|\r|\n/',$features)?:[])));
+        if (count($bullets)>12) throw new \RuntimeException('En fazla 12 kart özelliği kullanılabilir.');
+        foreach($bullets as $b)if(mb_strlen(strip_tags($b))>115) throw new \RuntimeException('Özellik satırı 115 karakteri geçemez.');
+        $label=trim((string)($data['label_prefix']??''));
+        if ($label!=='' && !preg_match('/^[\pL\pN \-]{3,60}$/u',$label)) throw new \RuntimeException('Paket başlık öneki yalnızca harf, rakam ve boşluk içerebilir.');
+        $published=0;$skipped=[];
+        $quantity=(int)($data['fulfillment_quantity']??0);
+        $catId=(int)($data['category_id']??0);
+        $price=(float)($data['price']??0);
+        $db=Database::getInstance();
+        foreach($ids as $serviceId) {
+            $service=$db->fetch('SELECT s.*,p.is_active FROM smm_services s JOIN smm_providers p ON p.id=s.provider_id WHERE s.id=?',[$serviceId]);
+            if(!$service || !$service['is_available'] || !$service['is_active']
+                || strcasecmp((string)$service['service_type'],'Default')!==0) {
+                $skipped[]=$serviceId.' (uyumsuz/pasif)';continue;
+            }
+            // User-authored generic names. NEVER copy raw provider service name to the storefront.
+            $platform=SmmOrderFields::platform((string)$service['category'].' '.(string)$service['name']);
+            $platformName=$platform!==''?ucfirst($platform):'Sosyal Medya';
+            $source=mb_strtolower((string)$service['name'].' '.(string)$service['category'],'UTF-8');
+            $type='Hizmet';
+            foreach([
+                '/takipçi|takipci|follow|subscriber|abone/u'=>'Takipçi',
+                '/beğeni|begeni|like/u'=>'Beğeni',
+                '/izlenme|view/u'=>'İzlenme',
+                '/yorum|comment/u'=>'Yorum',
+                '/kaydetme|save|favori/u'=>'Kaydetme',
+                '/paylaşım|share/u'=>'Paylaşım'
+            ] as $regex=>$value) {
+                if(preg_match($regex,$source)){$type=$value;break;}
+            }
+            $amount=$quantity>0?$quantity:(int)$service['min_quantity'];
+            if ($amount<(int)$service['min_quantity'] || $amount>(int)$service['max_quantity']) {
+                $skipped[]=$serviceId.' (adet sınırı)';continue;
+            }
+            $base=($label!==''?$label.' ':'').$platformName.' '.$amount.' '.$type.' Paketi';
+            $name=$base;
+            for($counter=2;$counter<=150 && $db->fetch('SELECT id FROM packages WHERE slug=?',[slugify($name)]);$counter++) {
+                $name=$base.' Seçenek '.$counter;
+            }
+            try {
+                $record=$data;
+                $record['service_id']=$serviceId;
+                $record['name']=$name;
+                $record['fulfillment_quantity']=$amount;
+                $record['category_id']=$catId;
+                $record['price']=$price;
+                $record['seo_title']=mb_substr($name.' | '.(string)setting('site_name','Yorum Hizmeti'),0,200);
+                $record['seo_description']=$short;
+                $record['seo_focus_keyword']='';
+                // Always create inactive first. Supervisor can individually verify supplier and copy.
+                $record['publish_now']=null;
+                $id=self::publish($record);
+                if($features!=='')PackageHighlightsService::save($id,$features);
+                $published++;
+            } catch (\Throwable $e) {
+                $skipped[]=$serviceId.' ('.mb_substr($e->getMessage(),0,80).')';
+            }
+        }
+        return ['created'=>$published,'skipped'=>$skipped];
+    }
+
+    public static function syncAll(): array
+    {
+        if(!self::installed())throw new \RuntimeException('SMM modülü henüz kurulmadı.');
+        $providers=self::providers();
+        $stats=['providers'=>0,'services'=>0,'errors'=>[]];
+        foreach($providers as $p){
+            if(!(int)$p['is_active'])continue;
+            try{
+                $count=self::sync((int)$p['id']);
+                $stats['providers']++;
+                $stats['services']+=$count;
+            }catch(\Throwable $e){
+                $stats['errors'][]=$p['name'].': '.mb_substr($e->getMessage(),0,90);
+            }
+        }
+        return $stats;
+    }
+
     public static function updateMapping(int $packageId, int $serviceId, int $qty, bool $enabled): void
     {
         $db = Database::getInstance();
