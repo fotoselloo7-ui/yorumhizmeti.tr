@@ -168,4 +168,23 @@ final class SmmController extends Controller
         }
         redirect('/admin/smm');
     }
+    public function reconcile(string $id): void
+    {
+        $this->ownerOnly();
+        Csrf::check();
+        try {
+            SmmFulfillmentService::reconcile(
+                (int)$id,
+                (string)($_POST['mode'] ?? ''),
+                (string)($_POST['upstream_order_id'] ?? ''),
+                ($_POST['verify_absent'] ?? '') === '1'
+            );
+            logActivity('smm_reconcile', 'Tedarikçi sipariş uzlaştırma: '.(int)$id);
+            flash('success', 'Tedarikçi siparişi yönetici tarafından güvenli şekilde uzlaştırıldı.');
+        } catch (\Throwable $e) {
+            flash('error', $e->getMessage());
+        }
+        redirect('/admin/smm');
+    }
+
 }
