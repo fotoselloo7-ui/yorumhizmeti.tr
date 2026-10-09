@@ -284,3 +284,68 @@ body.nv-theme-enabled .site-footer .footer-col a:hover{
 @media(prefers-reduced-motion:reduce){
   .nv75-ecosystem-item,.nv75-benefit{transition:none!important}
 }
+
+
+/* v77: fix legacy responsive stylesheets forcing 64–76px !important fonts and
+   min-width 500px art, causing gaps and overflow on the three-line heading. */
+.yh6-hero .yh6-hero-grid{
+  grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;
+  gap:clamp(18px,2.5vw,34px)!important;
+  min-height:0!important;
+  align-items:center;
+}
+.yh6-hero .yh6-hero-copy{
+  min-width:0;max-width:none!important;
+  padding-left:0!important;
+}
+.yh6-hero .yh6-hero-copy h1.nv75-hero-heading{
+  width:100%;max-width:650px!important;
+  font-size:clamp(37px,3.35vw,52px)!important;
+  line-height:1.105!important;
+  margin:12px 0 17px!important;
+  letter-spacing:-.055em!important;
+  row-gap:0;
+}
+.yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-line:first-child{
+  padding-left:clamp(12px,4.8vw,60px);
+}
+.yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-middle{
+  padding-left:clamp(8px,2vw,27px);
+}
+.yh6-hero .yh6-hero-art{
+  min-width:0!important;
+}
+@media(max-width:1024px){
+  .yh6-hero .yh6-hero-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:12px!important;
+  }
+  .yh6-hero .yh6-hero-copy{max-width:760px!important}
+  .yh6-hero .yh6-hero-copy h1.nv75-hero-heading{
+    font-size:clamp(34px,5.2vw,49px)!important;
+  }
+  .yh6-hero .yh6-hero-art{
+    width:100%;max-width:650px!important;
+    min-height:300px!important;
+    margin:0 auto;
+  }
+}
+@media(max-width:620px){
+  .yh6-hero .yh6-hero-grid{gap:6px!important}
+  .yh6-hero .yh6-hero-copy h1.nv75-hero-heading{
+    font-size:clamp(28px,7.5vw,38px)!important;
+    max-width:100%!important;
+    line-height:1.12!important;
+    margin:12px 0 13px!important;
+  }
+  .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-line:first-child,
+  .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-middle{
+    padding-left:0;
+  }
+  .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-highlight{
+    font-size:.72em;letter-spacing:-.048em;
+  }
+  .yh6-hero .yh6-hero-art{
+    min-height:265px!important;
+  }
+}
