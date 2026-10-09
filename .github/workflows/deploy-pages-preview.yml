@@ -1,0 +1,103 @@
+name: Publish Storefront Design Preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/resources/views/frontend/**'
+      - 'well-known/resources/views/layouts/app.php'
+      - 'well-known/public/assets/**'
+      - 'well-known/scripts/build-pages-preview.py'
+      - '.github/workflows/deploy-pages-preview.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages-static-preview
+  cancel-in-progress: false
+
+jobs:
+  static-preview:
+    name: Build public-only PHP design snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: qa_test_only_password
+          MYSQL_DATABASE: yorumhizmeti_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent -pqa_test_only_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: PHP with required extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, curl, gd
+          tools: none
+      - name: Create isolated synthetic storefront database
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq default-mysql-client
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci < yorumhizmeti_yorumhizmeti.sql
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci < well-known/database/migrations/netvera-legacy-bridge-v1.sql
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci < well-known/tests/netvera-public-ci-seed.sql
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci -e "UPDATE packages SET is_featured=1 WHERE status='active';"
+          # This is a throwaway QA fixture, never customer SQL or live credentials.
+          cat > well-known/.env <<'EOF'
+          APP_NAME="YorumHizmeti Tasarım Önizleme"
+          APP_ENV=local
+          APP_DEBUG=false
+          APP_URL=http://127.0.0.1:8006
+          DB_HOST=127.0.0.1
+          DB_NAME=yorumhizmeti_ci
+          DB_USER=root
+          DB_PASS=qa_test_only_password
+          DB_CHARSET=utf8mb4
+          LICENSE_ENABLED=false
+          LICENSE_LOCAL_BYPASS=true
+          NETVERA_LOCAL_AUTO_SETUP=0
+          EOF
+          mkdir -p well-known/storage/cache well-known/storage/logs well-known/public/uploads
+          php -S 127.0.0.1:8006 -t well-known/public well-known/tests/router.php > /tmp/pages-preview-php.log 2>&1 &
+          for attempt in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8006/ >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/pages-preview-php.log
+          exit 1
+      - name: Export visitor pages only
+        shell: bash
+        env:
+          PAGES_PREVIEW_CI_ONLY: '1'
+          PREVIEW_ORIGIN: http://127.0.0.1:8006
+          PREVIEW_OUTPUT: pages-preview
+        run: python3 well-known/scripts/build-pages-preview.py
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload static site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-preview
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
