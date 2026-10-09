@@ -36,7 +36,10 @@
     </form>
     <?php endif; ?>
     <?php if(!$importanceReady && $ready): ?>
-      <p style="font-size:11px;margin:13px 0 0;color:#9b673e">Önemli işaretleme özelliğini kullanmak için <code>database/migrations/netvera-inquiries-v2.sql</code> şemasını bir kez uygulayın.</p>
+      <form method="post" action="/admin/netvera-gelen-kutusu/onem/kur" style="margin-top:14px">
+        <?= csrfField() ?>
+        <button class="btn btn-outline btn-sm" type="submit"><?= icon('star',14) ?> Önemli Talep Özelliğini Kur (Tek Tık)</button>
+      </form>
     <?php endif; ?>
   </div>
 </div>
