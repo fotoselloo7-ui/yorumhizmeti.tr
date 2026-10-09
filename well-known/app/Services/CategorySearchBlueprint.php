@@ -133,6 +133,23 @@ final class CategorySearchBlueprint {
   ]
 ];
   }
+  /** Server-side launch defaults for unedited service categories. URL, product data and software categories remain untouched. */
+  public static function decorate(array $category): array {
+    if(self::isSoftware($category))return $category;
+    $profile=self::profiles()[strtolower((string)($category['slug']??''))]??null;
+    if(!$profile)return $category;
+    $title=trim((string)($category['seo_title']??''));
+    if($title==='' || preg_match('/Yorum\s*Hizmeti|YorumHizmeti/iu',$title))
+      $category['seo_title']=$profile['title'];
+    $description=trim((string)($category['seo_description']??''));
+    if($description===''||mb_strlen($description,'UTF-8')<65)
+      $category['seo_description']=$profile['desc'];
+    if(trim((string)($category['seo_focus_keyword']??''))==='')$category['seo_focus_keyword']=$profile['focus'];
+    if(trim((string)($category['og_title']??''))==='')$category['og_title']=$category['seo_title'];
+    if(trim((string)($category['og_description']??''))==='')$category['og_description']=$category['seo_description'];
+    return $category;
+  }
+
   public static function preview(): array {
     $db=Database::getInstance();
     $categories=$db->fetchAll("SELECT id,name,slug,seo_title,seo_description,seo_focus_keyword FROM categories");
