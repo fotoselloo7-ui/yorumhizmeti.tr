@@ -31,7 +31,13 @@ final class CatalogMenuService
                 foreach ($cat['children'] as &$child) {
                     $child['style']=self::style($child,$cat);
                     $child['icon']=self::subcategoryIcon($child);
-                    $child['url']=$cat['url'].'?alt='.rawurlencode($child['slug']);
+                    // Every real non-software child is a standalone indexable service
+                    // page with its own title, canonical and visible products.
+                    $softwareParent=(bool)preg_match('/yaz[ıi]l[ıi]m|yazilim|script|web.?site|cms|software|wordpress/iu',
+                        (string)$cat['name'].' '.(string)$cat['slug']);
+                    $child['url']=$softwareParent
+                        ?$cat['url'].'?alt='.rawurlencode($child['slug'])
+                        :'/kategori/'.rawurlencode($child['slug']);
                 }
                 unset($child);
                 $groups[self::bucket($cat)]['categories'][]=$cat;
