@@ -111,6 +111,31 @@ class CategoryController extends Controller
             $testimonialSection = null;
         }
 
+        $schema=null;
+        if(!preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|web.site|tema)/iu',
+             (string)$category['slug'].' '.(string)$category['name'])){
+            $canonical=url('/kategori/'.$category['slug']);
+            $items=[];
+            foreach(array_slice($packages,0,35) as $n=>$p){
+                $items[]=['@type'=>'ListItem','position'=>$n+1,
+                    'name'=>$p['name'],'url'=>url('/paket/'.$p['slug'])];
+            }
+            $graph=[
+              ['@type'=>'BreadcrumbList','@id'=>$canonical.'#breadcrumbs','itemListElement'=>[
+                 ['@type'=>'ListItem','position'=>1,'name'=>'Ana Sayfa','item'=>url('/')],
+                 ['@type'=>'ListItem','position'=>2,'name'=>'Hizmet Kategorileri','item'=>url('/kategoriler')],
+                 ['@type'=>'ListItem','position'=>3,'name'=>$category['name'],'item'=>$canonical]
+              ]],
+              ['@type'=>'CollectionPage','@id'=>$canonical.'#page',
+                 'name'=>$category['seo_title']?:$category['name'],
+                 'description'=>$category['seo_description']?:$category['description'],
+                 'url'=>$canonical,'inLanguage'=>'tr-TR',
+                 'mainEntity'=>['@type'=>'ItemList','numberOfItems'=>count($items),'itemListElement'=>$items]]
+            ];
+            $schema=json_encode(['@context'=>'https://schema.org','@graph'=>$graph],
+                JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
+        }
+
         $this->render('frontend/category-detail', [
             'pageTitle' => $category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name'),
             'metaDescription' => $category['seo_description'] ?: $category['description'],
@@ -118,6 +143,7 @@ class CategoryController extends Controller
             'ogTitle' => $category['og_title'] ?: $category['name'],
             'ogDescription' => $category['og_description'] ?: $category['seo_description'],
             'category' => $category,
+            'schema' => $schema,
             'nvSeoData' => \App\Services\NetveraSeoBridge::get('category',(int)$category['id']),
             'packages' => $packages,
             'subCategories' => $subCategories,
