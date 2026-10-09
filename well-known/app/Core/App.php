@@ -151,6 +151,19 @@ class App
         $r->get('/admin/paket/{id}/alanlar', 'Admin\\PackageController@fields');
         $r->post('/admin/paket/{id}/alanlar-kaydet', 'Admin\\PackageController@saveFields');
 
+        // Multi-provider social media fulfillment (admin only; never exposed in storefront).
+        $r->get('/admin/smm', 'Admin\\SmmController@index');
+        $r->post('/admin/smm/kur', 'Admin\\SmmController@install');
+        $r->post('/admin/smm/tedarikci/kaydet', 'Admin\\SmmController@saveProvider');
+        $r->post('/admin/smm/tedarikci/{id}/esitle', 'Admin\\SmmController@sync');
+        $r->post('/admin/smm/tedarikci/{id}/test', 'Admin\\SmmController@balance');
+        $r->post('/admin/smm/kategori/ekle', 'Admin\\SmmController@createCategory');
+        $r->post('/admin/smm/paket/olustur', 'Admin\\SmmController@publish');
+        $r->post('/admin/smm/paket/{id}/esle', 'Admin\\SmmController@mapping');
+        $r->post('/admin/smm/calistir', 'Admin\\SmmController@run');
+        $r->post('/admin/smm/is/{id}/yenile', 'Admin\\SmmController@refill');
+        $r->post('/admin/smm/is/{id}/iptal', 'Admin\\SmmController@cancel');
+
         // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
         $r->get('/admin/netvera-gelen-kutusu', 'Admin\\NetveraInboxController@index');
         $r->get('/admin/netvera-gelen-kutusu/{id}', 'Admin\\NetveraInboxController@detail');
