@@ -10,13 +10,13 @@
 </div>
 <?php if(!$ready): ?>
   <div class="adm-card"><div class="adm-card-body" style="max-width:810px">
-    <h3>Staging içerik tabloları henüz hazır değil</h3>
-    <p>Gerçek Netvera yedeğinin ürünlerini aktarmak için önce ayrı test veritabanında katalog şemasını hazırlamalısınız. Bu adım kullanıcı, sipariş, lisans veya ödeme tablolarına dokunmaz ve <strong>canlı ortamda çalışmaz</strong>.</p>
+    <h3>Yazılım kategorisi veritabanı eksik</h3>
+    <p>Yazılım ekleme ve kategori yönetimi için katalog veritabanı tablolarının kurulması gerekiyor. Güncel SQL ve içerik aktarımı yapılmadan mevcut site verilerini silmeyin.</p>
     <form method="post" action="/admin/netvera-kategoriler/staging-kur">
       <?= csrfField() ?>
-      <button class="btn btn-primary" type="submit"><?= icon('database',16) ?> Staging Katalog Tablolarını Hazırla</button>
+      <button class="btn btn-primary" type="submit"><?= icon('database',16) ?> Katalog Tablolarını Hazırla (Test Ortamı)</button>
     </form>
-    <p class="text-sm text-secondary">Güvenlik koşulu: APP_ENV=staging, NETVERA_IMPORT_ALLOWED=1 ve ayrı bir test MySQL veritabanı.</p>
+    <p class="text-sm text-secondary">Bu otomatik kurulum yalnızca test veritabanında çalışır. Canlı cPanel geçişi, mevcut verilerin yedeği ve kontrollü SQL aktarımı gerektirir.</p>
   </div></div>
 <?php else: ?>
   <div class="adm-card" style="margin-bottom:20px">
