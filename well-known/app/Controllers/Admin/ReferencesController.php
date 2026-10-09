@@ -35,6 +35,18 @@ class ReferencesController extends Controller
         if (!isset($groups[$group]) || !isset($groups[$group]['services'][$service])) {
             throw new \InvalidArgumentException('Lütfen geçerli bir referans kategorisi seçin.');
         }
+        $secondGroup = trim((string)($_POST['secondary_group'] ?? ''));
+        $secondService = trim((string)($_POST['secondary_service'] ?? ''));
+        $placements = [['group'=>$group, 'service'=>$service]];
+        if ($secondGroup !== '') {
+            if (!isset($groups[$secondGroup]['services'][$secondService])) {
+                throw new \InvalidArgumentException('İkinci kategori için geçerli bir alt hizmet seçin.');
+            }
+            if ($secondGroup === $group && $secondService === $service) {
+                throw new \InvalidArgumentException('Aynı kategori ve alt hizmeti iki kez seçmeyin.');
+            }
+            $placements[] = ['group'=>$secondGroup, 'service'=>$secondService];
+        }
         if (!array_key_exists($media, ReferencesService::mediaTypes())) {
             throw new \InvalidArgumentException('Geçersiz referans içerik türü.');
         }
@@ -53,6 +65,7 @@ class ReferencesController extends Controller
             'url' => $url,
             'group' => $group,
             'service' => $service,
+            'placements' => $placements,
             'media_type' => $media,
             'image' => $existing['image'] ?? '',
             'logo' => $existing['logo'] ?? '',
