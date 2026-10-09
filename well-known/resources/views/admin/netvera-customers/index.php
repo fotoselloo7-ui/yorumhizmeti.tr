@@ -1,79 +1,114 @@
 <div class="adm-page-top">
-  <div>
-    <h2><?= icon('users',24) ?> NetVera Müşteriler & Bayilik</h2>
-    <p class="text-sm text-secondary">Eski NetVera profil, satın alma, lisans ve komisyon geçmişinin korunmuş kayıtları.</p>
-  </div>
-  <a class="btn btn-outline btn-sm" href="/admin/uyeler"><?= icon('arrow-left',14) ?> Mevcut Üyeler</a>
-</div>
-<?php if (!$ready): ?>
-<div class="adm-card" style="margin-top:16px">
- <div class="adm-card-body">
-  <h3><?= icon('shield-check',19) ?> Güvenli aktarım henüz uygulanmadı</h3>
-  <p>Eski NetVera müşteri ve bayilik tabloları bu veritabanında bulunmuyor. Eski müşteri haklarını korumak için açık GitHub'a veri koymadan ayrı staging veritabanından taşımalıyız.</p>
-  <p>Kaynak veritabanı okuma ve staging işlemine ilişkin yönergeler <code>docs/netvera-private-customer-migration-v1.md</code> dosyasındadır. Üretim kullanıcıları silinmedi, admin bilgileri değiştirilmedi.</p>
+ <div><h2><?= icon('users',22) ?> Müşteriler, Siparişler ve Bayilik</h2>
+   <p class="text-sm text-secondary">Aktif müşteri hesapları, gerçek alışveriş kayıtları ve iş ortaklığı başvuruları tek merkezde.</p>
+ </div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <a class="btn btn-outline btn-sm" href="/admin/uyeler"><?= icon('users',14) ?> Tüm Üyeler</a>
+   <a class="btn btn-outline btn-sm" href="/admin/siparisler"><?= icon('shopping-cart',14) ?> Siparişler</a>
+   <a class="btn btn-primary btn-sm" href="/admin/bayilik"><?= icon('handshake',14) ?> Bayilik Yönetimi</a>
  </div>
 </div>
-<?php else: ?>
-<div class="grid grid-4" style="margin:15px 0 23px">
+<div class="nv67-customer-overview">
+ <div class="nv67-metric-row">
   <?php foreach ([
-    ['users','Aktarılan Müşteri',$stats['customers']],
-    ['shopping-cart','Eski Sipariş',$stats['orders']],
-    ['shield-check','Lisans / Hak Kaydı',$stats['licenses']],
-    ['user-check','Bayilik Kaydı',$stats['dealers']]
+    ['users','Toplam Üye',$nativeStats['users']??0],
+    ['shopping-cart','Toplam Sipariş',$nativeStats['orders']??0],
+    ['check-circle','Ödenen Sipariş',$nativeStats['paid_orders']??0],
+    ['handshake','Bayi Kaydı',$nativeStats['dealers']??0],
+    ['clock','Bekleyen Başvuru',$nativeStats['waiting']??0]
   ] as $metric): ?>
-  <div class="adm-card"><div class="adm-card-body" style="display:flex;align-items:center;gap:12px">
-    <?= icon($metric[0],23) ?><div><strong style="display:block;font-size:23px"><?= (int)$metric[2] ?></strong>
-    <span class="text-sm text-secondary"><?= e($metric[1]) ?></span></div></div></div>
+  <div class="adm-card"><div class="adm-card-body nv67-metric">
+    <span><?= icon($metric[0],19) ?></span><div><strong><?= number_format((int)$metric[2],0,',','.') ?></strong><small><?= e($metric[1]) ?></small></div>
+  </div></div>
   <?php endforeach; ?>
-</div>
-<div class="adm-card">
-  <div class="adm-card-header"><h3><?= icon('users',18) ?> Kaynak Hesap Eşleştirmeleri</h3></div>
-  <div class="adm-card-body" style="padding:0">
-    <div class="table-responsive">
-      <table class="adm-table">
-        <thead><tr><th>Üye</th><th>Eski ID</th><th>Eski Sipariş</th><th>Lisans</th><th>Bayilik</th><th>Durum</th></tr></thead>
-        <tbody>
-        <?php foreach ($members as $m): ?>
-        <tr>
-          <td><strong><?= e($m['name']) ?></strong><small style="display:block;color:#8a92a6"><?= e($m['email']) ?></small></td>
-          <td><?= (int)$m['old_customer_id'] ?></td>
-          <td><?= (int)$m['legacy_orders'] ?></td>
-          <td><?= (int)$m['licenses'] ?></td>
-          <td><?= e($m['dealer_status'] ?: ($m['want_dealer']?'Başvuru':'—')) ?></td>
-          <td><span class="badge <?= $m['status']==='active'?'badge-success':'badge-warning' ?>"><?= e($m['status']) ?></span></td>
-        </tr>
-        <?php endforeach; ?>
-        <?php if (!$members): ?><tr><td colspan="6">Henüz eşleştirilmiş müşteri yok.</td></tr><?php endif; ?>
-        </tbody>
-      </table>
-    </div>
+ </div>
+
+ <nav class="nv67-subnav" aria-label="Müşteri yönetimi bölümleri">
+  <a href="#current-customers">Mevcut Müşteriler</a>
+  <a href="#current-orders">Satın Almalar</a>
+  <a href="#partner-accounts">Bayilik</a>
+  <a href="#old-netvera-archive">Eski NetVera Arşivi</a>
+ </nav>
+
+ <section class="adm-card" id="current-customers">
+  <div class="adm-card-header"><h3><?= icon('users',18) ?> Aktif Sistemdeki Müşteriler</h3><a class="btn btn-outline btn-sm" href="/admin/uyeler">Tümünü Yönet <?= icon('arrow-right',12) ?></a></div>
+  <div class="adm-card-body"><div class="table-responsive">
+   <table class="adm-table"><thead><tr><th>Üye</th><th>Hesap</th><th>Sipariş</th><th>Ödenen Tutar</th><th>Kayıt</th></tr></thead><tbody>
+    <?php foreach($nativeUsers as $customer): ?>
+    <tr>
+     <td><strong><?= e($customer['name']) ?></strong><small class="nv67-table-muted"><?= e($customer['email']) ?></small></td>
+     <td><span class="badge <?= $customer['status']==='active'?'badge-success':'badge-warning' ?>"><?= e($customer['status']) ?></span></td>
+     <td><?= (int)$customer['order_count'] ?></td>
+     <td><?= money((float)$customer['paid_total']) ?></td>
+     <td><?= e((string)$customer['created_at']) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php if(!$nativeUsers): ?><tr><td colspan="5">Henüz müşteri kaydı bulunmuyor.</td></tr><?php endif; ?>
+   </tbody></table>
+  </div></div>
+ </section>
+
+ <section class="adm-card" id="current-orders">
+  <div class="adm-card-header"><h3><?= icon('shopping-cart',18) ?> Gerçek Sipariş ve Satın Alma Geçmişi</h3><a class="btn btn-outline btn-sm" href="/admin/siparisler">Sipariş Merkezi <?= icon('arrow-right',12) ?></a></div>
+  <div class="adm-card-body"><div class="table-responsive"><table class="adm-table">
+   <thead><tr><th>Sipariş</th><th>Müşteri</th><th>Tutar</th><th>Ödeme</th><th>İşlem Durumu</th></tr></thead><tbody>
+    <?php foreach($nativeOrders as $order): ?><tr>
+     <td><a href="/admin/siparis/<?= (int)$order['id'] ?>"><strong><?= e($order['order_number']) ?></strong></a><small class="nv67-table-muted"><?= e((string)$order['created_at']) ?></small></td>
+     <td><?= e($order['customer_name']??'—') ?><small class="nv67-table-muted"><?= e($order['customer_email']??'') ?></small></td>
+     <td><?= money((float)$order['total_amount']) ?></td>
+     <td><?= e($order['payment_status']) ?></td><td><?= e(orderStatusLabel($order['order_status'])) ?></td>
+    </tr><?php endforeach; ?>
+    <?php if(!$nativeOrders): ?><tr><td colspan="5">Henüz sipariş bulunmuyor.</td></tr><?php endif; ?>
+   </tbody></table></div>
   </div>
-</div>
-<div class="adm-card" style="margin-top:16px">
-  <div class="adm-card-header" style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between">
-    <h3><?= icon('shopping-cart',18) ?> Kimlik Doğrulaması Bekleyen Eski Misafir Siparişleri</h3>
-    <span class="badge badge-warning"><?= (int)$stats['unclaimed'] ?> eşleşmemiş</span>
-  </div>
+ </section>
+
+ <section class="adm-card" id="partner-accounts">
+  <div class="adm-card-header"><h3><?= icon('handshake',18) ?> Bayilik Başvuruları ve İş Ortakları</h3><a class="btn btn-outline btn-sm" href="/admin/bayilik">Bayilik Yönetimine Git <?= icon('arrow-right',12) ?></a></div>
   <div class="adm-card-body">
-    <p class="text-sm text-secondary" style="margin-bottom:12px">Kaynak NetVera'da müşteri ID'si bulunmayan eski siparişler burada korunur. E-posta eşleşse bile yalnızca bu bilgiyle lisans hakkı verilmez. Önce ödeme ve alıcı kimliği doğrulanmalıdır.</p>
-    <div class="table-responsive">
-      <table class="adm-table">
-        <thead><tr><th>Eski Sipariş</th><th>Müşteri / E-posta</th><th>Ürün</th><th>Tutar</th><th>Ödeme</th></tr></thead>
-        <tbody>
-        <?php foreach ($unclaimedOrders as $oldOrder): ?>
-        <tr>
-          <td><strong><?= e($oldOrder['order_no']) ?></strong></td>
-          <td><?= e($oldOrder['customer_name'] ?: 'Misafir') ?><small style="display:block;color:#8490a5"><?= e($oldOrder['customer_email'] ?: '-') ?></small></td>
-          <td><?= e($oldOrder['product_name'] ?: 'Dijital Ürün') ?></td>
-          <td><?= money((float)$oldOrder['amount']) ?></td>
-          <td><?= e($oldOrder['payment_status']) ?></td>
-        </tr>
-        <?php endforeach; ?>
-        <?php if (!$unclaimedOrders): ?><tr><td colspan="5">Eşleşmemiş eski sipariş bulunmuyor.</td></tr><?php endif; ?>
-        </tbody>
-      </table>
-    </div>
+   <?php if(!\App\Services\DealerProgramService::ready()): ?>
+     <p class="text-secondary">Bayilik başvuru modülü veritabanı henüz kurulmadı. Yönetici panelindeki Bayilik Yönetimi bölümünden mevcut üyeleri silmeden kurulumu başlatabilirsiniz.</p>
+   <?php else: ?>
+   <div class="table-responsive"><table class="adm-table">
+    <thead><tr><th>Müşteri</th><th>Referans</th><th>Durum</th><th>Seviye</th><th>Oran</th></tr></thead><tbody>
+    <?php foreach($nativeDealerAccounts as $dealer): ?>
+    <tr><td><strong><?= e($dealer['name']) ?></strong><small class="nv67-table-muted"><?= e($dealer['email']) ?></small></td>
+     <td><code><?= e($dealer['referral_code']) ?></code></td><td><?= e($dealer['status']) ?></td><td><?= e($dealer['tier']) ?></td><td><?= e((string)$dealer['commission_rate']) ?>%</td></tr>
+    <?php endforeach; ?>
+    <?php if(!$nativeDealerAccounts): ?><tr><td colspan="5">Henüz bayilik başvurusu bulunmuyor.</td></tr><?php endif; ?>
+    </tbody></table></div>
+   <?php endif; ?>
   </div>
+ </section>
+
+ <section class="adm-card" id="old-netvera-archive">
+   <div class="adm-card-header"><h3><?= icon('archive',18) ?> Eski NetVera Satın Alma ve Lisans Arşivi</h3>
+      <span class="badge <?= $ready?'badge-success':'badge-warning' ?>"><?= $ready?'Arşiv tabloları bağlı':'Arşiv bağlantısı bekliyor' ?></span></div>
+   <div class="adm-card-body">
+    <?php if(!$ready): ?>
+      <p class="text-secondary">Mevcut müşteri ve sipariş yönetimi yukarıda aktiftir. Eski NetVera veritabanındaki kişisel hesaplar ve lisanslar henüz bu veritabanına aktarılmadığı için burada kayıt uydurulmuyor. Güvenli kaynak aktarımı için sunucu işletim yönergesi: <code>docs/netvera-private-customer-migration-v1.md</code>.</p>
+    <?php else: ?>
+      <div class="nv67-archive-stats">
+        <span><strong><?= (int)$stats['customers'] ?></strong> Eski müşteri</span>
+        <span><strong><?= (int)$stats['orders'] ?></strong> Eski sipariş</span>
+        <span><strong><?= (int)$stats['licenses'] ?></strong> Lisans hakkı</span>
+        <span><strong><?= (int)$stats['dealers'] ?></strong> Eski bayi</span>
+        <span><strong><?= (int)$stats['unclaimed'] ?></strong> Doğrulama bekleyen sipariş</span>
+      </div>
+      <div class="table-responsive"><table class="adm-table"><thead>
+       <tr><th>Eski Müşteri</th><th>E-posta</th><th>Sipariş</th><th>Lisans</th><th>Bayilik</th></tr></thead><tbody>
+       <?php foreach($members as $m): ?><tr>
+        <td><strong><?= e($m['name']) ?></strong><small class="nv67-table-muted">Eski ID #<?= (int)$m['old_customer_id'] ?></small></td>
+        <td><?= e($m['email']) ?></td><td><?= (int)$m['legacy_orders'] ?></td>
+        <td><?= (int)$m['licenses'] ?></td><td><?= e($m['dealer_status']?:($m['want_dealer']?'Başvuru':'—')) ?></td>
+       </tr><?php endforeach; ?>
+       <?php if(!$members): ?><tr><td colspan="5">Arşiv şeması hazır; henüz aktarılmış müşteri kaydı yok.</td></tr><?php endif; ?>
+       </tbody></table></div>
+       <?php if($unclaimedOrders): ?><details class="nv67-archive-details"><summary>Doğrulanmamış eski siparişleri incele (<?= (int)$stats['unclaimed'] ?>)</summary>
+       <div class="table-responsive"><table class="adm-table"><thead><tr><th>Sipariş</th><th>Alıcı</th><th>Ürün</th><th>Ödeme</th></tr></thead><tbody>
+       <?php foreach($unclaimedOrders as $o): ?><tr><td><?= e($o['order_no']) ?></td><td><?= e($o['customer_name']?:'Misafir') ?></td><td><?= e($o['product_name']) ?></td><td><?= e($o['payment_status']) ?></td></tr><?php endforeach; ?>
+       </tbody></table></div><p class="text-secondary">Misafir siparişleri yalnızca e-posta benzerliğiyle hesaba/lisansa bağlanmaz.</p></details><?php endif; ?>
+    <?php endif; ?>
+   </div>
+ </section>
 </div>
-<p class="text-sm text-secondary" style="margin-top:12px">Bu ekran yalnızca doğrulanmış kayıtları gösterir; yeni satışlara komisyon veya lisans oluşturmaz.</p>
-<?php endif; ?>
