@@ -83,9 +83,8 @@ def export_html(text, route, all_routes):
     # All demo forms, account operations and payments are intentionally disabled.
     notice = r'''
 <div id="pages-preview-toast" role="status" aria-live="polite" hidden style="position:fixed;right:20px;bottom:20px;z-index:999999;max-width:340px;background:#152449;color:#fff;padding:15px 19px;border-radius:12px;box-shadow:0 15px 45px #10183b50;font:600 12px/1.6 Arial,sans-serif">
-  Bu bağlantı yalnızca görsel önizlemede bulunmuyor. Gerçek sitede kullanılabilir.
+  Bu işlem yayın ortamında kullanılabilir. Hesap, teklif ve ödeme işlemleri burada gerçekleştirilmez.
 </div>
-<div style="position:fixed;z-index:999990;right:12px;top:8px;background:linear-gradient(110deg,#2e5be2,#7940de);color:white;border-radius:999px;padding:7px 12px;font:700 10px Arial,sans-serif;box-shadow:0 7px 23px #172a6a33;pointer-events:none">TASARIM ÖNİZLEMESİ · ÖDEME KAPALI</div>
 <script>
 (() => {
   const toast = document.getElementById('pages-preview-toast');
