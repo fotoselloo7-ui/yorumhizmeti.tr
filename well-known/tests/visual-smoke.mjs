@@ -1290,6 +1290,37 @@ try {
     throw new Error('Uploaded MP4 did not select first-party native video player');
   await showcasePage.keyboard.press('Escape');
   if(await modal.isVisible())throw new Error('Escape did not close local player');
+
+  // Admin can add an externally hosted YouTube video for the same Instagram
+  // reference: the app stores only a URL, and the viewer stays on our site.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const existingReel=showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Reels Referans Testi'});
+  const updateReel=existingReel.locator('form[data-reference-editor]');
+  await updateReel.locator('[name="external_video_url"]').fill('https://youtu.be/dQw4w9WgXcQ');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    updateReel.locator('button[type="submit"]').click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const streamedCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI Reels Referans Testi'});
+  if(await streamedCard.getAttribute('data-ref-external-type')!=='iframe')
+    throw new Error('External video provider was not saved into the reference');
+  const beforeStream=showcasePage.url();
+  await streamedCard.locator('.nv51-play-embed').click();
+  const streamedModal=showcasePage.locator('[data-ref-player-modal]');
+  const externalFrame=streamedModal.locator('iframe');
+  if(!(await streamedModal.isVisible()) ||
+     !(await externalFrame.getAttribute('src')).includes('youtube-nocookie.com/embed/dQw4w9WgXcQ'))
+    throw new Error('External video did not use privacy-enhanced on-site player');
+  if(showcasePage.url()!==beforeStream)throw new Error('External video left our website');
+  if(await streamedModal.locator('video').count())
+    throw new Error('Remote iframe was incorrectly routed into local MP4 player');
+  await streamedModal.locator('[data-ref-player-close]').click();
+  if(await streamedModal.locator('iframe').count())
+    throw new Error('External hosted player was not removed on close');
+  console.log('PASS external YouTube link saved in admin -> onsite modal, zero local video file');
+
   console.log('PASS Instagram cover -> local modal (no redirect), close cleanup, native video priority');
 
   await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-desktop.png'),fullPage:true,animations:'disabled'});
