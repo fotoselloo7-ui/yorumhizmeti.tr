@@ -28,7 +28,7 @@ if (!function_exists('yvBlogPlatform')) {
           <input name="q" value="<?= e($_GET['q']??'') ?>" placeholder="Hangi konuda bilgi arıyorsunuz?">
           <button type="submit">Ara <?= icon('arrow-right',11) ?></button>
         </form>
-        <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Google Yorum</span><span>Instagram Etkileşim</span><span>TikTok Takipçi</span><span>SEO</span></div>
+        <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Hazır Yazılım</span><span>Instagram Takipçi</span><span>Dijital Ajans</span><span>Teknik SEO</span></div>
       </div>
       <div class="yv-blog-hero-art-v8">
         <img class="yv-blog-woman-v8" src="<?= e(asset('img/blog-woman-cutout.png')) ?>" alt="NetVera bilgi merkezi" loading="eager">
