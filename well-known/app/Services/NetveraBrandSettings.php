@@ -12,6 +12,7 @@ final class NetveraBrandSettings
         return [
             'site_name' => ['NetVera Teknoloji Yazılım','general'],
             'site_url' => ['https://netvera.tr','general'],
+            'site_email' => ['info@netvera.tr','general'],
             'site_slogan' => ['Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri','general'],
             'footer_text' => ['© NetVera Teknoloji Yazılım. Tüm hakları saklıdır.','footer'],
             'brand_short_name' => ['NetVera','branding'],
@@ -43,6 +44,7 @@ final class NetveraBrandSettings
         $lower=mb_strtolower($value,'UTF-8');
         if(preg_match('~yorumhizmeti(?:\.tr)?|yorum\s+hizmeti|yorumpanel~iu',$value))return true;
         if($key==='site_url')return (bool)preg_match('~^https?://(?:www\.)?yorumhizmeti\.tr/?$~iu',$value);
+        if($key==='site_email')return mb_strtolower($value,'UTF-8')==='info@yorumhizmeti.tr';
         if($key==='site_slogan')return in_array($lower,[
             'dijital hizmetlerde güvenilir çözüm ortağınız',
             'web yazılımı, sosyal medya ve dijital pazarlama çözümleri',
