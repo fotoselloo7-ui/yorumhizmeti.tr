@@ -19,7 +19,7 @@ final class CategorySearchBlueprint {
     'title' => 'Instagram Takipçi Al | Takipçi Paketleri – NetVera',
     'desc' => 'Instagram takipçi paketlerinin kapsamını, adetlerini ve teslimat koşullarını karşılaştırın. Profilinize uygun seçenekler ve şifresiz sipariş bilgileri NetVera\'da.',
     'focus' => 'instagram takipçi al',
-    'secondary' => 'instagram takipçi hizmeti, instagram takipçi paketleri, instagram takipçi fiyatları',
+    'secondary' => 'instagram takipçi satın al, instagram takipçi hizmeti, instagram takipçi paketleri, instagram takipçi fiyatları',
     'question' => 'Instagram takipçi hizmeti seçerken nelere dikkat edilmeli?',
     'answer' => 'Paket adedini, hizmetin kapsamını, hesap gereksinimlerini ve olası teslimat değişkenlerini inceleyin. Hesap şifrenizi paylaşmadan sipariş hedefini belirtin.'
   ],
@@ -28,7 +28,7 @@ final class CategorySearchBlueprint {
     'title' => 'Instagram Beğeni Al | Gönderi Beğeni Paketleri – NetVera',
     'desc' => 'Instagram gönderi beğenisi hizmetlerinin kapsamını ve paket seçeneklerini karşılaştırın. Hedef gönderi bağlantısını ve teslimat koşullarını sipariş öncesinde inceleyin.',
     'focus' => 'instagram beğeni al',
-    'secondary' => 'instagram beğeni paketleri, instagram gönderi beğeni, instagram beğeni hizmeti',
+    'secondary' => 'instagram beğeni satın al, instagram beğeni paketleri, instagram gönderi beğeni, instagram beğeni hizmeti',
     'question' => 'Instagram beğeni paketi için ne gerekir?',
     'answer' => 'Genellikle hedef gönderinin bağlantısı gerekir; hangi bağlantıların desteklendiğini, miktar sınırlarını ve teslimat koşullarını seçtiğiniz paket üzerinden kontrol edin.'
   ],
@@ -37,7 +37,7 @@ final class CategorySearchBlueprint {
     'title' => 'Instagram Reels İzlenme Hizmetleri – NetVera',
     'desc' => 'Instagram Reels izlenme paketlerini, kapsamlarını ve video bağlantısı koşullarını inceleyin. Seçenekleri şeffaf hizmet bilgileriyle karşılaştırın.',
     'focus' => 'instagram reels izlenme',
-    'secondary' => 'instagram reels izlenme al, reels görüntülenme, instagram video izlenme',
+    'secondary' => 'instagram reels izlenme al, instagram izlenme satın al, reels görüntülenme, instagram video izlenme',
     'question' => 'Reels izlenme hizmeti için hangi bilgi gerekir?',
     'answer' => 'Hedef Reels videosunun bağlantısını belirtin. Hizmet kapsamı ve tahmini teslimat süresi seçilen pakete göre değişebilir.'
   ],
@@ -55,7 +55,7 @@ final class CategorySearchBlueprint {
     'title' => 'TikTok Takipçi Al | Takipçi Paketleri – NetVera',
     'desc' => 'TikTok takipçi hizmetlerini adet, kapsam ve teslimat koşullarına göre karşılaştırın. Paket detaylarını inceleyerek hesabınıza uygun seçeneği belirleyin.',
     'focus' => 'tiktok takipçi al',
-    'secondary' => 'tiktok takipçi hizmeti, tiktok takipçi fiyatları',
+    'secondary' => 'tiktok takipçi satın al, tiktok takipçi hizmeti, tiktok takipçi fiyatları',
     'question' => 'TikTok takipçi paketleri nasıl karşılaştırılır?',
     'answer' => 'Paket adetleri, teslimat koşulları ve hesap hedefi için istenen bilgiler hizmetler arasında değişebilir. Siparişten önce açıklamaları karşılaştırın.'
   ],
@@ -64,7 +64,7 @@ final class CategorySearchBlueprint {
     'title' => 'TikTok İzlenme Al | Video İzlenme Paketleri – NetVera',
     'desc' => 'TikTok video izlenme paketlerinin adet, teslimat ve bağlantı gereksinimlerini karşılaştırın. Hedef videonuza uygun hizmeti seçin.',
     'focus' => 'tiktok izlenme al',
-    'secondary' => 'tiktok video izlenme, tiktok görüntülenme',
+    'secondary' => 'tiktok izlenme satın al, tiktok video izlenme, tiktok görüntülenme',
     'question' => 'TikTok izlenme hizmetinde hangi bilgi gerekir?',
     'answer' => 'İzlenme hizmeti için video bağlantısını hazırlayın ve seçilen paketin kapsamını, miktarını ve teslimat süresini kontrol edin.'
   ],
@@ -82,7 +82,7 @@ final class CategorySearchBlueprint {
     'title' => 'YouTube Abone Hizmetleri | Abone Paketleri – NetVera',
     'desc' => 'YouTube abone paketlerinin kapsamını, sipariş şartlarını ve kanal bağlantısı gereksinimlerini inceleyin. Mevcut seçenekleri NetVera\'da karşılaştırın.',
     'focus' => 'youtube abone',
-    'secondary' => 'youtube abone al, youtube abone paketleri',
+    'secondary' => 'youtube abone al, youtube abone satın al, youtube abone paketleri',
     'question' => 'YouTube abone paketlerinde hangi bilgiler gerekir?',
     'answer' => 'Seçilen hizmetin kanal bağlantısı ve kapsam koşullarını inceleyin; performans veya kalıcılık konusunda doğrulanmamış vaatlere güvenmeyin.'
   ],
@@ -168,7 +168,7 @@ final class CategorySearchBlueprint {
     'title' => 'Facebook Sayfa ve Gönderi Beğeni Hizmetleri | NetVera',
     'desc' => 'Facebook sayfa veya gönderi beğenisi hizmet seçeneklerini ve hedef bağlantısı koşullarını inceleyin.',
     'focus' => 'facebook beğeni',
-    'secondary' => 'facebook sayfa beğeni, facebook etkileşim',
+    'secondary' => 'facebook beğeni satın al, facebook sayfa beğeni, facebook etkileşim',
     'question' => 'Facebook beğeni hizmetinde hangi bağlantı kullanılır?',
     'answer' => 'Hedefin sayfa mı gönderi mi olduğunu seçin. Gerekli URL ile hizmetin kapsamı ve teslimat bilgileri pakete göre değişir.',  ],
   'twitter-hizmetleri' => [
