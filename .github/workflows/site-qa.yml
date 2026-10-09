@@ -85,6 +85,58 @@ jobs:
           cat /tmp/yorum-qa-php.log
           exit 1
 
+      - name: Verify private in-host migration of PUBLIC demo accounts (synthetic only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci <<'SQL'
+          CREATE TABLE script_products (
+            id INT PRIMARY KEY,
+            slug VARCHAR(180) NOT NULL,
+            demo_url VARCHAR(255) NULL,
+            demo_admin_url VARCHAR(255) NULL,
+            demo_user_url VARCHAR(255) NULL,
+            demo_username VARCHAR(190) NULL,
+            demo_password VARCHAR(190) NULL,
+            demo_admin_username VARCHAR(190) NULL,
+            demo_admin_password VARCHAR(190) NULL,
+            demo_note TEXT NULL,
+            demo_accounts_json LONGTEXT NULL,
+            demo_video_url VARCHAR(255) NULL,
+            demo_is_active TINYINT DEFAULT 0,
+            demo_is_public TINYINT DEFAULT 0,
+            demo_display_mode VARCHAR(30) NULL,
+            is_active TINYINT DEFAULT 1
+          );
+          INSERT INTO script_products
+            (id,slug,demo_url,demo_admin_url,demo_username,demo_password,
+             demo_admin_username,demo_admin_password,demo_note,demo_accounts_json,
+             demo_is_active,demo_is_public,demo_display_mode,is_active)
+          VALUES (49,'netvera-temizlik-firmasi-script-yazilimi-pro',
+            'https://qa-cleaning.example.test','https://qa-cleaning.example.test/admin',
+            'qa-test-user','synthetic-qa-only-no-real-account',
+            'qa-test-admin','synthetic-qa-only-no-real-account','Deneme erişimi','[]',
+            1,1,'public',1);
+          SQL
+          php -l well-known/scripts/sync-netvera-public-demo-logins.php
+          php well-known/scripts/sync-netvera-public-demo-logins.php > /tmp/public-demo-dryrun.txt
+          grep -q "DRY_RUN_NO_WRITES" /tmp/public-demo-dryrun.txt
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci -N -B -e \
+            "SELECT JSON_EXTRACT(public_json,'$.demo_admin_url') FROM nv_legacy_script_products WHERE legacy_id=49" \
+            | grep -qx 'NULL'
+          NETVERA_DEMO_SYNC_APPROVED=1 NETVERA_PUBLIC_DEMO_LOGINS=1 \
+            php well-known/scripts/sync-netvera-public-demo-logins.php --apply > /tmp/public-demo-import.txt
+          grep -q "UPDATED_PRIVATE_DATABASE" /tmp/public-demo-import.txt
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci -N -B -e \
+            "SELECT JSON_UNQUOTE(JSON_EXTRACT(public_json,'$.demo_admin_url')) FROM nv_legacy_script_products WHERE legacy_id=49" \
+            | grep -qx 'https://qa-cleaning.example.test/admin'
+          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci -N -B -e \
+            "SELECT JSON_EXTRACT(public_json,'$.demo_credentials_public') FROM nv_legacy_script_products WHERE legacy_id=49" \
+            | grep -qx '1'
+          NETVERA_DEMO_SYNC_APPROVED=1 NETVERA_PUBLIC_DEMO_LOGINS=1 \
+            php well-known/scripts/sync-netvera-public-demo-logins.php --apply > /tmp/public-demo-reimport.txt
+          echo "PASS: private demo migration dry run, target-only updates, consent gate and repeatability"
+
       - name: Install browser automation
         run: |
           npm --prefix well-known install --no-save --no-package-lock playwright
