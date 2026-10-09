@@ -46,7 +46,7 @@ $esc = static fn($value) => e((string)$value);
   </div>
   <?php endif; ?>
 
-  <div class="adm-card"><div class="adm-card-header"><h3><?= icon('layers',18) ?> Bağlantılar &amp; Katalog Senkronizasyonu</h3></div>
+  <div class="adm-card"><div class="adm-card-header"><h3><?= icon('layers',18) ?> Bağlantılar &amp; Katalog Senkronizasyonu</h3><?php if($providers && $canEditProviders): ?><form method="post" action="/admin/smm/tedarikciler/esitle"><?= csrfField() ?><button class="btn btn-outline btn-sm" type="submit">Tüm Panellerin Servislerini Çek</button></form><?php endif; ?></div>
     <div class="adm-card-body"><div class="smm-provider-list">
     <?php foreach ($providers as $p): ?>
      <div class="smm-provider"><div><strong><?= $esc($p['name']) ?></strong>
@@ -81,9 +81,10 @@ $esc = static fn($value) => e((string)$value);
         <input class="form-control" type="search" name="q" placeholder="Servis veya kategori ara" value="<?= $esc($search) ?>">
         <button class="btn btn-outline" type="submit"><?= icon('search',14) ?> Ara</button>
       </form>
-      <div class="smm-table-wrap"><table class="smm-table"><thead><tr><th>Kaynak</th><th>Servis / Kategori</th><th>Tür</th><th>Adet aralığı</th><th>Alış / 1000</th><th>Durum</th><th></th></tr></thead><tbody>
+      <div class="smm-table-wrap"><table class="smm-table"><thead><tr><th><label class="smm-checkbox"><input type="checkbox" id="smm-check-all" aria-label="Listelenen uygun servisleri seç"> Seç</label></th><th>Kaynak</th><th>Servis / Kategori</th><th>Tür</th><th>Adet aralığı</th><th>Alış / 1000</th><th>Durum</th><th></th></tr></thead><tbody>
       <?php foreach ($services as $s): ?>
        <tr>
+         <td><?php if($s['is_available'] && $s['provider_active'] && strcasecmp($s['service_type'],'Default')===0): ?><input type="checkbox" class="smm-service-check" form="smm-bulk-form" name="service_ids[]" value="<?= (int)$s['id'] ?>" aria-label="<?= $esc($s['name']) ?> seç"><?php endif; ?></td>
          <td><?= $esc($s['provider_name']) ?><small>#<?= $esc($s['external_service_id']) ?></small></td>
          <td><strong><?= $esc($s['name']) ?></strong><small><?= $esc($s['category']) ?></small></td>
          <td><?= $esc($s['service_type']) ?></td>
@@ -95,8 +96,34 @@ $esc = static fn($value) => e((string)$value);
            <?php else: ?><small>Manuel/uyumsuz</small><?php endif; ?></td>
        </tr>
       <?php endforeach; ?>
-      <?php if (!$services): ?><tr><td colspan="7">Servis bulunamadı. Tedarikçiyi ekleyip “Servisleri Çek” işlemini kullanın.</td></tr><?php endif; ?>
+      <?php if (!$services): ?><tr><td colspan="8">Servis bulunamadı. Tedarikçiyi ekleyip “Servisleri Çek” işlemini kullanın.</td></tr><?php endif; ?>
       </tbody></table></div>
+    </div>
+  </div>
+
+
+  <div class="adm-card" id="smm-bulk">
+    <div class="adm-card-header"><h3><?= icon('layers',18) ?> Seçili Servisleri Toplu Paket Olarak Ekle</h3><span class="text-sm text-secondary" id="smm-selected-count">0 servis seçildi</span></div>
+    <div class="adm-card-body">
+      <p class="text-secondary">Yukarıdaki listeden 1–80 servisi seç. <strong>API servis adları müşteriye kopyalanmaz.</strong> Paketler platform / hizmet türü / adet başlığıyla taslak oluşturulur; kısa açıklama, detay ve kart özellikleri tüm seçilen paketlerde sizin yazdığınız metin olur. Fiyat ve SEO'yu sonradan paket editöründe ayrı değiştirebilirsin.</p>
+      <form id="smm-bulk-form" method="post" action="/admin/smm/paket/toplu-ekle" class="smm-form">
+        <?= csrfField() ?>
+        <input type="hidden" name="provider_filter" value="<?= (int)$currentProvider ?>">
+        <div class="smm-form-grid">
+          <div class="form-group"><label>Site Sosyal Medya Kategorisi</label><select name="category_id" class="form-control" required>
+            <option value="">Hedef kategori seç</option>
+            <?php foreach($categories as $c): ?><option value="<?= (int)$c['id'] ?>"><?= $esc($c['name']) ?></option><?php endforeach; ?>
+          </select></div>
+          <div class="form-group"><label>Ortak Teslimat Adedi</label><input class="form-control" type="number" name="fulfillment_quantity" min="0" value="0" required><small>0 = her servisin minimum adedini kullan. Sınır dışındaki servis atlanır.</small></div>
+          <div class="form-group"><label>Ortak Satış Fiyatı (TL)</label><input class="form-control" type="number" name="price" min="1" step="0.01" required placeholder="249.90"></div>
+          <div class="form-group"><label>İsteğe Bağlı Marka Öneki</label><input class="form-control" name="label_prefix" maxlength="60" placeholder="Ör. Premium"></div>
+        </div>
+        <div class="form-group"><label>Ortak Kısa Açıklama — Sadece Sizin Metniniz</label><textarea class="form-control" name="short_description" maxlength="500" rows="2" minlength="10" required placeholder="Seçili paketlerin kart özetinde gösterilecek açıklama"></textarea></div>
+        <div class="form-group"><label>Ortak Detaylı Paket Açıklaması (HTML)</label><textarea class="form-control" name="description" rows="5" required placeholder="<h2>Paket Hakkında</h2><p>Kendi hizmet açıklamanız...</p>"></textarea></div>
+        <div class="form-group"><label>Ortak Kart Özellikleri (Her Satır Bir Özellik)</label><textarea class="form-control" name="highlight_lines" rows="7" maxlength="1600" placeholder="Şifre paylaşmadan sipariş&#10;Müşteri panelinden takip&#10;Tahmini teslimat bilgisi&#10;Destek ekibimizle iletişim"></textarea><small>8 satır eklerseniz 4+4 kaydırıcıda gösterilir. En fazla 12 satır.</small></div>
+        <div class="form-group"><label>Ortak Teslim Süresi</label><input class="form-control" name="delivery_time" maxlength="100" placeholder="Ör. 1–3 gün (gerçek süreye uygun yazın)"></div>
+        <button type="submit" class="btn btn-primary"><?= icon('plus',16) ?> Seçili Servislerden Paketleri Oluştur</button>
+      </form>
     </div>
   </div>
 
@@ -181,6 +208,14 @@ $esc = static fn($value) => e((string)$value);
   <?php endif; ?>
 </div>
 <script>
+var bulkBoxes=Array.from(document.querySelectorAll('.smm-service-check'));
+var bulkSelectAll=document.getElementById('smm-check-all');
+var bulkCounter=document.getElementById('smm-selected-count');
+function updateBulkCount(){if(bulkCounter)bulkCounter.textContent=bulkBoxes.filter(function(el){return el.checked}).length+' servis seçildi';}
+if(bulkSelectAll)bulkSelectAll.addEventListener('change',function(){
+  bulkBoxes.forEach(function(el){el.checked=bulkSelectAll.checked});updateBulkCount();
+});
+bulkBoxes.forEach(function(el){el.addEventListener('change',updateBulkCount)});
 document.querySelectorAll('.smm-edit-provider').forEach(function(btn){
   btn.addEventListener('click',function(){
     var form=document.getElementById('smm-provider-form');
