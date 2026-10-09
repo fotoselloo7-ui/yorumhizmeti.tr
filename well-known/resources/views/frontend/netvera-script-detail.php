@@ -11,6 +11,22 @@ $nv40ListTitle=static function($entry):string {
 };
 $nv40Host=strtolower((string)($_SERVER['HTTP_HOST']??''));
 $nv40ExternalLive=!in_array($nv40Host,['netvera.tr','www.netvera.tr'],true);
+$nv60PublicDemo=[];
+if ($nv40DemoAllowed) {
+    // Public preview destinations only, never private demo passwords or customer login data.
+    $nv60DemoFile=BASE_PATH.'/database/netvera-demo-public-links.json';
+    if (is_file($nv60DemoFile)) {
+        $nv60Data=json_decode((string)file_get_contents($nv60DemoFile),true);
+        foreach (($nv60Data['demos']??[]) as $nv60Entry) {
+            if (!is_array($nv60Entry) || ($nv60Entry['slug']??'')!==($product['slug']??'')) continue;
+            if (rtrim((string)($nv60Entry['demo_url']??''),'/') !== rtrim((string)$demoUrl,'/')) continue;
+            $nv60PublicDemo=$nv60Entry;
+            break;
+        }
+    }
+}
+$nv60DemoAdminUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['demo_admin_url']??null);
+$nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($nv60PublicDemo['demo_user_url']??null);
 ?>
 <main class="nv40-detail">
   <section class="nv40-product-hero"><div class="container">
@@ -85,6 +101,7 @@ $nv40ExternalLive=!in_array($nv40Host,['netvera.tr','www.netvera.tr'],true);
   <section class="nv40-product-body"><div class="container">
     <nav class="nv40-anchor-nav nv60-product-tabs" aria-label="Yazılım ayrıntıları" role="tablist" data-nv60-tabs>
       <button type="button" role="tab" id="nv60-tab-ozellikler" aria-controls="ozellikler" aria-selected="true" tabindex="0" data-nv60-tab="ozellikler">Ürün Açıklaması</button>
+      <?php if($nv40DemoAllowed): ?><button type="button" role="tab" id="nv60-tab-demo" aria-controls="demo" aria-selected="false" tabindex="-1" data-nv60-tab="demo">Canlı Demo</button><?php endif; ?>
       <?php if($modules): ?><button type="button" role="tab" id="nv60-tab-moduller" aria-controls="moduller" aria-selected="false" tabindex="-1" data-nv60-tab="moduller">Modüller</button><?php endif; ?>
       <?php if($technical): ?><button type="button" role="tab" id="nv60-tab-teknik" aria-controls="teknik" aria-selected="false" tabindex="-1" data-nv60-tab="teknik">Teknik Özellikler</button><?php endif; ?>
       <?php if($license): ?><button type="button" role="tab" id="nv60-tab-lisans" aria-controls="lisans" aria-selected="false" tabindex="-1" data-nv60-tab="lisans">Lisans</button><?php endif; ?>
@@ -106,6 +123,28 @@ $nv40ExternalLive=!in_array($nv40Host,['netvera.tr','www.netvera.tr'],true);
             </button>
           </div>
         </section>
+        <?php if($nv40DemoAllowed): ?>
+        <section class="nv40-info-card" id="demo" role="tabpanel" aria-labelledby="nv60-tab-demo" tabindex="0" data-nv60-panel="demo">
+          <h2>Canlı Demo & Yazılımı İncele</h2>
+          <p>Ürünün çalışan sürümünü ve varsa herkese açık deneme yönetim panelini ziyaret edebilirsiniz.</p>
+          <div class="nv60-demo-grid">
+            <a class="nv60-demo-link" href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer">
+              <?= icon('external-link',18) ?> <span><strong>Canlı Siteyi Görüntüle</strong><small><?= e((string)parse_url($demoUrl,PHP_URL_HOST)) ?></small></span><?= icon('arrow-up-right',15) ?>
+            </a>
+            <?php if($nv60DemoAdminUrl): ?>
+            <a class="nv60-demo-link" href="<?= e($nv60DemoAdminUrl) ?>" target="_blank" rel="noopener noreferrer">
+              <?= icon('settings',18) ?> <span><strong>Demo Yönetim Paneli</strong><small>Yönetim arayüzünü aç</small></span><?= icon('arrow-up-right',15) ?>
+            </a>
+            <?php endif; ?>
+            <?php if($nv60DemoUserUrl && rtrim($nv60DemoUserUrl,'/')!==rtrim($demoUrl,'/')): ?>
+            <a class="nv60-demo-link" href="<?= e($nv60DemoUserUrl) ?>" target="_blank" rel="noopener noreferrer">
+              <?= icon('users',18) ?> <span><strong>Demo Kullanıcı Sayfası</strong><small>Örnek kullanıcı arayüzünü aç</small></span><?= icon('arrow-up-right',15) ?>
+            </a>
+            <?php endif; ?>
+          </div>
+          <p class="nv60-demo-disclaimer">Demo kullanıcı adı ve şifreleri bu herkese açık GitHub Pages kopyasına yerleştirilmez. Varsa yetkilendirilmiş deneme hesaplarının güncel giriş bilgileri için <a href="https://netvera.tr<?= e($nv40Url) ?>" target="_blank" rel="noopener noreferrer">NetVera'daki ürün sayfasına</a> bakabilirsiniz.</p>
+        </section>
+        <?php endif; ?>
         <?php if($modules): ?><section class="nv40-info-card" id="moduller" role="tabpanel" aria-labelledby="nv60-tab-moduller" tabindex="0" data-nv60-panel="moduller"><h2>Yazılım Modülleri</h2>
           <div class="nv40-feature-list">
           <?php foreach($modules as $module):$title=$nv40ListTitle($module);if($title==='')continue; ?>
