@@ -806,37 +806,46 @@ $reviews = \App\Services\TestimonialManager::rows(true);
             </div>
             <a class="nv30-outline-link" href="/kategoriler">Hizmetleri Keşfet <?= icon('arrow-up-right', 14) ?></a>
         </div>
+        <?php
+          $visibleReviews=array_slice(array_values($reviews),0,3);
+          $primarySequence=count($reviews)>3?array_merge([reset($reviews)],array_slice($reviews,3)):array_slice($reviews,0,1);
+          $renderReviewBody=static function(array $review):void{
+            $name=trim((string)($review['name']??'Müşteri'));
+            $initial=mb_strtoupper(mb_substr($name,0,1,'UTF-8'),'UTF-8');
+            $rating=$review['rating']??null;
+            $label=trim((string)($review['service_name']??''));
+            if($label==='')$label=trim((string)($review['category_name']??''));
+        ?>
+            <div class="nv30-review-topline">
+              <span class="nv30-review-quote" aria-hidden="true"><?= icon('message-circle',23) ?></span>
+              <?php if($rating!==null): ?><span class="nv30-review-stars" aria-label="<?= (int)$rating ?>/5 yıldız"><?= str_repeat('★',max(1,min(5,(int)$rating))) ?></span><?php endif; ?>
+            </div>
+            <blockquote><?= e($review['text']) ?></blockquote>
+            <?php if($label!==''): ?><div class="nv68-review-service"><?= icon('check-circle',12) ?> <?= e($label) ?></div><?php endif; ?>
+            <div class="nv30-review-author">
+              <?php if(!empty($review['image'])): ?><img class="nv68-review-image" src="<?= e(upload_url($review['image'])) ?>" alt="" loading="lazy">
+              <?php else: ?><span class="nv30-review-avatar" aria-hidden="true"><?= e($initial) ?></span><?php endif; ?>
+              <div class="nv30-review-author-info">
+                <strong><?= e($name) ?></strong>
+                <?php if(!empty($review['role'])): ?><small><?= e($review['role']) ?></small><?php endif; ?>
+              </div>
+              <span class="nv30-review-decoration" aria-hidden="true"><?= icon('message-circle',16) ?></span>
+            </div>
+        <?php }; ?>
         <div class="nv30-review-grid" aria-label="Müşteri yorumları">
-            <?php foreach(array_slice($reviews, 0, 4) as $index=>$review):
-                $reviewName = trim((string)($review['name'] ?? 'Müşteri'));
-                $reviewInitial = mb_strtoupper(mb_substr($reviewName !== '' ? $reviewName : 'M', 0, 1, 'UTF-8'), 'UTF-8');
-                $reviewRole = trim((string)($review['role'] ?? ''));
-                $reviewText = trim((string)($review['text'] ?? ''));
-                $reviewRating = isset($review['rating']) && is_numeric($review['rating'])
-                    ? max(0, min(5, (int)$review['rating'])) : null;
-                if ($reviewText === '') continue;
-            ?>
-            <article class="nv30-review-card <?= $index === 0 ? 'nv30-review-primary' : '' ?>">
-                <div class="nv30-review-topline">
-                    <span class="nv30-review-quote" aria-hidden="true"><?= icon('message-circle', 23) ?></span>
-                    <?php if ($reviewRating !== null && $reviewRating > 0): ?>
-                        <span class="nv30-review-stars" aria-label="<?= (int)$reviewRating ?> üzerinden 5 yıldız">
-                            <?php for($r=0;$r<$reviewRating;$r++): ?><?= icon('star-fill', 12) ?><?php endfor; ?>
-                        </span>
-                    <?php endif; ?>
-                </div>
-                <blockquote><?= e($reviewText) ?></blockquote>
-                <div class="nv30-review-author">
-                    <span class="nv30-review-avatar" aria-hidden="true"><?= e($reviewInitial) ?></span>
-                    <div class="nv30-review-author-info">
-                        <strong><?= e($reviewName !== '' ? $reviewName : 'Müşteri') ?></strong>
-                        <?php if ($reviewRole !== ''): ?><small><?= e($reviewRole) ?></small><?php else: ?><small>Müşteri yorumu</small><?php endif; ?>
-                    </div>
-                    <span class="nv30-review-decoration" aria-hidden="true"><?= icon('message-circle', 16) ?></span>
-                </div>
-            </article>
-            <?php endforeach; ?>
+           <?php foreach($visibleReviews as $index=>$review): ?>
+           <article class="nv30-review-card <?= $index===0?'nv30-review-primary':'' ?>" <?= $index===0?'data-review-primary':'' ?>>
+               <?php $renderReviewBody($review); ?>
+           </article>
+           <?php endforeach; ?>
         </div>
+        <?php if(count($primarySequence)>1): ?>
+          <div hidden id="nv68-review-queue" aria-hidden="true">
+            <?php foreach($primarySequence as $review): ?>
+            <template data-review-template><div class="nv68-review-inner"><?php $renderReviewBody($review); ?></div></template>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
         <div class="nv30-feedback-foot">
             <span><?= icon('shield-check', 15) ?> Açık ve anlaşılır sipariş takibi</span>
             <span><?= icon('headphones', 15) ?> Destek merkezine kolay erişim</span>
