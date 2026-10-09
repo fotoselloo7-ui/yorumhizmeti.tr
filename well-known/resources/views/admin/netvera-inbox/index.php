@@ -29,6 +29,12 @@
       </div>
       <button class="btn btn-primary btn-sm" type="submit"><?= icon('check',14) ?> Bildirim Tercihlerini Kaydet</button>
     </form>
+    <?php if($telegramConfigured): ?>
+    <form method="post" action="/admin/netvera-gelen-kutusu/telegram/test" style="margin-top:10px">
+      <?= csrfField() ?>
+      <button type="submit" class="btn btn-outline btn-sm"><?= icon('send',14) ?> Telegram Test Bildirimi Gönder</button>
+    </form>
+    <?php endif; ?>
     <?php if(!$importanceReady && $ready): ?>
       <p style="font-size:11px;margin:13px 0 0;color:#9b673e">Önemli işaretleme özelliğini kullanmak için <code>database/migrations/netvera-inquiries-v2.sql</code> şemasını bir kez uygulayın.</p>
     <?php endif; ?>
