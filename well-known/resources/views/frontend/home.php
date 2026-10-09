@@ -222,7 +222,7 @@ if (!function_exists('yh41SoftwareCard')) {
 
 $heroCutout = asset('img/hero-woman-cutout.png');
 
-$reviews = \App\Services\TestimonialManager::rows(true);
+$reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\TestimonialManager::rows(true) : [];
 ?>
 
 <main class="yh-home-v6">
