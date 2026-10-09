@@ -70,6 +70,14 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
     <input class="form-control" type="file" name="image" accept="image/png,image/jpeg,image/webp">
     <?php if (!empty($ref['image'])): ?><small>Mevcut kapak kayıtlı; yenisini seçmezsen korunur.</small><?php endif; ?>
   </label>
+  <label data-ref-video-field>İsteğe Bağlı Video (MP4 / WebM)
+    <input class="form-control" type="file" name="video" accept="video/mp4,video/webm,.mp4,.webm" data-ref-video-input>
+    <small>Instagram linkiyle oynatma kısıtlanırsa videoyu doğrudan sitemizde oynatırız. En fazla 80 MB; sunucuda PHP yükleme limiti yeterli olmalı.</small>
+    <?php if (!empty($ref['video'])): ?>
+      <span class="adm52-video-saved"><?= icon('check-circle',13) ?> Yüklenmiş video mevcut.</span>
+      <span class="adm52-remove-video"><input type="checkbox" name="remove_video" value="1"> Videoyu kaldır</span>
+    <?php endif; ?>
+  </label>
   <label>Müşteri Logosu (isteğe bağlı)
     <input class="form-control" type="file" name="logo" accept="image/png,image/jpeg,image/webp">
     <?php if (!empty($ref['logo'])): ?><small>Mevcut logo kayıtlı; yenisini seçmezsen korunur.</small><?php endif; ?>
