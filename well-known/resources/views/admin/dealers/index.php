@@ -7,7 +7,8 @@
 <?php if(!$ready): ?>
 <div class="adm-card" style="margin-top:20px"><div class="adm-card-body">
   <h3><?= icon('database',18) ?> Bayilik yönetimi veritabanı kurulumu bekleniyor</h3>
-  <p>Mevcut üyeler, ürünler ve eski komisyon kayıtları değiştirilmedi. <code>database/migrations/netvera-dealer-program-v2.sql</code> şeması kontrol edilip yüklenince başvurular ve yönetici onayı aktif olur.</p>
+  <p>Mevcut üyeler, ürünler ve eski komisyon kayıtları korunur. Üç ayrı bayilik tablosu güvenle oluşturulduğunda başvuru, yönetici onayı, seviye ve referans takibi aktif olur.</p>
+  <?php if($canApprove): ?><form method="post" action="/admin/bayilik/kur"><?= csrfField() ?><button class="btn btn-primary" type="submit"><?= icon('database',16) ?> Bayilik Modülünü Etkinleştir</button></form><?php endif; ?>
 </div></div>
 <?php else: ?>
 <div class="adm-card" style="margin-top:18px">
