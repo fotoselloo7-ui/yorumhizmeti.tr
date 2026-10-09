@@ -122,6 +122,13 @@ class CheckoutController extends Controller
                 ];
             }
             $orderItem['fields'] = $itemFields;
+            try {
+                \App\Services\SmmFulfillmentService::validateLine((int)$pkg['id'], $itemFields);
+            } catch (\RuntimeException $e) {
+                flash('error', $e->getMessage());
+                redirect('/odeme');
+                return;
+            }
             $orderItems[] = $orderItem;
         }
 
