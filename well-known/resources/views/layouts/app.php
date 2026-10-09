@@ -71,6 +71,7 @@
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=35.1">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=40.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=60.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
@@ -440,6 +441,7 @@
     </nav>
 
     <script src="<?= asset('js/software-marketplace-v36.js') ?>?v=36.1" defer></script>
+    <script src="<?= asset('js/netvera-product-tabs-v60.js') ?>?v=60.1" defer></script>
     <script src="<?= asset('js/category-marquee-drag-v56.js') ?>?v=56.2" defer></script>
 
     <!-- Flash Messages -->
