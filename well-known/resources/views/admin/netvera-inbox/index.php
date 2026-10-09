@@ -109,6 +109,35 @@ document.addEventListener('DOMContentLoaded',()=>{
    </div>
  </div></div>
 <?php else: ?>
+<link rel="stylesheet" href="<?= asset('css/inbox-desktop-v70.css') ?>?v=70.1">
+<section class="nv70-chatdesk" data-nv70-chatdesk aria-label="Canlı sohbet yönetimi">
+ <div class="nv70-chat-list">
+  <header><h3><?= icon('messages-square',17) ?> Canlı Sohbetler</h3><span class="badge"><?= count(array_filter($inquiries,static fn($t)=>$t['source_type']==='chat')) ?></span></header>
+  <div class="nv70-chat-users" data-nv70-chats>
+   <?php foreach($inquiries as $chat):if($chat['source_type']!=='chat')continue; ?>
+   <button class="nv70-chat-user" type="button" data-chat-id="<?= (int)$chat['id'] ?>"
+      data-chat-name="<?= e($chat['visitor_name']) ?>" data-chat-contact="<?= e($chat['visitor_contact']) ?>">
+      <span class="nv70-chat-initial"><?= e(mb_strtoupper(mb_substr($chat['visitor_name']?:'M',0,1,'UTF-8'))) ?></span>
+      <span><strong><?= e($chat['visitor_name']) ?></strong><small><?= e($chat['visitor_contact']) ?> · <?= e($chat['status']) ?></small></span>
+   </button>
+   <?php endforeach; ?>
+   <?php if(!array_filter($inquiries,static fn($t)=>$t['source_type']==='chat')): ?>
+    <p class="nv70-empty">Henüz canlı sohbet bulunmuyor.</p>
+   <?php endif; ?>
+  </div>
+ </div>
+ <div class="nv70-chat-main">
+  <header><span class="nv70-chat-initial"><?= icon('message-circle',19) ?></span><div><h3 data-nv70-title>Konuşma Paneli</h3><small data-nv70-subtitle>Bir sohbet seçin</small></div></header>
+  <div class="nv70-chat-thread" data-nv70-thread aria-live="polite"><div class="nv70-empty">Sol taraftan bir konuşma seçin.</div></div>
+  <form class="nv70-chat-form" data-nv70-form hidden>
+    <?= csrfField() ?>
+    <textarea name="message" rows="2" minlength="2" maxlength="3000" required aria-label="Sohbet yanıtı" placeholder="Müşteriye yanıt yazın…"></textarea>
+    <button class="btn btn-primary" type="submit"><?= icon('send',15) ?> Gönder</button>
+  </form>
+  <div data-nv70-status class="nv70-chat-status" role="status"></div>
+ </div>
+</section>
+<script defer src="<?= asset('js/inbox-desktop-v70.js') ?>?v=70.1"></script>
 <div class="adm-card">
  <div class="adm-card-header"><h3><?= icon('inbox',16) ?> Talepler (<?= count($inquiries) ?>)</h3></div>
  <div class="adm-card-body">
