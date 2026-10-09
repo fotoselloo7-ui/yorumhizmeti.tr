@@ -72,6 +72,17 @@ final class NetveraInboxController extends Controller
         redirect('/admin/netvera-gelen-kutusu');
     }
 
+    public function testTelegram():void
+    {
+        Csrf::check();
+        if(Inbox::testTelegramConnection()){
+            flash('success','Telegram test mesajı gönderildi. Bot sohbetini kontrol edin.');
+        } else {
+            flash('error','Telegram test mesajı gönderilemedi. Sunucu .env bilgilerini, bot izinlerini ve bağlantıyı kontrol edin.');
+        }
+        redirect('/admin/netvera-gelen-kutusu');
+    }
+
     public function importance(string $id):void
     {
         Csrf::check();
