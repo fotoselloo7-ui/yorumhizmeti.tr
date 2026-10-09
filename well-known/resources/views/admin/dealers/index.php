@@ -56,3 +56,26 @@
   </div>
 </div>
 <?php endif; ?>
+
+<?php if($ready && !empty($history)): ?>
+<div class="adm-card" style="margin-top:15px">
+ <div class="adm-card-header"><h3><?= icon('history',18) ?> Bayilik Karar Geçmişi</h3></div>
+ <div class="adm-card-body">
+  <div class="table-responsive"><table class="adm-table">
+   <thead><tr><th>Tarih</th><th>Müşteri</th><th>İşlem</th><th>Önceki Durum</th><th>Yeni Durum</th><th>Açıklama</th></tr></thead>
+   <tbody>
+   <?php foreach($history as $entry): ?>
+    <tr>
+      <td><?= e((string)$entry['created_at']) ?></td>
+      <td><?= e($entry['dealer_name']) ?></td>
+      <td><?= e($entry['action']) ?></td>
+      <td><?= e($entry['old_status']?:'—') ?></td>
+      <td><?= e($entry['new_status']?:'—') ?></td>
+      <td><?= e($entry['details']) ?></td>
+    </tr>
+   <?php endforeach; ?>
+   </tbody>
+  </table></div>
+ </div>
+</div>
+<?php endif; ?>
