@@ -120,6 +120,79 @@ final class ReferencesService
         return 'https://www.instagram.com/'.$kindPath.'/'.$m[2].'/embed/';
     }
 
+    /**
+     * A video can be streamed from an external host, without consuming local
+     * PHP hosting disk space. Only known player providers may run in iframes.
+     * Native video sources must be ordinary public HTTPS MP4/WebM URLs.
+     *
+     * @return array{type:string,url:string,provider:string}|null
+     */
+    public static function externalPlayer(string $raw): ?array
+    {
+        $raw = trim($raw);
+        if ($raw === '' || strlen($raw) > 2000 || !filter_var($raw, FILTER_VALIDATE_URL)) return null;
+        $u = parse_url($raw);
+        if (!is_array($u) || strtolower((string)($u['scheme'] ?? '')) !== 'https'
+            || isset($u['user']) || isset($u['pass']) || isset($u['port'])) return null;
+        $host = strtolower(rtrim((string)($u['host'] ?? ''), '.'));
+        $path = (string)($u['path'] ?? '');
+        $query = [];
+        parse_str((string)($u['query'] ?? ''), $query);
+
+        // YouTube's privacy-enhanced embed keeps visitors on our website.
+        $youtubeId = null;
+        if (in_array($host, ['youtu.be','www.youtu.be'], true)
+            && preg_match('~^/([a-zA-Z0-9_-]{11})/?$~D', $path, $m)) $youtubeId = $m[1];
+        if (in_array($host, ['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'], true)) {
+            if ($path === '/watch' && is_string($query['v'] ?? null)
+                && preg_match('~^[a-zA-Z0-9_-]{11}$~D', $query['v'])) $youtubeId = $query['v'];
+            elseif (preg_match('~^/(?:shorts|embed|live)/([a-zA-Z0-9_-]{11})/?$~D', $path, $m)) $youtubeId = $m[1];
+        }
+        if ($youtubeId !== null) {
+            return ['type'=>'iframe','url'=>'https://www.youtube-nocookie.com/embed/'.$youtubeId.'?rel=0&playsinline=1',
+                'provider'=>'YouTube'];
+        }
+
+        // Vimeo can provide an unlisted video with its shareable hash.
+        if (in_array($host, ['vimeo.com','www.vimeo.com','player.vimeo.com'], true)) {
+            $pattern = $host === 'player.vimeo.com' ? '~^/video/([0-9]{6,15})/?$~D' : '~^/([0-9]{6,15})/?$~D';
+            if (preg_match($pattern, $path, $m)) {
+                $link='https://player.vimeo.com/video/'.$m[1];
+                if (isset($query['h']) && is_string($query['h'])
+                    && preg_match('~^[a-fA-F0-9]{6,64}$~D', $query['h'])) $link.='?h='.$query['h'];
+                return ['type'=>'iframe','url'=>$link,'provider'=>'Vimeo'];
+            }
+        }
+
+        // The video lives entirely on Bunny Stream infrastructure.
+        if (in_array($host, ['player.mediadelivery.net','iframe.mediadelivery.net'], true)
+            && preg_match('~^/(?:embed|play)/([0-9]{1,16})/([a-fA-F0-9-]{20,45})/?$~D', $path, $m)) {
+            return ['type'=>'iframe','url'=>'https://player.mediadelivery.net/embed/'.$m[1].'/'.$m[2],
+                'provider'=>'Bunny Stream'];
+        }
+
+        // Cloudflare Stream player URL from its dashboard.
+        if (preg_match('~^customer-[a-z0-9]+\\.cloudflarestream\\.com$~D', $host)
+            && preg_match('~^/([a-fA-F0-9]{32})/iframe/?$~D', $path, $m)) {
+            return ['type'=>'iframe','url'=>'https://'.$host.'/'.$m[1].'/iframe',
+                'provider'=>'Cloudflare Stream'];
+        }
+        if ($host === 'iframe.videodelivery.net'
+            && preg_match('~^/([a-fA-F0-9]{32})/?$~D', $path, $m)) {
+            return ['type'=>'iframe','url'=>'https://iframe.videodelivery.net/'.$m[1],
+                'provider'=>'Cloudflare Stream'];
+        }
+
+        // A CDN video file: no local upload and no iframe execution on arbitrary hosts.
+        if (preg_match('~^(?=.{1,253}$)(?:[a-z0-9-]+\\.)+[a-z]{2,63}$~D', $host)
+            && !preg_match('~(?:^|\\.)(?:localhost|local|internal|test|invalid)$~D', $host)
+            && preg_match('~\\.(mp4|webm)$~iD', $path, $m)) {
+            return ['type'=>'video','url'=>$raw,'provider'=>'Harici Video CDN'];
+        }
+
+        return null;
+    }
+
     public static function all(bool $activeOnly = false): array
     {
         $rows = json_decode(setting(self::KEY, '[]'), true);
