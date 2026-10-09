@@ -30,6 +30,14 @@ final class MobileDeskController extends Controller
             'csrf'=>Csrf::token()
         ],'mobile');
     }
+    public function signal():void {
+        $this->protect();
+        $chat=Inbox::ready()?$this->db->fetch("SELECT COALESCE(MAX(id),0) AS id FROM nv_public_inquiry_replies WHERE sender='visitor'"):['id'=>0];
+        $tickets=$this->db->fetch("SELECT COALESCE(MAX(id),0) AS id FROM support_messages WHERE sender_type='user'");
+        $this->send(['ok'=>true,'cursor'=>[
+            'chat'=>(int)($chat['id']??0),'ticket'=>(int)($tickets['id']??0)
+        ]]);
+    }
     public function feed():void {
         $this->protect();
         $db=$this->db;
