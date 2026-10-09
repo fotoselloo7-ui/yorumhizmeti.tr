@@ -18,6 +18,9 @@ jobs:
             php -l "$file"
           done
 
+      - name: Admin release text QA
+        run: php well-known/tests/admin-release-copy-qa.php
+
       - name: Offline SMM provider encryption and endpoint QA
         run: php well-known/tests/smm-api-qa.php
       - name: Social media target validation and package carousel QA
