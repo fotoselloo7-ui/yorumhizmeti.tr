@@ -129,7 +129,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
     </div>
    </div>
    <div class="yv-category-story-copy-v5">
-    <div class="yv-kicker">Neden YorumHizmeti.tr?</div>
+    <div class="yv-kicker">Neden NetVera Teknoloji Yazılım?</div>
     <h2 id="yh23-story-heading"><?= e($category['name']) ?> ile markanızı <span>güvenle büyütün.</span></h2>
     
     <ul>
