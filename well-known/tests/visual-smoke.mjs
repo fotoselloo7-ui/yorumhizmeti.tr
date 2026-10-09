@@ -126,6 +126,28 @@ for(const screen of screens){
           await filtered.close();
         }
       }
+      // Netvera blog covers include text on the artwork; no responsive crop
+      // may hide original titles in the 4-card homepage layout.
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        const artwork=await page.locator('.yh6-blog .yh6-blog-image img').evaluateAll(images=>
+          images.map(img=>{
+            const area=img.closest('.yh6-blog-image');
+            const a=area.getBoundingClientRect();
+            return {src:img.getAttribute('src'),fit:getComputedStyle(img).objectFit,
+                    ratio:a.width/Math.max(1,a.height)};
+          }));
+        if(artwork.length<4)throw new Error('Four original latest-blog cards missing');
+        if(artwork.some(x=>x.fit!=='contain'||x.ratio<1.7||x.ratio>1.85))
+          throw new Error('Original blog artwork is cropped or incorrect ratio: '+JSON.stringify(artwork));
+        if(screen.name==='masaustu'){
+          const cards=page.locator('.nv29-services-grid .nv29-service-card');
+          if(await cards.count()!==3)throw new Error('Three service cards missing from home');
+          const ctas=await cards.locator('.nv29-card-cta').evaluateAll(links=>
+            links.map(link=>Math.round(link.getBoundingClientRect().top)));
+          if(Math.max(...ctas)-Math.min(...ctas)>3)
+            throw new Error('Service category buttons do not share a horizontal baseline: '+JSON.stringify(ctas));
+        }
+      }
       let switcher=null;
       if(p.route==='/' && screen.name==='masaustu'){
         const tabs=page.locator('[data-featured-tab]');
