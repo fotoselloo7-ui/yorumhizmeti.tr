@@ -156,3 +156,15 @@
  .nv51-reference-card.nv51-is-playing .nv51-cover{height:500px}
  .nv51-reference-card.nv51-is-playing .nv51-embed-slot{min-height:500px}
 }
+
+/* Higher specificity than the generic :has() embed styles. */
+.nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-cover{height:600px!important;aspect-ratio:auto!important}
+.nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-embed-slot{height:100%!important;min-height:600px!important}
+@media(max-width:700px){
+ .nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-cover{height:540px!important}
+ .nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-embed-slot{min-height:540px!important}
+}
+@media(max-width:420px){
+ .nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-cover{height:500px!important}
+ .nv51-portfolio-grid .nv51-reference-card.nv51-is-playing .nv51-embed-slot{min-height:500px!important}
+}
