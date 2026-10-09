@@ -5,6 +5,7 @@ Never connect this script to a live or customer database. Only invoke it against
 the isolated MySQL QA fixture that the preview workflow creates.
 """
 import html
+import json
 import os
 import pathlib
 import re
@@ -78,14 +79,6 @@ def export_html(text, route, all_routes):
                   attr_replace, text, flags=re.I)
     text = re.sub(r'<link[^>]+rel=(["\'])canonical\1[^>]*>', '', text, flags=re.I)
     text = text.replace("</head>", '<meta name="robots" content="noindex,nofollow">\n</head>', 1)
-    if route == "":
-        # Transparent preview provenance: don't pass software/blog artwork off
-        # as verified private customer references.
-        text = text.replace(
-          '<div class="nv31-portfolio-grid nv51-portfolio-grid"',
-          '<p class="pages-portfolio-note" style="margin:10px 0 18px;font-size:12px;color:#65708c">Portföy önizlemesi: NetVera yazılım ve yayınlanmış içerik örnekleri. Canlı müşteri referansları bu statik demoda senkronize değildir.</p>\n'
-          '<div class="nv31-portfolio-grid nv51-portfolio-grid"', 1
-        )
 
     # All demo forms, account operations and payments are intentionally disabled.
     notice = r'''
@@ -152,17 +145,44 @@ def main():
     # Count rendered card elements, not JS selector strings in inline scripts.
     reference_count = len(re.findall(r'<article[^>]+data-ref-card',
                                      home_html, flags=re.S))
-    if reference_count != 6:
-        sys.exit(f"Missing cover-backed portfolio examples: {reference_count}/6")
-    if 'data-ref-group="agency"' not in home_html or 'data-ref-group="marketing"' not in home_html:
-        sys.exit("Missing agency or digital filter on static homepage")
-    for ref in ["insaat-firmasi-scripti", "haber-sitesi-scripti",
-                "netvera-emlak-script-yazilimi-pro", "google-maps-veri-cekme-isletme-bulucu-botu"]:
-        if not (OUT / "hazir-scriptler" / ref / "index.html").exists():
-            sys.exit("Missing linked portfolio software page: " + ref)
-    if len(list((OUT / "hazir-scriptler").glob("*/index.html"))) < 16:
-        sys.exit("Incomplete authentic public software catalog (expected 16)")
-    print("STATIC_PREVIEW_OK: references=6, verified_catalog=16, pages=", len(list(OUT.rglob("index.html"))),
+    # The original PHP reads references from settings.showcase_references_v1.
+    # Never invent six cards to satisfy a hard-coded smoke test.
+    raw_refs = mysql_column(
+        "SELECT setting_value FROM settings WHERE setting_key='showcase_references_v1' LIMIT 1"
+    )
+    source_references = json.loads(raw_refs[0]) if raw_refs else []
+    if not isinstance(source_references, list):
+        sys.exit("Invalid source reference store: expected an array")
+    source_active = [ref for ref in source_references
+                     if isinstance(ref, dict) and ref.get("status") == "active"
+                     and ref.get("id") and ref.get("title")][:36]
+    if reference_count != len(source_active):
+        sys.exit(f"Reference mismatch: source={len(source_active)} exported={reference_count}")
+    if source_active and (
+        'data-ref-group="agency"' not in home_html or
+        'data-ref-group="marketing"' not in home_html
+    ):
+        sys.exit("Actual reference category filters were lost from output")
+    for ref in source_active:
+        for field in ("image","logo"):
+            asset = str(ref.get(field) or "").strip()
+            if not asset:
+                continue
+            # A reference may use a hosted image. Local uploaded files must be
+            # in the tracked public assets; failing here avoids silent broken covers.
+            if asset.startswith("/uploads/"):
+                local_file = OUT / asset.lstrip("/")
+            elif asset.startswith("references/"):
+                local_file = OUT / "uploads" / asset
+            elif asset.startswith("uploads/"):
+                local_file = OUT / asset
+            else:
+                continue
+            if not local_file.is_file():
+                sys.exit(f"Missing original reference {field} asset (not replaced): {asset}")
+    print("STATIC_PREVIEW_OK: source_references=",len(source_active),
+          "rendered_references=",reference_count,
+          "original_repository_content=true, pages=", len(list(OUT.rglob("index.html"))),
           "failed_optional=",len(failures),"public_only=true")
     for route,err in failures[:10]:
         print("OPTIONAL_PAGE_OMITTED:",route,err[:130])
