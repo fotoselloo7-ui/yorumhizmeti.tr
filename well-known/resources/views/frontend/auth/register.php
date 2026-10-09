@@ -1,6 +1,6 @@
 <main class="auth-wrapper auth25-page"><div class="auth25-shell auth25-register">
 <section class="auth25-showcase" aria-label="Üyelik avantajları">
-<a class="auth25-brand" href="/" aria-label="Ana sayfa"><span class="auth25-brandmark">Y</span><span><strong><?= e(setting('site_name','YorumHizmeti.tr')) ?></strong><small>Dijital hizmet platformu</small></span></a>
+<a class="auth25-brand" href="/" aria-label="Ana sayfa"><span class="auth25-brandmark">Y</span><span><strong><?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?></strong><small>Dijital hizmet platformu</small></span></a>
 <div class="auth25-orbit auth25-orbit-one" aria-hidden="true"></div><div class="auth25-orbit auth25-orbit-two" aria-hidden="true"></div>
 <div class="auth25-showcase-main">
 <span class="auth25-eyebrow"><?= icon('sparkles',15) ?> Ücretsiz üyelik</span>
@@ -15,7 +15,7 @@
 <a href="/" class="auth25-back"><?= icon('arrow-left',14) ?> Ana sayfaya dön</a>
 </section>
 <section class="auth25-panel" aria-labelledby="auth-title"><div class="auth25-panel-body">
-<a class="auth25-mobile-logo" href="/"><span class="auth25-brandmark">Y</span><strong><?= e(setting('site_name','YorumHizmeti.tr')) ?></strong></a>
+<a class="auth25-mobile-logo" href="/"><span class="auth25-brandmark">Y</span><strong><?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?></strong></a>
 <span class="auth25-tag"><?= icon('user-plus',14) ?> Yeni Hesap</span>
 <h1 id="auth-title">Hesabınızı oluşturun.</h1>
 <p class="auth25-lead">Ücretsiz kaydolun, hizmetleri tek panelden yönetin.</p>
@@ -37,5 +37,5 @@
 </form>
 <p class="auth25-switch">Zaten hesabınız var mı? <a href="/giris">Giriş yapın <?= icon('arrow-up-right',13) ?></a></p>
 <div class="auth25-secure"><?= icon('shield-check',15) ?> Kişisel bilgileriniz güvenle saklanır.</div>
-</div><footer class="auth25-footer"><span>© <?= date('Y') ?> <?= e(setting('site_name','YorumHizmeti.tr')) ?></span><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a></footer>
+</div><footer class="auth25-footer"><span>© <?= date('Y') ?> <?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?></span><a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a></footer>
 </section></div></main>
