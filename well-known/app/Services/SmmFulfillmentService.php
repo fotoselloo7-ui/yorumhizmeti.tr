@@ -14,6 +14,8 @@ final class SmmFulfillmentService
         $m = SmmCatalogService::mapping($packageId);
         if ($m === null) return;
         if (!$m['enabled'] || !$m['is_available'] || !$m['provider_active']
+            || (int)$m['fulfillment_quantity'] < (int)$m['min_quantity']
+            || (int)$m['fulfillment_quantity'] > (int)$m['max_quantity']
             || strcasecmp((string)$m['service_type'],'Default') !== 0) {
             throw new \RuntimeException('Seçtiğiniz hizmet şu an siparişe kapalı. Lütfen sepetinizden çıkarın.');
         }
