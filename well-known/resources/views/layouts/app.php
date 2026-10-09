@@ -71,7 +71,7 @@
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=35.1">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=40.1">
-    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=61.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=61.2">
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
