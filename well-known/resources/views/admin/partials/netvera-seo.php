@@ -4,7 +4,7 @@ $nvseo=$nvSeoData??[];
 <div class="adm-card">
  <div class="adm-card-header"><h3><?= icon('search',18) ?> Netvera Gelişmiş SEO / GEO</h3></div>
  <div class="adm-card-body">
-  <p class="form-hint">Mevcut URL, kategori ve ödeme ayarlarını değiştirmez. Alanlarda sadece doğrulanmış bilgiler kullanın.</p>
+  
   <div class="form-group"><label>Yardımcı Anahtar Kelimeler</label>
    <textarea name="nvseo_secondary_keywords" rows="2" maxlength="1000" class="form-control" placeholder="Virgülle ayırın"><?= e($nvseo['secondary_keywords']??'') ?></textarea></div>
   <div class="form-group"><label>Robots</label>
@@ -31,7 +31,7 @@ $nvseo=$nvSeoData??[];
    <input name="nvseo_author_url" type="url" class="form-control" value="<?= e($nvseo['author_url']??'') ?>"></div>
   <?php if(!empty($nvSeoIsBlog)): ?>
   <div class="nv44-editorial-title"><?= icon('sparkles',15) ?> GEO / AIO İçerik Yapısı</div>
-  <p class="form-hint">Alanlar gerçek içerikle uyumlu olmalı. Arama sonuçlarında veya AI yanıtlarında görünme garantisi vermez.</p>
+  
   <div class="form-group">
     <label for="nvseo_content_intent">Kullanıcı Arama Niyeti</label>
     <select class="form-control" id="nvseo_content_intent" name="nvseo_content_intent">
