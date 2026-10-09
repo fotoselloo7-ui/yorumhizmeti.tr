@@ -28,7 +28,7 @@ final class NetveraCustomersController extends Controller
                     m.old_customer_id,m.is_agency,m.want_dealer,m.source_status,
                     (SELECT COUNT(*) FROM nv_private_orders o WHERE o.new_user_id=u.id) AS legacy_orders,
                     (SELECT COUNT(*) FROM nv_private_orders o WHERE o.new_user_id=u.id AND
-                      (o.license_key_encrypted IS NOT NULL OR o.entitlement_json IS NOT NULL)) AS licenses,
+                      o.payment_status IN ('paid','completed','success') AND (o.license_key_encrypted IS NOT NULL OR o.entitlement_json IS NOT NULL)) AS licenses,
                     a.status AS dealer_status,a.referral_code
                     FROM nv_private_user_map m INNER JOIN users u ON u.id=m.new_user_id
                     LEFT JOIN nv_private_affiliates a ON a.new_user_id=u.id
