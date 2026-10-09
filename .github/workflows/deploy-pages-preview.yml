@@ -87,6 +87,15 @@ jobs:
           PREVIEW_ORIGIN: http://127.0.0.1:8006
           PREVIEW_OUTPUT: pages-preview
         run: python3 well-known/scripts/build-pages-preview.py
+      - name: Keep downloadable static preview until Pages is enabled
+        uses: actions/upload-artifact@v4
+        with:
+          name: storefront-readonly-preview
+          path: pages-preview/
+          retention-days: 7
+          if-no-files-found: error
+      # One-time activation: repo Settings -> Pages -> Build and deployment -> GitHub Actions.
+      # Configure-pages cannot enable a repository with the default GITHUB_TOKEN.
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload static site artifact
