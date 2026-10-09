@@ -25,7 +25,9 @@ class SettingsController extends Controller
             if (str_starts_with($key, '_group_')) continue;
             $group = $_POST['_group_' . $key] ?? 'general';
             // HEX color validation for theme settings
-            if (str_starts_with($key, 'theme_') && $group === 'theme') {
+            if ($key === 'theme_preset_enabled') {
+                $value = $value === '1' ? '1' : '0';
+            } elseif (str_starts_with($key, 'theme_') && $group === 'theme') {
                 $value = trim($value);
                 if (!preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $value)) {
                     continue; // skip invalid color values
