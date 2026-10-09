@@ -301,7 +301,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
         <div class="yh49-category-marquee" aria-label="Ana ve alt hizmet kategorileri">
             <?php foreach (['main' => $yh49Roots, 'child' => $yh49Children] as $yh49Row => $yh49Items):
                 if (!$yh49Items) continue; ?>
-            <div class="yh49-marquee-row <?= $yh49Row === 'main' ? 'yh49-marquee-primary' : 'yh49-marquee-secondary' ?>">
+            <div class="yh49-marquee-row yh56-grabbable <?= $yh49Row === 'main' ? 'yh49-marquee-primary' : 'yh49-marquee-secondary' ?>" aria-label="Kategorileri sürükleyerek keşfedin">
                 <div class="yh49-marquee-track">
                     <?php for ($yh49Repeat = 0; $yh49Repeat < 2; $yh49Repeat++): ?>
                     <div class="yh49-marquee-set" <?= $yh49Repeat ? 'aria-hidden="true"' : '' ?>>
