@@ -74,6 +74,27 @@
             </div>
         </div>
 
+        <!-- Internal SMM provider fulfillment (admin only) -->
+        <?php if (!empty($smmJobs)): ?>
+        <div class="adm-card">
+            <div class="adm-card-header"><h3><?= icon('share-2',18) ?> Sosyal Medya Servis Takibi</h3></div>
+            <div class="adm-card-body">
+                <p class="text-secondary" style="margin-bottom:14px">Bu bilgiler yalnızca yönetici ekranında görünür, müşterilere ve genel ürün sayfalarına aktarılmaz.</p>
+                <?php foreach ($smmJobs as $job): ?>
+                <div style="padding:12px 0;border-bottom:1px solid #e2e8f0">
+                    <div class="font-semibold"><?= e($job['provider_name']) ?> · <?= (int)$job['quantity'] ?> adet</div>
+                    <div class="text-sm text-secondary">Servis #<?= e($job['external_service_id']) ?> · Durum: <?= e($job['state']) ?></div>
+                    <div class="text-sm text-secondary">Tedarikçi siparişi: <?= e($job['upstream_order_id']??'Henüz gönderilmedi') ?></div>
+                    <?php if (!empty($job['last_error'])): ?>
+                    <div class="text-sm" style="color:#a84624">Kontrol gerekli: <?= e($job['last_error']) ?></div>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+                <a class="btn btn-outline btn-sm" href="/admin/smm" style="margin-top:12px">API Siparişlerini Yönet <?= icon('arrow-right',14) ?></a>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <!-- Order Fields -->
         <?php if (!empty($fields)): ?>
         <div class="adm-card">
