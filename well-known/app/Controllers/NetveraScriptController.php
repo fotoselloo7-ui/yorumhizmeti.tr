@@ -32,6 +32,11 @@ class NetveraScriptController extends Controller
         $q=mb_substr(trim((string)($_GET['q']??'')),0,70);
         $cat=trim((string)($_GET['category']??''));
         $categories=Catalog::categories();$categoryId=null;
+        // Expanded ready-script subtypes are an ADDITIONAL facet on the same
+        // real imported catalog; original NetVera category/SEO URLs remain.
+        $type=trim((string)($_GET['type']??''));
+        if(!\App\Services\NetveraScriptTypeService::valid($type))$type='';
+        $typeDefinitions=\App\Services\NetveraScriptTypeService::definitions();
         foreach($categories as $row)if($row['slug']===$cat)$categoryId=(int)$row['legacy_id'];
 
         // Untrusted query parameters never become SQL identifiers or free-form clauses.
@@ -48,11 +53,15 @@ class NetveraScriptController extends Controller
         if(!in_array($sort,['recommended','price_asc','price_desc','rating','newest'],true))
             $sort='recommended';
 
+        $allProducts=Catalog::all($q,$categoryId,$minPrice,$maxPrice,$minRating,$sort);
+        $typeCounts=\App\Services\NetveraScriptTypeService::counts(Catalog::all());
+        $visibleProducts=\App\Services\NetveraScriptTypeService::filter($allProducts,$type);
         $this->render('frontend/netvera-scripts',[
             'pageTitle'=>'Hazır Scriptler ve Profesyonel Yazılımlar',
             'metaDescription'=>'Sektörel PHP web yazılımları, otomasyon, CMS ve hazır script ürünleri.',
             'canonicalUrl'=>url($canonicalPath),
-            'products'=>Catalog::all($q,$categoryId,$minPrice,$maxPrice,$minRating,$sort),
+            'products'=>$visibleProducts, 'softwareTypes'=>$typeDefinitions,
+            'filterType'=>$type, 'softwareTypeCounts'=>$typeCounts,
             'categories'=>$categories,'filterCategory'=>$cat,'filterQuery'=>$q,
             'filterMinPrice'=>$minPrice,'filterMaxPrice'=>$maxPrice,
             'filterMinRating'=>$minRating,'filterSort'=>$sort,
