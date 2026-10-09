@@ -1278,7 +1278,7 @@ try {
     showcaseCtx.waitForEvent('page'),
     igCoverLink.click()
   ]);
-  await instagramTab.waitForURL(/instagram\\.com\\/reel\\/C9mVh6oN8d_/,{timeout:12000});
+  await instagramTab.waitForURL(url=>url.hostname==='www.instagram.com' && url.pathname.startsWith('/reel/C9mVh6oN8d_/'),{timeout:12000});
   if(showcasePage.url()!==originBefore)
     throw new Error('Instagram click navigated the storefront tab');
   const modal=showcasePage.locator('[data-ref-player-modal]');
