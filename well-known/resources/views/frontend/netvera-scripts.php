@@ -2,6 +2,7 @@
 // Keep existing indexed catalogue URLs; GET facets only adjust the visible results.
 $nv40Context = array_filter([
     'q' => $filterQuery ?? '',
+    'type' => $filterType ?? '',
     'min_price' => $filterMinPrice ?? null,
     'max_price' => $filterMaxPrice ?? null,
     'min_rating' => ($filterMinRating ?? 0) ?: null,
@@ -34,8 +35,25 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
            class="<?= $filterCategory === $cat['slug'] ? 'active' : '' ?>"><?= e($cat['name']) ?></a>
         <?php endforeach; ?>
       </nav>
+      <div class="nv75-types">
+        <div class="nv75-types-heading"><?= icon('grid',14) ?> Yazılım Türleri</div>
+        <nav class="nv75-types-list" aria-label="NetVera hazır yazılım türleri">
+          <?php foreach(($softwareTypes??[]) as [$typeName,$typeSlug,$typeDescription,$typeIcon]): ?>
+          <a href="<?= e('/hazir-scriptler?'.http_build_query(array_filter([
+                  'type'=>$typeSlug,'q'=>$filterQuery??'',
+                  'category'=>$filterCategory??''
+              ],static fn($x)=>$x!==''),'','&',PHP_QUERY_RFC3986)) ?>"
+             class="nv75-type-link <?= ($filterType??'')===$typeSlug?'active':'' ?>"
+             title="<?= e($typeDescription) ?>">
+             <?= icon($typeIcon,14) ?><span><?= e($typeName) ?></span>
+             <em><?= (int)($softwareTypeCounts[$typeSlug]??0) ?></em>
+          </a>
+          <?php endforeach; ?>
+        </nav>
+      </div>
       <form class="nv40-filter-form" role="search" method="get" action="/hazir-scriptler">
         <?php if($filterCategory !== ''): ?><input type="hidden" name="category" value="<?= e($filterCategory) ?>"><?php endif; ?>
+        <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
         <?php if($filterQuery !== ''): ?><input type="hidden" name="q" value="<?= e($filterQuery) ?>"><?php endif; ?>
         <fieldset class="nv40-filter-group">
           <legend><?= icon('wallet',15) ?> Fiyat Aralığı</legend>
@@ -77,13 +95,15 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
         <button class="nv40-apply-filters" type="submit"><?= icon('check',15) ?> Filtreleri Uygula</button>
       </form>
       </div></details>
-      <a class="nv40-catalog-shortcut" href="/hazir-yazilimlar">Diğer Yazılımları Keşfet <?= icon('arrow-right',13) ?></a>
+      <a class="nv40-catalog-shortcut" href="/hazir-scriptler">Tüm Hazır Scriptleri Gör <?= icon('arrow-right',13) ?></a>
     </aside>
     <div class="nv40-store-main">
       <div class="nv40-store-head">
         <div><h2>Yazılım Ürünleri</h2><p><?= count($products) ?> ürün listeleniyor</p></div>
         <form role="search" method="get" action="/hazir-scriptler">
           <?php if($filterCategory !== ''): ?><input type="hidden" name="category" value="<?= e($filterCategory) ?>"><?php endif; ?>
+          <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
+        <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
           <?php if($filterMinPrice !== null): ?><input type="hidden" name="min_price" value="<?= e((string)$filterMinPrice) ?>"><?php endif; ?>
           <?php if($filterMaxPrice !== null): ?><input type="hidden" name="max_price" value="<?= e((string)$filterMaxPrice) ?>"><?php endif; ?>
           <?php if($filterMinRating): ?><input type="hidden" name="min_rating" value="<?= (int)$filterMinRating ?>"><?php endif; ?>
