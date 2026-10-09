@@ -156,6 +156,21 @@ $esc = static fn($value) => e((string)$value);
       <td><div class="smm-actions">
         <?php if(in_array($j['state'],['completed','partial'],true)): ?><form method="post" action="/admin/smm/is/<?= (int)$j['id'] ?>/yenile"><?= csrfField() ?><button class="btn btn-outline btn-sm" type="submit">Yenileme İste</button></form><?php endif; ?>
         <?php if(in_array($j['state'],['submitted','in_progress'],true)): ?><form method="post" action="/admin/smm/is/<?= (int)$j['id'] ?>/iptal"><?= csrfField() ?><button class="btn btn-outline btn-sm" type="submit">İptal İste</button></form><?php endif; ?>
+        <?php if($canEditProviders && $j['state']==='manual_review'): ?>
+        <form method="post" action="/admin/smm/is/<?= (int)$j['id'] ?>/uzlastir" class="smm-reconcile">
+            <?= csrfField() ?>
+            <strong>Gönderim sonucu doğrulaması</strong>
+            <select name="mode" class="form-control" required>
+                <option value="matched">Tedarikçide var — numarasıyla eşleştir</option>
+                <option value="retry">Tedarikçide yok — kontrollü tekrar kuyruğa al</option>
+            </select>
+            <input type="text" name="upstream_order_id" class="form-control"
+                   placeholder="Tedarikçi sipariş numarası (eşleştirmede)" maxlength="120">
+            <label class="smm-checkbox"><input type="checkbox" name="verify_absent" value="1">
+              Siparişin tedarikçide OLUŞMADIĞINI kontrol ettim (tekrar deneme için)</label>
+            <button type="submit" class="btn btn-outline btn-sm">Kontrol Sonucunu Kaydet</button>
+        </form>
+        <?php endif; ?>
         </div></td>
     </tr><?php endforeach; ?>
     <?php if (!$jobs): ?><tr><td colspan="5">Henüz API siparişi oluşmadı.</td></tr><?php endif; ?>
