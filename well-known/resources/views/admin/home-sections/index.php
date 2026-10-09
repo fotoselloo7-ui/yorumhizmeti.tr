@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('layout', 24) ?> Ana Sayfa Bölümleri</h2>
-        <p class="text-sm text-secondary">Ana sayfadaki her bölümü buradan düzenleyebilirsiniz.</p>
     </div>
 </div>
 
