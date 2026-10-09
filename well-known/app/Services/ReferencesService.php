@@ -150,8 +150,16 @@ final class ReferencesService
             elseif (preg_match('~^/(?:shorts|embed|live)/([a-zA-Z0-9_-]{11})/?$~D', $path, $m)) $youtubeId = $m[1];
         }
         if ($youtubeId !== null) {
-            return ['type'=>'iframe','url'=>'https://www.youtube-nocookie.com/embed/'.$youtubeId.'?rel=0&playsinline=1&autoplay=1',
-                'provider'=>'YouTube'];
+            // Only /shorts/ reliably identifies vertical video from the URL.
+            // Normal watch, live, embed and youtu.be URLs retain widescreen.
+            $isShorts = preg_match('~^/shorts/[a-zA-Z0-9_-]{11}/?$~D', $path) === 1
+                && in_array($host, ['youtube.com','www.youtube.com','m.youtube.com'], true);
+            return [
+                'type'=>'iframe',
+                'url'=>'https://www.youtube-nocookie.com/embed/'.$youtubeId.'?rel=0&playsinline=1&autoplay=1',
+                'provider'=>'YouTube',
+                'aspect'=>$isShorts ? 'portrait' : 'landscape'
+            ];
         }
 
         // Vimeo can provide an unlisted video with its shareable hash.
