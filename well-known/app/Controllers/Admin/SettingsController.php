@@ -22,8 +22,24 @@ class SettingsController extends Controller
     {
         Csrf::check();
         $config = SiteConfigService::getInstance();
+        if(($_POST['_action']??'')==='reset_theme'){
+            // Reset the *saved* palette, not just the browser's color picker.
+            $config->set('theme_preset_enabled','0','theme');
+            foreach([
+                'theme_primary'=>'#6B4DE8','theme_secondary'=>'#13254B',
+                'theme_accent'=>'#D936A1','theme_button'=>'#6B4DE8',
+                'theme_button_hover'=>'#5136D2','theme_bg'=>'#FFFFFF',
+                'theme_card'=>'#FFFFFF','theme_text'=>'#17264E',
+                'theme_muted'=>'#70809C','theme_border'=>'#E2E6F3'
+            ] as $key=>$value)$config->set($key,$value,'theme');
+            logActivity('theme_reset','NetVera özgün tasarım paleti geri yüklendi.');
+            flash('success','Orijinal NetVera tasarım renkleri geri yüklendi.');
+            redirect('/admin/site-ayarlari');
+            return;
+        }
         foreach ($_POST as $key => $value) {
             if ($key === '_csrf_token') continue;
+            if ($key === '_action') continue;
             if (str_starts_with($key, '_group_')) continue;
             $group = $_POST['_group_' . $key] ?? 'general';
             // HEX color validation for theme settings
