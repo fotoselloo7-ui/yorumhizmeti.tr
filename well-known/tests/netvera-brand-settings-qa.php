@@ -25,6 +25,26 @@ if(!Brand::upgradeable('default_seo_title','Yorum Hizmeti - Dijital Hizmet Platf
   throw new RuntimeException('Old SEO cannot migrate.');
 if(!Brand::upgradeable('default_seo_description','Google, Instagram, TikTok, YouTube ve daha fazlası için profesyonel dijital hizmetler.'))
   throw new RuntimeException('Old SEO description cannot migrate.');
+// Regression: live Site Settings screenshot retained a new-brand-prefixed old
+// Google Yorum SEO title because legacy checks matched only "Yorum Hizmeti".
+foreach([
+    'default_seo_title'=>'NetVera Teknoloji Yazılım | Google Yorum ve Sosyal Medya Hizmetleri',
+    'seo_og_title'=>'NetVera Teknoloji Yazılım | Google Yorum ve Sosyal Medya',
+    'default_seo_description'=>'Google yorum, Instagram, TikTok, YouTube ve sosyal medya paketleriyle işletmenizin dijital güvenini artırın.',
+    'seo_og_description'=>'Google yorum ve sosyal medya paketleriyle kurumsal markanızın dijital güvenini artırın.'
+] as $key=>$old){
+    if(!Brand::upgradeable($key,$old))
+        throw new RuntimeException('Screenshot legacy SEO missed '.$key);
+    $expected=$defaults[$key][0];
+    if(Brand::display($key,$old)!==$expected)
+        throw new RuntimeException('Global SEO value not normalized: '.$key);
+}
+if(Brand::display('default_seo_title','NetVera Teknoloji Yazılım | Google Yorum ve Sosyal Medya')!==
+    'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya')
+    throw new RuntimeException('Screenshot SEO title not replaced by agreed positioning.');
+if(Brand::upgradeable('default_seo_title',
+    'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya'))
+    throw new RuntimeException('Correct NetVera title should remain stable.');
 if(Brand::upgradeable('site_name','NetVera Premium Teknoloji'))
   throw new RuntimeException('Hand-authored brand would be overwritten.');
 if(Brand::upgradeable('default_seo_title','Özgün Kurumsal Başlık | NetVera'))
@@ -54,6 +74,10 @@ if(!str_contains($settings,'NetveraBrandSettings::syncExisting'))
 $runtime=$read('app/Services/SiteConfigService.php');
 if(!str_contains($runtime,'NetveraBrandSettings::display'))
  throw new RuntimeException('Brand defaults are not applied at runtime.');
+$seed=$read('database/seeds.sql');
+if(!str_contains($seed, $defaults['default_seo_title'][0]) ||
+   !str_contains($seed, $defaults['default_seo_description'][0]))
+    throw new RuntimeException('Fresh-install SEO defaults diverge from live brand settings.');
 $home=$read('app/Controllers/HomeController.php');
 foreach([
  "setting('seo_org_description')","setting('seo_entity_topics')",
@@ -65,6 +89,8 @@ foreach([
  if(!str_contains($home,$marker))throw new RuntimeException('SEO not wired to website: '.$marker);
 }
 $seo=$read('resources/views/admin/settings/seo.php');
+if(!str_contains($home,"'canonicalUrl'=>url('/')"))
+    throw new RuntimeException('Homepage canonical link missing.');
 if(!str_contains($seo,'NetVera Kurumsal SEO / GEO / AIO') ||
    !str_contains($seo,'/admin/site-ayarlari'))
  throw new RuntimeException('SEO Center does not show actual global NetVera settings.');
