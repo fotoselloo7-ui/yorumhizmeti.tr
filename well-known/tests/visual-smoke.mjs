@@ -284,8 +284,15 @@ for(const screen of screens){
         if(childStats.width<=childStats.viewport+50)
           throw new Error('Nested software menu not scrollable: '+JSON.stringify(childStats));
         if(screen.name==='masaustu'){
+          // The submenu may expand below the current viewport. Real users
+          // scroll it into view before dragging; pointer events outside the
+          // viewport cannot reach a rail even when its content overflows.
+          await childRail.scrollIntoViewIfNeeded();
+          await page.waitForTimeout(80);
           await childRail.evaluate(el=>{el.scrollLeft=0;});
           const rect=await childRail.boundingBox();
+          if(!rect||rect.y<0||rect.y+rect.height>page.viewportSize().height+5)
+            throw new Error('Nested category rail is outside the draggable viewport');
           await page.mouse.move(rect.x+rect.width*.73,rect.y+rect.height*.6);
           await page.mouse.down();
           await page.mouse.move(rect.x+rect.width*.31,rect.y+rect.height*.6,{steps:9});
