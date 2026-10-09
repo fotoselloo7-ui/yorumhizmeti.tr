@@ -29,6 +29,11 @@ $name = $getEnv('NETVERA_SOURCE_DB_NAME');
 $user = $getEnv('NETVERA_SOURCE_DB_USER');
 $secret = getenv('NETVERA_SOURCE_DB_PASSWORD');
 $port = $getEnv('NETVERA_SOURCE_DB_PORT');
+$auditEmail = strtolower($getEnv('NETVERA_AUDIT_EMAIL'));
+if ($auditEmail === '' || !filter_var($auditEmail, FILTER_VALIDATE_EMAIL)) {
+    fwrite(STDERR, "Set private NETVERA_AUDIT_EMAIL to the account email you want inspected.\n");
+    exit(2);
+}
 if ($host === '' || $name === '' || $user === '' || !is_string($secret)) {
     fwrite(STDERR, "Set NETVERA_SOURCE_DB_HOST, _NAME, _USER and _PASSWORD in your private shell/environment.\n");
     exit(2);
@@ -82,9 +87,9 @@ foreach (['admins','admin_users','users','customers'] as $table) {
     $select = implode(',',array_map($ident,$display));
     // Only explicitly requested account or administrator-role records.
     $target = $db->prepare("SELECT ".$select." FROM ".$ident($table)." WHERE LOWER(".$ident($emailField).")=? LIMIT 3");
-    $target->execute(['fotoselloo7@gmail.com']);
+    $target->execute([$auditEmail]);
     $matched = $target->fetchAll();
-    $entry = ['columns'=>$col,'fotoselloo7_account'=>$matched];
+    $entry = ['columns'=>$col,'target_account'=>$matched];
     if (in_array($table,['admins','admin_users'],true)) {
         $entry['admin_accounts'] = $db->query("SELECT ".$select." FROM ".$ident($table)." LIMIT 20")->fetchAll();
     } elseif (in_array('role',$col,true)) {
