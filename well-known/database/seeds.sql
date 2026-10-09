@@ -23,7 +23,7 @@ INSERT INTO `bank_accounts` (`bank_name`, `account_holder`, `iban`, `branch`, `s
 -- ─── Site Ayarları ───
 INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 ('site_name', 'NetVera Teknoloji Yazılım', 'general'),
-('site_slogan', 'Web Yazılımı, Sosyal Medya ve Dijital Pazarlama Çözümleri', 'general'),
+('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri', 'general'),
 ('site_logo', '', 'general'),
 ('site_favicon', '', 'general'),
 ('site_email', 'info@yorumhizmeti.tr', 'general'),
@@ -37,8 +37,8 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 ('youtube_url', '', 'social'),
 ('tiktok_url', '', 'social'),
 ('x_url', '', 'social'),
-('default_seo_title', 'NetVera Teknoloji Yazılım | Sosyal Medya, SEO ve Dijital Hizmetler', 'seo'),
-('default_seo_description', 'NetVera Teknoloji Yazılım ile Instagram, TikTok, YouTube, SEO, dijital reklam ve web çözümlerini keşfedin. Paket kapsamlarını ve hizmet koşullarını inceleyin.', 'seo'),
+('default_seo_title', 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya', 'seo'),
+('default_seo_description', 'NetVera Teknoloji Yazılım: hazır yazılım ve web çözümleri, dijital ajans, SEO, reklam yönetimi ve Instagram, TikTok, YouTube hizmetlerini keşfedin.', 'seo'),
 ('default_og_image', '', 'seo'),
 ('maintenance_mode', '0', 'general'),
 ('header_script', '', 'scripts'),
@@ -54,13 +54,13 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 -- ─── Kategoriler ───
 INSERT INTO `categories` (`name`, `slug`, `description`, `icon_key`, `sort_order`, `status`, `seo_title`, `seo_description`) VALUES
 ('Google Hizmetleri', 'google-hizmetleri', 'Google İşletme Profili, Google Harita ve Google SEO hizmetleri', 'globe', 1, 'active', 'Google Hizmetleri - NetVera', 'Profesyonel Google hizmetleri ile işletmenizi dijitalde öne çıkarın.'),
-('Instagram Hizmetleri', 'instagram-hizmetleri', 'Instagram büyüme, etkileşim ve yönetim hizmetleri', 'camera', 2, 'active', 'Instagram Hizmetleri - NetVera', 'Instagram hesabınızı profesyonel olarak büyütün.'),
-('TikTok Hizmetleri', 'tiktok-hizmetleri', 'TikTok büyüme ve etkileşim hizmetleri', 'video', 3, 'active', 'TikTok Hizmetleri - NetVera', 'TikTok hesabınızı hızla büyütün.'),
-('YouTube Hizmetleri', 'youtube-hizmetleri', 'YouTube kanal büyüme ve video tanıtım hizmetleri', 'play-circle', 4, 'active', 'YouTube Hizmetleri - NetVera', 'YouTube kanalınızı profesyonel olarak büyütün.'),
-('Facebook Hizmetleri', 'facebook-hizmetleri', 'Facebook sayfa yönetimi ve büyüme hizmetleri', 'thumbs-up', 5, 'active', 'Facebook Hizmetleri - NetVera', 'Facebook sayfanızı güçlendirin.'),
-('SEO Hizmetleri', 'seo-hizmetleri', 'Arama motoru optimizasyonu ve site içi SEO hizmetleri', 'search', 6, 'active', 'SEO Hizmetleri - NetVera', 'Profesyonel SEO hizmetleri ile Google''da üst sıralara çıkın.'),
-('Dijital Reklam', 'dijital-reklam', 'Google Ads, Facebook Ads ve dijital reklam yönetimi', 'target', 7, 'active', 'Dijital Reklam Hizmetleri - NetVera', 'Etkili dijital reklam kampanyaları ile müşterilerinize ulaşın.'),
-('İtibar Yönetimi', 'itibar-yonetimi', 'Online itibar yönetimi ve olumsuz yorum temizleme', 'shield', 8, 'active', 'İtibar Yönetimi - NetVera', 'Online itibarınızı profesyonel olarak yönetin.');
+('Instagram Hizmetleri', 'instagram-hizmetleri', 'Instagram büyüme, etkileşim ve yönetim hizmetleri', 'camera', 2, 'active', 'Instagram Hizmetleri | Takipçi, Beğeni ve Reels – NetVera', 'Instagram takipçi, beğeni ve Reels izlenme hizmetlerini keşfedin. Paket miktarlarını, hedef bağlantılarını ve teslimat koşullarını karşılaştırın.'),
+('TikTok Hizmetleri', 'tiktok-hizmetleri', 'TikTok büyüme ve etkileşim hizmetleri', 'video', 3, 'active', 'TikTok Hizmetleri | Takipçi, Beğeni ve İzlenme – NetVera', 'TikTok takipçi, beğeni ve video izlenme paketlerini inceleyin. Hedef kullanıcı veya video bağlantısını ve hizmet koşullarını karşılaştırın.'),
+('YouTube Hizmetleri', 'youtube-hizmetleri', 'YouTube kanal büyüme ve video tanıtım hizmetleri', 'play-circle', 4, 'active', 'YouTube Hizmetleri | Abone ve İzlenme – NetVera', 'YouTube kanal ve video hizmetleriyle abone, izlenme ve tanıtım seçeneklerini karşılaştırın. Paket koşullarını ve hedef bağlantı bilgilerini inceleyin.'),
+('Facebook Hizmetleri', 'facebook-hizmetleri', 'Facebook sayfa yönetimi ve büyüme hizmetleri', 'thumbs-up', 5, 'active', 'Facebook Hizmetleri | Sayfa ve Gönderi – NetVera', 'Facebook sayfa ve gönderi hizmetlerini keşfedin. Hedef bağlantısı, paket kapsamı ve teslimat koşullarını karşılaştırın.'),
+('SEO Hizmetleri', 'seo-hizmetleri', 'Arama motoru optimizasyonu ve site içi SEO hizmetleri', 'search', 6, 'active', 'SEO Hizmetleri | Teknik SEO ve Danışmanlık – NetVera', 'Teknik SEO, içerik optimizasyonu, site içi iyileştirme ve arama görünürlüğü çalışmalarını karşılaştırın. Kapsam ve ölçümleme ayrıntılarını inceleyin.'),
+('Dijital Reklam', 'dijital-reklam', 'Google Ads, Facebook Ads ve dijital reklam yönetimi', 'target', 7, 'active', 'Dijital Reklam Ajansı | Google Ads ve Meta – NetVera', 'Google Ads, Meta ve sosyal medya reklam yönetimi hizmetlerini keşfedin. Kampanya planlaması, ölçümleme ve optimizasyon kapsamını karşılaştırın.'),
+('İtibar Yönetimi', 'itibar-yonetimi', 'Dijital marka itibarı, müşteri iletişimi ve geri bildirim yönetimi', 'shield', 8, 'active', 'Dijital Marka ve İtibar Yönetimi – NetVera', 'Dijital marka ve itibar yönetimi, müşteri iletişimi ve geri bildirim takibi hizmetlerini keşfedin. Şeffaf yönetim süreçlerini inceleyin.');
 
 -- ─── Örnek Paketler ───
 INSERT INTO `packages` (`category_id`, `name`, `slug`, `short_description`, `description`, `price`, `discount_price`, `delivery_time`, `min_quantity`, `max_quantity`, `badge`, `status`, `sort_order`, `seo_title`, `seo_description`, `seo_focus_keyword`) VALUES
