@@ -8,8 +8,8 @@
   <div class="adm-card-body">
     <p style="font-size:12px;line-height:1.65;margin:0 0 14px">
       <?= $telegramConfigured
-          ? 'Telegram botu bu sunucuda yapılandırılmış. Hangi olaylarda bildirim alacağınızı seçebilirsiniz.'
-          : 'Telegram bot bilgileri henüz bu sunucuda tanımlı değil. NETVERA_TELEGRAM_BOT_TOKEN ve NETVERA_TELEGRAM_CHAT_ID değerlerini sunucu .env dosyasına girin; gizli anahtarları GitHub’a yüklemeyin.' ?>
+          ? 'Telegram bağlantısı aktif. Bildirim türlerini aşağıdan yönetebilirsiniz.'
+          : 'Telegram bağlantısı pasif. Bildirim tercihlerinizi aşağıdan yönetebilirsiniz.' ?>
     </p>
     <form method="post" action="/admin/netvera-gelen-kutusu/telegram/kaydet">
       <?= csrfField() ?>
@@ -45,8 +45,13 @@
 </div>
 <?php if(!$ready): ?>
  <div class="adm-card"><div class="adm-card-body">
-  <h3>Netvera gelen kutusu henüz kurulmamış</h3>
-  <p>Staging aktarımında <code>database/migrations/netvera-inquiries-v1.sql</code> şemasını kurun. Müşteri veya ödeme tablolarına dokunulmaz.</p>
+   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+     <div><h3><?= icon('inbox',17) ?> Gelen Kutusu</h3><p class="text-secondary">Sohbet ve teklif kayıtlarını bu bölümden yönetin.</p></div>
+     <form method="post" action="/admin/netvera-gelen-kutusu/kur">
+       <?= csrfField() ?>
+       <button class="btn btn-primary btn-sm" type="submit"><?= icon('check-circle',14) ?> Gelen Kutusunu Etkinleştir</button>
+     </form>
+   </div>
  </div></div>
 <?php else: ?>
 <div class="adm-card">
