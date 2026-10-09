@@ -202,17 +202,75 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
             </div>
         </div>
 
-        <div class="yh6-platform-bar" aria-label="Popüler dijital hizmet kategorileri">
-            <?php foreach (($homeQuickCategories ?? []) as $cat):
-                [$cls,$ico,$label] = yh6Platform($cat['slug'] ?? '', $cat['name'] ?? '');
-                $title = preg_replace('/\\s+Hizmetleri?$/u', '', (string)$cat['name']);
-            ?>
-            <a href="<?= e($cat['url']) ?>" class="<?= e($cls) ?>">
-                <span><?= icon($cat['icon'], 23) ?></span>
-                <div><strong><?= e($title) ?></strong><small><?= e($cat['name']) ?></small></div>
-            </a>
+        <?php
+        // New category rails reuse the same live catalog as the main navigation.
+        $yh49Roots = [];
+        $yh49Children = [];
+        $yh49Seen = [];
+        foreach (\App\Services\CatalogMenuService::groups() as $catalogGroup) {
+            foreach ($catalogGroup['categories'] as $cat) {
+                if (empty($cat['url'])) continue;
+                if (!isset($yh49Seen[$cat['url']])) {
+                    $yh49Roots[] = [
+                        'name' => (string)$cat['name'], 'detail' => (string)$catalogGroup['short'],
+                        'url' => (string)$cat['url'], 'icon' => (string)$cat['icon'],
+                        'style' => (string)$cat['style']
+                    ];
+                    $yh49Seen[$cat['url']] = true;
+                }
+                foreach (array_slice($cat['children'] ?? [], 0, 3) as $child) {
+                    if (empty($child['url'])) continue;
+                    $yh49Children[] = [
+                        'name' => (string)$child['name'], 'detail' => (string)$cat['name'],
+                        'url' => (string)$child['url'], 'icon' => (string)$child['icon'],
+                        'style' => (string)$cat['style']
+                    ];
+                }
+            }
+        }
+        if (!empty($featuredSoftwareGroups)) {
+            $yh49Roots[] = [
+                'name' => 'Hazır Yazılımlar & Scriptler', 'detail' => 'Ajans & Yazılım',
+                'url' => '/hazir-scriptler', 'icon' => 'monitor', 'style' => 'software'
+            ];
+            foreach (\App\Services\NetveraBridgeService::categories() as $scriptCat) {
+                if (empty($scriptCat['slug'])) continue;
+                $yh49Children[] = [
+                    'name' => (string)$scriptCat['name'], 'detail' => 'Hazır Yazılımlar',
+                    'url' => '/hazir-scriptler?category='.rawurlencode((string)$scriptCat['slug']),
+                    'icon' => 'code', 'style' => 'software'
+                ];
+            }
+        }
+        ?>
+        <?php if ($yh49Roots): ?>
+        <div class="yh49-category-marquee" aria-label="Ana ve alt hizmet kategorileri">
+            <?php foreach (['main' => $yh49Roots, 'child' => $yh49Children] as $yh49Row => $yh49Items):
+                if (!$yh49Items) continue; ?>
+            <div class="yh49-marquee-row <?= $yh49Row === 'main' ? 'yh49-marquee-primary' : 'yh49-marquee-secondary' ?>">
+                <div class="yh49-marquee-track">
+                    <?php for ($yh49Repeat = 0; $yh49Repeat < 2; $yh49Repeat++): ?>
+                    <div class="yh49-marquee-set" <?= $yh49Repeat ? 'aria-hidden="true"' : '' ?>>
+                        <?php foreach ($yh49Items as $yh49Item): ?>
+                        <a href="<?= e($yh49Item['url']) ?>"
+                           class="yh49-category-link <?= e($yh49Item['style']) ?>"
+                           <?= $yh49Repeat ? 'tabindex="-1"' : '' ?>
+                           title="<?= e($yh49Item['name']) ?>">
+                            <span class="yh49-category-icon"><?= icon($yh49Item['icon'], 20) ?></span>
+                            <span class="yh49-category-copy">
+                                <strong><?= e($yh49Item['name']) ?></strong>
+                                <small><?= e($yh49Item['detail']) ?></small>
+                            </span>
+                        </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
+
     </div>
 </section>
 
@@ -655,13 +713,20 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
   </div>
 </section>
 
-<section class="yh6-stats">
+<section class="yh6-stats" aria-label="Platform istatistikleri">
     <div class="container">
-        <div><?= icon('users',20) ?><span><strong>50.000+</strong><small>Mutlu Müşteri</small></span></div>
-        <div><?= icon('shopping-cart',20) ?><span><strong>250.000+</strong><small>Tamamlanan Sipariş</small></span></div>
-        <div><?= icon('star-fill',20) ?><span><strong>4.9/5</strong><small>Müşteri Memnuniyeti</small></span></div>
-        <div><?= icon('headphones',20) ?><span><strong>7/24</strong><small>Canlı Destek</small></span></div>
-        <div><?= icon('trending-up',20) ?><span><strong>%98</strong><small>Başarılı Teslimat Oranı</small></span></div>
+        <?php foreach ([
+            ['users','50.000+','Mutlu Müşteri'],
+            ['shopping-cart','250.000+','Tamamlanan Sipariş'],
+            ['star-fill','4.9/5','Müşteri Memnuniyeti'],
+            ['headphones','7/24','Canlı Destek'],
+            ['trending-up','%98','Başarılı Teslimat Oranı']
+        ] as $metric): ?>
+        <div class="yh49-stat">
+            <span class="yh49-stat-icon" aria-hidden="true"><?= icon($metric[0], 22) ?></span>
+            <span class="yh49-stat-info"><strong><?= e($metric[1]) ?></strong><small><?= e($metric[2]) ?></small></span>
+        </div>
+        <?php endforeach; ?>
     </div>
 </section>
 
