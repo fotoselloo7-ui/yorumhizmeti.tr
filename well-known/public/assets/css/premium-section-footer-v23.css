@@ -278,3 +278,19 @@
   .yv-checkout-payments-v5.yv-payment-networks-v24>span{min-height:35px;padding:3px 5px}
   .yv-payment-networks-v24 img{height:28px}
 }
+
+/* v48: consistent bank transfer badge next to the existing payment logos. */
+.footer-payments-v4.footer-payment-logos .footer-payment-brands-v23>.footer-payment-bank{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:8px!important;min-width:128px!important;min-height:50px!important;height:50px!important;
+  padding:0 13px!important;border:1px solid rgba(181,195,230,.26)!important;
+  border-radius:10px!important;background:rgba(255,255,255,.07)!important;
+  color:#eef3ff!important;white-space:nowrap!important;font-size:11px!important;
+  font-weight:700!important;line-height:1.2!important;box-sizing:border-box!important
+}
+.footer-payments-v4 .footer-payment-bank .icon{flex-shrink:0!important;width:16px;height:16px;color:#aec5ff}
+.footer-payments-v4 .footer-payment-bank span{white-space:nowrap}
+@media(max-width:540px){
+ .footer-payment-brands-v23{gap:8px!important}
+ .footer-payments-v4.footer-payment-logos .footer-payment-brands-v23>.footer-payment-bank{min-width:118px!important}
+}
