@@ -140,6 +140,52 @@ for(const screen of screens){
         if(artwork.some(x=>x.fit!=='contain'||x.ratio<1.7||x.ratio>1.85))
           throw new Error('Original blog artwork is cropped or incorrect ratio: '+JSON.stringify(artwork));
         if(screen.name==='masaustu'){
+          // Fast Access is a compact live-category hierarchy, not five static links.
+          const quick=page.locator('.nv56-quick');
+          if(await quick.count()!==1)throw new Error('Fast Access menu is missing');
+          await quick.locator('summary').click();
+          if(!(await quick.locator('.nv56-quick-panel').isVisible()))
+            throw new Error('Fast Access categories did not open');
+          const fastActions=await quick.locator('.nv56-quick-action').count();
+          const groupPanels=await quick.locator('.nv56-quick-group').count();
+          if(fastActions!==3 || groupPanels<2)
+            throw new Error('Fast Access actions/catalog hierarchy incomplete: '+fastActions+'/'+groupPanels);
+          const quickHref=await quick.locator('.nv56-quick-category').first().getAttribute('href');
+          if(!quickHref||!quickHref.startsWith('/kategori/'))
+            throw new Error('Fast Access category link does not use real active taxonomy');
+          await quick.locator('summary').click();
+
+          // Two carousels can be grabbed, but their original CSS animation
+          // keeps running naturally whenever the user releases the strip.
+          for(const kind of ['primary','secondary']){
+            const row=page.locator('.yh49-marquee-'+kind+'.yh56-grabbable');
+            if(await row.count()!==1)throw new Error('Grab-enabled category row missing: '+kind);
+            await row.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(100);
+            const clock=()=>row.locator('.yh49-marquee-track').evaluate(el=>{
+              const animation=el.getAnimations()[0];
+              return animation ? Number(animation.currentTime) : NaN;
+            });
+            const before=await clock();
+            await row.hover();
+            await page.waitForTimeout(120);
+            const after=await clock();
+            if(!Number.isFinite(before)||!Number.isFinite(after)||Math.abs(after-before)<30)
+              throw new Error('Category auto-scroll freezes on hover '+kind+': '+before+'/'+after);
+            const box=await row.boundingBox();
+            const y=box.y+box.height/2;
+            await page.mouse.move(box.x+box.width*.75,y);
+            await page.mouse.down();
+            await page.mouse.move(box.x+box.width*.29,y,{steps:8});
+            await page.mouse.up();
+            const dragged=await clock();
+            if(Math.abs(dragged-after)<1200)
+              throw new Error('Mouse drag did not scrub CSS animation '+kind);
+            await page.waitForTimeout(130);
+            const resumed=await clock();
+            if(Math.abs(resumed-dragged)<25)
+              throw new Error('Category animation did not resume after drag '+kind);
+          }
           const motionTab=page.locator('#featured [data-featured-filter-panel]:not([hidden]) .nv43-root-rail .nv43-category-card').first();
           if(await motionTab.count()){
             await motionTab.scrollIntoViewIfNeeded();
