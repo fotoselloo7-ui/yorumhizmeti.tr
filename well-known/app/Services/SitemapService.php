@@ -8,7 +8,7 @@ class SitemapService
     public function generate(): string
     {
         $db = Database::getInstance();
-        $baseUrl = rtrim(setting('site_url', 'https://yorumhizmeti.tr'), '/');
+        $baseUrl = rtrim(setting('site_url', 'https://netvera.tr'), '/');
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
@@ -108,7 +108,7 @@ class SitemapService
 
     public function robots(): string
     {
-        $baseUrl = rtrim(setting('site_url', 'https://yorumhizmeti.tr'), '/');
+        $baseUrl = rtrim(setting('site_url', 'https://netvera.tr'), '/');
         return "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /hesabim\nDisallow: /siparislerim\nDisallow: /sepet\nDisallow: /odeme\n\nSitemap: {$baseUrl}/sitemap.xml\n";
     }
 }
