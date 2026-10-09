@@ -85,6 +85,9 @@
                 </a>
 
                 <div class="sidebar-section">Kullanıcılar</div>
+                <a href="/admin/netvera-musteriler" class="<?= isActive('/admin/netvera-musteriler') ? 'active' : '' ?>">
+                    <?= icon('users',18) ?> NetVera Müşteri & Bayilik
+                </a>
                 <a href="/admin/uyeler" class="<?= isActive('/admin/uye') ?>">
                     <?= icon('users', 18) ?> Üyeler
                 </a>
