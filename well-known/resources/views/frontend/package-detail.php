@@ -75,19 +75,19 @@ $reviews=$testimonialSection['extra']??[];
      <span><img src="<?= e(asset('img/support-woman-cutout.png')) ?>" alt=""></span>
     </div>
     <div class="yv-product-info-strip-v5">
-     <div><?= icon('users',18) ?><span><strong>Gerçek Kullanıcılar</strong><small>%100 Organik</small></span></div>
-     <div><?= icon('shield',18) ?><span><strong>Düşüş Riski Yok</strong><small>Kalıcı etkileşim</small></span></div>
-     <div><?= icon('zap',18) ?><span><strong>Hızlı Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Hızlı') ?></small></span></div>
-     <div><?= icon('target',18) ?><span><strong>Lokasyon Uyumu</strong><small>Türkiye geneli</small></span></div>
+     <div><?= icon('users',18) ?><span><strong>Hizmet Bilgisi</strong><small>Paket içeriğine göre</small></span></div>
+     <div><?= icon('shield',18) ?><span><strong>Şifresiz İşlem</strong><small>Parola talep edilmez</small></span></div>
+     <div><?= icon('zap',18) ?><span><strong>Tahmini Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Sipariş sonrası') ?></small></span></div>
+     <div><?= icon('target',18) ?><span><strong>Sipariş Takibi</strong><small>Hesabınız üzerinden</small></span></div>
     </div>
    </div>
 
    <aside class="yv-product-buy-v5">
     <div class="yv-product-badges-v5"><span><?= e($package['badge'] ?: 'En Çok Tercih Edilen Paket') ?></span><?php if($discount): ?><b>%<?= $discount ?> İndirim</b><?php endif; ?></div>
     <h2><?= e(package_display_name($package)) ?></h2>
-    <div class="yv-product-rating-v5"><b>★ 4.9</b><span>Güvenli satın alma deneyimi</span></div>
+    <div class="yv-product-rating-v5"><b><?= icon('shield-check',14) ?> Güvenli Sipariş</b><span>İşlem durumunu hesabınızdan takip edin</span></div>
     <div class="yv-product-price-v5"><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
-    <p>Bu paketle markanızın görünürlüğünü ve sosyal kanıtını güçlendirin.</p>
+    <p><?= e((string)($package['short_description'] ?: 'Seçtiğiniz dijital hizmet paketinin ayrıntılarını aşağıda inceleyebilirsiniz.')) ?></p>
 
     <?php if(!empty($variantPackages) && count($variantPackages) > 1): ?>
     <div class="yv-product-variants-v9">
@@ -120,7 +120,11 @@ $reviews=$testimonialSection['extra']??[];
 <section class="yv-product-content-v5"><div class="container">
  <div class="yv-product-tabs-v5"><span class="active">Açıklama</span><span>Özellikler</span><span>Teslimat Süreci</span><span>Sıkça Sorulan Sorular</span></div>
  <article class="yv-product-copy-v5"><h2><?= e(package_display_name($package)) ?> Nedir?</h2><div class="blog-content"><?php if(!empty($package['description'])): ?><?= $package['description'] ?><?php else: ?><p>Bu paket, ihtiyacınız olan dijital hizmeti güvenli, hızlı ve kolay bir sipariş deneyimiyle sunar. Ödeme ve gerekli bilgiler tamamlandıktan sonra siparişiniz işleme alınır ve hesabınızdan takip edilebilir.</p><?php endif; ?></div></article>
- <div class="yv-product-gains-v5"><h3>Bu Paket ile Neler Kazanırsınız?</h3><div><span><?= icon('check-circle',13) ?> Daha güçlü dijital görünürlük</span><span><?= icon('check-circle',13) ?> Marka güvenilirliğinde artış</span><span><?= icon('check-circle',13) ?> Daha fazla müşteri erişimi</span><span><?= icon('check-circle',13) ?> Gerçek sosyal kanıt</span><span><?= icon('check-circle',13) ?> Hızlı ve güvenli süreç</span><span><?= icon('check-circle',13) ?> 7/24 satış sonrası destek</span></div></div>
+ <div class="yv-product-gains-v5"><h3>Paket Özellikleri</h3><div>
+ <?php foreach(\App\Services\PackageHighlightsService::get((int)$package['id'],$package) as $highlight): ?>
+  <span><?= icon('check-circle',13) ?> <?= e($highlight) ?></span>
+ <?php endforeach; ?>
+ </div></div>
 </div></section>
 
 <?php if(!empty($reviews)): ?>
