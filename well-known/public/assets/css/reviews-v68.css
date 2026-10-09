@@ -1,12 +1,54 @@
-/* Three stable review cards; only featured slot dissolves into next approved review. */
-.nv30-feedback .nv30-review-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-.nv30-feedback .nv30-review-card{min-height:248px;overflow:hidden}
-.nv30-feedback .nv30-review-primary{position:relative;will-change:opacity,transform}
-.nv68-review-service{display:flex;align-items:center;gap:5px;color:#6658bd;font-size:10px;font-weight:700;min-height:22px;margin-top:auto;margin-bottom:10px;overflow-wrap:anywhere}
-.nv68-review-image{width:41px;height:41px;object-fit:cover;border-radius:13px;flex-shrink:0}
-.nv30-review-primary.nv68-fade-out{opacity:0;transform:translateY(9px);transition:opacity .36s ease,transform .36s ease}
-.nv30-review-primary.nv68-fade-in{animation:nv68-enter .52s ease both}
-@keyframes nv68-enter{from{opacity:0;transform:translateY(-9px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:900px){.nv30-feedback .nv30-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.nv30-feedback .nv30-review-card:nth-child(3){display:none}}
-@media(max-width:600px){.nv30-feedback .nv30-review-grid{grid-template-columns:1fr!important}.nv30-feedback .nv30-review-card:not(:first-child){display:none}.nv30-feedback .nv30-review-card{min-height:240px}}
-@media(prefers-reduced-motion:reduce){.nv30-review-primary.nv68-fade-out,.nv30-review-primary.nv68-fade-in{animation:none;transition:none}}
+/* Yorumlar: üç kartlık vitrin sağdan sola, her adımda sadece bir kart ilerler. */
+.nv30-feedback .nv69-review-viewport{overflow:hidden;min-width:0;padding:7px 2px 15px;margin:-7px -2px -15px}
+.nv30-feedback .nv30-review-grid{
+  display:flex!important;align-items:stretch;gap:16px!important;
+  grid-template-columns:none!important;min-width:0;transform:translate3d(0,0,0);
+  will-change:transform
+}
+.nv30-feedback .nv30-review-grid.nv69-is-sliding{
+  transition:transform .68s cubic-bezier(.22,.68,0,1)!important
+}
+.nv30-feedback .nv30-review-card{
+  box-sizing:border-box;flex:0 0 calc((100% - 32px)/3);
+  width:calc((100% - 32px)/3);min-width:0;min-height:248px;height:248px;
+  overflow:hidden;display:flex!important
+}
+.nv30-feedback .nv30-review-primary{
+  background:radial-gradient(circle at 96% 0,rgba(122,84,234,.10),transparent 35%),linear-gradient(155deg,#fbfaff,#f7f6ff);
+  border-color:#ded9fb
+}
+.nv30-feedback .nv30-review-card:not(.nv30-review-primary){
+  background:#fff;border-color:#e6e8f2
+}
+.nv30-feedback .nv30-review-card:not(.nv30-review-primary) .nv30-review-quote{
+  background:#f1ecff;color:#7651ea;box-shadow:none
+}
+.nv30-feedback .nv30-review-card blockquote{
+  display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:4;
+  overflow:hidden;flex:1 1 auto;min-height:0
+}
+.nv68-review-service{
+  display:flex;align-items:center;gap:5px;color:#6658bd;
+  font-size:10px;font-weight:700;min-height:22px;margin-top:auto;margin-bottom:10px;
+  overflow-wrap:anywhere
+}
+.nv68-review-image{
+  width:41px;height:41px;object-fit:cover;border-radius:13px;flex-shrink:0
+}
+.nv30-feedback [data-review-clone]{pointer-events:none}
+@media(max-width:900px){
+ .nv30-feedback .nv30-review-card{
+   flex-basis:calc((100% - 16px)/2);width:calc((100% - 16px)/2);
+   min-height:242px;height:242px
+ }
+}
+@media(max-width:600px){
+ .nv30-feedback .nv30-review-card{
+   flex-basis:100%;width:100%;min-height:240px;height:240px;
+   padding:19px;border-radius:15px
+ }
+ .nv30-feedback .nv30-review-card:not(:first-child){display:flex!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .nv30-feedback .nv30-review-grid.nv69-is-sliding{transition:none!important}
+}
