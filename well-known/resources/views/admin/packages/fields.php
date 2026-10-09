@@ -15,11 +15,6 @@
         <button type="button" class="btn btn-primary btn-sm" onclick="addField()"><?= icon('plus', 14) ?> Alan Ekle</button>
     </div>
     <div class="adm-card-body">
-        <div class="adm-fields-info">
-            <?= icon('info', 16) ?>
-            <span>Müşterinin sipariş sırasında dolduracağı alanları tanımlayın. Örn: URL, kullanıcı adı, hedef kitle vb.</span>
-        </div>
-
         <form method="POST" action="/admin/paket/<?= $package['id'] ?>/alanlar-kaydet">
             <?= csrfField() ?>
             <div id="fieldsContainer">
