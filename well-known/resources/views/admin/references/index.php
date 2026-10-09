@@ -6,7 +6,7 @@
 <div class="adm31-help">
   <?= icon('shield-check',18) ?>
   <div><strong>Yayınlanan referanslar yalnızca gerçek çalışmalardan oluşur.</strong>
-    <p>Web/yazılım referansları doğrudan müşteri sitesini açar. Instagram post/Reels kapakları sitemizde görünür; kapak tıklanınca kendi video penceremiz açılır. Instagram dış sitelerde oynatmayı engellerse, aynı formdaki isteğe bağlı MP4/WebM yüklemesi ile video sitemizde doğrudan oynatılır.</p>
+    <p>Web/yazılım referansları müşteri sitesine gider. Reels ve postların kapağı ana sayfada görünür. Instagram gömmeyi engelleyebildiği için kesintisiz site içi video oynatma amacıyla YouTube (liste dışı), Bunny Stream, Cloudflare Stream, Vimeo veya harici MP4 bağlantısı kullanılabilir. Bu seçenek video dosyasını bizim sunucuda tutmaz. Yerel MP4 yükleme isteğe bağlı olarak korunmuştur.</p>
   </div>
 </div>
 <div class="adm-card">
@@ -68,6 +68,8 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
   const media = form.querySelector('[data-ref-media]');
   const videoField = form.querySelector('[data-ref-video-field]');
   const videoInput = form.querySelector('[data-ref-video-input]');
+  const hostedVideoField = form.querySelector('[data-ref-hosted-video-field]');
+  const hostedVideoInput = form.querySelector('[data-ref-hosted-video]');
   const url = form.querySelector('[data-ref-url]');
   const hint = form.querySelector('[data-ref-url-hint]');
   if (!group || !service || !media || !url) return;
@@ -105,6 +107,8 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
     const instagram = media.value.startsWith('instagram_');
     if (videoField) videoField.style.display = instagram ? '' : 'none';
     if (videoInput) videoInput.disabled = !instagram;
+    if (hostedVideoField) hostedVideoField.style.display = instagram ? '' : 'none';
+    if (hostedVideoInput) hostedVideoInput.disabled = !instagram;
     url.placeholder = instagram ?
       (media.value === 'instagram_reel' ? 'https://www.instagram.com/reel/ABC123/' : 'https://www.instagram.com/p/ABC123/') :
       'https://musteri-sitesi.com';
