@@ -79,7 +79,7 @@
     <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
     <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=50.1">
     <link rel="stylesheet" href="<?= asset('css/reference-portfolio-v51.css') ?>?v=51.3">
-    <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=52.1">
+    <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=53.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
