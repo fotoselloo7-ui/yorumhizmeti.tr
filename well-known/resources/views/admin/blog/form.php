@@ -93,18 +93,19 @@
                 </div>
                 <!-- Markdown Toolbar -->
                 <div class="md-toolbar nv46-markdown-toolbar" role="toolbar" aria-label="Makale biçimlendirme araçları">
+                    <span class="nv47-toolbar-caption">Biçimlendir</span>
                     <button type="button" class="md-btn" onclick="mdInsert('## ', '')" title="H2 Başlık"><b>H2</b></button>
                     <button type="button" class="md-btn" onclick="mdInsert('### ', '')" title="H3 Başlık"><b>H3</b></button>
                     <span class="nv46-toolbar-divider" aria-hidden="true"></span>
                     <button type="button" class="md-btn" onclick="mdWrap('**', '**')" title="Kalın metin" aria-label="Kalın metin"><b class="nv46-format-symbol">B</b><span>Kalın</span></button>
                     <button type="button" class="md-btn" onclick="mdWrap('*', '*')" title="İtalik metin" aria-label="İtalik metin"><em class="nv46-format-symbol">I</em><span>İtalik</span></button>
                     <span class="nv46-toolbar-divider" aria-hidden="true"></span>
-                    <button type="button" class="md-btn" onclick="mdInsert('- ', '')" title="Madde işaretli liste" aria-label="Madde işaretli liste"><?= icon('list',14) ?><span>Liste</span></button>
+                    <button type="button" class="md-btn" onclick="mdInsert('- ', '')" title="Madde işaretli liste" aria-label="Madde işaretli liste"><span aria-hidden="true">☷</span><span>Liste</span></button>
                     <button type="button" class="md-btn" onclick="mdInsert('1. ', '')" title="Numaralı liste" aria-label="Numaralı liste"><b class="nv46-format-symbol">1.</b><span>Numaralı</span></button>
                     <button type="button" class="md-btn" onclick="mdInsert('> ', '')" title="Alıntı ekle" aria-label="Alıntı ekle"><b class="nv46-format-symbol">“</b><span>Alıntı</span></button>
                     <span class="nv46-toolbar-divider" aria-hidden="true"></span>
-                    <button type="button" class="md-btn" onclick="mdWrap('[', '](url)')" title="Bağlantı ekle" aria-label="Bağlantı ekle"><?= icon('link',14) ?><span>Bağlantı</span></button>
-                    <button type="button" class="md-btn" onclick="document.getElementById('inline_image_upload').click()" title="Görsel ekle" aria-label="Görsel ekle"><?= icon('image',14) ?><span>Görsel</span></button>
+                    <button type="button" class="md-btn" onclick="mdWrap('[', '](url)')" title="Bağlantı ekle" aria-label="Bağlantı ekle"><span aria-hidden="true">↗</span><span>Bağlantı</span></button>
+                    <button type="button" class="md-btn" onclick="document.getElementById('inline_image_upload').click()" title="Görsel ekle" aria-label="Görsel ekle"><span aria-hidden="true">▧</span><span>Görsel</span></button>
                     <span class="nv46-toolbar-divider" aria-hidden="true"></span>
                     <button type="button" class="md-btn" onclick="mdInsert('\n[info]Bilgi metni[/info]\n', '')" title="Info Kutusu">Info</button>
                     <button type="button" class="md-btn" onclick="mdInsert('\n[cta title=&quot;Başlık&quot; text=&quot;Açıklama&quot; url=&quot;/&quot; button=&quot;İncele&quot;]\n', '')" title="CTA">CTA</button>
