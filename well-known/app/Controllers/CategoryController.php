@@ -112,6 +112,15 @@ class CategoryController extends Controller
             $testimonialSection = null;
         }
 
+        $categorySeo=\App\Services\NetveraSeoBridge::get('category',(int)$category['id']);
+        // Editorial answers are visible immediately, even before the optional admin SEO batch is applied.
+        $categoryIntent=\App\Services\CategorySearchBlueprint::profileForCategory($category);
+        if($categoryIntent){
+            if(empty($categorySeo['main_question']))$categorySeo['main_question']=$categoryIntent['question'];
+            if(empty($categorySeo['direct_answer']))$categorySeo['direct_answer']=$categoryIntent['answer'];
+            if(empty($categorySeo['secondary_keywords']))$categorySeo['secondary_keywords']=$categoryIntent['secondary'];
+        }
+
         $schema=null;
         if(!preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|web.site|tema)/iu',
              (string)$category['slug'].' '.(string)$category['name'])){
@@ -145,7 +154,7 @@ class CategoryController extends Controller
             'ogDescription' => $category['og_description'] ?: $category['seo_description'],
             'category' => $category,
             'schema' => $schema,
-            'nvSeoData' => \App\Services\NetveraSeoBridge::get('category',(int)$category['id']),
+            'nvSeoData' => $categorySeo,
             'packages' => $packages,
             'subCategories' => $subCategories,
             'selectedSubCategory' => $selectedSubCategory,
