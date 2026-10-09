@@ -1,0 +1,12 @@
+/* Three stable review cards; only featured slot dissolves into next approved review. */
+.nv30-feedback .nv30-review-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.nv30-feedback .nv30-review-card{min-height:248px;overflow:hidden}
+.nv30-feedback .nv30-review-primary{position:relative;will-change:opacity,transform}
+.nv68-review-service{display:flex;align-items:center;gap:5px;color:#6658bd;font-size:10px;font-weight:700;min-height:22px;margin-top:auto;margin-bottom:10px;overflow-wrap:anywhere}
+.nv68-review-image{width:41px;height:41px;object-fit:cover;border-radius:13px;flex-shrink:0}
+.nv30-review-primary.nv68-fade-out{opacity:0;transform:translateY(9px);transition:opacity .36s ease,transform .36s ease}
+.nv30-review-primary.nv68-fade-in{animation:nv68-enter .52s ease both}
+@keyframes nv68-enter{from{opacity:0;transform:translateY(-9px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.nv30-feedback .nv30-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.nv30-feedback .nv30-review-card:nth-child(3){display:none}}
+@media(max-width:600px){.nv30-feedback .nv30-review-grid{grid-template-columns:1fr!important}.nv30-feedback .nv30-review-card:not(:first-child){display:none}.nv30-feedback .nv30-review-card{min-height:240px}}
+@media(prefers-reduced-motion:reduce){.nv30-review-primary.nv68-fade-out,.nv30-review-primary.nv68-fade-in{animation:none;transition:none}}
