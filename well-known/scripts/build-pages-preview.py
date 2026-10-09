@@ -30,16 +30,23 @@ def safe_slug(value):
 
 def route_catalog():
     routes = {"", "kategoriler", "hazir-scriptler", "hazir-yazilimlar",
-              "blog", "sss", "iletisim", "sayfa/hakkimizda"}
-    for slug in mysql_column("SELECT slug FROM categories WHERE status='active' AND parent_id IS NULL LIMIT 70"):
-        if safe_slug(slug):
-            routes.add("kategori/" + slug)
-    for slug in mysql_column("SELECT slug FROM blog_posts WHERE status='published' LIMIT 35"):
-        if safe_slug(slug):
-            routes.add("blog/" + slug)
-    for slug in mysql_column("SELECT slug FROM nv_legacy_script_products WHERE active=1 LIMIT 30"):
-        if safe_slug(slug):
-            routes.add("hazir-scriptler/" + slug)
+              "blog", "sss", "iletisim",
+              "haber-sitesi-scripti", "temizlik-firmasi-scripti-web-site-yazilimi",
+              "emlak-scripti-hazir-emlak-sitesi-yazilimi"}
+    # Match the LIVE PHP router's active states and slug shapes. Previously the
+    # exporter queried non-existent 'published' status, silently dropping blogs.
+    sources = [
+      ("SELECT slug FROM categories WHERE status='active' LIMIT 180", "kategori/"),
+      ("SELECT slug FROM packages WHERE status='active' LIMIT 180", "paket/"),
+      ("SELECT slug FROM blog_posts WHERE status='active' LIMIT 90", "blog/"),
+      ("SELECT slug FROM blog_categories WHERE status='active' LIMIT 60", "blog/kategori/"),
+      ("SELECT slug FROM pages WHERE status='active' LIMIT 60", "sayfa/"),
+      ("SELECT slug FROM nv_legacy_script_products WHERE active=1 LIMIT 60", "hazir-scriptler/"),
+    ]
+    for sql, prefix in sources:
+        for slug in mysql_column(sql):
+            if safe_slug(slug):
+                routes.add(prefix + slug)
     return routes
 
 def mapped_url(raw, routes):
@@ -71,6 +78,14 @@ def export_html(text, route, all_routes):
                   attr_replace, text, flags=re.I)
     text = re.sub(r'<link[^>]+rel=(["\'])canonical\1[^>]*>', '', text, flags=re.I)
     text = text.replace("</head>", '<meta name="robots" content="noindex,nofollow">\n</head>', 1)
+    if route == "":
+        # Transparent preview provenance: don't pass software/blog artwork off
+        # as verified private customer references.
+        text = text.replace(
+          '<div class="nv31-portfolio-grid nv51-portfolio-grid"',
+          '<p class="pages-portfolio-note" style="margin:10px 0 18px;font-size:12px;color:#65708c">Portföy önizlemesi: NetVera yazılım ve yayınlanmış içerik örnekleri. Canlı müşteri referansları bu statik demoda senkronize değildir.</p>\n'
+          '<div class="nv31-portfolio-grid nv51-portfolio-grid"', 1
+        )
 
     # All demo forms, account operations and payments are intentionally disabled.
     notice = r'''
@@ -133,7 +148,19 @@ def main():
     for required in ("kategoriler", "hazir-scriptler", "blog"):
         if not (OUT / required / "index.html").exists():
             sys.exit("Required demo route missing: " + required)
-    print("STATIC_PREVIEW_OK: pages=", len(list(OUT.rglob("index.html"))),
+    home_html = (OUT / "index.html").read_text(encoding="utf-8")
+    reference_count = home_html.count('data-ref-card')
+    if reference_count != 6:
+        sys.exit(f"Missing cover-backed portfolio examples: {reference_count}/6")
+    if 'data-ref-group="agency"' not in home_html or 'data-ref-group="marketing"' not in home_html:
+        sys.exit("Missing agency or digital filter on static homepage")
+    for ref in ["insaat-firmasi-scripti", "haber-sitesi-scripti",
+                "netvera-emlak-script-yazilimi-pro", "google-maps-veri-cekme-isletme-bulucu-botu"]:
+        if not (OUT / "hazir-scriptler" / ref / "index.html").exists():
+            sys.exit("Missing linked portfolio software page: " + ref)
+    if len(list((OUT / "hazir-scriptler").glob("*/index.html"))) < 16:
+        sys.exit("Incomplete authentic public software catalog (expected 16)")
+    print("STATIC_PREVIEW_OK: references=6, verified_catalog=16, pages=", len(list(OUT.rglob("index.html"))),
           "failed_optional=",len(failures),"public_only=true")
     for route,err in failures[:10]:
         print("OPTIONAL_PAGE_OMITTED:",route,err[:130])
