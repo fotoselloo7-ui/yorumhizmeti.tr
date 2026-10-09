@@ -231,18 +231,18 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
     <div class="container">
         <div class="yh6-hero-grid">
             <div class="yh6-hero-copy">
-                <span class="yh6-eyebrow"><?= icon('award', 12) ?> Dijital Çözümler, Daha Güçlü Markalar</span>
-                <h1>Dijitalde <span>Daha Güçlü Bir Marka Yaratın!</span></h1>
-                <p>Web sitesi ve özel yazılımdan SEO, dijital reklam ve sosyal medya hizmetlerine kadar markanızın ihtiyaç duyduğu çözümleri tek noktadan keşfedin.</p>
+                <span class="yh6-eyebrow"><?= icon('award', 12) ?> NetVera Teknoloji Yazılım</span>
+                <h1>Yazılım, Dijital Ajans ve <span>Sosyal Medya Hizmetleri</span></h1>
+                <p>Hazır ve özel yazılım çözümleri, SEO, dijital reklam yönetimi ve Instagram, TikTok, YouTube hizmetleri NetVera Teknoloji Yazılım çatısı altında.</p>
                 <div class="yh6-hero-actions">
                     <a href="/kategoriler" class="yh6-btn primary">Hemen İncele <?= icon('arrow-right', 12) ?></a>
                     <a href="#how" class="yh6-btn ghost"><?= icon('play-circle', 14) ?> Nasıl Çalışır?</a>
                 </div>
                 <div class="yh6-hero-metrics">
-                    <div><?= icon('users', 16) ?><span><strong>50.000+</strong><small>Mutlu Müşteri</small></span></div>
-                    <div><?= icon('star-fill', 16) ?><span><strong>4.9/5</strong><small>Müşteri Puanı</small></span></div>
-                    <div><?= icon('zap', 16) ?><span><strong>Hızlı Teslimat</strong><small>Ortalama 0-6 Saat</small></span></div>
-                    <div><?= icon('shield', 16) ?><span><strong>%100 Güvenli</strong><small>SSL ile Koruma</small></span></div>
+                    <div><?= icon('code', 16) ?><span><strong>Yazılım</strong><small>Sektörel Çözümler</small></span></div>
+                    <div><?= icon('layers', 16) ?><span><strong>Dijital Ajans</strong><small>SEO ve Reklam</small></span></div>
+                    <div><?= icon('share-2', 16) ?><span><strong>Sosyal Medya</strong><small>Takipçi ve Etkileşim</small></span></div>
+                    <div><?= icon('package', 16) ?><span><strong>Hizmet Paketleri</strong><small>Online Sipariş</small></span></div>
                 </div>
             </div>
 
@@ -255,13 +255,13 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 <span class="yh6-social-float google"><?= icon('google', 25) ?></span>
                 <span class="yh6-social-float youtube"><?= icon('youtube', 24) ?></span>
 
-                <div class="yh6-rating-float"><span>★★★★★</span></div>
+                <div class="yh6-rating-float"><span>NETVERA</span></div>
                 <div class="yh6-review-float">
                     <?= icon('google', 19) ?>
-                    <div><strong>Yeni Yorum Geldi!</strong><small>5 yıldızlı değerlendirme</small></div>
+                    <div><strong>Dijital Çözümler</strong><small>SEO, yazılım ve sosyal medya</small></div>
                 </div>
                 <div class="yh6-growth-float">
-                    <strong>+285</strong><small>Bu hafta yeni müşteri</small>
+                    <strong>NetVera</strong><small>Teknoloji ve Yazılım</small>
                     <i></i><i></i><i></i><i></i><i></i>
                 </div>
             </div>
@@ -345,28 +345,28 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
             <div class="yh6-why-copy">
                 <span class="yh6-eyebrow">Markanız İçin En İyisi</span>
                 <h2>Neden NetVera?</h2>
-                <p>Sosyal kanıt, günümüz dijital dünyasında başarının anahtarıdır. Markanızın güvenilirliğini artırmak için hızlı, güvenli ve etkili çözümler sunuyoruz.</p>
+                <p>NetVera; yazılım geliştirme, profesyonel dijital ajans çözümleri ve sosyal medya hizmetlerini birlikte sunar. Her sektör için ihtiyaca uygun hizmetleri karşılaştırabilirsiniz.</p>
                 <ul>
-                    <li><?= icon('check-circle', 14) ?> Gerçek ve kaliteli etkileşimler</li>
-                    <li><?= icon('check-circle', 14) ?> Hızlı teslimat ve 7/24 destek</li>
-                    <li><?= icon('check-circle', 14) ?> %100 gizli ve güvenli hizmet</li>
-                    <li><?= icon('check-circle', 14) ?> Uygun fiyatlarla yüksek performans</li>
-                    <li><?= icon('check-circle', 14) ?> Tüm platformlar için tek adres</li>
+                    <li><?= icon('check-circle', 14) ?> Hazır ve özel yazılım çözümleri</li>
+                    <li><?= icon('check-circle', 14) ?> Dijital ajans, reklam ve içerik yönetimi</li>
+                    <li><?= icon('check-circle', 14) ?> Instagram, TikTok ve YouTube hizmetleri</li>
+                    <li><?= icon('check-circle', 14) ?> Teknik SEO ve arama görünürlüğü</li>
+                    <li><?= icon('check-circle', 14) ?> Paket kapsamı ve sipariş takibi</li>
                 </ul>
                 <a href="/kategoriler" class="yh6-btn primary">Hizmetlerimizi Keşfet <?= icon('arrow-right', 12) ?></a>
             </div>
 
             <div class="yh6-dashboard">
                 <div class="yh6-browser">
-                    <div class="yh6-browser-top"><span></span><span></span><span></span><b>Hesap İstatistikleri</b><em>Son 30 Gün</em></div>
-                    <div class="yh6-dash-stats"><div><small>Toplam Yorum</small><strong>1.248</strong><b>↗ %46</b></div><div><small>Etkileşim</small><strong>25,6K</strong><b>↗ %42</b></div><div><small>Görüntülenme</small><strong>532K</strong><b>↗ %39</b></div></div>
+                    <div class="yh6-browser-top"><span></span><span></span><span></span><b>NetVera Hizmet Alanları</b><em>3 Ana Sektör</em></div>
+                    <div class="yh6-dash-stats"><div><small>Yazılım</small><strong>Web</strong><b>Özel & Hazır</b></div><div><small>Dijital Ajans</small><strong>SEO</strong><b>Reklam & Tasarım</b></div><div><small>Sosyal Medya</small><strong>SMM</strong><b>Platform Paketleri</b></div></div>
                     <div class="yh6-chart"><svg viewBox="0 0 600 180" preserveAspectRatio="none"><polyline fill="none" stroke="#7b5cff" stroke-width="7" points="0,145 70,125 135,130 210,90 275,105 340,70 405,92 475,54 540,72 600,38"/><polyline fill="none" stroke="#4ca7ff" stroke-width="4" points="0,155 70,142 135,146 210,111 275,121 340,87 405,104 475,74 540,86 600,59"/></svg></div>
                 </div>
                 <div class="yh6-dash-services">
-                    <div><span class="google"><?= icon('google',15) ?></span><b>Google Yorumları</b><small>5 yeni yorum</small></div>
-                    <div><span class="instagram"><?= icon('instagram',15) ?></span><b>Instagram Beğeni</b><small>250 yeni beğeni</small></div>
-                    <div><span class="tiktok"><?= icon('tiktok',15) ?></span><b>TikTok İzlenme</b><small>12.4K yeni izlenme</small></div>
-                    <div><span class="youtube"><?= icon('youtube',15) ?></span><b>YouTube Yorum</b><small>18 yeni yorum</small></div>
+                    <div><span class="google"><?= icon('google',15) ?></span><b>Google SEO</b><small>İşletme & Teknik SEO</small></div>
+                    <div><span class="instagram"><?= icon('instagram',15) ?></span><b>Instagram Hizmetleri</b><small>Takipçi & Beğeni</small></div>
+                    <div><span class="tiktok"><?= icon('tiktok',15) ?></span><b>TikTok Hizmetleri</b><small>Takipçi & İzlenme</small></div>
+                    <div><span class="youtube"><?= icon('youtube',15) ?></span><b>YouTube Hizmetleri</b><small>Abone & Video</small></div>
                 </div>
             </div>
         </div>
@@ -1268,7 +1268,7 @@ if (!empty($projectReferences)) {
         <div class="yh6-final-copy">
             <span class="yh6-eyebrow">Daha Güçlü Bir Marka İçin</span>
             <h2 id="home-final-title">NetVera Teknoloji Yazılım ile Dijital Varlığınızı Güçlendirin</h2>
-            <p>Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web sitesi çözümlerinden SEO hizmetlerine kadar ihtiyacınız olan dijital hizmetler tek platformda.</p>
+            <p>NetVera Teknoloji Yazılım ile web ve sektörel yazılım çözümlerini, dijital ajans hizmetlerini, SEO çalışmalarını ve sosyal medya paketlerini tek adreste inceleyin.</p>
         </div>
         <div class="yh6-final-actions">
             <a href="/kategoriler" class="yh6-btn primary">Hizmetleri Keşfet <?= icon('arrow-right', 16) ?></a>
