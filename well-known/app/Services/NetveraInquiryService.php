@@ -88,6 +88,26 @@ final class NetveraInquiryService
         } catch (\Throwable $e) { return false; }
     }
 
+    /**
+     * Explicitly run by the authenticated admin; do not modify schemas on GET.
+     * Safe to retry after the v2 migration was previously applied.
+     */
+    public static function installImportance(): bool
+    {
+        if(!self::ready())return false;
+        if(self::importanceReady())return true;
+        try {
+            Database::getInstance()->query(
+                "ALTER TABLE nv_public_inquiries
+                 ADD COLUMN is_important TINYINT(1) NOT NULL DEFAULT 0 AFTER admin_note"
+            );
+        } catch (\Throwable $e) {
+            // Concurrent deployment may have already added the column.
+            if(!self::importanceReady())return false;
+        }
+        return self::importanceReady();
+    }
+
     /** Credentials from NetVera-compatible environment variable names. */
     private static function telegramCredentials(): array
     {
