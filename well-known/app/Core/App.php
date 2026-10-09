@@ -152,7 +152,9 @@ class App
         $r->get('/admin/netvera-gelen-kutusu', 'Admin\\NetveraInboxController@index');
         $r->get('/admin/netvera-gelen-kutusu/{id}', 'Admin\\NetveraInboxController@detail');
         $r->post('/admin/netvera-gelen-kutusu/{id}/yanit', 'Admin\\NetveraInboxController@reply');
-        $r->post('/admin/netvera-gelen-kutusu/{id}/durum', 'Admin\\NetveraInboxController@state');
+
+        $r->post('/admin/netvera-gelen-kutusu/telegram/kaydet', 'Admin\\NetveraInboxController@saveTelegramSettings');
+        $r->post('/admin/netvera-gelen-kutusu/{id}/onem', 'Admin\\NetveraInboxController@importance');        $r->post('/admin/netvera-gelen-kutusu/{id}/durum', 'Admin\\NetveraInboxController@state');
         $r->get('/admin/netvera-kategoriler', 'Admin\\NetveraScriptController@categories');
         $r->post('/admin/netvera-kategoriler/kaydet', 'Admin\\NetveraScriptController@saveCategory');
         $r->post('/admin/netvera-kategoriler/staging-kur', 'Admin\\NetveraScriptController@installBridge');
