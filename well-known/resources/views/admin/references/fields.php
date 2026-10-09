@@ -70,6 +70,15 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
     <input class="form-control" type="file" name="image" accept="image/png,image/jpeg,image/webp">
     <?php if (!empty($ref['image'])): ?><small>Mevcut kapak kayıtlı; yenisini seçmezsen korunur.</small><?php endif; ?>
   </label>
+  <label data-ref-hosted-video-field>Harici Video Bağlantısı — Sunucuda Yer Kaplamaz
+    <input class="form-control" type="url" name="external_video_url" maxlength="2000"
+      value="<?= e($ref['external_video_url'] ?? '') ?>" data-ref-hosted-video
+      placeholder="https://youtu.be/... veya Bunny / Cloudflare Stream / Vimeo">
+    <small>ÖNERİLEN: Videoyu YouTube'da liste dışı veya bir video servisinde barındır. Paylaşılan bağlantıyı buraya yapıştır. Video referans kartındaki kendi penceremizde açılır; dosya YorumHizmeti.tr sunucusunda tutulmaz. Sadece Instagram linki kullanılırsa Instagram oynatmayı kısıtlayabilir.</small>
+    <?php if (!empty($ref['external_video_url'])): ?>
+      <span class="adm52-video-saved"><?= icon('check-circle',13) ?> Harici oynatma bağlantısı kayıtlı.</span>
+    <?php endif; ?>
+  </label>
   <label data-ref-video-field>İsteğe Bağlı Video (MP4 / WebM)
     <input class="form-control" type="file" name="video" accept="video/mp4,video/webm,.mp4,.webm" data-ref-video-input>
     <small>Instagram linkiyle oynatma kısıtlanırsa videoyu doğrudan sitemizde oynatırız. En fazla 80 MB; sunucuda PHP yükleme limiti yeterli olmalı.</small>
