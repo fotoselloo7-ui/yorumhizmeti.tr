@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('list', 24) ?> Aktivite Logları</h2>
-        <p class="text-sm text-secondary">Yöneticiler tarafından yapılan işlemlerin işlem geçmişi.</p>
     </div>
 </div>
 
