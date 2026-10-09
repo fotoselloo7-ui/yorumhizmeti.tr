@@ -197,6 +197,26 @@ try {
             (int)$row['id'],$cid,$userMap[$cid]??null,$row['referral_code'],(string)$row['status'],$row['commission_rate']
         ]);
     }
+    // Optional operational dealer program. A legacy 'approved' status is only
+    // historical evidence; never auto-approve payouts or commissions on new site.
+    $dealerTables=$new->query("SHOW TABLES LIKE 'nv_dealer_accounts'")->fetchColumn();
+    if($dealerTables){
+        foreach($all($old,'SELECT id,customer_id,referral_code,status FROM affiliate_accounts') as $legacyDealer){
+            $oldCustomerId=(int)$legacyDealer['customer_id'];
+            $newUserId=$userMap[$oldCustomerId]??null;
+            if(!$newUserId)continue;
+            $existing=$one($new,'SELECT id FROM nv_dealer_accounts WHERE user_id=?',[$newUserId]);
+            if($existing)continue;
+            $refCode='NV'.strtoupper(bin2hex(random_bytes(6)));
+            $put($new,"INSERT INTO nv_dealer_accounts (user_id,legacy_affiliate_id,referral_code,status,tier,commission_rate,note) VALUES (?,?,?,'pending','starter',0,?)",[
+                $newUserId,(int)$legacyDealer['id'],$refCode,'Eski NetVera bayilik hesabi, yonetici incelemesi bekliyor'
+            ]);
+            $dealerId=(int)$new->lastInsertId();
+            $put($new,"INSERT INTO nv_dealer_audit (dealer_id,actor_type,actor_id,action,new_status,details) VALUES (?,'system',0,'legacy_import','pending',?)",[
+                $dealerId,'Eski bayi kaydi aktarildi, yeni hak edis baslatilmadi'
+            ]);
+        }
+    }
     foreach($all($old,'SELECT id,affiliate_id,order_id,amount,rate,status,paid_at,created_at FROM affiliate_commissions') as $row){
         $put($new,'INSERT INTO nv_private_affiliate_commissions (old_commission_id,old_affiliate_id,old_order_id,amount,rate,status,paid_at,created_at) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE status=VALUES(status),paid_at=VALUES(paid_at)',[
             (int)$row['id'],(int)$row['affiliate_id'],(int)$row['order_id'],$row['amount'],$row['rate'],
