@@ -80,7 +80,7 @@ final class TestimonialManager
             $id=trim((string)($data['id']??''));
             $idx=null;
             foreach($list as $n=>$item)if(is_array($item) && (string)($item['id']??'legacy-'.$n)===$id){$idx=$n;break;}
-            if($idx===null && count($list)>=250)throw new \RuntimeException('En fazla 250 yorum saklanabilir.');
+
             $old=$idx!==null?$list[$idx]:[];
             $record=[
                 'id'=>$idx!==null?$id:bin2hex(random_bytes(12)),
