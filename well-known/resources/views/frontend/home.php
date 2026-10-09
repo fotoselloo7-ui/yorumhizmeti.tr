@@ -901,6 +901,11 @@ if (!empty($projectReferences)) {
         $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
         $embedUrl = \App\Services\ReferencesService::instagramEmbed((string)($ref['url']??''), $refMedia);
         $hasInstagram = $embedUrl !== null;
+        $localVideo = (string)($ref['video'] ?? '');
+        // Only first-party files written by the reference upload endpoint may play natively.
+        if (!preg_match('~^/uploads/references/videos/[A-Za-z0-9_.-]+\.(?:mp4|webm)$~D', $localVideo)) {
+            $localVideo = '';
+        }
         $isWebsite = $refMedia === 'website' && !empty($ref['url']);
         $cover = (string)($ref['image']??'');
         $logo = (string)($ref['logo']??'');
@@ -917,6 +922,11 @@ if (!empty($projectReferences)) {
                data-ref-card
                data-ref-placements="<?= e(json_encode($refPublicPlacements, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"
                data-ref-kind="<?= e($refMedia) ?>"
+               <?php if ($hasInstagram): ?>
+               data-ref-embed="<?= e($embedUrl) ?>"
+               data-ref-video="<?= $localVideo !== '' ? e(upload_url($localVideo)) : '' ?>"
+               data-ref-title="<?= e($ref['title']) ?>"
+               <?php endif; ?>
                <?= in_array($nv51InitialGroup, array_column($refPublicPlacements, 'group'), true)?'':'hidden' ?>>
         <?php if ($isWebsite): ?>
         <a class="nv51-client-link" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
@@ -925,8 +935,8 @@ if (!empty($projectReferences)) {
 
         <div class="nv31-portfolio-image nv51-cover <?= $hasInstagram?'nv51-instagram-media':'' ?>">
           <?php if ($hasInstagram): ?>
-          <button type="button" class="nv51-play-embed" data-ref-play data-embed="<?= e($embedUrl) ?>"
-                  aria-label="<?= e($ref['title']) ?> <?= $refMedia==='instagram_reel'?'Reels videosunu':'Instagram gönderisini' ?> aç">
+          <button type="button" class="nv51-play-embed" data-ref-play
+                  aria-label="<?= e($ref['title']) ?> <?= $refMedia==='instagram_reel'?'Reels videosunu':'Instagram gönderisini' ?> kendi penceremizde oynat">
             <?php if ($cover): ?>
               <img src="<?= e(upload_url($cover)) ?>" alt="<?= e($ref['title']) ?> kapak görseli" loading="lazy" decoding="async">
             <?php else: ?>
@@ -935,7 +945,7 @@ if (!empty($projectReferences)) {
             <span class="nv51-play-icon"><?= icon($refMedia==='instagram_reel'?'play':'instagram',23) ?></span>
             <span class="nv51-media-tag"><?= e($refMedia==='instagram_reel'?'Reels':'Instagram Post') ?></span>
           </button>
-          <div class="nv51-embed-slot" data-embed-slot hidden></div>
+
           <?php else: ?>
             <?php if ($cover): ?>
               <img src="<?= e(upload_url($cover)) ?>" alt="<?= e($ref['title']) ?> proje görseli" loading="lazy" decoding="async">
@@ -960,7 +970,7 @@ if (!empty($projectReferences)) {
           <?php if($isWebsite): ?>
             <span class="nv51-reference-action">Müşteri Sitesini Ziyaret Et <?= icon('arrow-up-right',13) ?></span>
           <?php elseif ($hasInstagram): ?>
-            <a class="nv51-reference-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer">Instagram'da Aç <?= icon('arrow-up-right',13) ?></a>
+            <button type="button" class="nv51-reference-action nv52-watch-action" data-ref-play><?= icon('play',12) ?> Videoyu Sitemizde İzle <?= icon('arrow-right',12) ?></button>
           <?php elseif ($target): ?>
             <a class="nv51-reference-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer">Çalışmayı Gör <?= icon('arrow-up-right',13) ?></a>
           <?php endif; ?>
@@ -978,6 +988,19 @@ if (!empty($projectReferences)) {
 
   </div>
 </section>
+<dialog class="nv52-player-dialog" data-ref-player-modal aria-labelledby="nv52-player-title">
+  <div class="nv52-player-window">
+    <header class="nv52-player-head">
+      <div class="nv52-player-ident">
+        <span class="nv52-player-mark"><?= icon('play-circle',19) ?></span>
+        <div><span class="nv52-player-eyebrow">REFERANS VİDEOSU</span><h3 id="nv52-player-title" data-ref-player-title>Çalışmamız</h3></div>
+      </div>
+      <button class="nv52-player-close" type="button" data-ref-player-close aria-label="Videoyu kapat"><?= icon('x',20) ?></button>
+    </header>
+    <div class="nv52-player-stage" data-ref-player-stage aria-label="Video oynatıcı"></div>
+    <div class="nv52-player-foot" data-ref-player-foot role="status" aria-live="polite"></div>
+  </div>
+</dialog>
 <script>
 (function(){
  const root=document.querySelector('[data-reference-gallery]');
@@ -987,14 +1010,76 @@ if (!empty($projectReferences)) {
  const cards=Array.from(root.querySelectorAll('[data-ref-card]'));
  const formatPanel=root.querySelector('[data-ref-format-panel]');
  const empty=root.querySelector('[data-ref-empty]');
- function resetPlayer(card){
-   const slot=card.querySelector('[data-embed-slot]');
-   const preview=card.querySelector('[data-ref-play]');
-   if(!slot||slot.hidden)return;
-   slot.replaceChildren();
-   slot.hidden=true;
-   if(preview)preview.hidden=false;
-   card.classList.remove('nv51-is-playing');
+ const modal=document.querySelector('[data-ref-player-modal]');
+ const stage=modal?.querySelector('[data-ref-player-stage]');
+ const note=modal?.querySelector('[data-ref-player-foot]');
+ const modalTitle=modal?.querySelector('[data-ref-player-title]');
+ const closeButton=modal?.querySelector('[data-ref-player-close]');
+ let previousFocus=null;
+
+ function clearPlayer(){
+   if(!stage)return;
+   const video=stage.querySelector('video');
+   if(video){video.pause();video.removeAttribute('src');video.load();}
+   stage.replaceChildren();
+ }
+ function closePlayer(){
+   if(!modal)return;
+   if(modal.open)modal.close();
+   clearPlayer();
+ }
+ if(modal){
+   modal.addEventListener('close',()=>{
+     clearPlayer();
+     if(previousFocus?.isConnected)previousFocus.focus();
+     previousFocus=null;
+   });
+   modal.addEventListener('click',e=>{if(e.target===modal)closePlayer();});
+   closeButton?.addEventListener('click',closePlayer);
+ }
+ function openPlayer(card,trigger){
+   if(!card||!modal||!stage)return;
+   const embed=card.dataset.refEmbed||'';
+   const videoPath=card.dataset.refVideo||'';
+   if(!embed && !videoPath)return;
+   previousFocus=trigger;
+   clearPlayer();
+   modalTitle.textContent=card.dataset.refTitle||'Referans videosu';
+   if(videoPath){
+     // No Instagram redirect: video is served from our own uploads folder.
+     const video=document.createElement('video');
+     video.controls=true;video.autoplay=true;video.playsInline=true;
+     video.preload='metadata';
+     const poster=card.querySelector('.nv51-play-embed img');
+     if(poster?.src)video.poster=poster.src;
+     video.src=videoPath;
+     video.addEventListener('error',()=>{
+       if(note)note.textContent='Video yüklenemedi. Yönetim panelinden MP4/WebM dosyasını kontrol edin.';
+     });
+     stage.appendChild(video);
+     if(note)note.textContent='Video burada, kendi oynatıcımızda açılıyor.';
+     modal.showModal();
+     video.play().catch(()=>{});
+   }else{
+     let url;
+     try{
+       url=new URL(embed);
+       if(url.protocol!=='https:'||url.hostname!=='www.instagram.com'||
+          !/^\\/(?:p|reel)\\/[A-Za-z0-9_-]+\\/embed\\/$/.test(url.pathname))return;
+     }catch(e){return}
+     const frame=document.createElement('iframe');
+     frame.title='Instagram içerik oynatıcısı';
+     frame.src=url.href;
+     frame.loading='eager';
+     frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+     frame.referrerPolicy='strict-origin-when-cross-origin';
+     // Never permit the embedded player to send visitors to instagram.com.
+     frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-presentation');
+     frame.setAttribute('allowfullscreen','');
+     stage.appendChild(frame);
+     if(note)note.textContent='Instagram bazı içeriklerin sitede oynatılmasını engelleyebilir. Kesintisiz oynatma için yönetim panelinden MP4/WebM yüklenebilir.';
+     modal.showModal();
+   }
  }
 
  let group=groups.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.refGroup||'agency';
@@ -1022,7 +1107,7 @@ if (!empty($projectReferences)) {
        const label=card.querySelector('[data-ref-service-label]');
        if(label)label.textContent=matched.label||'Dijital Proje';
      }
-     if(!permitted)resetPlayer(card);
+     if(!permitted && modal?.open)closePlayer();
      card.hidden=!permitted;
      if(permitted)found++;
    });
@@ -1034,16 +1119,7 @@ if (!empty($projectReferences)) {
  }));
  if(formatPanel)formatPanel.querySelectorAll('[data-ref-format]').forEach(button=>button.addEventListener('click',()=>{format=button.dataset.refFormat;apply()}));
  root.querySelectorAll('[data-ref-play]').forEach(button=>button.addEventListener('click',()=>{
-   const url=button.dataset.embed||'';
-   try{const u=new URL(url);if(u.protocol!=='https:'||u.hostname!=='www.instagram.com'||!/^\/(?:p|reel)\/[A-Za-z0-9_-]+\/embed\/$/.test(u.pathname))return;}catch(e){return}
-   const slot=button.parentElement.querySelector('[data-embed-slot]');if(!slot)return;
-   const frame=document.createElement('iframe');
-   frame.src=url+'?autoplay=1';frame.title='Instagram gönderisi';frame.loading='lazy';
-   frame.allow='autoplay; encrypted-media; picture-in-picture';
-   frame.referrerPolicy='strict-origin-when-cross-origin';
-   frame.setAttribute('allowfullscreen','');
-   button.hidden=true;slot.hidden=false;slot.appendChild(frame);
-   button.closest('[data-ref-card]')?.classList.add('nv51-is-playing');
+   openPlayer(button.closest('[data-ref-card]'),button);
  }));
  apply();
 })();
