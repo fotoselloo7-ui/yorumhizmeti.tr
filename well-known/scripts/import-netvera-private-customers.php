@@ -61,7 +61,7 @@ try {
     $old=$pdo($get('NETVERA_SOURCE_DB_HOST'),$get('NETVERA_SOURCE_DB_NAME'),
         $get('NETVERA_SOURCE_DB_USER'),$get('NETVERA_SOURCE_DB_PASSWORD'));
     $new=$pdo($get('DB_HOST'),$get('DB_NAME'),$get('DB_USER'),$get('DB_PASS'));
-    $tables=['admin_users','customers','orders','order_items','affiliate_accounts','affiliate_commissions'];
+    $tables=['admin_users','customers','orders','order_items','affiliate_accounts','affiliate_commissions','support_tickets','support_ticket_replies','affiliate_clicks','order_referrals'];
     $counts=[];
     foreach($tables as $table) {
         $counts[$table]=(int)$old->query('SELECT COUNT(*) FROM `'.$table.'`')->fetchColumn();
@@ -138,8 +138,9 @@ try {
             $userId=(int)$new->lastInsertId();
         }
         $oldId=(int)$row['id'];$userMap[$oldId]=$userId;
-        $put($new,'INSERT INTO nv_private_user_map (old_customer_id,new_user_id,is_agency,want_dealer,source_status) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE new_user_id=VALUES(new_user_id),is_agency=VALUES(is_agency),want_dealer=VALUES(want_dealer),source_status=VALUES(source_status)',[
-            $oldId,$userId,(int)$row['is_agency'],(int)$row['want_dealer'],(string)$row['status']
+        $put($new,'INSERT INTO nv_private_user_map (old_customer_id,new_user_id,is_agency,want_dealer,source_status,source_profile_encrypted) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE new_user_id=VALUES(new_user_id),is_agency=VALUES(is_agency),want_dealer=VALUES(want_dealer),source_status=VALUES(source_status),source_profile_encrypted=VALUES(source_profile_encrypted)',[
+            $oldId,$userId,(int)$row['is_agency'],(int)$row['want_dealer'],(string)$row['status'],
+            $encrypt(json_encode($row,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR))
         ]);
     }
     $adminRows=$all($old,'SELECT id,name,email,password_hash,role,is_active FROM admin_users');
@@ -164,13 +165,15 @@ try {
         }
         $put($new,'INSERT INTO nv_private_admin_map (old_admin_id,new_admin_id) VALUES (?,?) ON DUPLICATE KEY UPDATE new_admin_id=VALUES(new_admin_id)',[(int)$a['id'],$adminId]);
     }
-    foreach($all($old,'SELECT id,order_no,customer_id,product_id,product_name,amount,currency,payment_status,order_status,order_type,entitlements_json,license_key,paid_at,created_at FROM orders') as $row){
+    foreach($all($old,'SELECT * FROM orders') as $row){
         $oldCustomer=$row['customer_id']===null?null:(int)$row['customer_id'];
         // Guest purchases without an old customer ID remain unclaimed; never
         // grant product rights based only on potentially unverified email.
         $userId=$oldCustomer===null?null:($userMap[$oldCustomer]??null);
-        $put($new,'INSERT INTO nv_private_orders (old_order_id,old_customer_id,new_user_id,order_no,product_id,product_name,amount,currency,payment_status,order_status,order_type,entitlement_json,license_key_encrypted,paid_at,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE new_user_id=VALUES(new_user_id),payment_status=VALUES(payment_status),order_status=VALUES(order_status),entitlement_json=VALUES(entitlement_json),license_key_encrypted=VALUES(license_key_encrypted)',[
-            (int)$row['id'],$oldCustomer,$userId,(string)$row['order_no'],$row['product_id'],
+        $put($new,'INSERT INTO nv_private_orders (old_order_id,old_customer_id,new_user_id,customer_name,customer_email,customer_phone,source_order_json_encrypted,order_no,product_id,product_name,amount,currency,payment_status,order_status,order_type,entitlement_json,license_key_encrypted,paid_at,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE new_user_id=VALUES(new_user_id),customer_email=VALUES(customer_email),source_order_json_encrypted=VALUES(source_order_json_encrypted),payment_status=VALUES(payment_status),order_status=VALUES(order_status),entitlement_json=VALUES(entitlement_json),license_key_encrypted=VALUES(license_key_encrypted)',[
+            (int)$row['id'],$oldCustomer,$userId,$row['customer_name'],$row['customer_email'],$row['customer_phone'],
+            $encrypt(json_encode($row,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR)),
+            (string)$row['order_no'],$row['product_id'],
             $row['product_name'],$row['amount'],(string)$row['currency'],(string)$row['payment_status'],
             (string)$row['order_status'],(string)$row['order_type'],$row['entitlements_json'],
             $encrypt($row['license_key']),(string)$row['paid_at']?:null,(string)$row['created_at']?:null
@@ -192,6 +195,30 @@ try {
         $put($new,'INSERT INTO nv_private_affiliate_commissions (old_commission_id,old_affiliate_id,old_order_id,amount,rate,status,paid_at,created_at) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE status=VALUES(status),paid_at=VALUES(paid_at)',[
             (int)$row['id'],(int)$row['affiliate_id'],(int)$row['order_id'],$row['amount'],$row['rate'],
             (string)$row['status'],$row['paid_at'],$row['created_at']
+        ]);
+    }
+
+    foreach($all($old,'SELECT id,customer_id,subject,initial_message,related_order_id,priority,status,created_at,updated_at FROM support_tickets') as $row){
+        $cid=$row['customer_id']===null?null:(int)$row['customer_id'];
+        $put($new,'INSERT INTO nv_private_support_tickets (old_ticket_id,old_customer_id,new_user_id,subject,initial_message,old_order_id,priority,status,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE new_user_id=VALUES(new_user_id)',[
+            (int)$row['id'],$cid,$cid===null?null:($userMap[$cid]??null),$row['subject'],
+            $row['initial_message'],$row['related_order_id'],$row['priority'],$row['status'],
+            $row['created_at'],$row['updated_at']
+        ]);
+    }
+    foreach($all($old,'SELECT id,ticket_id,sender_type,message,created_at FROM support_ticket_replies') as $row){
+        $put($new,'INSERT INTO nv_private_support_replies (old_reply_id,old_ticket_id,sender_type,message,created_at) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE message=VALUES(message)',[
+            (int)$row['id'],(int)$row['ticket_id'],$row['sender_type'],$row['message'],$row['created_at']
+        ]);
+    }
+    foreach($all($old,'SELECT id,affiliate_id,visitor_token,landing_path,clicked_at FROM affiliate_clicks') as $row){
+        $put($new,'INSERT INTO nv_private_affiliate_clicks (old_click_id,old_affiliate_id,visitor_token,landing_path,clicked_at) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE landing_path=VALUES(landing_path)',[
+            (int)$row['id'],(int)$row['affiliate_id'],$row['visitor_token'],$row['landing_path'],$row['clicked_at']
+        ]);
+    }
+    foreach($all($old,'SELECT order_id,affiliate_id,visitor_token,attributed_at FROM order_referrals') as $row){
+        $put($new,'INSERT INTO nv_private_order_referrals (old_order_id,old_affiliate_id,visitor_token,attributed_at) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE attributed_at=VALUES(attributed_at)',[
+            (int)$row['order_id'],(int)$row['affiliate_id'],$row['visitor_token'],$row['attributed_at']
         ]);
     }
     $new->commit();
