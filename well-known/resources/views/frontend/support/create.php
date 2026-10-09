@@ -7,7 +7,7 @@
                 <div class="panel-page-header">
                     <div>
                         <h1><?= icon('plus', 24) ?> Yeni Destek Talebi</h1>
-                        <p>Sorunuzu veya talebinizi aşağıdaki formu doldurarak bize iletin.</p>
+                        
                     </div>
                     <a href="/destek" class="btn btn-outline btn-sm"><?= icon('arrow-left', 14) ?> Taleplerime Dön</a>
                 </div>
@@ -71,17 +71,6 @@
 
                     <!-- Info sidebar -->
                     <div class="panel-support-info">
-                        <div class="panel-card">
-                            <div class="panel-card-body">
-                                <div class="panel-info-box">
-                                    <?= icon('info', 20) ?>
-                                    <div>
-                                        <strong>Bilgilendirme</strong>
-                                        <p>Destek ekibimiz taleplerinize genellikle 1-4 saat içerisinde yanıt vermektedir. Detaylı anlatım hızlı çözüm sağlar.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <?php if (setting('site_whatsapp')): ?>
                         <div class="panel-card">
                             <div class="panel-card-body">
@@ -89,7 +78,7 @@
                                     <?= icon('whatsapp', 20) ?>
                                     <div>
                                         <strong>Acil Destek</strong>
-                                        <p>Acil durumlarda WhatsApp üzerinden de bize ulaşabilirsiniz.</p>
+                                        
                                         <a href="https://wa.me/<?= e(setting('site_whatsapp')) ?>" target="_blank" rel="noopener" class="btn btn-success btn-sm" style="margin-top: 8px;"><?= icon('send', 14) ?> WhatsApp</a>
                                     </div>
                                 </div>
