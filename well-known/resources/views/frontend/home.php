@@ -940,7 +940,7 @@ if (!empty($projectReferences)) {
                <?= in_array($nv51InitialGroup, array_column($refPublicPlacements, 'group'), true)?'':'hidden' ?>>
         <?php if ($isWebsite): ?>
         <a class="nv51-client-link" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
-           aria-label="<?= e($ref['title']) ?> müşteri sitesine git">
+           aria-label="<?= e($ref['title']) ?> <?= str_starts_with($target,'/')?'proje detayını görüntüle':'müşteri sitesine git' ?>">
         <?php endif; ?>
 
         <div class="nv31-portfolio-image nv51-cover <?= $hasVideoMedia?'nv51-instagram-media':'' ?>">
@@ -985,7 +985,7 @@ if (!empty($projectReferences)) {
           <h3><?= e($ref['title']) ?></h3>
           <?php if(!empty($ref['description'])): ?><p><?= e($ref['description']) ?></p><?php endif; ?>
           <?php if($isWebsite): ?>
-            <span class="nv51-reference-action">Müşteri Sitesini Ziyaret Et <?= icon('arrow-up-right',13) ?></span>
+            <span class="nv51-reference-action"><?= str_starts_with($target,'/')?'Proje Detayını Gör':'Müşteri Sitesini Ziyaret Et' ?> <?= icon('arrow-up-right',13) ?></span>
           <?php elseif ($instagramOnly): ?>
             <a class="nv51-reference-action nv52-watch-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
                aria-label="<?= e($ref['title']) ?> videosunu Instagram'da izle (yeni sekme)"><?= icon('play',12) ?> Videoyu İzle <?= icon('arrow-up-right',12) ?></a>
