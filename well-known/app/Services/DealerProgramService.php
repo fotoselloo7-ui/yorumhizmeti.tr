@@ -124,6 +124,19 @@ final class DealerProgramService
         return true;
     }
 
+    public static function auditTrail(): array
+    {
+        if(!self::ready())return [];
+        return Database::getInstance()->fetchAll(
+            'SELECT a.dealer_id,a.actor_type,a.action,a.old_status,a.new_status,
+                    a.details,a.created_at,u.name AS dealer_name
+             FROM nv_dealer_audit a
+             JOIN nv_dealer_accounts d ON d.id=a.dealer_id
+             JOIN users u ON u.id=d.user_id
+             ORDER BY a.id DESC LIMIT 40'
+        );
+    }
+
     public static function adminList(): array
     {
         if(!self::ready())return [];
