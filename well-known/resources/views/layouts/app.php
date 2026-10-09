@@ -658,12 +658,14 @@
         <?php require BASE_PATH.'/resources/views/frontend/partials/netvera-live-chat.php'; ?>
     <?php endif; ?>
 
+    <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=43.1"></script>
     <script src="<?= asset('js/package-benefits-v67.js') ?>?v=67.1"></script>
     <script src="<?= asset('js/reviews-v68.js') ?>?v=68.1" defer></script>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
+    <style>.nv68-chat-person{display:flex;align-items:center;gap:10px}.nv68-chat-person>img,.nv68-chat-avatar{width:39px;height:39px;flex-shrink:0;border-radius:12px;object-fit:cover;background:rgba(255,255,255,.18);display:grid;place-items:center}.nv68-chat-person strong,.nv68-chat-person small{display:block}.nv68-chat-person small{opacity:.8;font-size:10px}</style>
     <?= setting('footer_script') ?>
 </body>
 </html>
