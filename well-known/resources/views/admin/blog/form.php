@@ -331,7 +331,7 @@
 
 </form>
 <link rel="stylesheet" href="<?= asset('css/blog-quality-v44.css') ?>?v=44.1">
-<link rel="stylesheet" href="<?= asset('css/blog-editor-v46.css') ?>?v=46.1">
+<link rel="stylesheet" href="<?= asset('css/blog-editor-v46.css') ?>?v=47.1">
 <script src="<?= asset('js/blog-quality-v44.js') ?>?v=44.1" defer></script>
 
 <!-- JS Kütüphaneleri (Select2 & TinyMCE) -->
