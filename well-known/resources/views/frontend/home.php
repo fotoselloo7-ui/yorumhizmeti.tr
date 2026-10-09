@@ -933,6 +933,7 @@ if (!empty($projectReferences)) {
                data-ref-external-url="<?= e($hostedPlayer['url'] ?? '') ?>"
                data-ref-external-type="<?= e($hostedPlayer['type'] ?? '') ?>"
                data-ref-external-provider="<?= e($hostedPlayer['provider'] ?? '') ?>"
+               data-ref-aspect="<?= e($hostedPlayer['aspect'] ?? '') ?>"
                data-ref-video="<?= $localVideo !== '' ? e(upload_url($localVideo)) : '' ?>"
                data-ref-title="<?= e($ref['title']) ?>"
                <?php endif; ?>
@@ -957,7 +958,9 @@ if (!empty($projectReferences)) {
               <span class="nv51-social-placeholder"><?= icon($isYouTube?'youtube':'instagram',35) ?></span>
             <?php endif; ?>
             <span class="nv51-play-icon"><?= icon($refMedia==='instagram_post'?'instagram':'play',23) ?></span>
-            <span class="nv51-media-tag"><?= e($isYouTube?'YouTube Video':($refMedia==='instagram_reel'?'Reels':'Instagram Post')) ?></span>
+            <span class="nv51-media-tag"><?= e($isYouTube
+                ? (($hostedPlayer['aspect'] ?? '') === 'portrait' ? 'YouTube Shorts' : 'YouTube Video')
+                : ($refMedia==='instagram_reel'?'Reels':'Instagram Post')) ?></span>
           <?php if ($instagramOnly): ?></a><?php else: ?></button><?php endif; ?>
 
           <?php else: ?>
@@ -1035,6 +1038,7 @@ if (!empty($projectReferences)) {
  let previousFocus=null;
 
  function clearPlayer(){
+   if(modal)modal.removeAttribute('data-video-orientation');
    if(!stage)return;
    const video=stage.querySelector('video');
    if(video){video.pause();video.removeAttribute('src');video.load();}
@@ -1060,9 +1064,14 @@ if (!empty($projectReferences)) {
    const externalUrl=card.dataset.refExternalUrl||'';
    const externalType=card.dataset.refExternalType||'';
    const externalProvider=card.dataset.refExternalProvider||'';
+   const aspect=card.dataset.refAspect||'';
    if(!videoPath && !externalUrl)return;
    previousFocus=trigger;
    clearPlayer();
+   // Read the canonical YouTube source type; other providers retain legacy layout.
+   if(externalProvider==='YouTube' && (aspect==='portrait'||aspect==='landscape')){
+     modal.dataset.videoOrientation=aspect;
+   }
    modalTitle.textContent=card.dataset.refTitle||'Referans videosu';
    if(externalUrl && (externalType==='video'||externalType==='iframe')){
      // Admin-validated external stream takes precedence over any first-party upload.
