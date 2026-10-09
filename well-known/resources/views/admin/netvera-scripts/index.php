@@ -5,9 +5,9 @@
 </div>
 <?php if(!$ready): ?>
 <div class="adm-card" style="margin-bottom:14px"><div class="adm-card-body">
-  <strong><?= icon('info',15) ?> Gerçek NetVera ürünleri önizleme modunda</strong>
-  <p style="font-size:12px;margin:8px 0 0">Orijinal ürün verileri, görselleri ve bağlantıları aktif. Yerel veritabanına aktarım henüz yapılmadığı için ürün düzenleme ve yeni yazılım kaydetme bu ekranda kapalıdır.</p>
-  <a href="/admin/netvera-kategoriler" class="btn btn-outline btn-sm" style="margin-top:12px">Kategori ve Yerel Kurulum</a>
+  <strong><?= icon('info',15) ?> Yazılım kataloğu veritabanı henüz kurulmamış</strong>
+  <p style="font-size:12px;margin:8px 0 0">Ürünler kayıtlardan okunabiliyor ancak bu sunucuda yazılım yönetim tabloları eksik. Yeni yazılım eklemek ve mevcut ürünleri düzenlemek için katalog veritabanı kurulumunun tamamlanması gerekiyor.</p>
+  <a href="/admin/netvera-kategoriler" class="btn btn-outline btn-sm" style="margin-top:12px">Katalog Veritabanı</a>
 </div></div>
 <?php endif; ?>
 <div class="adm-card">
