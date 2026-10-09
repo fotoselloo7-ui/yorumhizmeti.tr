@@ -1,5 +1,5 @@
 /* Yorumlar: üç kartlık vitrin sağdan sola, her adımda sadece bir kart ilerler. */
-.nv30-feedback .nv69-review-viewport{overflow:hidden;min-width:0;padding:7px 2px 15px;margin:-7px -2px -15px}
+.nv30-feedback .nv69-review-viewport{overflow:hidden;min-width:0;width:100%;max-width:100%;padding:3px 0 18px;margin:0;isolation:isolate}
 .nv30-feedback .nv30-review-grid{
   display:flex!important;align-items:stretch;gap:16px!important;
   grid-template-columns:none!important;min-width:0;transform:translate3d(0,0,0);
@@ -10,7 +10,7 @@
 }
 .nv30-feedback .nv30-review-card{
   box-sizing:border-box;flex:0 0 calc((100% - 32px)/3);
-  width:calc((100% - 32px)/3);min-width:0;min-height:248px;height:248px;
+  width:calc((100% - 32px)/3);min-width:0;min-height:328px;height:328px;
   overflow:hidden;display:flex!important
 }
 .nv30-feedback .nv30-review-primary{
@@ -24,8 +24,10 @@
   background:#f1ecff;color:#7651ea;box-shadow:none
 }
 .nv30-feedback .nv30-review-card blockquote{
-  display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:4;
-  overflow:hidden;flex:1 1 auto;min-height:0
+  display:block!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;
+  overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;
+  max-height:156px;line-height:1.65;scrollbar-width:thin;
+  scrollbar-color:#d9d3ef transparent
 }
 .nv68-review-service{
   display:flex;align-items:center;gap:5px;color:#6658bd;
@@ -39,12 +41,12 @@
 @media(max-width:900px){
  .nv30-feedback .nv30-review-card{
    flex-basis:calc((100% - 16px)/2);width:calc((100% - 16px)/2);
-   min-height:242px;height:242px
+   min-height:322px;height:322px
  }
 }
 @media(max-width:600px){
  .nv30-feedback .nv30-review-card{
-   flex-basis:100%;width:100%;min-height:240px;height:240px;
+   flex-basis:100%;width:100%;min-height:316px;height:316px;
    padding:19px;border-radius:15px
  }
  .nv30-feedback .nv30-review-card:not(:first-child){display:flex!important}
@@ -52,3 +54,7 @@
 @media(prefers-reduced-motion:reduce){
  .nv30-feedback .nv30-review-grid.nv69-is-sliding{transition:none!important}
 }
+
+.nv30-feedback .nv69-review-viewport .nv30-review-grid{width:100%;max-width:none!important}
+.nv30-feedback .nv69-review-viewport .nv30-review-card{max-width:none}
+.nv30-feedback .nv69-review-viewport .nv30-review-card:hover{transform:none}
