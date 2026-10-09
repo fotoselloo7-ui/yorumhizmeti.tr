@@ -89,11 +89,11 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
     <div class="yv-category-package-icon-v5 <?= e($platformClass) ?>"><?= icon($platformIcon,23) ?></div>
     <?php if($index===0 || !empty($pkg['is_featured'])): ?><span class="yv-package-ribbon-v5"><?= $index===0?'EN POPÜLER':'ÇOK TERCİH EDİLEN' ?></span><?php endif; ?>
     <h3><?= e(package_display_name($pkg)) ?></h3>
+    <?php if(!empty($pkg['short_description'])): ?><p class="nv67-category-package-summary"><?= e(excerpt(strip_tags((string)$pkg['short_description']),125)) ?></p><?php endif; ?>
     <ul>
-     <li><?= icon('check-circle',12) ?> Gerçek ve aktif kullanıcılar</li>
-     <li><?= icon('check-circle',12) ?> Hızlı ve güvenli teslimat</li>
-     <li><?= icon('check-circle',12) ?> Şifre gerektirmez</li>
-     <li><?= icon('check-circle',12) ?> 7/24 müşteri desteği</li>
+     <?php foreach(array_slice(\App\Services\PackageHighlightsService::get((int)$pkg['id'],$pkg),0,4) as $highlight): ?>
+       <li><?= icon('check-circle',12) ?> <?= e($highlight) ?></li>
+     <?php endforeach; ?>
     </ul>
     <div class="yv-category-delivery-v5"><?= icon('truck',12) ?> Teslimat: <?= e($pkg['delivery_time'] ?: 'Hızlı') ?></div>
     <div class="yv-category-price-v5"><div><?php if($discount): ?><del><?= money($pkg['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong></div><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
