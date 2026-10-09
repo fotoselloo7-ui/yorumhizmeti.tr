@@ -666,7 +666,9 @@ for(const screen of screens){
             softwarePresent:!!software,
             referencesPresent:!!refs,
             emptySoftware:!!software?.querySelector('.nv32-software-intro'),
-            emptyReferences:!!refs?.querySelector('.nv32-portfolio-intro'),
+            // V51+ keeps category tabs visible even with no references.
+            emptyReferences:!!refs?.querySelector('.nv32-portfolio-intro') ||
+              !!refs?.querySelector('.nv51-no-results:not([hidden])'),
             softwareProducts:software?.querySelectorAll('.nv31-software-card').length||0,
             references:refs?.querySelectorAll('.nv31-portfolio-card').length||0,
             badLinks:[...document.querySelectorAll('.nv32-software-intro a,.nv32-portfolio-intro a')]
