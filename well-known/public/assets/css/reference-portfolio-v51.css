@@ -137,3 +137,22 @@
 @media(prefers-reduced-motion:reduce){
  .nv51-play-embed>img,.nv51-play-icon,.nv51-main-filter,.nv51-sub-filter{transition:none}
 }
+/* Inline player expands its own card, never opens the cover in a lightbox. */
+.nv51-reference-card.nv51-is-playing{grid-column:span 2;min-width:0}
+.nv51-reference-card.nv51-is-playing .nv51-cover{height:600px;min-height:0;aspect-ratio:auto}
+.nv51-reference-card.nv51-is-playing .nv51-embed-slot{
+ min-height:600px;height:100%;
+ background:linear-gradient(100deg,#f4f3fc,#fff 48%,#f4f3fc)
+}
+.nv51-reference-card.nv51-is-playing .nv51-embed-slot iframe{
+ display:block;width:100%;max-width:410px;height:100%;margin:0 auto
+}
+@media(max-width:700px){
+ .nv51-reference-card.nv51-is-playing{grid-column:1/-1}
+ .nv51-reference-card.nv51-is-playing .nv51-cover{height:540px}
+ .nv51-reference-card.nv51-is-playing .nv51-embed-slot{min-height:540px}
+}
+@media(max-width:420px){
+ .nv51-reference-card.nv51-is-playing .nv51-cover{height:500px}
+ .nv51-reference-card.nv51-is-playing .nv51-embed-slot{min-height:500px}
+}
