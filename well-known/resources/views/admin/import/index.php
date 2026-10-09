@@ -64,7 +64,7 @@
 </div>
 <?php endif; ?>
 
-<div class="adm-import-grid">
+<div class="adm-import-grid" style="grid-template-columns:minmax(0,760px)">
     <!-- Upload Form -->
     <div class="adm-card">
         <div class="adm-card-header"><h3><?= icon('upload', 18) ?> Dosya Yükle</h3></div>
@@ -85,65 +85,14 @@
                         <input type="checkbox" name="update_duplicate" value="1">
                         <span>Aynı slug varsa güncelle</span>
                     </label>
-                    <div class="form-hint">İşaretlerseniz mevcut paketler güncellenir, yeni eklenmez.</div>
+                    
                 </div>
                 <button type="submit" class="btn btn-primary btn-block" style="margin-top: var(--space-4);"><?= icon('upload', 16) ?> İçe Aktar</button>
             </form>
         </div>
     </div>
 
-    <!-- Instructions -->
-    <div class="adm-card">
-        <div class="adm-card-header"><h3><?= icon('info', 18) ?> Kullanım Kılavuzu</h3></div>
-        <div class="adm-card-body">
-            <div class="adm-import-info">
-                <h4>Zorunlu Sütunlar</h4>
-                <div class="adm-import-cols">
-                    <div class="adm-import-col adm-col-required"><code>name</code> <span>Paket adı</span></div>
-                    <div class="adm-import-col adm-col-required"><code>category_id</code> <span>Kategori ID</span></div>
-                    <div class="adm-import-col adm-col-required"><code>price</code> <span>Fiyat</span></div>
-                </div>
 
-                <h4 style="margin-top: var(--space-5);">Opsiyonel Sütunlar</h4>
-                <div class="adm-import-cols">
-                    <div class="adm-import-col"><code>slug</code> <span>Paket slug (opsiyonel)</span></div>
-                    <div class="adm-import-col"><code>discount_price</code> <span>İndirimli fiyat</span></div>
-                    <div class="adm-import-col"><code>short_description</code> <span>Kısa açıklama</span></div>
-                    <div class="adm-import-col"><code>description</code> <span>Detay açıklama</span></div>
-                    <div class="adm-import-col"><code>delivery_time</code> <span>Teslim süresi</span></div>
-                    <div class="adm-import-col"><code>min_quantity</code> <span>Min adet</span></div>
-                    <div class="adm-import-col"><code>max_quantity</code> <span>Max adet</span></div>
-                    <div class="adm-import-col"><code>status</code> <span>active / inactive</span></div>
-                    <div class="adm-import-col"><code>is_featured</code> <span>Öne çıkan (1/0)</span></div>
-                    <div class="adm-import-col"><code>sort_order</code> <span>Sıra (sayı)</span></div>
-                    <div class="adm-import-col"><code>seo_title</code> <span>SEO Başlık</span></div>
-                    <div class="adm-import-col"><code>seo_description</code> <span>SEO Açıklama</span></div>
-                    <div class="adm-import-col"><code>focus_keyword</code> <span>SEO Odak Kelime</span></div>
-                </div>
-
-                <div class="adm-import-note" style="margin-top: var(--space-5);">
-                    <?= icon('alert-circle', 16) ?>
-                    <div>
-                        <strong>Önemli</strong>
-                        <ul style="margin-top: 4px; padding-left: var(--space-4); list-style: disc;">
-                            <li>CSV dosyası UTF-8 formatında olmalıdır.</li>
-                            <li>İlk satır sütun başlıkları olmalıdır (name, category_id, vs).</li>
-                            <li>Virgül veya noktalı virgül ile ayırabilirsiniz.</li>
-                            <li>Slug belirtilmezse otomatik üretilir.</li>
-                            <li>category_id geçersizse satır atlanır (hata olarak listelenir).</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="adm-import-note" style="margin-top: var(--space-5); background: var(--color-surface); border-color: var(--color-border);">
-                    <div style="width: 100%; overflow-x: auto; white-space: nowrap;">
-                        <strong style="display:block; margin-bottom: 8px;">Örnek CSV Satırı:</strong>
-                        <code style="display:block; padding: 10px; background: #1a1a1a; color: #fff; border-radius: 4px; font-size: 12px;">name,category_id,price,discount_price,short_description,description,delivery_time,min_quantity,max_quantity,status,slug,seo_title,seo_description,focus_keyword<br>Instagram Yorum Paketi - 50,12,149,,50 adet Instagram yorum paketi.,Instagram gönderileriniz için SEO uyumlu açıklamalı yorum hizmeti.,1-3 iş günü,1,10,active,instagram-yorum-paketi-50,Instagram Yorum Paketi,Instagram yorum paketi ile gönderi etkileşiminizi artırın.,instagram yorum paketi</code>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
