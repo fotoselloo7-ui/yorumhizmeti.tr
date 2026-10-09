@@ -18,6 +18,9 @@ jobs:
             php -l "$file"
           done
 
+      - name: Offline SMM provider encryption and endpoint QA
+        run: php well-known/tests/smm-api-qa.php
+
       - name: Categorized project references and Instagram embed regression
         run: php well-known/tests/reference-portfolio-qa.php
 
