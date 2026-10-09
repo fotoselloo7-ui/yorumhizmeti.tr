@@ -9,6 +9,7 @@
     enabled=true;bell.classList.add('nv68-bell-enabled');
     bell.title='Bildirimler açık (sekme açıkken)';
     alerts?.play('soft');
+    check();
   });
   async function check(){
     if(!enabled||fetching||document.hidden)return;
