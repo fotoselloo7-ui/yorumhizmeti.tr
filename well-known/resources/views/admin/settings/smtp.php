@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('mail', 24) ?> SMTP Ayarları</h2>
-        <p class="text-sm text-secondary">E-posta bildirimlerinin gönderilmesi için sunucu ayarları.</p>
     </div>
 </div>
 
