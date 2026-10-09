@@ -937,6 +937,30 @@ try {
     adminPage.waitForURL('**/admin', {waitUntil:'domcontentloaded'}),
     adminPage.locator('form button[type=submit]').click()
   ]);
+  // Sweep all actual admin sidebar GET destinations. This catches broken routes,
+  // PHP fatal errors and missing admin shells beyond just Catalog/Menu settings.
+  const adminAllRoutes=await adminPage.locator('.sidebar-nav a[href^="/admin"]').evaluateAll(nodes=>
+    [...new Set(nodes.map(el=>el.getAttribute('href'))
+       .filter(h=>h&&h!=='/admin/cikis'&&!h.includes('?')))]);
+  const adminFaults=[];
+  const previewRoutes=['/admin','/admin/siparisler','/admin/kategoriler','/admin/paketler',
+    '/admin/uyeler','/admin/destek','/admin/referanslar','/admin/ana-sayfa',
+    '/admin/blog','/admin/netvera-yazilimlar'];
+  for(const route of adminAllRoutes){
+    const response=await adminPage.goto(origin+route,{waitUntil:'domcontentloaded'});
+    const body=await adminPage.locator('body').innerText();
+    const hasShell=(await adminPage.locator('.admin-layout .admin-page').count())>0;
+    if(response.status()!==200||!hasShell||/Fatal error:|Uncaught (?:Error|Exception)|SQLSTATE\[[A-Z0-9]+\]/i.test(body))
+      adminFaults.push({route,status:response.status(),shell:hasShell,error:body.slice(0,140)});
+    if(previewRoutes.includes(route)){
+      const bounds=await adminPage.locator('.admin-page').boundingBox();
+      if(!bounds||bounds.width<480||bounds.height<50)
+        adminFaults.push({route,error:'Admin content missing or too narrow'});
+    }
+  }
+  if(adminFaults.length)throw new Error('Admin route and layout audit: '+JSON.stringify(adminFaults).slice(0,2300));
+  console.log('PASS admin GET routes and page shells:',adminAllRoutes.length);
+
   await adminPage.goto(origin + '/admin/menu', {waitUntil:'domcontentloaded'});
   if ((await adminPage.locator('.adm-nav-item').count()) < 3) throw new Error('Menu management items not rendered');
   const toggle = adminPage.locator('input[name="enabled[]"][value="blog"]');
