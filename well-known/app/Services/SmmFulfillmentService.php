@@ -191,6 +191,41 @@ final class SmmFulfillmentService
         }
     }
 
+    /**
+     * Only a super-admin can resolve an ambiguous submission after checking the
+     * supplier dashboard. Requeue explicitly asserts NO upstream order exists.
+     */
+    public static function reconcile(int $jobId, string $mode, string $externalId='', bool $verifiedAbsent=false): void
+    {
+        $db=Database::getInstance();
+        $job=$db->fetch('SELECT * FROM smm_order_jobs WHERE id=?',[$jobId]);
+        if (!$job || $job['state']!=='manual_review') {
+            throw new \RuntimeException('Yalnızca manuel kontroldeki siparişler uzlaştırılabilir.');
+        }
+        if ($mode==='matched') {
+            $externalId=trim($externalId);
+            if (!preg_match('/^[a-zA-Z0-9_-]{1,120}$/',$externalId)) {
+                throw new \RuntimeException('Tedarikçideki gerçek sipariş numarasını girin.');
+            }
+            $db->update('smm_order_jobs',[
+                'upstream_order_id'=>$externalId,'state'=>'submitted',
+                'last_error'=>null,'last_checked_at'=>null
+            ],'id=? AND state=?',[$jobId,'manual_review']);
+            self::event($jobId,'reconciled','Tedarikçideki sipariş doğrulanıp numarası eşleştirildi.');
+            return;
+        }
+        if ($mode==='retry' && $verifiedAbsent) {
+            // Human has confirmed absence at the supplier. Still queued rather than sending in request.
+            $db->update('smm_order_jobs',[
+                'state'=>'queued','upstream_order_id'=>null,
+                'last_error'=>null,'last_checked_at'=>null
+            ],'id=? AND state=?',[$jobId,'manual_review']);
+            self::event($jobId,'requeued','Yönetici tedarikçide sipariş olmadığını doğrulayıp tekrar kuyruğa aldı.');
+            return;
+        }
+        throw new \RuntimeException('Güvenli işlem için tedarikçi kontrolünü ve seçiminizi doğrulayın.');
+    }
+
     public static function refill(int $jobId): void
     {
         $db=Database::getInstance();
