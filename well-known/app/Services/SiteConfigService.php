@@ -55,7 +55,7 @@ class SiteConfigService
             if($old===''||str_contains($old,'yorum ve etkileşim hizmetleri') ||
                str_contains($old,'google, instagram, tiktok, youtube ve daha fazlası') ||
                str_contains($old,'instagram, tiktok, youtube, seo, dijital reklam ve web çözümlerini')){
-                return 'NetVera Teknoloji Yazılım: hazır yazılım ve web çözümleri, dijital ajans, SEO, reklam yönetimi ve Instagram, TikTok, YouTube hizmetlerini keşfedin.';
+                return NetveraBrandSettings::defaults()['default_seo_description'][0];
             }
         }
         if($key==='site_url' && preg_match('~^https?://(?:www\.)?yorumhizmeti\.tr/?$~i',trim($value)))
@@ -63,6 +63,19 @@ class SiteConfigService
         if(in_array($key,['default_seo_title','footer_text','site_slogan','smtp_from_name'],true)){
             $value=preg_replace('/YorumHizmeti\.tr/iu','NetVera Teknoloji Yazılım',$value);
             $value=preg_replace('/\bYorum Hizmeti\b/iu','NetVera Teknoloji Yazılım',$value);
+        }
+        // Older NetVera backup used *_url keys, whereas the current admin
+        // social-media inputs use social_* keys. Never lose saved public profiles.
+        $legacySocialAliases=[
+            'social_instagram'=>'instagram_url',
+            'social_facebook'=>'facebook_url',
+            'social_youtube'=>'youtube_url',
+            'social_tiktok'=>'tiktok_url',
+            'social_twitter'=>'x_url'
+        ];
+        if(trim($value)==='' && isset($legacySocialAliases[$key])){
+            $old=trim((string)($this->settings[$legacySocialAliases[$key]]??''));
+            if($old!=='')$value=$old;
         }
         return NetveraBrandSettings::display($key,$value);
     }
