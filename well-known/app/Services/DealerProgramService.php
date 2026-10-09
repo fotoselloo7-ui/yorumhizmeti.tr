@@ -16,7 +16,12 @@ final class DealerProgramService
     public static function ready(): bool
     {
         try {
-            return (bool) self::db()->query("SHOW TABLES LIKE 'nv_dealer_accounts'")->fetchColumn();
+            foreach (['nv_dealer_accounts','nv_dealer_audit','nv_dealer_referral_events'] as $table) {
+                $q = self::db()->prepare('SHOW TABLES LIKE ?');
+                $q->execute([$table]);
+                if (!$q->fetchColumn()) return false;
+            }
+            return true;
         } catch (\Throwable $e) { return false; }
     }
 
