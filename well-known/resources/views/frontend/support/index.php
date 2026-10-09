@@ -7,7 +7,7 @@
                 <div class="panel-page-header">
                     <div>
                         <h1><?= icon('headphones', 24) ?> Destek Taleplerim</h1>
-                        <p>Destek taleplerinizi görüntüleyin veya yeni talep oluşturun.</p>
+                        
                     </div>
                     <a href="/destek/yeni" class="btn btn-primary btn-sm"><?= icon('plus', 16) ?> Yeni Talep Aç</a>
                 </div>
@@ -16,7 +16,7 @@
                 <div class="panel-empty-state">
                     <div class="panel-empty-icon"><?= icon('headphones', 48) ?></div>
                     <h3>Henüz destek talebiniz yok</h3>
-                    <p>Bir sorunuz veya sorununuz varsa destek talebi oluşturabilirsiniz.</p>
+                    
                     <a href="/destek/yeni" class="btn btn-primary"><?= icon('plus', 16) ?> Yeni Talep Oluştur</a>
                 </div>
                 <?php else: ?>
