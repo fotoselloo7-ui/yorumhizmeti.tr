@@ -141,13 +141,20 @@ class CheckoutController extends Controller
         $paymentMethod = $selectedPayment['type'] === 'manual' ? 'bank_transfer' : 'online';
 
         $orderService = new OrderService();
-        $orderId = $orderService->createOrder(
-            $user['id'],
-            $orderItems,
-            $paymentMethod,
-            $paymentGateway,
-            $_POST['customer_note'] ?? null
-        );
+        try {
+            $orderId = $orderService->createOrder(
+                $user['id'],
+                $orderItems,
+                $paymentMethod,
+                $paymentGateway,
+                $_POST['customer_note'] ?? null
+            );
+        } catch (\Throwable $e) {
+            error_log('Checkout persistence failed: '.get_class($e));
+            flash('error', 'Sipariş kaydedilemedi. Ödeme başlatılmadı; lütfen yeniden deneyin.');
+            redirect('/odeme');
+            return;
+        }
 
         $order = $db->fetch("SELECT * FROM orders WHERE id = ?", [$orderId]);
 
