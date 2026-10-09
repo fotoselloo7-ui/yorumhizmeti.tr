@@ -1231,6 +1231,58 @@ try {
   if(await showcasePage.locator('.nv32-portfolio-intro').count())
     throw new Error('Empty reference presentation remained visible after publishing a project');
 
+  // Reels references must keep the admin cover and open a branded, first-party
+  // dialog without opening Instagram or navigating the parent document.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const reelForm=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
+  await reelForm.locator('[name="title"]').fill('CI Reels Referans Testi');
+  await reelForm.locator('[name="group"]').selectOption('marketing');
+  await reelForm.locator('[name="service"]').selectOption('social-management');
+  await reelForm.locator('[name="media_type"]').selectOption('instagram_reel');
+  await reelForm.locator('[name="url"]').fill('https://www.instagram.com/reel/C9mVh6oN8d_/');
+  await reelForm.locator('[name="image"]').setInputFiles('well-known/public/assets/img/blog-woman-cutout.png');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    reelForm.locator('button[type="submit"]').click()
+  ]);
+  if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Reels Referans Testi'}).count()))
+    throw new Error('Instagram reference was not saved with custom cover');
+  await showcasePage.route('https://www.instagram.com/**',async route=>{
+    await route.fulfill({status:200,contentType:'text/html',
+      body:'<!doctype html><html><body><div id="ci-instagram-embed">Embedded reference player</div></body></html>'});
+  });
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const reelCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI Reels Referans Testi'});
+  if(!(await reelCard.isVisible()))throw new Error('Instagram reference hidden in SEO digital filter');
+  if(!(await reelCard.locator('.nv51-play-embed img').count()))
+    throw new Error('Custom Reels cover did not render on homepage');
+  if(await reelCard.locator('a[href*="instagram.com"]').count())
+    throw new Error('Instagram outbound action still present on Reels card');
+  const originBefore=showcasePage.url();
+  await reelCard.locator('.nv51-play-embed').click();
+  const modal=showcasePage.locator('[data-ref-player-modal]');
+  if(!(await modal.isVisible()))throw new Error('In-site reference video modal did not open');
+  const embedded=modal.locator('iframe');
+  if(await embedded.count()!==1)throw new Error('Embed not mounted inside our modal');
+  if(!(await embedded.getAttribute('src')).includes('/reel/C9mVh6oN8d_/embed/'))
+    throw new Error('Instagram embed URL incorrect');
+  if(showcasePage.url()!==originBefore)throw new Error('Reference viewer navigated away from site');
+  if(!(await embedded.getAttribute('sandbox')).includes('allow-scripts') ||
+     (await embedded.getAttribute('sandbox')).includes('allow-popups'))
+    throw new Error('Instagram iframe cannot open sandboxed in-site playback safely');
+  await modal.locator('[data-ref-player-close]').click();
+  if(await modal.isVisible() || await modal.locator('iframe').count())
+    throw new Error('Closing in-site video modal did not stop/unmount playback');
+  // With a verified first-party MP4 path available, native <video> takes priority.
+  await reelCard.evaluate(card=>{card.dataset.refVideo='/uploads/references/videos/ci-reference.mp4';});
+  await reelCard.locator('.nv51-play-embed').click();
+  if(await modal.locator('video[controls]').count()!==1 || await modal.locator('iframe').count())
+    throw new Error('Uploaded MP4 did not select first-party native video player');
+  await showcasePage.keyboard.press('Escape');
+  if(await modal.isVisible())throw new Error('Escape did not close local player');
+  console.log('PASS Instagram cover -> local modal (no redirect), close cleanup, native video priority');
+
   await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-desktop.png'),fullPage:true,animations:'disabled'});
   await showcasePage.setViewportSize({width:390,height:844});
   await showcasePage.reload({waitUntil:'domcontentloaded'});
