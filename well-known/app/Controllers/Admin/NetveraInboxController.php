@@ -90,6 +90,21 @@ final class NetveraInboxController extends Controller
         redirect('/admin/netvera-gelen-kutusu');
     }
 
+    public function saveAgent():void
+    {
+        Csrf::check();
+        $admin=\App\Core\AdminAuth::admin();
+        if(!$admin || ($admin['role']??'')!=='super_admin'){
+            http_response_code(403);exit('Yetkisiz işlem.');
+        }
+        try{
+            \App\Services\SupportDeskSettings::save($_POST,$_FILES['photo']??[]);
+            logActivity('support_agent_settings','Temsilci ve bildirim sesi ayarları düzenlendi.');
+            flash('success','Destek temsilcisi ve bildirim sesleri kaydedildi.');
+        }catch(\Throwable $e){flash('error',$e->getMessage());}
+        redirect('/admin/netvera-gelen-kutusu');
+    }
+
     public function testTelegram():void
     {
         Csrf::check();
