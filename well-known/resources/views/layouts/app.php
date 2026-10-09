@@ -88,30 +88,31 @@
     <link rel="stylesheet" href="<?= asset('css/package-benefits-v67.css') ?>?v=67.1">
     <link rel="stylesheet" href="<?= asset('css/reviews-v68.css') ?>?v=68.1">
 
-    <!-- Dynamic Theme Colors -->
+    <link rel="stylesheet" href="<?= asset('css/theme-runtime-v71.css') ?>?v=71.1">
     <?php
-    $themeMap = [
-        'theme_primary'      => ['var' => '--color-blue',           'default' => '#2563EB'],
-        'theme_secondary'    => ['var' => '--color-primary',        'default' => '#0F172A'],
-        'theme_accent'       => ['var' => '--color-blue-light',     'default' => '#3B82F6'],
-        'theme_button'       => ['var' => '--color-blue',           'default' => '#2563EB'],
-        'theme_button_hover' => ['var' => '--color-blue-hover',     'default' => '#1D4ED8'],
-        'theme_bg'           => ['var' => '--color-bg',             'default' => '#F8FAFC'],
-        'theme_card'         => ['var' => '--color-card',           'default' => '#FFFFFF'],
-        'theme_text'         => ['var' => '--color-text',           'default' => '#111827'],
-        'theme_muted'        => ['var' => '--color-text-secondary', 'default' => '#64748B'],
-        'theme_border'       => ['var' => '--color-border',         'default' => '#E5E7EB'],
-    ];
-    $overrides = [];
-    foreach ($themeMap as $key => $meta) {
-        $val = setting($key, '');
-        if ($val && preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $val) && $val !== $meta['default']) {
-            $overrides[] = $meta['var'] . ':' . $val;
+      $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
+      $nvPalette=[
+        'primary'=>['theme_primary','#6B4DE8'],
+        'secondary'=>['theme_secondary','#13254B'],
+        'accent'=>['theme_accent','#D936A1'],
+        'button'=>['theme_button','#6B4DE8'],
+        'hover'=>['theme_button_hover','#5136D2'],
+        'bg'=>['theme_bg','#FFFFFF'],
+        'card'=>['theme_card','#FFFFFF'],
+        'text'=>['theme_text','#17264E'],
+        'muted'=>['theme_muted','#70809C'],
+        'border'=>['theme_border','#E2E6F3'],
+      ];
+      $nvPaletteVars=[];
+      if($nvThemeEnabled){
+        foreach($nvPalette as $label=>$metadata){
+          $val=(string)setting($metadata[0],$metadata[1]);
+          if(!preg_match('/^#[A-Fa-f0-9]{6}$/D',$val))$val=$metadata[1];
+          $nvPaletteVars[]='--nv-theme-'.$label.':'.$val;
         }
-    }
-    if ($overrides): ?>
-    <style>:root{<?= implode(';', $overrides) ?>}</style>
-    <?php endif; ?>
+      }
+    ?>
+    <?php if($nvPaletteVars): ?><style>:root{<?= implode(';',$nvPaletteVars) ?>}</style><?php endif; ?>
 
     <?php
       $nvSemantic = null;
@@ -145,7 +146,7 @@
 
     <?= setting('header_script') ?>
 </head>
-<body>
+<body<?= $nvThemeEnabled?' class="nv-theme-enabled"':'' ?>>
 
     <div class="nv-topbar">
         <div class="container nv-topbar-inner">
