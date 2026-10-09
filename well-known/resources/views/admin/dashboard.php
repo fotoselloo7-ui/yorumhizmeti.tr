@@ -2,7 +2,7 @@
 <div class="adm-welcome">
     <div class="adm-welcome-text">
         <h2>Hoş Geldiniz, <?= e($_SESSION['admin_name'] ?? 'Admin') ?></h2>
-        <p>Yönetim panelinizden siparişleri, destek taleplerini ve ödemeleri takip edebilirsiniz.</p>
+        
     </div>
     <div class="adm-welcome-actions">
         <a href="/admin/siparisler" class="btn btn-primary btn-sm"><?= icon('shopping-cart', 16) ?> Siparişler</a>
