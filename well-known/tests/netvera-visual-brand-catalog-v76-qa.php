@@ -40,6 +40,11 @@ $layout=$read('resources/views/layouts/app.php');
 if(!str_contains($layout,'netvera-premium-v76.css') ||
    !str_contains($layout,"nvThemeEnabled?' class=\"nv-theme-enabled\""))
  throw new RuntimeException('CSS reset mode is not scoped.');
+$heroStyles=$read('public/assets/css/netvera-premium-v76.css');
+if(!str_contains($heroStyles,'/* v77: fix legacy responsive') ||
+   !str_contains($heroStyles,'font-size:clamp(37px,3.35vw,52px)!important') ||
+   !str_contains($heroStyles,'min-height:0!important'))
+    throw new RuntimeException('Oversized legacy hero font and empty space could return.');
 $home=$read('resources/views/frontend/home.php');
 foreach(['class="nv75-hero-heading"','nv75-hero-middle','nv75-hero-highlight',
          'nv75-benefits','nv75-ecosystem','nv75-platform-services'] as $marker)
