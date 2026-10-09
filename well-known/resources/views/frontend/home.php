@@ -1065,7 +1065,7 @@ if (!empty($projectReferences)) {
      try{
        url=new URL(embed);
        if(url.protocol!=='https:'||url.hostname!=='www.instagram.com'||
-          !/^\\/(?:p|reel)\\/[A-Za-z0-9_-]+\\/embed\\/$/.test(url.pathname))return;
+          !new RegExp('^/(?:p|reel)/[A-Za-z0-9_-]+/embed/$').test(url.pathname))return;
      }catch(e){return}
      const frame=document.createElement('iframe');
      frame.title='Instagram içerik oynatıcısı';
