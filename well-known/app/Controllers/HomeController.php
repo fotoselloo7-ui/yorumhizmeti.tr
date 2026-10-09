@@ -391,6 +391,7 @@ class HomeController extends Controller
         }
 
         $this->render('frontend/home', [
+            'canonicalUrl'=>url('/'),
             'pageTitle' => setting('default_seo_title', 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya'),
             'ogTitle' => setting('seo_og_title'),
             'ogDescription' => setting('seo_og_description'),
