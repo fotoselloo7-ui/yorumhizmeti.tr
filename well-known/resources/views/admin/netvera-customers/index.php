@@ -1,7 +1,6 @@
 <?php $showLegacyArchive = !empty($ready) && (int)($stats['customers']??0) + (int)($stats['orders']??0) + (int)($stats['dealers']??0) > 0; ?>
 <div class="adm-page-top">
  <div><h2><?= icon('users',22) ?> Müşteriler, Siparişler ve Bayilik</h2>
-   <p class="text-sm text-secondary">Aktif müşteri hesapları, gerçek alışveriş kayıtları ve iş ortaklığı başvuruları tek merkezde.</p>
  </div>
  <div style="display:flex;gap:8px;flex-wrap:wrap">
    <a class="btn btn-outline btn-sm" href="/admin/uyeler"><?= icon('users',14) ?> Tüm Üyeler</a>
