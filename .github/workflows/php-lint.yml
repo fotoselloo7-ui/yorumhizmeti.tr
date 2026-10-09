@@ -24,6 +24,9 @@ jobs:
         run: php well-known/tests/production-ui-copy-qa.php
       - name: Reviews, flat payment modules and mobile desk QA
         run: php well-known/tests/reviews-mobile-desk-qa.php
+      - name: NetVera global brand settings and SEO GEO AIO QA
+        run: php well-known/tests/netvera-brand-settings-qa.php
+
       - name: All category SEO, GEO and AIO modules QA
         run: php well-known/tests/netvera-category-complete-seo-v73-qa.php
 
