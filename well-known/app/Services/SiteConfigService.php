@@ -40,6 +40,24 @@ class SiteConfigService
         // Rebrand legacy DEFAULT UI settings without mutating customer/package content.
         if($key==='site_name' && preg_match('/^(?:yorum\s*hizmeti|yorumhizmeti(?:\.tr)?)$/iu',trim($value)))
             return 'NetVera Teknoloji Yazılım';
+        // The replatformed business is a software + digital agency + social services group.
+        // Replace ONLY retired/default SEO identities, never a hand-authored current title.
+        if($key==='default_seo_title'){
+            $old=mb_strtolower(trim($value),'UTF-8');
+            if($old==='' || str_contains($old,'yorum hizmeti') ||
+               str_contains($old,'yorumhizmeti') ||
+               $old==='netvera teknoloji yazılım | sosyal medya, seo ve dijital hizmetler'){
+                return 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya';
+            }
+        }
+        if($key==='default_seo_description'){
+            $old=mb_strtolower(trim($value),'UTF-8');
+            if($old===''||str_contains($old,'yorum ve etkileşim hizmetleri') ||
+               str_contains($old,'google, instagram, tiktok, youtube ve daha fazlası') ||
+               str_contains($old,'instagram, tiktok, youtube, seo, dijital reklam ve web çözümlerini')){
+                return 'NetVera Teknoloji Yazılım: hazır yazılım ve web çözümleri, dijital ajans, SEO, reklam yönetimi ve Instagram, TikTok, YouTube hizmetlerini keşfedin.';
+            }
+        }
         if($key==='site_url' && preg_match('~^https?://(?:www\.)?yorumhizmeti\.tr/?$~i',trim($value)))
             return 'https://netvera.tr';
         if(in_array($key,['default_seo_title','footer_text','site_slogan','smtp_from_name'],true)){
