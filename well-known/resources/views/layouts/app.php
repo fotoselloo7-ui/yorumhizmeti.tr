@@ -458,23 +458,15 @@
 
             <div class="footer-trust-v9">
                 <?php
-                $cardGatewayEnabled = false;
-                $bankGatewayEnabled = false;
-                try {
-                    $activeGateways = \App\Core\Database::getInstance()->fetchAll(
-                        "SELECT gateway_key, type FROM payment_gateways WHERE is_active = 1"
-                    );
-                    foreach ($activeGateways as $gateway) {
-                        if (($gateway['type'] ?? '') === 'online' && in_array($gateway['gateway_key'], ['paytr','iyzico'], true)) {
-                            $cardGatewayEnabled = true;
-                        }
-                        if (($gateway['gateway_key'] ?? '') === 'bank_transfer') {
-                            $bankGatewayEnabled = true;
-                        }
-                    }
-                } catch (\Throwable $e) {
-                    error_log('Footer payment methods: ' . $e->getMessage());
-                }
+                // Payment methods are verified by checkout; the footer makes no availability claims.
+                 $bankGatewayEnabled = false;
+                 try {
+                     $bankGatewayEnabled = (bool)\App\Core\Database::getInstance()->fetch(
+                         "SELECT id FROM payment_gateways WHERE gateway_key = 'bank_transfer' AND is_active = 1 LIMIT 1"
+                     );
+                 } catch (\Throwable $e) {
+                     error_log('Footer bank method lookup failed.');
+                 }
                 ?>
                 <div class="footer-payments-v4 footer-payment-logos footer-payment-visual-v23" aria-label="Ödeme sistemi logoları">
                     <div class="footer-payment-heading-v23">
@@ -492,15 +484,10 @@
                             <img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="80" height="48" loading="lazy">
                         </span>
                         <?php if($bankGatewayEnabled): ?>
-                            <span class="footer-payment-bank"><?= icon('landmark', 16) ?><span>Havale / EFT</span></span>
+                            <span class="footer-payment-bank" title="Banka havalesi ve EFT"><?= icon('landmark', 16) ?><span>Havale / EFT</span></span>
                         <?php endif; ?>
                     </div>
                     <div class="footer-payment-info-v23">
-                        <?php if(!$cardGatewayEnabled): ?>
-                            <span class="footer-payment-offline-v23"><?= icon('info',12) ?> Kartla ödeme şu anda aktif değil</span>
-                        <?php else: ?>
-                            <span class="footer-payment-online-v23"><?= icon('check-circle',12) ?> Kartlı ödeme aktif</span>
-                        <?php endif; ?>
                         <span class="footer-payment-security"><?= icon('shield', 15) ?> Güvenli işlem</span>
                     </div>
                 </div>
