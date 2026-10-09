@@ -12,6 +12,18 @@ class Upload
         return self::handle($file, $directory, self::$allowedImages);
     }
 
+    /** Optional first-party video for Instagram references when third-party embeds are restricted. */
+    public static function video(array $file, string $directory): ?string
+    {
+        if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) return null;
+        $originalExt = strtolower(pathinfo((string)($file['name'] ?? ''), PATHINFO_EXTENSION));
+        if (!in_array($originalExt, ['mp4', 'webm'], true)) return null;
+        $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name'] ?? '');
+        $pairs = ['mp4' => ['video/mp4','application/mp4'], 'webm' => ['video/webm']];
+        if (!in_array($mime, $pairs[$originalExt], true)) return null;
+        return self::handle($file, $directory, ['video/mp4','application/mp4','video/webm'], 80 * 1024 * 1024);
+    }
+
     public static function receipt(array $file, string $directory): ?string
     {
         return self::handle($file, $directory, self::$allowedDocs, 10 * 1024 * 1024);
@@ -54,7 +66,7 @@ class Upload
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         
-        $safeExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx'];
+        $safeExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'mp4', 'webm'];
         if (!in_array($ext, $safeExtensions)) {
             flash('error', 'Bu dosya uzantısına izin verilmiyor: ' . $ext);
             return null;
