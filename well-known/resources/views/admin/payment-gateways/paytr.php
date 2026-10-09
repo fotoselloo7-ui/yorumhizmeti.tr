@@ -10,19 +10,6 @@
         <h3><?= icon('key', 16) ?> API Bağlantı Bilgileri</h3>
     </div>
     <div class="adm-card-body">
-        <div class="adm-alert" style="padding:14px 16px;border:1px solid #e6e4f5;background:#faf9ff;border-radius:12px;margin-bottom:20px">
-            <strong><?= icon('shield-check',15) ?> PayTR iFrame v2 Entegrasyonu</strong>
-            <p style="font-size:12px;line-height:1.7;margin:7px 0 0">
-                <?= !empty($settings['merchant_id'])&& !empty($settings['merchant_key'])&& !empty($settings['merchant_salt'])
-                    ? 'Mağaza ayarları kayıtlı. API bilgileri güvenlik için ekranda gösterilmez.'
-                    : 'PayTR mağaza panelindeki Merchant ID, Key ve Salt olmadan canlı ödeme başlatılamaz.' ?>
-                <br>Bildirim (Callback) URL: <code><?= e(url('/payment/paytr/callback')) ?></code>
-                <br>Bu adres PayTR sunucusundan erişilebilir HTTPS alan adında olmalıdır. <code>localhost:8006</code> üzerinden gerçek callback yapılamaz.
-            </p>
-            <a href="/odeme/paytr-onizleme" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;color:#6347d8;font-size:12px;font-weight:800">
-                <?= icon('external-link',14) ?> Yerel PayTR ödeme ekranı tasarımını incele
-            </a>
-        </div>
         <form method="POST" action="/admin/paytr-ayarlari/kaydet">
             <?= csrfField() ?>
             <div class="form-group">
