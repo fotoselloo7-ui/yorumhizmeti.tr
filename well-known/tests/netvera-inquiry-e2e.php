@@ -36,7 +36,7 @@ try{
     $csrf=$m[1];
     [$status,$body]=httpRequest($base.'/netvera/canli-destek/gonder',$cookie,[
         '_csrf_token'=>$csrf,'source_type'=>'chat','transport'=>'json',
-        'name'=>'Automated QA','contact'=>'qa@example.invalid',
+        'name'=>'Automated QA','phone'=>'05551234567',
         'message'=>'Netvera staging CRM end to end test.','website'=>''
     ]);
     $result=json_decode($body,true);
