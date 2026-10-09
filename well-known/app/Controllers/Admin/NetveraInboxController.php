@@ -25,6 +25,24 @@ final class NetveraInboxController extends Controller
         ]);
     }
 
+    public function install(): void
+    {
+        Csrf::check();
+        if ((\App\Core\AdminAuth::admin()['role']??'')!=='super_admin') {
+            http_response_code(403);
+            exit('Bu işlem için süper yönetici yetkisi gerekiyor.');
+        }
+        try {
+            Inbox::install();
+            logActivity('netvera_inbox_install','Canlı destek veritabanı etkinleştirildi.');
+            flash('success','Gelen kutusu etkinleştirildi.');
+        } catch (\Throwable $e) {
+            error_log('Netvera inbox schema setup: '.get_class($e));
+            flash('error','Gelen kutusu etkinleştirilemedi. Veritabanı yetkilerini kontrol edin.');
+        }
+        redirect('/admin/netvera-gelen-kutusu');
+    }
+
     public function detail(string $id):void
     {
         if(!Inbox::ready()){redirect('/admin/netvera-gelen-kutusu');return;}
