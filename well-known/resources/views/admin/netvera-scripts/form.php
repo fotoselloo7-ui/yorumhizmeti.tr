@@ -51,16 +51,44 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
           <div class="adm-card-header"><h3><?= icon('monitor',18) ?> Demo, Kurulum ve Sürüm</h3><span>02 / Ürün Deneyimi</span></div>
           <div class="adm-card-body">
             <div class="nvpa-two">
-              <?php foreach(['demo_url'=>'Canlı Demo URL','demo_video_url'=>'Tanıtım Videosu URL','current_version'=>'Yazılım Sürümü','last_updated_on'=>'Son Güncelleme Tarihi','install_type'=>'Kurulum Türü','install_info'=>'Kurulum Bilgisi'] as $key=>$label): ?>
+              <?php foreach(['demo_url'=>'Canlı Demo URL','demo_admin_url'=>'Demo Yönetim Paneli URL','demo_user_url'=>'Demo Kullanıcı Sayfası URL','demo_video_url'=>'Tanıtım Videosu URL','current_version'=>'Yazılım Sürümü','last_updated_on'=>'Son Güncelleme Tarihi','install_type'=>'Kurulum Türü','install_info'=>'Kurulum Bilgisi'] as $key=>$label): ?>
                 <div class="nvpa-field"><label for="nvpa-<?= e($key) ?>"><?= e($label) ?></label><input id="nvpa-<?= e($key) ?>" class="form-control" name="<?= e($key) ?>" value="<?= e($d[$key]??'') ?>"></div>
               <?php endforeach; ?>
             </div>
             <div class="nvpa-checks">
-              <?php foreach(['demo_is_active'=>'Demo bağlantısı aktif','demo_is_public'=>'Demo herkese açık gösterilsin'] as $key=>$label): ?>
+              <?php foreach(['demo_is_active'=>'Demo bağlantısı aktif','demo_is_public'=>'Demo herkese açık gösterilsin','demo_credentials_public'=>'Demo kullanıcı adı ve şifreleri ürün detayında yayınlansın'] as $key=>$label): ?>
                 <label><input type="checkbox" name="<?= e($key) ?>" value="1" <?= !empty($d[$key])?'checked':'' ?>> <?= e($label) ?></label>
               <?php endforeach; ?>
             </div>
-            <p class="nvpa-note"><?= icon('shield-check',15) ?> Demo kullanıcı şifreleri bu herkese açık katalog verisine eklenmez. Gizli erişim bilgilerini burada saklamayın.</p>
+            <div class="nvpa-two">
+              <?php foreach([
+                'demo_username'=>'Kullanıcı Demo Kullanıcı Adı',
+                'demo_password'=>'Kullanıcı Demo Şifresi',
+                'demo_admin_username'=>'Admin Demo Kullanıcı Adı',
+                'demo_admin_password'=>'Admin Demo Şifresi'
+              ] as $key=>$label): ?>
+              <div class="nvpa-field">
+                <label for="nvpa-<?= e($key) ?>"><?= e($label) ?></label>
+                <input id="nvpa-<?= e($key) ?>" class="form-control" name="<?= e($key) ?>" type="<?= str_contains($key,'password')?'password':'text' ?>"
+                       value="<?= e($d[$key]??'') ?>" maxlength="190" autocomplete="off" spellcheck="false">
+              </div>
+              <?php endforeach; ?>
+            </div>
+            <div class="nvpa-field">
+              <label for="nvpa-demo-note">Demo Kullanım Notu</label>
+              <textarea id="nvpa-demo-note" class="form-control" name="demo_note" rows="3" maxlength="2000" placeholder="Demo hesabını test ederken nelere dikkat edilmeli?"><?= e($d['demo_note']??'') ?></textarea>
+            </div>
+            <div class="nvpa-field">
+              <label for="nvpa-demo-accounts">Ek Demo Hesapları (JSON)</label>
+              <textarea id="nvpa-demo-accounts" class="form-control" name="demo_accounts_json" rows="4" spellcheck="false"
+               placeholder='[{"label":"Editör","username":"test-editör","password":"yalnizca-demo"}]'><?= e($d['demo_accounts_json']??'[]') ?></textarea>
+              <small>Ek deneme rolleri için JSON listesi. Yalnızca özel olarak oluşturduğunuz demo hesaplarını kullanın.</small>
+            </div>
+            <p class="nvpa-note"><?= icon('shield-check',15) ?>
+              Demo giriş bilgilerini herkese açık göstermek için son kutucuğu da işaretleyin.
+              Gerçek yönetici, müşteri veya ödeme paneli şifrelerini bu alanlara yazmayın.
+              Yayınlanan demo hesap bilgileri ziyaretçilere görünür.
+            </p>
           </div>
         </section>
         <section class="adm-card nvpa-card">
