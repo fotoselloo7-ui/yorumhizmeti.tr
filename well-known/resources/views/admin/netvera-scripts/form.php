@@ -9,7 +9,7 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
     <div>
       <span class="nvpa-eyebrow">NETVERA · ÜRÜN YÖNETİMİ</span>
       <h2><?= $edit?'Yazılımı Düzenle':'Yeni Yazılım Ekle' ?></h2>
-      <p>Hazır yazılım bilgileri, sürümler, modüller, demo, lisans ve SEO alanları tek panelde.</p>
+      
     </div>
     <div class="nvpa-top-actions">
       <a class="btn btn-outline btn-sm" href="/admin/netvera-yazilimlar"><?= icon('arrow-left',15) ?> Yazılımlar</a>
@@ -29,7 +29,7 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
             <div class="nvpa-two">
               <div class="nvpa-field"><label for="nvpa-slug">Ürün SEO Adresi <b>*</b></label>
                 <input id="nvpa-slug" class="form-control" <?= $edit?'readonly':'' ?> name="slug" maxlength="250" value="<?= e($nvOriginalSlug) ?>" placeholder="haber-sitesi-scripti">
-                <small><?= $edit?'Google tarafından indekslenen orijinal adres kilitlidir.':'Boş bırakılırsa ürün adından oluşturulur.' ?></small>
+                
               </div>
               <div class="nvpa-field"><label for="nvpa-category">Yazılım Kategorisi <b>*</b></label>
                 <select id="nvpa-category" class="form-control" name="category_legacy_id" required>
@@ -43,7 +43,7 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
             <div class="nvpa-field"><label for="nvpa-summary">Kısa Ürün Açıklaması</label><textarea id="nvpa-summary" class="form-control" rows="3" name="short_desc" placeholder="Müşterinin ürün kartında gördüğü açıklama."><?= e($product['short_desc']??'') ?></textarea></div>
             <div class="nvpa-field"><label for="nvpa-description">Detaylı Ürün Açıklaması</label>
               <textarea id="nvpa-description" class="form-control nvpa-long" rows="12" name="description" placeholder="Yazılımın ne yaptığı, kullanım alanları, avantajları ve teknik detaylar..."><?= e($product['description']??'') ?></textarea>
-              <small>HTML içerik girilebilir; herkese açık sayfada güvenli HTML temizleyicisi uygulanır.</small>
+              
             </div>
           </div>
         </section>
@@ -82,13 +82,9 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
               <label for="nvpa-demo-accounts">Ek Demo Hesapları (JSON)</label>
               <textarea id="nvpa-demo-accounts" class="form-control" name="demo_accounts_json" rows="4" spellcheck="false"
                placeholder='[{"label":"Editör","username":"test-editör","password":"yalnizca-demo"}]'><?= e($d['demo_accounts_json']??'[]') ?></textarea>
-              <small>Ek deneme rolleri için JSON listesi. Yalnızca özel olarak oluşturduğunuz demo hesaplarını kullanın.</small>
+              
             </div>
-            <p class="nvpa-note"><?= icon('shield-check',15) ?>
-              Demo giriş bilgilerini herkese açık göstermek için son kutucuğu da işaretleyin.
-              Gerçek yönetici, müşteri veya ödeme paneli şifrelerini bu alanlara yazmayın.
-              Yayınlanan demo hesap bilgileri ziyaretçilere görünür.
-            </p>
+            
           </div>
         </section>
         <section class="adm-card nvpa-card">
@@ -99,7 +95,7 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
               <div class="nvpa-field"><label for="nvpa-<?= e($key) ?>"><?= e($label) ?></label><input id="nvpa-<?= e($key) ?>" class="form-control" name="<?= e($key) ?>" value="<?= e($d[$key]??'') ?>"></div>
               <?php endforeach; ?>
             </div>
-            <p class="nvpa-note"><?= icon('info',15) ?> Mevcut PayTR ve diğer ödeme sağlayıcılarının anahtarları ile callback mekanizmaları bu editörden değiştirilmez.</p>
+            
           </div>
         </section>
       </div>
@@ -136,12 +132,12 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
               <div class="nvpa-cover"><img src="<?= e(upload_url($product['cover_image'])) ?>" alt="Mevcut ürün kapağı"></div>
             <?php endif; ?>
             <div class="nvpa-field"><label for="nvpa-cover-input">Kapak Yükle</label><input id="nvpa-cover-input" class="form-control" type="file" name="image" accept="image/png,image/jpeg,image/webp"></div>
-            <small>Önerilen oran: 16:9. Yeni görsel yüklemek, önceki dosyayı fiziksel olarak silmez.</small>
+            
           </div>
         </section>
         <div class="nvpa-sticky-save">
           <button class="btn btn-primary" type="submit"><?= icon('save',16) ?> <?= $edit?'Değişiklikleri Kaydet':'Yazılımı Kaydet' ?></button>
-          <small>URL koruması ve güvenli veri doğrulama aktif.</small>
+          
         </div>
       </div>
     </div>
@@ -158,13 +154,13 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
           <div class="nvpa-field"><label>Open Graph Açıklaması</label><input class="form-control" name="og_description" value="<?= e($d['og_description']??'') ?>"></div>
           <div class="nvpa-field"><label>OG Görsel URL</label><input class="form-control" name="og_image" value="<?= e($d['og_image']??'') ?>" placeholder="https://..."></div>
         </div>
-        <p class="nvpa-note"><?= icon('link',15) ?> Eski ürünün <strong>/hazir-scriptler/<?= e($nvOriginalSlug?:'{slug}') ?></strong> adresi korunur; indeksli bağlantı değişiklikleri ayrıca 301 planı gerektirir.</p>
+        
       </div>
     </section>
     <section class="adm-card nvpa-card">
       <div class="adm-card-header"><h3><?= icon('layers',18) ?> Ürün Modülleri ve Teknik Detaylar</h3><span>05 / Yapılandırılmış Veriler</span></div>
       <div class="adm-card-body">
-        <p>İçe aktarılan ürünün modül, özellik, lisans ve SSS yapıları korunur. JSON dizi veya nesneleri doğrulanır; geçersiz veri kaydedilmez.</p>
+        
         <div class="nvpa-two">
           <?php foreach([
             'modules_json'=>'Yazılım Modülleri',
@@ -175,7 +171,7 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
           <div class="nvpa-field">
             <label for="nvpa-<?= e($key) ?>"><?= e($label) ?></label>
             <textarea id="nvpa-<?= e($key) ?>" class="form-control nvpa-json" name="<?= e($key) ?>" rows="6" spellcheck="false" data-nvpa-json><?= e($d[$key]??'[]') ?></textarea>
-            <small><?= e($label) ?> için mevcut JSON dizisini koruyarak düzenleyin.</small>
+            
           </div>
           <?php endforeach; ?>
         </div>
