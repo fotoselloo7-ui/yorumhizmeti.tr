@@ -19,6 +19,8 @@ final class SmmOrderFields
     public static function mode(string $title): string
     {
         $s=mb_strtolower($title,'UTF-8');
+        $platform=self::platform($title);
+        if (!in_array($platform,['instagram','tiktok','youtube','twitter','threads','telegram','twitch','facebook'],true)) return 'url';
         if (preg_match('/takipçi|takipci|followers?|abone|subscribers?|profil|hesap.?takip/u',$s)) return 'username';
         return 'url';
     }
@@ -88,6 +90,18 @@ final class SmmOrderFields
             || empty($parsed['host']) || isset($parsed['user']) || isset($parsed['pass'])
             || preg_match('/\s/',$value)) {
             throw new \RuntimeException('Geçerli kullanıcı adı veya HTTPS profil/video bağlantısı girin.');
+        }
+        if ($platform!=='') {
+            $host=strtolower(rtrim((string)($parsed['host']??''),'.'));
+            $permitted=[self::PLATFORMS[$platform]];
+            if($platform==='youtube')$permitted[]='youtu.be';
+            if($platform==='twitter')$permitted[]='twitter.com';
+            if($platform==='facebook')$permitted[]='fb.watch';
+            $valid=false;
+            foreach($permitted as $domain) {
+                if($host===$domain || str_ends_with($host,'.'.$domain)) {$valid=true;break;}
+            }
+            if(!$valid)throw new \RuntimeException('Bu paket için ilgili sosyal medya platformunun bağlantısını girin.');
         }
         return $value;
     }
