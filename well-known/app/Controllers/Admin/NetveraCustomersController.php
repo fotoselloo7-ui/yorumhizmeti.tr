@@ -11,7 +11,7 @@ final class NetveraCustomersController extends Controller
 {
     public function index(): void
     {
-        $ready=false;$members=[];$stats=['customers'=>0,'orders'=>0,'licenses'=>0,'dealers'=>0];
+        $ready=false;$members=[];$unclaimedOrders=[];$stats=['customers'=>0,'orders'=>0,'licenses'=>0,'dealers'=>0,'unclaimed'=>0,'tickets'=>0];
         try {
             $pdo=$this->db->getPdo();
             $table=$pdo->query("SHOW TABLES LIKE 'nv_private_user_map'");
@@ -21,6 +21,9 @@ final class NetveraCustomersController extends Controller
                 $stats['orders']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_orders")->fetchColumn();
                 $stats['licenses']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_orders WHERE payment_status IN ('paid','completed','success') AND (license_key_encrypted IS NOT NULL OR entitlement_json IS NOT NULL)")->fetchColumn();
                 $stats['dealers']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_affiliates")->fetchColumn();
+                $stats['unclaimed']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_orders WHERE new_user_id IS NULL")->fetchColumn();
+                $stats['tickets']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_support_tickets")->fetchColumn();
+                $unclaimedOrders=$this->db->fetchAll("SELECT old_order_id,order_no,customer_name,customer_email,product_name,amount,payment_status,created_at FROM nv_private_orders WHERE new_user_id IS NULL ORDER BY created_at DESC,old_order_id DESC LIMIT 70");
                 $members=$this->db->fetchAll("SELECT u.id,u.name,u.email,u.status,
                     m.old_customer_id,m.is_agency,m.want_dealer,m.source_status,
                     (SELECT COUNT(*) FROM nv_private_orders o WHERE o.new_user_id=u.id) AS legacy_orders,
@@ -37,7 +40,7 @@ final class NetveraCustomersController extends Controller
         }
         $this->renderAdmin('admin/netvera-customers/index',[
             'pageTitle'=>'NetVera Müşteriler ve Bayilik',
-            'ready'=>$ready,'members'=>$members,'stats'=>$stats
+            'ready'=>$ready,'members'=>$members,'unclaimedOrders'=>$unclaimedOrders,'stats'=>$stats
         ]);
     }
 }
