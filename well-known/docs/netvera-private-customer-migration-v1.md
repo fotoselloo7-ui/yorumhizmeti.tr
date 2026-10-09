@@ -33,3 +33,22 @@ Rapor ve SQL yedeği özel tutulmalı; GitHub deposuna, Actions loguna veya herk
 Netvera admin kimliği güvenle doğrulanmadan **hedef `admins` şifresi/e-postası otomatik değiştirilmez**. Yönetici rolü ve ilgili hesabın kimliği kontrol edildikten sonra güvenli yönetici değişikliği ayrı onay ve kayıtla uygulanır; mevcut yönetici oturumları geçersiz kılınır, gerekirse şifre sıfırlama zorunlu tutulur. Hassas giriş bilgileri GitHub commitine konmaz.
 
 **Kalan tek kaynak ihtiyacı:** netvera.tr'nin **özel SQL yedeği** (ve mümkünse lisans işlemlerini barındıran PHP kodu), ya da yetkili salt-okunur eski DB. Eski özel ZIP bu çalışmaya yeniden verilirse gerçek kaynak alanları üzerinden otomatik güvenli eşleme/importer tamamlanabilir.
+
+## Uygulanabilir staging importer — 2026-10-09
+SQL yedeği `alac6ayazilimtr_netvera.sql` eski sistemde **`admin_users`, `customers`, `orders`, `order_items`, `affiliate_accounts`, `affiliate_commissions` tablolarını içerir**. Kullanıcı hesapları ve satın alma hakları gerçek veriyle bu tablolardan eşleştirilmelidir.
+
+`database/migrations/netvera-private-customer-v1.sql` eski satın alımları, hakları ve bayi komisyonlarını ayrı `nv_private_*` tablolarında tutar. Kaynak sistemden veri alacak komut:
+`php scripts/import-netvera-private-customers.php`
+
+### Kesin önkoşullar
+1. Eski SQL yedeğini, internete açık olmayan **ayrı kaynak MySQL staging veritabanına** yükle. Kaynak bağlantı kullanıcısına yalnızca SELECT izni ver.
+2. Yeni hedef de ayrı bir **`APP_ENV=staging`** test MySQL veritabanı ve geri döndürülebilir yedeğe sahip olmalı. Canlı `netvera.tr` veya `yorumhizmeti.tr` bağlantı bilgilerini kullanma.
+3. Target `.env` MySQL parametreleri; özel ortam değişkenlerinde `NETVERA_SOURCE_DB_HOST`, `NETVERA_SOURCE_DB_NAME`, `NETVERA_SOURCE_DB_USER`, `NETVERA_SOURCE_DB_PASSWORD`, `NETVERA_ADMIN_EMAIL` ve güçlü `NETVERA_MIGRATION_SECRET` ayarlanmalı. Değerlerini GitHub'a, Actions loglarına veya ekran görüntülerine yazma.
+4. Yukarıdaki komutu önce **`--apply` olmadan** çalıştır. Rapor kaynak tablo sayımlarını ve admin eşleşmesini doğrular, hedefe veri yazmaz.
+5. Kaynak ile hedefte e-posta çakışmaları denetlendikten sonra yalnızca staging ortamında `NETVERA_PRIVATE_IMPORT_ALLOWED=1` ile `--apply` kullanılabilir. Gerçek hesap kimliği incelemesi yapıldıysa `NETVERA_MERGE_EXISTING_EMAILS=1` ayrıca etkinleştirilebilir.
+6. Yeni native `users` satırları şifre sıfırlamadan, yalnız PHP'nin desteklediği mevcut hash ile aktarılır. E-posta çakışmasında mevcut hesap şifresi otomatik üzerine yazılmaz. Eski admin hesabı aynı e-posta ile oluşturulur/güncellenir ve parola değiştirmesi gerekir; *yedek admin silinmez*.
+7. Eski sipariş/lisans ve bağlı bayilik/komisyon geçmişi **eski kimlikleriyle** ayrılmış tablolara aktarılır. Lisans anahtarları AES-256-GCM ile şifrelenir. Gerçek PayTR callback/webhook ve yeni sipariş tablolarına **dokunulmaz**.
+8. Staging'de `/hesabim`, `/siparislerim`, `/admin/netvera-musteriler` kontrol edilir. Gerçek canlıya alma, kimlik ve ödeme hakları mutabakatı yapılmadan gerçekleşmez.
+
+### Şimdiki sınır
+Kaynak SQL kişisel Library arşivinde **metin olarak incelenebildi**, ancak bu çalışma ortamında ham SQL dosyasına erişim yetkisi bulunmadığından staging aktarımı *henüz çalıştırılmadı*. SQL dosyası mevcut konuşmaya yeniden eklendiğinde ham dosyanın kullanımı mümkün hale gelebilir. Yalnızca müşteri kullanıcılarını silip yeni hesap yaratmak eski lisans sahiplik bağlarını koparır; bu nedenle kitle silme yoktur. Eski bayi komisyonları görüntülenebilir hale gelecek şekilde tasarlandı, **yeni satış üzerinden canlı komisyon üretme ve ödeme mantığı henüz taşınmadı**.
