@@ -24,7 +24,7 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
      <input type="text" tabindex="-1" autocomplete="off" name="website" class="nv-chat-honeypot" aria-hidden="true">
      <div class="nv-chat-identity" data-nv-chat-identity <?= $nvCurrentChat?'hidden':'' ?>>
        <label>Adınız<input name="name" autocomplete="name" maxlength="140" required placeholder="Adınız"></label>
-       <label>E-posta veya Telefon<input name="contact" autocomplete="email" maxlength="190" required placeholder="İletişim bilginiz"></label>
+       <label>Telefon Numaranız<input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" minlength="10" required placeholder="05xx xxx xx xx"></label>
      </div>
      <label class="nv-chat-compose">Mesajınız
        <textarea name="message" rows="2" minlength="5" maxlength="3000" required placeholder="Size nasıl yardımcı olabiliriz?"></textarea>
@@ -47,7 +47,12 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
  const identity=root.querySelector('[data-nv-chat-identity]');
  const idInput=root.querySelector('[data-nv-chat-id]');
  let pending=false;
- function open(state){panel.hidden=!state;toggle.setAttribute('aria-expanded',String(state));if(state)refresh();}
+ function open(state){
+   panel.hidden=!state;
+   toggle.hidden=state;
+   toggle.setAttribute('aria-expanded',String(state));
+   if(state)refresh();
+ }
  toggle.addEventListener('click',()=>open(panel.hidden));
  close.addEventListener('click',()=>open(false));
  function bubble(message,who){
