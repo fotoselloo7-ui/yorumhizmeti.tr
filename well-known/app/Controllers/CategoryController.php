@@ -113,6 +113,12 @@ class CategoryController extends Controller
         }
 
         $categorySeo=\App\Services\NetveraSeoBridge::get('category',(int)$category['id']);
+        $complete=\App\Services\CategorySeoCompleteService::fillForForm($category,$categorySeo);
+        if($complete['suggestion']){
+            $category=$complete['category'];
+            $categorySeo=$complete['seo'];
+        }
+
         // Editorial answers are visible immediately, even before the optional admin SEO batch is applied.
         $categoryIntent=\App\Services\CategorySearchBlueprint::profileForCategory($category);
         if($categoryIntent){
