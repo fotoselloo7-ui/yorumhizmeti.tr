@@ -50,7 +50,7 @@
 .nv68-support-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.nv68-install-grid{display:flex;align-items:center;gap:16px}.nv68-install-grid strong{font-size:13px}.nv68-install-grid p{font-size:11px;line-height:1.6;color:#73829a}.nv68-install-note{font-size:10px!important}.nv68-qr{width:152px;height:152px;flex:none;border-radius:14px;background:#f5f3ff;display:grid;place-items:center;color:#6253bd}.nv68-qr canvas,.nv68-qr img{max-width:100%}
 @media(max-width:1050px){.nv68-support-admin{grid-template-columns:1fr}}@media(max-width:580px){.nv68-agent{flex-direction:column}.nv68-agent-fields{grid-template-columns:1fr}.nv68-install-grid{align-items:flex-start}.nv68-qr{width:120px;height:120px}}
 </style>
-<script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
