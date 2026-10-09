@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('briefcase', 24) ?> Banka Hesapları</h2>
-        <p class="text-sm text-secondary">Müşterilerin havale/EFT ödemeleri yapabileceği banka hesaplarını yönetin.</p>
     </div>
 </div>
 
