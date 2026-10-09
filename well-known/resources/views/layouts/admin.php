@@ -178,6 +178,8 @@
                 </div>
 
                 <div class="topbar-actions">
+                    <a href="/admin/cep" class="btn btn-light btn-sm" title="Cep Paneli"><?= icon('smartphone',17) ?></a>
+                    <button type="button" id="nv68AdminBell" class="btn btn-light btn-sm" data-sound-new="<?= e(\App\Services\SupportDeskSettings::sounds()['new']) ?>" data-sound-reply="<?= e(\App\Services\SupportDeskSettings::sounds()['reply']) ?>" title="Yeni sohbet bildirimlerini aç" aria-label="Bildirimleri Aç"><?= icon('bell',17) ?></button>
                     <a href="/" target="_blank" class="btn btn-light btn-sm">
                         <?= icon('external-link', 14) ?> Siteyi Gör
                     </a>
@@ -218,5 +220,8 @@
     }
     </script>
     <script src="<?= asset('js/admin.js') ?>"></script>
+    <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
+    <script src="<?= asset('js/nv-desk-admin.js') ?>?v=1"></script>
+    <style>.nv68-bell-enabled{background:#eeeaff!important;color:#6152c8!important}.nv68-bell-flash{animation:nv68-shake .6s ease 3}@keyframes nv68-shake{0%,100%{transform:rotate(0)}20%{transform:rotate(13deg)}60%{transform:rotate(-10deg)}}</style>
 </body>
 </html>
