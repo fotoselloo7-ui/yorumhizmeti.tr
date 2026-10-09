@@ -33,7 +33,10 @@ final class NetveraInquiryController extends Controller
         $message=mb_substr(trim((string)($_POST['message']??'')),0,3000,'UTF-8');
         $name=mb_substr(trim((string)($_POST['name']??'')),0,140,'UTF-8');
         $contact=mb_substr(trim((string)($_POST['contact']??'')),0,190,'UTF-8');
+        $phone=mb_substr(trim((string)($_POST['phone']??'')),0,30,'UTF-8');
         $type=($_POST['source_type']??'chat')==='offer'?'offer':'chat';
+        // The chat contact number is stored in the existing contact field.
+        if($type==='chat' && $phone!=='')$contact=$phone;
         $slug=mb_substr(trim((string)($_POST['product_slug']??'')),0,250,'UTF-8');
         $id=max(0,(int)($_POST['inquiry_id']??0));
         $now=time();
@@ -42,7 +45,11 @@ final class NetveraInquiryController extends Controller
         $error='';
         if(count($log)>=12)$error='Çok fazla istek gönderildi. Daha sonra tekrar deneyin.';
         elseif(mb_strlen($message,'UTF-8')<5)$error='Mesaj en az 5 karakter olmalıdır.';
-        elseif($id===0 && (mb_strlen($name,'UTF-8')<2 || mb_strlen($contact,'UTF-8')<5))
+        elseif($id===0 && $type==='chat' &&
+            (mb_strlen($name,'UTF-8')<2 || !preg_match('/^[0-9+() .-]{10,30}$/D',$phone) ||
+            ($digits=preg_replace('/[^0-9]/','',$phone))===null || strlen($digits)<10 || strlen($digits)>15))
+            $error='Adınızı ve geçerli bir telefon numarası yazın.';
+        elseif($id===0 && $type==='offer' && (mb_strlen($name,'UTF-8')<2 || mb_strlen($contact,'UTF-8')<5))
             $error='Adınızı ve e-posta veya telefonunuzu yazın.';
         elseif($id!==0 && !Inbox::visibleToVisitor($id))
             $error='Bu sohbet oturumuna erişilemiyor.';
