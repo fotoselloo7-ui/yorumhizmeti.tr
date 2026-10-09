@@ -1240,8 +1240,8 @@ try {
   if(await showcasePage.locator('.nv32-portfolio-intro').count())
     throw new Error('Empty reference presentation remained visible after publishing a project');
 
-  // Reels references must keep the admin cover and open a branded, first-party
-  // dialog without opening Instagram or navigating the parent document.
+  // Instagram-only reference keeps the cover but opens the actual Instagram
+  // post in a new tab. Same button label is used by on-site video sources.
   await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
   const reelForm=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
   await reelForm.locator('[name="title"]').fill('CI Reels Referans Testi');
@@ -1256,7 +1256,7 @@ try {
   ]);
   if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Reels Referans Testi'}).count()))
     throw new Error('Instagram reference was not saved with custom cover');
-  await showcasePage.route('https://www.instagram.com/**',async route=>{
+  await showcaseCtx.route('https://www.instagram.com/**',async route=>{
     await route.fulfill({status:200,contentType:'text/html',
       body:'<!doctype html><html><body><div id="ci-instagram-embed">Embedded reference player</div></body></html>'});
   });
@@ -1266,30 +1266,27 @@ try {
   if(!(await reelCard.isVisible()))throw new Error('Instagram reference hidden in SEO digital filter');
   if(!(await reelCard.locator('.nv51-play-embed img').count()))
     throw new Error('Custom Reels cover did not render on homepage');
-  if(await reelCard.locator('a[href*="instagram.com"]').count())
-    throw new Error('Instagram outbound action still present on Reels card');
+  const igCoverLink=reelCard.locator('a.nv51-play-embed[href*="instagram.com"]');
+  const igAction=reelCard.locator('a.nv52-watch-action');
+  if(await igCoverLink.count()!==1||await igAction.count()!==1)
+    throw new Error('Instagram-only cover and CTA must open Instagram');
+  if((await igAction.innerText()).trim().includes('Sitemizde') ||
+     !(await igAction.innerText()).includes('Videoyu İzle'))
+    throw new Error('Watch-video CTA label is not consistent');
   const originBefore=showcasePage.url();
-  await reelCard.locator('.nv51-play-embed').click();
+  const [instagramTab]=await Promise.all([
+    showcaseCtx.waitForEvent('page'),
+    igCoverLink.click()
+  ]);
+  await instagramTab.waitForURL(/instagram\\.com\\/reel\\/C9mVh6oN8d_/,{timeout:12000});
+  if(showcasePage.url()!==originBefore)
+    throw new Error('Instagram click navigated the storefront tab');
   const modal=showcasePage.locator('[data-ref-player-modal]');
-  if(!(await modal.isVisible()))throw new Error('In-site reference video modal did not open');
-  const embedded=modal.locator('iframe');
-  if(await embedded.count()!==1)throw new Error('Embed not mounted inside our modal');
-  if(!(await embedded.getAttribute('src')).includes('/reel/C9mVh6oN8d_/embed/'))
-    throw new Error('Instagram embed URL incorrect');
-  if(showcasePage.url()!==originBefore)throw new Error('Reference viewer navigated away from site');
-  if(!(await embedded.getAttribute('sandbox')).includes('allow-scripts') ||
-     (await embedded.getAttribute('sandbox')).includes('allow-popups'))
-    throw new Error('Instagram iframe cannot open sandboxed in-site playback safely');
-  await modal.locator('[data-ref-player-close]').click();
-  if(await modal.isVisible() || await modal.locator('iframe').count())
-    throw new Error('Closing in-site video modal did not stop/unmount playback');
-  // With a verified first-party MP4 path available, native <video> takes priority.
-  await reelCard.evaluate(card=>{card.dataset.refVideo='/uploads/references/videos/ci-reference.mp4';});
-  await reelCard.locator('.nv51-play-embed').click();
-  if(await modal.locator('video[controls]').count()!==1 || await modal.locator('iframe').count())
-    throw new Error('Uploaded MP4 did not select first-party native video player');
-  await showcasePage.keyboard.press('Escape');
-  if(await modal.isVisible())throw new Error('Escape did not close local player');
+  if(await modal.isVisible())throw new Error('Instagram-only content opened local player instead of Instagram');
+  if(await igAction.getAttribute('href')!=='https://www.instagram.com/reel/C9mVh6oN8d_/')
+    throw new Error('Instagram watch button lost canonical original link');
+  await instagramTab.close();
+  console.log('PASS Instagram cover and Videoyu İzle CTA open Instagram in new tab');
 
   // Admin can add an externally hosted YouTube video for the same Instagram
   // reference: the app stores only a URL, and the viewer stays on our site.
@@ -1320,8 +1317,51 @@ try {
   if(await streamedModal.locator('iframe').count())
     throw new Error('External hosted player was not removed on close');
   console.log('PASS external YouTube link saved in admin -> onsite modal, zero local video file');
+  // A dedicated YouTube/Shorts reference can be created without an Instagram URL.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const youtubeForm=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
+  await youtubeForm.locator('[name="title"]').fill('CI YouTube Shorts Referansı');
+  await youtubeForm.locator('[name="group"]').selectOption('marketing');
+  await youtubeForm.locator('[name="service"]').selectOption('social-management');
+  await youtubeForm.locator('[name="media_type"]').selectOption('youtube_video');
+  await youtubeForm.locator('[name="url"]').fill('https://www.youtube.com/shorts/dQw4w9WgXcQ');
+  await youtubeForm.locator('[name="image"]').setInputFiles('well-known/public/assets/img/blog-woman-cutout.png');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    youtubeForm.locator('button[type="submit"]').click()
+  ]);
+  if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI YouTube Shorts Referansı'}).count()))
+    throw new Error('Standalone YouTube reference did not save');
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const youtubeCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI YouTube Shorts Referansı'});
+  if(!(await youtubeCard.isVisible()))throw new Error('YouTube video reference is not visible');
+  const youtubeCTA=youtubeCard.locator('button.nv52-watch-action');
+  if(await youtubeCTA.count()!==1 || !(await youtubeCTA.innerText()).includes('Videoyu İzle'))
+    throw new Error('YouTube on-site watch button does not use shared caption');
+  await youtubeCTA.click();
+  const youtubeDialog=showcasePage.locator('[data-ref-player-modal]');
+  const youtubeFrame=youtubeDialog.locator('iframe');
+  if(!(await youtubeDialog.isVisible()) ||
+     !(await youtubeFrame.getAttribute('src')).includes('youtube-nocookie.com/embed/dQw4w9WgXcQ'))
+    throw new Error('Standalone YouTube Shorts video did not open on our site');
+  await youtubeDialog.locator('[data-ref-player-close]').click();
+  if(await youtubeDialog.isVisible())throw new Error('YouTube player did not close');
+  console.log('PASS standalone YouTube Shorts reference uses Videoyu İzle -> site modal');
 
-  console.log('PASS Instagram cover -> local modal (no redirect), close cleanup, native video priority');
+
+  // Uploaded MP4 still has the same local-player behavior, without an Instagram iframe.
+  await streamedCard.evaluate(card=>{
+    card.dataset.refExternalUrl='';
+    card.dataset.refExternalType='';
+    card.dataset.refVideo='/uploads/references/videos/ci-reference.mp4';
+  });
+  await streamedCard.locator('button.nv51-play-embed').click();
+  if(await streamedModal.locator('video[controls]').count()!==1 || await streamedModal.locator('iframe').count())
+    throw new Error('Uploaded MP4 did not select the native video player');
+  await showcasePage.keyboard.press('Escape');
+  if(await streamedModal.isVisible())throw new Error('Escape did not close first-party MP4 player');
+  console.log('PASS native MP4 player retained, close cleanup intact');
 
   await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-desktop.png'),fullPage:true,animations:'disabled'});
   await showcasePage.setViewportSize({width:390,height:844});
