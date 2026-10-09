@@ -107,7 +107,7 @@
       if($nvThemeEnabled){
         foreach($nvPalette as $label=>$metadata){
           $val=(string)setting($metadata[0],$metadata[1]);
-          if(!preg_match('/^#[A-Fa-f0-9]{6}$/D',$val))$val=$metadata[1];
+          if(!preg_match('/^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/D',$val))$val=$metadata[1];
           $nvPaletteVars[]='--nv-theme-'.$label.':'.$val;
         }
       }
