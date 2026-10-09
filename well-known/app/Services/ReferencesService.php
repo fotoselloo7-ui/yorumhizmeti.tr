@@ -61,6 +61,40 @@ final class ReferencesService
         return $group === 'marketing' ? 'seo' : 'web-site';
     }
 
+    /**
+     * Up to two unique category placements per reference.
+     * Reads old single-category rows without changing their IDs or media.
+     */
+    public static function normalizedPlacements(array $row): array
+    {
+        $groups = self::groups();
+        $placements = [];
+        $candidateRows = $row['placements'] ?? [];
+        if (!is_array($candidateRows) || !$candidateRows) {
+            $candidateRows = [[
+                'group' => self::normalizedGroup($row),
+                'service' => self::normalizedService($row),
+            ]];
+        }
+        foreach ($candidateRows as $candidate) {
+            if (!is_array($candidate)) continue;
+            $group = (string)($candidate['group'] ?? '');
+            $service = (string)($candidate['service'] ?? '');
+            if (!isset($groups[$group]['services'][$service])) continue;
+            $key = $group.':'.$service;
+            $placements[$key] = ['group'=>$group, 'service'=>$service];
+            if (count($placements) >= 2) break;
+        }
+        if (!$placements) {
+            $group = self::normalizedGroup($row);
+            $placements[$group.':'.self::normalizedService($row)] = [
+                'group'=>$group,
+                'service'=>self::normalizedService($row)
+            ];
+        }
+        return array_values($placements);
+    }
+
     public static function normalizedMedia(array $row): string
     {
         $type = (string)($row['media_type'] ?? '');
@@ -94,8 +128,9 @@ final class ReferencesService
         foreach ($rows as $row) {
             if (!is_array($row) || empty($row['id']) || empty($row['title'])) continue;
             if ($activeOnly && ($row['status'] ?? '') !== 'active') continue;
-            $row['group'] = self::normalizedGroup($row);
-            $row['service'] = self::normalizedService($row);
+            $row['placements'] = self::normalizedPlacements($row);
+            $row['group'] = $row['placements'][0]['group'];
+            $row['service'] = $row['placements'][0]['service'];
             $row['media_type'] = self::normalizedMedia($row);
             $row['logo'] = (string)($row['logo'] ?? '');
             $list[] = $row;
