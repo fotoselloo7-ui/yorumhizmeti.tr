@@ -240,6 +240,7 @@ class App
         $r->post('/admin/banka-hesabi/{id}/sil', 'Admin\\SettingsController@deleteBankAccount');
         $r->get('/admin/netvera-musteriler', 'Admin\\NetveraCustomersController@index');
         $r->get('/admin/bayilik', 'Admin\\DealerController@index');
+        $r->post('/admin/bayilik/kur', 'Admin\\DealerController@install');
         $r->post('/admin/bayilik/{id}/karar', 'Admin\\DealerController@review');
         $r->get('/admin/uyeler', 'Admin\\SettingsController@users');
         $r->get('/admin/admin-kullanicilari', 'Admin\\SettingsController@adminUsers');
