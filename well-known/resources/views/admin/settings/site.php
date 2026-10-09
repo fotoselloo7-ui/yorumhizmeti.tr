@@ -137,7 +137,7 @@
                 <input type="hidden" name="_group_theme_preset_enabled" value="theme">
                 <div class="adm-card-header" style="display:flex; justify-content:space-between; align-items:center;">
                     <h3><?= icon('palette', 16) ?> Tema Renkleri</h3>
-                    <button type="button" class="btn btn-outline btn-sm" onclick="resetThemeDefaults()">Varsayılana Döndür</button>
+                    <button type="submit" name="_action" value="reset_theme" formnovalidate class="btn btn-outline btn-sm" onclick="return confirm('Orijinal NetVera renkleri geri yüklensin mi?')">Varsayılana Döndür</button>
                 </div>
                 <div class="adm-card-body">
                     
