@@ -6,7 +6,7 @@ $searchQuery = $searchQuery ?? '';
 ?>
 <main class="nv26-catalog">
   <section class="nv26-catalog-hero"><div class="container nv26-catalog-hero-inner">
-    <div><span class="nv26-catalog-kicker"><?= icon('layers',15) ?> YorumHizmeti Dijital Hizmet Merkezi</span>
+    <div><span class="nv26-catalog-kicker"><?= icon('layers',15) ?> NetVera Dijital Hizmet Merkezi</span>
       <h1>İhtiyacınıza uygun <span>hizmeti keşfedin.</span></h1>
       
     </div>
@@ -67,7 +67,7 @@ $searchQuery = $searchQuery ?? '';
     </section>
     <?php endforeach; ?>
     <aside class="nv26-catalog-banner">
-      <div><span><?= icon('sparkles',15) ?> YorumHizmeti Premium</span>
+      <div><span><?= icon('sparkles',15) ?> NetVera Premium</span>
         <h2>Markanız için dijital çözümler <em>tek adreste.</em></h2>
         
         <a href="/iletisim">Projenizi konuşalım <?= icon('arrow-right',13) ?></a>
