@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('folder', 24) ?> Blog Kategorileri</h2>
-        <p class="text-sm text-secondary">Blog yazılarınızı gruplandırın.</p>
     </div>
 </div>
 
