@@ -204,6 +204,10 @@ class App
         $r->post('/admin/havale/{id}/onayla', 'Admin\\OrderController@confirmBankTransfer');
         $r->post('/admin/havale/{id}/reddet', 'Admin\\OrderController@rejectBankTransfer');
 
+        $r->get('/admin/yorumlar', 'Admin\\TestimonialController@index');
+        $r->post('/admin/yorumlar/kaydet', 'Admin\\TestimonialController@save');
+        $r->post('/admin/yorumlar/sil', 'Admin\\TestimonialController@remove');
+
         // Admin Ödeme Modülleri
         $r->get('/admin/odeme-modulleri', 'Admin\\PaymentGatewayController@index');
         $r->post('/admin/odeme-modulleri/{id}/toggle', 'Admin\\PaymentGatewayController@toggle');
