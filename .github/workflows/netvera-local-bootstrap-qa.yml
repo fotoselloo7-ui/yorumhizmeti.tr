@@ -7,6 +7,8 @@ on:
       - 'well-known/app/Services/NetveraLocalSetup.php'
       - 'well-known/app/Core/App.php'
       - 'well-known/database/netvera-public-catalog.json'
+      - 'well-known/tests/netvera-blog-media-qa.php'
+      - 'well-known/public/uploads/blog/**'
       - 'well-known/database/migrations/netvera-*.sql'
       - '.github/workflows/netvera-local-bootstrap-qa.yml'
   workflow_dispatch:
@@ -116,6 +118,22 @@ jobs:
           curl -fsS -b /tmp/admin-cookies http://127.0.0.1:8006/admin/netvera-kategoriler > /tmp/nv-admin-categories.html
           grep -q 'Sektörel Yönetim Yazılımları' /tmp/nv-admin-categories.html
           echo 'PASS: authenticated CRM inbox, edit-ready 16 products and original category management'
+
+      - name: Original Netvera blog images return real HTTP 200 and WebP bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          php well-known/tests/netvera-blog-media-qa.php --list-urls > /tmp/nv-blog-image-paths
+          [ "$(wc -l < /tmp/nv-blog-image-paths)" -eq 20 ]
+          while IFS= read -r url; do
+            status=$(curl --fail --silent --show-error -o /tmp/nv-current-webp               -w '%{http_code}|%{content_type}' "http://127.0.0.1:8006${url}")
+            if [[ "$status" != "200|image/webp" ]]; then
+              echo "Broken web-accessible original Netvera media ${url}: ${status}"
+              exit 1
+            fi
+            php -r 'if (!($m=@getimagesize($argv[1])) || $m["mime"]!=="image/webp") exit(1);' /tmp/nv-current-webp
+          done < /tmp/nv-blog-image-paths
+          echo 'PASS: all 20 original Netvera blog images served as valid WebP at /uploads/blog/... URLs'
 
       - name: Assert production and remote databases cannot auto-bootstrap
         shell: bash
