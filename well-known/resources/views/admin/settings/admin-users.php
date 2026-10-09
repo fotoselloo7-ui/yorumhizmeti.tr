@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
          <h2><?= icon('shield', 24) ?> Admin Kullanıcıları</h2>
-         <p class="text-sm text-secondary">Yönetim paneline erişimi olan yöneticiler.</p>
     </div>
 </div>
 
