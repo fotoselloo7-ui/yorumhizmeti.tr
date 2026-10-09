@@ -101,3 +101,24 @@
   .nv40-detail .nv60-product-tabs [role="tab"]{transition:none!important}
   .nv40-detail .nv60-product-tabs [role="tab"]:hover{transform:none!important}
 }
+
+/* Public demo links are safely separated from account passwords. */
+.nv40-detail .nv60-demo-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0;
+}
+.nv40-detail .nv60-demo-link{
+  display:flex;align-items:center;gap:12px;min-height:78px;padding:14px;
+  border:1px solid #dce2f4;border-radius:13px;background:#faf9ff;
+  color:#6646cc;text-decoration:none!important;
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.nv40-detail .nv60-demo-link:hover{transform:translateY(-2px);border-color:#b9a6f0;box-shadow:0 8px 20px rgba(91,69,180,.09)}
+.nv40-detail .nv60-demo-link>svg:first-child{flex:0 0 18px}
+.nv40-detail .nv60-demo-link>svg:last-child{flex:0 0 15px;margin-left:auto}
+.nv40-detail .nv60-demo-link span{display:flex;flex-direction:column;gap:5px;min-width:0}
+.nv40-detail .nv60-demo-link strong{color:#2e3860;font-size:12px}
+.nv40-detail .nv60-demo-link small{font-size:10px;color:#77829d;overflow-wrap:anywhere}
+.nv40-detail .nv60-demo-disclaimer{margin-top:14px;color:#61718d;font-size:11px;line-height:1.8}
+.nv40-detail .nv60-demo-disclaimer a{color:#6540d1;text-decoration:underline}
+@media(max-width:700px){.nv40-detail .nv60-demo-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.nv40-detail .nv60-demo-link{transition:none}.nv40-detail .nv60-demo-link:hover{transform:none}}
