@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-admin-products.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/admin-sidebar-readable-v77.css') ?>?v=77.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body>
