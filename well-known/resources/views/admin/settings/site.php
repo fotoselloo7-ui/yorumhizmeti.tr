@@ -133,7 +133,7 @@
 
             <!-- Theme Colors Card -->
             <div class="adm-card" style="grid-column: 1 / -1;">
-                <input type="hidden" name="theme_preset_enabled" value="1">
+                <input type="hidden" id="nvThemeEnabled" name="theme_preset_enabled" value="<?= setting('theme_preset_enabled','0')==='1'?'1':'0' ?>">
                 <input type="hidden" name="_group_theme_preset_enabled" value="theme">
                 <div class="adm-card-header" style="display:flex; justify-content:space-between; align-items:center;">
                     <h3><?= icon('palette', 16) ?> Tema Renkleri</h3>
@@ -337,7 +337,13 @@
 </style>
 
 <script>
+function nvThemeActivate() {
+    const flag=document.getElementById('nvThemeEnabled');
+    if(flag)flag.value='1';
+}
+
 function syncColor(picker, key) {
+    nvThemeActivate();
     const hex = picker.value;
     document.getElementById(key).value = hex;
     document.getElementById('preview_' + key).style.background = hex;
@@ -352,6 +358,7 @@ function validateHex(input) {
     const valid = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(val);
     input.classList.toggle('invalid', !valid && val.length > 1);
     if (valid) {
+        nvThemeActivate();
         const fullHex = val.length === 4 ? '#' + val[1]+val[1]+val[2]+val[2]+val[3]+val[3] : val;
         const preview = document.getElementById('preview_' + input.name);
         if (preview) preview.style.background = fullHex;
@@ -363,6 +370,7 @@ function validateHex(input) {
 const colorKeys = ['theme_primary','theme_secondary','theme_accent','theme_button','theme_button_hover','theme_bg','theme_card','theme_text','theme_muted','theme_border'];
 
 function applyPreset(colors) {
+    nvThemeActivate();
     colorKeys.forEach((key, i) => {
         const input = document.getElementById(key);
         if (input && colors[i]) {
@@ -377,6 +385,8 @@ function applyPreset(colors) {
 }
 
 function resetThemeDefaults() {
+    const flag=document.getElementById('nvThemeEnabled');
+    if(flag)flag.value='0';
     colorKeys.forEach(key => {
         const input = document.getElementById(key);
         if (input) {
