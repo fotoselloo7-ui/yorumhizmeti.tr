@@ -21,7 +21,7 @@ class CategoryController extends Controller
             http_response_code(403);exit('Bu işlem için süper yönetici yetkisi gerekiyor.');
         }
         try{
-            $report=\App\Services\CategorySearchBlueprint::apply();
+            $report=\App\Services\CategorySeoCompleteService::apply();
             logActivity('category_seo_blueprint','Kategori SEO/GEO taslakları uygulandı.');
             flash('success',$report['categories'].' kategoride '.$report['fields'].' SEO alanı ve '.$report['seo_profiles'].' GEO/AIO profili güncellendi.');
         }catch(\Throwable $e){
@@ -47,6 +47,8 @@ class CategoryController extends Controller
             $data['image'] = Upload::image($_FILES['image'], 'categories');
         }
 
+        $this->populateMissingSeo($data);
+
         $seo = new SeoScoreService();
         $score = $seo->calculate($data);
         $data['seo_score'] = $score['score'];
@@ -66,14 +68,16 @@ class CategoryController extends Controller
         $parents = $this->db->fetchAll("SELECT id, name FROM categories WHERE parent_id IS NULL AND id != ? ORDER BY name", [$id]);
         $icons = \App\Services\IconService::list();
         $seo = (new SeoScoreService())->calculate($category);
+        $optimized=\App\Services\CategorySeoCompleteService::fillForForm($category,
+            \App\Services\NetveraSeoBridge::get('category',(int)$id));
 
         $this->renderAdmin('admin/categories/form', [
             'pageTitle' => 'Kategori Düzenle',
-            'category' => $category,
+            'category' => $optimized['category'],
             'parents' => $parents,
             'icons' => $icons,
             'seoResult' => $seo,
-            'nvSeoData' => \App\Services\NetveraSeoBridge::get('category',(int)$id),
+            'nvSeoData' => $optimized['seo'],
         ]);
     }
 
@@ -85,6 +89,8 @@ class CategoryController extends Controller
         if (!empty($_FILES['image']['name'])) {
             $data['image'] = Upload::image($_FILES['image'], 'categories');
         }
+
+        $this->populateMissingSeo($data,(int)$id);
 
         $seo = new SeoScoreService();
         $score = $seo->calculate($data);
@@ -245,6 +251,43 @@ class CategoryController extends Controller
         }
         fclose($output);
         exit;
+    }
+
+    /** Fill all missing relevant SEO/GEO/AIO inputs before saving a category. */
+    private function populateMissingSeo(array &$data,int $id=0):void
+    {
+        $existing=$id>0?$this->db->fetch('SELECT image FROM categories WHERE id=?',[$id]):null;
+        if(empty($data['image']) && !empty($existing['image']))$data['image']=$existing['image'];
+        $old=$id>0?\App\Services\NetveraSeoBridge::get('category',$id):[];
+        $merged=\App\Services\CategorySeoCompleteService::fillForForm($data,$old);
+        if(!$merged['suggestion'])return;
+        foreach(['description','image_alt','seo_title','seo_description','seo_focus_keyword',
+                  'canonical_url','og_title','og_description'] as $key)
+            if(isset($merged['category'][$key]))$data[$key]=$merged['category'][$key];
+        foreach($merged['seo'] as $field=>$value){
+            $key='nvseo_'.$field;
+            if(trim((string)($_POST[$key]??''))==='')$_POST[$key]=(string)$value;
+        }
+        // image is not writable unless explicitly uploaded by this request.
+        if(!empty($existing['image']) && empty($_FILES['image']['name']))unset($data['image']);
+    }
+
+    public function seoSuggestion():void
+    {
+        Csrf::check();
+        $category=[
+            'name'=>trim((string)($_POST['name']??'')),
+            'slug'=>trim((string)($_POST['slug']??'')),
+            'status'=>'active',
+            'description'=>trim((string)($_POST['description']??'')),
+        ];
+        if($category['slug']==='')$category['slug']=slugify($category['name']);
+        $profile=\App\Services\CategorySeoCompleteService::recommendations($category);
+        if(!$profile){
+            $this->json(['ok'=>false,'message'=>'Bu kategori için otomatik öneri mevcut değil.'],422);
+            return;
+        }
+        $this->json(['ok'=>true,'suggestion'=>$profile]);
     }
 
     private function getCategoryData(): array
