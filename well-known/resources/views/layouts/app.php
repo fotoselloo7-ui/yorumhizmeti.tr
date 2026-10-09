@@ -502,10 +502,12 @@
             <div class="footer-grid footer-grid-v9 yh49-footer-grid">
                 <div class="footer-brand">
                     <h3><?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?></h3>
-                    <p><?= e(setting('site_slogan', 'Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web ve dijital çözümlere kadar güvenilir hizmet ortağınız.')) ?></p>
+                    <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
                     <div class="footer-social footer-social-v9">
                         <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
                         <?php if (setting('social_youtube')): ?><a href="<?= e(setting('social_youtube')) ?>" target="_blank" rel="noopener" aria-label="YouTube"><?= icon('youtube', 15) ?></a><?php endif; ?>
+                        <?php if (setting('social_facebook')): ?><a href="<?= e(setting('social_facebook')) ?>" target="_blank" rel="noopener" aria-label="Facebook"><?= icon('facebook', 15) ?></a><?php endif; ?>
+                        <?php if (setting('social_tiktok')): ?><a href="<?= e(setting('social_tiktok')) ?>" target="_blank" rel="noopener" aria-label="TikTok"><?= icon('tiktok', 15) ?></a><?php endif; ?>
                         <?php if (setting('social_twitter')): ?><a href="<?= e(setting('social_twitter')) ?>" target="_blank" rel="noopener" aria-label="X"><?= icon('twitter', 15) ?></a><?php endif; ?>
                     </div>
                 </div>
