@@ -19,7 +19,7 @@ $check($a!==$b,'AES-GCM IV uniqueness');
 $check(SmmApiClient::decrypt($a)===$secret,'API key roundtrip');
 $check(!str_contains($a,$secret),'no plaintext key');
 $corrupted=$a;
-$corrupted[strlen($corrupted)-2]=$corrupted[strlen($corrupted)-2]==='A'?'B':'A';
+$corrupted[10]=$corrupted[10]==='A'?'B':'A';
 try { SmmApiClient::decrypt($corrupted); $bad=false; } catch (\RuntimeException $e) { $bad=true; }
 $check($bad,'tampered ciphertext rejected');
 $check(SmmApiClient::validateEndpoint('https://provider.example/api/v2')==='https://provider.example/api/v2','valid endpoint');
