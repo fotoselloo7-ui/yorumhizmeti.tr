@@ -24,6 +24,11 @@ jobs:
         run: php well-known/tests/production-ui-copy-qa.php
       - name: Reviews, flat payment modules and mobile desk QA
         run: php well-known/tests/reviews-mobile-desk-qa.php
+      - name: NetVera brand, theme, chat and category SEO QA
+        run: |
+          php well-known/tests/netvera-brand-theme-seo-chat-qa.php
+          node --check well-known/public/assets/js/inbox-desktop-v70.js
+
       - name: Mobile browser JavaScript syntax
         run: |
           node --check well-known/public/assets/js/reviews-v68.js
