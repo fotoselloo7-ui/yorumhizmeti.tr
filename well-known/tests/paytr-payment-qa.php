@@ -96,7 +96,7 @@ $html=curl_exec($ch);
 $code=(int)curl_getinfo($ch,CURLINFO_HTTP_CODE);
 curl_close($ch);
 $assert($code===200&&is_string($html),'Local payment design preview unavailable');
-$assert(str_contains($html,'nv45-checkout')&&str_contains($html,'Yalnızca yerel tasarım önizlemesi'),
+$assert(str_contains($html,'nv45-checkout')&&str_contains($html,'nv45-preview-frame') && !str_contains($html,'nv45-preview-alert'),
     'Branded PayTR preview did not render');
 $assert(!str_contains($html,'id="paytriframe"'),
     'Local preview unexpectedly rendered a live card payment iframe');
