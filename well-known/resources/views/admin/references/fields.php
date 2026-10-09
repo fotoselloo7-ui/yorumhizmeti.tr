@@ -59,7 +59,7 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
       <?php endforeach; ?>
     </select>
   </label>
-  <label>Web Sitesi / Instagram Bağlantısı
+  <label>Web Sitesi / Instagram / YouTube Bağlantısı
     <input class="form-control" type="url" name="url" data-ref-url value="<?= e($ref['url'] ?? '') ?>" maxlength="1000" placeholder="https://www.instagram.com/reel/... veya https://musteri.com">
     <small data-ref-url-hint>Web sitesi referansları doğrudan müşterinin sitesini açar.</small>
   </label>
@@ -74,7 +74,7 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
     <input class="form-control" type="url" name="external_video_url" maxlength="2000"
       value="<?= e($ref['external_video_url'] ?? '') ?>" data-ref-hosted-video
       placeholder="https://youtu.be/... veya Bunny / Cloudflare Stream / Vimeo">
-    <small>ÖNERİLEN: Videoyu YouTube'da liste dışı veya bir video servisinde barındır. Paylaşılan bağlantıyı buraya yapıştır. Video referans kartındaki kendi penceremizde açılır; dosya YorumHizmeti.tr sunucusunda tutulmaz. Sadece Instagram linki kullanılırsa Instagram oynatmayı kısıtlayabilir.</small>
+    <small>ÖNERİLEN: Videoyu YouTube'da liste dışı veya bir video servisinde barındır. Paylaşılan bağlantıyı buraya yapıştır. Video referans kartındaki kendi penceremizde açılır; dosya YorumHizmeti.tr sunucusunda tutulmaz. Sadece Instagram linki girildiğinde ziyaretçi Instagram'da izler; harici video da eklendiğinde sitemizde oynar.</small>
     <?php if (!empty($ref['external_video_url'])): ?>
       <span class="adm52-video-saved"><?= icon('check-circle',13) ?> Harici oynatma bağlantısı kayıtlı.</span>
     <?php endif; ?>
