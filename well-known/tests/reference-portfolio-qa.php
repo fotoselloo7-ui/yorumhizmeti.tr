@@ -27,4 +27,22 @@ verify(Refs::instagramEmbed('https://www.instagram.com/reel/../../evil','instagr
 verify(Refs::normalizedGroup(['title'=>'Legacy site'])==='agency','legacy entries default to agency');
 verify(Refs::normalizedService(['title'=>'Legacy site'])==='web-site','legacy entries keep website category');
 verify(Refs::normalizedMedia(['title'=>'Legacy site'])==='website','legacy entries retain website mode');
-echo "PASS: client project/reference taxonomy, Instagram embeds, URL safety and legacy records.\n";
+$primary = ['group'=>'agency','service'=>'web-site'];
+$secondary = ['group'=>'marketing','service'=>'social-management'];
+$dual = ['id'=>'same-project','title'=>'Test Site','group'=>'agency','service'=>'web-site',
+         'placements'=>[$primary,$secondary]];
+verify(Refs::normalizedPlacements($dual)===[$primary,$secondary],
+    'one project is assigned to two different main/service categories');
+verify(count(Refs::normalizedPlacements(['placements'=>[$primary,$primary]]))===1,
+    'duplicate category assignment is deduplicated');
+verify(Refs::normalizedPlacements(['placements'=>[$primary,['group'=>'admin','service'=>'fake']]])===[$primary],
+    'unknown category cannot enter public filter');
+verify(Refs::normalizedPlacements(['placements'=>[$primary,$secondary,$primary]])===[$primary,$secondary],
+    'portfolio category assignment has two slots maximum');
+$twoAgency = [['group'=>'agency','service'=>'web-site'],['group'=>'agency','service'=>'software']];
+verify(Refs::normalizedPlacements(['placements'=>$twoAgency])===$twoAgency,
+    'two different subcategories in one main category are supported');
+verify(Refs::normalizedPlacements(['group'=>'marketing','service'=>'seo'])===[
+    ['group'=>'marketing','service'=>'seo']
+], 'existing one-category references retain their exact group/service');
+echo "PASS: dual-category reference placement, Instagram embeds, URL safety and legacy records.\n";
