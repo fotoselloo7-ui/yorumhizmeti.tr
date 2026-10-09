@@ -208,21 +208,21 @@ class HomeController extends Controller
         // catalog as the mega menu. Category chips only link to ACTIVE records.
         $promoConfig = [
             'social' => [
-                'title' => 'Sosyal Medya Hizmetleri',
+                'title' => setting('brand_sector_social','Instagram, TikTok ve YouTube Hizmetleri'),
                 'eyebrow' => 'MARKANI SOSYALDE BÜYÜT',
                 'description' => 'Instagram, TikTok, YouTube ve diğer platformlarda etkileşiminizi ve görünürlüğünüzü artıran çözümler.',
                 'cta' => 'Paketleri İncele',
                 'preferred' => ['instagram', 'tiktok', 'youtube', 'facebook'],
             ],
             'agency' => [
-                'title' => 'Ajans & Yazılım',
+                'title' => setting('brand_sector_software','Hazır Yazılım ve Özel Web Çözümleri'),
                 'eyebrow' => 'DİJİTAL ALTYAPINI KUR',
                 'description' => 'Web sitesi, e-ticaret, özel yazılım, mobil uygulama ve tasarım için profesyonel çözümler.',
                 'cta' => 'Hizmetleri İncele',
                 'preferred' => ['web', 'ecommerce', 'mobileapp', 'graphic'],
             ],
             'marketing' => [
-                'title' => 'SEO & Dijital Pazarlama',
+                'title' => setting('brand_sector_agency','Dijital Ajans, SEO ve Reklam Yönetimi'),
                 'eyebrow' => 'DİJİTALDE DAHA GÖRÜNÜR OL',
                 'description' => 'SEO, reklam yönetimi, yerel işletme ve dijital büyüme hizmetleriyle markanızı öne çıkarın.',
                 'cta' => 'Çözümleri İncele',
