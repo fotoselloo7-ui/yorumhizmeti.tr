@@ -1,6 +1,6 @@
 <div class="adm-page-top">
   <div><h2><?= icon('award',24) ?> Referanslarımız</h2>
-    <p class="text-sm text-secondary">Ajans & Yazılım veya SEO & Dijital çalışmalarını yönet. Instagram post/Reels kapakları ve müşteri logoları ekle.</p></div>
+    <p class="text-sm text-secondary">Ajans & Yazılım ve SEO & Dijital çalışmalarını yönet; bir referansı iki ayrı kategoriye bağla. Post/Reels kapakları ve müşteri logoları ekle.</p></div>
   <a href="/#referanslarimiz" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><?= icon('external-link',14) ?> Referans Vitrinini Gör</a>
 </div>
 <div class="adm31-help">
@@ -37,7 +37,11 @@
               <img loading="lazy" src="<?= e(upload_url($row['logo'])) ?>" alt="<?= e($row['title']) ?>">
             <?php else: ?><span><?= icon('monitor',22) ?></span><?php endif; ?>
             <div><strong><?= e($row['title']) ?></strong>
-              <small><?= e($referenceGroups[$row['group']]['label']??'Ajans & Yazılım') ?> · <?= e($referenceGroups[$row['group']]['services'][$row['service']]??'Web Sitesi') ?></small></div>
+              <small>
+                <?php foreach (\App\Services\ReferencesService::normalizedPlacements($row) as $pos=>$placement): ?>
+                <?= $pos ? ' · ' : '' ?><?= e($referenceGroups[$placement['group']]['label'] ?? '') ?> / <?= e($referenceGroups[$placement['group']]['services'][$placement['service']] ?? '') ?>
+                <?php endforeach; ?>
+              </small></div>
             <span class="adm31-pkg-status <?= $row['status']==='active'?'on':'off' ?>"><?= $row['status']==='active'?'Yayında':'Gizli' ?></span>
           </div>
           <form method="POST" action="/admin/referanslar/<?= e($row['id']) ?>/guncelle" enctype="multipart/form-data" class="adm31-reference-form" data-reference-editor>
@@ -59,6 +63,8 @@
 document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
   const group = form.querySelector('[data-ref-group]');
   const service = form.querySelector('[data-ref-service]');
+  const secondGroup = form.querySelector('[data-ref-second-group]');
+  const secondService = form.querySelector('[data-ref-second-service]');
   const media = form.querySelector('[data-ref-media]');
   const url = form.querySelector('[data-ref-url]');
   const hint = form.querySelector('[data-ref-url-hint]');
@@ -75,6 +81,25 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
       const first = Array.from(service.options).find(o => !o.disabled);
       if (first) service.value = first.value;
     }
+    if (secondGroup && secondService) {
+      const enabled = secondGroup.value !== '';
+      secondService.disabled = !enabled;
+      secondService.required = enabled;
+      let validSelection = false;
+      Array.from(secondService.options).forEach(function(option) {
+        if (!option.value) { option.hidden = enabled; return; }
+        const visible = enabled && option.dataset.parent === secondGroup.value;
+        option.hidden = !visible;
+        option.disabled = !visible;
+        if (visible && option.selected) validSelection = true;
+      });
+      if (!enabled) {
+        secondService.value = '';
+      } else if (!validSelection) {
+        const first = Array.from(secondService.options).find(option => !option.disabled && option.value);
+        if (first) secondService.value = first.value;
+      }
+    }
     const instagram = media.value.startsWith('instagram_');
     url.placeholder = instagram ?
       (media.value === 'instagram_reel' ? 'https://www.instagram.com/reel/ABC123/' : 'https://www.instagram.com/p/ABC123/') :
@@ -85,6 +110,7 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
       (media.value === 'website' ? 'Müşteri sitesine direkt yönlendirilir.' : 'İsteğe bağlı görsel bağlantısı.');
   }
   group.addEventListener('change', sync);
+  if (secondGroup) secondGroup.addEventListener('change', sync);
   media.addEventListener('change', sync);
   sync();
 });
