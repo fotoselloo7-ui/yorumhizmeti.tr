@@ -2,7 +2,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('edit-3', 24) ?> <?= $isEdit ? 'Yazı Düzenle' : 'Yazı Ekle' ?></h2>
-        <p class="text-sm text-secondary">Blog yazılarınızı buradan oluşturabilir veya düzenleyebilirsiniz.</p>
     </div>
     <a href="/admin/blog" class="btn btn-light btn-sm"><?= icon('arrow-left', 16) ?> Geri Dön</a>
 </div>
@@ -27,7 +26,6 @@
                     <div class="form-group">
                         <label for="slug">URL Slug</label>
                         <input type="text" name="slug" id="slug" class="form-control" value="<?= e($post['slug'] ?? '') ?>" placeholder="otomatik-olusturulur">
-                        <div class="form-hint">Boş bırakırsanız başlıktan otomatik üretilir. Aynı isimde varsa sonuna sayı eklenir.</div>
                     </div>
 
                     <div class="nv46-basic-fields">
@@ -136,7 +134,6 @@
                     <button type="button" class="btn btn-light btn-sm" onclick="addFaqRow()"><?= icon('plus', 16) ?> Soru Ekle</button>
                 </div>
                 <div class="adm-card-body">
-                    <p class="text-sm text-secondary mb-3">Bu alana eklediğiniz sorular otomatik olarak sayfanın sonuna şık bir akordiyon ve Google FAQ Schema olarak eklenecektir.</p>
                     <div id="faq_container">
                         <?php 
                         $faqs = !empty($post['faqs']) ? json_decode($post['faqs'], true) : [];
@@ -223,7 +220,6 @@
                     <div class="form-group mb-0">
                         <label for="published_at">Yayın Tarihi</label>
                         <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="<?= ($post['published_at'] ?? '') ? date('Y-m-d\TH:i', strtotime($post['published_at'])) : date('Y-m-d\TH:i') ?>">
-                        <div class="form-hint">İleri bir tarih seçerseniz otomatik olarak planlanır.</div>
                     </div>
                 </div>
             </div>
