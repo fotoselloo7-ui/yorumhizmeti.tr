@@ -20,7 +20,9 @@ final class SmmFulfillmentService
             || strcasecmp((string)$m['service_type'],'Default') !== 0) {
             throw new \RuntimeException('Seçtiğiniz hizmet şu an siparişe kapalı. Lütfen sepetinizden çıkarın.');
         }
-        $link = self::findLink($m['field_key'], $fields);
+        $raw = self::findLink($m['field_key'], $fields);
+        $p = Database::getInstance()->fetch('SELECT name FROM packages WHERE id=?',[$packageId]);
+        $link = \App\Services\SmmOrderFields::target($raw,(string)($p['name']??''));
         $parts = parse_url($link);
         if (!filter_var($link,FILTER_VALIDATE_URL) || !$parts
             || !in_array(strtolower((string)($parts['scheme'] ?? '')),['https'],true)
@@ -50,7 +52,9 @@ final class SmmFulfillmentService
             'order_id'=>$orderId,'order_item_id'=>$orderItemId,'package_id'=>$packageId,
             'provider_id'=>(int)$m['provider_id'],'external_service_id'=>$m['external_service_id'],
             'quantity'=>(int)$m['fulfillment_quantity'] * max(1,$cartQty),
-            'target_link'=>self::findLink($m['field_key'],$fields),'state'=>'queued',
+            'target_link'=>\App\Services\SmmOrderFields::target(self::findLink($m['field_key'],$fields),
+                (string)(Database::getInstance()->fetch('SELECT name FROM packages WHERE id=?',[$packageId])['name']??'')),
+            'state'=>'queued',
         ]);
     }
 
