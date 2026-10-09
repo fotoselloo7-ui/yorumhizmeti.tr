@@ -64,6 +64,12 @@ $read=static function(string $path)use($root):string{
  return file_get_contents($f);
 };
 $site=$read('resources/views/admin/settings/site.php');
+$seoPanelPos=strpos($site,'nv79-global-seo');
+$sidebarPos=strpos($site,'<!-- Sidebar (Right) -->');
+if($seoPanelPos===false || $sidebarPos===false || $seoPanelPos>=$sidebarPos ||
+   !str_contains($site,'id="nv79-seo-title-preview"') ||
+   !str_contains($site,'id="nv79-seo-desc-preview"'))
+    throw new RuntimeException('Global SEO must be fully visible and editable in the main Site Settings area.');
 foreach($needed as $name){
  if(!str_contains($site,'name="'.$name.'"')){
     throw new RuntimeException('Brand settings editor missing field '.$name);
