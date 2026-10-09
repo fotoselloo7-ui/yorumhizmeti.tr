@@ -100,7 +100,7 @@ class SettingsController extends Controller
 
     public function pages(): void
     {
-        $pages = $this->db->fetchAll("SELECT * FROM pages ORDER BY sort_order ASC");
+        $pages = $this->db->fetchAll("SELECT * FROM pages ORDER BY id ASC");
         $this->renderAdmin('admin/settings/pages', ['pageTitle' => 'Sayfalar', 'pages' => $pages]);
     }
 
@@ -155,7 +155,7 @@ class SettingsController extends Controller
 
     public function logs(): void
     {
-        $logs = $this->db->fetchAll("SELECT * FROM admin_activity_logs ORDER BY created_at DESC LIMIT 200");
+        $logs = $this->db->fetchAll("SELECT id, admin_id, action, description AS detail, ip_address, created_at FROM activity_logs ORDER BY created_at DESC, id DESC LIMIT 200");
         $this->renderAdmin('admin/settings/logs', ['pageTitle' => 'Loglar', 'logs' => $logs]);
     }
 
