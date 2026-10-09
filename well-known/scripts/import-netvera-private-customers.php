@@ -31,7 +31,7 @@ foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
 }
 $get=static fn(string $key):string=>(string)(getenv($key)?:'');
 $env=strtolower($get('APP_ENV'));
-if (!in_array($env,['staging','local','development'],true)) {
+if ($env !== 'staging') {
     fwrite(STDERR,"REFUSED: production and unknown environments cannot run this importer.\n"); exit(2);
 }
 $apply=in_array('--apply',$argv,true);
@@ -117,7 +117,7 @@ try {
     $new->beginTransaction();
     $userMap=[];
     $collisions=0;
-    foreach($all($old,'SELECT id,name,email,phone,is_agency,want_dealer,password_hash,email_verified_at,created_at,is_active,status FROM customers') as $row){
+    foreach($all($old,'SELECT * FROM customers') as $row){
         $email=mb_strtolower(trim((string)$row['email']),'UTF-8');
         if(!filter_var($email,FILTER_VALIDATE_EMAIL))throw new RuntimeException('Invalid legacy customer email');
         if(!password_get_info((string)$row['password_hash'])['algo'])
@@ -140,7 +140,7 @@ try {
         $oldId=(int)$row['id'];$userMap[$oldId]=$userId;
         $put($new,'INSERT INTO nv_private_user_map (old_customer_id,new_user_id,is_agency,want_dealer,source_status,source_profile_encrypted) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE new_user_id=VALUES(new_user_id),is_agency=VALUES(is_agency),want_dealer=VALUES(want_dealer),source_status=VALUES(source_status),source_profile_encrypted=VALUES(source_profile_encrypted)',[
             $oldId,$userId,(int)$row['is_agency'],(int)$row['want_dealer'],(string)$row['status'],
-            $encrypt(json_encode($row,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR))
+            $encrypt(json_encode(array_diff_key($row,array_flip(['password_hash','email_verify_code','sms_verify_code'])),JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR))
         ]);
     }
     $adminRows=$all($old,'SELECT id,name,email,password_hash,role,is_active FROM admin_users');
@@ -175,14 +175,14 @@ try {
             $encrypt(json_encode($row,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR)),
             (string)$row['order_no'],$row['product_id'],
             $row['product_name'],$row['amount'],(string)$row['currency'],(string)$row['payment_status'],
-            (string)$row['order_status'],(string)$row['order_type'],$row['entitlements_json'],
+            (string)$row['order_status'],(string)$row['order_type'],$encrypt($row['entitlements_json']),
             $encrypt($row['license_key']),(string)$row['paid_at']?:null,(string)$row['created_at']?:null
         ]);
     }
     foreach($all($old,'SELECT id,order_id,item_type,item_id,item_name,item_slug,sale_price,entitlements_json FROM order_items') as $row){
         $put($new,'INSERT INTO nv_private_order_items (old_item_id,old_order_id,item_type,item_id,item_name,item_slug,sale_price,entitlement_json) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE entitlement_json=VALUES(entitlement_json)',[
             (int)$row['id'],(int)$row['order_id'],(string)$row['item_type'],(int)$row['item_id'],
-            (string)$row['item_name'],$row['item_slug'],$row['sale_price'],$row['entitlements_json']
+            (string)$row['item_name'],$row['item_slug'],$row['sale_price'],$encrypt($row['entitlements_json'])
         ]);
     }
     foreach($all($old,'SELECT id,customer_id,referral_code,status,commission_rate FROM affiliate_accounts') as $row){
