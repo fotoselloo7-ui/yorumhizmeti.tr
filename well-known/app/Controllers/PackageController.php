@@ -30,7 +30,7 @@ class PackageController extends Controller
         ", [$slug]);
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
-        $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order ASC", [$package['id']]);
+        $fields = \App\Services\SmmOrderFields::fields($package);
         $variantPackages = $db->fetchAll("SELECT id, name, slug, price, discount_price, seo_title, og_title FROM packages WHERE category_id = ? AND status = 'active' ORDER BY sort_order ASC LIMIT 3", [$package['category_id']]);
         $relatedPackages = $db->fetchAll("
             SELECT p.*, c.name AS category_name, c.slug AS category_slug
