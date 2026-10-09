@@ -6,7 +6,7 @@
    <span class="nv57-history-pill"><?= count($nv62Owned) ?> doğrulanmış ürün</span>
  </div>
  <div class="panel-card-body">
-   <p class="nv57-history-note" style="margin-top:0;margin-bottom:14px">Bu liste eski NetVera hesabınıza bağlı, ödeme durumu doğrulanmış yazılımları gösterir. Misafir siparişleri kimlik doğrulanmadan burada görünmez.</p>
+   
    <div class="nv57-purchases">
     <?php foreach(array_slice($nv62Owned,0,30) as $script):
       $nvSlug=(string)($script['item_slug']??'');
@@ -29,7 +29,7 @@
     </article>
     <?php endforeach; ?>
    </div>
-   <p class="nv57-history-note">Eski NetVera indirme paketleri veya lisans anahtarı kayıtları burada herkese açık sunulmaz. Ürün teslimatı ve lisans talepleri için <a href="/destek/yeni">destek merkezi</a> kullanılabilir.</p>
+   
  </div>
 </section>
 <?php endif; ?>
