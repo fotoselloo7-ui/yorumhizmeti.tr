@@ -36,7 +36,6 @@
                     <div class="form-group">
                         <label for="content">İçerik</label>
                         <textarea name="content" id="content" class="form-control" rows="6"><?= e($section['content'] ?? '') ?></textarea>
-                        <span class="form-hint">HTML desteklenir. SEO metin alanı veya hizmet açıklamaları için kullanabilirsiniz.</span>
                     </div>
 
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
