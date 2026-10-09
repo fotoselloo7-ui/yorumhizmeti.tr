@@ -25,8 +25,9 @@ final class SmmCatalogService
         $sql = file_get_contents(BASE_PATH . '/database/migrations/smm-multi-provider-v1.sql');
         if ($sql === false) throw new \RuntimeException('Veritabanı kurulum dosyası okunamadı.');
         $db = Database::getInstance();
+        // Strip SQL comments BEFORE splitting: comments may themselves contain semicolons.
+        $sql = preg_replace('/^\s*--[^\r\n]*(?:\r?\n|$)/m', '', $sql);
         foreach (explode(';', $sql) as $statement) {
-            $statement = preg_replace('/^\s*--[^\r\n]*[\r\n]+/m', '', $statement);
             if (trim($statement) !== '') $db->getPdo()->exec(trim($statement));
         }
     }
