@@ -9,7 +9,7 @@
   <div class="adm-card-body">
    <?php foreach($messages as $m): ?>
    <div style="max-width:86%;padding:13px 15px;border:1px solid #e5e6f3;border-radius:13px;background:<?= $m['sender']==='admin'?'#f0edff':'#fafbfe' ?>;margin:0 0 11px <?= $m['sender']==='admin'?'auto':'0' ?>">
-    <strong style="font-size:11px;color:#5b50b6"><?= $m['sender']==='admin'?'NetVera Destek':'Ziyaretçi' ?></strong>
+    <strong style="font-size:11px;color:#5b50b6"><?= $m['sender']==='admin'?e(\App\Services\SupportDeskSettings::publicProfile()['name']):'Ziyaretçi' ?></strong>
     <p style="font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;margin:9px 0;color:#374561"><?= e($m['message']) ?></p>
     <small style="font-size:10px;color:#8090a9"><?= e($m['created_at']) ?></small>
    </div>
