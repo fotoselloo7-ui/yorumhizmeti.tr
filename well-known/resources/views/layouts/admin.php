@@ -113,6 +113,9 @@
                 <a href="/admin/ana-sayfa" class="<?= isActive('/admin/ana-sayfa') ?>">
                     <?= icon('home', 18) ?> Ana Sayfa Yönetimi
                 </a>
+                <a href="/admin/yorumlar" class="<?= isActive('/admin/yorumlar') ? 'active' : '' ?>">
+                    <?= icon('message-circle',18) ?> Müşteri Yorumları
+                </a>
                 <a href="/admin/referanslar" class="<?= isActive('/admin/referanslar') ? 'active' : '' ?>">
                     <?= icon('award', 18) ?> Referanslarımız
                 </a>
