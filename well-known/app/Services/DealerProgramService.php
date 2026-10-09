@@ -25,6 +25,19 @@ final class DealerProgramService
         } catch (\Throwable $e) { return false; }
     }
 
+    /** Additive, idempotent installation; preserves all current users and legacy commissions. */
+    public static function install(): void
+    {
+        $path=BASE_PATH.'/database/migrations/netvera-dealer-program-v2.sql';
+        $sql=@file_get_contents($path);
+        if($sql===false)throw new RuntimeException('Bayilik kurulum SQL dosyası bulunamadı.');
+        $sql=preg_replace('/^\s*--[^\r\n]*(?:\r?\n|$)/m','',$sql);
+        foreach(explode(';',$sql) as $statement) {
+            if(trim($statement)!=='') self::db()->exec(trim($statement));
+        }
+        if(!self::ready())throw new RuntimeException('Bayilik tabloları doğrulanamadı.');
+    }
+
     public static function account(int $userId): ?array
     {
         if ($userId < 1 || !self::ready()) return null;
