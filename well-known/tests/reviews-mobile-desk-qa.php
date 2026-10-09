@@ -38,4 +38,11 @@ $sw=$get('public/nv-desk-sw.js');
 if(str_contains($sw,'/admin/cep/veri'))throw new RuntimeException('Private API must never be precached.');
 $manifest=json_decode($get('public/nv-desk.webmanifest'),true,512,JSON_THROW_ON_ERROR);
 if(($manifest['start_url']??'')!=='/admin/cep'||($manifest['display']??'')!=='standalone')throw new RuntimeException('Invalid PWA manifest.');
+foreach([192,512] as $size){
+    $file=$base.'/public/assets/img/nv-desk-icon-'.$size.'.png';
+    $image=@getimagesize($file);
+    if(!$image || $image[0]!==$size || $image[1]!==$size ||
+       ($image['mime']??'')!=='image/png')
+        throw new RuntimeException('PWA raster icon corrupted: '.$file);
+}
 echo "PASS: {$count} review/payment/support/mobile checks; PWA private data not cached\n";
