@@ -6,7 +6,7 @@
 <div class="adm31-help">
   <?= icon('shield-check',18) ?>
   <div><strong>Yayınlanan referanslar yalnızca gerçek çalışmalardan oluşur.</strong>
-    <p>Web/yazılım referansları müşteri sitesine gider. Reels ve postların kapağı ana sayfada görünür. Instagram gömmeyi engelleyebildiği için kesintisiz site içi video oynatma amacıyla YouTube (liste dışı), Bunny Stream, Cloudflare Stream, Vimeo veya harici MP4 bağlantısı kullanılabilir. Bu seçenek video dosyasını bizim sunucuda tutmaz. Yerel MP4 yükleme isteğe bağlı olarak korunmuştur.</p>
+    <p>Referanslarda video düğmesinin metni her zaman “Videoyu İzle” olur. Sadece Instagram bağlantısı olan içerikler yeni sekmede Instagram’da açılır. YouTube Videosu / Shorts türü seçilenler bizim oynatma penceremizde gösterilir. Instagram referansına isteğe bağlı harici video eklersen site içinde oynatma öncelikli olur. Kapak görseli her iki durumda da korunur.</p>
   </div>
 </div>
 <div class="adm-card">
@@ -105,16 +105,18 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
       }
     }
     const instagram = media.value.startsWith('instagram_');
+    const youtube = media.value === 'youtube_video';
     if (videoField) videoField.style.display = instagram ? '' : 'none';
     if (videoInput) videoInput.disabled = !instagram;
     if (hostedVideoField) hostedVideoField.style.display = instagram ? '' : 'none';
     if (hostedVideoInput) hostedVideoInput.disabled = !instagram;
-    url.placeholder = instagram ?
-      (media.value === 'instagram_reel' ? 'https://www.instagram.com/reel/ABC123/' : 'https://www.instagram.com/p/ABC123/') :
+    url.placeholder = youtube ? 'https://www.youtube.com/watch?v=... veya https://youtu.be/...' :
+      instagram ? (media.value === 'instagram_reel' ? 'https://www.instagram.com/reel/ABC123/' : 'https://www.instagram.com/p/ABC123/') :
       'https://musteri-sitesi.com';
-    url.required = instagram || media.value === 'website';
-    hint.textContent = instagram ?
-      'Herkese açık Instagram bağlantısı girin. Video veya gönderi, kapak tıklanınca sayfada açılır.' :
+    url.required = instagram || youtube || media.value === 'website';
+    hint.textContent = youtube ?
+      'YouTube videosu veya Shorts bağlantısı girin. Kapağa basılınca video sitemizde açılır.' :
+      instagram ? 'Instagram linki tek başına eklenirse Videoyu İzle, Instagram’da açar. Aynı referansa ayrıca harici video bağlantısı eklenirse kendi sitemizde oynatılır.' :
       (media.value === 'website' ? 'Müşteri sitesine direkt yönlendirilir.' : 'İsteğe bağlı görsel bağlantısı.');
   }
   group.addEventListener('change', sync);
