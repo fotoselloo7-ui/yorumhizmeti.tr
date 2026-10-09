@@ -10,14 +10,14 @@
       </div>
       <?php if(!$dealerReady): ?>
         <div class="nv62-dealer-card">
-          <h2><?= icon('database',18) ?> Bayilik modülü kurulumu bekliyor</h2>
+          <h2>Bayilik Başvurusu</h2>
           
         </div>
       <?php elseif(!$dealer): ?>
         <div class="nv62-dealer-card nv62-dealer-apply">
           <span class="nv62-dealer-eyebrow"><?= icon('handshake',15) ?> YAZILIM İŞ ORTAKLIĞI</span>
           <h2>NetVera Bayilik Programı</h2>
-          <p>Yazılım çözümlerini müşterilerinize tanıtın. Başvurunuz onaylandıktan sonra size özel referans bağlantısı ve belirlenen komisyon oranı açılır.</p>
+          
           <form method="post" action="/bayilik/basvur">
             <?= csrfField() ?>
             <button type="submit" class="btn btn-primary"><?= icon('send',15) ?> Bayilik Başvurusu Gönder</button>
