@@ -67,7 +67,7 @@
   <div class="adm-card-header"><h3><?= icon('handshake',18) ?> Bayilik Başvuruları ve İş Ortakları</h3><a class="btn btn-outline btn-sm" href="/admin/bayilik">Bayilik Yönetimine Git <?= icon('arrow-right',12) ?></a></div>
   <div class="adm-card-body">
    <?php if(!\App\Services\DealerProgramService::ready()): ?>
-     <p class="text-secondary">Bayilik başvurularını ve iş ortaklarını Bayilik Yönetimi bölümünden yönetin.</p>
+     
    <?php else: ?>
    <div class="table-responsive"><table class="adm-table">
     <thead><tr><th>Müşteri</th><th>Referans</th><th>Durum</th><th>Seviye</th><th>Oran</th></tr></thead><tbody>
@@ -106,7 +106,7 @@
        <?php if($unclaimedOrders): ?><details class="nv67-archive-details"><summary>Doğrulanmamış eski siparişleri incele (<?= (int)$stats['unclaimed'] ?>)</summary>
        <div class="table-responsive"><table class="adm-table"><thead><tr><th>Sipariş</th><th>Alıcı</th><th>Ürün</th><th>Ödeme</th></tr></thead><tbody>
        <?php foreach($unclaimedOrders as $o): ?><tr><td><?= e($o['order_no']) ?></td><td><?= e($o['customer_name']?:'Misafir') ?></td><td><?= e($o['product_name']) ?></td><td><?= e($o['payment_status']) ?></td></tr><?php endforeach; ?>
-       </tbody></table></div><p class="text-secondary">Misafir siparişleri yalnızca e-posta benzerliğiyle hesaba/lisansa bağlanmaz.</p></details><?php endif; ?>
+       </tbody></table></div></details><?php endif; ?>
    </div>
  </section>
  <?php endif; ?>
