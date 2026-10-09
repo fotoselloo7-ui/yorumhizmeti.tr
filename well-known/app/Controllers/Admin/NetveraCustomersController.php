@@ -19,7 +19,7 @@ final class NetveraCustomersController extends Controller
             if ($ready) {
                 $stats['customers']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_user_map")->fetchColumn();
                 $stats['orders']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_orders")->fetchColumn();
-                $stats['licenses']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_orders WHERE license_key_encrypted IS NOT NULL OR entitlement_json IS NOT NULL")->fetchColumn();
+                $stats['licenses']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_orders WHERE payment_status IN ('paid','completed','success') AND (license_key_encrypted IS NOT NULL OR entitlement_json IS NOT NULL)")->fetchColumn();
                 $stats['dealers']=(int)$pdo->query("SELECT COUNT(*) FROM nv_private_affiliates")->fetchColumn();
                 $members=$this->db->fetchAll("SELECT u.id,u.name,u.email,u.status,
                     m.old_customer_id,m.is_agency,m.want_dealer,m.source_status,
