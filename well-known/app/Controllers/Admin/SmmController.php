@@ -118,6 +118,33 @@ final class SmmController extends Controller
         redirect('/admin/smm?provider='.(int)($_POST['provider_filter']??0));
     }
 
+    public function syncAll(): void
+    {
+        $this->ownerOnly();
+        Csrf::check();
+        try {
+            $stats=SmmCatalogService::syncAll();
+            logActivity('smm_sync_all','Panel sayısı: '.$stats['providers'].'; servis: '.$stats['services']);
+            $message=$stats['providers'].' tedarikçi eşitlendi, '.$stats['services'].' servis okundu.';
+            if($stats['errors']) $message.=' Hatalar: '.implode(' | ',$stats['errors']);
+            flash($stats['errors']?'warning':'success',$message);
+        } catch (\Throwable $e) {flash('error',$e->getMessage());}
+        redirect('/admin/smm');
+    }
+
+    public function bulkPublish(): void
+    {
+        Csrf::check();
+        try {
+            $result=SmmCatalogService::bulkPublish($_POST);
+            logActivity('smm_bulk_import','Toplu paket oluşturma: '.$result['created'].' başarılı, '.count($result['skipped']).' atlandı');
+            $summary=$result['created'].' paket taslak olarak oluşturuldu.';
+            if($result['skipped']) $summary.=' Atlananlar: '.implode(', ',array_slice($result['skipped'],0,8));
+            flash($result['skipped']?'warning':'success',$summary);
+        } catch (\Throwable $e) {flash('error',$e->getMessage());}
+        redirect('/admin/smm?provider='.(int)($_POST['provider_filter']??0).'#smm-bulk');
+    }
+
     public function mapping(string $id): void
     {
         Csrf::check();
