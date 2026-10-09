@@ -150,7 +150,7 @@ def main():
             sys.exit("Required demo route missing: " + required)
     home_html = (OUT / "index.html").read_text(encoding="utf-8")
     # Count rendered card elements, not JS selector strings in inline scripts.
-    reference_count = len(re.findall(r'<article\\b[^>]*\\bdata-ref-card(?:\\s|>)',
+    reference_count = len(re.findall(r'<article[^>]+data-ref-card',
                                      home_html, flags=re.S))
     if reference_count != 6:
         sys.exit(f"Missing cover-backed portfolio examples: {reference_count}/6")
