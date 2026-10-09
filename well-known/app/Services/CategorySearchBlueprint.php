@@ -341,7 +341,7 @@ final class CategorySearchBlueprint {
 
   public static function preview(): array {
     $db=Database::getInstance();
-    $categories=$db->fetchAll("SELECT id,name,slug,seo_title,seo_description,seo_focus_keyword FROM categories");
+    $categories=$db->fetchAll("SELECT id,name,slug,seo_title,seo_description,seo_focus_keyword,og_title,og_description FROM categories");
     $profiles=self::profiles();$found=[];
     foreach($categories as $row) {
       $slug=strtolower((string)$row['slug']);
@@ -367,6 +367,10 @@ final class CategorySearchBlueprint {
           $update['seo_description']=$suggest['desc'];
       }
       if(trim((string)($cat['seo_focus_keyword']??''))==='')$update['seo_focus_keyword']=$suggest['focus'];
+      $ogTitle=trim((string)($cat['og_title']??''));
+      if($ogTitle===''||preg_match('/Yorum\\s*Hizmeti|YorumHizmeti/iu',$ogTitle))$update['og_title']=$suggest['title'];
+      $ogDescription=trim((string)($cat['og_description']??''));
+      if($ogDescription===''||preg_match('/Yorum\\s*Hizmeti|YorumHizmeti/iu',$ogDescription))$update['og_description']=$suggest['desc'];
       if($update){$db->update('categories',$update,'id=?',[(int)$cat['id']]);$counts['categories']++;$counts['fields']+=count($update);}
       $currentSeo=NetveraSeoBridge::get('category',(int)$cat['id']);
       if(empty($currentSeo['secondary_keywords'])||empty($currentSeo['main_question'])){
