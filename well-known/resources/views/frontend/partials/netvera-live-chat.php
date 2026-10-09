@@ -1,4 +1,5 @@
 <?php
+$nvAgentProfile=\App\Services\SupportDeskSettings::publicProfile();
 $nvCurrentChat=max(0,(int)($_SESSION['nv_active_chat_id']??0));
 if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($nvCurrentChat))
     $nvCurrentChat=0;
@@ -9,7 +10,11 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
  </button>
  <section class="nv-chat-panel" id="nv-chat-panel" aria-label="NetVera canlı destek" hidden>
    <header class="nv-chat-header">
-     <div><strong><?= icon('headphones',18) ?> NetVera Destek</strong><small>Mesajınızı bırakın, buradan yanıtlayalım.</small></div>
+     <div class="nv68-chat-person">
+       <?php if(!empty($nvAgentProfile['photo'])): ?><img src="<?= e(upload_url($nvAgentProfile['photo'])) ?>" alt="">
+       <?php else: ?><span class="nv68-chat-avatar"><?= icon('headphones',20) ?></span><?php endif; ?>
+       <div><strong><?= e($nvAgentProfile['name']) ?></strong><small><?= e($nvAgentProfile['title']) ?></small></div>
+     </div>
      <button type="button" data-nv-chat-close aria-label="Sohbet penceresini kapat"><?= icon('x',18) ?></button>
    </header>
    <div class="nv-chat-messages" data-nv-chat-messages aria-live="polite">
@@ -47,11 +52,13 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
  const identity=root.querySelector('[data-nv-chat-identity]');
  const idInput=root.querySelector('[data-nv-chat-id]');
  let pending=false;
+ let latestCount=null;
+ let soundReady=false;
  function open(state){
    panel.hidden=!state;
    toggle.hidden=state;
    toggle.setAttribute('aria-expanded',String(state));
-   if(state)refresh();
+   if(state){soundReady=window.NvDeskAlerts?.unlock()||false;refresh();}
  }
  toggle.addEventListener('click',()=>open(panel.hidden));
  close.addEventListener('click',()=>open(false));
@@ -69,8 +76,14 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
      if(!response.ok)return;
      const payload=await response.json();
      if(!payload.ok)return;
+     const messages=payload.messages||[];
+     const prior=latestCount;
+     if(prior!==null && messages.length>prior && messages.slice(prior).some(item=>item.sender==='admin') && soundReady){
+        window.NvDeskAlerts?.play('soft');
+     }
+     latestCount=messages.length;
      list.textContent='';
-     for(const item of payload.messages||[])bubble(item.message,item.sender);
+     for(const item of messages)bubble(item.message,item.sender);
      list.scrollTop=list.scrollHeight;
    }catch(e){status.textContent='Mesajlar güncellenemedi. Bağlantıyı kontrol edin.';}
  }
@@ -92,6 +105,6 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
    finally{pending=false;button.disabled=false;refresh();}
  });
  if(Number(idInput.value)>0){identity.querySelectorAll('input').forEach(i=>i.required=false);}
- setInterval(()=>{if(!panel.hidden)refresh()},12000);
+ setInterval(()=>{if(!panel.hidden)refresh()},5000);
 }());
 </script>
