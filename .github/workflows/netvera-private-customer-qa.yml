@@ -10,6 +10,8 @@ on:
       - 'well-known/database/migrations/netvera-private-customer-v1.sql'
       - 'well-known/database/migrations/netvera-dealer-program-v2.sql'
       - 'well-known/app/Services/DealerProgramService.php'
+      - 'well-known/tests/netvera-dealer-program-qa.php'
+      - 'well-known/resources/views/frontend/account/partials/netvera-owned-software.php'
       - 'well-known/app/Controllers/DealerController.php'
       - 'well-known/app/Controllers/Admin/DealerController.php'
       - 'well-known/resources/views/frontend/account/dealer.php'
@@ -128,3 +130,11 @@ jobs:
           native_after=$(db "SELECT CONCAT((SELECT COUNT(*) FROM orders),':',(SELECT COUNT(*) FROM order_items),':',(SELECT COUNT(*) FROM payment_gateways))")
           [ "$native_before" = "$native_after" ]
           echo "PASS: source isolation, user/admin mapping, license encryption, preserved guest order, dealer, support, referral, idempotency and untouched native payments"
+      - name: Functional dealer approval and ownership tests
+        shell: bash
+        env:
+          NETVERA_DEALER_QA_ONLY: '1'
+        run: |
+          set -euo pipefail
+          php -l well-known/tests/netvera-dealer-program-qa.php
+          php well-known/tests/netvera-dealer-program-qa.php
