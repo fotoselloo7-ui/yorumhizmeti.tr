@@ -76,10 +76,7 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
             <label class="nv36-check"><input name="indirim" type="checkbox" value="1" <?= $softwareDiscount?'checked':'' ?>><span>İndirimli yazılımlar</span><?= icon('tag',14) ?></label>
             <label class="nv36-check"><input name="one_cikan" type="checkbox" value="1" <?= $softwareFeatured?'checked':'' ?>><span>Öne çıkanlar</span><?= icon('star',14) ?></label>
           </div>
-          <div class="nv36-filter-section nv36-rating-section">
-            <strong class="nv36-filter-label">Müşteri Değerlendirmesi</strong>
-            <p><?= icon('shield-check',14) ?> Ürün bazında doğrulanmış değerlendirmeler henüz bağlı değil. Puan uydurulmaz; gerçek değerlendirmeler eklendiğinde filtre etkinleştirilebilir.</p>
-          </div>
+
           <input type="hidden" name="siralama" value="<?= e($softwareSort) ?>">
           <button class="nv36-apply" type="submit">Filtreleri Uygula <?= icon('arrow-right',14) ?></button>
         </form>
@@ -162,7 +159,7 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
         <?php else: ?>
         <div class="nv33-catalog-empty">
           <span><?= icon('search',32) ?></span><h3>Bu filtrelerle eşleşen yazılım bulunamadı.</h3>
-          <p>Kategoriyi veya fiyat aralığını değiştirebilir, tüm aktif yazılımlara dönebilirsiniz.</p>
+          
           <a href="/hazir-yazilimlar">Tüm Yazılımları Göster <?= icon('arrow-right',14) ?></a>
         </div>
         <?php endif; ?>
