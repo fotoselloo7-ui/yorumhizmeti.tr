@@ -18,7 +18,7 @@ $nvTickets = $nvHistory['tickets'] ?? [];
             <div><small>Referans Kodunuz</small><strong><?= e($nvAffiliate['referral_code'] ?: '—') ?></strong></div>
             <div><small>Eski Komisyon Geçmişi</small><strong><?= money((float)($nvHistory['commission_total']??0)) ?></strong></div>
         </div>
-        <p class="nv57-history-note">Burada eski NetVera komisyonları gösterilir. Yeni satışlara otomatik komisyon tahakkuku, eski ödeme/bayilik sözleşmesi doğrulanmadan başlamaz.</p>
+        
         <?php endif; ?>
         <?php if ($nvTickets): ?>
         <div class="nv57-dealer-summary" style="margin:10px 0 15px;grid-template-columns:1fr">
@@ -53,7 +53,7 @@ $nvTickets = $nvHistory['tickets'] ?? [];
             </article>
             <?php endforeach; ?>
         </div>
-        <p class="nv57-history-note">Eski yazılım lisansı, kurulum veya yetki sorunlarınız için <a href="/destek/yeni">destek talebi oluşturabilirsiniz</a>.</p>
+        
         <?php endif; ?>
     </div>
 </section>
