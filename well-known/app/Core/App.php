@@ -163,6 +163,7 @@ class App
         $r->post('/admin/smm/calistir', 'Admin\\SmmController@run');
         $r->post('/admin/smm/is/{id}/yenile', 'Admin\\SmmController@refill');
         $r->post('/admin/smm/is/{id}/iptal', 'Admin\\SmmController@cancel');
+        $r->post('/admin/smm/is/{id}/uzlastir', 'Admin\\SmmController@reconcile');
 
         // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
         $r->get('/admin/netvera-gelen-kutusu', 'Admin\\NetveraInboxController@index');
