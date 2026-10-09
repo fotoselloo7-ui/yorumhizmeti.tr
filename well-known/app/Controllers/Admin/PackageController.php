@@ -120,6 +120,7 @@ class PackageController extends Controller
         }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
         $id=$this->db->insert('packages',$data);
+        \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('software_create', 'Hazır yazılım oluşturuldu: '.$data['name']);
         flash('success','Hazır yazılım eklendi. Aktifse yazılım kataloğunda otomatik görünür.');
@@ -163,6 +164,7 @@ class PackageController extends Controller
         }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
         $this->db->update('packages',$data,'id = ?',[(int)$id]);
+        \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('software_update','Hazır yazılım güncellendi: '.$data['name']);
         flash('success','Hazır yazılım güncellendi.');
@@ -183,6 +185,7 @@ class PackageController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $pkgId = $this->db->insert('packages', $data);
+        \App\Services\PackageHighlightsService::save((int)$pkgId,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$pkgId,$_POST);
         logActivity('package_create', 'Paket oluşturuldu: ' . $data['name']);
         flash('success', 'Paket oluşturuldu.');
@@ -211,6 +214,7 @@ class PackageController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $this->db->update('packages', $data, 'id = ?', [(int) $id]);
+        \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('package_update', 'Paket güncellendi: ' . $data['name']);
         flash('success', 'Paket güncellendi.');
