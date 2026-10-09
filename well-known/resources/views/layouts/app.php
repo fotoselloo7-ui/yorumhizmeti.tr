@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($pageTitle ?? setting('default_seo_title', 'Yorum Hizmeti')) ?></title>
+    <title><?= e($pageTitle ?? setting('default_seo_title', 'NetVera Teknoloji Yazılım')) ?></title>
     <meta name="description" content="<?= e($metaDescription ?? setting('default_seo_description')) ?>">
     <?php
       $nvRobots = (string)($nvSeoData['robots'] ?? '');
@@ -25,7 +25,7 @@
     <meta property="og:image" content="<?= e($ogImage) ?>">
     <?php endif; ?>
     <meta property="og:url" content="<?= e($canonicalUrl ?? url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
-    <meta property="og:site_name" content="YorumHizmeti.tr">
+    <meta property="og:site_name" content="<?= e(setting('site_name', 'NetVera Teknoloji Yazılım')) ?>">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
@@ -173,7 +173,7 @@
                         <path d="M10.5 11.5h15v10.2a2.3 2.3 0 0 1-2.3 2.3h-7.1l-4.6 3.5V24h-1a2 2 0 0 1-2-2V13.5a2 2 0 0 1 2-2Z" fill="white" fill-opacity=".96"/>
                         <path d="m14.4 17.6 2.3 2.2 5-5" stroke="url(#yhLogoGrad)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <?= e(setting('site_name', 'Yorum Hizmeti')) ?>
+                    <?= e(setting('site_name', 'NetVera Teknoloji Yazılım')) ?>
                 </a>
 
                 <?php
@@ -501,7 +501,7 @@
             ?>
             <div class="footer-grid footer-grid-v9 yh49-footer-grid">
                 <div class="footer-brand">
-                    <h3>YorumHizmeti.tr</h3>
+                    <h3><?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?></h3>
                     <p><?= e(setting('site_slogan', 'Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web ve dijital çözümlere kadar güvenilir hizmet ortağınız.')) ?></p>
                     <div class="footer-social footer-social-v9">
                         <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
@@ -606,7 +606,7 @@
             </div>
 
             <div class="footer-bottom">
-                <span><?= e(setting('footer_text', '© ' . date('Y') . ' YorumHizmeti.tr - Tüm hakları saklıdır.')) ?></span>
+                <span><?= e(setting('footer_text', '© ' . date('Y') . ' NetVera Teknoloji Yazılım · netvera.tr - Tüm hakları saklıdır.')) ?></span>
                 <span><?= icon('shield', 11) ?> Güvenli Ödeme · 7/24 Destek · %100 Müşteri Memnuniyeti</span>
             </div>
         </div>
