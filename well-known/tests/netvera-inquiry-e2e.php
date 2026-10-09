@@ -34,6 +34,11 @@ try{
     test(str_contains($page,'Canlı Destek'),'sitewide chat widget visible');
     test(preg_match('/name="_csrf_token" value="([0-9a-f]{64})"/',$page,$m)===1,'CSRF token in session');
     $csrf=$m[1];
+    [$badPhoneStatus,$badPhoneBody]=httpRequest($base.'/netvera/canli-destek/gonder',$cookie,[
+        '_csrf_token'=>$csrf,'source_type'=>'chat','transport'=>'json',
+        'name'=>'Automated QA','phone'=>'bad','message'=>'Telefon olmadan talep testi'
+    ]);
+    test($badPhoneStatus===422,'new chat rejects an invalid phone number');
     [$status,$body]=httpRequest($base.'/netvera/canli-destek/gonder',$cookie,[
         '_csrf_token'=>$csrf,'source_type'=>'chat','transport'=>'json',
         'name'=>'Automated QA','phone'=>'05551234567',
