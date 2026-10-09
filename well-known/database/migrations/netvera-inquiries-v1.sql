@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS nv_public_inquiries (
  inquiry_text TEXT NOT NULL,
  status ENUM('new','open','replied','closed') NOT NULL DEFAULT 'new',
  admin_note TEXT NULL,
+  is_important TINYINT(1) NOT NULL DEFAULT 0,
  session_hash CHAR(64) NOT NULL,
  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
