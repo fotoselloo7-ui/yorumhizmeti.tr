@@ -1,0 +1,80 @@
+/* V56: compact category-aware fast actions, same premium YorumHizmeti language. */
+.nv26-quick.nv56-quick{position:relative;z-index:201}
+.nv26-quick.nv56-quick>summary{gap:7px}
+.nv26-quick.nv56-quick[open]>summary{color:#613fe1;background:#f6f3ff;border-radius:9px}
+.nv26-quick .nv56-quick-panel{
+ display:block!important;box-sizing:border-box!important;
+ width:min(670px,calc(100vw - 32px))!important;min-width:0!important;max-width:none!important;
+ max-height:min(72vh,560px)!important;overflow-y:auto!important;overflow-x:hidden!important;
+ padding:18px!important;gap:0!important;right:0!important;
+ border:1px solid #dfe3f4!important;border-radius:17px!important;
+ background:#fff!important;box-shadow:0 27px 58px rgba(19,32,81,.17)!important;
+}
+.nv56-quick-top{display:flex;flex-direction:column;gap:5px;padding:0 0 13px}
+.nv56-quick-top strong{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#192951}
+.nv56-quick-top strong .icon{color:#6644dd}
+.nv56-quick-top small{font-size:10px;color:#7f8aa7;line-height:1.5}
+.nv56-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding-bottom:15px;border-bottom:1px solid #edf0f7}
+.nv26-quick .nv56-quick-action{
+ display:flex!important;align-items:center!important;gap:8px!important;min-height:46px;
+ min-width:0;padding:9px 10px!important;background:#f5f3ff!important;
+ border:1px solid #e5defd;border-radius:10px;color:#6142ce!important;
+ font-size:10px!important;font-weight:750!important;line-height:1.4!important;
+ transition:transform .22s ease,background .22s ease,box-shadow .22s ease!important;
+}
+.nv56-quick-action>span{flex:1;min-width:0}
+.nv56-quick-action>.icon:first-child{flex:0 0 16px}
+.nv56-quick-action>.icon:last-child{opacity:.65;width:12px;flex:0 0 12px}
+.nv26-quick .nv56-quick-action:hover{transform:translateY(-2px);background:#ece7ff!important;box-shadow:0 7px 13px rgba(96,73,195,.12)}
+.nv56-quick-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding:17px 0 12px}
+.nv56-quick-group{min-width:0}
+.nv56-quick-group h3{display:flex;align-items:center;gap:6px;margin:0 0 8px;font-size:10.5px;line-height:1.4;font-weight:800;color:#263858}
+.nv56-quick-group h3 .icon{flex:0 0 14px;color:#724fda}
+.nv26-quick .nv56-quick-category{
+ display:flex!important;align-items:center!important;gap:8px!important;min-height:35px;
+ min-width:0;margin:1px 0;padding:8px!important;
+ color:#596984!important;border:1px solid transparent;border-radius:9px;
+ font-size:10px!important;font-weight:600!important;line-height:1.35!important;
+ transition:background .2s ease,color .2s ease,transform .2s ease!important
+}
+.nv56-quick-category>span{min-width:0;overflow-wrap:anywhere}
+.nv56-quick-category>.icon{flex:0 0 14px;color:#8064d9}
+.nv26-quick .nv56-quick-category:hover{transform:translateX(2px);color:#5538c1!important;background:#f6f3ff!important}
+.nv56-quick-all{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:8px!important;min-height:36px;padding:10px 11px!important;
+ border:1px solid #e2e2f4;border-radius:9px;background:#faf9ff!important;
+ color:#5b42c8!important;font-size:10px!important;font-weight:800!important;
+}
+/* Keep marquee animation alive on hover. Interactive drags control the CSS animation clock. */
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable{
+ cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;
+}
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable a{-webkit-user-drag:none}
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable:hover .yh49-marquee-track,
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable:focus-within .yh49-marquee-track{
+ animation-play-state:running!important
+}
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable.yh56-is-dragging{
+ cursor:grabbing
+}
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable.yh56-is-dragging .yh49-marquee-track{
+ animation-play-state:paused!important;
+}
+.yh-home-v6 .yh49-marquee-row.yh56-grabbable.yh56-is-dragging .yh49-category-link{cursor:grabbing}
+@media(max-width:960px){
+ .nv26-quick .nv56-quick-panel{position:static!important;width:100%!important;max-height:65vh!important;padding:12px!important;box-shadow:none!important}
+ .nv56-quick-groups{gap:10px}
+}
+@media(max-width:620px){
+ .nv56-quick-actions{grid-template-columns:1fr;gap:6px}
+ .nv56-quick-groups{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 10px}
+ .nv26-quick .nv56-quick-panel{max-height:54vh!important}
+}
+@media(max-width:380px){.nv56-quick-groups{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+ .nv26-quick .nv56-quick-category,.nv26-quick .nv56-quick-action{transition:none!important}
+ .nv26-quick .nv56-quick-category:hover,.nv26-quick .nv56-quick-action:hover{transform:none!important}
+ .yh-home-v6 .yh49-marquee-row.yh56-grabbable{touch-action:pan-y;cursor:auto}
+ .yh-home-v6 .yh49-marquee-row.yh56-grabbable .yh49-marquee-track{animation:none!important}
+}
