@@ -50,6 +50,11 @@
  color:#fff!important;transform:translateX(3px);
 }
 .site-footer .yh49-footer-grid .footer-col>a.yh49-footer-link:hover:before{background:#a98bff}
+.site-footer .yh49-footer-grid .yh49-footer-subtitle{
+ display:flex;align-items:center;gap:7px;margin:13px 0 5px;
+ padding-top:11px;border-top:1px solid rgba(255,255,255,.09);
+ color:#c7b5ff;font-size:10px;font-weight:800;letter-spacing:.035em
+}
 .site-footer .yh49-footer-grid .footer-col .yh49-footer-all{
  display:inline-flex!important;align-items:center;gap:5px;color:#beb3ff!important;
  font-size:10px!important;font-weight:800!important;margin-top:8px!important;
