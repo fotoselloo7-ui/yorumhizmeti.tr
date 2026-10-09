@@ -14,6 +14,7 @@ $files=[
   'resources/views/frontend/support/create.php'=>['<strong>Bilgilendirme</strong>'],
   'resources/views/frontend/software.php'=>['nv36-rating-section','doğrulanmış değerlendirmeler henüz bağlı değil'],
   'resources/views/frontend/netvera-script-detail.php'=>['Yönetim panelinden herkese açık demo hesabı tanımlanmadı'],
+  'resources/views/frontend/payment-iframe.php'=>['nv45-preview-alert','nv45-summary-notice','Yalnızca yerel tasarım önizlemesi'],
 ];
 $count=0;
 foreach($files as $path=>$disallowed){
