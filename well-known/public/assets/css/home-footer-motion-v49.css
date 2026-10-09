@@ -150,8 +150,8 @@
 .yh-home-v6 .yh49-marquee-set{
  display:flex;flex:0 0 auto;align-items:stretch;gap:var(--yh49-gap);padding-right:var(--yh49-gap);
 }
-.yh-home-v6 .yh49-marquee-primary .yh49-marquee-track{animation:yh49-marquee-left 36s linear infinite}
-.yh-home-v6 .yh49-marquee-secondary .yh49-marquee-track{animation:yh49-marquee-right 44s linear infinite}
+.yh-home-v6 .yh49-marquee-primary .yh49-marquee-track{animation:yh49-marquee-left 180s linear infinite}
+.yh-home-v6 .yh49-marquee-secondary .yh49-marquee-track{animation:yh49-marquee-right 210s linear infinite}
 .yh-home-v6 .yh49-marquee-row:hover .yh49-marquee-track,
 .yh-home-v6 .yh49-marquee-row:focus-within .yh49-marquee-track{animation-play-state:paused}
 .yh-home-v6 .yh49-category-link{
@@ -240,4 +240,43 @@
  .yh-home-v6 .yh49-marquee-track{animation:none!important;transform:none!important;will-change:auto}
  .yh-home-v6 .yh49-marquee-row{overflow-x:auto}
  .yh-home-v6 .yh49-category-link,.yh-home-v6 .nv29-service-card{transition:none}
+}
+
+/* v50: slow, calm paired category carousels and exact bank icon/text centering. */
+.site-footer .footer-payments-v4.footer-payment-logos .footer-payment-brands-v23 > .footer-payment-bank{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:92px!important;min-width:92px!important;max-width:92px!important;
+ height:50px!important;min-height:50px!important;padding:0!important;
+ margin:0!important;background:#fff!important;
+ border:1px solid #e5e8f2!important;border-radius:11px!important;
+ box-sizing:border-box!important;vertical-align:middle!important;
+}
+.site-footer .footer-payments-v4.footer-payment-logos .footer-payment-brands-v23 > .footer-payment-bank > .yh50-bank-inline{
+ display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;
+ justify-content:center!important;gap:5px!important;
+ width:auto!important;max-width:100%!important;height:auto!important;min-height:0!important;
+ margin:0!important;padding:0!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ color:#142b62!important;white-space:nowrap!important;
+ font-size:10px!important;line-height:1!important;
+ transform:none!important;position:static!important;
+ box-shadow:none!important;
+}
+.site-footer .footer-payment-bank .yh50-bank-inline .icon{
+ display:inline-block!important;position:static!important;
+ flex:0 0 14px!important;width:14px!important;height:auto!important;
+ padding:0!important;margin:0!important;
+ color:#2756c7!important;line-height:1!important;
+ font-size:14px!important;vertical-align:middle!important;
+}
+.site-footer .footer-payment-bank .yh50-bank-inline b{
+ display:inline-block!important;position:static!important;
+ margin:0!important;padding:0!important;
+ color:#142b62!important;font-size:9px!important;line-height:1.2!important;
+ letter-spacing:-.025em!important;font-weight:800!important;white-space:nowrap!important;
+}
+/* Maintain a static, horizontally usable list for visitors who disable animations. */
+@media(prefers-reduced-motion:reduce){
+ .yh-home-v6 .yh49-marquee-primary .yh49-marquee-track,
+ .yh-home-v6 .yh49-marquee-secondary .yh49-marquee-track{animation:none!important}
 }
