@@ -62,6 +62,12 @@ class CartController extends Controller
             return;
         }
 
+        $smmLink = \App\Services\SmmCatalogService::mapping($packageId);
+        if ($smmLink && (!$smmLink['enabled'] || !$smmLink['is_available'] || !$smmLink['provider_active'])) {
+            flash('error', 'Bu hizmet şu anda siparişe kapalı.');
+            redirect('/paket/' . $pkg['slug']);
+            return;
+        }
         $min = max(1, (int)$pkg['min_quantity']);
         $max = max($min, (int)$pkg['max_quantity']);
         $quantity = max($min, min($max, $quantity));
