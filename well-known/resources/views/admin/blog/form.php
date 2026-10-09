@@ -177,7 +177,7 @@
                     <span id="nv44-overall-score" class="nv44-overall-score" aria-live="polite">0 / 100</span>
                 </div>
                 <div class="adm-card-body">
-                    <p class="nv44-quality-subtitle">Yazarken anlık hesaplanır. Puanlar içerik hazırlığı içindir, sıralama garantisi değildir.</p>
+                    
                     <div class="nv44-quality-meters">
                         <?php foreach(['seo'=>'Teknik SEO','geo'=>'GEO / AIO','content'=>'İçerik Kalitesi'] as $kind=>$name): ?>
                         <div class="nv44-quality-meter" data-quality-meter="<?= e($kind) ?>">
