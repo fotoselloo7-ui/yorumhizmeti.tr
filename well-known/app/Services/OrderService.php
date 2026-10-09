@@ -14,6 +14,9 @@ class OrderService
 
     public function createOrder(int $userId, array $cartItems, string $paymentMethod, string $paymentGateway, ?string $customerNote = null): int
     {
+        $pdo = $this->db->getPdo();
+        $pdo->beginTransaction();
+        try {
         $orderNumber = $this->generateOrderNumber();
         $totalAmount = 0;
 
@@ -58,11 +61,17 @@ class OrderService
                     ]);
                 }
             }
+            \App\Services\SmmFulfillmentService::attachOrderItem($orderId, $orderItemId, (int)$item['id'], (int)$qty, $item['fields'] ?? []);
         }
 
         $this->logStatus($orderId, null, 'payment_pending', 'Sipariş oluşturuldu.', 'system');
 
+        $pdo->commit();
         return $orderId;
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            throw $e;
+        }
     }
 
     public function updateStatus(int $orderId, string $newStatus, ?string $note = null, string $createdBy = 'admin'): void
