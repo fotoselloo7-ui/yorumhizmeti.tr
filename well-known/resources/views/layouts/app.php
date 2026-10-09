@@ -74,6 +74,7 @@
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
+    <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
