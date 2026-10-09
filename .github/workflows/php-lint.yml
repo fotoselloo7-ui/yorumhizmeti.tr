@@ -20,6 +20,8 @@ jobs:
 
       - name: Offline SMM provider encryption and endpoint QA
         run: php well-known/tests/smm-api-qa.php
+      - name: Social media target validation and package carousel QA
+        run: php well-known/tests/smm-target-and-ui-qa.php
 
       - name: Categorized project references and Instagram embed regression
         run: php well-known/tests/reference-portfolio-qa.php
