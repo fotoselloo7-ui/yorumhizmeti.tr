@@ -30,7 +30,7 @@ $badgeBg = $badgeBgMap[$info['badge']['color']] ?? '#f1f5f9';
 <div class="adm-page-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-6);">
     <div>
         <h1 style="font-size:var(--font-size-2xl); font-weight:700; color:var(--color-dark); margin:0;"><?= icon('shield', 24) ?> Lisans Yönetimi</h1>
-        <p style="color:var(--color-text-secondary); margin-top:var(--space-1); font-size:14px;">Yazılım lisansınızı yönetin ve durumunu kontrol edin.</p>
+        
     </div>
 </div>
 
@@ -113,7 +113,6 @@ $badgeBg = $badgeBgMap[$info['badge']['color']] ?? '#f1f5f9';
                         <input type="url" name="license_server_url" id="license_server_url" class="form-control"
                                value="<?= e($info['server_url']) ?>"
                                placeholder="https://lisans.example.com">
-                        <div class="form-hint">Lisans doğrulama sunucusunun tam URL adresi.</div>
                     </div>
 
                     <div class="form-group">
@@ -121,7 +120,6 @@ $badgeBg = $badgeBgMap[$info['badge']['color']] ?? '#f1f5f9';
                         <input type="text" name="license_key" id="license_key" class="form-control"
                                value="<?= e($info['license_key']) ?>"
                                placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off">
-                        <div class="form-hint">Lisans merkezinden aldığınız ürün anahtarı.</div>
                     </div>
 
                     <div class="form-group" style="display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:8px; background:#f8fafc; border:1px solid var(--color-border);">
