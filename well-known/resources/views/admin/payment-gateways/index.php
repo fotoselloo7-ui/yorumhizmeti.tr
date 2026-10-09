@@ -1,36 +1,30 @@
-<div class="adm-page-top">
-    <div>
-        <h2><?= icon('credit-card', 24) ?> Ödeme Modülleri</h2>
-    </div>
+<div class="adm-page-top"><h2><?= icon('credit-card',22) ?> Ödeme Modülleri</h2></div>
+<div class="nv68-payment-list">
+ <?php foreach($gateways as $gw): ?>
+ <article class="nv68-payment-row">
+  <div class="nv68-payment-meta">
+   <span class="nv68-payment-icon"><?= icon($gw['type']==='online'?'credit-card':'wallet',21) ?></span>
+   <div><strong><?= e($gw['name']) ?></strong><small><?= $gw['type']==='online'?'Online POS':'Havale / EFT' ?></small></div>
+  </div>
+  <div class="nv68-payment-actions">
+   <?php if($gw['is_default']): ?><span class="badge badge-success">Varsayılan</span><?php endif; ?>
+   <span class="status-badge <?= $gw['is_active']?'success':'default' ?>"><?= $gw['is_active']?'Aktif':'Pasif' ?></span>
+   <form method="post" action="/admin/odeme-modulleri/<?= (int)$gw['id'] ?>/toggle"><?= csrfField() ?><button class="btn btn-light btn-sm" type="submit" aria-label="<?= $gw['is_active']?'Pasifleştir':'Etkinleştir' ?>" title="<?= $gw['is_active']?'Pasifleştir':'Etkinleştir' ?>"><?= icon($gw['is_active']?'eye-off':'eye',15) ?></button></form>
+   <?php if($gw['type']==='online' && !$gw['is_default']): ?>
+   <form method="post" action="/admin/odeme-modulleri/<?= (int)$gw['id'] ?>/varsayilan"><?= csrfField() ?><button class="btn btn-light btn-sm" type="submit" title="Varsayılan Yap" aria-label="Varsayılan Yap"><?= icon('star',15) ?></button></form>
+   <?php endif; ?>
+   <?php if($gw['gateway_key']==='paytr'): ?><a href="/admin/paytr-ayarlari" class="btn btn-light btn-sm" aria-label="PayTR Ayarları"><?= icon('settings',15) ?></a><?php endif; ?>
+   <?php if($gw['gateway_key']==='iyzico'): ?><a href="/admin/iyzico-ayarlari" class="btn btn-light btn-sm" aria-label="iyzico Ayarları"><?= icon('settings',15) ?></a><?php endif; ?>
+  </div>
+ </article>
+ <?php endforeach; ?>
 </div>
-
-<div class="adm-card" style="max-width: 800px; margin: 0 auto;">
-    <div class="adm-card-header">
-        <h3><?= icon('settings', 16) ?> Sistem Ödeme Yolları</h3>
-    </div>
-    <div class="adm-card-body" style="display:flex; flex-direction:column; gap: 15px;">
-        <?php foreach ($gateways as $gw): ?>
-        <div class="gateway-card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid var(--color-border); border-radius: 12px; background: #fff; transition: 0.2s; flex-wrap: wrap; gap: 15px;">
-            <div class="gateway-info" style="display: flex; align-items: center; gap: 15px;">
-                <div class="gateway-icon" style="width:48px; height:48px; border-radius:10px; background: var(--color-soft-blue); color: var(--color-blue); display:flex; align-items:center; justify-content:center;">
-                    <?= icon($gw['type'] === 'online' ? 'credit-card' : 'money-dollar-circle-fill', 22) ?>
-                </div>
-                <div>
-                    <div class="font-semibold" style="font-size:15px; color:var(--color-dark);"><?= e($gw['name']) ?></div>
-                    <div class="text-xs text-secondary" style="margin-top:2px;"><?= $gw['type'] === 'online' ? 'Online POS' : 'Manuel Ödeme' ?> · <?= e($gw['gateway_key']) ?></div>
-                </div>
-            </div>
-            <div class="gateway-actions" style="display: flex; align-items: center; gap: 12px;">
-                <?php if ($gw['is_default']): ?><span class="badge badge-success">Varsayılan</span><?php endif; ?>
-                <span class="status-badge <?= $gw['is_active'] ? 'success' : 'default' ?>"><?= $gw['is_active'] ? 'Aktif' : 'Pasif' ?></span>
-                <form method="POST" action="/admin/odeme-modulleri/<?= $gw['id'] ?>/toggle" style="margin:0; display:inline-block;"><?= csrfField() ?><button class="btn btn-light btn-sm" title="Durum Değiştir"><?= $gw['is_active'] ? icon('eye-off', 14) : icon('eye', 14) ?></button></form>
-                <?php if ($gw['type'] === 'online' && !$gw['is_default']): ?>
-                <form method="POST" action="/admin/odeme-modulleri/<?= $gw['id'] ?>/varsayilan" style="margin:0; display:inline-block;"><?= csrfField() ?><button class="btn btn-light btn-sm" title="Varsayılan Yap"><?= icon('star', 14) ?></button></form>
-                <?php endif; ?>
-                <?php if ($gw['gateway_key'] === 'paytr'): ?><a href="/admin/paytr-ayarlari" class="btn btn-light btn-sm" title="Ayarlar"><?= icon('settings', 14) ?></a><?php endif; ?>
-                <?php if ($gw['gateway_key'] === 'iyzico'): ?><a href="/admin/iyzico-ayarlari" class="btn btn-light btn-sm" title="Ayarlar"><?= icon('settings', 14) ?></a><?php endif; ?>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-</div>
+<style>
+.nv68-payment-list{display:grid;gap:12px;max-width:1200px}
+.nv68-payment-row{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:17px 22px;border:1px solid #e2e7f0;background:#fff;border-radius:15px;box-shadow:0 3px 15px rgba(30,45,80,.035)}
+.nv68-payment-meta{display:flex;align-items:center;gap:13px}
+.nv68-payment-icon{display:grid;place-items:center;width:45px;height:45px;flex-shrink:0;border-radius:12px;background:#eef3ff;color:#4169e5}
+.nv68-payment-meta strong{display:block;font-size:14px;color:#1a2b4c}.nv68-payment-meta small{display:block;font-size:11px;color:#7d89a2;margin-top:3px}
+.nv68-payment-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.nv68-payment-actions form{margin:0}
+@media(max-width:600px){.nv68-payment-row{padding:14px}.nv68-payment-actions{width:100%;justify-content:flex-end}}
+</style>
