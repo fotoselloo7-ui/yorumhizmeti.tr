@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="adm-form-layout">
+<div class="adm-form-layout" style="grid-template-columns:minmax(0,1fr)">
     <!-- Left Column: Tables -->
     <div class="adm-form-main" style="display:flex; flex-direction:column; gap:var(--space-6);">
         <!-- Categories -->
@@ -148,21 +148,4 @@
         </div>
     </div>
     
-    <!-- Right Column: Info & Default Settings -->
-    <div class="adm-form-sidebar">
-        <div class="adm-card">
-            <div class="adm-card-header">
-                <h3><?= icon('info', 16) ?> SEO İpuçları</h3>
-            </div>
-            <div class="adm-card-body">
-                <ul class="text-sm text-secondary" style="list-style: disc; padding-left: 1rem; display: flex; flex-direction: column; gap: 8px;">
-                    <li>SEO başlıklarınızın <strong>35-60 karakter</strong> arasında olduğundan emin olun.</li>
-                    <li>Meta açıklamaları <strong>120-160 karakter</strong> uzunluğunda tutun.</li>
-                    <li>Her sayfa için spesifik <strong>odak anahtar kelime</strong> belirleyin.</li>
-                    <li>Sitemap her yeni içerik eklendiğinde otomatik olarak güncellenir.</li>
-                </ul>
-                <a href="/admin/ayarlar/genel" class="btn btn-outline btn-sm btn-block mt-4"><?= icon('settings', 14) ?> Varsayılan SEO Ayarları</a>
-            </div>
-        </div>
-    </div>
 </div>
