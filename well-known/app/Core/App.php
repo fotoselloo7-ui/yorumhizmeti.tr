@@ -219,6 +219,7 @@ class App
         $r->get('/admin/banka-hesaplari', 'Admin\\SettingsController@bankAccounts');
         $r->post('/admin/banka-hesabi/kaydet', 'Admin\\SettingsController@storeBankAccount');
         $r->post('/admin/banka-hesabi/{id}/sil', 'Admin\\SettingsController@deleteBankAccount');
+        $r->get('/admin/netvera-musteriler', 'Admin\\NetveraCustomersController@index');
         $r->get('/admin/uyeler', 'Admin\\SettingsController@users');
         $r->get('/admin/admin-kullanicilari', 'Admin\\SettingsController@adminUsers');
         $r->get('/admin/sayfalar', 'Admin\\SettingsController@pages');
