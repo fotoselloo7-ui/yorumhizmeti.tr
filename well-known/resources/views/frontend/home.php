@@ -901,6 +901,9 @@ if (!empty($projectReferences)) {
         $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
         $embedUrl = \App\Services\ReferencesService::instagramEmbed((string)($ref['url']??''), $refMedia);
         $hasInstagram = $embedUrl !== null;
+        $hostedPlayer = $hasInstagram
+            ? \App\Services\ReferencesService::externalPlayer((string)($ref['external_video_url'] ?? ''))
+            : null;
         $localVideo = (string)($ref['video'] ?? '');
         // Only first-party files written by the reference upload endpoint may play natively.
         if (!preg_match('~^/uploads/references/videos/[A-Za-z0-9_.-]+\.(?:mp4|webm)$~D', $localVideo)) {
@@ -924,6 +927,9 @@ if (!empty($projectReferences)) {
                data-ref-kind="<?= e($refMedia) ?>"
                <?php if ($hasInstagram): ?>
                data-ref-embed="<?= e($embedUrl) ?>"
+               data-ref-external-url="<?= e($hostedPlayer['url'] ?? '') ?>"
+               data-ref-external-type="<?= e($hostedPlayer['type'] ?? '') ?>"
+               data-ref-external-provider="<?= e($hostedPlayer['provider'] ?? '') ?>"
                data-ref-video="<?= $localVideo !== '' ? e(upload_url($localVideo)) : '' ?>"
                data-ref-title="<?= e($ref['title']) ?>"
                <?php endif; ?>
@@ -1041,12 +1047,47 @@ if (!empty($projectReferences)) {
    if(!card||!modal||!stage)return;
    const embed=card.dataset.refEmbed||'';
    const videoPath=card.dataset.refVideo||'';
-   if(!embed && !videoPath)return;
+   const externalUrl=card.dataset.refExternalUrl||'';
+   const externalType=card.dataset.refExternalType||'';
+   const externalProvider=card.dataset.refExternalProvider||'';
+   if(!embed && !videoPath && !externalUrl)return;
    previousFocus=trigger;
    clearPlayer();
    modalTitle.textContent=card.dataset.refTitle||'Referans videosu';
-   if(videoPath){
-     // No Instagram redirect: video is served from our own uploads folder.
+   if(externalUrl && (externalType==='video'||externalType==='iframe')){
+     // Admin-validated external stream takes precedence over any first-party upload.
+     // The video is streamed from its provider, not our site's PHP hosting disk.
+     if(externalType==='video'){
+       const video=document.createElement('video');
+       video.controls=true;video.autoplay=true;video.playsInline=true;
+       video.preload='metadata';
+       const poster=card.querySelector('.nv51-play-embed img');
+       if(poster?.src)video.poster=poster.src;
+       video.src=externalUrl;
+       video.addEventListener('error',()=>{
+         if(note)note.textContent='Harici video yüklenemedi. Video bağlantısını ve sağlayıcının erişim ayarlarını kontrol edin.';
+       });
+       stage.appendChild(video);
+       if(note)note.textContent='Video, harici sunucudan kendi oynatıcımızda yükleniyor.';
+       modal.showModal();
+       video.play().catch(()=>{});
+     }else{
+       const frame=document.createElement('iframe');
+       frame.title=(externalProvider||'Harici video')+' oynatıcısı';
+       frame.src=externalUrl;
+       frame.loading='eager';
+       frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+       frame.referrerPolicy='strict-origin-when-cross-origin';
+       frame.setAttribute('allowfullscreen','');
+       // Do not allow third-party video frames to navigate the top page
+       // or open new tabs from the reference player's overlay.
+       frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-presentation');
+       stage.appendChild(frame);
+       if(note)note.textContent=(externalProvider||'Harici video')+' üzerinden sitemizde oynatılıyor. Video dosyası bizim sunucuda saklanmaz.';
+       modal.showModal();
+     }
+   }else if(videoPath){
+     // Local upload remains available, but is not required for hosted streaming.
      const video=document.createElement('video');
      video.controls=true;video.autoplay=true;video.playsInline=true;
      video.preload='metadata';
@@ -1077,7 +1118,7 @@ if (!empty($projectReferences)) {
      frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-presentation');
      frame.setAttribute('allowfullscreen','');
      stage.appendChild(frame);
-     if(note)note.textContent='Instagram bazı içeriklerin sitede oynatılmasını engelleyebilir. Kesintisiz oynatma için yönetim panelinden MP4/WebM yüklenebilir.';
+     if(note)note.textContent='Instagram, Reels oynatmayı dış sitelerde engelleyebiliyor. Kesintisiz izleme için admin paneline harici bir YouTube, Bunny Stream veya Cloudflare Stream bağlantısı ekleyin; bizim sunucuya MP4 yüklemek gerekmez.';
      modal.showModal();
    }
  }
