@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('grid', 24) ?> Kategoriler</h2>
-        <p class="text-sm text-secondary">Hizmet kategorilerinizi yönetin.</p>
     </div>
     <div style="display:flex; gap: 8px;">
         <form method="POST" action="/admin/kategoriler/varsayilan-kur" style="margin:0;" onsubmit="return confirm('Varsayılan kategorileri kurmak istediğinize emin misiniz? (Var olanlar silinmez)')">
