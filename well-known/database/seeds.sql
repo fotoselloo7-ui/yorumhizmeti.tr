@@ -38,7 +38,7 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 ('tiktok_url', '', 'social'),
 ('x_url', '', 'social'),
 ('default_seo_title', 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya', 'seo'),
-('default_seo_description', 'NetVera Teknoloji Yazılım: hazır yazılım ve web çözümleri, dijital ajans, SEO, reklam yönetimi ve Instagram, TikTok, YouTube hizmetlerini keşfedin.', 'seo'),
+('default_seo_description', 'NetVera Teknoloji Yazılım: hazır yazılımlar, web çözümleri, dijital ajans, SEO, reklam yönetimi ve Instagram, TikTok, YouTube hizmetlerini keşfedin.', 'seo'),
 ('default_og_image', '', 'seo'),
 ('brand_short_name', 'NetVera', 'branding'),
 ('brand_positioning', 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya', 'branding'),
