@@ -69,6 +69,7 @@ class ReferencesController extends Controller
             'media_type' => $media,
             'image' => $existing['image'] ?? '',
             'logo' => $existing['logo'] ?? '',
+            'video' => $existing['video'] ?? '',
             'sort_order' => max(0, min(9999, (int)($_POST['sort_order'] ?? 100))),
             'status' => ($_POST['status'] ?? '') === 'active' ? 'active' : 'inactive',
         ];
@@ -80,6 +81,18 @@ class ReferencesController extends Controller
                 }
                 $row[$field] = $upload;
             }
+        }
+        // Uploading a file is optional; Instagram URLs and covers continue to work.
+        if (!empty($_POST['remove_video'])) $row['video'] = '';
+        if (!empty($_FILES['video']['name'])) {
+            if (!str_starts_with($media, 'instagram_')) {
+                throw new \InvalidArgumentException('Yerel video yalnızca Instagram gönderisi veya Reels referansında kullanılabilir.');
+            }
+            $uploadedVideo = Upload::video($_FILES['video'], 'references/videos');
+            if (!$uploadedVideo) {
+                throw new \InvalidArgumentException('Video yüklenemedi. MP4/WebM (en fazla 80 MB) kullanın; PHP upload_max_filesize ayarını kontrol edin.');
+            }
+            $row['video'] = $uploadedVideo;
         }
         return $row;
     }
