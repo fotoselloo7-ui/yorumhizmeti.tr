@@ -20,3 +20,20 @@ INSERT INTO nv_legacy_public_reviews
  VALUES
  (801,47,5,'Yalnızca QA otomasyon verisi',NOW()),
  (802,49,4,'Yalnızca QA otomasyon verisi',NOW());
+
+-- QA ONLY: validate the exact legacy format that caused unlabeled values
+-- (numeric JSON string list) and opt-in public demo account rendering.
+UPDATE nv_legacy_script_products
+SET public_json=JSON_SET(
+    public_json,
+    '$.specs_json','["PHP 8.2 ve üstü","MySQL 8+","Linux / cPanel / LiteSpeed"]',
+    '$.demo_url','https://qa-demo.example.test',
+    '$.demo_admin_url','https://qa-demo.example.test/yonetim',
+    '$.demo_is_active',1,
+    '$.demo_is_public',1,
+    '$.demo_credentials_public',1,
+    '$.demo_username','qa-public-demo-user',
+    '$.demo_password','qa-public-demo-only-no-real-account',
+    '$.demo_note','Bu yalnızca otomatik test hesabıdır.'
+)
+WHERE legacy_id=47;
