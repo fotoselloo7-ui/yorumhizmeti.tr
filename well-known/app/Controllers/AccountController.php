@@ -3,6 +3,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Auth;
 use App\Core\Csrf;
+use App\Services\LegacyCustomerService;
 
 class AccountController extends Controller
 {
@@ -25,6 +26,7 @@ class AccountController extends Controller
             'completedOrders' => $completedOrders,
             'openTickets' => $openTickets,
             'recentTickets' => $recentTickets,
+            'netveraHistory' => LegacyCustomerService::overview((int)$user['id']),
         ]);
     }
 
@@ -76,6 +78,7 @@ class AccountController extends Controller
             'orders' => $orders,
             'page' => $page,
             'totalPages' => max(1, ceil($total / $perPage)),
+            'netveraHistory' => LegacyCustomerService::overview((int)$userId),
         ]);
     }
 
