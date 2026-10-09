@@ -37,7 +37,7 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
         <option value="<?= e($groupKey) ?>" <?= $secondary['group']===$groupKey?'selected':'' ?>><?= e($group['label']) ?></option>
       <?php endforeach; ?>
     </select>
-    <small>İki farklı hizmet alanında aynı referansı gösterebilirsin. Kopya kayıt oluşturulmaz.</small>
+    
   </label>
   <label>İkinci Hizmet / Alt Kategori
     <select class="form-control" name="secondary_service" data-ref-second-service>
@@ -61,7 +61,7 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
   </label>
   <label>Web Sitesi / Instagram / YouTube Bağlantısı
     <input class="form-control" type="url" name="url" data-ref-url value="<?= e($ref['url'] ?? '') ?>" maxlength="1000" placeholder="https://www.instagram.com/reel/... veya https://musteri.com">
-    <small data-ref-url-hint>Web sitesi referansları doğrudan müşterinin sitesini açar.</small>
+    
   </label>
   <label>Proje Türü / Sektör (isteğe bağlı)
     <input class="form-control" type="text" name="category" maxlength="100" value="<?= e($ref['category'] ?? '') ?>" placeholder="Örn. Otel rezervasyon sistemi">
@@ -74,14 +74,14 @@ $secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
     <input class="form-control" type="url" name="external_video_url" maxlength="2000"
       value="<?= e($ref['external_video_url'] ?? '') ?>" data-ref-hosted-video
       placeholder="https://youtu.be/... veya Bunny / Cloudflare Stream / Vimeo">
-    <small>ÖNERİLEN: Videoyu YouTube'da liste dışı veya bir video servisinde barındır. Paylaşılan bağlantıyı buraya yapıştır. Video referans kartındaki kendi penceremizde açılır; dosya YorumHizmeti.tr sunucusunda tutulmaz. Sadece Instagram linki girildiğinde ziyaretçi Instagram'da izler; harici video da eklendiğinde sitemizde oynar.</small>
+    
     <?php if (!empty($ref['external_video_url'])): ?>
       <span class="adm52-video-saved"><?= icon('check-circle',13) ?> Harici oynatma bağlantısı kayıtlı.</span>
     <?php endif; ?>
   </label>
   <label data-ref-video-field>İsteğe Bağlı Video (MP4 / WebM)
     <input class="form-control" type="file" name="video" accept="video/mp4,video/webm,.mp4,.webm" data-ref-video-input>
-    <small>Instagram linkiyle oynatma kısıtlanırsa videoyu doğrudan sitemizde oynatırız. En fazla 80 MB; sunucuda PHP yükleme limiti yeterli olmalı.</small>
+    
     <?php if (!empty($ref['video'])): ?>
       <span class="adm52-video-saved"><?= icon('check-circle',13) ?> Yüklenmiş video mevcut.</span>
       <span class="adm52-remove-video"><input type="checkbox" name="remove_video" value="1"> Videoyu kaldır</span>
