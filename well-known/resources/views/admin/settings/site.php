@@ -34,6 +34,37 @@
                 </div>
             </div>
 
+            <div class="adm-card" style="grid-column:1/-1">
+                <div class="adm-card-header"><h3><?= icon('building-2',16) ?> NetVera Kurumsal Kimlik</h3></div>
+                <div class="adm-card-body nv-brand-grid">
+                    <div class="form-group">
+                        <label>Marka Kısa Adı</label>
+                        <input class="form-control" type="text" name="brand_short_name" maxlength="100" value="<?= e(setting('brand_short_name')) ?>">
+                        <input type="hidden" name="_group_brand_short_name" value="branding">
+                    </div>
+                    <div class="form-group">
+                        <label>Ana Konumlandırma</label>
+                        <input class="form-control" type="text" name="brand_positioning" maxlength="180" value="<?= e(setting('brand_positioning')) ?>">
+                        <input type="hidden" name="_group_brand_positioning" value="branding">
+                    </div>
+                    <div class="form-group">
+                        <label>Yazılım Hizmetleri Başlığı</label>
+                        <input class="form-control" type="text" name="brand_sector_software" maxlength="160" value="<?= e(setting('brand_sector_software')) ?>">
+                        <input type="hidden" name="_group_brand_sector_software" value="branding">
+                    </div>
+                    <div class="form-group">
+                        <label>Dijital Ajans Başlığı</label>
+                        <input class="form-control" type="text" name="brand_sector_agency" maxlength="160" value="<?= e(setting('brand_sector_agency')) ?>">
+                        <input type="hidden" name="_group_brand_sector_agency" value="branding">
+                    </div>
+                    <div class="form-group">
+                        <label>Sosyal Medya Hizmetleri Başlığı</label>
+                        <input class="form-control" type="text" name="brand_sector_social" maxlength="160" value="<?= e(setting('brand_sector_social')) ?>">
+                        <input type="hidden" name="_group_brand_sector_social" value="branding">
+                    </div>
+                </div>
+            </div>
+
             <div class="adm-card">
                 <div class="adm-card-header">
                     <h3><?= icon('phone', 16) ?> İletişim Bilgileri</h3>
@@ -71,6 +102,16 @@
                         <label>Instagram URL</label>
                         <input type="url" name="social_instagram" class="form-control" value="<?= e(setting('social_instagram')) ?>">
                         <input type="hidden" name="_group_social_instagram" value="social">
+                    </div>
+                    <div class="form-group">
+                        <label>Facebook URL</label>
+                        <input type="url" name="social_facebook" class="form-control" value="<?= e(setting('social_facebook')) ?>">
+                        <input type="hidden" name="_group_social_facebook" value="social">
+                    </div>
+                    <div class="form-group">
+                        <label>TikTok URL</label>
+                        <input type="url" name="social_tiktok" class="form-control" value="<?= e(setting('social_tiktok')) ?>">
+                        <input type="hidden" name="_group_social_tiktok" value="social">
                     </div>
                     <div class="form-group">
                         <label>Twitter/X URL</label>
@@ -178,6 +219,16 @@
                         <textarea name="default_seo_description" class="form-control" rows="3"><?= e(setting('default_seo_description')) ?></textarea>
                         <input type="hidden" name="_group_default_seo_description" value="seo">
                     </div>
+                    <div class="form-group">
+                        <label>Varsayılan Open Graph Başlığı</label>
+                        <input name="seo_og_title" type="text" class="form-control" maxlength="180" value="<?= e(setting('seo_og_title')) ?>">
+                        <input type="hidden" name="_group_seo_og_title" value="seo">
+                    </div>
+                    <div class="form-group">
+                        <label>Varsayılan Open Graph Açıklaması</label>
+                        <textarea name="seo_og_description" class="form-control" rows="3" maxlength="500"><?= e(setting('seo_og_description')) ?></textarea>
+                        <input type="hidden" name="_group_seo_og_description" value="seo">
+                    </div>
                     <div class="form-group mb-0">
                         <label>Google Analytics ID</label>
                         <input type="text" name="google_analytics_id" class="form-control" value="<?= e(setting('google_analytics_id')) ?>" placeholder="G-XXXXXXXXXX">
@@ -186,6 +237,69 @@
                 </div>
             </div>
             
+            <div class="adm-card">
+                <div class="adm-card-header"><h3><?= icon('globe',16) ?> Kurumsal GEO / AIO</h3></div>
+                <div class="adm-card-body">
+                    <div class="form-group">
+                        <label>Kuruluş Schema Türü</label>
+                        <select class="form-control" name="seo_org_type">
+                            <?php foreach(['Organization'=>'Organization','ProfessionalService'=>'ProfessionalService'] as $k=>$label): ?>
+                            <option value="<?= e($k) ?>" <?= setting('seo_org_type')===$k?'selected':'' ?>><?= e($label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <input type="hidden" name="_group_seo_org_type" value="geo">
+                    </div>
+                    <div class="form-group">
+                        <label>Kurumsal Tanım</label>
+                        <textarea class="form-control" rows="4" name="seo_org_description" maxlength="750"><?= e(setting('seo_org_description')) ?></textarea>
+                        <input type="hidden" name="_group_seo_org_description" value="geo">
+                    </div>
+                    <div class="form-group">
+                        <label>GEO Kurum Özeti</label>
+                        <textarea class="form-control" rows="4" name="seo_geo_summary" maxlength="750"><?= e(setting('seo_geo_summary')) ?></textarea>
+                        <input type="hidden" name="_group_seo_geo_summary" value="geo">
+                    </div>
+                    <div class="form-group">
+                        <label>İlişkili Sektörler ve Varlıklar</label>
+                        <textarea class="form-control" rows="4" name="seo_entity_topics" maxlength="1000"><?= e(setting('seo_entity_topics')) ?></textarea>
+                        <input type="hidden" name="_group_seo_entity_topics" value="geo">
+                    </div>
+                    <div class="form-group">
+                        <label>Hizmet Bölgesi</label>
+                        <input class="form-control" type="text" name="seo_service_area" maxlength="120" value="<?= e(setting('seo_service_area')) ?>">
+                        <input type="hidden" name="_group_seo_service_area" value="geo">
+                    </div>
+                    <div class="form-group">
+                        <label>Ana Sayfa Arama Niyeti</label>
+                        <select class="form-control" name="seo_content_intent">
+                            <?php foreach(['commercial'=>'Ticari araştırma','transactional'=>'Satın alma / hizmet','informational'=>'Bilgilendirme'] as $intent=>$name): ?>
+                            <option value="<?= e($intent) ?>" <?= setting('seo_content_intent')===$intent?'selected':'' ?>><?= e($name) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <input type="hidden" name="_group_seo_content_intent" value="aio">
+                    </div>
+                    <div class="form-group">
+                        <label>AIO Ana Soru</label>
+                        <input class="form-control" name="seo_home_question" type="text" maxlength="250" value="<?= e(setting('seo_home_question')) ?>">
+                        <input type="hidden" name="_group_seo_home_question" value="aio">
+                    </div>
+                    <div class="form-group">
+                        <label>AIO Doğrudan Yanıt</label>
+                        <textarea class="form-control" name="seo_home_answer" rows="5" maxlength="900"><?= e(setting('seo_home_answer')) ?></textarea>
+                        <input type="hidden" name="_group_seo_home_answer" value="aio">
+                    </div>
+                    <div class="form-group mb-0">
+                        <label>Ana Sayfa Robots</label>
+                        <select class="form-control" name="seo_default_robots">
+                            <?php foreach(['index,follow,max-image-preview:large','index,follow','noindex,follow'] as $rule): ?>
+                            <option value="<?= e($rule) ?>" <?= setting('seo_default_robots')===$rule?'selected':'' ?>><?= e($rule) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <input type="hidden" name="_group_seo_default_robots" value="seo">
+                    </div>
+                </div>
+            </div>
+
             <div class="adm-card">
                 <div class="adm-card-header">
                     <h3><?= icon('settings', 16) ?> Hızlı Bağlantılar</h3>
@@ -207,6 +321,7 @@
         grid-template-columns: 1fr !important;
     }
 }
+.nv-brand-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.nv-brand-grid .form-group{margin:0}.nv-brand-grid .form-group:nth-child(2){grid-column:span 1}@media(max-width:700px){.nv-brand-grid{grid-template-columns:1fr}}
 .theme-presets { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
 .theme-preset-btn { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 10px; background: #fff; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: 600; color: var(--color-dark, #1E293B); }
 .theme-preset-btn:hover { border-color: #6B4DE8; box-shadow: 0 0 0 3px rgba(107,77,232,0.1); }
