@@ -1,12 +1,12 @@
 -- =====================================================
--- YorumPanel Pro - Seed Data
+-- NetVera Teknoloji Yazılım - İlk Kurulum Verileri
 -- =====================================================
 
 SET NAMES utf8mb4;
 
 -- ─── Varsayılan Admin ───
 INSERT INTO `admins` (`name`, `email`, `password`, `role`, `status`, `must_change_password`) VALUES
-('Admin', 'admin@yorumhizmeti.tr', '$2y$10$kijA4bMSuQGyZ1/erH9/4uIkl1UDYJNlKEck7pniTdxZJhYxo2IGq', 'super_admin', 'active', 1);
+('Admin', 'admin@netvera.tr', '$2y$10$kijA4bMSuQGyZ1/erH9/4uIkl1UDYJNlKEck7pniTdxZJhYxo2IGq', 'super_admin', 'active', 1);
 -- Şifre: Admin123!
 
 -- ─── Ödeme Modülleri ───
@@ -26,7 +26,7 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 ('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri', 'general'),
 ('site_logo', '', 'general'),
 ('site_favicon', '', 'general'),
-('site_email', 'info@yorumhizmeti.tr', 'general'),
+('site_email', 'info@netvera.tr', 'general'),
 ('site_phone', '+90 500 000 00 00', 'general'),
 ('site_whatsapp', '905000000000', 'general'),
 ('site_address', 'İstanbul, Türkiye', 'general'),
@@ -48,8 +48,8 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
 ('smtp_username', '', 'mail'),
 ('smtp_password', '', 'mail'),
 ('smtp_encryption', 'tls', 'mail'),
-('smtp_from_email', 'noreply@yorumhizmeti.tr', 'mail'),
-('smtp_from_name', 'Yorum Hizmeti', 'mail');
+('smtp_from_email', 'noreply@netvera.tr', 'mail'),
+('smtp_from_name', 'NetVera Teknoloji Yazılım', 'mail');
 
 -- ─── Kategoriler ───
 INSERT INTO `categories` (`name`, `slug`, `description`, `icon_key`, `sort_order`, `status`, `seo_title`, `seo_description`) VALUES
