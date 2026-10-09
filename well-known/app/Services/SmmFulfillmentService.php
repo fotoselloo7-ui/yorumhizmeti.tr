@@ -9,13 +9,14 @@ use App\Core\Database;
  */
 final class SmmFulfillmentService
 {
-    public static function validateLine(int $packageId, array $fields): void
+    public static function validateLine(int $packageId, array $fields, int $cartQty=1): void
     {
         $m = SmmCatalogService::mapping($packageId);
         if ($m === null) return;
         if (!$m['enabled'] || !$m['is_available'] || !$m['provider_active']
             || (int)$m['fulfillment_quantity'] < (int)$m['min_quantity']
             || (int)$m['fulfillment_quantity'] > (int)$m['max_quantity']
+            || max(1,$cartQty) * (int)$m['fulfillment_quantity'] > (int)$m['max_quantity']
             || strcasecmp((string)$m['service_type'],'Default') !== 0) {
             throw new \RuntimeException('Seçtiğiniz hizmet şu an siparişe kapalı. Lütfen sepetinizden çıkarın.');
         }
@@ -44,7 +45,7 @@ final class SmmFulfillmentService
     {
         $m = SmmCatalogService::mapping($packageId);
         if (!$m) return;
-        self::validateLine($packageId,$fields);
+        self::validateLine($packageId,$fields,$cartQty);
         Database::getInstance()->insert('smm_order_jobs',[
             'order_id'=>$orderId,'order_item_id'=>$orderItemId,'package_id'=>$packageId,
             'provider_id'=>(int)$m['provider_id'],'external_service_id'=>$m['external_service_id'],
