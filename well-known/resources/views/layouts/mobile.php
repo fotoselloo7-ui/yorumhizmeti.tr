@@ -8,5 +8,6 @@
 <link rel="stylesheet" href="/assets/css/nv-desk.css?v=1">
 <title><?= e($pageTitle??'NetVera Cep') ?></title></head><body>
 <?= $content ?>
+<script src="/assets/js/nv-desk-alerts.js?v=1" defer></script>
 <script src="/assets/js/nv-desk.js?v=1" defer></script>
 </body></html>
