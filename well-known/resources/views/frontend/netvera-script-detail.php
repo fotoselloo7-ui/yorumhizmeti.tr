@@ -124,7 +124,7 @@ if ($nv60ShowAccounts) {
         <?php if($nv40DemoAllowed): ?>
         <section class="nv40-info-card" id="demo" role="tabpanel" aria-labelledby="nv60-tab-demo" tabindex="0" data-nv60-panel="demo">
           <h2>Canlı Demo & Yazılımı İncele</h2>
-          <p>Ürünün çalışan sürümünü ve varsa herkese açık deneme yönetim panelini ziyaret edebilirsiniz.</p>
+          
           <div class="nv60-demo-grid">
             <a class="nv60-demo-link" href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer">
               <?= icon('external-link',18) ?> <span><strong>Canlı Siteyi Görüntüle</strong><small><?= e((string)parse_url($demoUrl,PHP_URL_HOST)) ?></small></span><?= icon('arrow-up-right',15) ?>
@@ -152,13 +152,13 @@ if ($nv60ShowAccounts) {
           </div>
           <?php endif; ?>
           <?php if(!empty($productData['demo_note'])): ?><p class="nv60-demo-disclaimer"><?= nl2br(e((string)$productData['demo_note'])) ?></p><?php endif; ?>
-          <?php if(!$nv60DemoAccounts): ?><p class="nv60-demo-disclaimer">Yönetim panelinden herkese açık demo hesabı tanımlanmadı. Demo sitesini bağlantılardan inceleyebilir, gerektiğinde satış ekibinden giriş bilgisi isteyebilirsiniz.</p><?php endif; ?>
+          
         </section>
         <?php endif; ?>
         <?php if($nv40InquiryReady): ?>
           <section class="nv40-info-card nv60-offer-panel nv-product-offer" id="teklif-al" role="tabpanel" aria-labelledby="nv60-tab-teklif-al" tabindex="0" data-nv60-panel="teklif-al">
             <h2><?= icon('message-square',16) ?> Bu Yazılım İçin Teklif Alın</h2>
-            <p>Kurulum, lisans ve proje detaylarını birlikte netleştirelim. Talebinizi satış ekibimize iletin; sizinle kurulum ve lisans seçeneklerini görüşelim.</p>
+            
             <form method="post" action="/netvera/canli-destek/gonder">
               <?= csrfField() ?>
               <input type="hidden" name="source_type" value="offer">
@@ -206,9 +206,8 @@ if ($nv60ShowAccounts) {
             <p><?= e($faq['a']??$faq['answer']??'') ?></p></details>
           <?php endforeach; ?></section><?php endif; ?>
         <section class="nv40-info-card" id="yorumlar" role="tabpanel" aria-labelledby="nv60-tab-yorumlar" tabindex="0" data-nv60-panel="yorumlar"><h2>Müşteri Değerlendirmeleri</h2>
-          <?php if(!$reviews): ?><p>Bu yazılım için aktarılmış onaylı değerlendirme henüz bulunmuyor.</p>
-          <?php else: ?>
-          <p>Mevcut sistemden aktarılan onaylı yorumlar; kişisel hesaplar aktarılmadığı için isimler gösterilmez.</p>
+          <?php if($reviews): ?>
+          
           <?php foreach($reviews as $review): ?><article class="nv40-review">
             <span aria-label="<?= (int)$review['rating'] ?> yıldız"><?= str_repeat('★',max(1,min(5,(int)$review['rating']))) ?></span>
             <p><?= e($review['comment']) ?></p><small>Yayınlanmış müşteri değerlendirmesi</small>
