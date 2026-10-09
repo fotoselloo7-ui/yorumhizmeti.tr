@@ -1345,9 +1345,65 @@ try {
   if(!(await youtubeDialog.isVisible()) ||
      !(await youtubeFrame.getAttribute('src')).includes('youtube-nocookie.com/embed/dQw4w9WgXcQ'))
     throw new Error('Standalone YouTube Shorts video did not open on our site');
+  if(await youtubeDialog.getAttribute('data-video-orientation')!=='portrait')
+    throw new Error('YouTube Shorts did not select vertical 9:16 player');
+  const shortsGeometry=await youtubeDialog.locator('.nv52-player-stage').evaluate(node=>{
+    const b=node.getBoundingClientRect();
+    return {ratio:b.width/b.height,width:b.width,height:b.height};
+  });
+  if(Math.abs(shortsGeometry.ratio-9/16)>0.025)
+    throw new Error('YouTube Shorts player geometry is not 9:16 '+JSON.stringify(shortsGeometry));
+  await showcasePage.setViewportSize({width:390,height:844});
+  const mobileShorts=await youtubeDialog.evaluate(dialog=>{
+    const a=dialog.getBoundingClientRect();
+    const b=dialog.querySelector('.nv52-player-stage').getBoundingClientRect();
+    return {ratio:b.width/b.height,overflow:a.top<0||a.bottom>innerHeight+1||a.left<0||a.right>innerWidth+1};
+  });
+  if(mobileShorts.overflow||Math.abs(mobileShorts.ratio-9/16)>0.025)
+    throw new Error('Shorts modal fails on 390px mobile viewport '+JSON.stringify(mobileShorts));
   await youtubeDialog.locator('[data-ref-player-close]').click();
   if(await youtubeDialog.isVisible())throw new Error('YouTube player did not close');
-  console.log('PASS standalone YouTube Shorts reference uses Videoyu İzle -> site modal');
+  if(await youtubeDialog.getAttribute('data-video-orientation')!==null)
+    throw new Error('Closed player retained previous orientation');
+  await showcasePage.setViewportSize({width:1440,height:900});
+  console.log('PASS YouTube Shorts uses portrait 9:16 on desktop and mobile');
+
+  // An ordinary /watch URL must instead become a widescreen player.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const youtubeReferenceEditor=showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI YouTube Shorts Referansı'})
+    .locator('form[data-reference-editor]');
+  await youtubeReferenceEditor.locator('[name="url"]').fill('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    youtubeReferenceEditor.locator('button[type="submit"]').click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const longVideoCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI YouTube Shorts Referansı'});
+  if(await longVideoCard.getAttribute('data-ref-aspect')!=='landscape')
+    throw new Error('Normal YouTube watch URL was not recognized as landscape');
+  await longVideoCard.locator('button.nv52-watch-action').click();
+  const longVideoDialog=showcasePage.locator('[data-ref-player-modal]');
+  if(await longVideoDialog.getAttribute('data-video-orientation')!=='landscape')
+    throw new Error('Normal YouTube video did not select 16:9 player');
+  const longGeometry=await longVideoDialog.locator('.nv52-player-stage').evaluate(node=>{
+    const b=node.getBoundingClientRect();
+    return {ratio:b.width/b.height,width:b.width,height:b.height};
+  });
+  if(Math.abs(longGeometry.ratio-16/9)>0.04)
+    throw new Error('Normal YouTube player geometry is not 16:9 '+JSON.stringify(longGeometry));
+  await showcasePage.setViewportSize({width:844,height:390});
+  const landscapeMobile=await longVideoDialog.evaluate(dialog=>{
+    const a=dialog.getBoundingClientRect();
+    const b=dialog.querySelector('.nv52-player-stage').getBoundingClientRect();
+    return {ratio:b.width/b.height,overflow:a.top<0||a.bottom>innerHeight+1||a.left<0||a.right>innerWidth+1};
+  });
+  if(landscapeMobile.overflow||Math.abs(landscapeMobile.ratio-16/9)>0.04)
+    throw new Error('16:9 modal fails in landscape phone viewport '+JSON.stringify(landscapeMobile));
+  await longVideoDialog.locator('[data-ref-player-close]').click();
+  await showcasePage.setViewportSize({width:1440,height:900});
+  console.log('PASS standard YouTube watch uses 16:9 on desktop and landscape mobile');
+
 
 
   // Uploaded MP4 still has the same local-player behavior, without an Instagram iframe.
