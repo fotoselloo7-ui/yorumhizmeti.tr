@@ -1,4 +1,4 @@
-/* V52 — user-owned video popup. Cover cards stay in place; no Instagram outbound links. */
+/* V53 — unified Videoyu İzle CTA: Instagram is a normal link, hosted videos use the on-site dialog. */
 .nv51-reference-body .nv52-watch-action{
  appearance:none;display:inline-flex;align-items:center;gap:8px;
  width:max-content;max-width:100%;background:transparent;border:0;
@@ -87,3 +87,18 @@
  .nv52-player-stage{height:min(66dvh,580px)}
 }
 @media(prefers-reduced-motion:reduce){.nv52-player-dialog[open]{animation:none}}
+
+/* Instagram cards use a real link (not a scripted player) but retain the same visual style. */
+.nv51-reference-card a.nv51-play-embed{
+ color:inherit!important;text-decoration:none!important;
+ outline-offset:-4px
+}
+.nv51-reference-card a.nv51-play-embed:focus-visible{
+ outline:3px solid #c9b9ff!important;
+}
+.nv51-reference-body a.nv52-watch-action{
+ text-decoration:none!important;color:#6541db!important;
+}
+.nv51-reference-body a.nv52-watch-action:hover{
+ color:#3f2ba1!important;text-decoration:underline!important;
+}
