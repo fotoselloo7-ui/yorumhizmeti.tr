@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('user', 24) ?> Üyeler / Kullanıcılar</h2>
-        <p class="text-sm text-secondary">Sitenize kayıtlı tüm müşterilerin listesi.</p>
     </div>
 </div>
 
