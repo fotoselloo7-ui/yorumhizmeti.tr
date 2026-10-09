@@ -30,17 +30,17 @@ $esc = static fn($value) => e((string)$value);
   <div class="adm-card" id="smm-providers"><div class="adm-card-header"><h3><?= icon('plug',18) ?> Tedarikçi API Bağlantısı</h3></div>
    <div class="adm-card-body">
     <p class="text-secondary">Standart API v2 (POST + form-encoded) desteklenir. Anahtar sunucu tarafında AES-256-GCM ile şifrelenir; ekranda geri gösterilmez.</p>
-    <form class="smm-form" method="post" action="/admin/smm/tedarikci/kaydet">
+    <form class="smm-form" id="smm-provider-form" method="post" action="/admin/smm/tedarikci/kaydet">
       <?= csrfField() ?>
       <div class="smm-form-grid">
-        <div class="form-group"><label>Tedarikçi ID (düzenleme için)</label><input class="form-control" type="number" min="0" name="id" value="0"><small>Yeni kayıt için 0</small></div>
-        <div class="form-group"><label>Görünen yönetim adı</label><input class="form-control" name="name" required maxlength="120" placeholder="Tedarikçi 1"></div>
-        <div class="form-group"><label>API uç noktası (HTTPS)</label><input class="form-control" name="endpoint" type="url" required placeholder="https://tedarikci.com/api/v2"></div>
+        <div class="form-group"><label>Tedarikçi ID (düzenleme için)</label><input class="form-control" type="number" min="0" name="id" id="smm-provider-id" value="0"><small>Yeni kayıt için 0</small></div>
+        <div class="form-group"><label>Görünen yönetim adı</label><input class="form-control" name="name" id="smm-provider-name" required maxlength="120" placeholder="Tedarikçi 1"></div>
+        <div class="form-group"><label>API uç noktası (HTTPS)</label><input class="form-control" name="endpoint" id="smm-provider-endpoint" type="url" required placeholder="https://tedarikci.com/api/v2"></div>
         <div class="form-group"><label>API Anahtarı</label><input class="form-control" name="api_key" type="password" autocomplete="new-password" placeholder="Yeni anahtar / değiştirmek için doldur"></div>
-        <div class="form-group"><label>API Para Birimi (maliyet raporu)</label><select class="form-control" name="currency"><option>USD</option><option>TRY</option><option>EUR</option><option>GBP</option></select></div>
-        <div class="form-group"><label>Bağlantı durumu</label><select class="form-control" name="is_active"><option value="1">Aktif</option><option value="0">Pasif</option></select></div>
+        <div class="form-group"><label>API Para Birimi (maliyet raporu)</label><select class="form-control" name="currency" id="smm-provider-currency"><option>USD</option><option>TRY</option><option>EUR</option><option>GBP</option></select></div>
+        <div class="form-group"><label>Bağlantı durumu</label><select class="form-control" name="is_active" id="smm-provider-active"><option value="1">Aktif</option><option value="0">Pasif</option></select></div>
       </div>
-      <button class="btn btn-primary" type="submit"><?= icon('save',16) ?> Tedarikçiyi Kaydet</button>
+      <div class="smm-actions"><button class="btn btn-primary" type="submit"><?= icon('save',16) ?> Tedarikçiyi Kaydet</button><button class="btn btn-outline" type="reset" id="smm-provider-new">Yeni Bağlantı</button></div>
     </form>
    </div>
   </div>
@@ -53,6 +53,7 @@ $esc = static fn($value) => e((string)$value);
         <small>#<?= (int)$p['id'] ?> · <?= $esc($p['currency']) ?> · <?= $p['is_active']?'Aktif':'Pasif' ?> · Son eşitleme: <?= $esc($p['last_synced_at']??'Henüz yok') ?></small>
         <small><?= $esc($p['endpoint']) ?></small></div>
        <div class="smm-actions">
+         <?php if($canEditProviders): ?><button type="button" class="btn btn-outline btn-sm smm-edit-provider" data-id="<?= (int)$p['id'] ?>" data-name="<?= $esc($p['name']) ?>" data-endpoint="<?= $esc($p['endpoint']) ?>" data-currency="<?= $esc($p['currency']) ?>" data-active="<?= (int)$p['is_active'] ?>">Düzenle</button><?php endif; ?>
          <form method="post" action="/admin/smm/tedarikci/<?= (int)$p['id'] ?>/test"><?= csrfField() ?><button type="submit" class="btn btn-outline btn-sm">API Testi / Bakiye</button></form>
          <form method="post" action="/admin/smm/tedarikci/<?= (int)$p['id'] ?>/esitle"><?= csrfField() ?><button type="submit" class="btn btn-primary btn-sm">Servisleri Çek</button></form>
        </div>
@@ -180,6 +181,22 @@ $esc = static fn($value) => e((string)$value);
   <?php endif; ?>
 </div>
 <script>
+document.querySelectorAll('.smm-edit-provider').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var form=document.getElementById('smm-provider-form');
+    if(!form)return;
+    document.getElementById('smm-provider-id').value=this.dataset.id;
+    document.getElementById('smm-provider-name').value=this.dataset.name;
+    document.getElementById('smm-provider-endpoint').value=this.dataset.endpoint;
+    document.getElementById('smm-provider-currency').value=this.dataset.currency;
+    document.getElementById('smm-provider-active').value=this.dataset.active;
+    form.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+var newProvider=document.getElementById('smm-provider-new');
+if(newProvider)newProvider.addEventListener('click',function(){
+  document.getElementById('smm-provider-id').value='0';
+});
 document.querySelectorAll('.smm-choose').forEach(function(btn){
   btn.addEventListener('click',function(){
     var sel=document.getElementById('smm-service-select');
