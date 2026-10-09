@@ -25,6 +25,15 @@
           history.replaceState(history.state, "", location.pathname + location.search + "#" + selected);
         }
       };
+      root.closest(".nv40-detail")?.querySelectorAll('[data-nv60-jump-tab]').forEach(link => {
+        link.addEventListener("click", event => {
+          const id=link.getAttribute("data-nv60-jump-tab");
+          if(!ids.has(id))return;
+          event.preventDefault();
+          activate(id,{updateUrl:true});
+          nav.scrollIntoView({block:"start",behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+        });
+      });
       nav.addEventListener("click", e => {
         const tab=e.target.closest('[role="tab"]');
         if (!tab || !nav.contains(tab)) return;
