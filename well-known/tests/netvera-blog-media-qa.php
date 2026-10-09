@@ -33,4 +33,8 @@ foreach($srcs as $src){
         throw new RuntimeException('Broken original WebP content: '.$src);
 }
 if(count($srcs)!==20)throw new RuntimeException('Expected 10 inline + 10 cover/OG files, got '.count($srcs));
+if(in_array('--list-urls',$argv??[],true)) {
+    foreach($srcs as $src)echo $src."\n";
+    exit(0);
+}
 echo "PASS: 5 original articles, 10 inline media + 10 cover/OG images; all real WebP files and Markdown image URLs valid.\n";
