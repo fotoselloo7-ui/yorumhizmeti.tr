@@ -47,14 +47,17 @@ verify(Refs::normalizedPlacements(['group'=>'marketing','service'=>'seo'])===[
 ], 'existing one-category references retain their exact group/service');
 // Harici barındırma: site sunucusunda MP4 saklamadan iframe veya CDN oynatma.
 verify(Refs::externalPlayer('https://youtu.be/dQw4w9WgXcQ')['url']
-    ==='https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0&playsinline=1',
+    ==='https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0&playsinline=1&autoplay=1',
     'YouTube share URL converts to privacy-enhanced on-site embed');
 verify(Refs::externalPlayer('https://www.youtube.com/shorts/dQw4w9WgXcQ')['provider']==='YouTube',
     'YouTube Shorts URL supported');
 verify(Refs::externalPlayer('https://vimeo.com/123456789')['type']==='iframe',
     'Vimeo share URL supported');
+verify(Refs::externalPlayer('https://vimeo.com/123456789/abcde12345')['url']
+    ==='https://player.vimeo.com/video/123456789?h=abcde12345&autoplay=1',
+    'unlisted Vimeo private share hash preserved');
 verify(Refs::externalPlayer('https://player.mediadelivery.net/embed/197133/dc48a09e-d9bb-420a-83d7-72dc2304c034')
-    ===['type'=>'iframe','url'=>'https://player.mediadelivery.net/embed/197133/dc48a09e-d9bb-420a-83d7-72dc2304c034','provider'=>'Bunny Stream'],
+    ===['type'=>'iframe','url'=>'https://player.mediadelivery.net/embed/197133/dc48a09e-d9bb-420a-83d7-72dc2304c034?autoplay=true','provider'=>'Bunny Stream'],
     'Bunny Stream video URL canonicalized');
 verify(Refs::externalPlayer('https://customer-f33zs165nr7gyfy4.cloudflarestream.com/6b9e68b07dfee8cc2d116e4c51d6a957/iframe')['provider']==='Cloudflare Stream',
     'Cloudflare Stream player link supported');
