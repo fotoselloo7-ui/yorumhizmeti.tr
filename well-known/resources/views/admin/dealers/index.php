@@ -1,0 +1,58 @@
+<div class="adm-page-top">
+  <div><h2><?= icon('handshake',22) ?> Bayilik ve İş Ortakları</h2>
+    <p class="text-sm text-secondary">Başvuruları onaylayın, bayi seviyelerini belirleyin ve geçmiş hakları şeffaf biçimde izleyin.</p>
+  </div>
+  <a class="btn btn-outline btn-sm" href="/admin/netvera-musteriler"><?= icon('users',15) ?> NetVera Eski Müşterileri</a>
+</div>
+<?php if(!$ready): ?>
+<div class="adm-card" style="margin-top:20px"><div class="adm-card-body">
+  <h3><?= icon('database',18) ?> Bayilik yönetimi veritabanı kurulumu bekleniyor</h3>
+  <p>Mevcut üyeler, ürünler ve eski komisyon kayıtları değiştirilmedi. <code>database/migrations/netvera-dealer-program-v2.sql</code> şeması kontrol edilip yüklenince başvurular ve yönetici onayı aktif olur.</p>
+</div></div>
+<?php else: ?>
+<div class="adm-card" style="margin-top:18px">
+  <div class="adm-card-header">
+    <h3><?= icon('users',18) ?> Başvurular ve İş Ortakları (<?= count($dealers) ?>)</h3>
+  </div>
+  <div class="adm-card-body">
+    <p class="text-sm text-secondary">Eski NetVera bayi hesabı otomatik olarak onaylanmaz. Sadece süper yönetici yeni programdaki bayilik durumunu ve oranını değiştirebilir. Komisyon ödemeleri bu ekrandan yapılmaz.</p>
+    <div class="table-responsive"><table class="adm-table" style="min-width:850px">
+      <thead><tr><th>Müşteri</th><th>Referans Kodu</th><th>Ziyaret</th><th>Durum</th><th>Seviye</th><th>Komisyon Oranı</th><th>İşlem</th></tr></thead>
+      <tbody>
+        <?php foreach($dealers as $dealer): ?>
+        <tr>
+          <td><strong><?= e($dealer['name']) ?></strong><small style="display:block"><?= e($dealer['email']) ?></small>
+            <?php if($dealer['legacy_affiliate_id']): ?><small>Eski bayi #<?= (int)$dealer['legacy_affiliate_id'] ?></small><?php endif; ?>
+          </td>
+          <td><code><?= e($dealer['referral_code']) ?></code></td>
+          <td><?= (int)$dealer['referral_visits'] ?></td>
+          <?php if($canApprove): ?>
+            <td colspan="4">
+              <form method="post" action="/admin/bayilik/<?= (int)$dealer['id'] ?>/karar"
+                style="display:grid;grid-template-columns:repeat(3,minmax(115px,1fr)) auto;gap:8px;align-items:center">
+                <?= csrfField() ?>
+                <select name="status" class="form-control" aria-label="Bayilik durumu">
+                  <?php foreach(['pending'=>'İncelemede','approved'=>'Onaylandı','suspended'=>'Askıya al','rejected'=>'Reddedildi'] as $v=>$label): ?>
+                  <option value="<?= e($v) ?>" <?= $dealer['status']===$v?'selected':'' ?>><?= e($label) ?></option><?php endforeach; ?>
+                </select>
+                <select name="tier" class="form-control" aria-label="Bayilik seviyesi">
+                  <?php foreach(['starter'=>'Başlangıç','pro'=>'Pro','agency'=>'Ajans'] as $v=>$label): ?>
+                  <option value="<?= e($v) ?>" <?= $dealer['tier']===$v?'selected':'' ?>><?= e($label) ?></option><?php endforeach; ?>
+                </select>
+                <input name="commission_rate" class="form-control" type="number" min="0" max="30" step=".01"
+                  value="<?= e(number_format((float)$dealer['commission_rate'],2,'.','')) ?>" aria-label="Komisyon oranı" required>
+                <button type="submit" class="btn btn-primary btn-sm"><?= icon('save',14) ?> Kaydet</button>
+              </form>
+            </td>
+          <?php else: ?>
+            <td><?= e($dealer['status']) ?></td><td><?= e($dealer['tier']) ?></td>
+            <td><?= e((string)$dealer['commission_rate']) ?>%</td><td>İnceleme</td>
+          <?php endif; ?>
+        </tr>
+        <?php endforeach; ?>
+        <?php if(!$dealers): ?><tr><td colspan="7">Henüz bayilik başvurusu yok.</td></tr><?php endif; ?>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+<?php endif; ?>
