@@ -835,40 +835,130 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
 </section>
 <?php endif; ?>
 
-<section class="nv31-portfolio" id="referanslarimiz" aria-labelledby="nv31-portfolio-heading">
+<?php
+$nv51ReferenceGroups = \App\Services\ReferencesService::groups();
+$nv51InitialGroup = 'agency';
+if (!empty($projectReferences)) {
+    $nv51InitialGroup = \App\Services\ReferencesService::normalizedGroup($projectReferences[0]);
+}
+?>
+<section class="nv31-portfolio nv51-portfolio" id="referanslarimiz" aria-labelledby="nv31-portfolio-heading" data-reference-gallery>
   <div class="container">
-    <div class="nv31-section-heading">
+    <div class="nv31-section-heading nv51-heading">
       <div>
         <span class="nv31-kicker"><?= icon('award',14) ?> PROJE PORTFÖYÜMÜZ</span>
         <h2 id="nv31-portfolio-heading">Referanslarımız <span>& Çalışmalarımız</span></h2>
-        <p><?= !empty($projectReferences) ? 'Hayata geçirdiğimiz projelerden örnekler. Sektörlere özel dijital tasarım ve yazılım çözümleri.' : 'Dijital projelerimizin portföyünü bu alanda paylaşacağız. Size özel proje fikirlerini birlikte şekillendirelim.' ?></p>
+        <p>Web sitesi, yazılım, SEO ve sosyal medya çalışmalarımızı kategoriye göre keşfedin.</p>
       </div>
       <a href="/iletisim" class="nv31-heading-link">Projenizi Konuşalım <?= icon('arrow-up-right',15) ?></a>
     </div>
+
     <?php if (!empty($projectReferences)): ?>
-    <div class="nv31-portfolio-grid">
-      <?php foreach($projectReferences as $ref): ?>
-      <article class="nv31-portfolio-card">
-        <div class="nv31-portfolio-image">
-          <?php if(!empty($ref['image'])): ?>
-            <img src="<?= e(upload_url($ref['image'])) ?>" alt="<?= e($ref['title'].' proje görseli') ?>" loading="lazy">
+    <div class="nv51-filter-shell">
+      <div class="nv51-filter-heading">
+        <span><?= icon('sliders-horizontal',14) ?> Referans Kategorileri</span>
+        <small>Çalışmaları hizmet alanına göre filtreleyin</small>
+      </div>
+      <div class="nv51-main-filters" role="group" aria-label="Referans ana kategorileri">
+        <?php foreach ($nv51ReferenceGroups as $groupKey=>$group): ?>
+        <button class="nv51-main-filter" type="button" data-ref-group="<?= e($groupKey) ?>"
+                aria-pressed="<?= $groupKey===$nv51InitialGroup?'true':'false' ?>">
+          <?= icon($group['icon'],16) ?> <?= e($group['label']) ?>
+        </button>
+        <?php endforeach; ?>
+      </div>
+      <?php foreach ($nv51ReferenceGroups as $groupKey=>$group): ?>
+      <div class="nv51-sub-filters" data-ref-service-panel="<?= e($groupKey) ?>" <?= $groupKey!==$nv51InitialGroup?'hidden':'' ?> role="group" aria-label="<?= e($group['label']) ?> alt hizmetleri">
+        <button type="button" class="nv51-sub-filter" data-ref-service="all" aria-pressed="true">Tümü</button>
+        <?php foreach ($group['services'] as $serviceKey=>$serviceName): ?>
+        <button type="button" class="nv51-sub-filter" data-ref-service="<?= e($serviceKey) ?>" aria-pressed="false">
+          <?= e($serviceName) ?>
+        </button>
+        <?php endforeach; ?>
+      </div>
+      <?php endforeach; ?>
+      <div class="nv51-format-filters" data-ref-format-panel hidden role="group" aria-label="Sosyal medya içerik türleri">
+        <span><?= icon('instagram',15) ?> İçerikler</span>
+        <button type="button" data-ref-format="all" aria-pressed="true">Tümü</button>
+        <button type="button" data-ref-format="posts" aria-pressed="false"><?= icon('image',13) ?> Postlar</button>
+        <button type="button" data-ref-format="reels" aria-pressed="false"><?= icon('video',13) ?> Reels</button>
+      </div>
+    </div>
+
+    <div class="nv31-portfolio-grid nv51-portfolio-grid" aria-live="polite">
+      <?php foreach ($projectReferences as $ref):
+        $refGroup = \App\Services\ReferencesService::normalizedGroup($ref);
+        $refService = \App\Services\ReferencesService::normalizedService($ref);
+        $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
+        $embedUrl = \App\Services\ReferencesService::instagramEmbed((string)($ref['url']??''), $refMedia);
+        $hasInstagram = $embedUrl !== null;
+        $isWebsite = $refMedia === 'website' && !empty($ref['url']);
+        $cover = (string)($ref['image']??'');
+        $logo = (string)($ref['logo']??'');
+        $target = trim((string)($ref['url']??''));
+        $serviceLabel = $nv51ReferenceGroups[$refGroup]['services'][$refService] ?? 'Dijital Proje';
+      ?>
+      <article class="nv31-portfolio-card nv51-reference-card"
+               data-ref-card data-ref-group="<?= e($refGroup) ?>"
+               data-ref-service="<?= e($refService) ?>"
+               data-ref-kind="<?= e($refMedia) ?>"
+               <?= $refGroup!==$nv51InitialGroup?'hidden':'' ?>>
+        <?php if ($isWebsite): ?>
+        <a class="nv51-client-link" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
+           aria-label="<?= e($ref['title']) ?> müşteri sitesine git">
+        <?php endif; ?>
+
+        <div class="nv31-portfolio-image nv51-cover <?= $hasInstagram?'nv51-instagram-media':'' ?>">
+          <?php if ($hasInstagram): ?>
+          <button type="button" class="nv51-play-embed" data-ref-play data-embed="<?= e($embedUrl) ?>"
+                  aria-label="<?= e($ref['title']) ?> <?= $refMedia==='instagram_reel'?'Reels videosunu':'Instagram gönderisini' ?> aç">
+            <?php if ($cover): ?>
+              <img src="<?= e(upload_url($cover)) ?>" alt="<?= e($ref['title']) ?> kapak görseli" loading="lazy" decoding="async">
+            <?php else: ?>
+              <span class="nv51-social-placeholder"><?= icon('instagram',35) ?></span>
+            <?php endif; ?>
+            <span class="nv51-play-icon"><?= icon($refMedia==='instagram_reel'?'play':'instagram',23) ?></span>
+            <span class="nv51-media-tag"><?= e($refMedia==='instagram_reel'?'Reels':'Instagram Post') ?></span>
+          </button>
+          <div class="nv51-embed-slot" data-embed-slot hidden></div>
           <?php else: ?>
-            <div class="nv31-portfolio-placeholder"><?= icon('monitor',45) ?></div>
+            <?php if ($cover): ?>
+              <img src="<?= e(upload_url($cover)) ?>" alt="<?= e($ref['title']) ?> proje görseli" loading="lazy" decoding="async">
+            <?php elseif($logo): ?>
+              <img class="nv51-logo-cover" src="<?= e(upload_url($logo)) ?>" alt="<?= e($ref['title']) ?> marka logosu" loading="lazy">
+            <?php else: ?>
+              <div class="nv31-portfolio-placeholder"><?= icon($refMedia==='website'?'monitor':'image',45) ?></div>
+            <?php endif; ?>
           <?php endif; ?>
-          <?php if(!empty($ref['url'])): ?>
-          <a class="nv31-portfolio-arrow" href="<?= e($ref['url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($ref['title']) ?> projesini ziyaret et"><?= icon('arrow-up-right',16) ?></a>
+          <?php if($logo && $cover): ?>
+            <span class="nv51-corner-logo"><img src="<?= e(upload_url($logo)) ?>" alt="" loading="lazy"></span>
+          <?php endif; ?>
+          <?php if($isWebsite): ?>
+            <span class="nv31-portfolio-arrow" aria-hidden="true"><?= icon('arrow-up-right',16) ?></span>
           <?php endif; ?>
         </div>
-        <div class="nv31-portfolio-body">
-          <span class="nv31-portfolio-kind"><?= icon('layers',11) ?> <?= e($ref['category'] ?: 'Dijital proje') ?></span>
+
+        <div class="nv31-portfolio-body nv51-reference-body">
+          <span class="nv31-portfolio-kind"><?= icon($hasInstagram?'instagram':($isWebsite?'globe':'layers'),12) ?> <?= e($serviceLabel) ?></span>
           <h3><?= e($ref['title']) ?></h3>
           <?php if(!empty($ref['description'])): ?><p><?= e($ref['description']) ?></p><?php endif; ?>
-          <?php if(!empty($ref['url'])): ?>
-            <a href="<?= e($ref['url']) ?>" target="_blank" rel="noopener noreferrer">Projeyi İncele <?= icon('arrow-right',12) ?></a>
+          <?php if($isWebsite): ?>
+            <span class="nv51-reference-action">Müşteri Sitesini Ziyaret Et <?= icon('arrow-up-right',13) ?></span>
+          <?php elseif ($hasInstagram): ?>
+            <a class="nv51-reference-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer">Instagram'da Aç <?= icon('arrow-up-right',13) ?></a>
+          <?php elseif ($target): ?>
+            <a class="nv51-reference-action" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer">Çalışmayı Gör <?= icon('arrow-up-right',13) ?></a>
           <?php endif; ?>
         </div>
+
+        <?php if ($isWebsite): ?></a><?php endif; ?>
       </article>
       <?php endforeach; ?>
+    </div>
+    <div class="nv51-no-results" data-ref-empty hidden>
+      <?= icon('folder',25) ?>
+      <strong>Bu kategoride henüz yayınlanmış referans yok.</strong>
+      <p>Diğer hizmetleri veya farklı bir kategori seçebilirsiniz.</p>
     </div>
     <?php else: ?>
     <div class="nv32-portfolio-intro">
@@ -876,18 +966,70 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
         <span class="nv32-portfolio-orb nv32-orb-one"><?= icon('monitor',31) ?></span>
         <span class="nv32-portfolio-orb nv32-orb-two"><?= icon('palette',23) ?></span>
         <span class="nv32-portfolio-orb nv32-orb-three"><?= icon('layers',25) ?></span>
-        <div class="nv32-portfolio-frames"><div><span></span><span></span><span></span></div><div><span></span><span></span><span></span></div></div>
+        <div class="nv32-portfolio-frames"><div><span></span><span></span><span></span></div><div><span></span></span></div></div>
       </div>
       <div class="nv32-portfolio-copy">
         <span class="nv32-intro-kicker"><?= icon('award',14) ?> YENİ PROJELERE AÇIĞIZ</span>
         <h3>Bir sonraki dijital projeyi <span>birlikte hayata geçirelim.</span></h3>
-        <p>Web tasarım, özel yazılım ve dijital büyüme alanlarında işletmenizin ihtiyaçlarını konuşalım. Yayınlanan müşteri çalışmalarını daha sonra bu bölümde görüntüleyebilirsiniz.</p>
+        <p>Web tasarım, özel yazılım ve dijital büyüme alanlarında işletmenizin ihtiyaçlarını konuşalım. Yayınlanan çalışmaları bu bölümde görüntüleyebilirsiniz.</p>
         <a class="nv32-primary-cta" href="/iletisim">Projenizi Anlatın <?= icon('arrow-right',15) ?></a>
       </div>
     </div>
     <?php endif; ?>
   </div>
 </section>
+<script>
+(function(){
+ const root=document.querySelector('[data-reference-gallery]');
+ if(!root)return;
+ const groups=Array.from(root.querySelectorAll('[data-ref-group]'));
+ const panels=Array.from(root.querySelectorAll('[data-ref-service-panel]'));
+ const cards=Array.from(root.querySelectorAll('[data-ref-card]'));
+ const formatPanel=root.querySelector('[data-ref-format-panel]');
+ const empty=root.querySelector('[data-ref-empty]');
+ let group=groups.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.refGroup||'agency';
+ let service='all',format='all';
+ function apply(){
+   groups.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.refGroup===group)));
+   panels.forEach(panel=>{
+     panel.hidden=panel.dataset.refServicePanel!==group;
+     panel.querySelectorAll('[data-ref-service]').forEach(button=>{
+       button.setAttribute('aria-pressed',String(panel.dataset.refService===group && button.dataset.refService===service));
+     });
+   });
+   const social=group==='marketing'&&service==='social-management';
+   if(formatPanel)formatPanel.hidden=!social;
+   if(formatPanel)formatPanel.querySelectorAll('[data-ref-format]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.refFormat===format)));
+   let found=0;
+   cards.forEach(card=>{
+     const t=card.dataset.refKind;
+     const permitted=card.dataset.refGroup===group &&
+       (service==='all'||card.dataset.refService===service) &&
+       (!social||format==='all'||(format==='reels'?t==='instagram_reel':t==='instagram_post'||t==='image'));
+     card.hidden=!permitted;
+     if(permitted)found++;
+   });
+   if(empty)empty.hidden=found>0;
+ }
+ groups.forEach(button=>button.addEventListener('click',()=>{group=button.dataset.refGroup;service='all';format='all';apply()}));
+ panels.forEach(panel=>panel.querySelectorAll('[data-ref-service]').forEach(button=>{
+   button.addEventListener('click',()=>{group=panel.dataset.refServicePanel;service=button.dataset.refService;format='all';apply()});
+ }));
+ if(formatPanel)formatPanel.querySelectorAll('[data-ref-format]').forEach(button=>button.addEventListener('click',()=>{format=button.dataset.refFormat;apply()}));
+ root.querySelectorAll('[data-ref-play]').forEach(button=>button.addEventListener('click',()=>{
+   const url=button.dataset.embed||'';
+   try{const u=new URL(url);if(u.protocol!=='https:'||u.hostname!=='www.instagram.com'||!/^\/(?:p|reel)\/[A-Za-z0-9_-]+\/embed\/$/.test(u.pathname))return;}catch(e){return}
+   const slot=button.parentElement.querySelector('[data-embed-slot]');if(!slot)return;
+   const frame=document.createElement('iframe');
+   frame.src=url;frame.title='Instagram gönderisi';frame.loading='lazy';
+   frame.allow='encrypted-media; picture-in-picture';
+   frame.referrerPolicy='strict-origin-when-cross-origin';
+   frame.setAttribute('allowfullscreen','');
+   button.hidden=true;slot.hidden=false;slot.appendChild(frame);
+ }));
+ apply();
+})();
+</script>
 
 <section class="nv30-process" id="how" aria-labelledby="nv30-process-title">
     <div class="container">
