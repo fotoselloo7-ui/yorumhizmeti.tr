@@ -29,6 +29,60 @@ if (!function_exists('yh6Platform')) {
     }
 }
 
+/**
+ * Choose a concrete, locally supported icon from the visible service category.
+ * More specific child services take precedence over parent/platform branding.
+ */
+if (!function_exists('yh50MarqueeIcon')) {
+    function yh50MarqueeIcon(string $name, string $style = '', string $configured = ''): string {
+        $term = mb_strtolower($name, 'UTF-8');
+        $rules = [
+            ['/qr|karekod/u', 'grid'],
+            ['/harita|konum|lokasyon|maps?/u', 'map-pin'],
+            ['/yorum|şikayet|sikayet|mesaj|değerlendirme|degerlendirme/u', 'message-circle'],
+            ['/takipçi|takipci|abone|follower/u', 'users'],
+            ['/beğeni|begeni|like/u', 'heart'],
+            ['/izlenme|görüntülenme|goruntulenme|view/u', 'eye'],
+            ['/puan|yıldız|yildiz|rating/u', 'star-fill'],
+            ['/otomasyon|robot|bot/u', 'robot'],
+            ['/analiz|istatistik|rapor|performans/u', 'bar-chart'],
+            ['/reklam|ads|kampanya/u', 'ads'],
+            ['/backlink|bağlantı|baglanti/u', 'link'],
+            ['/profil|işletme|isletme|mağaza|magaza/u', 'store'],
+            ['/grafik|tasarım|tasarim|logo/u', 'palette'],
+            ['/içerik|icerik|blog|makale|metin/u', 'content-create'],
+            ['/mobil|uygulama|android|ios/u', 'mobile-app'],
+            ['/e.?ticaret|eticaret|ecommerce/u', 'store'],
+            ['/sektörel|sektorel|yönetim yazılım|yonetim yazilim/u', 'monitor'],
+            ['/masaüstü|masaustu|desktop/u', 'monitor'],
+            ['/hazır yazılım|hazir yazilim|script|yazılım|yazilim|software/u', 'code'],
+            ['/web|site|wordpress/u', 'globe'],
+            ['/seo|arama motor/u', 'search'],
+        ];
+        foreach ($rules as [$pattern, $iconName]) {
+            if (preg_match($pattern, $term) && \App\Services\IconService::has($iconName)) {
+                return $iconName;
+            }
+        }
+        $byStyle = [
+            'instagram'=>'instagram', 'tiktok'=>'tiktok', 'youtube'=>'youtube',
+            'facebook'=>'facebook', 'google'=>'google', 'seo'=>'search',
+            'twitter'=>'twitter', 'threads'=>'threads', 'telegram'=>'telegram',
+            'spotify'=>'spotify', 'discord'=>'discord', 'linkedin'=>'linkedin',
+            'twitch'=>'twitch', 'pinterest'=>'pinterest', 'snapchat'=>'snapchat',
+            'soundcloud'=>'soundcloud', 'software'=>'monitor', 'web'=>'globe',
+            'ecommerce'=>'store', 'mobileapp'=>'mobile-app', 'content'=>'content-create',
+            'graphic'=>'palette', 'ads'=>'ads', 'local'=>'map-pin',
+            'reputation'=>'shield-check',
+        ];
+        $suggested = $byStyle[$style] ?? '';
+        if ($suggested !== '' && \App\Services\IconService::has($suggested)) {
+            return $suggested;
+        }
+        return \App\Services\IconService::has($configured) ? $configured : 'package';
+    }
+}
+
 if (!function_exists('yh6PackagePrice')) {
     function yh6PackagePrice(array $pkg): float {
         return (!empty($pkg['discount_price']) && $pkg['discount_price'] < $pkg['price'])
@@ -256,7 +310,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
                            class="yh49-category-link <?= e($yh49Item['style']) ?>"
                            <?= $yh49Repeat ? 'tabindex="-1"' : '' ?>
                            title="<?= e($yh49Item['name']) ?>">
-                            <span class="yh49-category-icon"><?= icon($yh49Item['icon'], 20) ?></span>
+                            <span class="yh49-category-icon"><?= icon(yh50MarqueeIcon((string)$yh49Item['name'], (string)$yh49Item['style'], (string)$yh49Item['icon']), 20) ?></span>
                             <span class="yh49-category-copy">
                                 <strong><?= e($yh49Item['name']) ?></strong>
                                 <small><?= e($yh49Item['detail']) ?></small>
