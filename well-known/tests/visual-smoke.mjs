@@ -1614,6 +1614,43 @@ try {
   });
   if(readable.fontSize<12||readable.visibility!=='visible')
     throw new Error('Product description is too small or invisible '+JSON.stringify(readable));
+  if((await productTabPage.getByText('Netvera\'daki Ürünü Aç').count())>0)
+    throw new Error('Old NetVera external product CTA must be removed');
+  if((await productTabPage.getByText('staging görünümünden').count())>0)
+    throw new Error('Temporary staging wording leaked into product details');
+  const technicalTab=tabNav.locator('[data-nv60-tab="teknik"]');
+  if((await technicalTab.count())!==1)throw new Error('Synthetic technical spec tab missing');
+  await technicalTab.click();
+  const technicalPanel=productTabPage.locator('[data-nv60-panel="teknik"]');
+  const features=technicalPanel.locator('.nv61-spec-feature');
+  if(await features.count()!==3 || !(await features.first().getByText('PHP 8.2 ve üstü').isVisible()))
+    throw new Error('Legacy unlabelled technical values must show as full-content feature cards');
+  const technicalGeometry=await technicalPanel.evaluate(el=>{
+    const specs=[...el.querySelectorAll('.nv61-spec-feature')];
+    return specs.map(card=>({
+      left:card.getBoundingClientRect().left,
+      itemLeft:card.querySelector('span')?.getBoundingClientRect().left,
+      visible:getComputedStyle(card).display!=='none'
+    }));
+  });
+  if(technicalGeometry.some(item=>!item.visible||item.itemLeft-item.left>62))
+    throw new Error('Unlabelled technical values are misplaced to the right edge');
+  await tabNav.locator('[data-nv60-tab="demo"]').click();
+  const demoPanel=productTabPage.locator('[data-nv60-panel="demo"]');
+  if(!(await demoPanel.isVisible())||!(await demoPanel.locator('a[href="https://qa-demo.example.test"]').count()))
+    throw new Error('Demo URL missing from in-place preview tab');
+  if(!(await demoPanel.locator('a[href="https://qa-demo.example.test/yonetim"]').count()))
+    throw new Error('Demo admin URL missing from original demo tab');
+  if(!(await demoPanel.getByText('qa-public-demo-user').count()) ||
+     !(await demoPanel.getByText('qa-public-demo-only-no-real-account').count()))
+    throw new Error('Opted-in public QA demo login not shown in product tab');
+  const media=await productTabPage.locator('.nv40-product-media').boundingBox();
+  const price=await productTabPage.locator('.nv40-price-box').boundingBox();
+  const hero=await productTabPage.locator('.nv40-product-hero').boundingBox();
+  if(!media||!price||!hero)throw new Error('Product hero layouts missing');
+  if(await productTabPage.locator('.nv40-product-hero .nv-product-offer').count())
+    throw new Error('Quote form must not vertically stretch the cover/gallery hero');
+  console.log('PASS NetVera specifications, real tab demo structure, public QA credentials and compact hero');
   console.log('PASS product detail tabs, no page jump, accessible selection and article legibility');
 } catch(e) {
   failed=true;
