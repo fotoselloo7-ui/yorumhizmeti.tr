@@ -174,6 +174,7 @@ class App
         $r->post('/admin/netvera-gelen-kutusu/{id}/yanit', 'Admin\\NetveraInboxController@reply');
 
         $r->post('/admin/netvera-gelen-kutusu/telegram/kaydet', 'Admin\\NetveraInboxController@saveTelegramSettings');
+        $r->post('/admin/netvera-gelen-kutusu/temsilci/kaydet', 'Admin\\NetveraInboxController@saveAgent');
         $r->post('/admin/netvera-gelen-kutusu/telegram/test', 'Admin\\NetveraInboxController@testTelegram');
         $r->post('/admin/netvera-gelen-kutusu/onem/kur', 'Admin\\NetveraInboxController@installImportance');
         $r->post('/admin/netvera-gelen-kutusu/{id}/onem', 'Admin\\NetveraInboxController@importance');
