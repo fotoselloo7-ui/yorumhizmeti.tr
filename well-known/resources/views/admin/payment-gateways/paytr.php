@@ -32,7 +32,7 @@
                 </select>
             </div>
             
-            <p style="font-size:11px;color:#697891;line-height:1.65;margin-top:13px">Merchant Key ve Salt alanlarını boş bırakırsanız mevcut bilgiler korunur. Test modu açıkken gerçek tahsilat onayı kabul edilmez; canlıya geçmeden önce PayTR mağaza panelinden yetkileri ve bildirim adresini doğrulayın.</p>
+            <p class="form-hint">Merchant Key ve Salt alanlarını boş bırakırsanız kayıtlı bilgiler korunur.</p>
             <button type="submit" class="adm-action-btn adm-btn-save" style="width: 100%; justify-content: center; margin-top: 1.5rem;">
                 <?= icon('save', 16) ?> Ayarları Kaydet
             </button>
