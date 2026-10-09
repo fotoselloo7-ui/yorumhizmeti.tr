@@ -77,6 +77,7 @@
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <link rel="stylesheet" href="<?= asset('css/home-service-alignment-v45.css') ?>?v=45.1">
     <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
+    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=49.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -397,7 +398,45 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
-            <div class="footer-grid footer-grid-v9">
+            <?php
+            // The site footer uses the same published category hierarchy as the mega menu.
+            $footerServices = [];
+            $footerChildren = [];
+            $footerScripts = [];
+            try {
+                foreach (\App\Services\CatalogMenuService::groups() as $footerGroup) {
+                    foreach (array_slice($footerGroup['categories'], 0, 3) as $footerCat) {
+                        $footerServices[] = ['name'=>$footerCat['name'], 'url'=>$footerCat['url']];
+                        if (!empty($footerCat['children'])) {
+                            $footerChild = $footerCat['children'][0];
+                            $footerChildren[] = ['name'=>$footerChild['name'], 'url'=>$footerChild['url']];
+                        }
+                    }
+                }
+                $footerProducts = \App\Services\NetveraBridgeService::all();
+                if ($footerProducts) {
+                    foreach (\App\Services\NetveraBridgeService::categories() as $footerCategory) {
+                        $footerCategoryId = (int)($footerCategory['legacy_id'] ?? 0);
+                        $footerHasProduct = false;
+                        foreach ($footerProducts as $footerProduct) {
+                            if ((int)($footerProduct['category_legacy_id'] ?? 0) === $footerCategoryId) {
+                                $footerHasProduct = true;
+                                break;
+                            }
+                        }
+                        if (!$footerHasProduct) continue;
+                        $footerScripts[] = [
+                            'name' => $footerCategory['name'],
+                            'url' => '/hazir-scriptler?category='.rawurlencode((string)$footerCategory['slug'])
+                        ];
+                        if (count($footerScripts) >= 5) break;
+                    }
+                }
+            } catch (\Throwable $e) {
+                error_log('Footer public catalog lookup failed.');
+            }
+            ?>
+            <div class="footer-grid footer-grid-v9 yh49-footer-grid">
                 <div class="footer-brand">
                     <h3>YorumHizmeti.tr</h3>
                     <p><?= e(setting('site_slogan', 'Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web ve dijital çözümlere kadar güvenilir hizmet ortağınız.')) ?></p>
@@ -408,26 +447,40 @@
                     </div>
                 </div>
 
-                <div class="footer-col">
-                    <h4>Hizmetlerimiz</h4>
-                    <?php
-                    try {
-                        $footerCats = \App\Core\Database::getInstance()->fetchAll("SELECT name, slug FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order LIMIT 6");
-                        foreach ($footerCats as $fc):
-                    ?>
-                        <a href="/kategori/<?= e($fc['slug']) ?>"><?= e($fc['name']) ?></a>
-                    <?php endforeach; } catch(\Exception $e) {} ?>
-                </div>
+                <nav class="footer-col" aria-label="Hizmet kategorileri">
+                    <h4>Hizmet Kategorileri</h4>
+                    <?php foreach (array_slice($footerServices, 0, 8) as $footerItem): ?>
+                    <a class="yh49-footer-link" href="<?= e($footerItem['url']) ?>"><?= e($footerItem['name']) ?></a>
+                    <?php endforeach; ?>
+                    <?php if ($footerChildren): ?>
+                    <span class="yh49-footer-subtitle">Alt Hizmetler</span>
+                    <?php foreach (array_slice($footerChildren, 0, 3) as $footerItem): ?>
+                    <a class="yh49-footer-link" href="<?= e($footerItem['url']) ?>"><?= e($footerItem['name']) ?></a>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
+                    <a class="yh49-footer-all" href="/kategoriler">Tüm Hizmetler <?= icon('arrow-up-right',12) ?></a>
+                </nav>
 
-                <div class="footer-col">
-                    <h4>Kurumsal</h4>
-                    <a href="/sayfa/hakkimizda">Hakkımızda</a>
-                    <a href="/blog">Blog</a>
-                    <a href="/sss">Sıkça Sorulan Sorular</a>
-                    <a href="/iletisim">İletişim</a>
-                    <a href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a>
-                    <a href="/sayfa/kvkk">KVKK</a>
-                </div>
+                <nav class="footer-col" aria-label="Hazır yazılımlar">
+                    <h4>Hazır Yazılımlar</h4>
+                    <a class="yh49-footer-link" href="/hazir-scriptler">Tüm Hazır Yazılımlar</a>
+                    <?php foreach ($footerScripts as $footerItem): ?>
+                    <a class="yh49-footer-link" href="<?= e($footerItem['url']) ?>"><?= e($footerItem['name']) ?></a>
+                    <?php endforeach; ?>
+                    <a class="yh49-footer-link" href="/hazir-yazilimlar">Yazılım Hizmet Paketleri</a>
+                    <a class="yh49-footer-all" href="/hazir-scriptler">Scriptleri Keşfet <?= icon('arrow-up-right',12) ?></a>
+                </nav>
+
+                <nav class="footer-col" aria-label="Kurumsal ve destek">
+                    <h4>Kurumsal & Destek</h4>
+                    <a class="yh49-footer-link" href="/sayfa/hakkimizda">Hakkımızda</a>
+                    <a class="yh49-footer-link" href="/blog">Blog</a>
+                    <a class="yh49-footer-link" href="/sss">Sıkça Sorulan Sorular</a>
+                    <a class="yh49-footer-link" href="/destek">Destek Merkezi</a>
+                    <a class="yh49-footer-link" href="/destek/yeni">Destek Talebi Oluştur</a>
+                    <a class="yh49-footer-link" href="/sayfa/gizlilik-politikasi">Gizlilik Politikası</a>
+                    <a class="yh49-footer-link" href="/sayfa/kvkk">KVKK</a>
+                </nav>
 
                 <div class="footer-col footer-contact-v9">
                     <h4>İletişim</h4>
