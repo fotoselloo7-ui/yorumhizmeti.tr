@@ -3,12 +3,7 @@
     <p class="text-sm text-secondary">Ajans & Yazılım ve SEO & Dijital çalışmalarını yönet; bir referansı iki ayrı kategoriye bağla. Post/Reels kapakları ve müşteri logoları ekle.</p></div>
   <a href="/#referanslarimiz" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><?= icon('external-link',14) ?> Referans Vitrinini Gör</a>
 </div>
-<div class="adm31-help">
-  <?= icon('shield-check',18) ?>
-  <div><strong>Yayınlanan referanslar yalnızca gerçek çalışmalardan oluşur.</strong>
-    <p>Referanslarda video düğmesinin metni her zaman “Videoyu İzle” olur. Sadece Instagram bağlantısı olan içerikler yeni sekmede Instagram’da açılır. YouTube Videosu / Shorts türü seçilenler bizim oynatma penceremizde gösterilir. Instagram referansına isteğe bağlı harici video eklersen site içinde oynatma öncelikli olur. Kapak görseli her iki durumda da korunur.</p>
-  </div>
-</div>
+
 <div class="adm-card">
   <div class="adm-card-header"><h3><?= icon('plus',18) ?> Yeni Referans Ekle</h3></div>
   <div class="adm-card-body">
@@ -24,7 +19,7 @@
   <div class="adm-card-body">
   <?php if(empty($references)): ?>
     <div class="adm31-empty"><?= icon('image',28) ?><strong>Henüz referans eklenmemiş.</strong>
-      <p>Bir çalışma yayınladığında Ajans & Yazılım veya SEO & Dijital sekmesinde görünür.</p>
+      
     </div>
   <?php else: ?>
     <div class="adm31-existing-refs">
