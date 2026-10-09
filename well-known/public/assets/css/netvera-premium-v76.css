@@ -353,3 +353,32 @@ body.nv-theme-enabled .site-footer .footer-col a:hover{
     min-height:265px!important;
   }
 }
+
+/* Ensure all hero headline lines share the paragraph's left edge, including
+   on pages with older global h1 centering rules. */
+.yh-home-v6 .yh6-hero .yh6-hero-copy h1.nv75-hero-heading {
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+  margin-left:0!important;
+  padding-left:0!important;
+}
+.yh-home-v6 .yh6-hero .yh6-hero-copy h1.nv75-hero-heading > .nv75-hero-line {
+  display:block!important;
+  flex:none!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:left!important;
+  align-self:stretch!important;
+  text-indent:0!important;
+  transform:none!important;
+}
+@media(max-width:620px) {
+  .yh-home-v6 .yh6-hero .yh6-hero-copy h1.nv75-hero-heading > .nv75-hero-highlight {
+    font-size:clamp(20px,5.2vw,30px)!important;
+    white-space:normal!important;
+  }
+}
