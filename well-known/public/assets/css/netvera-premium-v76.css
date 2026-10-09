@@ -193,6 +193,63 @@ body.nv-theme-enabled .nv75-why .nv75-platform-services>div{
 body.nv-theme-enabled .nv75-why .nv75-why-cta{
   background:linear-gradient(110deg,var(--nv-theme-button),var(--nv-theme-accent));color:#fff
 }
+/* Apply editor palette consistently across navigation, CTA, category filters and cards.
+   Contrast variables come from the saved color luminance and are absent in reset/default mode. */
+body.nv-theme-enabled .yh6-hero .nv75-hero-heading .nv75-hero-line:not(.nv75-hero-highlight){
+  color:var(--nv-theme-text,#17264e)
+}
+body.nv-theme-enabled .yh6-hero .nv75-hero-heading .nv75-hero-highlight{
+  background:linear-gradient(95deg,var(--nv-theme-primary),var(--nv-theme-accent));
+  -webkit-background-clip:text;background-clip:text
+}
+body.nv-theme-enabled .yh6-eyebrow,
+body.nv-theme-enabled .nv31-kicker,
+body.nv-theme-enabled .nv75-type-link.active,
+body.nv-theme-enabled .nv75-why .nv75-why-eyebrow{
+  color:var(--nv-theme-primary)!important;
+  border-color:color-mix(in srgb,var(--nv-theme-primary) 23%,white)!important;
+  background:color-mix(in srgb,var(--nv-theme-primary) 9%,white)!important
+}
+body.nv-theme-enabled .yh6-btn.primary,
+body.nv-theme-enabled .yh18-card-cta,
+body.nv-theme-enabled .nv40-apply-filters,
+body.nv-theme-enabled .nv75-why .nv75-why-cta{
+  background:linear-gradient(110deg,var(--nv-theme-button),var(--nv-theme-accent))!important;
+  color:var(--nv-theme-on-button,#fff)!important;
+  border:1px solid transparent!important
+}
+body.nv-theme-enabled .yh24-featured-group.is-open,
+body.nv-theme-enabled .nv43-featured-nav-item.active{
+  background:linear-gradient(112deg,var(--nv-theme-button),var(--nv-theme-accent))!important;
+  color:var(--nv-theme-on-button,#fff)!important
+}
+body.nv-theme-enabled .yh6-hero-metrics .icon,
+body.nv-theme-enabled .site-header .nv26-header-context .icon{
+  color:var(--nv-theme-primary)
+}
+body.nv-theme-enabled .nv75-why .nv75-benefit strong,
+body.nv-theme-enabled .nv75-why .nv75-ecosystem-heading strong,
+body.nv-theme-enabled .nv75-why .nv75-ecosystem-item strong,
+body.nv-theme-enabled .nv75-why .nv75-platform-services b{
+  color:var(--nv-theme-on-card,#17264e)
+}
+body.nv-theme-enabled .nv75-why .nv75-benefit small,
+body.nv-theme-enabled .nv75-why .nv75-ecosystem-heading small,
+body.nv-theme-enabled .nv75-why .nv75-ecosystem-item em,
+body.nv-theme-enabled .nv75-why .nv75-platform-services small{
+  color:color-mix(in srgb,var(--nv-theme-on-card,#17264e) 72%,transparent)
+}
+body.nv-theme-enabled .nv75-why .nv75-ecosystem-item{
+  background:var(--nv-theme-card,#fff);
+  border-color:var(--nv-theme-border,#e5e8f2)
+}
+body.nv-theme-enabled .site-footer .footer-col a{
+  color:#e7eaff
+}
+body.nv-theme-enabled .site-footer .footer-col a:hover{
+  color:#fff!important;text-decoration:underline
+}
+
 @media(max-width:1200px){
   .yh6-hero .yh6-hero-copy h1.nv75-hero-heading{font-size:clamp(35px,4vw,50px)}
   .nv75-why .nv75-platform-services{grid-template-columns:repeat(2,minmax(0,1fr))}
