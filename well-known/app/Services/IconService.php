@@ -7,6 +7,8 @@ class IconService
         'home'=>['solid','house'],'package'=>['solid','box'],'box'=>['solid','box'],
         'shopping-cart'=>['solid','cart-shopping'],'shopping-bag'=>['solid','bag-shopping'],'users'=>['solid','users'],'user'=>['regular','user'],
         'settings'=>['solid','gear'],'search'=>['solid','magnifying-glass'],'menu'=>['solid','bars'],
+        'code'=>['solid','code'],'robot'=>['solid','robot'],'briefcase'=>['solid','briefcase'],
+        'building'=>['solid','building'],'comment'=>['solid','comment-dots'],
         'x'=>['solid','xmark'],'x-circle'=>['regular','circle-xmark'],'check'=>['solid','check'],'check-circle'=>['regular','circle-check'],'shield-check'=>['solid','shield-halved'],
         'alert-triangle'=>['solid','triangle-exclamation'],'alert-circle'=>['solid','circle-exclamation'],
         'info'=>['solid','circle-info'],'plus'=>['solid','plus'],'minus'=>['solid','minus'],
@@ -77,7 +79,8 @@ class IconService
                 . ' aria-hidden="true" focusable="false">'
                 . '<path d="M7 17 17 7M8 7h9v9"/></svg>';
         }
-        $item = self::$map[$name] ?? ['regular','circle'];
+        // A meaningful package glyph is safer than an empty-looking circular fallback.
+        $item = self::$map[$name] ?? self::$map['package'];
         $prefix = $item[0] === 'brands' ? 'fa-brands' : ($item[0] === 'regular' ? 'fa-regular' : 'fa-solid');
         $safeClass = trim($class);
         return '<i class="icon fa-fw ' . $prefix . ' fa-' . $item[1] . ($safeClass ? ' ' . $safeClass : '') . '" aria-hidden="true" style="font-size:' . (int)$size . 'px"></i>';
