@@ -348,15 +348,15 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 <p>Birden fazla ajans veya yazılım sağlayıcısı arasında kaybolmadan; web altyapısından SEO ve reklam yönetimine, sosyal medya paketlerinden destek süreçlerine kadar ihtiyaçlarınızı tek noktada yönetin.</p>
                 <div class="nv75-benefits" aria-label="NetVera hizmet alanları">
                     <article class="nv75-benefit">
-                        <span class="nv75-benefit-icon nv75-benefit-purple"><?= icon('code-2',19) ?></span>
+                        <span class="nv75-benefit-icon nv75-benefit-purple"><?= icon('code',19) ?></span>
                         <div><strong>Yazılım ve web çözümleri</strong><small>Hazır scriptler ve özel geliştirme</small></div>
                     </article>
                     <article class="nv75-benefit">
-                        <span class="nv75-benefit-icon nv75-benefit-blue"><?= icon('search-check',19) ?></span>
+                        <span class="nv75-benefit-icon nv75-benefit-blue"><?= icon('search',19) ?></span>
                         <div><strong>SEO ve görünürlük</strong><small>Teknik SEO, GEO ve içerik stratejisi</small></div>
                     </article>
                     <article class="nv75-benefit">
-                        <span class="nv75-benefit-icon nv75-benefit-pink"><?= icon('megaphone',19) ?></span>
+                        <span class="nv75-benefit-icon nv75-benefit-pink"><?= icon('ads',19) ?></span>
                         <div><strong>Dijital reklam yönetimi</strong><small>Google Ads ve sosyal medya kampanyaları</small></div>
                     </article>
                     <article class="nv75-benefit">
@@ -391,7 +391,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                                 <?= icon('arrow-up-right',17) ?>
                             </a>
                             <a href="/kategoriler" class="nv75-ecosystem-item">
-                                <span class="nv75-ecosystem-item-icon nv75-blue"><?= icon('chart-no-axes-combined',20) ?></span>
+                                <span class="nv75-ecosystem-item-icon nv75-blue"><?= icon('bar-chart',20) ?></span>
                                 <div><small>02 / Dijital Ajans</small><strong>SEO, Reklam ve İçerik</strong><em>Markanız için bütünleşik dijital hizmetler</em></div>
                                 <?= icon('arrow-up-right',17) ?>
                             </a>
