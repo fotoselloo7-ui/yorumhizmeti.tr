@@ -19,7 +19,7 @@ final class CategorySeoCompleteService
     private static function software(array $category): bool
     {
         $text=mb_strtolower((string)($category['slug']??'').' '.(string)($category['name']??''),'UTF-8');
-        return (bool)preg_match('/haz[ıi]r[- ]?(yaz[ıi]l[ıi]m|script)|sekt[oö]rel[- ]?(y[oö]netim[- ]?)?yaz[ıi]l[ıi]m|yaz[ıi]l[ıi]mlar|software|cms|masa[uü]st[uü][- ]?bot[- ]?yaz[ıi]l[ıi]m|script[- ]?yaz[ıi]l[ıi]m/iu',$text);
+        return (bool)preg_match('/haz[ıi]r[- ]?(yaz[ıi]l[ıi]m|script)|sekt[oö]rel[- ]?(y[oö]netim[- ]?)?yaz[ıi]l[ıi]m|yaz[ıi]l[ıi]m|yazilim|software|cms|script|web[- ]?site|wordpress|masa[uü]st[uü][- ]?bot/iu',$text);
     }
 
     public static function recommendations(array $category): array
