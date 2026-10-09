@@ -323,7 +323,11 @@ class HomeController extends Controller
             'description'=>'Yazılım çözümleri, dijital ajans, SEO, reklam yönetimi ve sosyal medya hizmetleri.'
         ];
         $logo=trim((string)setting('site_logo',''));
-        if($logo!=='')$organization['logo']=upload_url($logo);
+        if($logo!==''){
+            $logoUrl=upload_url($logo);
+            $organization['logo']=filter_var($logoUrl,FILTER_VALIDATE_URL)
+                ?$logoUrl:$siteUrl.'/'.ltrim($logoUrl,'/');
+        }
         $profiles=[];
         foreach(['instagram_url','facebook_url','youtube_url','tiktok_url','x_url'] as $socialKey){
             $profileUrl=trim((string)setting($socialKey,''));
