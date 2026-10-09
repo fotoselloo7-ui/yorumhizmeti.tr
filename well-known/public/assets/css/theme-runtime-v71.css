@@ -61,3 +61,43 @@ body.nv-theme-enabled .nv30-feedback{
   background:var(--nv-theme-bg)
 }
 body.nv-theme-enabled a:hover{color:var(--nv-theme-primary)}
+
+/* v72: match the actual current storefront class names, not legacy button aliases. */
+body.nv-theme-enabled .yh18-featured-card .yh18-card-cta,
+body.nv-theme-enabled .yv-btn-primary,
+body.nv-theme-enabled .yv-services-cta,
+body.nv-theme-enabled .yv-category-cta-v5,
+body.nv-theme-enabled .yv-summary-cta,
+body.nv-theme-enabled .yh6-package-cta,
+body.nv-theme-enabled .btn-cart,
+body.nv-theme-enabled .nv30-process-primary-link {
+  background:linear-gradient(110deg,var(--nv-theme-button),var(--nv-theme-accent))!important;
+  border-color:transparent!important;color:white!important
+}
+body.nv-theme-enabled .yh18-featured-card .yh18-card-cta:hover,
+body.nv-theme-enabled .yv-btn-primary:hover,
+body.nv-theme-enabled .nv30-process-primary-link:hover {
+  background:var(--nv-theme-hover)!important;color:#fff!important
+}
+body.nv-theme-enabled .nv30-feedback .nv30-section-head h2 span,
+body.nv-theme-enabled .yh18-featured-title em,
+body.nv-theme-enabled .yv-kicker,
+body.nv-theme-enabled .nv30-section-kicker,
+body.nv-theme-enabled .yh6-btn:not(.primary),
+body.nv-theme-enabled .nv30-outline-link {
+  color:var(--nv-theme-primary)!important
+}
+body.nv-theme-enabled .yv-link-button:hover,
+body.nv-theme-enabled .yh18-all-link:hover,
+body.nv-theme-enabled .footer-col a:hover {
+  color:var(--nv-theme-accent)!important
+}
+body.nv-theme-enabled .yh18-featured-card,
+body.nv-theme-enabled .nv30-feedback .nv30-review-card{
+  border-color:var(--nv-theme-border)!important
+}
+body.nv-theme-enabled #yhLogoGrad stop:first-child{stop-color:var(--nv-theme-primary)}
+body.nv-theme-enabled #yhLogoGrad stop:nth-child(2){stop-color:var(--nv-theme-secondary)}
+body.nv-theme-enabled #yhLogoGrad stop:last-child{stop-color:var(--nv-theme-accent)}
+body.nv-theme-enabled .site-header .header-inner{color:var(--nv-theme-text)}
+body.nv-theme-enabled .site-footer{background:var(--nv-theme-secondary)!important}
