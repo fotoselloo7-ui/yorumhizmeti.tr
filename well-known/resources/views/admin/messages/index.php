@@ -3,7 +3,7 @@
         <div class="admin-lead-heading">
             <div>
                 <h2>İletişim Mesajları</h2>
-                <p>İletişim formundan gelen kayıtlar. İlk 100 mesaj gösterilir.</p>
+                
             </div>
             <strong><?= count($messages) ?> mesaj</strong>
         </div>
@@ -34,7 +34,7 @@
         <div class="admin-lead-heading">
             <div>
                 <h2>E-Bülten Kayıtları</h2>
-                <p>Onay veren ziyaretçiler. İlk 100 kayıt gösterilir.</p>
+                
             </div>
             <strong><?= count($subscribers) ?> kayıt</strong>
         </div>
