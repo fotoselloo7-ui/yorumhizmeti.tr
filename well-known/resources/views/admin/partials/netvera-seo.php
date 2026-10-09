@@ -29,7 +29,7 @@ $nvseo=$nvSeoData??[];
   </div>
   <div class="form-group"><label>Yazar URL</label>
    <input name="nvseo_author_url" type="url" class="form-control" value="<?= e($nvseo['author_url']??'') ?>"></div>
-  <?php if(!empty($nvSeoIsBlog)): ?>
+  <?php if(!empty($nvSeoIsBlog)||!empty($nvSeoIsCategory)): ?>
   <div class="nv44-editorial-title"><?= icon('sparkles',15) ?> GEO / AIO İçerik Yapısı</div>
   
   <div class="form-group">
