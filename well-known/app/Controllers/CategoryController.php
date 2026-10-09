@@ -34,8 +34,10 @@ class CategoryController extends Controller
         }
 
         $this->render('frontend/categories', [
-            'pageTitle' => 'Hizmet Kategorileri - ' . setting('site_name'),
-            'metaDescription' => 'Sosyal medya, ajans, yazılım, SEO ve dijital pazarlama hizmetlerini keşfedin.',
+            'pageTitle' => 'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera',
+            'metaDescription' => 'NetVera Teknoloji Yazılım: yazılım çözümleri, Instagram ve TikTok hizmetleri, SEO, grafik tasarım ve dijital reklam yönetimini sektörlerine göre inceleyin.',
+            'canonicalUrl' => url('/kategoriler'),
+            'noindex' => $q!=='',
             'catalogGroups' => $groups,
             'activeCatalogGroup' => $activeGroup,
             'searchQuery' => $q,
