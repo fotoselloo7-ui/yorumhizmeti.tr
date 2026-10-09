@@ -49,6 +49,16 @@ $home=$read('resources/views/frontend/home.php');
 foreach(['class="nv75-hero-heading"','nv75-hero-middle','nv75-hero-highlight',
          'nv75-benefits','nv75-ecosystem','nv75-platform-services'] as $marker)
  if(!str_contains($home,$marker))throw new RuntimeException('Homepage visual upgrade missing '.$marker);
+$heroCss=$read('public/assets/css/netvera-premium-v76.css');
+if(!str_contains($heroCss,'text-align:left!important') ||
+   !str_contains($heroCss,'align-self:flex-start!important') ||
+   !str_contains($heroCss,'padding-left:0!important'))
+ throw new RuntimeException('Hero rows must share precisely the same left starting position.');
+if(str_contains($heroCss,'padding-left:clamp(0px,1.7vw,24px)'))
+ throw new RuntimeException('Misaligned middle hero line was reintroduced.');
+$head=$read('resources/views/layouts/app.php');
+if(!str_contains($head,'netvera-premium-v76.css') || !str_contains($head,'?v=76.2'))
+ throw new RuntimeException('New hero styles may be served from stale browser cache.');
 $a=strpos($home,'<section class="yh6-why nv75-why"');
 $b=strpos($home,'</section>',$a);
 if($a===false||$b===false)throw new RuntimeException('No why-section');
