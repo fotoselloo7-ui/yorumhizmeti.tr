@@ -20,7 +20,7 @@ final class LegacyCustomerService
             $test=$pdo->query("SHOW TABLES LIKE 'nv_private_orders'");
             if (!$test->fetchColumn()) return $empty;
             $q=$pdo->prepare("SELECT old_order_id,order_no,product_name,amount,currency,payment_status,order_status,order_type,
-                       (license_key_encrypted IS NOT NULL OR entitlement_json IS NOT NULL) as has_entitlements,
+                       (CASE WHEN payment_status IN ('paid','completed','success') AND (license_key_encrypted IS NOT NULL OR entitlement_json IS NOT NULL) THEN 1 ELSE 0 END) as has_entitlements,
                        paid_at,created_at
                        FROM nv_private_orders WHERE new_user_id=? ORDER BY created_at DESC LIMIT 60");
             $q->execute([$userId]); $empty['orders']=$q->fetchAll(PDO::FETCH_ASSOC);
