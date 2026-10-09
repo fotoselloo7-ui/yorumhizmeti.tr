@@ -45,7 +45,7 @@ final class CategorySearchBlueprint {
     'slug' => 'tiktok-hizmetleri',
     'title' => 'TikTok Hizmetleri | Takipçi, Beğeni ve İzlenme – NetVera',
     'desc' => 'TikTok takipçi, beğeni ve video izlenme hizmetlerini karşılaştırın. Paket miktarlarını, bağlantı gereksinimlerini ve teslimat detaylarını inceleyin.',
-    'focus' => 'tiktok takipçi al',
+    'focus' => 'tiktok hizmetleri',
     'secondary' => 'tiktok izlenme, tiktok beğeni al, tiktok takipçi paketleri',
     'question' => 'TikTok hizmetleri nasıl seçilir?',
     'answer' => 'Takipçi, beğeni veya video izlenme ihtiyacınızı belirleyin. Her paketin miktarını, gerekli kullanıcı adı veya bağlantı alanını ve teslimat şartlarını kontrol edin.'
@@ -72,7 +72,7 @@ final class CategorySearchBlueprint {
     'slug' => 'youtube-hizmetleri',
     'title' => 'YouTube Hizmetleri | Abone ve İzlenme – NetVera',
     'desc' => 'YouTube abone, video izlenme ve kanal hizmetlerini inceleyin. Paket kapsamı, kanal veya video bağlantısı ve teslimat koşullarını karşılaştırın.',
-    'focus' => 'youtube abone',
+    'focus' => 'youtube hizmetleri',
     'secondary' => 'youtube abone paketleri, youtube izlenme, youtube video tanıtımı',
     'question' => 'YouTube hizmetleri seçerken hangi bilgiler önemlidir?',
     'answer' => 'Abone ve video izlenme hizmetlerinin hedef bilgileri farklı olabilir. Kanal veya video bağlantısını doğrulayın, hizmet koşullarını ve platform kurallarını inceleyin.'
@@ -117,7 +117,7 @@ final class CategorySearchBlueprint {
     'slug' => 'dijital-reklam',
     'title' => 'Google Ads ve Sosyal Medya Reklam Yönetimi – NetVera',
     'desc' => 'Google Ads, Meta reklamları ve dijital kampanya yönetim hizmetlerini inceleyin. Hedefleme, ölçümleme ve optimizasyon kapsamını karşılaştırın.',
-    'focus' => 'google ads yönetimi',
+    'focus' => 'dijital reklam ajansı',
     'secondary' => 'meta reklam yönetimi, dijital reklam ajansı, sosyal medya reklamları',
     'question' => 'Dijital reklam yönetimi hangi çalışmaları kapsar?',
     'answer' => 'Hedef kitle planlama, kampanya kurulumu, dönüşüm takibi ve performans analizleri hizmet kapsamına göre yapılır; sonuçlar bütçe ve pazar koşullarına bağlıdır.'
