@@ -8,7 +8,7 @@
                 <div class="panel-welcome">
                     <div class="panel-welcome-text">
                         <h1>Hoş Geldiniz, <?= e($user['name']) ?></h1>
-                        <p>Hesap özetinizi, siparişlerinizi ve destek taleplerinizi buradan yönetebilirsiniz.</p>
+                        
                     </div>
                     <div class="panel-welcome-actions">
                         <a href="/kategoriler" class="btn btn-primary btn-sm"><?= icon('shopping-cart', 16) ?> Yeni Sipariş</a>
@@ -204,7 +204,7 @@
                         <?= icon('whatsapp', 28) ?>
                         <div>
                             <strong>Yardıma mı ihtiyacınız var?</strong>
-                            <p>WhatsApp üzerinden bize ulaşabilirsiniz. Destek ekibimiz en kısa sürede size dönüş yapacaktır.</p>
+                            
                         </div>
                     </div>
                     <a href="https://wa.me/<?= e(setting('site_whatsapp')) ?>" target="_blank" rel="noopener" class="btn btn-success btn-sm"><?= icon('send', 14) ?> WhatsApp Destek</a>
