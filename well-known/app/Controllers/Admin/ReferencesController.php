@@ -50,6 +50,12 @@ class ReferencesController extends Controller
         if (!array_key_exists($media, ReferencesService::mediaTypes())) {
             throw new \InvalidArgumentException('Geçersiz referans içerik türü.');
         }
+        $externalUrl = trim((string)($_POST['external_video_url'] ?? ($existing['external_video_url'] ?? '')));
+        if ($externalUrl !== '' && !ReferencesService::externalPlayer($externalUrl)) {
+            throw new \InvalidArgumentException(
+                'Harici video bağlantısı geçersiz. YouTube, Vimeo, Bunny Stream, Cloudflare Stream veya doğrudan HTTPS MP4/WebM adresi kullanın.'
+            );
+        }
         if (str_starts_with($media, 'instagram_')) {
             if (!ReferencesService::instagramEmbed($url, $media)) {
                 throw new \InvalidArgumentException('Herkese açık Instagram gönderi veya Reels bağlantısını (https://www.instagram.com/p/... ya da /reel/...) girin.');
@@ -70,6 +76,7 @@ class ReferencesController extends Controller
             'image' => $existing['image'] ?? '',
             'logo' => $existing['logo'] ?? '',
             'video' => $existing['video'] ?? '',
+            'external_video_url' => str_starts_with($media, 'instagram_') ? $externalUrl : '',
             'sort_order' => max(0, min(9999, (int)($_POST['sort_order'] ?? 100))),
             'status' => ($_POST['status'] ?? '') === 'active' ? 'active' : 'inactive',
         ];
