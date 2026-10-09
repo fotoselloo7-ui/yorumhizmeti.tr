@@ -1,14 +1,8 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('menu', 23) ?> Üst Menü Yönetimi</h2>
-        <p class="text-sm text-secondary">Menü öğelerini gizle, tekrar yayınla, adını ve sırasını düzenle. Kategoriler doğrudan katalog kayıtlarından gelir.</p>
     </div>
     <a class="btn btn-outline btn-sm" href="/" target="_blank" rel="noopener"><?= icon('external-link',14) ?> Menü Önizlemesi</a>
-</div>
-
-<div class="adm-nav-help">
-    <?= icon('info',16) ?>
-    <span>İşareti kaldırılan bağlantı yalnızca üst menüden gizlenir; kategorisi ve paketleri silinmez. Pasif kategoriler yayında görünmez. Mobil açılır menü de bu ayarları kullanır.</span>
 </div>
 
 <form method="POST" action="/admin/menu/kaydet" class="adm-menu-editor" id="navMenuEditor">
@@ -43,7 +37,7 @@
     </div>
     <div class="adm-nav-submit">
         <button type="submit" class="btn btn-primary"><?= icon('save',17) ?> Menüyü Kaydet</button>
-        <span>Başka sayfayı yenilediğinde yeni menü görünür.</span>
+        
     </div>
 </form>
 <form method="POST" action="/admin/menu/sifirla" class="adm-nav-reset" onsubmit="return confirm('Üst menüyü varsayılan sıralamaya ve görünürlüğe döndürmek istiyor musunuz?')">
