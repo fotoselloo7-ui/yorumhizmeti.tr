@@ -14,7 +14,7 @@
     if(!enabled||fetching||document.hidden)return;
     fetching=true;
     try{
-       const r=await fetch('/admin/cep/veri',{cache:'no-store',credentials:'same-origin'});
+       const r=await fetch('/admin/cep/sinyal',{cache:'no-store',credentials:'same-origin'});
        if(r.status===401||r.redirected)return;
        if(!r.ok)return;
        const data=await r.json();
