@@ -102,9 +102,11 @@ final class CategorySeoCompleteService
         foreach(['description','image_alt','seo_title','seo_description','seo_focus_keyword','canonical_url','og_title','og_description'] as $key){
             $current=(string)($category[$key]??'');
             // Existing category prose is meaningful, so retain it unless completely blank.
-            $replace=($key==='description'||$key==='image_alt'||$key==='canonical_url')
-                ?trim($current)===''
-                :self::isGeneric($key,$current,$category);
+            $replace=$key==='description'
+                ?(trim($current)==='' || mb_strlen($current,'UTF-8')<55)
+                :(in_array($key,['image_alt','canonical_url'],true)
+                  ?trim($current)===''
+                  :self::isGeneric($key,$current,$category));
             if($replace && $suggest[$key]!=='')$category[$key]=$suggest[$key];
         }
         foreach($suggest['extra'] as $key=>$value){
