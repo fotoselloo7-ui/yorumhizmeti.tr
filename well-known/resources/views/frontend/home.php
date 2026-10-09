@@ -807,8 +807,6 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
             <a class="nv30-outline-link" href="/kategoriler">Hizmetleri Keşfet <?= icon('arrow-up-right', 14) ?></a>
         </div>
         <?php
-          $visibleReviews=array_slice(array_values($reviews),0,3);
-          $primarySequence=count($reviews)>3?array_merge([reset($reviews)],array_slice($reviews,3)):array_slice($reviews,0,1);
           $renderReviewBody=static function(array $review):void{
             $name=trim((string)($review['name']??'Müşteri'));
             $initial=mb_strtoupper(mb_substr($name,0,1,'UTF-8'),'UTF-8');
@@ -832,20 +830,15 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
               <span class="nv30-review-decoration" aria-hidden="true"><?= icon('message-circle',16) ?></span>
             </div>
         <?php }; ?>
-        <div class="nv30-review-grid" aria-label="Müşteri yorumları">
-           <?php foreach($visibleReviews as $index=>$review): ?>
-           <article class="nv30-review-card <?= $index===0?'nv30-review-primary':'' ?>" <?= $index===0?'data-review-primary':'' ?>>
-               <?php $renderReviewBody($review); ?>
-           </article>
-           <?php endforeach; ?>
-        </div>
-        <?php if(count($primarySequence)>1): ?>
-          <div hidden id="nv68-review-queue" aria-hidden="true">
-            <?php foreach($primarySequence as $review): ?>
-            <template data-review-template><div class="nv68-review-inner"><?php $renderReviewBody($review); ?></div></template>
+        <div class="nv69-review-viewport" data-review-viewport>
+          <div class="nv30-review-grid" data-review-track aria-label="Müşteri yorumları" aria-live="off">
+            <?php foreach(array_values($reviews) as $index=>$review): ?>
+              <article class="nv30-review-card <?= $index===0?'nv30-review-primary':'' ?>">
+                <?php $renderReviewBody($review); ?>
+              </article>
             <?php endforeach; ?>
           </div>
-        <?php endif; ?>
+        </div>
         <div class="nv30-feedback-foot">
             <span><?= icon('shield-check', 15) ?> Açık ve anlaşılır sipariş takibi</span>
             <span><?= icon('headphones', 15) ?> Destek merkezine kolay erişim</span>
