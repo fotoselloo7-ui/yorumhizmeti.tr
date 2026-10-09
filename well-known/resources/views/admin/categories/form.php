@@ -22,7 +22,6 @@
                     <div class="form-group">
                         <label>Slug</label>
                         <input type="text" name="slug" class="form-control" value="<?= e($category['slug'] ?? '') ?>" placeholder="Otomatik oluşturulur">
-                        <div class="form-hint">Boş bırakırsanız isimden otomatik üretilir.</div>
                     </div>
                     <div class="form-group">
                         <label>Üst Kategori</label>
@@ -44,7 +43,6 @@
                             <option value="<?= $ic ?>" <?= ($category['icon_key'] ?? 'package') === $ic ? 'selected' : '' ?>><?= $ic ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <div class="form-hint">Kategorinin menüde ve listelerde gösterilecek ikonu.</div>
                     </div>
                 </div>
             </div>
@@ -100,12 +98,10 @@
                     <div class="form-group">
                         <label>SEO Başlığı</label>
                         <input type="text" name="seo_title" class="form-control" value="<?= e($category['seo_title'] ?? '') ?>" placeholder="Sayfa başlığı...">
-                        <div class="form-hint">35-60 karakter önerilir</div>
                     </div>
                     <div class="form-group">
                         <label>Meta Açıklama</label>
                         <textarea name="seo_description" class="form-control" rows="2" placeholder="Arama motorlarında görünen açıklama..."><?= e($category['seo_description'] ?? '') ?></textarea>
-                        <div class="form-hint">120-160 karakter önerilir</div>
                     </div>
                     <div class="form-group">
                         <label>Odak Anahtar Kelime</label>
