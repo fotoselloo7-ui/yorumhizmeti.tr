@@ -2,8 +2,9 @@
 $nvHistory = isset($netveraHistory) && is_array($netveraHistory) ? $netveraHistory : [];
 $nvOrders = array_slice($nvHistory['orders'] ?? [], 0, 12);
 $nvAffiliate = $nvHistory['affiliate'] ?? null;
+$nvTickets = $nvHistory['tickets'] ?? [];
 ?>
-<?php if ($nvOrders || $nvAffiliate): ?>
+<?php if ($nvOrders || $nvAffiliate || $nvTickets): ?>
 <section class="panel-card nv57-legacy-history" aria-label="NetVera eski satın alma ve bayilik geçmişi">
     <div class="panel-card-header">
         <h3><?= icon('layers',18) ?> NetVera Satın Almalarım & Bayilik</h3>
@@ -18,6 +19,20 @@ $nvAffiliate = $nvHistory['affiliate'] ?? null;
             <div><small>Eski Komisyon Geçmişi</small><strong><?= money((float)($nvHistory['commission_total']??0)) ?></strong></div>
         </div>
         <p class="nv57-history-note">Burada eski NetVera komisyonları gösterilir. Yeni satışlara otomatik komisyon tahakkuku, eski ödeme/bayilik sözleşmesi doğrulanmadan başlamaz.</p>
+        <?php endif; ?>
+        <?php if ($nvTickets): ?>
+        <div class="nv57-dealer-summary" style="margin:10px 0 15px;grid-template-columns:1fr">
+          <div>
+            <strong><?= icon('headphones',15) ?> Eski NetVera destek talepleriniz</strong>
+            <?php foreach ($nvTickets as $oldTicket): ?>
+              <span style="display:flex;gap:10px;justify-content:space-between;align-items:center;font-size:11px">
+                <?= e($oldTicket['subject']) ?>
+                <small><?= e($oldTicket['status'] ?: 'Eski talep') ?></small>
+              </span>
+            <?php endforeach; ?>
+            <small>Eski talepler arşiv kaydıdır; yeni destek işlemleri için <a href="/destek/yeni">destek merkezini</a> kullanın.</small>
+          </div>
+        </div>
         <?php endif; ?>
         <?php if ($nvOrders): ?>
         <div class="nv57-purchases">
