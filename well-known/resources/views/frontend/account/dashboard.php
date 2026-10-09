@@ -48,6 +48,8 @@
                     </div>
                 </div>
 
+                <?php include __DIR__.'/partials/netvera-legacy-history.php'; ?>
+
                 <!-- Quick Actions -->
                 <div class="panel-quick-actions">
                     <a href="/kategoriler" class="panel-action-card">
