@@ -6,7 +6,7 @@
 <div class="adm31-help">
   <?= icon('shield-check',18) ?>
   <div><strong>Yayınlanan referanslar yalnızca gerçek çalışmalardan oluşur.</strong>
-    <p>Web/yazılım referansları tıklanınca müşterinin sitesine gider. Instagram post/Reels herkese açık bağlantı ile site içinde açılır; özel veya Instagram tarafından engellenen içerikler için Instagram bağlantısı gösterilir. Kapak fotoğrafı (en fazla 5 MB) ayrıca yüklenebilir.</p>
+    <p>Web/yazılım referansları doğrudan müşteri sitesini açar. Instagram post/Reels kapakları sitemizde görünür; kapak tıklanınca kendi video penceremiz açılır. Instagram dış sitelerde oynatmayı engellerse, aynı formdaki isteğe bağlı MP4/WebM yüklemesi ile video sitemizde doğrudan oynatılır.</p>
   </div>
 </div>
 <div class="adm-card">
@@ -66,6 +66,8 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
   const secondGroup = form.querySelector('[data-ref-second-group]');
   const secondService = form.querySelector('[data-ref-second-service]');
   const media = form.querySelector('[data-ref-media]');
+  const videoField = form.querySelector('[data-ref-video-field]');
+  const videoInput = form.querySelector('[data-ref-video-input]');
   const url = form.querySelector('[data-ref-url]');
   const hint = form.querySelector('[data-ref-url-hint]');
   if (!group || !service || !media || !url) return;
@@ -101,6 +103,8 @@ document.querySelectorAll('[data-reference-editor]').forEach(function(form) {
       }
     }
     const instagram = media.value.startsWith('instagram_');
+    if (videoField) videoField.style.display = instagram ? '' : 'none';
+    if (videoInput) videoInput.disabled = !instagram;
     url.placeholder = instagram ?
       (media.value === 'instagram_reel' ? 'https://www.instagram.com/reel/ABC123/' : 'https://www.instagram.com/p/ABC123/') :
       'https://musteri-sitesi.com';
