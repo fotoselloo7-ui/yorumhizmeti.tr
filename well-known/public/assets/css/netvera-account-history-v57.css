@@ -1,0 +1,23 @@
+/* V57: only appears for customers who have safely imported NetVera purchase records. */
+.nv57-legacy-history{margin-bottom:24px;border:1px solid #e1e7fa;overflow:hidden}
+.nv57-legacy-history .panel-card-header{flex-wrap:wrap;gap:12px}
+.nv57-legacy-history .panel-card-header h3{display:flex;align-items:center;gap:8px;font-size:16px}
+.nv57-history-pill{padding:6px 10px;border:1px solid #e0dafc;border-radius:999px;background:#f6f2ff;color:#6d4bd8;font-size:10px;font-weight:700}
+.nv57-dealer-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:2px 0 15px}
+.nv57-dealer-summary>div{display:flex;flex-direction:column;gap:7px;padding:14px;border:1px solid #e1e5f5;border-radius:12px;background:linear-gradient(145deg,#f8f9ff,#fff)}
+.nv57-dealer-summary small{font-size:10px;color:#7c87a2}
+.nv57-dealer-summary strong{font-size:13px;font-weight:800;color:#1b3058;overflow-wrap:anywhere}
+.nv57-purchases{display:flex;flex-direction:column;gap:8px}
+.nv57-purchase{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid #e9edf7;border-radius:12px;background:#fff}
+.nv57-purchase-icon{flex:0 0 40px;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#f0eaff;color:#6246d3}
+.nv57-purchase-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.nv57-purchase-copy strong{font-size:12px;color:#273655;line-height:1.45}
+.nv57-purchase-copy small{font-size:10px;color:#8b95ab}
+.nv57-entitlement{display:inline-flex;align-items:center;gap:5px;width:fit-content;color:#0b8e79;font-size:9.5px;font-weight:750}
+.nv57-purchase-status{display:flex;flex-direction:column;text-align:right;gap:4px;max-width:33%}
+.nv57-purchase-status strong{font-size:13px;color:#223456}
+.nv57-purchase-status span{font-size:9px;color:#7f8ca5}
+.nv57-history-note{margin:12px 0 0;color:#7b87a0;font-size:10px;line-height:1.7}
+.nv57-history-note a{color:#6950d8;text-decoration:underline}
+@media(max-width:680px){.nv57-dealer-summary{grid-template-columns:1fr}.nv57-purchase{align-items:flex-start}.nv57-purchase-status{max-width:39%}.nv57-legacy-history .panel-card-header h3{font-size:14px}}
+@media(max-width:380px){.nv57-purchase{flex-wrap:wrap}.nv57-purchase-status{max-width:100%;padding-left:50px;text-align:left}}
