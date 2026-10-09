@@ -149,17 +149,21 @@ final class ReferencesService
             elseif (preg_match('~^/(?:shorts|embed|live)/([a-zA-Z0-9_-]{11})/?$~D', $path, $m)) $youtubeId = $m[1];
         }
         if ($youtubeId !== null) {
-            return ['type'=>'iframe','url'=>'https://www.youtube-nocookie.com/embed/'.$youtubeId.'?rel=0&playsinline=1',
+            return ['type'=>'iframe','url'=>'https://www.youtube-nocookie.com/embed/'.$youtubeId.'?rel=0&playsinline=1&autoplay=1',
                 'provider'=>'YouTube'];
         }
 
         // Vimeo can provide an unlisted video with its shareable hash.
         if (in_array($host, ['vimeo.com','www.vimeo.com','player.vimeo.com'], true)) {
-            $pattern = $host === 'player.vimeo.com' ? '~^/video/([0-9]{6,15})/?$~D' : '~^/([0-9]{6,15})/?$~D';
+            $pattern = $host === 'player.vimeo.com'
+                ? '~^/video/([0-9]{6,15})/?$~D'
+                : '~^/([0-9]{6,15})(?:/([a-fA-F0-9]{6,64}))?/?$~D';
             if (preg_match($pattern, $path, $m)) {
                 $link='https://player.vimeo.com/video/'.$m[1];
-                if (isset($query['h']) && is_string($query['h'])
-                    && preg_match('~^[a-fA-F0-9]{6,64}$~D', $query['h'])) $link.='?h='.$query['h'];
+                $hash = (string)($m[2] ?? '');
+                if ($hash === '' && isset($query['h']) && is_string($query['h'])
+                    && preg_match('~^[a-fA-F0-9]{6,64}$~D', $query['h'])) $hash=$query['h'];
+                $link .= $hash !== '' ? '?h='.$hash.'&autoplay=1' : '?autoplay=1';
                 return ['type'=>'iframe','url'=>$link,'provider'=>'Vimeo'];
             }
         }
@@ -167,7 +171,7 @@ final class ReferencesService
         // The video lives entirely on Bunny Stream infrastructure.
         if (in_array($host, ['player.mediadelivery.net','iframe.mediadelivery.net'], true)
             && preg_match('~^/(?:embed|play)/([0-9]{1,16})/([a-fA-F0-9-]{20,45})/?$~D', $path, $m)) {
-            return ['type'=>'iframe','url'=>'https://player.mediadelivery.net/embed/'.$m[1].'/'.$m[2],
+            return ['type'=>'iframe','url'=>'https://player.mediadelivery.net/embed/'.$m[1].'/'.$m[2].'?autoplay=true',
                 'provider'=>'Bunny Stream'];
         }
 
