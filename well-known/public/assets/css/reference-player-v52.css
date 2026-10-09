@@ -102,3 +102,46 @@
 .nv51-reference-body a.nv52-watch-action:hover{
  color:#3f2ba1!important;text-decoration:underline!important;
 }
+
+
+/* V54: automatically fit YouTube watch videos (16:9) and Shorts (9:16).
+   Width is also bounded by viewport height, preventing overflow in landscape phones. */
+.nv52-player-dialog[data-video-orientation="landscape"]{
+ width:min(95vw,920px,115dvh)!important;
+ max-width:95vw!important;
+}
+.nv52-player-dialog[data-video-orientation="portrait"]{
+ width:min(92vw,405px,40dvh)!important;
+ max-width:92vw!important;
+}
+.nv52-player-dialog[data-video-orientation] .nv52-player-window{
+ width:100%!important;
+ max-height:calc(100dvh - 22px)!important;
+}
+.nv52-player-dialog[data-video-orientation] .nv52-player-stage{
+ position:relative!important;
+ display:block!important;
+ width:100%!important;
+ height:auto!important;
+ min-height:0!important;
+ max-height:none!important;
+ flex:0 0 auto!important;
+ overflow:hidden;
+}
+.nv52-player-dialog[data-video-orientation="landscape"] .nv52-player-stage{
+ aspect-ratio:16 / 9!important;
+}
+.nv52-player-dialog[data-video-orientation="portrait"] .nv52-player-stage{
+ aspect-ratio:9 / 16!important;
+}
+.nv52-player-dialog[data-video-orientation] .nv52-player-stage iframe{
+ position:absolute!important;
+ inset:0!important;
+ width:100%!important;
+ max-width:none!important;
+ height:100%!important;
+ max-height:none!important;
+ display:block!important;
+ flex:none!important;
+ border:0!important;
+}
