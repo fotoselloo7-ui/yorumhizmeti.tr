@@ -75,7 +75,7 @@ foreach($required as $key){
   if(!str_contains($advanced,'nvseo_'.$key))throw new RuntimeException('Missing GEO/AIO module '.$key);
 }
 $home=file_get_contents($root.'/resources/views/frontend/home.php');
-if(!str_contains($home,'Yazılım, Dijital Ajans ve <span>Sosyal Medya Hizmetleri</span>'))
+if(!str_contains($home,'class="nv75-hero-heading"') && str_contains($home,'nv75-hero-middle') && str_contains($home,'nv75-hero-highlight'))
   throw new RuntimeException('Corporate homepage SEO heading missing.');
 foreach(['Yeni Yorum Geldi!','50.000+','1.248','4.9/5'] as $fake){
   if(str_contains($home,$fake))throw new RuntimeException('Unverified old social proof visible: '.$fake);
