@@ -77,7 +77,12 @@
 
             <!-- SEO -->
             <div class="adm-card">
-                <div class="adm-card-header"><h3><?= icon('search', 18) ?> SEO Ayarları</h3></div>
+                <div class="adm-card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+                    <h3><?= icon('search', 18) ?> SEO Ayarları</h3>
+                    <?php if(empty($category) || !preg_match('/(haz[ıi]r.?script|yaz[ıi]l[ıi]m|yazilim|software|cms|script|web.?site|wordpress)/iu',(string)($category['slug']??'').' '.(string)($category['name']??''))): ?>
+                    <button id="nvSeoFillCategory" type="button" class="btn btn-outline btn-sm"><?= icon('sparkles',15) ?> SEO / GEO Alanlarını Doldur</button>
+                    <?php endif; ?>
+                </div>
                 <div class="adm-card-body">
                     <?php if (!empty($seoResult)): ?>
                     <div class="adm-seo-score-box">
@@ -107,6 +112,18 @@
                         <label>Odak Anahtar Kelime</label>
                         <input type="text" name="seo_focus_keyword" class="form-control" value="<?= e($category['seo_focus_keyword'] ?? '') ?>" placeholder="Ana hedef kelime...">
                     </div>
+                    <div class="form-group">
+                        <label>Canonical URL</label>
+                        <input type="url" name="canonical_url" class="form-control" value="<?= e($category['canonical_url']??'') ?>" placeholder="https://netvera.tr/kategori/orijinal-slug">
+                    </div>
+                    <div class="form-group">
+                        <label>Open Graph Başlığı</label>
+                        <input type="text" name="og_title" class="form-control" value="<?= e($category['og_title']??'') ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Open Graph Açıklaması</label>
+                        <textarea name="og_description" class="form-control" rows="2"><?= e($category['og_description']??'') ?></textarea>
+                    </div>
                 </div>
             </div>
             <?php $nvSeoIsCategory = !preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|web.site|tema)/iu', (string)($category['slug']??'').' '.(string)($category['name']??'')); require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
@@ -123,3 +140,42 @@
         </div>
     </div>
 </form>
+<script>
+(()=>{
+  'use strict';
+  const button=document.getElementById('nvSeoFillCategory');
+  if(!button)return;
+  const form=button.closest('form');
+  const byName=name=>form.querySelector('[name="'+name+'"]');
+  const set=(name,value)=>{
+    const element=byName(name);
+    if(!element || typeof value!=='string' || value==='')return;
+    const current=String(element.value||'').trim();
+    const legacy=/YorumHizmeti|Yorum Hizmeti/i.test(current);
+    const shortMeta=['seo_description','og_description'].includes(name)&&current.length<75;
+    if(!current || legacy || shortMeta)element.value=value;
+  };
+  button.addEventListener('click',async()=>{
+    if(!byName('name')?.value.trim())return;
+    const payload=new FormData();
+    ['_csrf_token','name','slug','description'].forEach(key=>{
+        payload.append(key,byName(key)?.value||'');
+    });
+    button.disabled=true;
+    try{
+      const response=await fetch('/admin/kategoriler/seo-oneri',{
+        method:'POST',body:payload,credentials:'same-origin',cache:'no-store'
+      });
+      const data=await response.json();
+      if(!response.ok||!data.ok)throw new Error(data.message||'Öneriler getirilemedi.');
+      const profile=data.suggestion;
+      ['slug','description','image_alt','seo_title','seo_description','seo_focus_keyword',
+       'canonical_url','og_title','og_description'].forEach(k=>set(k,profile[k]||''));
+      Object.entries(profile.extra||{}).forEach(([key,value])=>set('nvseo_'+key,value));
+    }catch(error){
+      // Only display an actual error; successful fill needs no instructional banner.
+      alert(error.message||'SEO önerisi alınamadı.');
+    }finally{button.disabled=false;}
+  });
+})();
+</script>
