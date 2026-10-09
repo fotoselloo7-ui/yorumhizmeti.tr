@@ -13,6 +13,9 @@
         <a href="/siparislerim" class="<?= isActive('/siparis') ?>">
             <?= icon('package', 18) ?> <span>Siparişlerim</span>
         </a>
+        <a href="/bayilik" class="<?= isActive('/bayilik') ?>">
+            <?= icon('handshake', 18) ?> <span>Bayilik ve Ortaklık</span>
+        </a>
         <a href="/destek" class="<?= isActive('/destek') ?>">
             <?= icon('headphones', 18) ?> <span>Destek Taleplerim</span>
         </a>
