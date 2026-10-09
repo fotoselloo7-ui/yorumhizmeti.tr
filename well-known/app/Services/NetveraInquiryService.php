@@ -4,8 +4,8 @@ namespace App\Services;
 use App\Core\Database;
 
 /**
- * Netvera inbox for fresh public chats and quotes. Never imports old contacts,
- * Telegram tokens, customer records or payment data.
+ * Public chats and offers stay isolated from orders/payment records.
+ * Telegram credentials are read from the server environment, never from source control.
  */
 final class NetveraInquiryService
 {
@@ -42,7 +42,7 @@ final class NetveraInquiryService
         $db->insert('nv_public_inquiry_replies',[
             'inquiry_id'=>$id,'sender'=>'visitor','message'=>$message
         ]);
-        self::notifyTelegram($id,$type,$name,$slug);
+        self::notifyTelegram($id,$type==='offer'?'offer':'chat');
         return $id;
     }
 
@@ -73,28 +73,91 @@ final class NetveraInquiryService
         $db->update('nv_public_inquiries',[
             'status'=>$sender==='admin'?'replied':'open'
         ],'id=?',[$id]);
+        if($sender==='visitor')self::notifyTelegram($id,'followup');
     }
 
-    /** Safe optional Telegram notification; token stays in environment only. */
-    private static function notifyTelegram(int $id,string $type,string $name,?string $slug): void
+    /** The importance flag is optional until the one-time v2 migration is applied. */
+    public static function importanceReady(): bool
+    {
+        try {
+            return (bool)Database::getInstance()->fetch(
+                "SELECT 1 AS present FROM information_schema.columns
+                 WHERE table_schema=DATABASE() AND table_name='nv_public_inquiries'
+                   AND column_name='is_important' LIMIT 1"
+            );
+        } catch (\Throwable $e) { return false; }
+    }
+
+    /** Credentials from NetVera-compatible environment variable names. */
+    private static function telegramCredentials(): array
     {
         $token=trim((string)($_ENV['NETVERA_TELEGRAM_BOT_TOKEN']??getenv('NETVERA_TELEGRAM_BOT_TOKEN')?:''));
         $chat=trim((string)($_ENV['NETVERA_TELEGRAM_CHAT_ID']??getenv('NETVERA_TELEGRAM_CHAT_ID')?:''));
-        if(!extension_loaded('curl') || !preg_match('/^[0-9]{6,15}:[A-Za-z0-9_-]{30,}$/',$token)
-            || !preg_match('/^-?[0-9]{5,20}$/',$chat))return;
-        $label=$type==='offer'?'Teklif talebi':'Yeni sohbet';
-        $text=$label.' #'.$id."\n".$name."\n".($slug?:'Genel iletişim');
-        $ch=curl_init('https://api.telegram.org/bot'.$token.'/sendMessage');
-        if(!$ch)return;
-        curl_setopt_array($ch,[
-            CURLOPT_POST=>true, CURLOPT_POSTFIELDS=>http_build_query([
-                'chat_id'=>$chat,'text'=>$text,'disable_web_page_preview'=>'true'
-            ]), CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>2,
-            CURLOPT_TIMEOUT=>5,CURLOPT_FOLLOWLOCATION=>false,
-            CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_SSL_VERIFYHOST=>2
-        ]);
-        curl_exec($ch);
-        curl_close($ch);
-        // Never log tokens, visitor contacts or message bodies.
+        if(!preg_match('/^[0-9]{6,15}:[A-Za-z0-9_-]{30,}$/D',$token)
+            || !preg_match('/^-?[0-9]{5,20}$/D',$chat))return ['',''];
+        return [$token,$chat];
+    }
+
+    public static function telegramConfigured(): bool
+    {
+        [$token,$chat]=self::telegramCredentials();
+        return $token!=='' && $chat!=='' && extension_loaded('curl');
+    }
+
+    /**
+     * Optional Telegram alerts. A failed request never rolls back a saved inquiry.
+     * Event switches: chat, offer, followup, important.
+     */
+    public static function notifyTelegram(int $id,string $event): void
+    {
+        if(!in_array($event,['chat','offer','followup','important'],true))return;
+        if(setting('nv_tg_enabled','1')!=='1'
+            || setting('nv_tg_notify_'.$event,'1')!=='1'
+            || !self::telegramConfigured())return;
+        [$token,$chat]=self::telegramCredentials();
+        try {
+            $db=Database::getInstance();
+            $inquiry=$db->fetch(
+                "SELECT id,source_type,product_slug,visitor_name,visitor_contact,inquiry_text
+                 FROM nv_public_inquiries WHERE id=? LIMIT 1",[$id]
+            );
+            if(!$inquiry)return;
+            $titles=[
+                'chat'=>'💬 Yeni canlı destek mesajı',
+                'offer'=>'📦 Yeni yazılım teklif talebi',
+                'followup'=>'🔔 Ziyaretçiden yeni yanıt',
+                'important'=>'⭐ Önemli olarak işaretlenen talep'
+            ];
+            $detail=$event==='followup'
+                ?$db->fetch(
+                    "SELECT message FROM nv_public_inquiry_replies
+                     WHERE inquiry_id=? AND sender='visitor' ORDER BY id DESC LIMIT 1",[$id]
+                )
+                :null;
+            $excerpt=trim((string)($detail['message']??$inquiry['inquiry_text']??''));
+            $text=$titles[$event]." #".$id."\n"
+                ."👤 ".(string)$inquiry['visitor_name']."\n"
+                ."📞 / ✉ ".(string)$inquiry['visitor_contact']."\n"
+                ."📁 ".((string)($inquiry['product_slug']??'')?:'Genel destek')."\n"
+                ."📝 ".mb_substr($excerpt,0,400,'UTF-8');
+            $ch=curl_init('https://api.telegram.org/bot'.$token.'/sendMessage');
+            if(!$ch)return;
+            curl_setopt_array($ch,[
+                CURLOPT_POST=>true,
+                CURLOPT_POSTFIELDS=>http_build_query([
+                    'chat_id'=>$chat,'text'=>$text,'disable_web_page_preview'=>'true'
+                ]),
+                CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>3,
+                CURLOPT_TIMEOUT=>7,CURLOPT_FOLLOWLOCATION=>false,
+                CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_SSL_VERIFYHOST=>2
+            ]);
+            $result=curl_exec($ch);
+            $code=(int)curl_getinfo($ch,CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($result===false||$code!==200)
+                error_log('NetVera Telegram alert delivery failed for event '.$event);
+        } catch (\Throwable $e) {
+            error_log('NetVera Telegram alert could not be processed.');
+        }
     }
 }
