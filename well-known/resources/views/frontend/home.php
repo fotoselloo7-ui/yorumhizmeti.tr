@@ -966,7 +966,7 @@ if (!empty($projectReferences)) {
         <span class="nv32-portfolio-orb nv32-orb-one"><?= icon('monitor',31) ?></span>
         <span class="nv32-portfolio-orb nv32-orb-two"><?= icon('palette',23) ?></span>
         <span class="nv32-portfolio-orb nv32-orb-three"><?= icon('layers',25) ?></span>
-        <div class="nv32-portfolio-frames"><div><span></span><span></span><span></span></div><div><span></span></span></div></div>
+        <div class="nv32-portfolio-frames"><div><span></span><span></span><span></span></div><div><span></span><span></span></div></div>
       </div>
       <div class="nv32-portfolio-copy">
         <span class="nv32-intro-kicker"><?= icon('award',14) ?> YENİ PROJELERE AÇIĞIZ</span>
@@ -994,7 +994,7 @@ if (!empty($projectReferences)) {
    panels.forEach(panel=>{
      panel.hidden=panel.dataset.refServicePanel!==group;
      panel.querySelectorAll('[data-ref-service]').forEach(button=>{
-       button.setAttribute('aria-pressed',String(panel.dataset.refService===group && button.dataset.refService===service));
+       button.setAttribute('aria-pressed',String(panel.dataset.refServicePanel===group && button.dataset.refService===service));
      });
    });
    const social=group==='marketing'&&service==='social-management';
