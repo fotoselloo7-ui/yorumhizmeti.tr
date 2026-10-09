@@ -853,7 +853,6 @@ if (!empty($projectReferences)) {
       <a href="/iletisim" class="nv31-heading-link">Projenizi Konuşalım <?= icon('arrow-up-right',15) ?></a>
     </div>
 
-    <?php if (!empty($projectReferences)): ?>
     <div class="nv51-filter-shell">
       <div class="nv51-filter-heading">
         <span><?= icon('sliders-horizontal',14) ?> Referans Kategorileri</span>
@@ -960,22 +959,7 @@ if (!empty($projectReferences)) {
       <strong>Bu kategoride henüz yayınlanmış referans yok.</strong>
       <p>Diğer hizmetleri veya farklı bir kategori seçebilirsiniz.</p>
     </div>
-    <?php else: ?>
-    <div class="nv32-portfolio-intro">
-      <div class="nv32-portfolio-art" aria-hidden="true">
-        <span class="nv32-portfolio-orb nv32-orb-one"><?= icon('monitor',31) ?></span>
-        <span class="nv32-portfolio-orb nv32-orb-two"><?= icon('palette',23) ?></span>
-        <span class="nv32-portfolio-orb nv32-orb-three"><?= icon('layers',25) ?></span>
-        <div class="nv32-portfolio-frames"><div><span></span><span></span><span></span></div><div><span></span><span></span></div></div>
-      </div>
-      <div class="nv32-portfolio-copy">
-        <span class="nv32-intro-kicker"><?= icon('award',14) ?> YENİ PROJELERE AÇIĞIZ</span>
-        <h3>Bir sonraki dijital projeyi <span>birlikte hayata geçirelim.</span></h3>
-        <p>Web tasarım, özel yazılım ve dijital büyüme alanlarında işletmenizin ihtiyaçlarını konuşalım. Yayınlanan çalışmaları bu bölümde görüntüleyebilirsiniz.</p>
-        <a class="nv32-primary-cta" href="/iletisim">Projenizi Anlatın <?= icon('arrow-right',15) ?></a>
-      </div>
-    </div>
-    <?php endif; ?>
+
   </div>
 </section>
 <script>
