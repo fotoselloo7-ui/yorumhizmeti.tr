@@ -290,7 +290,8 @@ class HomeController extends Controller
                 [(int)$softwareRoot['id']]
             );
         }
-        $projectReferences = array_slice(\App\Services\ReferencesService::all(true), 0, 8);
+        // Show every published work across the two portfolio filters (max 36).
+        $projectReferences = \App\Services\ReferencesService::all(true);
 
         // SSS
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
