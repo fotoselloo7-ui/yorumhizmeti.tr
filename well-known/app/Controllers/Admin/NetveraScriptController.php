@@ -58,7 +58,7 @@ final class NetveraScriptController extends Controller
     {
         Csrf::check();
         if(!NetveraBridgeService::ready()){
-            flash('error','Önce Netvera genel içerik aktarımını staging ortamına kurun.');
+            flash('error','Yazılım yönetimi veritabanı henüz kurulmamış. Yöneticiye başvurun.');
             redirect('/admin/netvera-yazilimlar');return;
         }
         $id=max(0,(int)($_POST['id']??0));
@@ -79,7 +79,9 @@ final class NetveraScriptController extends Controller
         if($collision){flash('error','Bu slug başka ürüne ait.');redirect('/admin/netvera-yazilimlar');return;}
         $newData=$old?NetveraBridgeService::jsonFields($old):[];
         $knownFields=[
-          'demo_url','demo_video_url','current_version','last_updated_on',
+          'demo_url','demo_admin_url','demo_user_url','demo_video_url',
+          'demo_username','demo_password','demo_admin_username','demo_admin_password',
+          'demo_note','current_version','last_updated_on',
           'install_type','install_info','update_duration_type','update_duration_months',
           'support_duration_type','support_duration_months',
           'tags','focus_keyword','secondary_keywords','showcase_button_label',
@@ -87,8 +89,39 @@ final class NetveraScriptController extends Controller
         ];
         foreach($knownFields as $key){
             $value=trim((string)($_POST[$key]??($newData[$key]??'')));
-            $newData[$key]=mb_substr($value,0,in_array($key,['install_info','tags','secondary_keywords'],true)?1000:500);
+            $newData[$key]=mb_substr($value,0,in_array($key,['install_info','tags','secondary_keywords','demo_note'],true)?2000:500);
         }
+        foreach(['demo_url','demo_admin_url','demo_user_url','demo_video_url'] as $urlField){
+            $value=trim((string)($newData[$urlField]??''));
+            if($value!=='' && !\App\Services\NetveraBridgeService::publicUrl($value)){
+                flash('error',$urlField.' alanında geçerli HTTPS veya HTTP bağlantısı kullanın.');
+                redirect($id?'/admin/netvera-yazilimlar/'.$id.'/duzenle':'/admin/netvera-yazilimlar/ekle');
+                return;
+            }
+        }
+        $demoAccountsRaw=(string)($_POST['demo_accounts_json']??($newData['demo_accounts_json']??'[]'));
+        $demoAccounts=json_decode($demoAccountsRaw,true);
+        if(!is_array($demoAccounts) || !array_is_list($demoAccounts) || count($demoAccounts)>6){
+            flash('error','Ek demo hesapları en fazla 6 elemanlı bir JSON dizisi olmalıdır.');
+            redirect($id?'/admin/netvera-yazilimlar/'.$id.'/duzenle':'/admin/netvera-yazilimlar/ekle');
+            return;
+        }
+        $safeDemoAccounts=[];
+        foreach($demoAccounts as $account){
+            if(!is_array($account))continue;
+            $username=mb_substr(trim((string)($account['username']??'')),0,190);
+            $password=mb_substr((string)($account['password']??''),0,190);
+            $label=mb_substr(trim((string)($account['label']??'Demo Hesabı')),0,80);
+            $demoAccountUrl=trim((string)($account['url']??''));
+            if($demoAccountUrl!==''&&!\App\Services\NetveraBridgeService::publicUrl($demoAccountUrl)){
+                flash('error','Ek demo hesaplarının bağlantıları geçerli URL olmalıdır.');
+                redirect($id?'/admin/netvera-yazilimlar/'.$id.'/duzenle':'/admin/netvera-yazilimlar/ekle');
+                return;
+            }
+            if($username==='')continue;
+            $safeDemoAccounts[]=['label'=>$label,'username'=>$username,'password'=>$password,'url'=>$demoAccountUrl];
+        }
+        $newData['demo_accounts_json']=json_encode($safeDemoAccounts,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_THROW_ON_ERROR);
         foreach(['modules_json','specs_json','license_json','faq_json'] as $key){
             $raw=(string)($_POST[$key]??'[]');
             $decoded=json_decode($raw,true);
@@ -100,6 +133,9 @@ final class NetveraScriptController extends Controller
         }
         $newData['demo_is_active']=isset($_POST['demo_is_active'])?1:0;
         $newData['demo_is_public']=isset($_POST['demo_is_public'])?1:0;
+        // Publishing demo credentials is an explicit decision, restricted to
+        // accounts made only for public software demonstrations.
+        $newData['demo_credentials_public']=isset($_POST['demo_credentials_public'])?1:0;
         $newData['is_featured']=isset($_POST['is_featured'])?1:0;
         $newData['is_popular']=isset($_POST['is_popular'])?1:0;
         $newData['is_new']=isset($_POST['is_new'])?1:0;
@@ -141,7 +177,7 @@ final class NetveraScriptController extends Controller
             $id=$this->db->insert('nv_legacy_script_products',$record);
         }
         logActivity('netvera_software_save','Netvera yazılımı güncellendi: '.$name);
-        flash('success','Netvera yazılım kaydı kaydedildi. Ödeme sistemi değiştirilmedi.');
+        flash('success','Yazılım bilgileri ve demo ayarları kaydedildi.');
         redirect('/admin/netvera-yazilimlar');
     }
     /** Isolated legacy categories. The original indexed slug is immutable on edit. */
