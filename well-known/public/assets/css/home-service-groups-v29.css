@@ -178,3 +178,28 @@
  .nv29-services-grid .nv29-card-content>h3{max-height:64px}
  .nv29-services-grid .nv29-card-content>.nv29-card-cta{min-height:38px}
 }
+
+/* V47: shared editorial baseline for the three promotional service cards.
+   Keep artwork, branding, button URL and chip ribbons unchanged. */
+@media(min-width:1151px){
+ .nv29-services-grid{align-items:stretch}
+ .nv29-service-card{min-height:335px}
+ .nv29-card-content{height:calc(100% - 60px);min-height:275px;padding-bottom:20px}
+ .nv29-card-content h3{min-height:2.25em;display:flex;align-items:flex-start}
+ .nv29-card-content p{min-height:5.05em;max-height:5.05em;overflow:hidden}
+ .nv29-card-cta{margin-top:auto;flex:0 0 auto;align-self:flex-start;position:relative;z-index:5}
+ .nv29-service-chips{min-height:60px;max-height:60px}
+}
+@media(min-width:701px) and (max-width:1150px){
+ .nv29-card-content{min-height:250px}
+ .nv29-card-cta{margin-top:auto}
+}
+@media(max-width:700px){
+ .nv29-card-content{min-height:245px}
+ .nv29-card-cta{margin-top:auto;position:relative;z-index:5}
+ .nv29-service-card{min-height:330px}
+ .nv29-service-chip{max-width:none}
+}
+.nv29-card-cta{white-space:nowrap;overflow:visible}
+.nv29-card-content h3,.nv29-card-content p{overflow-wrap:break-word}
+.nv29-service-chips{overflow:hidden}
