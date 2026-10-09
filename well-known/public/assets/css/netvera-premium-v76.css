@@ -16,15 +16,19 @@ body.nv-theme-enabled{
   width:100%;max-width:660px;
   font-size:clamp(39px,3.5vw,56px);line-height:1.08;
   letter-spacing:-.05em;margin:16px 0 17px;
+  text-align:left!important;text-indent:0!important;
+  padding-left:0!important;
 }
 .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-line{
   display:block;flex:0 0 auto;width:100%;
   white-space:nowrap;background:none;-webkit-background-clip:initial;
   background-clip:initial;-webkit-text-fill-color:currentColor;
   color:#141a34;
-}
-.yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-middle{
-  padding-left:clamp(0px,1.7vw,24px);
+  /* All three lines start at exactly the same left edge, not centered separately. */
+  text-align:left!important;text-indent:0!important;
+  padding-left:0!important;margin-left:0!important;
+  align-self:flex-start!important;justify-self:start;
+  transform:none!important;
 }
 .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-highlight{
   background:linear-gradient(95deg,#2868ff,var(--nv76-primary) 53%,var(--nv76-accent));
@@ -265,7 +269,7 @@ body.nv-theme-enabled .site-footer .footer-col a:hover{
     font-size:clamp(30px,7.1vw,40px);max-width:100%
   }
   .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-middle{
-    padding-left:0;font-size:.93em
+    font-size:.93em
   }
   .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-highlight{
     font-size:.69em
