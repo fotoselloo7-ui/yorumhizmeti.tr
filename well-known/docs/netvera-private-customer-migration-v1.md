@@ -6,7 +6,7 @@ Mevcut `database/netvera-public-catalog.json` müşteri kimliği ve satın alma 
 
 ## Kesin ayrım
 - **Kaynak müşteriler**: Netvera `users` / ilişkili profil tablosu; hedef `users` (benzersiz e-posta). Eski ve yeni numeric ID değerleri körü körüne aynı kabul edilmez.
-- **Kaynak admin**: Eski admin tablosu ve istenen `fotoselloo7@gmail.com` kaydı. Hedef `admins` ile `users` ayrı tablolar. Mevcut `super_admin` erişimi, geri dönüş kapısı oluşmadan değiştirilmez.
+- **Kaynak admin**: Eski admin tablosu ve istenen belirtilen müşteri e-postası kaydı. Hedef `admins` ile `users` ayrı tablolar. Mevcut `super_admin` erişimi, geri dönüş kapısı oluşmadan değiştirilmez.
 - **Satış geçmişi**: Eski siparişlerin ödemesi, satırları ve ürün ilişkisi Netvera'nın gerçek kayıtlarından gelir. Hedef `orders` ve `order_items` kendi özgün hesaplamalarına sahip. Ödeme imzaları veya canlı webhooklar asla yeniden üretilmez.
 - **Satın alınmış yazılım lisansları**: Müşteri/ürün/order eşleşmesi, anahtar kimliği, alan adı, durum ve geçerlilik tarihi gibi haklar ancak Netvera kaynak şemasına göre aktarılabilir. Mevcut `LicenseService` sitenin kendi ürün lisansını yönetir, müşteri satın alım haklarını **yönetmez**.
 - **Profil ayrıntıları / destek talepleri**: Kaynak tabloları bulunduktan sonra eşlemeye alınır. Kullanıcıya ait destek mesajları başka kullanıcıya bağlanmaz.
