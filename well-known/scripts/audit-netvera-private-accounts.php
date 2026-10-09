@@ -102,7 +102,7 @@ foreach (['admins','admin_users','users','customers'] as $table) {
 }
 $related = [];
 foreach (array_keys($tableNames) as $table) {
-    if (!preg_match('/order|purchas|licen|entitle|activation|invoice|payment|script_product|user_profile/i',$table)) continue;
+    if (!preg_match('/order|purchas|licen|entitle|activation|invoice|payment|script_product|user_profile|reseller|dealer|bayi|affiliate|wallet|balance|tier|commission|discount|subscription|customer/i',$table)) continue;
     $col = $columns($table);
     // Untrusted legacy names are quoted and remain database-local; metadata only.
     $related[$table] = ['columns'=>$col];
