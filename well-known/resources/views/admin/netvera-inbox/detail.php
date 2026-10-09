@@ -25,7 +25,15 @@
   <div class="adm-card-header"><h3><?= icon('info',16) ?> Talep Bilgileri</h3></div>
   <div class="adm-card-body" style="overflow-wrap:anywhere">
     <p><strong>İsim:</strong> <?= e($inquiry['visitor_name']) ?></p>
-    <p><strong>İletişim:</strong> <?= e($inquiry['visitor_contact']) ?></p>
+    <p><strong>Telefon / İletişim:</strong> <?= e($inquiry['visitor_contact']) ?></p>
+    <?php if(\App\Services\NetveraInquiryService::importanceReady()): ?>
+    <form method="post" action="/admin/netvera-gelen-kutusu/<?= (int)$inquiry['id'] ?>/onem" style="margin:12px 0 17px">
+      <?= csrfField() ?>
+      <button class="btn btn-outline btn-sm" type="submit">
+        <?= !empty($inquiry['is_important']) ? '★ Önem İşaretini Kaldır' : '☆ Önemli Olarak İşaretle' ?>
+      </button>
+    </form>
+    <?php endif; ?>
     <p><strong>Yazılım:</strong> <?= e($inquiry['product_slug']?:'Genel') ?></p>
     <p><strong>Tür:</strong> <?= $inquiry['source_type']==='offer'?'Teklif':'Sohbet' ?></p>
     <form method="post" action="/admin/netvera-gelen-kutusu/<?= (int)$inquiry['id'] ?>/durum">
