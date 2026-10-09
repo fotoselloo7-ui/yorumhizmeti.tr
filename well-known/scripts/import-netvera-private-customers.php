@@ -67,7 +67,11 @@ try {
         $counts[$table]=(int)$old->query('SELECT COUNT(*) FROM `'.$table.'`')->fetchColumn();
     }
     $selected=$old->prepare("SELECT COUNT(*) FROM admin_users WHERE LOWER(email)=?");
-    $selected->execute(['fotoselloo7@gmail.com']);
+    $verifiedAdminEmail=strtolower($get('NETVERA_ADMIN_EMAIL'));
+    if(!filter_var($verifiedAdminEmail,FILTER_VALIDATE_EMAIL)) {
+        throw new RuntimeException('Set NETVERA_ADMIN_EMAIL securely in the import environment');
+    }
+    $selected->execute([$verifiedAdminEmail]);
     $adminFound=(int)$selected->fetchColumn()===1;
     $newCount=(int)$new->query('SELECT COUNT(*) FROM users')->fetchColumn();
     $newAdminCount=(int)$new->query('SELECT COUNT(*) FROM admins')->fetchColumn();
