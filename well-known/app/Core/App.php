@@ -212,6 +212,7 @@ class App
         // Admin mobile support desk (session login required by Router).
         $r->get('/admin/cep', 'Admin\\MobileDeskController@index');
         $r->get('/admin/cep/veri', 'Admin\\MobileDeskController@feed');
+        $r->get('/admin/cep/sinyal', 'Admin\\MobileDeskController@signal');
         $r->get('/admin/cep/kayit/{type}/{id}', 'Admin\\MobileDeskController@detail');
         $r->post('/admin/cep/yanit/{type}/{id}', 'Admin\\MobileDeskController@reply');
 
