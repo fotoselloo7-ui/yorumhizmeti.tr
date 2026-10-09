@@ -160,6 +160,11 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 <section class="yv-category-reviews-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Gerçek müşteri deneyimleri</div><h2>Müşterilerimiz Ne Diyor?</h2></div></div><div class="yv-category-review-grid-v5"><?php foreach(array_slice($reviews,0,4) as $review): ?><article><div><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><b><?= e($review['name']??'Müşteri') ?></b><em><?php for($i=0;$i<($review['stars']??5);$i++): ?>★<?php endfor; ?></em></div><p><?= e($review['text']??'') ?></p></article><?php endforeach; ?></div></div></section>
 <?php endif; ?>
 
+<?php if(!empty($nvSeoData['main_question']) && !empty($nvSeoData['direct_answer'])): ?>
+<section class="nv71-category-answer"><div class="container">
+<h2><?= e($nvSeoData['main_question']) ?></h2><p><?= e($nvSeoData['direct_answer']) ?></p>
+</div></section>
+<?php endif; ?>
 <?php if(!empty($faqs)): ?>
 <section class="yv-category-faq-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Sıkça sorulan sorular</div><h2>Merak Ettikleriniz</h2></div><a href="/sss" class="yv-link-button">Tüm Soruları Gör <?= icon('arrow-right',11) ?></a></div><div class="yv-services-faq-grid"><?php foreach($faqs as $faq): ?><div class="premium-faq-item"><button type="button" class="premium-faq-question"><span><?= e($faq['question']) ?></span><?= icon('plus',12) ?></button><div class="premium-faq-answer"><?= nl2br(e($faq['answer'])) ?></div></div><?php endforeach; ?></div></div></section>
 <?php endif; ?>
