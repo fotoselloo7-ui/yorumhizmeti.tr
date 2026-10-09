@@ -12,11 +12,27 @@ final class NetveraInquiryService
     public static function ready(): bool
     {
         try {
-            return (bool)Database::getInstance()->fetch(
-                "SELECT 1 AS yes FROM information_schema.tables
-                 WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='nv_public_inquiries'"
+            $row=Database::getInstance()->fetch(
+                "SELECT COUNT(*) AS cnt FROM information_schema.tables
+                 WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('nv_public_inquiries','nv_public_inquiry_replies')"
             );
+            return (int)($row['cnt']??0)===2;
         } catch(\Throwable $e){return false;}
+    }
+
+    /** New, isolated inbox tables only; safe to run explicitly from admin on cPanel. */
+    public static function install(): void
+    {
+        if (self::ready()) return;
+        $file=BASE_PATH.'/database/migrations/netvera-inquiries-v1.sql';
+        $sql=@file_get_contents($file);
+        if($sql===false)throw new \RuntimeException('Gelen kutusu kurulum dosyası okunamadı.');
+        $sql=preg_replace('/^\s*--[^\r\n]*(?:\r?\n|$)/m','',$sql);
+        $pdo=Database::getInstance()->getPdo();
+        foreach(explode(';',$sql) as $statement) {
+            if(trim($statement)!=='') $pdo->exec(trim($statement));
+        }
+        if(!self::ready())throw new \RuntimeException('Gelen kutusu tabloları doğrulanamadı.');
     }
 
     public static function visitorHash(): string
