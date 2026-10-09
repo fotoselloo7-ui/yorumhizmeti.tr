@@ -172,6 +172,8 @@ class App
         $r->post('/admin/netvera-gelen-kutusu/kur', 'Admin\\NetveraInboxController@install');
         $r->get('/admin/netvera-gelen-kutusu/{id}', 'Admin\\NetveraInboxController@detail');
         $r->post('/admin/netvera-gelen-kutusu/{id}/yanit', 'Admin\\NetveraInboxController@reply');
+        $r->get('/admin/netvera-gelen-kutusu/sohbet/{id}/mesajlar', 'Admin\\NetveraInboxController@conversation');
+        $r->post('/admin/netvera-gelen-kutusu/sohbet/{id}/yanit', 'Admin\\NetveraInboxController@conversationReply');
 
         $r->post('/admin/netvera-gelen-kutusu/telegram/kaydet', 'Admin\\NetveraInboxController@saveTelegramSettings');
         $r->post('/admin/netvera-gelen-kutusu/temsilci/kaydet', 'Admin\\NetveraInboxController@saveAgent');
