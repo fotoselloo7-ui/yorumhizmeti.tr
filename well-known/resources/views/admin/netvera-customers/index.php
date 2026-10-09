@@ -1,3 +1,4 @@
+<?php $showLegacyArchive = !empty($ready) && (int)($stats['customers']??0) + (int)($stats['orders']??0) + (int)($stats['dealers']??0) > 0; ?>
 <div class="adm-page-top">
  <div><h2><?= icon('users',22) ?> Müşteriler, Siparişler ve Bayilik</h2>
    <p class="text-sm text-secondary">Aktif müşteri hesapları, gerçek alışveriş kayıtları ve iş ortaklığı başvuruları tek merkezde.</p>
@@ -27,7 +28,7 @@
   <a href="#current-customers">Mevcut Müşteriler</a>
   <a href="#current-orders">Satın Almalar</a>
   <a href="#partner-accounts">Bayilik</a>
-  <a href="#old-netvera-archive">Eski NetVera Arşivi</a>
+  <?php if($showLegacyArchive): ?><a href="#old-netvera-archive">Geçmiş Satın Almalar</a><?php endif; ?>
  </nav>
 
  <section class="adm-card" id="current-customers">
@@ -67,7 +68,7 @@
   <div class="adm-card-header"><h3><?= icon('handshake',18) ?> Bayilik Başvuruları ve İş Ortakları</h3><a class="btn btn-outline btn-sm" href="/admin/bayilik">Bayilik Yönetimine Git <?= icon('arrow-right',12) ?></a></div>
   <div class="adm-card-body">
    <?php if(!\App\Services\DealerProgramService::ready()): ?>
-     <p class="text-secondary">Bayilik başvuru modülü veritabanı henüz kurulmadı. Yönetici panelindeki Bayilik Yönetimi bölümünden mevcut üyeleri silmeden kurulumu başlatabilirsiniz.</p>
+     <p class="text-secondary">Bayilik başvurularını ve iş ortaklarını Bayilik Yönetimi bölümünden yönetin.</p>
    <?php else: ?>
    <div class="table-responsive"><table class="adm-table">
     <thead><tr><th>Müşteri</th><th>Referans</th><th>Durum</th><th>Seviye</th><th>Oran</th></tr></thead><tbody>
@@ -81,13 +82,12 @@
   </div>
  </section>
 
+ <?php if($showLegacyArchive): ?>
  <section class="adm-card" id="old-netvera-archive">
    <div class="adm-card-header"><h3><?= icon('archive',18) ?> Eski NetVera Satın Alma ve Lisans Arşivi</h3>
       <span class="badge <?= $ready?'badge-success':'badge-warning' ?>"><?= $ready?'Arşiv tabloları bağlı':'Arşiv bağlantısı bekliyor' ?></span></div>
    <div class="adm-card-body">
-    <?php if(!$ready): ?>
-      <p class="text-secondary">Mevcut müşteri ve sipariş yönetimi yukarıda aktiftir. Eski NetVera veritabanındaki kişisel hesaplar ve lisanslar henüz bu veritabanına aktarılmadığı için burada kayıt uydurulmuyor. Güvenli kaynak aktarımı için sunucu işletim yönergesi: <code>docs/netvera-private-customer-migration-v1.md</code>.</p>
-    <?php else: ?>
+
       <div class="nv67-archive-stats">
         <span><strong><?= (int)$stats['customers'] ?></strong> Eski müşteri</span>
         <span><strong><?= (int)$stats['orders'] ?></strong> Eski sipariş</span>
@@ -108,7 +108,7 @@
        <div class="table-responsive"><table class="adm-table"><thead><tr><th>Sipariş</th><th>Alıcı</th><th>Ürün</th><th>Ödeme</th></tr></thead><tbody>
        <?php foreach($unclaimedOrders as $o): ?><tr><td><?= e($o['order_no']) ?></td><td><?= e($o['customer_name']?:'Misafir') ?></td><td><?= e($o['product_name']) ?></td><td><?= e($o['payment_status']) ?></td></tr><?php endforeach; ?>
        </tbody></table></div><p class="text-secondary">Misafir siparişleri yalnızca e-posta benzerliğiyle hesaba/lisansa bağlanmaz.</p></details><?php endif; ?>
-    <?php endif; ?>
    </div>
  </section>
+ <?php endif; ?>
 </div>
