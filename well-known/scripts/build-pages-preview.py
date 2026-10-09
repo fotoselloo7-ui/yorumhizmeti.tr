@@ -180,6 +180,25 @@ def main():
                 continue
             if not local_file.is_file():
                 sys.exit(f"Missing original reference {field} asset (not replaced): {asset}")
+    # Real NetVera pages must retain in-place tabs and the owner-approved
+    # public demo destinations after static URL rewriting.
+    build_detail = OUT / "hazir-scriptler" / "insaat-firmasi-scripti" / "index.html"
+    if not build_detail.is_file():
+        sys.exit("Missing construction software product detail")
+    build_html=build_detail.read_text(encoding="utf-8")
+    for required in ("data-nv60-tabs", 'data-nv60-tab="ozellikler"',
+                     'data-nv60-tab="demo"', 'data-nv60-panel="demo"',
+                     "netvera-product-tabs-v60.js", "netvera-product-detail-v60.css",
+                     "https://insaat.netvera.tr"):
+        if required not in build_html:
+            sys.exit("Missing tab or demo link from original product page: " + required)
+    if not (OUT / "assets/js/netvera-product-tabs-v60.js").is_file():
+        sys.exit("Missing in-place software tabs JS")
+    if not (OUT / "assets/css/netvera-product-detail-v60.css").is_file():
+        sys.exit("Missing software detail legibility stylesheet")
+    for secret_field in ("demo_admin_password", "demo_password", "demo_accounts_json"):
+        if secret_field in build_html:
+            sys.exit("Unexpected private demo credential field in public Pages output")
     print("STATIC_PREVIEW_OK: source_references=",len(source_active),
           "rendered_references=",reference_count,
           "original_repository_content=true, pages=", len(list(OUT.rglob("index.html"))),
