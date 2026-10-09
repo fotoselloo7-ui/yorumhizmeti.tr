@@ -79,7 +79,7 @@
         <div class="adm-card">
             <div class="adm-card-header"><h3><?= icon('share-2',18) ?> Sosyal Medya Servis Takibi</h3></div>
             <div class="adm-card-body">
-                <p class="text-secondary" style="margin-bottom:14px">Bu bilgiler yalnızca yönetici ekranında görünür, müşterilere ve genel ürün sayfalarına aktarılmaz.</p>
+                
                 <?php foreach ($smmJobs as $job): ?>
                 <div style="padding:12px 0;border-bottom:1px solid #e2e8f0">
                     <div class="font-semibold"><?= e($job['provider_name']) ?> · <?= (int)$job['quantity'] ?> adet</div>
@@ -187,9 +187,8 @@
                 <?php if ($order['admin_note']): ?>
                 <div class="adm-admin-note"><?= nl2br(e($order['admin_note'])) ?></div>
                 <?php else: ?>
-                <p class="text-sm text-secondary">Henüz admin notu yok.</p>
                 <?php endif; ?>
-                <div class="form-hint" style="margin-top: var(--space-2);"><?= icon('lock', 12) ?> Bu not sadece admin panelinde görünür.</div>
+                
             </div>
         </div>
 
