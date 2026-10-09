@@ -22,7 +22,7 @@ if (!function_exists('yvBlogPlatform')) {
       <div class="yv-blog-hero-copy-v8">
         <div class="yv-kicker"><?= icon('file-text',12) ?> Blog / Bilgi Merkezi</div>
         <h1>Dijital Başarınız İçin<br><span>Güncel Bilgiler, Rehberler ve İpuçları!</span></h1>
-        <p>Sosyal medya, Google, web siteniz ve daha fazlası için uzman bilgileri, stratejileri ve pratik rehberleri keşfedin. YorumHizmeti.tr blogu ile dijital dünyada her zaman bir adım önde olun.</p>
+        <p>Sosyal medya, Google, web siteniz ve daha fazlası için uzman bilgileri, stratejileri ve pratik rehberleri keşfedin. NetVera Teknoloji Yazılım blogu ile dijital dünyada her zaman bir adım önde olun.</p>
         <form class="yv-blog-search-v8" method="GET" action="/blog">
           <?= icon('search',15) ?>
           <input name="q" value="<?= e($_GET['q']??'') ?>" placeholder="Hangi konuda bilgi arıyorsunuz?">
@@ -31,7 +31,7 @@ if (!function_exists('yvBlogPlatform')) {
         <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Google Yorum</span><span>Instagram Etkileşim</span><span>TikTok Takipçi</span><span>SEO</span></div>
       </div>
       <div class="yv-blog-hero-art-v8">
-        <img class="yv-blog-woman-v8" src="<?= e(asset('img/blog-woman-cutout.png')) ?>" alt="YorumHizmeti bilgi merkezi" loading="eager">
+        <img class="yv-blog-woman-v8" src="<?= e(asset('img/blog-woman-cutout.png')) ?>" alt="NetVera bilgi merkezi" loading="eager">
         <span class="yv-blog-float-v8 google"><?= icon('google',25) ?></span>
         <span class="yv-blog-float-v8 instagram"><?= icon('instagram',24) ?></span>
         <span class="yv-blog-float-v8 tiktok"><?= icon('tiktok',23) ?></span>
