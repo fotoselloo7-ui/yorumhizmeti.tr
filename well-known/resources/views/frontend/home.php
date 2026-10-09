@@ -886,8 +886,18 @@ if (!empty($projectReferences)) {
 
     <div class="nv31-portfolio-grid nv51-portfolio-grid" aria-live="polite">
       <?php foreach ($projectReferences as $ref):
-        $refGroup = \App\Services\ReferencesService::normalizedGroup($ref);
-        $refService = \App\Services\ReferencesService::normalizedService($ref);
+        $refPlacements = \App\Services\ReferencesService::normalizedPlacements($ref);
+        $refGroup = $refPlacements[0]['group'];
+        $refService = $refPlacements[0]['service'];
+        // The same physical card may appear in either group without duplicate HTML.
+        $refPublicPlacements = [];
+        foreach ($refPlacements as $placement) {
+            $refPublicPlacements[] = [
+                'group' => $placement['group'],
+                'service' => $placement['service'],
+                'label' => $nv51ReferenceGroups[$placement['group']]['services'][$placement['service']] ?? 'Dijital Proje',
+            ];
+        }
         $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
         $embedUrl = \App\Services\ReferencesService::instagramEmbed((string)($ref['url']??''), $refMedia);
         $hasInstagram = $embedUrl !== null;
@@ -896,12 +906,18 @@ if (!empty($projectReferences)) {
         $logo = (string)($ref['logo']??'');
         $target = trim((string)($ref['url']??''));
         $serviceLabel = $nv51ReferenceGroups[$refGroup]['services'][$refService] ?? 'Dijital Proje';
+        foreach ($refPublicPlacements as $position) {
+            if ($position['group'] === $nv51InitialGroup) {
+                $serviceLabel = $position['label'];
+                break;
+            }
+        }
       ?>
       <article class="nv31-portfolio-card nv51-reference-card"
-               data-ref-card data-ref-group="<?= e($refGroup) ?>"
-               data-ref-service="<?= e($refService) ?>"
+               data-ref-card
+               data-ref-placements="<?= e(json_encode($refPublicPlacements, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"
                data-ref-kind="<?= e($refMedia) ?>"
-               <?= $refGroup!==$nv51InitialGroup?'hidden':'' ?>>
+               <?= in_array($nv51InitialGroup, array_column($refPublicPlacements, 'group'), true)?'':'hidden' ?>>
         <?php if ($isWebsite): ?>
         <a class="nv51-client-link" href="<?= e($target) ?>" target="_blank" rel="noopener noreferrer"
            aria-label="<?= e($ref['title']) ?> müşteri sitesine git">
@@ -938,7 +954,7 @@ if (!empty($projectReferences)) {
         </div>
 
         <div class="nv31-portfolio-body nv51-reference-body">
-          <span class="nv31-portfolio-kind"><?= icon($hasInstagram?'instagram':($isWebsite?'globe':'layers'),12) ?> <?= e($serviceLabel) ?></span>
+          <span class="nv31-portfolio-kind"><?= icon($hasInstagram?'instagram':($isWebsite?'globe':'layers'),12) ?> <span data-ref-service-label><?= e($serviceLabel) ?></span></span>
           <h3><?= e($ref['title']) ?></h3>
           <?php if(!empty($ref['description'])): ?><p><?= e($ref['description']) ?></p><?php endif; ?>
           <?php if($isWebsite): ?>
@@ -997,9 +1013,15 @@ if (!empty($projectReferences)) {
    let found=0;
    cards.forEach(card=>{
      const t=card.dataset.refKind;
-     const permitted=card.dataset.refGroup===group &&
-       (service==='all'||card.dataset.refService===service) &&
+     let placements=[];
+     try{placements=JSON.parse(card.dataset.refPlacements||'[]')}catch(e){placements=[]}
+     const matched=placements.find(p=>p.group===group && (service==='all'||p.service===service));
+     const permitted=!!matched &&
        (!social||format==='all'||(format==='reels'?t==='instagram_reel':t==='instagram_post'||t==='image'));
+     if(matched){
+       const label=card.querySelector('[data-ref-service-label]');
+       if(label)label.textContent=matched.label||'Dijital Proje';
+     }
      if(!permitted)resetPlayer(card);
      card.hidden=!permitted;
      if(permitted)found++;
