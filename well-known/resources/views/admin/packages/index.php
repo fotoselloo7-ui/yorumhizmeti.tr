@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('package', 24) ?> Paketler</h2>
-        <p class="text-sm text-secondary">Tüm hizmet paketlerinizi yönetin.</p>
     </div>
     <div class="adm-page-top-badges">
         <form method="POST" action="/admin/paketler/yayinla" style="margin:0" onsubmit="return confirm('Mevcut tüm kayıtlı paketler ile ilişkili kategorileri aktif edip vitrinde yayımlamak istiyor musunuz? Fiyatlar ve paket detayları değişmeyecek.')">
