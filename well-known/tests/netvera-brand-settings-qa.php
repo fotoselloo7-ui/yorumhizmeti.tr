@@ -6,7 +6,7 @@ use App\Services\NetveraBrandSettings as Brand;
 
 $defaults=Brand::defaults();
 $needed=[
- 'site_name','site_url','site_slogan','brand_short_name','brand_positioning',
+ 'site_name','site_url','site_email','site_slogan','brand_short_name','brand_positioning',
  'brand_sector_software','brand_sector_agency','brand_sector_social',
  'default_seo_title','default_seo_description','seo_og_title','seo_og_description',
  'seo_org_type','seo_org_description','seo_geo_summary','seo_entity_topics',
@@ -19,6 +19,10 @@ foreach($needed as $name){
 }
 if(!Brand::upgradeable('site_name','Yorum Hizmeti'))
   throw new RuntimeException('Old branding cannot migrate.');
+if(Brand::display('site_email','info@yorumhizmeti.tr')!=='info@netvera.tr')
+  throw new RuntimeException('Legacy public company email not migrated.');
+if(Brand::upgradeable('site_email','musteri@ornek.com'))
+  throw new RuntimeException('Must never replace an unrelated verified contact email.');
 if(!Brand::upgradeable('site_url','https://yorumhizmeti.tr'))
   throw new RuntimeException('Old domain cannot migrate.');
 if(!Brand::upgradeable('default_seo_title','Yorum Hizmeti - Dijital Hizmet Platformu'))
