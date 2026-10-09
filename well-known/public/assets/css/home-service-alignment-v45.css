@@ -1,0 +1,45 @@
+/* Match the 3 homepage service cards without repositioning their artwork. */
+.nv29-services-grid{align-items:stretch}
+.nv29-services-grid>.nv29-service-card{min-height:360px;height:100%}
+.nv29-services-grid .nv29-card-content{
+  flex:1 1 auto;
+  align-self:stretch;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+.nv29-services-grid .nv29-eyebrow{flex:0 0 auto}
+.nv29-services-grid .nv29-card-content h3{
+  min-height:2.22em;
+  margin-bottom:8px;
+  line-height:1.11;
+}
+.nv29-services-grid .nv29-card-content p{
+  min-height:4.8em;
+  max-width:245px;
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.nv29-services-grid .nv29-card-cta{
+  flex:0 0 auto;
+  align-self:flex-start;
+  margin-top:auto;
+  min-height:40px;
+  white-space:nowrap;
+}
+.nv29-services-grid .nv29-service-chips{flex:0 0 auto;margin-top:0}
+@media(max-width:1150px){
+  .nv29-services-grid>.nv29-service-card{min-height:355px}
+  .nv29-services-grid .nv29-card-content h3{min-height:2.22em}
+}
+@media(max-width:700px){
+  .nv29-services-grid>.nv29-service-card{min-height:325px}
+  .nv29-services-grid .nv29-card-content p{min-height:4.6em}
+}
+@media(max-width:380px){
+  .nv29-services-grid>.nv29-service-card{min-height:320px}
+  .nv29-services-grid .nv29-card-content p{min-height:4.4em}
+  .nv29-services-grid .nv29-card-cta{white-space:normal}
+}
