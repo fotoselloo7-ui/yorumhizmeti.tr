@@ -51,7 +51,7 @@ final class NetveraBrandSettings
             'netvera teknoloji yazılım | sosyal medya, seo ve dijital hizmetler',
             'netvera teknoloji yazılım'
         ],true);
-        if($key==='default_seo_description')return str_contains($lower,'netvera teknoloji yazılım ile instagram, tiktok, youtube, seo');
+        if($key==='default_seo_description')return str_contains($lower,'netvera teknoloji yazılım ile instagram, tiktok, youtube, seo') || str_contains($lower,'google, instagram, tiktok, youtube ve daha fazlası');
         if($key==='footer_text')return (bool)preg_match('/^©\s*\d{4}\s*NetVera Teknoloji Yazılım\.\s*Tüm hakları saklıdır\.?$/iu',$value);
         return false;
     }
