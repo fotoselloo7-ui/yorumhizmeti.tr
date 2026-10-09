@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('settings', 24) ?> Site Ayarları</h2>
-        <p class="text-sm text-secondary">Genel site bilgileri, iletişim, sosyal medya ve SEO varsayılanları.</p>
     </div>
 </div>
 
@@ -98,7 +97,6 @@
                     <button type="button" class="btn btn-outline btn-sm" onclick="resetThemeDefaults()">Varsayılana Döndür</button>
                 </div>
                 <div class="adm-card-body">
-                    <p class="text-sm text-secondary mb-4">Hazır temalardan birini seçin veya özel renklerinizi belirleyin. Değişiklikler kaydettikten sonra uygulanır.</p>
                     
                     <!-- Preset Themes -->
                     <div class="theme-presets">
@@ -172,7 +170,6 @@
                         <label>Varsayılan SEO Başlığı</label>
                         <input type="text" name="default_seo_title" class="form-control" value="<?= e(setting('default_seo_title')) ?>">
                         <input type="hidden" name="_group_default_seo_title" value="seo">
-                        <div class="form-hint">Eksik olan sayfalarda otomatik kullanılır.</div>
                     </div>
                     <div class="form-group">
                         <label>Varsayılan Meta Açıklama</label>
