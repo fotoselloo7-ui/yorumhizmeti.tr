@@ -45,8 +45,9 @@ final class NetveraBrandSettings
         if($key==='site_url')return (bool)preg_match('~^https?://(?:www\.)?yorumhizmeti\.tr/?$~iu',$value);
         if($key==='site_slogan')return in_array($lower,[
             'dijital hizmetlerde güvenilir çözüm ortağınız',
-            'web yazılımı, sosyal medya ve dijital pazarlama çözümleri'
-        ],true);
+            'web yazılımı, sosyal medya ve dijital pazarlama çözümleri',
+            'google yorum, sosyal medya ve dijital güven hizmetleri'
+        ],true) || (str_contains($lower,'google yorum') && str_contains($lower,'sosyal medya'));
         if($key==='default_seo_title'||$key==='seo_og_title')return in_array($lower,[
             'netvera teknoloji yazılım | sosyal medya, seo ve dijital hizmetler',
             'netvera teknoloji yazılım'
