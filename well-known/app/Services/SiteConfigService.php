@@ -42,9 +42,9 @@ class SiteConfigService
             return 'NetVera Teknoloji Yazılım';
         if($key==='site_url' && preg_match('~^https?://(?:www\.)?yorumhizmeti\.tr/?$~i',trim($value)))
             return 'https://netvera.tr';
-        if(in_array($key,['default_seo_title','footer_text','site_slogan'],true)){
+        if(in_array($key,['default_seo_title','footer_text','site_slogan','smtp_from_name'],true)){
             $value=preg_replace('/YorumHizmeti\.tr/iu','NetVera Teknoloji Yazılım',$value);
-            $value=preg_replace('/\bYorum Hizmeti\s*[|—-]\s*Türkiye\b/iu','NetVera Teknoloji Yazılım',$value);
+            $value=preg_replace('/\bYorum Hizmeti\b/iu','NetVera Teknoloji Yazılım',$value);
         }
         return $value;
     }
