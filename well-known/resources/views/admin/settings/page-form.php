@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('layout', 24) ?> Sayfa Düzenle: <?= e($page['title']) ?></h2>
-        <p class="text-sm text-secondary">Kurumsal sayfa içeriğini ve SEO ayarlarını düzenleyin.</p>
     </div>
     <a href="/admin/sayfalar" class="btn btn-light btn-sm"><?= icon('arrow-left', 16) ?> Geri Dön</a>
 </div>
