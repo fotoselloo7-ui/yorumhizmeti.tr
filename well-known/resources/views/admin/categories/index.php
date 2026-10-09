@@ -3,6 +3,10 @@
         <h2><?= icon('grid', 24) ?> Kategoriler</h2>
     </div>
     <div style="display:flex; gap: 8px;">
+        <form method="POST" action="/admin/kategoriler/seo-optimize" style="margin:0;" onsubmit="return confirm('Mevcut URL ve Hazır Yazılımlar korunarak yalnız seçili sosyal medya/hizmet kategorilerinin eski veya boş SEO alanları doldurulsun mu?')">
+            <?= csrfField() ?>
+            <button class="btn btn-outline btn-sm" type="submit"><?= icon('search', 16) ?> SEO / GEO Profillerini Uygula</button>
+        </form>
         <form method="POST" action="/admin/kategoriler/varsayilan-kur" style="margin:0;" onsubmit="return confirm('Varsayılan kategorileri kurmak istediğinize emin misiniz? (Var olanlar silinmez)')">
             <?= csrfField() ?>
             <button type="submit" class="btn btn-secondary btn-sm"><?= icon('layers', 16) ?> Varsayılanları Kur</button>
