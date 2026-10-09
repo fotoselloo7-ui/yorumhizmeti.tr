@@ -8,7 +8,7 @@ $searchQuery = $searchQuery ?? '';
   <section class="nv26-catalog-hero"><div class="container nv26-catalog-hero-inner">
     <div><span class="nv26-catalog-kicker"><?= icon('layers',15) ?> YorumHizmeti Dijital Hizmet Merkezi</span>
       <h1>İhtiyacınıza uygun <span>hizmeti keşfedin.</span></h1>
-      <p>Sosyal medya platformlarından web sitesi ve yazılım çözümlerine, SEO ve dijital pazarlamaya kadar tüm hizmetler bir arada.</p>
+      
     </div>
     <a class="nv26-catalog-hero-link" href="#categories">Kategorileri keşfet <?= icon('arrow-right',15) ?></a>
   </div></section>
@@ -33,7 +33,7 @@ $searchQuery = $searchQuery ?? '';
     </nav>
     <?php if(empty($catalogGroups)): ?>
     <div class="nv26-catalog-empty"><h2>Aramanızla eşleşen kategori bulunamadı.</h2>
-      <p>Farklı bir arama yapabilir veya tüm kategorileri keşfedebilirsiniz.</p><a href="/kategoriler">Tüm hizmetleri görüntüle</a>
+      <a href="/kategoriler">Tüm hizmetleri görüntüle</a>
     </div>
     <?php endif; ?>
     <?php foreach($catalogGroups as $group): ?>
@@ -69,7 +69,7 @@ $searchQuery = $searchQuery ?? '';
     <aside class="nv26-catalog-banner">
       <div><span><?= icon('sparkles',15) ?> YorumHizmeti Premium</span>
         <h2>Markanız için dijital çözümler <em>tek adreste.</em></h2>
-        <p>Web sitesi, yazılım, sosyal medya ve dijital büyüme hizmetlerini keşfedin.</p>
+        
         <a href="/iletisim">Projenizi konuşalım <?= icon('arrow-right',13) ?></a>
       </div>
       <div class="nv26-banner-icons" aria-hidden="true"><span><?= icon('instagram',27) ?></span><span><?= icon('globe',27) ?></span><span><?= icon('bar-chart',27) ?></span><span><?= icon('palette',27) ?></span></div>
