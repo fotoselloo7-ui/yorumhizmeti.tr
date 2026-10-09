@@ -208,6 +208,12 @@ class App
         $r->post('/admin/yorumlar/kaydet', 'Admin\\TestimonialController@save');
         $r->post('/admin/yorumlar/sil', 'Admin\\TestimonialController@remove');
 
+        // Admin mobile support desk (session login required by Router).
+        $r->get('/admin/cep', 'Admin\\MobileDeskController@index');
+        $r->get('/admin/cep/veri', 'Admin\\MobileDeskController@feed');
+        $r->get('/admin/cep/kayit/{type}/{id}', 'Admin\\MobileDeskController@detail');
+        $r->post('/admin/cep/yanit/{type}/{id}', 'Admin\\MobileDeskController@reply');
+
         // Admin Ödeme Modülleri
         $r->get('/admin/odeme-modulleri', 'Admin\\PaymentGatewayController@index');
         $r->post('/admin/odeme-modulleri/{id}/toggle', 'Admin\\PaymentGatewayController@toggle');
