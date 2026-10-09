@@ -9,15 +9,13 @@
   </div>
 </div>
 <?php if(!$ready): ?>
-  <div class="adm-card"><div class="adm-card-body" style="max-width:810px">
-    <h3>Yazılım kategorisi veritabanı eksik</h3>
-    <p>Yazılım ekleme ve kategori yönetimi için katalog veritabanı tablolarının kurulması gerekiyor. Güncel SQL ve içerik aktarımı yapılmadan mevcut site verilerini silmeyin.</p>
-    <form method="post" action="/admin/netvera-kategoriler/staging-kur">
-      <?= csrfField() ?>
-      <button class="btn btn-primary" type="submit"><?= icon('database',16) ?> Katalog Tablolarını Hazırla (Test Ortamı)</button>
-    </form>
-    <p class="text-sm text-secondary">Bu otomatik kurulum yalnızca test veritabanında çalışır. Canlı cPanel geçişi, mevcut verilerin yedeği ve kontrollü SQL aktarımı gerektirir.</p>
-  </div></div>
+  <div class="adm-card">
+    <div class="adm-card-body">
+      <h3><?= icon('layers',18) ?> Yazılım Kategorileri</h3>
+      <p class="text-secondary">Kategori düzenleme, katalog verileri hazır olduğunda kullanılabilir.</p>
+      <a href="/admin/netvera-yazilimlar" class="btn btn-outline btn-sm"><?= icon('arrow-left',14) ?> Yazılım Listesine Dön</a>
+    </div>
+  </div>
 <?php else: ?>
   <div class="adm-card" style="margin-bottom:20px">
     <div class="adm-card-header"><h3><?= icon('plus',16) ?> Yeni Yazılım Kategorisi</h3></div>
