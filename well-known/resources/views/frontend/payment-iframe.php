@@ -19,21 +19,16 @@ $paytrCustomer = trim((string)($user['email']??''));
       <div>
         <span class="nv45-checkout-kicker"><?= icon('shield-check',15) ?> GÜVENLİ ÖDEME</span>
         <h1>Ödemenizi <span>güvenle tamamlayın.</span></h1>
-        <p>Ödeme alanı doğrudan PayTR tarafından sunulur. Kart numaranız ve güvenlik kodunuz bu web sitesi tarafından kaydedilmez.</p>
+        
       </div>
       <div class="nv45-powered"><?= icon('lock-keyhole',17) ?><span>Ödeme sağlayıcısı<strong>PayTR</strong></span></div>
     </div>
-    <?php if($paytrPreview): ?>
-      <div class="nv45-preview-alert" role="status">
-        <?= icon('info',18) ?>
-        <div><strong>Yalnızca yerel tasarım önizlemesi</strong><p>Bu ekranda ödeme başlatılmaz ve kart bilgisi istenmez. Gerçek PayTR formu, mağaza bilgileri ve onaylı test işlemiyle açılır.</p></div>
-      </div>
-    <?php endif; ?>
+
     <div class="nv45-checkout-grid">
       <section class="nv45-checkout-panel" aria-label="PayTR ödeme alanı">
         <div class="nv45-panel-heading">
           <span class="nv45-payment-step">01</span>
-          <div><h2>Kredi veya Banka Kartıyla Ödeme</h2><p>Ödeme işlemini PayTR'nin güvenli formunda tamamlayın.</p></div>
+          <div><h2>Kredi veya Banka Kartıyla Ödeme</h2></div>
           <?= icon('shield',22) ?>
         </div>
         <?php if(!$paytrPreview && $gateway==='paytr' && $paytrToken!==''): ?>
@@ -59,9 +54,9 @@ $paytrCustomer = trim((string)($user['email']??''));
           <div class="nv45-preview-frame" aria-label="PayTR ödeme formu örnek konumu">
             <span class="nv45-preview-logo"><?= icon('credit-card',37) ?></span>
             <strong>PayTR Güvenli Kart Formu</strong>
-            <p>Gerçek ödeme ekranı burada otomatik olarak açılır.</p>
+            
             <span class="nv45-preview-placeholder"><span></span><span></span><span></span></span>
-            <small><?= $paytrPreview?'Önizleme modunda ödeme yapılmaz.':'Ödeme sağlayıcısı başlatılamadı.' ?></small>
+            <small><?= $paytrPreview?'Önizleme':'Ödeme sağlayıcısı başlatılamadı.' ?></small>
           </div>
         <?php endif; ?>
         <div class="nv45-security-row">
@@ -85,7 +80,7 @@ $paytrCustomer = trim((string)($user['email']??''));
         <?php if($paytrTotal>0): ?>
           <div class="nv45-summary-total"><span>Ödenecek Tutar</span><strong><?= money($paytrTotal) ?></strong></div>
         <?php endif; ?>
-        <p class="nv45-summary-notice"><?= icon('info',14) ?> Siparişinizin ödeme onayı PayTR'nin sunucu bildirimiyle kesinleşir. Yönlendirme sayfası tek başına ödeme onayı değildir.</p>
+        
         <a class="nv45-return-link" href="/siparislerim"><?= icon('arrow-left',15) ?> Siparişlerime Dön</a>
         <div class="nv45-cards" aria-label="Kart ağları">
           <img src="<?= asset('img/payments/visa.svg') ?>" alt="Visa" width="55" height="29" loading="lazy">
