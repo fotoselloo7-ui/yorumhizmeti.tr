@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
+    <link rel="stylesheet" href="<?= asset('css/admin-customers-v67.css') ?>?v=67.1">
     <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-admin-products.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
