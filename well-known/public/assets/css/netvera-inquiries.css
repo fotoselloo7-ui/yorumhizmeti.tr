@@ -39,3 +39,14 @@
 @media(max-width:750px){.nv-chat{right:15px;bottom:83px}.nv-chat-panel{max-height:min(550px,calc(100dvh - 150px))}}
 @media(max-width:420px){.nv-chat-toggle{padding:11px 14px;font-size:11px}.nv-chat-identity,.nv-product-offer-grid{grid-template-columns:1fr}.nv-chat-panel{width:calc(100vw - 26px)}.nv-chat{right:13px}.nv-product-offer{padding:13px}}
 @media(prefers-reduced-motion:reduce){.nv-chat-toggle{transition:none}}
+
+/* v48: do not render the launcher beside the open conversation. */
+.nv-chat-toggle[hidden]{display:none!important}
+.nv-chat form input[type="tel"]{letter-spacing:.01em}
+.nv-chat form input:focus-visible,.nv-chat form textarea:focus-visible{
+ outline:2px solid #7b62ec;outline-offset:1px;border-color:#7b62ec
+}
+@media(max-width:420px){
+ .nv-chat-identity{grid-template-columns:1fr}
+ .nv-chat-panel{max-height:calc(100dvh - 108px)}
+}
