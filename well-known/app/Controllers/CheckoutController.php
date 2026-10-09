@@ -30,7 +30,7 @@ class CheckoutController extends Controller
                 $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
                 $qty = $item['quantity'] ?? 1;
                 $fields = \App\Services\SmmOrderFields::fields($pkg);
-                $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields, 'cart_key' => $key]);
+                $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields, 'saved_fields'=>$item['fields'] ?? [], 'cart_key' => $key]);
                 $total += $price * $qty;
             }
         }
