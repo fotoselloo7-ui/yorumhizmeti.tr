@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-admin-products.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
@@ -47,6 +48,9 @@
                 </a>
                 <a href="/admin/paketler" class="<?= isActive('/admin/paket') ?>">
                     <?= icon('package', 18) ?> Paketler
+                </a>
+                <a href="/admin/smm" class="<?= isActive('/admin/smm') ? 'active' : '' ?>">
+                    <?= icon('share-2', 18) ?> Sosyal Medya API &amp; Servisler
                 </a>
                 <a href="/admin/hazir-yazilimlar" class="<?= isActive('/admin/hazir-yazilimlar') ? 'active' : '' ?>">
                     <?= icon('monitor', 18) ?> Hazır Yazılım Vitrini
