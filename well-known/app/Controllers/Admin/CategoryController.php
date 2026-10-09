@@ -13,6 +13,24 @@ class CategoryController extends Controller
         $this->renderAdmin('admin/categories/index', ['pageTitle' => 'Kategoriler', 'categories' => $categories]);
     }
 
+    public function optimizeCategorySeo(): void
+    {
+        Csrf::check();
+        $admin=\App\Core\AdminAuth::admin();
+        if(!$admin||($admin['role']??'')!=='super_admin'){
+            http_response_code(403);exit('Bu işlem için süper yönetici yetkisi gerekiyor.');
+        }
+        try{
+            $report=\App\Services\CategorySearchBlueprint::apply();
+            logActivity('category_seo_blueprint','Kategori SEO/GEO taslakları uygulandı.');
+            flash('success',$report['categories'].' kategoride '.$report['fields'].' SEO alanı ve '.$report['seo_profiles'].' GEO/AIO profili güncellendi.');
+        }catch(\Throwable $e){
+            error_log('Category SEO blueprint: '.get_class($e).' '.$e->getMessage());
+            flash('error','SEO profilleri kaydedilemedi. Sunucu kayıtlarını kontrol edin.');
+        }
+        redirect('/admin/kategoriler');
+    }
+
     public function create(): void
     {
         $parents = $this->db->fetchAll("SELECT id, name FROM categories WHERE parent_id IS NULL ORDER BY name");
