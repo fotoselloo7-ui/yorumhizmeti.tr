@@ -81,6 +81,7 @@
     <link rel="stylesheet" href="<?= asset('css/reference-portfolio-v51.css') ?>?v=51.3">
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
     <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=55.1">
+    <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
@@ -438,6 +439,7 @@
     </nav>
 
     <script src="<?= asset('js/software-marketplace-v36.js') ?>?v=36.1" defer></script>
+    <script src="<?= asset('js/category-marquee-drag-v56.js') ?>?v=56.2" defer></script>
 
     <!-- Flash Messages -->
     <?php if (!empty($flash)): ?>
