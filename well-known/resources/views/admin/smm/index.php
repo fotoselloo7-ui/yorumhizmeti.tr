@@ -21,7 +21,7 @@ $esc = static fn($value) => e((string)$value);
   <?php else: ?>
   <div class="smm-stats">
    <div class="adm-card"><div class="adm-card-body"><strong><?= count($providers) ?></strong><small>Bağlı tedarikçi</small></div></div>
-   <div class="adm-card"><div class="adm-card-body"><strong><?= count($services) ?>+</strong><small>Listelenen servis (en çok 250)</small></div></div>
+   <div class="adm-card"><div class="adm-card-body"><strong><?= count($services) ?>+</strong><small>Servisler</small></div></div>
    <div class="adm-card"><div class="adm-card-body"><strong><?= count($links) ?></strong><small>Entegre paket</small></div></div>
    <div class="adm-card"><div class="adm-card-body"><strong><?= count(array_filter($jobs,static fn($j)=>$j['state']==='manual_review')) ?></strong><small>Manuel kontrol</small></div></div>
   </div>
@@ -141,7 +141,7 @@ $esc = static fn($value) => e((string)$value);
        </div>
        <div class="form-group"><label>Hedef Kategori</label><select name="category_id" class="form-control" required><option value="">Kategori seçin</option>
         <?php foreach ($categories as $c): ?><option value="<?= (int)$c['id'] ?>"><?= $esc($c['name']) ?></option><?php endforeach; ?></select></div>
-       <div class="form-group"><label>Tedarikçinin Teslim Edeceği Adet</label><input type="number" name="fulfillment_quantity" id="smm-quantity" min="1" class="form-control" required placeholder="1000"><small id="smm-limits">Seçilen servisin min/max değerlerine uygun olmalı.</small></div>
+       <div class="form-group"><label>Tedarikçinin Teslim Edeceği Adet</label><input type="number" name="fulfillment_quantity" id="smm-quantity" min="1" class="form-control" required placeholder="1000"><small id="smm-limits"></small></div>
        <div class="form-group"><label>Kendi Satış Fiyatımız (TL)</label><input type="number" min="1" step="0.01" name="price" class="form-control" required placeholder="249.90"></div>
        <div class="form-group"><label>Özgün Paket Başlığı</label><input name="name" class="form-control" maxlength="300" required placeholder="Instagram 1000 Takipçi Paketi"></div>
        <div class="form-group"><label>Öngörülen Teslim Süresi</label><input name="delivery_time" class="form-control" maxlength="100" placeholder="Ör. 1-3 gün"></div>
