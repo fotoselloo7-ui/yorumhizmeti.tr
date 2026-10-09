@@ -78,7 +78,8 @@ final class SmmOrderFields
         if ($mode==='username' && !str_contains($value,'/')) {
             $username=ltrim($value,'@');
             if ($platform!=='' && preg_match('/^[a-zA-Z0-9_.-]{1,80}$/D',$username)) {
-                return 'https://'.self::PLATFORMS[$platform].'/'.rawurlencode($username);
+                $prefix=in_array($platform,['tiktok','threads','youtube'],true)?'@':'';
+                return 'https://'.self::PLATFORMS[$platform].'/'.$prefix.rawurlencode($username);
             }
         }
         $parsed=parse_url($value);
