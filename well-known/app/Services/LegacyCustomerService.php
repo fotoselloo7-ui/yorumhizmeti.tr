@@ -13,7 +13,7 @@ final class LegacyCustomerService
     public static function overview(int $userId): array
     {
         $empty=['orders'=>[],'affiliate'=>null,'commission_total'=>0,'pending_total'=>0,
-                'paid_total'=>0,'legacy_purchase_count'=>0];
+                'paid_total'=>0,'legacy_purchase_count'=>0,'tickets'=>[]];
         if ($userId<=0) return $empty;
         try {
             $pdo=Database::getInstance()->getPdo();
@@ -25,6 +25,14 @@ final class LegacyCustomerService
                        FROM nv_private_orders WHERE new_user_id=? ORDER BY created_at DESC LIMIT 60");
             $q->execute([$userId]); $empty['orders']=$q->fetchAll(PDO::FETCH_ASSOC);
             $empty['legacy_purchase_count']=count($empty['orders']);
+            $ticketTable=$pdo->query("SHOW TABLES LIKE 'nv_private_support_tickets'");
+            if ($ticketTable->fetchColumn()) {
+                $q=$pdo->prepare("SELECT old_ticket_id,subject,priority,status,created_at
+                    FROM nv_private_support_tickets WHERE new_user_id=?
+                    ORDER BY created_at DESC LIMIT 12");
+                $q->execute([$userId]);
+                $empty['tickets']=$q->fetchAll(PDO::FETCH_ASSOC);
+            }
             $q=$pdo->prepare("SELECT old_affiliate_id,referral_code,status,commission_rate
                               FROM nv_private_affiliates WHERE new_user_id=? LIMIT 1");
             $q->execute([$userId]);$empty['affiliate']=$q->fetch(PDO::FETCH_ASSOC)?:null;
