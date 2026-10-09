@@ -64,7 +64,7 @@ class SiteConfigService
             $value=preg_replace('/YorumHizmeti\.tr/iu','NetVera Teknoloji Yazılım',$value);
             $value=preg_replace('/\bYorum Hizmeti\b/iu','NetVera Teknoloji Yazılım',$value);
         }
-        return $value;
+        return NetveraBrandSettings::display($key,$value);
     }
 
     public function all(): array
