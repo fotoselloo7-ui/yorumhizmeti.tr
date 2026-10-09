@@ -1,0 +1,212 @@
+/* YorumHizmeti v55 | premium micro-interactions on public storefront only.
+   Design principle: existing brand hues, subtle elevation, intentional icon motion.
+   Nothing changes until hover/focus. Does not alter site routes or active selection. */
+:root{--yh55-ease:cubic-bezier(.2,.7,.25,1);--yh55-purple:#6b49dc;--yh55-dark:#192b58}
+/* Existing active states remain the source of truth, never stateful hover JS. */
+@media (hover:hover) and (pointer:fine){
+/* Featured category roots: tint-to-inverse in their own purple/blue palette */
+#featured .nv43-category-card.yh18-featured-tab{
+ transition:background-color .3s var(--yh55-ease),color .3s var(--yh55-ease),
+   border-color .3s var(--yh55-ease),box-shadow .3s var(--yh55-ease),
+   transform .3s var(--yh55-ease)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab:hover,
+#featured .nv43-category-card.yh18-featured-tab:focus-visible{
+ transform:translateY(-3px)!important;
+ background:#6b4edf!important;color:#fff!important;border-color:#7863e7!important;
+ box-shadow:0 13px 26px rgba(79,64,183,.22)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab.active:hover,
+#featured .nv43-category-card.yh18-featured-tab.is-parent-selected:hover{
+ background:#2865d8!important;border-color:#497fff!important;
+ box-shadow:0 15px 26px rgba(39,94,196,.24)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab.software:hover{
+ background:#6d47d4!important;border-color:#8d69ec!important;
+ box-shadow:0 14px 26px rgba(99,63,197,.25)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-name{
+ color:#fff!important;
+}
+#featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon{
+ transform-origin:50% 50%;
+ transition:transform .55s var(--yh55-ease),background .3s ease,color .3s ease,box-shadow .3s ease!important;
+}
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon{
+ transform:rotate(-14deg) scale(1.14);
+ background:rgba(255,255,255,.94)!important;color:#6048d6!important;
+ box-shadow:0 5px 18px rgba(10,17,70,.15);
+}
+#featured .nv43-category-card.yh18-featured-tab.active:is(:hover,:focus-visible) .yh26-filter-icon{
+ color:#2164dd!important;
+}
+#featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon :is(.icon,svg,i){
+ transition:transform .58s var(--yh55-ease);
+}
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i){
+ transform:rotate(27deg);
+}
+/* The two feature group tabs retain their clicked/expanded state */
+#featured .yh24-featured-group{
+ transition:transform .24s var(--yh55-ease),box-shadow .24s ease,background .24s ease,color .24s ease!important;
+}
+#featured .yh24-featured-group:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(93,67,195,.2)}
+#featured .yh24-featured-group>.icon:first-child{transition:transform .45s var(--yh55-ease)}
+#featured .yh24-featured-group:hover>.icon:first-child{transform:rotate(-22deg) scale(1.14)}
+/* Don't spin dropdown arrows: arrow orientation signals open/closed. */
+#featured .nv43-subcategory-link{
+ transition:background .24s var(--yh55-ease),color .24s var(--yh55-ease),
+ border-color .24s ease,box-shadow .24s ease,transform .24s ease!important;
+}
+#featured .nv43-subcategory-link:hover,
+#featured .nv43-subcategory-link:focus-visible{
+ transform:translateY(-2px);
+ color:#fff!important;background:#6c50dc!important;
+ border-color:#6c50dc!important;box-shadow:0 7px 15px rgba(83,71,184,.16);
+}
+#featured .nv43-subcategory-link :is(.icon,svg):first-child{
+ transition:transform .4s var(--yh55-ease),color .3s ease;
+}
+#featured .nv43-subcategory-link:is(:hover,:focus-visible) :is(.icon,svg):first-child{
+ transform:rotate(-18deg) scale(1.16);color:#fff;
+}
+#featured .nv43-rail-arrow:not(:disabled):hover{
+ background:#6848d9!important;color:#fff!important;
+ border-color:#6848d9!important;transform:translateY(-1px) scale(1.045);
+ box-shadow:0 6px 14px rgba(91,67,192,.15);
+}
+/* On the home hero: slow, calm micro-interactions. */
+.yh-home-v6 .yh49-category-link{
+ transition:transform .3s var(--yh55-ease),box-shadow .3s ease,filter .3s ease!important;
+}
+.yh-home-v6 .yh49-category-link:hover{
+ transform:translateY(-3px) scale(1.015);
+ filter:brightness(1.11) saturate(1.08)!important;
+ box-shadow:0 12px 21px rgba(34,36,91,.2)!important;
+}
+.yh-home-v6 .yh49-category-icon{transition:background .3s ease,transform .48s var(--yh55-ease)}
+.yh-home-v6 .yh49-category-link:hover .yh49-category-icon{
+ background:rgba(255,255,255,.3)!important;transform:rotate(-17deg) scale(1.12);
+}
+.yh-home-v6 .yh49-category-icon :is(.icon,svg,i){transition:transform .5s var(--yh55-ease)}
+.yh-home-v6 .yh49-category-link:hover .yh49-category-icon :is(.icon,svg,i){transform:rotate(32deg)}
+/* Promo cards and calls-to-action: preserve the CTA grid baseline. */
+.nv29-service-card{transition:transform .3s var(--yh55-ease),box-shadow .3s ease,border-color .3s ease!important}
+.nv29-service-card:hover{
+ transform:translateY(-4px)!important;
+ box-shadow:0 22px 41px rgba(30,37,88,.19)!important;
+ border-color:rgba(255,255,255,.36)!important;
+}
+.nv29-service-card .nv29-eyebrow{transition:background .25s ease,box-shadow .25s ease}
+.nv29-service-card:hover .nv29-eyebrow{background:rgba(255,255,255,.23);box-shadow:0 7px 18px rgba(17,22,62,.12)}
+.nv29-service-card .nv29-eyebrow .icon{transition:transform .5s var(--yh55-ease)}
+.nv29-service-card:hover .nv29-eyebrow .icon{transform:rotate(-28deg) scale(1.12)}
+.nv29-service-card .nv29-card-cta{
+ transition:color .26s ease,background .26s ease,border-color .26s ease,
+ box-shadow .26s ease,transform .26s ease!important;
+}
+.nv29-service-card .nv29-card-cta:hover{
+ color:#fff!important;background:#613fe1!important;border-color:rgba(255,255,255,.75)!important;
+ box-shadow:0 11px 23px rgba(22,31,88,.2)!important;
+}
+.nv29-service-card.nv29-social .nv29-card-cta:hover{background:#e32c99!important}
+.nv29-service-card.nv29-marketing .nv29-card-cta:hover{background:#0c8190!important}
+.nv29-card-cta .icon{transition:transform .24s ease}
+.nv29-card-cta:hover .icon{transform:translateX(4px)}
+/* Secondary chips and cards across catalog, news, projects and steps. */
+:is(.nv29-service-chip,.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
+ .nv27-subcategory-link,.yv-category-card,.nv31-software-card,.nv51-reference-card,
+ .nv30-step,.yh6-blog-card,.yh6-review-grid>article,.yh6-how-grid>div){
+ transition:transform .27s var(--yh55-ease),box-shadow .27s ease,
+ border-color .27s ease,background-color .27s ease,color .27s ease!important;
+}
+:is(.nv29-service-chip,.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
+ .nv27-subcategory-link):hover{
+ transform:translateY(-2px)!important;
+ box-shadow:0 8px 17px rgba(77,69,156,.11);
+}
+:is(.nv27-service-card,.yv-category-card,.nv31-software-card,.nv51-reference-card,
+ .nv30-step,.yh6-blog-card,.yh6-review-grid>article,.yh6-how-grid>div):hover{
+ transform:translateY(-3px);
+ box-shadow:0 17px 30px rgba(33,47,91,.12);
+}
+.nv51-sub-filter:hover,.nv51-format-filters button:hover{
+ background:#6b49d8!important;color:#fff!important;border-color:#7452e3!important;
+}
+.nv51-main-filter:not([aria-pressed="true"]):hover{
+ background:#6b49d8!important;color:#fff!important;border-color:#7452e3!important;
+}
+.nv51-main-filter[aria-pressed="true"]:hover{
+ filter:brightness(1.07);box-shadow:0 11px 22px rgba(77,61,188,.23);
+}
+:is(.nv51-main-filter,.nv51-format-filters button,.nv29-service-chip,.nv30-step-icon,
+ .yh6-package-icon,.yh49-stat-icon,.nv31-software-image-arrow,
+ .nv27-service-parent-arrow,.nv27-subcategory-symbol) :is(.icon,svg,i){
+ transition:transform .45s var(--yh55-ease),color .27s ease;
+}
+.nv51-main-filter:hover :is(.icon,svg,i),
+.nv51-format-filters button:hover :is(.icon,svg,i),
+.nv29-service-chip:hover :is(.icon,svg,i),
+.nv30-step:hover .nv30-step-icon :is(.icon,svg,i),
+.yh6-package-card:hover .yh6-package-icon :is(.icon,svg,i),
+.nv31-software-card:hover .nv31-software-image-arrow :is(.icon,svg,i),
+.nv27-service-card:hover .nv27-subcategory-symbol :is(.icon,svg,i){
+ transform:rotate(-22deg) scale(1.13);
+}
+/* Distinct inverse tone for each expertise chip, without changing brand content */
+.nv29-service-chip:hover{
+ background:rgba(255,255,255,.97)!important;color:#6040bd!important;
+ border-color:rgba(255,255,255,.83)!important;
+}
+.nv29-service-card.nv29-marketing .nv29-service-chip:hover{color:#087c86!important}
+.nv29-service-card.nv29-social .nv29-service-chip:hover{color:#bf278f!important}
+.nv30-step:hover .nv30-step-icon{transform:rotate(-11deg) scale(1.06);background:#6b4ce0;color:#fff}
+.yh-home-v6 .yh6-stats .yh49-stat:hover .yh49-stat-icon{
+ background:rgba(255,255,255,.29)!important;transform:rotate(-12deg) scale(1.06)
+}
+/* Hover glow is not an action, so don't imply clickability by changing cursors. */
+.yh6-faq-item [data-faq-trigger] .yh6-faq-toggle-icon{
+ transition:transform .25s var(--yh55-ease),color .25s ease,background .25s ease;
+}
+.yh6-faq-item [data-faq-trigger]:hover .yh6-faq-toggle-icon{transform:rotate(90deg);color:#6744dc}
+.yh6-faq-item.open [data-faq-trigger] .yh6-faq-toggle-icon{transform:rotate(45deg)}
+:is(.yh6-btn,.nv31-heading-link,.nv29-view-all,.nv32-primary-cta):hover .icon{
+ transform:translateX(3px);
+}
+:is(.yh6-btn,.nv31-heading-link,.nv29-view-all,.nv32-primary-cta) .icon{
+ transition:transform .22s ease;
+}
+}
+/* Keyboard: stay visible, including for elements that become colorful on hover. */
+#featured :is(.nv43-category-card,.nv43-subcategory-link,.nv43-rail-arrow):focus-visible,
+:is(.nv51-main-filter,.nv51-sub-filter,.nv29-service-chip,.nv29-card-cta):focus-visible{
+ outline:3px solid #b491ff;outline-offset:3px;
+}
+/* Touch devices have no stable hover state: preserve scrolling and tappable areas. */
+@media (hover:none),(pointer:coarse){
+ #featured .nv43-category-card.yh18-featured-tab:active{filter:brightness(1.025)}
+}
+/* Respect reduced-motion system preferences throughout every new interaction. */
+@media (prefers-reduced-motion:reduce){
+ #featured .nv43-category-card.yh18-featured-tab,
+ #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon,
+ #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon :is(.icon,svg,i),
+ #featured .yh24-featured-group,#featured .yh24-featured-group>.icon:first-child,
+ #featured .nv43-subcategory-link,#featured .nv43-subcategory-link :is(.icon,svg):first-child,
+ .yh-home-v6 .yh49-category-link,.yh-home-v6 .yh49-category-icon,
+ .yh-home-v6 .yh49-category-icon :is(.icon,svg,i),
+ .nv29-service-card,.nv29-card-cta,.nv29-card-cta .icon,
+ .nv29-service-card .nv29-eyebrow .icon,
+ :is(.nv29-service-chip,.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
+ .nv27-subcategory-link,.yv-category-card,.nv31-software-card,.nv51-reference-card,
+ .nv30-step,.yh6-blog-card,.yh6-review-grid>article,.yh6-how-grid>div){
+ transition:none!important;animation:none!important;
+ }
+ #featured .nv43-category-card.yh18-featured-tab:hover,
+ #featured .nv43-subcategory-link:hover,
+ .yh-home-v6 .yh49-category-link:hover,
+ .nv29-service-card:hover{transform:none!important}
+ #featured .nv43-category-card.yh18-featured-tab:hover .yh26-filter-icon,
+ .yh-home-v6 .yh49-category-link:hover .yh49-category-icon,
+ .nv30-step:hover .nv30-step-icon{transform:none!important}
+}
