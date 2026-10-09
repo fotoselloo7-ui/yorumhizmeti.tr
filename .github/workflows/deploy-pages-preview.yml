@@ -9,6 +9,11 @@ on:
       - 'well-known/resources/views/layouts/app.php'
       - 'well-known/public/assets/**'
       - 'well-known/scripts/build-pages-preview.py'
+      - 'well-known/scripts/seed-pages-public-showcase.php'
+      - 'well-known/database/netvera-public-catalog.json'
+      - 'well-known/database/migrations/netvera-legacy-bridge-v1.sql'
+      - 'well-known/app/Controllers/HomeController.php'
+      - 'well-known/app/Services/ReferencesService.php'
       - '.github/workflows/deploy-pages-preview.yml'
 
 permissions:
@@ -54,9 +59,10 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq default-mysql-client
           mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci < yorumhizmeti_yorumhizmeti.sql
+          # Use the genuine, PUBLIC NetVera catalog: 16 software products,
+          # cover/gallery assets and published blogs, rather than three QA fakes.
+          # Preserve actual published/featured package flags from application SQL.
           mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci < well-known/database/migrations/netvera-legacy-bridge-v1.sql
-          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci < well-known/tests/netvera-public-ci-seed.sql
-          mysql --host=127.0.0.1 -uroot -pqa_test_only_password yorumhizmeti_ci -e "UPDATE packages SET is_featured=1 WHERE status='active';"
           # This is a throwaway QA fixture, never customer SQL or live credentials.
           cat > well-known/.env <<'EOF'
           APP_NAME="YorumHizmeti Tasarım Önizleme"
@@ -71,7 +77,10 @@ jobs:
           LICENSE_ENABLED=false
           LICENSE_LOCAL_BYPASS=true
           NETVERA_LOCAL_AUTO_SETUP=0
+          NETVERA_IMPORT_ALLOWED=1
           EOF
+          PAGES_PREVIEW_CI_ONLY=1 php well-known/scripts/import-netvera-public.php well-known/database/netvera-public-catalog.json --apply
+          PAGES_PREVIEW_CI_ONLY=1 php well-known/scripts/seed-pages-public-showcase.php
           mkdir -p well-known/storage/cache well-known/storage/logs well-known/public/uploads
           php -S 127.0.0.1:8006 -t well-known/public well-known/tests/router.php > /tmp/pages-preview-php.log 2>&1 &
           for attempt in $(seq 1 25); do
