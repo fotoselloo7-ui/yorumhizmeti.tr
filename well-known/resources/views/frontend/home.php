@@ -144,11 +144,22 @@ if (!function_exists('yh18FeaturedCard')) {
             <p class="yh18-card-summary"><?= e(excerpt($short, 112)) ?></p>
             <?php endif; ?>
 
-            <div class="yh18-card-features">
-                <span><?= icon('check-circle', 13) ?><b>Aktif ve güvenli hizmet</b></span>
-                <span><?= icon('zap', 13) ?><b><?= e($delivery !== '' ? $delivery : 'Hızlı teslimat') ?></b></span>
-                <span><?= icon('shield', 13) ?><b>Şifresiz sipariş</b></span>
-                <span><?= icon('headphones', 13) ?><b>7/24 müşteri desteği</b></span>
+            <?php $benefits=\App\Services\PackageHighlightsService::get((int)$pkg['id'],$pkg); $benefitPages=array_chunk($benefits,4); ?>
+            <div class="yh18-card-features yh67-card-benefits" data-benefit-carousel aria-label="Paket özellikleri">
+                <div class="yh67-benefit-pages" aria-live="polite">
+                  <?php foreach($benefitPages as $pageIndex=>$page): ?>
+                  <div class="yh67-benefit-page" data-benefit-page="<?= $pageIndex ?>" <?= $pageIndex!==0?'hidden':'' ?>>
+                    <?php foreach($page as $benefit): ?><span><?= icon('check-circle',13) ?><b><?= e($benefit) ?></b></span><?php endforeach; ?>
+                  </div>
+                  <?php endforeach; ?>
+                </div>
+                <?php if(count($benefitPages)>1): ?>
+                <div class="yh67-benefit-nav">
+                  <button type="button" class="yh67-benefit-arrow" data-benefit-prev aria-label="Önceki dört özelliği göster"><?= icon('chevron-left',14) ?></button>
+                  <small data-benefit-counter>1 / <?= count($benefitPages) ?></small>
+                  <button type="button" class="yh67-benefit-arrow" data-benefit-next aria-label="Sonraki dört özelliği göster"><?= icon('chevron-right',14) ?></button>
+                </div>
+                <?php endif; ?>
             </div>
 
             <div class="yh18-card-bottom">
