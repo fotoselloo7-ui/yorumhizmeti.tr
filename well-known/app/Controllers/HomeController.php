@@ -312,38 +312,47 @@ class HomeController extends Controller
         }
 
         // Schema.org JSON-LD
-        $siteName = setting('site_name', 'Yorum Hizmeti');
-        $siteUrl = rtrim($_ENV['APP_URL'] ?? 'https://yorumhizmeti.tr', '/');
+        $siteName = setting('site_name', 'NetVera Teknoloji Yazılım');
+        $siteUrl = rtrim(setting('site_url', 'https://netvera.tr'), '/');
         $sitePhone = setting('site_phone', '');
         $siteEmail = setting('site_email', '');
 
+        $organization=[
+            '@type'=>'Organization','@id'=>$siteUrl.'/#organization',
+            'name'=>$siteName,'url'=>$siteUrl,
+            'description'=>'Yazılım çözümleri, dijital ajans, SEO, reklam yönetimi ve sosyal medya hizmetleri.'
+        ];
+        $logo=trim((string)setting('site_logo',''));
+        if($logo!=='')$organization['logo']=upload_url($logo);
+        $profiles=[];
+        foreach(['instagram_url','facebook_url','youtube_url','tiktok_url','x_url'] as $socialKey){
+            $profileUrl=trim((string)setting($socialKey,''));
+            if(filter_var($profileUrl,FILTER_VALIDATE_URL))$profiles[]=$profileUrl;
+        }
+        if($profiles)$organization['sameAs']=array_values(array_unique($profiles));
+        $contact=[];
+        if($siteEmail!=='' && filter_var($siteEmail,FILTER_VALIDATE_EMAIL) &&
+           !str_ends_with($siteEmail,'@yorumhizmeti.tr'))$contact['email']=$siteEmail;
+        if($sitePhone!=='' && !str_contains($sitePhone,'500 000 00 00'))$contact['telephone']=$sitePhone;
+        if($contact)$organization['contactPoint']=array_merge([
+             '@type'=>'ContactPoint','contactType'=>'customer service',
+             'availableLanguage'=>'tr'
+        ],$contact);
         $schemaOrg = [
-            '@context' => 'https://schema.org',
-            '@graph' => [
+            '@context'=>'https://schema.org',
+            '@graph'=>[
+                $organization,
                 [
-                    '@type' => 'Organization',
-                    'name' => $siteName,
-                    'url' => $siteUrl,
-                    'logo' => $siteUrl . '/assets/images/logo.png',
-                    'contactPoint' => [
-                        '@type' => 'ContactPoint',
-                        'telephone' => $sitePhone,
-                        'email' => $siteEmail,
-                        'contactType' => 'customer service',
-                        'availableLanguage' => 'Turkish',
-                    ],
-                ],
-                [
-                    '@type' => 'WebSite',
-                    'name' => $siteName,
-                    'url' => $siteUrl,
-                    'potentialAction' => [
-                        '@type' => 'SearchAction',
-                        'target' => $siteUrl . '/kategoriler?q={search_term_string}',
-                        'query-input' => 'required name=search_term_string',
-                    ],
-                ],
-            ],
+                    '@type'=>'WebSite','@id'=>$siteUrl.'/#website',
+                    'name'=>$siteName,'url'=>$siteUrl,'inLanguage'=>'tr-TR',
+                    'publisher'=>['@id'=>$siteUrl.'/#organization'],
+                    'potentialAction'=>[
+                        '@type'=>'SearchAction',
+                        'target'=>$siteUrl.'/kategoriler?q={search_term_string}',
+                        'query-input'=>'required name=search_term_string'
+                    ]
+                ]
+            ]
         ];
 
         // FAQ Schema
@@ -366,8 +375,8 @@ class HomeController extends Controller
         }
 
         $this->render('frontend/home', [
-            'pageTitle' => setting('default_seo_title', 'Yorum Hizmeti - Dijital Hizmet Platformu'),
-            'metaDescription' => setting('default_seo_description', 'Google, Instagram, TikTok, YouTube yorum ve etkileşim hizmetleri. Güvenli ödeme, hızlı teslimat.'),
+            'pageTitle' => setting('default_seo_title', 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya'),
+            'metaDescription' => setting('default_seo_description', 'NetVera Teknoloji Yazılım: hazır yazılım, dijital ajans, SEO, reklam yönetimi ve sosyal medya hizmetleri.'),
             'categories' => $categories,
             'featuredPackages' => $featuredPackages,
             'featuredPackageGroups' => $featuredPackageGroups,
