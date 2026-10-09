@@ -8,7 +8,9 @@ class SettingsController extends Controller
 {
     public function site(): void
     {
-        $groups = ['general', 'contact', 'social', 'seo', 'appearance', 'footer'];
+        // Migrate only missing/retired demo defaults; existing custom settings remain intact.
+        \App\Services\NetveraBrandSettings::syncExisting(SiteConfigService::getInstance());
+        $groups = ['general', 'contact', 'social', 'seo', 'branding', 'geo', 'aio', 'appearance', 'footer'];
         $settings = [];
         foreach ($groups as $g) {
             $settings[$g] = $this->db->fetchAll("SELECT * FROM settings WHERE setting_group = ?", [$g]);
