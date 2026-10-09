@@ -317,10 +317,12 @@ class HomeController extends Controller
         $sitePhone = setting('site_phone', '');
         $siteEmail = setting('site_email', '');
 
+        $type=setting('seo_org_type','Organization');
+        if(!in_array($type,['Organization','ProfessionalService'],true))$type='Organization';
         $organization=[
-            '@type'=>'Organization','@id'=>$siteUrl.'/#organization',
+            '@type'=>$type,'@id'=>$siteUrl.'/#organization',
             'name'=>$siteName,'url'=>$siteUrl,
-            'description'=>'Yazılım çözümleri, dijital ajans, SEO, reklam yönetimi ve sosyal medya hizmetleri.'
+            'description'=>setting('seo_org_description')
         ];
         $logo=trim((string)setting('site_logo',''));
         if($logo!==''){
@@ -328,12 +330,12 @@ class HomeController extends Controller
             $organization['logo']=filter_var($logoUrl,FILTER_VALIDATE_URL)
                 ?$logoUrl:$siteUrl.'/'.ltrim($logoUrl,'/');
         }
-        $profiles=[];
-        foreach(['instagram_url','facebook_url','youtube_url','tiktok_url','x_url'] as $socialKey){
-            $profileUrl=trim((string)setting($socialKey,''));
-            if(filter_var($profileUrl,FILTER_VALIDATE_URL))$profiles[]=$profileUrl;
-        }
-        if($profiles)$organization['sameAs']=array_values(array_unique($profiles));
+        $area=trim((string)setting('seo_service_area'));
+        if($area!=='')$organization['areaServed']=['@type'=>'AdministrativeArea','name'=>$area];
+        $topics=array_values(array_filter(array_map('trim',explode(',',(string)setting('seo_entity_topics')))));
+        if($topics)$organization['knowsAbout']=array_slice($topics,0,24);
+        $profiles=\App\Services\NetveraBrandSettings::sameAs();
+        if($profiles)$organization['sameAs']=$profiles;
         $contact=[];
         if($siteEmail!=='' && filter_var($siteEmail,FILTER_VALIDATE_EMAIL) &&
            !str_ends_with($siteEmail,'@yorumhizmeti.tr'))$contact['email']=$siteEmail;
@@ -359,6 +361,16 @@ class HomeController extends Controller
             ]
         ];
 
+        // The global AIO question is published visibly through the existing FAQ
+        // section before it is included in JSON-LD; never emit hidden Q&A data.
+        $homeQuestion=trim((string)setting('seo_home_question'));
+        $homeAnswer=trim((string)setting('seo_home_answer'));
+        if($homeQuestion!==''&&$homeAnswer!==''&&!in_array(
+            mb_strtolower($homeQuestion,'UTF-8'),
+            array_map(static fn($f)=>mb_strtolower((string)($f['question']??''),'UTF-8'),$faqs),
+            true
+        ))$faqs[]=['question'=>$homeQuestion,'answer'=>$homeAnswer];
+
         // FAQ Schema
         if (!empty($faqs)) {
             $faqItems = [];
@@ -380,6 +392,16 @@ class HomeController extends Controller
 
         $this->render('frontend/home', [
             'pageTitle' => setting('default_seo_title', 'NetVera Teknoloji Yazılım | Yazılım, Dijital Ajans ve Sosyal Medya'),
+            'ogTitle' => setting('seo_og_title'),
+            'ogDescription' => setting('seo_og_description'),
+            'nvSeoData' => [
+                'robots'=>setting('seo_default_robots'),
+                'geo_summary'=>setting('seo_geo_summary'),
+                'entity_topics'=>setting('seo_entity_topics'),
+                'service_area'=>setting('seo_service_area'),
+                'author_name'=>setting('site_name'),
+                'author_type'=>setting('seo_org_type')
+            ],
             'metaDescription' => setting('default_seo_description', 'NetVera Teknoloji Yazılım: hazır yazılım, dijital ajans, SEO, reklam yönetimi ve sosyal medya hizmetleri.'),
             'categories' => $categories,
             'featuredPackages' => $featuredPackages,
