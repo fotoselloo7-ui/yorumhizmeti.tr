@@ -42,7 +42,7 @@
         animation, duration, width,
         moved: false
       };
-      row.setPointerCapture?.(event.pointerId);
+      // Do not capture taps: a plain click must still follow the category link.
     }, {passive:true});
 
     row.addEventListener('pointermove', event => {
@@ -55,6 +55,7 @@
         gesture = null;
         return;
       }
+      if(!gesture.moved){try{row.setPointerCapture?.(event.pointerId)}catch(_){}}
       gesture.moved = true;
       row.classList.add('yh56-is-dragging');
       // Left ribbon: mouse moves left => animation progresses forwards.
@@ -70,6 +71,9 @@
       gesture = null;
       row.classList.remove('yh56-is-dragging');
       if (moved) {
+        if(event && row.hasPointerCapture?.(event.pointerId)){
+          try{row.releasePointerCapture(event.pointerId)}catch(_){}
+        }
         suppressClick = true;
         window.setTimeout(() => { suppressClick = false; }, 100);
       }
