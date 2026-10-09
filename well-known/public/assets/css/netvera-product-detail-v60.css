@@ -132,7 +132,8 @@
 .nv40-detail .nv40-spec-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .nv40-detail .nv40-spec-list>.nv61-spec-pair,
 .nv40-detail .nv40-spec-list>.nv61-spec-feature{
-  display:flex;min-width:0;align-items:flex-start;gap:10px;padding:12px 13px;
+  display:flex;min-width:0;align-items:flex-start;justify-content:flex-start!important;
+  gap:10px;padding:12px 13px;
   border:1px solid #e3e8f2;border-radius:10px;background:#f9faff;
   color:#324462;font-size:12px;line-height:1.62;
 }
@@ -143,6 +144,7 @@
 .nv40-detail .nv40-spec-list>.nv61-spec-pair span{
   color:#455673!important;text-align:left!important;overflow-wrap:anywhere
 }
+.nv40-detail .nv40-spec-list>.nv61-spec-feature{justify-content:flex-start!important;text-align:left!important}
 .nv40-detail .nv40-spec-list>.nv61-spec-feature .icon{
   color:#6f4bd4;flex:0 0 16px;margin-top:2px
 }
