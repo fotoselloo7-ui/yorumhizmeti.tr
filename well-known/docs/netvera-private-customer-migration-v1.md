@@ -12,7 +12,7 @@ Mevcut `database/netvera-public-catalog.json` müşteri kimliği ve satın alma 
 - **Profil ayrıntıları / destek talepleri**: Kaynak tabloları bulunduktan sonra eşlemeye alınır. Kullanıcıya ait destek mesajları başka kullanıcıya bağlanmaz.
 
 ## Adım 1 — kaynak inceleme (yalnızca özel/salt-okunur)
-`php scripts/audit-netvera-private-accounts.php` komutunu **PHP CLI ve pdo_mysql** ile, kaynak Netvera DB bilgilerini `NETVERA_SOURCE_DB_HOST`, `_NAME`, `_USER`, `_PASSWORD`, gerekirse `_PORT` ortam değişkenleriyle **kişisel çalışma ortamında** çalıştır. Kaynak hesaba yalnız SELECT ve information_schema görüntüleme izni ver. Script:
+`php scripts/audit-netvera-private-accounts.php` komutunu **PHP CLI ve pdo_mysql** ile, kaynak Netvera DB bilgilerini `NETVERA_SOURCE_DB_HOST`, `_NAME`, `_USER`, `_PASSWORD`, gerekirse `_PORT` ile birlikte hedef hesap için `NETVERA_AUDIT_EMAIL` ortam değişkeniyle **kişisel çalışma ortamında** çalıştır. E-posta adresini, şifreyi veya veritabanı erişimini GitHub koduna yazma. Kaynak hesaba yalnız SELECT ve information_schema görüntüleme izni ver. Script:
 1. Tablo/kolon listesini ve olası müşteri/ödeme/lisans tablolarını raporlar.
 2. Netvera admin kayıtlarının sadece ad/e-posta/rol/durum alanlarını ve belirtilen e-postanın sadece güvenli meta alanlarını gösterir.
 3. Şifre, parola hash'i, lisans anahtarı, ödeme tokenı veya telefon gibi gizli alanları **okumaz ve raporlamaz**.
