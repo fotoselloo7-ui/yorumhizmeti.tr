@@ -401,16 +401,11 @@
             <?php
             // The site footer uses the same published category hierarchy as the mega menu.
             $footerServices = [];
-            $footerChildren = [];
             $footerScripts = [];
             try {
                 foreach (\App\Services\CatalogMenuService::groups() as $footerGroup) {
                     foreach (array_slice($footerGroup['categories'], 0, 3) as $footerCat) {
                         $footerServices[] = ['name'=>$footerCat['name'], 'url'=>$footerCat['url']];
-                        if (!empty($footerCat['children'])) {
-                            $footerChild = $footerCat['children'][0];
-                            $footerChildren[] = ['name'=>$footerChild['name'], 'url'=>$footerChild['url']];
-                        }
                     }
                 }
                 $footerProducts = \App\Services\NetveraBridgeService::all();
@@ -452,13 +447,6 @@
                     <?php foreach (array_slice($footerServices, 0, 8) as $footerItem): ?>
                     <a class="yh49-footer-link" href="<?= e($footerItem['url']) ?>"><?= e($footerItem['name']) ?></a>
                     <?php endforeach; ?>
-                    <?php if ($footerChildren): ?>
-                    <span class="yh49-footer-subtitle">Alt Hizmetler</span>
-                    <?php foreach (array_slice($footerChildren, 0, 3) as $footerItem): ?>
-                    <a class="yh49-footer-link" href="<?= e($footerItem['url']) ?>"><?= e($footerItem['name']) ?></a>
-                    <?php endforeach; ?>
-                    <?php endif; ?>
-                    <a class="yh49-footer-all" href="/kategoriler">Tüm Hizmetler <?= icon('arrow-up-right',12) ?></a>
                 </nav>
 
                 <nav class="footer-col" aria-label="Hazır yazılımlar">
@@ -537,7 +525,9 @@
                             <img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="80" height="48" loading="lazy">
                         </span>
                         <?php if($bankGatewayEnabled): ?>
-                            <span class="footer-payment-bank" title="Banka havalesi ve EFT"><?= icon('landmark', 16) ?><span>Havale / EFT</span></span>
+                            <div class="footer-payment-bank" title="Banka havalesi ve EFT">
+                                <span class="yh50-bank-inline"><?= icon('landmark', 16) ?><b>Havale / EFT</b></span>
+                            </div>
                         <?php endif; ?>
                     </div>
                     <div class="footer-payment-info-v23">
