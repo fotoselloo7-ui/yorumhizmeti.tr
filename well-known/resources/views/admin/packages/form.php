@@ -45,6 +45,13 @@
                         <textarea name="short_description" class="form-control" rows="2" placeholder="Paket listesinde gösterilecek kısa açıklama..."><?= e($package['short_description'] ?? '') ?></textarea>
                     </div>
                     <div class="form-group">
+                        <label>Satış Kartındaki Özellikler / Açıklamalar</label>
+                        <textarea name="highlight_lines" class="form-control" rows="8" maxlength="1600" placeholder="Şifresiz işlem&#10;Gönderi bağlantısıyla sipariş&#10;Tahmini teslimat süresi&#10;Sipariş takibi"><?=
+                            e(!empty($package) ? \App\Services\PackageHighlightsService::text((int)$package['id']) : '')
+                        ?></textarea>
+                        <div class="form-hint">Her satır ayrı bir kart özelliğidir. 4 özellik bir anda gösterilir; 5–12 satır girerseniz müşteri küçük ileri/geri oklarıyla diğerlerini görür. Boş bırakıldığında nötr varsayılan açıklamalar kullanılır. Bu metinler tamamen size aittir.</div>
+                    </div>
+                    <div class="form-group">
                         <label>Detay Açıklama (HTML)</label>
                         <textarea name="description" class="form-control" rows="8" placeholder="Detaylı açıklama, HTML destekler..."><?= e($package['description'] ?? '') ?></textarea>
                     </div>
