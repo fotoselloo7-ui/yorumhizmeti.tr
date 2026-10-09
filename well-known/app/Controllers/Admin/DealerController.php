@@ -14,6 +14,7 @@ final class DealerController extends Controller
           'pageTitle'=>'Bayilik Yönetimi',
           'ready'=>DealerProgramService::ready(),
           'dealers'=>DealerProgramService::adminList(),
+          'history'=>DealerProgramService::auditTrail(),
           'canApprove'=>(AdminAuth::admin()['role']??'')==='super_admin'
         ]);
     }
