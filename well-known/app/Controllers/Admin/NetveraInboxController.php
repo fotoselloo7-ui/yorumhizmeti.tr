@@ -10,14 +10,18 @@ final class NetveraInboxController extends Controller
     public function index():void
     {
         $ready=Inbox::ready();
+        $importanceReady=$ready && Inbox::importanceReady();
+        $importanceColumn=$importanceReady?'is_important':'0 AS is_important';
         $rows=$ready?$this->db->fetchAll(
             "SELECT id,source_type,product_slug,visitor_name,visitor_contact,
-                    status,created_at,updated_at
+                    status,created_at,updated_at,".$importanceColumn."
              FROM nv_public_inquiries ORDER BY updated_at DESC,id DESC LIMIT 250"
         ):[];
         $this->renderAdmin('admin/netvera-inbox/index',[
             'pageTitle'=>'Netvera Canlı Destek ve Teklifler',
-            'ready'=>$ready,'inquiries'=>$rows
+            'ready'=>$ready,'inquiries'=>$rows,
+            'importanceReady'=>$importanceReady,
+            'telegramConfigured'=>Inbox::telegramConfigured()
         ]);
     }
 
@@ -50,6 +54,44 @@ final class NetveraInboxController extends Controller
             ?'Teklif yanıtı kaydedildi. Teklif sahibine iletişim adresi üzerinden ayrıca dönüş yapın.'
             :'Yanıt kaydedildi; ziyaretçi açık sohbetinden görebilir.');
         redirect('/admin/netvera-gelen-kutusu/'.$id);
+    }
+
+    /**
+     * Admin-managed Telegram event switches; credentials remain server-side.
+     * Missing checkboxes are intentionally saved as disabled.
+     */
+    public function saveTelegramSettings():void
+    {
+        Csrf::check();
+        $config=\App\Services\SiteConfigService::getInstance();
+        foreach(['enabled','notify_chat','notify_offer','notify_followup','notify_important'] as $key){
+            $config->set('nv_tg_'.$key,isset($_POST['nv_tg_'.$key])?'1':'0','netvera_telegram');
+        }
+        logActivity('netvera_telegram_settings','Telegram bildirim seçenekleri güncellendi');
+        flash('success','Telegram bildirim tercihleri kaydedildi.');
+        redirect('/admin/netvera-gelen-kutusu');
+    }
+
+    public function importance(string $id):void
+    {
+        Csrf::check();
+        if(!Inbox::importanceReady()){
+            flash('error','Önemli işareti için netvera-inquiries-v2.sql kurulumu gerekiyor.');
+            redirect('/admin/netvera-gelen-kutusu');return;
+        }
+        $row=$this->db->fetch(
+            'SELECT id,is_important FROM nv_public_inquiries WHERE id=? LIMIT 1',[(int)$id]
+        );
+        if(!$row){
+            flash('error','Talep bulunamadı.');
+            redirect('/admin/netvera-gelen-kutusu');return;
+        }
+        $marked=empty($row['is_important'])?1:0;
+        $this->db->update('nv_public_inquiries',['is_important'=>$marked],'id=?',[(int)$id]);
+        if($marked===1)Inbox::notifyTelegram((int)$id,'important');
+        logActivity('netvera_inbox_importance','Talep #'.$id.' önem işareti '.($marked?'eklendi':'kaldırıldı'));
+        flash('success',$marked?'Talep önemli olarak işaretlendi.':'Talebin önem işareti kaldırıldı.');
+        redirect('/admin/netvera-gelen-kutusu/'.(int)$id);
     }
 
     public function state(string $id):void
