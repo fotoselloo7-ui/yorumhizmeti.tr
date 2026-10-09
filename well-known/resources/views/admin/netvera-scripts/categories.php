@@ -11,7 +11,7 @@
   <div class="adm-card">
     <div class="adm-card-body">
       <h3><?= icon('layers',18) ?> Yazılım Kategorileri</h3>
-      <p class="text-secondary">Kategori düzenleme, katalog verileri hazır olduğunda kullanılabilir.</p>
+      
       <a href="/admin/netvera-yazilimlar" class="btn btn-outline btn-sm"><?= icon('arrow-left',14) ?> Yazılım Listesine Dön</a>
     </div>
   </div>
