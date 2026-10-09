@@ -109,7 +109,7 @@ if (!function_exists('yh6PackageCard')) {
                 <li><?= icon('check-circle', 11) ?> Şifresiz sipariş süreci</li>
                 <li><?= icon('check-circle', 11) ?> 7/24 destek</li>
             </ul>
-            <div class="yh6-rating"><span>★★★★★</span><small>4.9/5 müşteri puanı</small></div>
+            <div class="yh6-rating"><span><?= icon('check-circle',15) ?></span><small>Hizmet ayrıntıları</small></div>
             <div class="yh6-price">
                 <strong><?= $price>0 ? money($price) : 'Teklif Al' ?></strong>
                 <?php if ($old): ?><del><?= money($old) ?></del><?php endif; ?>
@@ -781,11 +781,11 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 <section class="yh6-stats" aria-label="Platform istatistikleri">
     <div class="container">
         <?php foreach ([
-            ['users','50.000+','Mutlu Müşteri'],
-            ['shopping-cart','250.000+','Tamamlanan Sipariş'],
-            ['star-fill','4.9/5','Müşteri Memnuniyeti'],
-            ['headphones','7/24','Canlı Destek'],
-            ['trending-up','%98','Başarılı Teslimat Oranı']
+            ['code','Yazılım','Web & Sektörel Çözümler'],
+            ['layers','Ajans','Tasarım ve Reklam'],
+            ['share-2','Sosyal Medya','Platform Hizmetleri'],
+            ['search','SEO','Arama Optimizasyonu'],
+            ['headphones','Destek','Sipariş Takibi']
         ] as $metric): ?>
         <div class="yh49-stat">
             <span class="yh49-stat-icon" aria-hidden="true"><?= icon($metric[0], 22) ?></span>
