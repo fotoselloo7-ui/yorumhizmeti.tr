@@ -1,0 +1,63 @@
+/* NetVera theme palette v71 — opt-in theme variables, no change to unconfigured site.
+ * These selectors work with the pre-existing homepage/card/navigation components. */
+body.nv-theme-enabled{
+  --nv-brand:var(--nv-theme-primary);
+  --nv-accent:var(--nv-theme-accent);
+  --nv-ink:var(--nv-theme-secondary);
+  --nv-panel:var(--nv-theme-card);
+  --color-blue:var(--nv-theme-primary);
+  --color-blue-hover:var(--nv-theme-hover);
+  --color-blue-light:var(--nv-theme-accent);
+  --color-primary:var(--nv-theme-secondary);
+  --color-bg:var(--nv-theme-bg);
+  --color-card:var(--nv-theme-card);
+  --color-text:var(--nv-theme-text);
+  --color-text-secondary:var(--nv-theme-muted);
+  --color-border:var(--nv-theme-border);
+  color:var(--nv-theme-text);
+}
+body.nv-theme-enabled .site-header,
+body.nv-theme-enabled .site-footer,
+body.nv-theme-enabled .nv30-review-card,
+body.nv-theme-enabled .yh18-featured-card,
+body.nv-theme-enabled .yv-product-card,
+body.nv-theme-enabled .yv-service-card{border-color:var(--nv-theme-border)}
+body.nv-theme-enabled .yh6-btn.primary,
+body.nv-theme-enabled .btn-primary,
+body.nv-theme-enabled .yh18-card-button,
+body.nv-theme-enabled .yh18-card-action,
+body.nv-theme-enabled .nv30-review-primary .nv30-review-quote,
+body.nv-theme-enabled .nv68-review-primary .nv30-review-quote{
+  background:linear-gradient(105deg,var(--nv-theme-button),var(--nv-theme-accent));
+  color:#fff;border-color:transparent
+}
+body.nv-theme-enabled .btn-primary:hover,
+body.nv-theme-enabled .yh6-btn.primary:hover{
+  background:var(--nv-theme-hover);color:#fff
+}
+body.nv-theme-enabled .nv30-section-head h2 span,
+body.nv-theme-enabled .nv31-section-heading h2 span,
+body.nv-theme-enabled .yh6-highlight,
+body.nv-theme-enabled .yh6-title strong,
+body.nv-theme-enabled .yh6-eyebrow,
+body.nv-theme-enabled .nv30-section-kicker,
+body.nv-theme-enabled .nv68-review-service{
+  color:var(--nv-theme-primary)
+}
+body.nv-theme-enabled .yh6-eyebrow,
+body.nv-theme-enabled .nv30-section-kicker,
+body.nv-theme-enabled .nv30-review-quote{
+  background:color-mix(in srgb,var(--nv-theme-primary) 10%,white)
+}
+body.nv-theme-enabled .nv30-review-card.nv30-review-primary{
+  background:linear-gradient(150deg,var(--nv-theme-card),color-mix(in srgb,var(--nv-theme-primary) 8%,white));
+  border-color:color-mix(in srgb,var(--nv-theme-primary) 24%,white)
+}
+body.nv-theme-enabled .nv-topbar,
+body.nv-theme-enabled .site-header{
+  background:var(--nv-theme-card)
+}
+body.nv-theme-enabled .nv30-feedback{
+  background:var(--nv-theme-bg)
+}
+body.nv-theme-enabled a:hover{color:var(--nv-theme-primary)}
