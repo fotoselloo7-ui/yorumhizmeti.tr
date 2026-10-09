@@ -18,6 +18,24 @@ final class DealerController extends Controller
           'canApprove'=>(AdminAuth::admin()['role']??'')==='super_admin'
         ]);
     }
+    public function install(): void
+    {
+        Csrf::check();
+        if ((AdminAuth::admin()['role']??'')!=='super_admin') {
+            http_response_code(403);
+            exit('Yalnızca süper yönetici bayilik modülünü etkinleştirebilir.');
+        }
+        try {
+            DealerProgramService::install();
+            logActivity('dealer_module_install','Bayilik yönetim tabloları doğrulandı.');
+            flash('success','Bayilik modülü etkinleşti; mevcut müşteri ve sipariş verileri korunuyor.');
+        } catch (\Throwable $e) {
+            error_log('Dealer install failed: '.get_class($e));
+            flash('error','Bayilik kurulumu tamamlanamadı. Veritabanı yetkilerini kontrol edin.');
+        }
+        redirect('/admin/bayilik');
+    }
+
     public function review(string $id): void
     {
         Csrf::check();
