@@ -109,7 +109,7 @@
                     </div>
                 </div>
             </div>
-            <?php require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
+            <?php $nvSeoIsCategory = !preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|web.site|tema)/iu', (string)($category['slug']??'').' '.(string)($category['name']??'')); require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
         </div>
 
         <!-- Sidebar -->
