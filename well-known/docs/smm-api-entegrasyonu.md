@@ -36,3 +36,17 @@
 - Bu ilk sürüm otomatik **Default** siparişini destekler; özel yorum, mentions, package, subscription ve drip-feed tiplerinin her biri için ayrı form ve API parametresi gerekir.
 - Servis senkronizasyonu admin tarafından başlatılır; otomatik cron yalnızca ödemesi alınan işleri gönderir ve açık sipariş durumlarını kontrol eder.
 - Gerçek sağlayıcı erişimi verilmediğinden canlı API, para birimi ve servis tipi uyumluluğu henüz doğrulanmadı. Önce test siparişi zorunludur.
+
+## Ekim 2026: Toplu Servis, Özgün Kart Açıklamaları ve Hedef Bilgisi
+- Admin → Sosyal Medya API & Servisler → **Tüm Panellerin Servislerini Çek**: aktif 2/3/çoklu tedarikçiden API kataloglarını tek işlemle eşitler. Her panel ayrı endpoint/API anahtarı ve döviz birimiyle saklanır.
+- Servis listesindeki kutucuklardan **en fazla 80** geçerli \`Default\` servisi seçip **Seçili Servisleri Toplu Paket Olarak Ekle** formundan ortak kategori, TL fiyatı, adet, sizin yazdığınız kısa/detay açıklaması ve 0–12 kart özelliğini kaydet. Kaynak SMM servis adı müşteri başlığına aynen kopyalanmaz.
+- Toplu paketler **daima pasif** oluşturulur; editör üzerinden açıklama, SEO, fiyat, kategori, görsel ve özel alanlar ayrı ayrı denetlendikten sonra yayımlanır. Aynı servisten farklı teslimat adetlerinde ayrı paketler oluşturulabilir.
+- Admin → Paketler → Paket Düzenle → **Satış Kartındaki Özellikler/Açıklamalar**: Her satır paket kartında bir özellik. 4 satır sabit görünür, 5–12 satır dörderli sayfalarda küçük oklarla gezilebilir. Tek tek paketler için de çalışır, SMM API zorunlu değildir.
+- Instagram / TikTok / Threads / YouTube vb. sosyal paket detaylarında eğer özel sipariş alanları yoksa **kullanıcı adı** veya **profil/gönderi/video bağlantısı** alanı otomatik oluşturulur. Sepette saklanır, ödeme ekranında önden doldurulur. Sistem ücretli API gönderiminde kullanıcı adını ilgili platformun HTTPS URL biçimine normalize eder.
+- Mevcut paketlerin herkese açık SEO adresleri/ürünleri/kategorileri değişmez.
+
+## NetVera özel müşteri kayıtları
+- Admin → NetVera Müşteriler artık eski arşiv henüz eklenmemiş olsa bile **gerçek yeni üyeleri, gerçek siparişleri, ödenen sipariş sayılarını ve bayilik başvurularını** gösterir.
+- Admin → Bayilik modülünde süper yöneticinin **Bayilik Modülünü Etkinleştir** işlemi, yeni bayi tablolarını mevcut üyeleri silmeden oluşturur.
+- **Özel eski müşteri SQL yedeğindeki kullanıcılar, lisans hakları, satın almalar ve komisyonlar otomatik olarak GitHub'a gömülmez.** Bunun tek güvenli yolu: \`docs/netvera-private-customer-migration-v1.md\` ve \`scripts/import-netvera-private-customers.php\` ile özel MySQL staging üzerinde yedekli dry-run → apply → mutabakat. Gerçek eski kayıtlar henüz staging/live veritabanına aktarılmamışsa admin ekranda sayılmaz. Parola/admin girişleri GitHub'a eklenmez.
+
