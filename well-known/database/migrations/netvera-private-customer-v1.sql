@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS nv_private_user_map (
   is_agency TINYINT(1) NOT NULL DEFAULT 0,
   want_dealer TINYINT(1) NOT NULL DEFAULT 0,
   source_status VARCHAR(20) NOT NULL,
+  source_profile_encrypted LONGTEXT NULL,
   imported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_nv_user_target (new_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -13,6 +14,10 @@ CREATE TABLE IF NOT EXISTS nv_private_orders (
   old_order_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
   old_customer_id INT UNSIGNED NULL,
   new_user_id INT UNSIGNED NULL,
+  customer_name VARCHAR(140) NULL,
+  customer_email VARCHAR(190) NULL,
+  customer_phone VARCHAR(40) NULL,
+  source_order_json_encrypted LONGTEXT NULL,
   order_no VARCHAR(40) NOT NULL,
   product_id INT UNSIGNED NULL,
   product_name VARCHAR(190) NULL,
@@ -65,4 +70,41 @@ CREATE TABLE IF NOT EXISTS nv_private_admin_map (
   old_admin_id INT UNSIGNED NOT NULL PRIMARY KEY,
   new_admin_id INT UNSIGNED NOT NULL,
   imported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Read-only historical records; these do not modify native support/payment workflows.
+CREATE TABLE IF NOT EXISTS nv_private_support_tickets (
+  old_ticket_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+  old_customer_id INT UNSIGNED NULL,
+  new_user_id INT UNSIGNED NULL,
+  subject VARCHAR(300) NOT NULL,
+  initial_message LONGTEXT NULL,
+  old_order_id BIGINT UNSIGNED NULL,
+  priority VARCHAR(30) NULL,
+  status VARCHAR(30) NULL,
+  created_at DATETIME NULL,
+  updated_at DATETIME NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS nv_private_support_replies (
+  old_reply_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+  old_ticket_id BIGINT UNSIGNED NOT NULL,
+  sender_type VARCHAR(40) NULL,
+  message LONGTEXT NOT NULL,
+  created_at DATETIME NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS nv_private_affiliate_clicks (
+  old_click_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+  old_affiliate_id BIGINT UNSIGNED NOT NULL,
+  visitor_token CHAR(64) NOT NULL,
+  landing_path VARCHAR(500) NULL,
+  clicked_at DATETIME NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS nv_private_order_referrals (
+  old_order_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+  old_affiliate_id BIGINT UNSIGNED NOT NULL,
+  visitor_token CHAR(64) NOT NULL,
+  attributed_at DATETIME NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
