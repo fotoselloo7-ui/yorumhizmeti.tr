@@ -13,7 +13,7 @@ final class LegacyCustomerService
     public static function overview(int $userId): array
     {
         $empty=['orders'=>[],'affiliate'=>null,'commission_total'=>0,'pending_total'=>0,
-                'paid_total'=>0,'legacy_purchase_count'=>0,'tickets'=>[]];
+                'paid_total'=>0,'legacy_purchase_count'=>0,'tickets'=>[],'software'=>[]];
         if ($userId<=0) return $empty;
         try {
             $pdo=Database::getInstance()->getPdo();
@@ -25,6 +25,18 @@ final class LegacyCustomerService
                        FROM nv_private_orders WHERE new_user_id=? ORDER BY created_at DESC LIMIT 60");
             $q->execute([$userId]); $empty['orders']=$q->fetchAll(PDO::FETCH_ASSOC);
             $empty['legacy_purchase_count']=count($empty['orders']);
+            // Show only products from verified paid orders mapped to this user.
+            // Guest orders and failed payments cannot create purchase entitlements.
+            $q=$pdo->prepare("SELECT i.old_item_id,i.item_name,i.item_slug,i.item_type,i.sale_price,
+                o.order_no,o.paid_at,o.payment_status,
+                CASE WHEN (o.entitlement_json IS NOT NULL OR i.entitlement_json IS NOT NULL
+                           OR o.license_key_encrypted IS NOT NULL) THEN 1 ELSE 0 END AS has_rights
+                FROM nv_private_order_items i
+                INNER JOIN nv_private_orders o ON o.old_order_id=i.old_order_id
+                WHERE o.new_user_id=? AND o.payment_status IN ('paid','completed','success')
+                  AND i.item_type IN ('script','software')
+                ORDER BY o.paid_at DESC,i.old_item_id DESC LIMIT 100");
+            $q->execute([$userId]);$empty['software']=$q->fetchAll(PDO::FETCH_ASSOC);
             $ticketTable=$pdo->query("SHOW TABLES LIKE 'nv_private_support_tickets'");
             if ($ticketTable->fetchColumn()) {
                 $q=$pdo->prepare("SELECT old_ticket_id,subject,priority,status,created_at
