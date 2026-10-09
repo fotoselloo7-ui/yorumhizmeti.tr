@@ -65,6 +65,46 @@
                 </div>
             </div>
 
+            <div class="adm-card nv79-global-seo" style="grid-column:1/-1;">
+                <div class="adm-card-header">
+                    <h3><?= icon('search', 16) ?> Varsayılan SEO</h3>
+                </div>
+                <div class="adm-card-body nv79-seo-grid">
+                    <div class="form-group">
+                        <label>Varsayılan SEO Başlığı</label>
+                        <input type="text" name="default_seo_title" class="form-control" maxlength="180" autocomplete="off" value="<?= e(setting('default_seo_title')) ?>">
+                        <input type="hidden" name="_group_default_seo_title" value="seo">
+                    </div>
+                    <div class="form-group">
+                        <label>Varsayılan Meta Açıklama</label>
+                        <textarea name="default_seo_description" class="form-control" rows="3"><?= e(setting('default_seo_description')) ?></textarea>
+                        <input type="hidden" name="_group_default_seo_description" value="seo">
+                    </div>
+                    <div class="form-group">
+                        <label>Varsayılan Open Graph Başlığı</label>
+                        <input name="seo_og_title" type="text" class="form-control" maxlength="180" value="<?= e(setting('seo_og_title')) ?>">
+                        <input type="hidden" name="_group_seo_og_title" value="seo">
+                    </div>
+                    <div class="form-group">
+                        <label>Varsayılan Open Graph Açıklaması</label>
+                        <textarea name="seo_og_description" class="form-control" rows="3" maxlength="500"><?= e(setting('seo_og_description')) ?></textarea>
+                        <input type="hidden" name="_group_seo_og_description" value="seo">
+                    </div>
+                    <div class="nv79-serp-preview">
+                        <span>Google arama sonucu metni ön izlemesi</span>
+                        <small><?= e(setting('site_url','https://netvera.tr')) ?></small>
+                        <strong id="nv79-seo-title-preview"><?= e(setting('default_seo_title')) ?></strong>
+                        <p id="nv79-seo-desc-preview"><?= e(setting('default_seo_description')) ?></p>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label>Google Analytics ID</label>
+                        <input type="text" name="google_analytics_id" class="form-control" value="<?= e(setting('google_analytics_id')) ?>" placeholder="G-XXXXXXXXXX">
+                        <input type="hidden" name="_group_google_analytics_id" value="seo">
+                    </div>
+                </div>
+            </div>
+            
+
             <div class="adm-card">
                 <div class="adm-card-header">
                     <h3><?= icon('phone', 16) ?> İletişim Bilgileri</h3>
@@ -205,39 +245,6 @@
             </button>
 
             <div class="adm-card">
-                <div class="adm-card-header">
-                    <h3><?= icon('search', 16) ?> Varsayılan SEO</h3>
-                </div>
-                <div class="adm-card-body">
-                    <div class="form-group">
-                        <label>Varsayılan SEO Başlığı</label>
-                        <input type="text" name="default_seo_title" class="form-control" value="<?= e(setting('default_seo_title')) ?>">
-                        <input type="hidden" name="_group_default_seo_title" value="seo">
-                    </div>
-                    <div class="form-group">
-                        <label>Varsayılan Meta Açıklama</label>
-                        <textarea name="default_seo_description" class="form-control" rows="3"><?= e(setting('default_seo_description')) ?></textarea>
-                        <input type="hidden" name="_group_default_seo_description" value="seo">
-                    </div>
-                    <div class="form-group">
-                        <label>Varsayılan Open Graph Başlığı</label>
-                        <input name="seo_og_title" type="text" class="form-control" maxlength="180" value="<?= e(setting('seo_og_title')) ?>">
-                        <input type="hidden" name="_group_seo_og_title" value="seo">
-                    </div>
-                    <div class="form-group">
-                        <label>Varsayılan Open Graph Açıklaması</label>
-                        <textarea name="seo_og_description" class="form-control" rows="3" maxlength="500"><?= e(setting('seo_og_description')) ?></textarea>
-                        <input type="hidden" name="_group_seo_og_description" value="seo">
-                    </div>
-                    <div class="form-group mb-0">
-                        <label>Google Analytics ID</label>
-                        <input type="text" name="google_analytics_id" class="form-control" value="<?= e(setting('google_analytics_id')) ?>" placeholder="G-XXXXXXXXXX">
-                        <input type="hidden" name="_group_google_analytics_id" value="seo">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="adm-card">
                 <div class="adm-card-header"><h3><?= icon('globe',16) ?> Kurumsal GEO / AIO</h3></div>
                 <div class="adm-card-body">
                     <div class="form-group">
@@ -321,6 +328,16 @@
         grid-template-columns: 1fr !important;
     }
 }
+.nv79-seo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.nv79-seo-grid>.form-group:nth-child(1),.nv79-seo-grid>.form-group:nth-child(2),.nv79-serp-preview{grid-column:1/-1}
+.nv79-seo-grid>.form-group{min-width:0;margin:0}
+.nv79-seo-grid .form-control{width:100%}
+.nv79-serp-preview{background:#fafcff;border:1px solid #e4eaf4;border-radius:14px;padding:17px 19px}
+.nv79-serp-preview span{font-size:10px;color:#758199;font-weight:700;display:block;margin-bottom:8px}
+.nv79-serp-preview small{display:block;font-size:11px;color:#53647b;margin-bottom:5px}
+.nv79-serp-preview strong{display:block;font-size:17px;color:#2356aa;line-height:1.45;overflow-wrap:anywhere}
+.nv79-serp-preview p{font-size:12px;line-height:1.65;color:#495a72;margin:6px 0 0;max-width:830px;overflow-wrap:anywhere}
+@media(max-width:760px){.nv79-seo-grid{grid-template-columns:1fr}.nv79-seo-grid>.form-group{grid-column:1/-1}}
 .nv-brand-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.nv-brand-grid .form-group{margin:0}.nv-brand-grid .form-group:nth-child(2){grid-column:span 1}@media(max-width:700px){.nv-brand-grid{grid-template-columns:1fr}}
 .theme-presets { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
 .theme-preset-btn { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 10px; background: #fff; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: 600; color: var(--color-dark, #1E293B); }
@@ -341,6 +358,15 @@ function nvThemeActivate() {
     const flag=document.getElementById('nvThemeEnabled');
     if(flag)flag.value='1';
 }
+
+document.addEventListener('DOMContentLoaded',()=>{
+    const title=document.querySelector('[name="default_seo_title"]');
+    const desc=document.querySelector('[name="default_seo_description"]');
+    const titlePreview=document.getElementById('nv79-seo-title-preview');
+    const descPreview=document.getElementById('nv79-seo-desc-preview');
+    if(title && titlePreview)title.addEventListener('input',()=>{titlePreview.textContent=title.value;});
+    if(desc && descPreview)desc.addEventListener('input',()=>{descPreview.textContent=desc.value;});
+});
 
 function syncColor(picker, key) {
     nvThemeActivate();
