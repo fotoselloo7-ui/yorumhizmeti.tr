@@ -9,9 +9,12 @@ final class SmmCatalogService
     public static function installed(): bool
     {
         try {
-            return (bool) Database::getInstance()->fetch(
-                "SELECT 1 AS ok FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='smm_order_jobs' LIMIT 1"
+            $row = Database::getInstance()->fetch(
+                "SELECT COUNT(*) AS cnt FROM information_schema.tables
+                 WHERE table_schema=DATABASE() AND table_name IN
+                 ('smm_providers','smm_services','smm_package_links','smm_order_jobs','smm_job_events')"
             );
+            return (int)($row['cnt'] ?? 0) === 5;
         } catch (\Throwable $e) {
             return false;
         }
