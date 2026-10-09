@@ -105,12 +105,16 @@
         'border'=>['theme_border','#E2E6F3'],
       ];
       $nvPaletteVars=[];
+      $nvThemeResolved=[];
       if($nvThemeEnabled){
         foreach($nvPalette as $label=>$metadata){
           $val=(string)setting($metadata[0],$metadata[1]);
           if(!preg_match('/^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/D',$val))$val=$metadata[1];
           $nvPaletteVars[]='--nv-theme-'.$label.':'.$val;
+          $nvThemeResolved[$label]=$val;
         }
+        $nvPaletteVars[]='--nv-theme-on-card:'.\App\Services\NetveraThemeService::onColor($nvThemeResolved['card']);
+        $nvPaletteVars[]='--nv-theme-on-button:'.\App\Services\NetveraThemeService::onGradient($nvThemeResolved['button'],$nvThemeResolved['accent']);
       }
     ?>
     <?php if($nvPaletteVars): ?><style>:root{<?= implode(';',$nvPaletteVars) ?>}</style><?php endif; ?>
