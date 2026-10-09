@@ -92,6 +92,8 @@
 
             <!-- Theme Colors Card -->
             <div class="adm-card" style="grid-column: 1 / -1;">
+                <input type="hidden" name="theme_preset_enabled" value="1">
+                <input type="hidden" name="_group_theme_preset_enabled" value="theme">
                 <div class="adm-card-header" style="display:flex; justify-content:space-between; align-items:center;">
                     <h3><?= icon('palette', 16) ?> Tema Renkleri</h3>
                     <button type="button" class="btn btn-outline btn-sm" onclick="resetThemeDefaults()">Varsayılana Döndür</button>
@@ -102,7 +104,7 @@
                     <div class="theme-presets">
                         <?php
                         $presets = [
-                            ['name' => 'Varsayılan Mavi Premium', 'colors' => ['#2563EB','#1E293B','#3B82F6','#2563EB','#1D4ED8','#F8FAFC','#FFFFFF','#111827','#64748B','#E5E7EB']],
+                            ['name' => 'NetVera Premium (Önerilen)', 'colors' => ['#6B4DE8','#13254B','#D936A1','#6B4DE8','#5136D2','#FFFFFF','#FFFFFF','#17264E','#70809C','#E2E6F3']],
                             ['name' => 'Lacivert Kurumsal', 'colors' => ['#1E3A5F','#0F172A','#2980B9','#1E3A5F','#162D4D','#F0F4F8','#FFFFFF','#1A202C','#718096','#E2E8F0']],
                             ['name' => 'Yeşil Güven', 'colors' => ['#059669','#064E3B','#10B981','#059669','#047857','#F0FDF4','#FFFFFF','#1A202C','#6B7280','#D1FAE5']],
                             ['name' => 'Turuncu Enerji', 'colors' => ['#EA580C','#9A3412','#F97316','#EA580C','#C2410C','#FFF7ED','#FFFFFF','#1C1917','#78716C','#FED7AA']],
@@ -125,19 +127,19 @@
                     <div class="theme-color-grid">
                         <?php
                         $colorFields = [
-                            ['key' => 'theme_primary', 'label' => 'Primary Color', 'default' => '#2563EB'],
-                            ['key' => 'theme_secondary', 'label' => 'Secondary Color', 'default' => '#1E293B'],
-                            ['key' => 'theme_accent', 'label' => 'Accent Color', 'default' => '#3B82F6'],
-                            ['key' => 'theme_button', 'label' => 'Button Color', 'default' => '#2563EB'],
-                            ['key' => 'theme_button_hover', 'label' => 'Button Hover', 'default' => '#1D4ED8'],
-                            ['key' => 'theme_bg', 'label' => 'Background Color', 'default' => '#F8FAFC'],
-                            ['key' => 'theme_card', 'label' => 'Card Background', 'default' => '#FFFFFF'],
-                            ['key' => 'theme_text', 'label' => 'Text Color', 'default' => '#111827'],
-                            ['key' => 'theme_muted', 'label' => 'Muted Text', 'default' => '#64748B'],
-                            ['key' => 'theme_border', 'label' => 'Border Color', 'default' => '#E5E7EB'],
+                            ['key' => 'theme_primary', 'label' => 'Ana Marka Rengi', 'default' => '#6B4DE8'],
+                            ['key' => 'theme_secondary', 'label' => 'Lacivert Metin', 'default' => '#13254B'],
+                            ['key' => 'theme_accent', 'label' => 'Vurgu / Geçiş Rengi', 'default' => '#D936A1'],
+                            ['key' => 'theme_button', 'label' => 'Buton Rengi', 'default' => '#6B4DE8'],
+                            ['key' => 'theme_button_hover', 'label' => 'Buton Hover', 'default' => '#5136D2'],
+                            ['key' => 'theme_bg', 'label' => 'Sayfa Zemini', 'default' => '#FFFFFF'],
+                            ['key' => 'theme_card', 'label' => 'Kart Zemini', 'default' => '#FFFFFF'],
+                            ['key' => 'theme_text', 'label' => 'Metin Rengi', 'default' => '#17264E'],
+                            ['key' => 'theme_muted', 'label' => 'İkincil Metin', 'default' => '#70809C'],
+                            ['key' => 'theme_border', 'label' => 'Kenarlıklar', 'default' => '#E2E6F3'],
                         ];
                         foreach ($colorFields as $idx => $cf): 
-                            $val = setting($cf['key'], $cf['default']);
+                            $val = setting('theme_preset_enabled','0')==='1' ? setting($cf['key'], $cf['default']) : $cf['default'];
                         ?>
                         <div class="theme-color-item">
                             <label><?= $cf['label'] ?></label>
@@ -207,7 +209,7 @@
 }
 .theme-presets { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
 .theme-preset-btn { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 10px; background: #fff; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: 600; color: var(--color-dark, #1E293B); }
-.theme-preset-btn:hover { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.theme-preset-btn:hover { border-color: #6B4DE8; box-shadow: 0 0 0 3px rgba(107,77,232,0.1); }
 .preset-colors { display: flex; gap: 3px; }
 .preset-colors span { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
 .theme-color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
