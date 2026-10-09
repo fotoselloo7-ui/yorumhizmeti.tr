@@ -29,7 +29,7 @@ class CheckoutController extends Controller
             if ($pkg) {
                 $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
                 $qty = $item['quantity'] ?? 1;
-                $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ? ORDER BY sort_order", [$pkg['id']]);
+                $fields = \App\Services\SmmOrderFields::fields($pkg);
                 $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields, 'cart_key' => $key]);
                 $total += $price * $qty;
             }
@@ -111,10 +111,10 @@ class CheckoutController extends Controller
             $orderItem['quantity'] = max($minQty, min($maxQty, (int)($item['quantity'] ?? $minQty)));
 
             // Dinamik alanlar
-            $fields = $db->fetchAll("SELECT * FROM package_fields WHERE package_id = ?", [$pkg['id']]);
+            $fields = \App\Services\SmmOrderFields::fields($pkg);
             $itemFields = [];
             foreach ($fields as $field) {
-                $fieldValue = $_POST['field_' . $pkg['id'] . '_' . $field['field_key']] ?? '';
+                $fieldValue = $_POST['field_' . $pkg['id'] . '_' . $field['field_key']] ?? ($item['fields'][$field['field_key']] ?? '');
                 $itemFields[] = [
                     'field_key' => $field['field_key'],
                     'field_label' => $field['field_label'],
@@ -123,6 +123,7 @@ class CheckoutController extends Controller
             }
             $orderItem['fields'] = $itemFields;
             try {
+                \App\Services\SmmOrderFields::validateCustomerFields($pkg, $itemFields);
                 \App\Services\SmmFulfillmentService::validateLine((int)$pkg['id'], $itemFields, (int)$orderItem['quantity']);
             } catch (\RuntimeException $e) {
                 flash('error', $e->getMessage());
