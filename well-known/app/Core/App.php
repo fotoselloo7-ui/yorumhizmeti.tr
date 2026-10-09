@@ -169,6 +169,7 @@ class App
 
         // Hazır Yazılımlar & Referanslar: authenticated admin-only modules.
         $r->get('/admin/netvera-gelen-kutusu', 'Admin\\NetveraInboxController@index');
+        $r->post('/admin/netvera-gelen-kutusu/kur', 'Admin\\NetveraInboxController@install');
         $r->get('/admin/netvera-gelen-kutusu/{id}', 'Admin\\NetveraInboxController@detail');
         $r->post('/admin/netvera-gelen-kutusu/{id}/yanit', 'Admin\\NetveraInboxController@reply');
 
