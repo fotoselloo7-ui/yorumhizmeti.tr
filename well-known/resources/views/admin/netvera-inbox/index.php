@@ -6,11 +6,7 @@
 <div class="adm-card" style="margin-bottom:20px">
   <div class="adm-card-header"><h3><?= icon('bell',17) ?> Telegram Bildirimleri</h3></div>
   <div class="adm-card-body">
-    <p style="font-size:12px;line-height:1.65;margin:0 0 14px">
-      <?= $telegramConfigured
-          ? 'Telegram bağlantısı aktif. Bildirim türlerini aşağıdan yönetebilirsiniz.'
-          : 'Telegram bağlantısı pasif. Bildirim tercihlerinizi aşağıdan yönetebilirsiniz.' ?>
-    </p>
+    
     <form method="post" action="/admin/netvera-gelen-kutusu/telegram/kaydet">
       <?= csrfField() ?>
       <div style="display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:15px">
@@ -46,7 +42,7 @@
 <?php if(!$ready): ?>
  <div class="adm-card"><div class="adm-card-body">
    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-     <div><h3><?= icon('inbox',17) ?> Gelen Kutusu</h3><p class="text-secondary">Sohbet ve teklif kayıtlarını bu bölümden yönetin.</p></div>
+     <div><h3><?= icon('inbox',17) ?> Gelen Kutusu</h3></div>
      <form method="post" action="/admin/netvera-gelen-kutusu/kur">
        <?= csrfField() ?>
        <button class="btn btn-primary btn-sm" type="submit"><?= icon('check-circle',14) ?> Gelen Kutusunu Etkinleştir</button>
