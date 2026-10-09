@@ -1,7 +1,6 @@
 <div class="adm-page-top">
     <div>
         <h2><?= icon('search', 24) ?> SEO Merkezi</h2>
-        <p class="text-sm text-secondary">Arama motoru optimizasyonu, sitemap ve skor analizleri.</p>
     </div>
 </div>
 
@@ -23,7 +22,7 @@
         </div>
         <div class="adm-stat-info">
             <h3>Sitemap XML</h3>
-            <p>Görüntülemek için tıklayın</p>
+            
         </div>
     </div>
 
@@ -33,7 +32,7 @@
         </div>
         <div class="adm-stat-info">
             <h3>robots.txt</h3>
-            <p>Görüntülemek için tıklayın</p>
+            
         </div>
     </div>
 </div>
