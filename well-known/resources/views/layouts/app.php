@@ -82,6 +82,7 @@
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
     <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=55.1">
     <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-account-history-v57.css') ?>?v=57.1">
 
     <!-- Dynamic Theme Colors -->
     <?php
