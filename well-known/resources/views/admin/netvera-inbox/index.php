@@ -3,6 +3,68 @@
   <p class="text-sm text-secondary">Yeni yazılım müşterilerinden gelen gerçek mesaj ve teklif talepleri. Bu alan hizmet siparişlerinden ayrıdır.</p></div>
   <a href="/admin/netvera-yazilimlar" class="btn btn-outline btn-sm">Yazılımlar</a>
 </div>
+<?php $nvAgent=\App\Services\SupportDeskSettings::publicProfile(); $nvSounds=\App\Services\SupportDeskSettings::sounds(); ?>
+<div class="nv68-support-admin">
+ <section class="adm-card">
+  <div class="adm-card-header"><h3><?= icon('user-round',17) ?> Destek Temsilcisi ve Sesler</h3></div>
+  <div class="adm-card-body">
+   <form method="post" action="/admin/netvera-gelen-kutusu/temsilci/kaydet" enctype="multipart/form-data">
+    <?= csrfField() ?>
+    <div class="nv68-agent">
+     <div class="nv68-avatar">
+      <?php if($nvAgent['photo']): ?><img src="<?= e(upload_url($nvAgent['photo'])) ?>" alt=""><?php else: ?><?= icon('user-round',26) ?><?php endif; ?>
+     </div>
+     <div class="nv68-agent-fields">
+      <label>Temsilci Adı<input class="form-control" name="name" maxlength="90" required value="<?= e($nvAgent['name']) ?>"></label>
+      <label>Uzmanlık / Rütbe<input class="form-control" name="title" maxlength="90" required placeholder="Full Stack Developer" value="<?= e($nvAgent['title']) ?>"></label>
+      <label>Profil Fotoğrafı<input class="form-control" name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+      <label>Yeni Sohbet Sesi<select class="form-control" name="new_sound" data-nv-sound>
+       <?php foreach(['chime'=>'Zil','soft'=>'Yumuşak','digital'=>'Dijital','off'=>'Kapalı'] as $key=>$name): ?><option value="<?= e($key) ?>" <?= $nvSounds['new']===$key?'selected':'' ?>><?= e($name) ?></option><?php endforeach; ?></select></label>
+      <label>Yeni Yanıt Sesi<select class="form-control" name="reply_sound" data-nv-sound>
+       <?php foreach(['chime'=>'Zil','soft'=>'Yumuşak','digital'=>'Dijital','off'=>'Kapalı'] as $key=>$name): ?><option value="<?= e($key) ?>" <?= $nvSounds['reply']===$key?'selected':'' ?>><?= e($name) ?></option><?php endforeach; ?></select></label>
+     </div>
+    </div>
+    <div class="nv68-support-actions"><button type="submit" class="btn btn-primary btn-sm"><?= icon('save',15) ?> Kaydet</button><button type="button" id="nv68TrySound" class="btn btn-outline btn-sm"><?= icon('volume-2',15) ?> Ses Önizle</button><button type="button" id="nv68EnableSound" class="btn btn-outline btn-sm"><?= icon('bell',15) ?> Bildirimleri Aç</button></div>
+   </form>
+  </div>
+ </section>
+ <section class="adm-card">
+  <div class="adm-card-header"><h3><?= icon('smartphone',17) ?> NetVera Cep</h3></div>
+  <div class="adm-card-body">
+   <div class="nv68-install-grid">
+    <div id="nv68Qr" class="nv68-qr" aria-label="Telefon kurulum karekodu"><span>QR</span></div>
+    <div>
+      <strong>Mobil Destek Paneli</strong>
+      <p>iPhone ve Android telefonla QR kodu taratın. Yönetici hesabınızla giriş yapıp ana ekrana ekleyin.</p>
+      <a class="btn btn-primary btn-sm" href="/admin/cep" target="_blank" rel="noopener"><?= icon('smartphone',14) ?> Cep Panelini Aç</a>
+      <p class="nv68-install-note">iPhone: Safari → Paylaş → Ana Ekrana Ekle. Android: Chrome → Uygulamayı yükle / Ana ekrana ekle.</p>
+    </div>
+   </div>
+  </div>
+ </section>
+</div>
+<style>
+.nv68-support-admin{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:16px;margin-bottom:17px}
+.nv68-agent{display:flex;align-items:start;gap:13px}.nv68-avatar{width:62px;height:62px;border-radius:17px;background:#eeeaff;color:#6754c8;flex:none;display:grid;place-items:center;overflow:hidden}.nv68-avatar img{width:100%;height:100%;object-fit:cover}
+.nv68-agent-fields{flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.nv68-agent-fields label{display:grid;gap:5px;font-size:11px;font-weight:600}.nv68-agent-fields label:nth-child(3){grid-column:1/-1}
+.nv68-support-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.nv68-install-grid{display:flex;align-items:center;gap:16px}.nv68-install-grid strong{font-size:13px}.nv68-install-grid p{font-size:11px;line-height:1.6;color:#73829a}.nv68-install-note{font-size:10px!important}.nv68-qr{width:152px;height:152px;flex:none;border-radius:14px;background:#f5f3ff;display:grid;place-items:center;color:#6253bd}.nv68-qr canvas,.nv68-qr img{max-width:100%}
+@media(max-width:1050px){.nv68-support-admin{grid-template-columns:1fr}}@media(max-width:580px){.nv68-agent{flex-direction:column}.nv68-agent-fields{grid-template-columns:1fr}.nv68-install-grid{align-items:flex-start}.nv68-qr{width:120px;height:120px}}
+</style>
+<script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const qr=document.getElementById('nv68Qr');
+ if(qr && window.QRCode && location.protocol==='https:'){
+   qr.textContent='';new QRCode(qr,{text:location.origin+'/admin/cep',width:144,height:144,colorDark:'#24335c',colorLight:'#fff'});
+ }else if(qr){qr.textContent='QR için HTTPS bağlantısını açın'}
+ const alerts=window.NvDeskAlerts;
+ document.getElementById('nv68TrySound')?.addEventListener('click',()=>{
+  alerts?.unlock();alerts?.play(document.querySelector('[name="new_sound"]')?.value||'chime');
+ });
+ document.getElementById('nv68EnableSound')?.addEventListener('click',async()=>{await alerts?.enable();alerts?.play('soft')});
+});
+</script>
 <div class="adm-card" style="margin-bottom:20px">
   <div class="adm-card-header"><h3><?= icon('bell',17) ?> Telegram Bildirimleri</h3></div>
   <div class="adm-card-body">
