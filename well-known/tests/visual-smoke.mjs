@@ -1674,11 +1674,13 @@ try {
   const demoPanel=productTabPage.locator('[data-nv60-panel="demo"]');
   if(!(await demoPanel.isVisible())||!(await demoPanel.locator('a[href="https://qa-demo.example.test"]').count()))
     throw new Error('Demo URL missing from in-place preview tab');
-  if(!(await demoPanel.locator('a[href="https://qa-demo.example.test/yonetim"]').count()))
-    throw new Error('Demo admin URL missing from original demo tab');
-  if(!(await demoPanel.getByText('qa-public-demo-user').count()) ||
-     !(await demoPanel.getByText('qa-public-demo-only-no-real-account').count()))
-    throw new Error('Opted-in public QA demo login not shown in product tab');
+  // This check runs AFTER the admin E2E save, which replaces the fixture's
+  // original /yonetim URL and account values with new admin form inputs.
+  if(!(await demoPanel.locator('a[href="https://qa-demo.example.test/admin"]').count()))
+    throw new Error('Updated demo admin URL was not published on the product page');
+  if(!(await demoPanel.getByText('qa-editor-demo').count()) ||
+     !(await demoPanel.getByText('qa-public-admin-only').count()))
+    throw new Error('Updated opt-in public QA demo credentials missing in product detail');
   const media=await productTabPage.locator('.nv40-product-media').boundingBox();
   const price=await productTabPage.locator('.nv40-price-box').boundingBox();
   const hero=await productTabPage.locator('.nv40-product-hero').boundingBox();
