@@ -124,6 +124,7 @@ class App
 
         // Admin Kategoriler
         $r->get('/admin/kategoriler', 'Admin\\CategoryController@index');
+        $r->post('/admin/kategoriler/seo-optimize', 'Admin\\CategoryController@optimizeCategorySeo');
         $r->post('/admin/kategoriler/toplu-islem', 'Admin\\CategoryController@bulkAction');
         $r->post('/admin/kategoriler/varsayilan-kur', 'Admin\\CategoryController@seedDefault');
         $r->get('/admin/kategoriler/export', 'Admin\\CategoryController@exportCsv');
