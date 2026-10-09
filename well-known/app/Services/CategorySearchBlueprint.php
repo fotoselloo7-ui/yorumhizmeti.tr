@@ -130,8 +130,8 @@ final class CategorySearchBlueprint {
     'secondary' => 'müşteri deneyimi, marka itibar yönetimi, yorum yanıtlama',
     'question' => 'Online itibar yönetimi nasıl yürütülür?',
     'answer' => 'Gerçek müşteri geri bildirimleri takip edilir, yorumlara profesyonel yanıtlar hazırlanır ve işletme iletişim süreçleri iyileştirilir. Sahte değerlendirme oluşturulmaz.'
-  }
-};
+  ]
+];
   }
   public static function preview(): array {
     $db=Database::getInstance();
