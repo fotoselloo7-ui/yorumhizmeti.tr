@@ -834,39 +834,55 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? $testimonials['ex
 <?php endif; ?>
 
 <?php if (!empty($faqs)): ?>
-<section class="yh6-faq">
+<section class="yh6-faq" aria-labelledby="home-faq-title">
     <div class="container">
-        <div class="yh6-section-head"><div><span class="yh6-eyebrow">Merak Edilenler</span><h2>Sıkça Sorulan Sorular</h2></div></div>
+        <div class="yh6-section-head">
+            <div><span class="yh6-eyebrow">Merak Edilenler</span><h2 id="home-faq-title">Sıkça Sorulan Sorular</h2></div>
+        </div>
         <div class="yh6-faq-grid">
-            <?php foreach(array_slice($faqs,0,8) as $faq): ?>
-            <div class="yh6-faq-item"><button type="button"><span><?= e($faq['question']) ?></span><?= icon('plus',11) ?></button><div><?= nl2br(e($faq['answer'])) ?></div></div>
+            <?php foreach (array_slice($faqs, 0, 8) as $faqIndex => $faq): ?>
+            <div class="yh6-faq-item">
+                <button type="button" data-faq-trigger aria-expanded="false" aria-controls="home-faq-answer-<?= (int)$faqIndex ?>">
+                    <span><?= e($faq['question']) ?></span>
+                    <span class="yh6-faq-toggle-icon" aria-hidden="true"><?= icon('plus', 16) ?></span>
+                </button>
+                <div class="yh6-faq-answer" id="home-faq-answer-<?= (int)$faqIndex ?>" hidden><?= nl2br(e($faq['answer'])) ?></div>
+            </div>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
 <?php endif; ?>
 
-<section class="yh6-final">
+<section class="yh6-final" aria-labelledby="home-final-title">
     <div class="container">
-        <div>
+        <div class="yh6-final-copy">
             <span class="yh6-eyebrow">Daha Güçlü Bir Marka İçin</span>
-            <h2>YorumHizmeti.tr ile Dijital Varlığınızı Güçlendirin</h2>
-            <p>Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web site çözümlerinden SEO hizmetlerine kadar ihtiyaç duyduğunuz tüm dijital çözümler tek platformda.</p>
+            <h2 id="home-final-title">YorumHizmeti.tr ile Dijital Varlığınızı Güçlendirin</h2>
+            <p>Sosyal medya etkileşim hizmetlerinden Google yorumlarına, web sitesi çözümlerinden SEO hizmetlerine kadar ihtiyacınız olan dijital hizmetler tek platformda.</p>
         </div>
-        <a href="/kategoriler" class="yh6-btn primary">Hemen Başlayın <?= icon('arrow-right',11) ?></a>
-        <div class="yh6-avatar-proof"><span>A</span><span>E</span><span>M</span><div><strong>+50.000</strong><small>Mutlu Müşteri</small></div></div>
+        <div class="yh6-final-actions">
+            <a href="/kategoriler" class="yh6-btn primary">Hizmetleri Keşfet <?= icon('arrow-right', 16) ?></a>
+            <div class="yh6-final-guarantees">
+                <span><?= icon('shield', 14) ?> Güvenli Ödeme</span>
+                <span><?= icon('headphones', 14) ?> 7/24 Destek</span>
+            </div>
+        </div>
     </div>
 </section>
 
 </main>
 
 <script>
-document.querySelectorAll('.yh6-faq-item button').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        const item=btn.parentElement;
-        item.classList.toggle('open');
-        const body=btn.nextElementSibling;
-        body.style.display=body.style.display==='block'?'none':'block';
+document.querySelectorAll('.yh6-faq-item [data-faq-trigger]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const item = button.closest('.yh6-faq-item');
+        const answer = document.getElementById(button.getAttribute('aria-controls'));
+        if (!item || !answer) return;
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!isExpanded));
+        answer.hidden = isExpanded;
+        item.classList.toggle('open', !isExpanded);
     });
 });
 </script>
