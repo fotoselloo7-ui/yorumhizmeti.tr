@@ -49,5 +49,31 @@
     </div>
   </div>
 </div>
+<div class="adm-card" style="margin-top:16px">
+  <div class="adm-card-header" style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between">
+    <h3><?= icon('shopping-cart',18) ?> Kimlik Doğrulaması Bekleyen Eski Misafir Siparişleri</h3>
+    <span class="badge badge-warning"><?= (int)$stats['unclaimed'] ?> eşleşmemiş</span>
+  </div>
+  <div class="adm-card-body">
+    <p class="text-sm text-secondary" style="margin-bottom:12px">Kaynak NetVera'da müşteri ID'si bulunmayan eski siparişler burada korunur. E-posta eşleşse bile yalnızca bu bilgiyle lisans hakkı verilmez. Önce ödeme ve alıcı kimliği doğrulanmalıdır.</p>
+    <div class="table-responsive">
+      <table class="adm-table">
+        <thead><tr><th>Eski Sipariş</th><th>Müşteri / E-posta</th><th>Ürün</th><th>Tutar</th><th>Ödeme</th></tr></thead>
+        <tbody>
+        <?php foreach ($unclaimedOrders as $oldOrder): ?>
+        <tr>
+          <td><strong><?= e($oldOrder['order_no']) ?></strong></td>
+          <td><?= e($oldOrder['customer_name'] ?: 'Misafir') ?><small style="display:block;color:#8490a5"><?= e($oldOrder['customer_email'] ?: '-') ?></small></td>
+          <td><?= e($oldOrder['product_name'] ?: 'Dijital Ürün') ?></td>
+          <td><?= money((float)$oldOrder['amount']) ?></td>
+          <td><?= e($oldOrder['payment_status']) ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <?php if (!$unclaimedOrders): ?><tr><td colspan="5">Eşleşmemiş eski sipariş bulunmuyor.</td></tr><?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <p class="text-sm text-secondary" style="margin-top:12px">Bu ekran yalnızca doğrulanmış kayıtları gösterir; yeni satışlara komisyon veya lisans oluşturmaz.</p>
 <?php endif; ?>
