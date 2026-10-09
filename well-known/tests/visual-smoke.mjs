@@ -1532,6 +1532,41 @@ try {
   if(geometry.some(g=>!g.count||g.scroll>g.width+4||g.cross))
     throw new Error('Mobile software/reference layout defect '+JSON.stringify(geometry));
   await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-mobile.png'),fullPage:true,animations:'disabled'});
+  // Business requirement: owner edits real product demo access in admin,
+  // and the exact opt-in demo-only login then appears on its indexed URL.
+  await showcasePage.goto(origin+'/admin/netvera-yazilimlar/47/duzenle',{waitUntil:'domcontentloaded'});
+  const demoEdit=showcasePage.locator('form#nvpa-product-form');
+  if(await demoEdit.count()!==1)throw new Error('Legacy NetVera product editor missing');
+  for(const field of ['demo_url','demo_admin_url','demo_user_url','demo_username',
+                       'demo_password','demo_admin_username','demo_admin_password',
+                       'demo_note','demo_accounts_json']){
+    if(await demoEdit.locator('[name="'+field+'"]').count()!==1)
+      throw new Error('NetVera demo admin configuration field missing: '+field);
+  }
+  await demoEdit.locator('[name="demo_url"]').fill('https://qa-demo.example.test');
+  await demoEdit.locator('[name="demo_admin_url"]').fill('https://qa-demo.example.test/admin');
+  await demoEdit.locator('[name="demo_username"]').fill('qa-editor-demo');
+  await demoEdit.locator('[name="demo_password"]').fill('qa-public-demo-only-no-real-account');
+  await demoEdit.locator('[name="demo_admin_username"]').fill('qa-editor-admin');
+  await demoEdit.locator('[name="demo_admin_password"]').fill('qa-public-admin-only');
+  await demoEdit.locator('[name="demo_note"]').fill('Örnek test hesabı; gerçek sistem hesabı değil.');
+  await demoEdit.locator('[name="demo_accounts_json"]').fill('[]');
+  await demoEdit.locator('[name="demo_is_active"]').check();
+  await demoEdit.locator('[name="demo_is_public"]').check();
+  await demoEdit.locator('[name="demo_credentials_public"]').check();
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/netvera-yazilimlar',{timeout:15000}),
+    demoEdit.locator('button[type="submit"]').last().click()
+  ]);
+  await showcasePage.goto(origin+'/hazir-scriptler/haber-sitesi-scripti',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-nv60-tab="demo"]').click();
+  const savedDemo=showcasePage.locator('[data-nv60-panel="demo"]');
+  if(!(await savedDemo.getByText('qa-editor-demo',{exact:true}).isVisible())||
+     !(await savedDemo.getByText('qa-public-admin-only',{exact:true}).isVisible())||
+     !(await savedDemo.locator('a[href="https://qa-demo.example.test/admin"]').count()))
+    throw new Error('Saved public-demo role credentials or admin URL not published from admin form');
+  console.log('PASS NetVera admin demo inputs save and publish chosen demo-only credentials');
+
   results.push({route:'Admin install -> software featured -> reference publish',screen:'integration',status:200,errors:[]});
   console.log('PASS real admin software and references end-to-end');
 }catch(e){
