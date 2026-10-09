@@ -22,6 +22,15 @@ jobs:
         run: php well-known/tests/admin-release-copy-qa.php
       - name: Minimal production UI copy QA
         run: php well-known/tests/production-ui-copy-qa.php
+      - name: Reviews, flat payment modules and mobile desk QA
+        run: php well-known/tests/reviews-mobile-desk-qa.php
+      - name: Mobile browser JavaScript syntax
+        run: |
+          node --check well-known/public/assets/js/reviews-v68.js
+          node --check well-known/public/assets/js/nv-desk.js
+          node --check well-known/public/assets/js/nv-desk-alerts.js
+          node --check well-known/public/assets/js/nv-desk-admin.js
+          node --check well-known/public/nv-desk-sw.js
 
       - name: Offline SMM provider encryption and endpoint QA
         run: php well-known/tests/smm-api-qa.php
