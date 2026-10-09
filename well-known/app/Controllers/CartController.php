@@ -28,8 +28,8 @@ class CartController extends Controller
                     $max = max($min, (int)$pkg['max_quantity']);
                     $qty = max($min, min($max, (int)($item['quantity'] ?? $min)));
                     $cartKey = count($validCart);
-                    $validCart[] = ['id' => (int)$pkg['id'], 'quantity' => $qty];
-                    $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'cart_key' => $cartKey]);
+                    $validCart[] = ['id' => (int)$pkg['id'], 'quantity' => $qty, 'fields' => $item['fields'] ?? []];
+                    $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'cart_key' => $cartKey, 'fields' => $item['fields'] ?? []]);
                     $total += $price * $qty;
                 }
             }
@@ -72,17 +72,25 @@ class CartController extends Controller
         $max = max($min, (int)$pkg['max_quantity']);
         $quantity = max($min, min($max, $quantity));
         $cart = $_SESSION['cart'] ?? [];
+        $captured = [];
+        foreach (\App\Services\SmmOrderFields::fields($pkg) as $field) {
+            $key=(string)$field['field_key'];
+            if (isset($_POST['field_'.$packageId.'_'.$key])) {
+                $captured[$key]=mb_substr(trim((string)$_POST['field_'.$packageId.'_'.$key]),0,2048);
+            }
+        }
         $found = false;
         foreach ($cart as &$item) {
             if ($item['id'] == $packageId) {
                 $item['quantity'] = max($min, min((int)$item['quantity'] + $quantity, $max));
+                if ($captured) $item['fields']=$captured;
                 $found = true;
                 break;
             }
         }
 
         if (!$found) {
-            $cart[] = ['id' => $packageId, 'quantity' => $quantity];
+            $cart[] = ['id' => $packageId, 'quantity' => $quantity, 'fields'=>$captured];
         }
 
         $_SESSION['cart'] = $cart;
