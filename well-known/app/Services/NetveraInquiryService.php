@@ -104,6 +104,30 @@ final class NetveraInquiryService
         return $token!=='' && $chat!=='' && extension_loaded('curl');
     }
 
+    /** Send an admin-triggered connection test without disclosing bot credentials. */
+    public static function testTelegramConnection(): bool
+    {
+        if(!self::telegramConfigured())return false;
+        [$token,$chat]=self::telegramCredentials();
+        $ch=curl_init('https://api.telegram.org/bot'.$token.'/sendMessage');
+        if(!$ch)return false;
+        curl_setopt_array($ch,[
+            CURLOPT_POST=>true,
+            CURLOPT_POSTFIELDS=>http_build_query([
+                'chat_id'=>$chat,'text'=>'✅ YorumHizmeti.tr Telegram destek bildirimleri test mesajı.',
+                'disable_web_page_preview'=>'true'
+            ]),
+            CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>3,
+            CURLOPT_TIMEOUT=>7,CURLOPT_FOLLOWLOCATION=>false,
+            CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_SSL_VERIFYHOST=>2
+        ]);
+        $response=curl_exec($ch);
+        $code=(int)curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        $payload=is_string($response)?json_decode($response,true):null;
+        return $code===200 && is_array($payload) && ($payload['ok']??false)===true;
+    }
+
     /**
      * Optional Telegram alerts. A failed request never rolls back a saved inquiry.
      * Event switches: chat, offer, followup, important.
