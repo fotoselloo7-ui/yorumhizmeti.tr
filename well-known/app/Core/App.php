@@ -155,6 +155,8 @@ class App
         $r->get('/admin/smm', 'Admin\\SmmController@index');
         $r->post('/admin/smm/kur', 'Admin\\SmmController@install');
         $r->post('/admin/smm/tedarikci/kaydet', 'Admin\\SmmController@saveProvider');
+        $r->post('/admin/smm/tedarikciler/esitle', 'Admin\\SmmController@syncAll');
+        $r->post('/admin/smm/paket/toplu-ekle', 'Admin\\SmmController@bulkPublish');
         $r->post('/admin/smm/tedarikci/{id}/esitle', 'Admin\\SmmController@sync');
         $r->post('/admin/smm/tedarikci/{id}/test', 'Admin\\SmmController@balance');
         $r->post('/admin/smm/kategori/ekle', 'Admin\\SmmController@createCategory');
