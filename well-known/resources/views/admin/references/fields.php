@@ -4,6 +4,9 @@ $ref = isset($row) && is_array($row) ? $row : [];
 $refGroup = \App\Services\ReferencesService::normalizedGroup($ref);
 $refService = \App\Services\ReferencesService::normalizedService($ref);
 $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
+$refPlacements = \App\Services\ReferencesService::normalizedPlacements($ref);
+$secondary = $refPlacements[1] ?? ['group'=>'', 'service'=>''];
+
 ?>
 <div class="adm31-form-grid">
   <label>Proje / Firma Adı *
@@ -21,6 +24,28 @@ $refMedia = \App\Services\ReferencesService::normalizedMedia($ref);
       <?php foreach ($referenceGroups as $groupKey=>$group): ?>
         <?php foreach ($group['services'] as $serviceKey=>$serviceLabel): ?>
           <option data-parent="<?= e($groupKey) ?>" value="<?= e($serviceKey) ?>" <?= $refService===$serviceKey && $refGroup===$groupKey?'selected':'' ?>>
+            <?= e($serviceLabel) ?>
+          </option>
+        <?php endforeach; ?>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <label>İkinci Ana Kategori (isteğe bağlı)
+    <select class="form-control" name="secondary_group" data-ref-second-group>
+      <option value="">Yalnızca ilk kategoride göster</option>
+      <?php foreach ($referenceGroups as $groupKey=>$group): ?>
+        <option value="<?= e($groupKey) ?>" <?= $secondary['group']===$groupKey?'selected':'' ?>><?= e($group['label']) ?></option>
+      <?php endforeach; ?>
+    </select>
+    <small>İki farklı hizmet alanında aynı referansı gösterebilirsin. Kopya kayıt oluşturulmaz.</small>
+  </label>
+  <label>İkinci Hizmet / Alt Kategori
+    <select class="form-control" name="secondary_service" data-ref-second-service>
+      <option value="">Alt hizmet seçin</option>
+      <?php foreach ($referenceGroups as $groupKey=>$group): ?>
+        <?php foreach ($group['services'] as $serviceKey=>$serviceLabel): ?>
+          <option data-parent="<?= e($groupKey) ?>" value="<?= e($serviceKey) ?>"
+                  <?= $secondary['group']===$groupKey && $secondary['service']===$serviceKey?'selected':'' ?>>
             <?= e($serviceLabel) ?>
           </option>
         <?php endforeach; ?>
