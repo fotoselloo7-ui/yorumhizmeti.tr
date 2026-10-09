@@ -32,7 +32,7 @@
   <div class="adm-card-header"><h3><?= icon('smartphone',17) ?> NetVera Cep</h3></div>
   <div class="adm-card-body">
    <div class="nv68-install-grid">
-    <div id="nv68Qr" class="nv68-qr" aria-label="Telefon kurulum karekodu"><span>QR</span></div>
+    <div id="nv68Qr" class="nv68-qr" aria-label="Telefon kurulum karekodu"><img src="<?= asset('img/nv-desk-qr.svg') ?>" alt="NetVera Cep Paneli kurulum karekodu" width="150" height="150"></div>
     <div>
       <strong>Mobil Destek Paneli</strong>
       <p>iPhone ve Android telefonla QR kodu taratın. Yönetici hesabınızla giriş yapıp ana ekrana ekleyin.</p>
@@ -51,13 +51,10 @@
 @media(max-width:1050px){.nv68-support-admin{grid-template-columns:1fr}}@media(max-width:580px){.nv68-agent{flex-direction:column}.nv68-agent-fields{grid-template-columns:1fr}.nv68-install-grid{align-items:flex-start}.nv68-qr{width:120px;height:120px}}
 </style>
 <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
- const qr=document.getElementById('nv68Qr');
- if(qr && window.QRCode && location.protocol==='https:'){
-   qr.textContent='';new QRCode(qr,{text:location.origin+'/admin/cep',width:144,height:144,colorDark:'#24335c',colorLight:'#fff'});
- }else if(qr){qr.textContent='QR için HTTPS bağlantısını açın'}
+
  const alerts=window.NvDeskAlerts;
  document.getElementById('nv68TrySound')?.addEventListener('click',()=>{
   alerts?.unlock();alerts?.play(document.querySelector('[name="new_sound"]')?.value||'chime');
