@@ -83,6 +83,17 @@ final class NetveraInboxController extends Controller
         redirect('/admin/netvera-gelen-kutusu');
     }
 
+    public function installImportance():void
+    {
+        Csrf::check();
+        $ok=Inbox::installImportance();
+        if($ok)logActivity('netvera_inbox_migration','Önemli talep kolonu hazırlandı');
+        flash($ok?'success':'error',$ok
+            ?'Önemli talep işaretleme özelliği hazır.'
+            :'Kurulum tamamlanamadı. Veritabanı ALTER TABLE yetkisini kontrol edin.');
+        redirect('/admin/netvera-gelen-kutusu');
+    }
+
     public function importance(string $id):void
     {
         Csrf::check();
