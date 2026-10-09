@@ -202,7 +202,7 @@ final class NetveraScriptController extends Controller
         $env=strtolower(trim((string)($_ENV['APP_ENV']??'production')));
         if(!in_array($env,['staging','testing','development','local'],true) ||
             (string)($_ENV['NETVERA_IMPORT_ALLOWED']??'')!=='1'){
-            flash('error','Bu kurulum yalnızca ayrı staging veritabanında APP_ENV=staging ve NETVERA_IMPORT_ALLOWED=1 ile yapılabilir.');
+            flash('error','Bu işlem bu ortamda kullanılamıyor.');
             redirect('/admin/netvera-kategoriler');return;
         }
         if(NetveraBridgeService::ready() && \App\Services\NetveraInquiryService::ready()){
@@ -221,10 +221,10 @@ final class NetveraScriptController extends Controller
                     $this->db->getPdo()->exec($statement);
                 }
             }
-            flash('success','Staging içerik tabloları hazır. Mevcut kullanıcı, sipariş ve ödeme verilerine dokunulmadı.');
+            flash('success','Katalog tabloları hazır.');
         }catch(\Throwable $e){
             error_log('Netvera bridge staging schema setup failed: '.$e->getMessage());
-            flash('error','Staging tablo kurulumu tamamlanamadı. Sunucu loglarını kontrol edin.');
+            flash('error','Katalog kurulumu tamamlanamadı. Sunucu kayıtlarını kontrol edin.');
         }
         redirect('/admin/netvera-kategoriler');
     }
@@ -233,7 +233,7 @@ final class NetveraScriptController extends Controller
     {
         Csrf::check();
         if(!NetveraBridgeService::ready()){
-            flash('error','Önce güvenli staging içerik tablolarını kurun.');
+            flash('error','Yazılım kataloğu yönetim tabloları şu anda kullanılamıyor.');
             redirect('/admin/netvera-kategoriler');return;
         }
         $id=max(0,(int)($_POST['id']??0));
