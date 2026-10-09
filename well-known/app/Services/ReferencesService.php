@@ -44,6 +44,7 @@ final class ReferencesService
             'image' => 'Görsel / Post',
             'instagram_post' => 'Instagram Gönderisi',
             'instagram_reel' => 'Instagram Reels',
+            'youtube_video' => 'YouTube Videosu / Shorts',
         ];
     }
 
