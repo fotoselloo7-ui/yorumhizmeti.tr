@@ -7,16 +7,16 @@ final class CategorySearchBlueprint {
     return [
   'instagram-hizmetleri' => [
     'slug' => 'instagram-hizmetleri',
-    'title' => 'Instagram Takipçi, Beğeni ve Reels Hizmetleri | NetVera',
+    'title' => 'Instagram Hizmetleri | Takipçi, Beğeni ve Reels – NetVera',
     'desc' => 'Instagram takipçi, beğeni, Reels izlenme ve etkileşim hizmetlerini inceleyin. Paket kapsamı, teslimat şartları ve sipariş detaylarını NetVera\'da karşılaştırın.',
-    'focus' => 'instagram takipçi al',
-    'secondary' => 'instagram takipçi al, instagram beğeni, instagram reels izlenme',
+    'focus' => 'instagram hizmetleri',
+    'secondary' => 'instagram takipçi al, instagram beğeni al, instagram reels izlenme',
     'question' => 'Instagram hizmetlerinde paketler nasıl seçilir?',
     'answer' => 'İhtiyacınıza göre takipçi, beğeni veya Reels izlenme seçeneklerini karşılaştırın; açıklama, teslimat ve hizmet koşullarını sipariş öncesinde inceleyin.'
   ],
   'instagram-takipci' => [
     'slug' => 'instagram-takipci',
-    'title' => 'Instagram Takipçi Al | Takipçi Paketleri – NetVera',
+    'title' => 'Instagram Takipçi Satın Al | Paketler – NetVera',
     'desc' => 'Instagram takipçi paketlerinin kapsamını, adetlerini ve teslimat koşullarını karşılaştırın. Profilinize uygun seçenekler ve şifresiz sipariş bilgileri NetVera\'da.',
     'focus' => 'instagram takipçi al',
     'secondary' => 'instagram takipçi satın al, instagram takipçi hizmeti, instagram takipçi paketleri, instagram takipçi fiyatları',
@@ -43,7 +43,7 @@ final class CategorySearchBlueprint {
   ],
   'tiktok-hizmetleri' => [
     'slug' => 'tiktok-hizmetleri',
-    'title' => 'TikTok Takipçi, Beğeni ve İzlenme Hizmetleri – NetVera',
+    'title' => 'TikTok Hizmetleri | Takipçi, Beğeni ve İzlenme – NetVera',
     'desc' => 'TikTok takipçi, beğeni ve video izlenme hizmetlerini karşılaştırın. Paket miktarlarını, bağlantı gereksinimlerini ve teslimat detaylarını inceleyin.',
     'focus' => 'tiktok takipçi al',
     'secondary' => 'tiktok izlenme, tiktok beğeni al, tiktok takipçi paketleri',
@@ -70,7 +70,7 @@ final class CategorySearchBlueprint {
   ],
   'youtube-hizmetleri' => [
     'slug' => 'youtube-hizmetleri',
-    'title' => 'YouTube Abone, İzlenme ve Video Hizmetleri – NetVera',
+    'title' => 'YouTube Hizmetleri | Abone ve İzlenme – NetVera',
     'desc' => 'YouTube abone, video izlenme ve kanal hizmetlerini inceleyin. Paket kapsamı, kanal veya video bağlantısı ve teslimat koşullarını karşılaştırın.',
     'focus' => 'youtube abone',
     'secondary' => 'youtube abone paketleri, youtube izlenme, youtube video tanıtımı',
@@ -124,7 +124,7 @@ final class CategorySearchBlueprint {
   ],
   'itibar-yonetimi' => [
     'slug' => 'itibar-yonetimi',
-    'title' => 'Online İtibar Yönetimi ve Müşteri Deneyimi | NetVera',
+    'title' => 'Dijital Marka ve İtibar Yönetimi | NetVera',
     'desc' => 'Dijital itibar izleme, müşteri geri bildirimi yönetimi ve marka iletişimi hizmetlerini inceleyin. NetVera ile şeffaf ve etik çözümleri karşılaştırın.',
     'focus' => 'online itibar yönetimi',
     'secondary' => 'müşteri deneyimi, marka itibar yönetimi, yorum yanıtlama',
