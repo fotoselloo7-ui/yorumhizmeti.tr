@@ -3,6 +3,7 @@ declare(strict_types=1);
 $root=dirname(__DIR__);
 $read=static fn(string $p):string=>(string)file_get_contents($root.'/'.$p);
 require_once $root.'/app/Services/NetveraBrandSettings.php';
+require_once $root.'/app/Services/NetveraThemeService.php';
 require_once $root.'/app/Services/SoftwareCatalogService.php';
 require_once $root.'/app/Services/NetveraScriptTypeService.php';
 $brand=\App\Services\NetveraBrandSettings::class;
@@ -13,6 +14,15 @@ if($brand::display('site_slogan','Google Yorum, Sosyal Medya ve Dijital Güven H
  throw new RuntimeException('Legacy slogan must display updated NetVera positioning.');
 if($brand::upgradeable('site_slogan','Yapay Zekâ Destekli Özel Ajansım'))
  throw new RuntimeException('Must not override customer-authored slogans.');
+foreach([
+    ['#FFFFFF','#17264E'],['#000000','#FFFFFF'],
+    ['#1d1d33','#FFFFFF'],['#F7D800','#17264E']
+] as [$hex,$expect]){
+    if(\App\Services\NetveraThemeService::onColor($hex)!==$expect)
+        throw new RuntimeException('Theme contrast failed: '.$hex);
+}
+if(\App\Services\NetveraThemeService::onGradient('#ffffff','#eeeeee')!=='#17264E')
+    throw new RuntimeException('Light brand gradients require dark text.');
 $settings=$read('resources/views/admin/settings/site.php');
 if(!str_contains($settings,'id="nvThemeEnabled"') ||
    !str_contains($settings,'function nvThemeActivate()'))
