@@ -16,6 +16,16 @@ class SitemapService
         // Ana sayfa
         $xml .= $this->url($baseUrl . '/', '1.0', 'daily');
 
+        // Discovery pages use stable slash URLs, never category query parameters.
+        $xml .= $this->url($baseUrl . '/kategoriler', '0.8', 'weekly');
+        foreach (CatalogMenuService::groups() as $group) {
+            $xml .= $this->url(
+                $baseUrl . PublicSeoUrls::path('/kategoriler/grup', (string)$group['key']),
+                '0.7', 'weekly'
+            );
+        }
+        $xml .= $this->url($baseUrl . '/hazir-yazilimlar', '0.8', 'weekly');
+
         // Kategoriler
         $categories = $db->fetchAll("SELECT slug, updated_at FROM categories WHERE status = 'active'");
         foreach ($categories as $cat) {
@@ -34,6 +44,13 @@ class SitemapService
         // Preserve Netvera's indexed software URLs in the exact original structure.
         if (NetveraBridgeService::all()) {
             $xml .= $this->url($baseUrl . '/hazir-scriptler', '0.9', 'weekly');
+            foreach (NetveraBridgeService::categories() as $category) {
+                if (!empty($category['parent_legacy_id'])) continue;
+                $xml .= $this->url(
+                    $baseUrl . PublicSeoUrls::path('/hazir-scriptler/kategori', (string)$category['slug']),
+                    '0.7', 'weekly'
+                );
+            }
             foreach (NetveraBridgeService::all() as $script) {
                 $public=NetveraBridgeService::jsonFields($script);
                 $updated=(string)($public['updated_at']??$public['last_updated_on']??'');
@@ -61,8 +78,22 @@ class SitemapService
         $xml .= $this->url($baseUrl . '/blog', '0.7', 'daily');
 
         $blogCats = $db->fetchAll("SELECT slug, updated_at FROM blog_categories WHERE status = 'active'");
+        $indexedBlogCategories = [];
         foreach ($blogCats as $bc) {
-            $xml .= $this->url($baseUrl . '/blog?category=' . $bc['slug'], '0.6', 'weekly', $bc['updated_at']);
+            $indexedBlogCategories[$bc['slug']] = true;
+            $xml .= $this->url(
+                $baseUrl . PublicSeoUrls::path('/blog/kategori', (string)$bc['slug']),
+                '0.6', 'weekly', $bc['updated_at']
+            );
+        }
+        foreach (NetveraBlogSnapshot::categories() as $bc) {
+            if (isset($indexedBlogCategories[$bc['slug']])) continue;
+            // A deliberately disabled DB category must not be republished by a snapshot.
+            if ($db->fetch('SELECT id FROM blog_categories WHERE slug=? LIMIT 1', [$bc['slug']])) continue;
+            $xml .= $this->url(
+                $baseUrl . PublicSeoUrls::path('/blog/kategori', (string)$bc['slug']),
+                '0.6', 'weekly'
+            );
         }
 
         $posts = $db->fetchAll("SELECT slug, updated_at FROM blog_posts WHERE status = 'active' AND noindex = 0");
