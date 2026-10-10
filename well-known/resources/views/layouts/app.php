@@ -100,6 +100,7 @@
     <link rel="stylesheet" href="<?= asset('css/catalog-contrast-v87.css') ?>?v=87.1">
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
+    <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=90.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
@@ -181,14 +182,18 @@
     <header class="site-header">
         <div class="container">
             <div class="header-inner">
-                <a href="/" class="site-logo">
-                    <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs><linearGradient id="yhLogoGrad" x1="4" y1="4" x2="32" y2="32"><stop stop-color="#2868FF"/><stop offset=".55" stop-color="#7437FF"/><stop offset="1" stop-color="#F42E91"/></linearGradient></defs>
-                        <rect x="1" y="1" width="34" height="34" rx="11" fill="url(#yhLogoGrad)"/>
-                        <path d="M10.5 11.5h15v10.2a2.3 2.3 0 0 1-2.3 2.3h-7.1l-4.6 3.5V24h-1a2 2 0 0 1-2-2V13.5a2 2 0 0 1 2-2Z" fill="white" fill-opacity=".96"/>
-                        <path d="m14.4 17.6 2.3 2.2 5-5" stroke="url(#yhLogoGrad)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <?= e(setting('site_name', 'NetVera Teknoloji Yazılım')) ?>
+                <?php
+                    // Uploaded logo wins. The shipped NetVera SVG is only the default
+                    // until an administrator changes or resets it in Site Settings.
+                    $nv90CustomLogo = trim((string)setting('site_logo', ''));
+                    $nv90LogoUrl = $nv90CustomLogo !== ''
+                        ? upload_url($nv90CustomLogo)
+                        : asset('img/netvera-brand-v90.svg');
+                ?>
+                <a href="/" class="site-logo nv90-site-brand" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
+                    <img class="nv90-site-logo" src="<?= e($nv90LogoUrl) ?>"
+                         alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
+                         width="856" height="179" decoding="async" fetchpriority="high">
                 </a>
 
                 <?php
@@ -517,7 +522,13 @@
             ?>
             <div class="footer-grid footer-grid-v9 yh49-footer-grid">
                 <div class="footer-brand">
-                    <h3><?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?></h3>
+                    <h3 class="nv90-footer-brand-heading">
+                        <a href="/" class="nv90-footer-logo-link" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
+                            <img class="nv90-footer-logo <?= $nv90CustomLogo === '' ? 'nv90-logo-default' : '' ?>"
+                                 src="<?= e($nv90LogoUrl) ?>" alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
+                                 width="856" height="179" loading="lazy" decoding="async">
+                        </a>
+                    </h3>
                     <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
                     <div class="footer-social footer-social-v9">
                         <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
