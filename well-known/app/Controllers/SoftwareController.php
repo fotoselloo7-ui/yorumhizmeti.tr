@@ -6,6 +6,16 @@ use App\Services\SoftwareCatalogService;
 
 class SoftwareController extends Controller
 {
+    public function typePage(string $slug): void
+    {
+        $slug = rawurldecode($slug);
+        if (!in_array($slug, array_column(SoftwareCatalogService::definitions(), 1), true)) {
+            \App\Services\PublicSeoUrls::notFound('Yazılım Türü Bulunamadı'); return;
+        }
+        $_GET['tur'] = $slug;
+        $this->index();
+    }
+
     public function index(): void
     {
         $types = SoftwareCatalogService::definitions();
@@ -18,6 +28,12 @@ class SoftwareController extends Controller
         $params = $_GET;
         $filter = trim((string)($params['tur'] ?? ''));
         if (!in_array($filter, $allowed, true)) $filter = '';
+        $uriPath = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/hazir-yazilimlar', PHP_URL_PATH) ?: '/hazir-yazilimlar'), '/');
+        if ($filter !== '' && $uriPath === '/hazir-yazilimlar') {
+            \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                \App\Services\PublicSeoUrls::path('/hazir-yazilimlar/tur', $filter), 'tur'
+            );
+        }
         $query = mb_substr(trim((string)($params['q'] ?? '')), 0, 90, 'UTF-8');
         $sort = (string)($params['siralama'] ?? 'onerilen');
         if (!in_array($sort, ['onerilen','yeni','ucuz','pahali','ad'],true)) $sort='onerilen';
@@ -73,6 +89,11 @@ class SoftwareController extends Controller
         $this->render('frontend/software', [
             'pageTitle' => 'Hazır Yazılımlar ve Web Sitesi Scriptleri',
             'metaDescription' => 'Haber, WordPress, e-ticaret, emlak, otomasyon, tema ve eklenti yazılımlarını filtreleyip inceleyin.',
+            'canonicalUrl' => url($filter !== ''
+                ? \App\Services\PublicSeoUrls::path('/hazir-yazilimlar/tur', $filter)
+                : '/hazir-yazilimlar'),
+            'noindex' => $query!=='' || $min!==null || $max!==null || $discountOnly
+                || $featuredOnly || $sort!=='onerilen',
             'catalogGroups' => $groups,
             'softwareFilter' => $filter,
             'softwareQuery' => $query,
