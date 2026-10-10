@@ -267,7 +267,7 @@
               <section class="nv26-mega-panel <?= $nv26Group['key']==='social'?'':'nv27-pro-panel nv27-pro-panel--'.e($nv26Group['key']) ?>" id="nv26-panel-<?= e($nv26Group['key']) ?>" data-mega-panel hidden aria-label="<?= e($nv26Label) ?>">
                 <div class="nv26-mega-top">
                   <div><strong><?= e($nv26Label) ?></strong><p><?= e($nv26Group['description']) ?></p></div>
-                  <a href="/kategoriler?grup=<?= e($nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
+                  <a href="/kategoriler/grup/<?= rawurlencode((string)$nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
                 </div>
                 <?php if ($nv26Group['key'] === 'social'): ?>
                 <div class="nv26-social-mega-grid" aria-label="Sosyal medya platformları">
@@ -291,7 +291,7 @@
                       <strong><?= $nv27Agency?'Fikrinizden dijital ürüne.':'Dijitalde daha görünür olun.' ?></strong>
                       <p><?= $nv27Agency?'Web sitesi, uygulama, tasarım ve içerik hizmetlerini ihtiyacınıza göre keşfedin.':'SEO, reklam ve yerel işletme hizmetlerini tek noktadan inceleyin.' ?></p>
                     </div>
-                    <a href="/kategoriler?grup=<?= e($nv26Group['key']) ?>" class="nv27-spotlight-cta">
+                    <a href="/kategoriler/grup/<?= rawurlencode((string)$nv26Group['key']) ?>" class="nv27-spotlight-cta">
                       Tüm kategorileri gör <?= icon('arrow-right', 14) ?>
                     </a>
                   </aside>
@@ -360,7 +360,7 @@
                           <span class="nv27-subcategory-caption">YAZILIM KATEGORİLERİ</span>
                           <div class="nv27-subcategory-grid">
                             <?php foreach ($nv35NetveraCategories as $nv35Category): ?>
-                            <a class="nv27-subcategory-link" href="/hazir-scriptler?category=<?= rawurlencode((string)$nv35Category['slug']) ?>" title="<?= e($nv35Category['name']) ?>">
+                            <a class="nv27-subcategory-link" href="/hazir-scriptler/kategori/<?= rawurlencode((string)$nv35Category['slug']) ?>" title="<?= e($nv35Category['name']) ?>">
                               <span class="nv27-subcategory-symbol"><?= icon('folder', 13) ?></span>
                               <span><?= e($nv35Category['name']) ?></span>
                             </a>
@@ -506,7 +506,7 @@
                         if (!$footerHasProduct) continue;
                         $footerScripts[] = [
                             'name' => $footerCategory['name'],
-                            'url' => '/hazir-scriptler?category='.rawurlencode((string)$footerCategory['slug'])
+                            'url' => '/hazir-scriptler/kategori/'.rawurlencode((string)$footerCategory['slug'])
                         ];
                         if (count($footerScripts) >= 5) break;
                     }
