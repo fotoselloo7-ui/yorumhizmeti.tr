@@ -4,12 +4,70 @@
     </div>
 </div>
 
-<form method="POST" action="/admin/site-ayarlari/kaydet">
+<form method="POST" action="/admin/site-ayarlari/kaydet" enctype="multipart/form-data">
     <?= csrfField() ?>
     
     <div class="adm-form-layout">
         <!-- Main Form Grid -->
         <div class="adm-form-main" style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);">
+            <?php
+            $nv90CurrentLogo=trim((string)setting('site_logo',''));
+            $nv90Preview=$nv90CurrentLogo!=='' ? upload_url($nv90CurrentLogo) : asset('img/netvera-brand-v90.svg');
+            ?>
+            <section class="adm-card" style="grid-column:1/-1" aria-labelledby="nv90-logo-heading">
+                <div class="adm-card-header">
+                    <h3 id="nv90-logo-heading"><?= icon('image',16) ?> Site Logosu</h3>
+                </div>
+                <div class="adm-card-body" style="display:grid;grid-template-columns: minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center;">
+                    <div class="nv90-admin-logo-preview" style="background:linear-gradient(135deg,#fff,#f5f7ff);border:1px solid #e2e6f3;border-radius:14px;min-width:0;padding:18px;">
+                        <img id="nv90-site-logo-preview" src="<?= e($nv90Preview) ?>"
+                             alt="Sitede görüntülenecek NetVera logosu" width="856" height="179"
+                             style="display:block;width:100%;height:auto;max-height:104px;object-fit:contain;object-position:left center;">
+                        <small style="display:block;margin-top:10px;color:#677491">Üst menü ve alt alanda aynı logo ayarı kullanılır.</small>
+                    </div>
+                    <div class="form-group mb-0" style="min-width:0">
+                        <label for="nv90-logo-file">Yeni Logo Yükle</label>
+                        <input class="form-control" id="nv90-logo-file" type="file"
+                               name="site_logo_file" accept=".png,.webp,.jpg,.jpeg,.gif,image/png,image/webp,image/jpeg,image/gif"
+                               aria-describedby="nv90-logo-help">
+                        <small id="nv90-logo-help" style="display:block;margin-top:7px;color:#677491">
+                            PNG, WebP, JPG veya GIF; en fazla 5 MB. Şeffaf arka plan önerilir.
+                            Görseli seçip aşağıdaki “Ayarları Kaydet” butonuna basın.
+                        </small>
+                        <label style="display:flex;align-items:center;gap:9px;margin-top:12px;cursor:pointer">
+                            <input type="checkbox" id="nv90-logo-reset" name="site_logo_reset" value="1">
+                            <span>Varsayılan NetVera logosuna dön</span>
+                        </label>
+                        <?php if($nv90CurrentLogo!==''): ?>
+                        <small style="display:block;margin-top:6px;color:#677491">Şu anda yüklediğiniz özel logo kullanılıyor.</small>
+                        <?php else: ?>
+                        <small style="display:block;margin-top:6px;color:#677491">Şu anda değiştirilebilir varsayılan logo kullanılıyor.</small>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </section>
+            <script>
+            (function(){
+                var file=document.getElementById('nv90-logo-file');
+                var img=document.getElementById('nv90-site-logo-preview');
+                var reset=document.getElementById('nv90-logo-reset');
+                if(!file||!img||!reset)return;
+                var initial=img.src,preview=null;
+                file.addEventListener('change',function(){
+                    if(preview){URL.revokeObjectURL(preview);preview=null;}
+                    if(file.files&&file.files[0]){
+                        preview=URL.createObjectURL(file.files[0]);img.src=preview;reset.checked=false;
+                    }else{img.src=initial;}
+                });
+                reset.addEventListener('change',function(){
+                    if(reset.checked){
+                        file.value='';
+                        if(preview){URL.revokeObjectURL(preview);preview=null;}
+                        img.src='<?= e(asset('img/netvera-brand-v90.svg')) ?>';
+                    }else{img.src=initial;}
+                });
+            })();
+            </script>
             
             <div class="adm-card" style="grid-column: 1 / -1;">
                 <div class="adm-card-header">
