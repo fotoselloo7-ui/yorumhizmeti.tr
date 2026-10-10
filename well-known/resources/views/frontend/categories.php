@@ -47,7 +47,7 @@ $searchQuery = $searchQuery ?? '';
       </div>
       <div class="nv26-catalog-tiles">
         <?php foreach($group['categories'] as $cat): ?>
-        <article class="nv26-catalog-tile nv26-tile-<?= e($cat['style']) ?>">
+        <article class="nv26-catalog-tile nv26-tile-<?= e($cat['style']) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($cat))) ?>">
           <a class="nv26-tile-top" href="<?= e($cat['url']) ?>">
             <span class="nv26-tile-icon"><?= icon($cat['icon'],27) ?></span>
             <strong><?= e($cat['name']) ?></strong>
@@ -56,7 +56,7 @@ $searchQuery = $searchQuery ?? '';
           <?php if(!empty($cat['children'])): ?>
           <div class="nv26-tile-sub">
             <?php foreach(array_slice($cat['children'],0,2) as $sub): ?>
-            <a href="<?= e($sub['url']) ?>"><?= e($sub['name']) ?></a>
+            <a class="<?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($sub,$cat))) ?>" href="<?= e($sub['url']) ?>"><?= e($sub['name']) ?></a>
             <?php endforeach; ?>
             <?php if(count($cat['children'])>2): ?><a href="<?= e($cat['url']) ?>">Diğerleri <?= icon('arrow-right',10) ?></a><?php endif; ?>
           </div>
