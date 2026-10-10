@@ -86,13 +86,39 @@ foreach([
 ] as $needle){
  if(!str_contains($css,$needle))throw new RuntimeException('Platform ribbon/menu override absent '.$needle);
 }
-if(!str_contains($css,'--np-on:#0B2515') ||
-   !str_contains($css,'#1ED760,#1DB954') ||
+if(str_contains($css,'--np-on:#0B2515') ||
+   !str_contains($css,'.nv-platform-spotify{--np-on:#FFFFFF;--np-filled-from:#117b39;--np-filled-to:#0b622e}') ||
    !str_contains($css,'color:var(--np-on,#fff) !important')){
-    throw new RuntimeException('Spotify green must use high-contrast readable dark text.');
+    throw new RuntimeException('Spotify saturated cards must have white text on accessible dark-green surfaces.');
+}
+// WCAG AA text contrast, check BOTH ends of every colored marquee gradient.
+$relativeLuminance=static function(string $hex):float{
+    $rgb=[];
+    foreach([1,3,5] as $offset){
+        $v=hexdec(substr($hex,$offset,2))/255;
+        $rgb[]=$v<=0.04045?$v/12.92:(($v+0.055)/1.055)**2.4;
+    }
+    return 0.2126*$rgb[0]+0.7152*$rgb[1]+0.0722*$rgb[2];
+};
+foreach([
+    'spotify'=>['#117b39','#0b622e'],
+    'telegram'=>['#126e9c','#075e8d'],
+    'soundcloud'=>['#c84200','#9e3700'],
+    'bluesky'=>['#1262b8','#0a55a4'],
+    'instagram'=>['#ca285c','#833AB4'],
+    'youtube'=>['#d6002b','#a50029']
+] as $platform=>$colors){
+    foreach($colors as $color){
+        $contrast=1.05/($relativeLuminance($color)+0.05);
+        if($contrast<4.5)throw new RuntimeException('White text contrast failed '.$platform.' '.$color);
+    }
+}
+foreach(['snapchat','kick','whatsapp'] as $bright){
+    if(!str_contains($css,'.yh49-category-link.nv-platform-'.$bright))
+        throw new RuntimeException('Bright-background dark text override missing '.$bright);
 }
 if(!str_contains($layout,'social-platform-identity-v77.css') ||
-   !str_contains($layout,'?v=78.2'))
+   !str_contains($layout,'?v=79.1'))
     throw new RuntimeException('Platform stylesheet stale in browser cache.');
 if(Brand::fromText('Hazır Yazılımlar & Scriptler')!==null)
     throw new RuntimeException('Software categories picked up a platform brand.');
