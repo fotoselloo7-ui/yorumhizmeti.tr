@@ -91,7 +91,7 @@
     <link rel="stylesheet" href="<?= asset('css/theme-runtime-v71.css') ?>?v=71.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-premium-v76.css') ?>?v=76.3">
     <link rel="stylesheet" href="<?= asset('css/social-platform-identity-v77.css') ?>?v=79.1">
-    <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=80.1">
+    <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=81.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
@@ -672,7 +672,7 @@
     <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
-    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=43.1"></script>
+    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=81.1"></script>
     <script src="<?= asset('js/package-benefits-v67.js') ?>?v=67.1"></script>
     <script src="<?= asset('js/reviews-v68.js') ?>?v=68.1" defer></script>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
