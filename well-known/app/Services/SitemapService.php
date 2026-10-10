@@ -29,7 +29,7 @@ class SitemapService
         foreach (SoftwareCatalogService::publicPackages() as $software) {
             $slug = (string)($software['category_slug'] ?? '');
             if (!isset($softwareSlugs[$slug])) continue;
-            $softwareSlugs[$slug] = false; // each populated type once
+            unset($softwareSlugs[$slug]); // each populated type once
             $xml .= $this->url(
                 $baseUrl . PublicSeoUrls::path('/hazir-yazilimlar/tur', $slug),
                 '0.6', 'weekly'
