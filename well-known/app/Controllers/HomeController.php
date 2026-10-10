@@ -145,7 +145,7 @@ class HomeController extends Controller
                 $tab=[
                     'id'=>-100000-$catId,'name'=>$nc['name'],
                     'slug'=>$nc['slug'],
-                    'url'=>'/hazir-scriptler?category='.rawurlencode((string)$nc['slug']),
+                    'url'=>'/hazir-scriptler/kategori/'.rawurlencode((string)$nc['slug']),
                     'kind'=>'software','icon'=>$parentLegacy?'code':'layers',
                     'parent_featured_id'=>$parentLegacy?-100000-$parentLegacy:-100000
                 ];
@@ -158,7 +158,7 @@ class HomeController extends Controller
                 [$label,$slug,$description,$iconName]=$type;
                 $featuredChildCategories[-100000][]=[
                     'id'=>0,'name'=>$label,'slug'=>$slug,
-                    'url'=>'/hazir-scriptler?type='.rawurlencode($slug),
+                    'url'=>'/hazir-scriptler/tur/'.rawurlencode($slug),
                     'kind'=>'link','icon'=>$iconName,'parent_featured_id'=>-100000
                 ];
             }
@@ -272,7 +272,7 @@ class HomeController extends Controller
                 'eyebrow' => $config['eyebrow'],
                 'description' => $config['description'],
                 'cta' => $config['cta'],
-                'url' => '/kategoriler?grup=' . $key,
+                'url' => '/kategoriler/grup/' . rawurlencode($key),
                 'chips' => array_slice($chips, 0, 4),
             ];
         }
