@@ -27,7 +27,12 @@ if (!function_exists('yvPkgDesign')) {
 }
 $lower=mb_strtolower((package_display_name($package)).' '.($package['category_name']??''));
 [$pclass,$platform]=yvPkgDesign(package_display_name($package), $package['category_name']??'');
-$nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($package['category_slug']??'').' '.($package['category_name']??'').' '.package_display_name($package)));
+$nvPlatformKey=\App\Services\SocialPlatformIdentity::fromPackage($package);
+if($nvPlatformKey!==null){
+    $pclass=$nvPlatformKey;
+    $platform=\App\Services\SocialPlatformIdentity::iconFor($nvPlatformKey);
+}
+$nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor($nvPlatformKey);
 $price=(!empty($package['discount_price'])&&$package['discount_price']<$package['price'])?$package['discount_price']:$package['price'];
 $discount=(!empty($package['discount_price'])&&$package['discount_price']<$package['price']&&$package['price']>0)?round((1-$package['discount_price']/$package['price'])*100):0;
 $reviews=$testimonialSection['extra']??[];
