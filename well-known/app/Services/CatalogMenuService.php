@@ -24,10 +24,12 @@ final class CatalogMenuService
                 else $children[$cat['parent_id']][]=$cat;
             }
             foreach ($roots as $cat) {
+                if(!ServiceCategoryVisibility::show($cat))continue;
                 $cat['style']=self::style($cat);
                 $cat['icon']=self::icon($cat);
                 $cat['url']='/kategori/'.rawurlencode($cat['slug']);
-                $cat['children']=$children[$cat['id']]??[];
+                $cat['children']=array_values(array_filter($children[$cat['id']]??[],
+                    static fn(array $child):bool=>ServiceCategoryVisibility::show($child,$cat)));
                 foreach ($cat['children'] as &$child) {
                     $child['style']=self::style($child,$cat);
                     $child['icon']=self::subcategoryIcon($child,$cat);
