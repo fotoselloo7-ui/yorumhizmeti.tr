@@ -8,6 +8,48 @@ class BlogController extends Controller
     public function index(): void
     {
         $db = Database::getInstance();
+        $routePath = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/blog', PHP_URL_PATH) ?: '/blog'), '/') ?: '/';
+        $categorySlug = trim((string)($_GET['category'] ?? ''));
+        $tagSlug = trim((string)($_GET['tag'] ?? ''));
+        $categoryInfo = null;
+        $tagInfo = null;
+
+        if ($categorySlug !== '') {
+            if (!\App\Services\PublicSeoUrls::isSlug($categorySlug)) {
+                \App\Services\PublicSeoUrls::notFound('Blog Kategorisi Bulunamadı'); return;
+            }
+            $categoryInfo = $db->fetch("SELECT slug, name, description FROM blog_categories WHERE slug=? AND status='active' LIMIT 1", [$categorySlug]);
+            if (!$categoryInfo) {
+                foreach (\App\Services\NetveraBlogSnapshot::categories() as $legacyCategory) {
+                    if ($legacyCategory['slug'] === $categorySlug) {
+                        $categoryInfo = $legacyCategory;
+                        break;
+                    }
+                }
+            }
+            if (!$categoryInfo) {
+                \App\Services\PublicSeoUrls::notFound('Blog Kategorisi Bulunamadı'); return;
+            }
+            if ($routePath === '/blog') {
+                \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                    \App\Services\PublicSeoUrls::path('/blog/kategori', $categorySlug), 'category'
+                );
+            }
+        }
+        if ($tagSlug !== '') {
+            if (!\App\Services\PublicSeoUrls::isSlug($tagSlug)) {
+                \App\Services\PublicSeoUrls::notFound('Blog Etiketi Bulunamadı'); return;
+            }
+            $tagInfo = $db->fetch('SELECT slug,name FROM blog_tags WHERE slug=? LIMIT 1', [$tagSlug]);
+            if (!$tagInfo) {
+                \App\Services\PublicSeoUrls::notFound('Blog Etiketi Bulunamadı'); return;
+            }
+            if ($routePath === '/blog' && $categorySlug === '') {
+                \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                    \App\Services\PublicSeoUrls::path('/blog/etiket', $tagSlug), 'tag'
+                );
+            }
+        }
         $page = max(1, (int) ($_GET['page'] ?? 1));
         $perPage = 10;
         $offset = ($page - 1) * $perPage;
@@ -118,9 +160,22 @@ class BlogController extends Controller
             $testimonialSection = null;
         }
 
+        $canonicalPath = $categoryInfo
+            ? \App\Services\PublicSeoUrls::path('/blog/kategori', $categorySlug)
+            : ($tagInfo ? \App\Services\PublicSeoUrls::path('/blog/etiket', $tagSlug) : '/blog');
+        $hasSecondaryFilter = trim((string)($_GET['q'] ?? '')) !== '' || ($categorySlug !== '' && $tagSlug !== '');
+        $canonicalPath = \App\Services\PublicSeoUrls::withQuery(
+            $canonicalPath, !$hasSecondaryFilter && $page > 1 ? ['page' => $page] : []
+        );
         $this->render('frontend/blog/index', [
-            'pageTitle' => 'Blog - ' . setting('site_name'),
-            'metaDescription' => 'Dijital dünyadan güncel bilgiler, rehberler ve ipuçları.',
+            'pageTitle' => $categoryInfo
+                ? $categoryInfo['name'] . ' | Blog - ' . setting('site_name')
+                : ($tagInfo ? $tagInfo['name'] . ' | Blog - ' . setting('site_name') : 'Blog - ' . setting('site_name')),
+            'metaDescription' => $categoryInfo
+                ? (trim((string)($categoryInfo['description'] ?? '')) ?: $categoryInfo['name'] . ' hakkında güncel rehberler ve makaleler.')
+                : 'Dijital dünyadan güncel bilgiler, rehberler ve ipuçları.',
+            'canonicalUrl' => url($canonicalPath),
+            'noindex' => $hasSecondaryFilter,
             'posts' => $posts,
             'categories' => $categories,
             'popularPosts' => $popularPosts,
@@ -133,7 +188,13 @@ class BlogController extends Controller
 
     public function category(string $slug): void
     {
-        $_GET['category'] = $slug;
+        $_GET['category'] = rawurldecode($slug);
+        $this->index();
+    }
+
+    public function tag(string $slug): void
+    {
+        $_GET['tag'] = rawurldecode($slug);
         $this->index();
     }
 
