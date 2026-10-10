@@ -30,7 +30,7 @@ final class CatalogMenuService
                 $cat['children']=$children[$cat['id']]??[];
                 foreach ($cat['children'] as &$child) {
                     $child['style']=self::style($child,$cat);
-                    $child['icon']=self::subcategoryIcon($child);
+                    $child['icon']=self::subcategoryIcon($child,$cat);
                     // Every real non-software child is a standalone indexable service
                     // page with its own title, canonical and visible products.
                     $softwareParent=(bool)preg_match('/yaz[ıi]l[ıi]m|yazilim|script|web.?site|cms|software|wordpress/iu',
@@ -69,8 +69,12 @@ final class CatalogMenuService
      * are deliberately excluded so "Google 5 Yıldız" shows a star, not another G.
      * This is presentation-only; admin category data and URLs stay untouched.
      */
-    public static function subcategoryIcon(array $child): string
+    public static function subcategoryIcon(array $child, ?array $parent=null): string
     {
+        // Social-platform service icons inherit the parent brand, including
+        // Google Yorum, Google Harita, Instagram Takipçi and Reels.
+        $platform=SocialPlatformIdentity::fromCategory($child,$parent);
+        if($platform!==null)return SocialPlatformIdentity::iconFor($platform);
         $term = mb_strtolower(($child['slug'] ?? '') . ' ' . ($child['name'] ?? ''), 'UTF-8');
         $rules = [
             ['/yıldız|yildiz|5.?star|puan|rating/u', 'star-fill'],
