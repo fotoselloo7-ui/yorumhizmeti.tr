@@ -17,8 +17,7 @@ $searchQuery = $searchQuery ?? '';
       <div class="nv26-catalog-toolbar-title"><span class="nv26-toolbar-icon"><?= icon('grid',20) ?></span>
         <div><strong>Tüm Hizmet Kategorileri</strong><small>Platformlara ve ihtiyaçlarınıza göre keşfedin.</small></div>
       </div>
-      <form class="nv26-catalog-search" method="GET" action="/kategoriler" role="search">
-        <?php if($activeCatalogGroup!==''): ?><input type="hidden" name="grup" value="<?= e($activeCatalogGroup) ?>"><?php endif; ?>
+      <form class="nv26-catalog-search" method="GET" action="<?= e($activeCatalogGroup !== '' ? '/kategoriler/grup/'.rawurlencode($activeCatalogGroup) : '/kategoriler') ?>" role="search">
         <?= icon('search',17) ?><input type="search" name="q" value="<?= e($searchQuery) ?>" placeholder="Hizmet veya platform ara..." aria-label="Hizmet kategorisi ara">
         <button type="submit" aria-label="Ara"><?= icon('arrow-right',15) ?></button>
       </form>
@@ -26,7 +25,7 @@ $searchQuery = $searchQuery ?? '';
     <nav class="nv26-catalog-tabs" aria-label="Hizmet grupları">
       <a href="/kategoriler#categories" class="<?= $activeCatalogGroup===''?'active':'' ?>" <?= $activeCatalogGroup===''?'aria-current="page"':'' ?>><?= icon('grid',14) ?> Tüm Hizmetler</a>
       <?php foreach($allCatalogGroups as $group): ?>
-      <a href="/kategoriler?grup=<?= e($group['key']) ?>#categories" class="<?= $activeCatalogGroup===$group['key']?'active':'' ?>" <?= $activeCatalogGroup===$group['key']?'aria-current="page"':'' ?>>
+      <a href="/kategoriler/grup/<?= rawurlencode((string)$group['key']) ?>#categories" class="<?= $activeCatalogGroup===$group['key']?'active':'' ?>" <?= $activeCatalogGroup===$group['key']?'aria-current="page"':'' ?>>
         <?= icon($group['icon'],14) ?> <?= e($group['label']) ?>
       </a>
       <?php endforeach; ?>
