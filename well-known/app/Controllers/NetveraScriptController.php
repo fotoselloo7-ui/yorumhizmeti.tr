@@ -100,8 +100,9 @@ class NetveraScriptController extends Controller
             'pageTitle'=>'Hazır Scriptler ve Profesyonel Yazılımlar',
             'metaDescription'=>'Sektörel PHP web yazılımları, otomasyon, CMS ve hazır script ürünleri.',
             'canonicalUrl'=>url($canonicalPath),
-            'noindex'=>$q!=='' || $type!=='' || $minPrice!==null || $maxPrice!==null
-                || $minRating>0 || $sort!=='recommended',
+            'noindex'=>$q!=='' || ($type!=='' && !str_starts_with($canonicalPath, '/hazir-scriptler/tur/'))
+                || $minPrice!==null || $maxPrice!==null || $minRating>0 || $sort!=='recommended'
+                || ($cat!=='' && $type!==''),
             'products'=>$visibleProducts, 'softwareTypes'=>$typeDefinitions,
             'filterType'=>$type, 'softwareTypeCounts'=>$typeCounts,
             'categories'=>$categories,'filterCategory'=>$cat,'filterQuery'=>$q,
