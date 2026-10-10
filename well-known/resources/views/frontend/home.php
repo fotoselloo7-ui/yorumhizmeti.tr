@@ -314,7 +314,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 if (empty($scriptCat['slug'])) continue;
                 $yh49Children[] = [
                     'name' => (string)$scriptCat['name'], 'detail' => 'Hazır Yazılımlar',
-                    'url' => '/hazir-scriptler?category='.rawurlencode((string)$scriptCat['slug']),
+                    'url' => '/hazir-scriptler/kategori/'.rawurlencode((string)$scriptCat['slug']),
                     'icon' => 'code', 'style' => 'software'
                 ];
             }
@@ -827,7 +827,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
         <?php if (!empty($softwarePreviewCategories)): ?>
         <div class="nv32-service-list" aria-label="Hazır yazılım kategorileri">
           <?php foreach ($softwarePreviewCategories as $softwareCategory): ?>
-          <a href="/hazir-scriptler?type=<?= rawurlencode($softwareCategory['slug']) ?>">
+          <a href="/hazir-scriptler/tur/<?= rawurlencode($softwareCategory['slug']) ?>">
             <?= icon($softwareCategory['icon_key'] ?: 'monitor',14) ?> <?= e($softwareCategory['name']) ?> <?= icon('arrow-up-right',12) ?>
           </a>
           <?php endforeach; ?>
