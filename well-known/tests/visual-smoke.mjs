@@ -186,30 +186,31 @@ for(const screen of screens){
             if(Math.abs(resumed-dragged)<25)
               throw new Error('Category animation did not resume after drag '+kind);
           }
-          const motionTab=page.locator('#featured [data-featured-filter-panel]:not([hidden]) .nv43-root-rail .nv43-category-card').first();
+          const motionTab=page.locator('#featured [data-featured-filter-panel]:not([hidden]) .nv43-root-rail .nv43-category-card[class*="nv-platform-"]:not(.active):not(.is-parent-selected)').first();
           if(await motionTab.count()){
             await motionTab.scrollIntoViewIfNeeded();
             const before=await motionTab.evaluate(el=>({
-              color:getComputedStyle(el).color,
-              background:getComputedStyle(el).backgroundColor
+              border:getComputedStyle(el).borderColor,
+              shadow:getComputedStyle(el).boxShadow,
+              background:getComputedStyle(el).backgroundImage
             }));
             await motionTab.hover();
             await page.waitForTimeout(420);
             const after=await motionTab.evaluate(el=>({
-              color:getComputedStyle(el).color,
-              background:getComputedStyle(el).backgroundColor,
-              iconTransform:getComputedStyle(el.querySelector('.yh26-filter-icon')).transform
+              border:getComputedStyle(el).borderColor,
+              shadow:getComputedStyle(el).boxShadow,
+              background:getComputedStyle(el).backgroundImage
             }));
-            if(before.background===after.background||before.color===after.color||after.iconTransform==='none')
-              throw new Error('Premium featured-category hover inversion or rotating icon failed: '+JSON.stringify({before,after}));
+            if(before.border===after.border || !after.background.includes('gradient'))
+              throw new Error('Platform card needs distinct official hover accent and clean neutral idle border: '+JSON.stringify({before,after}));
             await page.emulateMedia({reducedMotion:'reduce'});
             await page.waitForTimeout(80);
             const reduced=await motionTab.evaluate(el=>({
               transition:getComputedStyle(el).transitionDuration,
-              iconTransform:getComputedStyle(el.querySelector('.yh26-filter-icon')).transform
+              transform:getComputedStyle(el).transform
             }));
-            if(reduced.iconTransform!=='none' || !reduced.transition.split(',').every(t=>parseFloat(t)===0))
-              throw new Error('Reduced motion must disable category icon spin and transitions: '+JSON.stringify(reduced));
+            if(reduced.transform!=='none' || !reduced.transition.split(',').every(t=>parseFloat(t)===0))
+              throw new Error('Reduced motion must disable platform card transforms and transitions: '+JSON.stringify(reduced));
             await page.emulateMedia({reducedMotion:'no-preference'});
           }
           const cards=page.locator('.nv29-services-grid .nv29-service-card');
