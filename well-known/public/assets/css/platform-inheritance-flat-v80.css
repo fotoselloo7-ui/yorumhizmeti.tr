@@ -167,6 +167,17 @@
 }
 
 /* Google: the G logo stays colorful on WHITE even when blue tile is active. */
+/* Selected Google has to beat the generic selected-platform icon opacity. */
+#featured .nv43-category-card.yh18-featured-tab.nv-platform-google[class*="nv-platform-"] .yh26-filter-icon,
+#featured .nv43-category-card.yh18-featured-tab.nv-platform-google:is(.active,.is-parent-selected)[class*="nv-platform-"] .yh26-filter-icon,
+#featured .nv43-category-card.yh18-featured-tab.nv-platform-google:is(:hover,:focus-visible)[class*="nv-platform-"] .yh26-filter-icon{
+  background:#FFFFFF!important;
+  background-color:#FFFFFF!important;
+  border:1px solid #DDE6F6!important;
+  opacity:1!important;
+  box-shadow:none!important;
+}
+
 #featured .nv43-category-card.nv-platform-google .yh26-filter-icon,
 #featured .nv43-category-card.nv-platform-google:is(.active,.is-parent-selected) .yh26-filter-icon,
 .nv26-catalog-tile.nv-platform-google .nv26-tile-icon,
