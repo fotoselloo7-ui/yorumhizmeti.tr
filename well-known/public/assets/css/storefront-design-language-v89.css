@@ -1,0 +1,265 @@
+/*
+ * NetVera original design-language reconciliation v89.
+ * VISUAL ONLY. The public layout, breakpoints, links, category structures,
+ * package data, JS handlers, filters, cart and checkout remain untouched.
+ * Palette inspired by the original YorumHizmeti references:
+ * deep-navy ink, luminous white/ice, blue-violet-magenta accents.
+ */
+:root{
+  --nv89-ink:#101b49;
+  --nv89-text:#38476b;
+  --nv89-muted:#62708d;
+  --nv89-border:#e4eaf5;
+  --nv89-soft:#f8faff;
+  --nv89-blue:#2868ff;
+  --nv89-purple:#703deb;
+  --nv89-pink:#e72ea3;
+  --nv89-grad:linear-gradient(105deg,#2868ff 0%,#703deb 53%,#e72ea3 100%);
+  --nv89-pinkgrad:linear-gradient(108deg,#ed3099 0%,#793bef 100%);
+  --nv89-hero:radial-gradient(ellipse at 82% 20%,rgba(234,56,164,.15),transparent 34%),radial-gradient(ellipse at 55% 38%,rgba(116,74,231,.11),transparent 37%),linear-gradient(115deg,#fff 10%,#f6f9ff 100%);
+  --nv89-shadow:0 8px 25px rgba(21,35,86,.06);
+}
+body.nv-theme-enabled{
+  --nv89-ink:var(--nv-theme-secondary,#101b49);
+  --nv89-muted:var(--nv-theme-muted,#62708d);
+  --nv89-purple:var(--nv-theme-primary,#703deb);
+  --nv89-pink:var(--nv-theme-accent,#e72ea3);
+  --nv89-grad:linear-gradient(105deg,var(--nv-theme-button,#2868ff),var(--nv89-purple) 53%,var(--nv89-pink));
+  --nv89-pinkgrad:linear-gradient(108deg,var(--nv89-pink),var(--nv89-purple));
+}
+
+/* Shared public color language. Geometry and section placement untouched. */
+body .site-header{border-bottom-color:var(--nv89-border)}
+body :is(.yh-home-v6,.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv26-catalog,.nv36-marketplace,.nv40-store)
+:is(.yv-kicker,.nv40-kicker){color:var(--nv89-purple)!important}
+body :is(.yh-home-v6,.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv26-catalog,.nv36-marketplace,.nv40-store)
+:is(.yv-section-head-v5 h2,.yh6-section-head h2,.nv36-results-heading h2,.nv40-store-head h2){
+  color:var(--nv89-ink)!important
+}
+body :is(.yh-home-v6,.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5)
+:is(.yv-link-button,.yh18-all-link){color:var(--nv89-blue)!important}
+body :is(.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv36-marketplace,.nv40-store)
+:is(.yv-btn-primary,.nv36-apply,.nv40-apply-filters){
+  background:var(--nv89-grad)!important;color:#fff!important;border-color:transparent!important;
+  -webkit-text-fill-color:#fff!important
+}
+body :is(.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv36-marketplace,.nv40-store)
+:is(.yv-btn-primary,.nv36-apply,.nv40-apply-filters):hover{
+  color:#fff!important;-webkit-text-fill-color:#fff!important;filter:brightness(1.035)
+}
+body :is(.yv-category-v5,.yv-product-v5,.yv-blog-v8,.nv36-marketplace,.nv40-store) a:focus-visible{
+  outline:2px solid var(--nv89-purple);outline-offset:3px
+}
+
+/* Category detail: first-reference pastel hero + split navy / gradient title. */
+body .yv-category-v5 .yv-category-hero-v5,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-hero-v5{
+  background:var(--nv89-hero)!important
+}
+body .yv-category-v5 .yv-category-hero-v5 h1 .yv-cat-title-lead{
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:var(--nv89-ink)!important;
+  text-shadow:none!important
+}
+body .yv-category-v5 .yv-category-hero-v5 h1 .yv-cat-title-accent,
+body .yv-category-v5[class*="nv-platform-"] .yv-cat-title-accent{
+  background:var(--nv89-grad)!important;background-clip:text!important;
+  -webkit-background-clip:text!important;color:transparent!important;
+  -webkit-text-fill-color:transparent!important;text-shadow:none!important
+}
+body .yv-category-v5 .yv-category-hero-v5 p{color:var(--nv89-muted)!important}
+body .yv-category-v5 .yv-category-benefits-v5 b{color:var(--nv89-ink)!important}
+body .yv-category-v5 .yv-category-benefits-v5 small{color:var(--nv89-muted)!important}
+body .yv-category-v5 .yv-category-hero-v5 .yv-btn-primary,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-hero-v5 .yv-btn-primary{
+  background:var(--nv89-pinkgrad)!important;color:#fff!important;
+  -webkit-text-fill-color:#fff!important;border-color:transparent!important
+}
+/* The actual brand glyphs stay Instagram pink / YouTube red / TikTok black. */
+body .yv-category-v5 .yv-category-chip-row-v5 a:not(.active){
+  background:#fff!important;color:var(--nv89-ink)!important;
+  -webkit-text-fill-color:currentColor!important;border-color:var(--nv89-border)!important
+}
+body .yv-category-v5 .yv-category-chip-row-v5 a.active,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-chip-row-v5 a.active{
+  background:var(--nv89-pinkgrad)!important;color:#fff!important;
+  -webkit-text-fill-color:#fff!important;border-color:transparent!important
+}
+body .yv-category-v5 .yv-category-chip-row-v5 a:not(.active):hover{
+  background:#f7f3ff!important;color:var(--nv89-purple)!important;
+  -webkit-text-fill-color:currentColor!important;border-color:#d9d0fa!important
+}
+body .yv-category-v5 .yv-category-search-form-v5 :is(input,select){
+  background:#fff!important;color:var(--nv89-ink)!important;
+  border-color:var(--nv89-border)!important
+}
+
+/* White package cards and bright CTAs. No prices or content are changed. */
+body .yv-category-v5 .yv-category-packages-v5{background:#fff!important}
+body .yv-category-v5 .yv-category-package-card-v5,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-package-card-v5{
+  background:#fff!important;border:1px solid var(--nv89-border)!important;
+  box-shadow:var(--nv89-shadow)!important
+}
+body .yv-category-v5 .yv-category-package-card-v5:hover{
+  background:#fff!important;border-color:#c8c2f7!important;
+  box-shadow:0 15px 32px rgba(27,39,91,.10)!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 h3{
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 li{
+  color:#52617e!important;font-size:11px!important;line-height:1.55!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 li .icon{color:var(--nv89-purple)!important}
+body .yv-category-v5 .yv-category-price-v5 strong{
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 em{
+  background:var(--nv89-grad)!important;color:#fff!important;
+  -webkit-text-fill-color:#fff!important;font-size:10px!important
+}
+body .yv-category-v5 .yv-package-ribbon-v5{
+  background:#ed2e85!important;color:#fff!important;font-size:9px!important
+}
+body .yv-category-v5 .yv-category-delivery-v5{
+  color:var(--nv89-blue)!important;font-size:10px!important
+}
+body .yv-category-v5 .yv-category-story-grid-v5{
+  background:linear-gradient(110deg,#edf5ff,#fff 47%,#f7efff)!important;
+  border-color:var(--nv89-border)!important
+}
+body .yv-category-v5 :is(.yv-category-story-copy-v5 h2,.yv-category-side-benefits-v5 h3){
+  color:var(--nv89-ink)!important
+}
+body .yv-category-v5 .yv-category-story-copy-v5 h2 span{
+  background:var(--nv89-grad)!important;
+  background-clip:text!important;-webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important
+}
+body .yv-category-v5 .yv-category-side-benefits-v5 div{color:var(--nv89-text)!important}
+body .yv-category-v5 :is(.yv-category-review-grid-v5 article,.yv-compare-table-wrap-v5){
+  background:#fff!important;border-color:var(--nv89-border)!important
+}
+body .yv-category-v5 .yv-category-compare-v5 thead th{
+  background:#eff7ff!important;color:var(--nv89-ink)!important
+}
+body .yv-category-v5 .yv-category-cta-v5{background:var(--nv89-grad)!important}
+body .yv-category-v5 .yv-category-cta-v5 :is(strong,small){color:#fff!important}
+body .yv-category-v5 .yv-category-cta-v5 .yv-btn-light{
+  background:#fff!important;color:var(--nv89-blue)!important
+}
+
+/* Product/package detail: same identity, original light cards, legible copy. */
+body .yv-product-v5 .yv-product-hero-v5,
+body .yv-product-v5[class*="nv-platform-"] .yv-product-hero-v5{
+  background:var(--nv89-hero)!important
+}
+body .yv-product-v5 .yv-product-hero-copy-v5 h1{
+  background:linear-gradient(92deg,var(--nv89-ink) 0 31%,var(--nv89-blue) 48%,var(--nv89-purple) 74%,var(--nv89-pink))!important;
+  background-clip:text!important;-webkit-background-clip:text!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+  text-shadow:none!important
+}
+body .yv-product-v5 .yv-product-hero-copy-v5>p{color:var(--nv89-muted)!important}
+body .yv-product-v5 .yv-product-proof-v5 b{color:var(--nv89-ink)!important}
+body .yv-product-v5 .yv-product-proof-v5 small{color:var(--nv89-muted)!important}
+body .yv-product-v5 :is(.yv-product-gallery-main-v5,.yv-product-buy-v5){
+  background:#fff!important;border-color:var(--nv89-border)!important;
+  box-shadow:var(--nv89-shadow)!important
+}
+body .yv-product-v5 :is(.yv-product-buy-v5 h2,.yv-product-copy-v5 h2,.yv-product-gains-v5 h3){
+  color:var(--nv89-ink)!important
+}
+body .yv-product-v5 .yv-product-price-v5 strong{
+  color:var(--nv89-purple)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-product-v5 .yv-product-add-v5{
+  background:linear-gradient(108deg,var(--nv89-blue),var(--nv89-purple))!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important
+}
+body .yv-product-v5 .yv-product-now-v5{
+  background:var(--nv89-pinkgrad)!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important
+}
+body .yv-product-v5 .yv-buy-form-v5 .form-control{
+  color:var(--nv89-ink)!important;background:#fff!important;
+  border-color:#dfe5f2!important
+}
+body .yv-product-v5 .yv-product-tabs-v5{
+  border-color:var(--nv89-border)!important;background:#f7f9ff!important
+}
+body .yv-product-v5 .yv-product-tabs-v5 span:not(.active){color:#405377!important}
+body .yv-product-v5 .yv-product-tabs-v5 span.active{
+  background:linear-gradient(110deg,var(--nv89-blue),var(--nv89-purple))!important;color:#fff!important
+}
+body .yv-product-v5 :is(.yv-product-gains-v5,.yv-product-why-v5>.container){
+  background:linear-gradient(110deg,#edf6ff,#fff 48%,#f6f0ff)!important
+}
+body .yv-product-v5 .yv-product-related-v5{background:#f8faff!important}
+/* v9 had converted ALL related products to dark cards: restore readable white. */
+body .yv-product-v5 .yv-product-related-card-v5{
+  background:#fff!important;color:var(--nv89-ink)!important;
+  border:1px solid var(--nv89-border)!important;box-shadow:var(--nv89-shadow)!important
+}
+body .yv-product-v5 .yv-product-related-card-v5 :is(h3,strong){
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-product-v5 .yv-product-related-card-v5 :is(small,li){
+  color:#5b6883!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-product-v5 .yv-product-related-card-v5 em{
+  color:var(--nv89-purple)!important;border-color:var(--nv89-border)!important
+}
+body .yv-product-v5 .yv-product-related-card-v5:hover{border-color:#c8c1fa!important}
+body .yv-product-v5 :is(.yv-product-buy-v5>p,.yv-product-copy-v5 .blog-content,.yv-product-copy-v5 p){
+  color:var(--nv89-muted)!important;font-size:12px!important;line-height:1.75!important
+}
+body .yv-product-v5 .yv-product-badges-v5 :is(span,b){font-size:9px!important}
+body .yv-product-v5 :is(.yv-product-mini-trust-v5,.yv-product-info-strip-v5) :is(strong,small){font-size:10px!important}
+body .yv-product-v5 .yv-buy-form-v5 .form-control,
+body .yv-product-v5 :is(.yv-product-add-v5,.yv-product-now-v5){font-size:12px!important}
+body .yv-product-v5 .yv-product-related-card-v5 :is(small,li,em){font-size:10px!important}
+
+/* Blog, software, basic pages: unify only color and surface, NOT layout. */
+body :is(.yv-blog-v8 .yv-blog-hero-v8,.yv-blog-home .yv-page-hero,.yv-blog-home .yv-simple-hero,.yv-simple-hero){
+  background:var(--nv89-hero)!important
+}
+body .yv-blog-v8 .yv-blog-hero-v8 h1{color:var(--nv89-ink)!important}
+body .yv-blog-v8 .yv-blog-hero-v8 h1 :is(span,em){
+  background:var(--nv89-grad)!important;background-clip:text!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important
+}
+body :is(.yv-blog-v8 .yv-blog-post-card-v8,.yv-blog-v8 .yv-blog-side-card-v8,.yv-blog-v8 .yv-blog-featured-v8,.yv-blog-home .yv-post-card,.nv40-store .nv40-product-card,.nv36-marketplace .nv31-software-card){
+  border-color:var(--nv89-border)!important;box-shadow:var(--nv89-shadow)!important
+}
+body :is(.yv-blog-v8 .yv-blog-post-body-v8 h3,.yv-blog-v8 .yv-blog-side-title-v8,.yv-blog-home .yv-post-body h3,.nv40-store .nv40-product-copy h3,.nv36-marketplace .nv31-software-body h3){
+  color:var(--nv89-ink)!important
+}
+body .yv-blog-v8 :is(.yv-blog-search-v8 button,.yv-blog-news-v8 button){
+  background:var(--nv89-grad)!important;color:#fff!important
+}
+body :is(.nv36-marketplace .nv36-hero,.nv40-store .nv40-store-hero){
+  background:linear-gradient(120deg,#fff,#f6f8ff 64%,#faf2ff)!important
+}
+body :is(.nv36-marketplace .nv36-results-heading h2,.nv40-store .nv40-store-head h2,.nv26-catalog .nv26-catalog-group-heading h2){
+  color:var(--nv89-ink)!important
+}
+body .nv26-catalog .nv26-catalog-hero{background:var(--nv89-hero)!important}
+/* Catalog social platform colors and v88 card geometry are intentionally preserved. */
+
+/* FAQs and contact share light panels and navy copy. */
+body :is(.yv-blog-v8,.yv-category-v5,.yv-product-v5,.yv-blog-home,.yv-contact) .premium-faq-item{
+  background:#fff!important;border-color:var(--nv89-border)!important
+}
+body :is(.yv-blog-v8,.yv-category-v5,.yv-product-v5,.yv-blog-home,.yv-contact) .premium-faq-question{
+  color:var(--nv89-ink)!important;font-size:11px!important
+}
+body :is(.yv-blog-v8,.yv-category-v5,.yv-product-v5,.yv-blog-home,.yv-contact) .premium-faq-answer{
+  color:#5b6984!important;font-size:11px!important;line-height:1.7!important
+}
+body .yv-contact .yv-contact-form{background:#fff!important;border-color:var(--nv89-border)!important}
+/* Footer remains navy. Payment logos, support widgets and flows are untouched. */
+@media(prefers-reduced-motion:reduce){
+  body .yv-category-v5 .yv-category-package-card-v5,
+  body .yv-product-v5 .yv-product-related-card-v5{transition:none!important}
+}
