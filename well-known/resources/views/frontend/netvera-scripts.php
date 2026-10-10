@@ -8,10 +8,14 @@ $nv40Context = array_filter([
     'min_rating' => ($filterMinRating ?? 0) ?: null,
     'sort' => ($filterSort ?? 'recommended') === 'recommended' ? null : $filterSort,
 ], static fn($value) => $value !== null && $value !== '');
+$nv40CatalogPath = $filterCategory !== ''
+    ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $filterCategory)
+    : '/hazir-scriptler';
 $nv40CategoryLink = static function (?string $category) use ($nv40Context): string {
-    $params = $nv40Context;
-    if ($category !== null && $category !== '') $params['category'] = $category;
-    return '/hazir-scriptler' . ($params ? '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986) : '');
+    $path = $category !== null && $category !== ''
+        ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $category)
+        : '/hazir-scriptler';
+    return \App\Services\PublicSeoUrls::withQuery($path, $nv40Context);
 };
 ?>
 <main class="nv40-store">
@@ -39,10 +43,9 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
         <div class="nv75-types-heading"><?= icon('grid',14) ?> Yazılım Türleri</div>
         <nav class="nv75-types-list" aria-label="NetVera hazır yazılım türleri">
           <?php foreach(($softwareTypes??[]) as [$typeName,$typeSlug,$typeDescription,$typeIcon]): ?>
-          <a href="<?= e('/hazir-scriptler?'.http_build_query(array_filter([
-                  'type'=>$typeSlug,'q'=>$filterQuery??'',
-                  'category'=>$filterCategory??''
-              ],static fn($x)=>$x!==''),'','&',PHP_QUERY_RFC3986)) ?>"
+          <a href="<?= e(\App\Services\PublicSeoUrls::withQuery($nv40CatalogPath, [
+                  'type'=>$typeSlug,'q'=>$filterQuery??''
+              ])) ?>"
              class="nv75-type-link <?= ($filterType??'')===$typeSlug?'active':'' ?>"
              title="<?= e($typeDescription) ?>">
              <?= icon($typeIcon,14) ?><span><?= e($typeName) ?></span>
@@ -51,8 +54,7 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
           <?php endforeach; ?>
         </nav>
       </div>
-      <form class="nv40-filter-form" role="search" method="get" action="/hazir-scriptler">
-        <?php if($filterCategory !== ''): ?><input type="hidden" name="category" value="<?= e($filterCategory) ?>"><?php endif; ?>
+      <form class="nv40-filter-form" role="search" method="get" action="<?= e($nv40CatalogPath) ?>">
         <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
         <?php if($filterQuery !== ''): ?><input type="hidden" name="q" value="<?= e($filterQuery) ?>"><?php endif; ?>
         <fieldset class="nv40-filter-group">
@@ -100,9 +102,8 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
     <div class="nv40-store-main">
       <div class="nv40-store-head">
         <div><h2>Yazılım Ürünleri</h2><p><?= count($products) ?> ürün listeleniyor</p></div>
-        <form role="search" method="get" action="/hazir-scriptler">
-          <?php if($filterCategory !== ''): ?><input type="hidden" name="category" value="<?= e($filterCategory) ?>"><?php endif; ?>
-          <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
+        <form role="search" method="get" action="<?= e($nv40CatalogPath) ?>">
+            <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
         <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
           <?php if($filterMinPrice !== null): ?><input type="hidden" name="min_price" value="<?= e((string)$filterMinPrice) ?>"><?php endif; ?>
           <?php if($filterMaxPrice !== null): ?><input type="hidden" name="max_price" value="<?= e((string)$filterMaxPrice) ?>"><?php endif; ?>
