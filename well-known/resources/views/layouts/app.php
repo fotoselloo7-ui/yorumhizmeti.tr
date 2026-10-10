@@ -92,6 +92,7 @@
     <link rel="stylesheet" href="<?= asset('css/netvera-premium-v76.css') ?>?v=76.3">
     <link rel="stylesheet" href="<?= asset('css/social-platform-identity-v77.css') ?>?v=79.1">
     <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=81.2">
+    <link rel="stylesheet" href="<?= asset('css/service-category-identity-v82.css') ?>?v=82.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
