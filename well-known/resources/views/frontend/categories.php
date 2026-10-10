@@ -3,6 +3,8 @@ $allCatalogGroups = \App\Services\CatalogMenuService::groups();
 $catalogGroups = $catalogGroups ?? $allCatalogGroups;
 $activeCatalogGroup = $activeCatalogGroup ?? '';
 $searchQuery = $searchQuery ?? '';
+// Display only the live imported NetVera software catalogue, not the retired DB category.
+$liveScriptCount = count(\App\Services\NetveraBridgeService::all());
 ?>
 <main class="nv26-catalog">
   <section class="nv26-catalog-hero"><div class="container nv26-catalog-hero-inner">
@@ -35,14 +37,14 @@ $searchQuery = $searchQuery ?? '';
       <a href="/kategoriler">Tüm hizmetleri görüntüle</a>
     </div>
     <?php endif; ?>
-    <?php foreach($catalogGroups as $group): ?>
+    <?php foreach($catalogGroups as $group): $showLiveScripts = $group['key'] === 'agency' && $liveScriptCount > 0; ?>
     <section class="nv26-catalog-group" id="group-<?= e($group['key']) ?>" aria-labelledby="title-<?= e($group['key']) ?>">
       <div class="nv26-catalog-group-head">
         <div class="nv26-catalog-group-heading"><span class="nv26-section-icon"><?= icon($group['icon'],19) ?></span>
           <div><small>Hizmet Kategorileri</small><h2 id="title-<?= e($group['key']) ?>"><?= e($group['label']) ?></h2>
             <p><?= e($group['description']) ?></p></div>
         </div>
-        <span class="nv26-catalog-count"><?= count($group['categories']) ?> kategori</span>
+        <span class="nv26-catalog-count"><?= count($group['categories']) + (int)$showLiveScripts ?> kategori</span>
       </div>
       <div class="nv26-catalog-tiles">
         <?php foreach($group['categories'] as $cat): ?>
@@ -55,6 +57,16 @@ $searchQuery = $searchQuery ?? '';
           </a>
         </article>
         <?php endforeach; ?>
+        <?php if($showLiveScripts): ?>
+        <article class="nv26-catalog-tile nv26-tile-software">
+          <a class="nv26-tile-top" href="/hazir-scriptler" aria-label="Hazır Yazılımlar ve Scriptler kataloğunu incele">
+            <span class="nv26-tile-icon"><?= icon('monitor',27) ?></span>
+            <strong>Hazır Yazılımlar &amp; Scriptler</strong>
+            <small><?= $liveScriptCount ?> yazılımı incele</small>
+            <span class="nv88-tile-arrow" aria-hidden="true"><?= icon('arrow-right',15) ?></span>
+          </a>
+        </article>
+        <?php endif; ?>
       </div>
     </section>
     <?php endforeach; ?>
