@@ -18,6 +18,9 @@ jobs:
             php -l "$file"
           done
 
+      - name: Editable site logo, upload and responsive display QA
+        run: php well-known/tests/site-logo-v90-qa.php
+
       - name: Retired ready-software category 301 and menu parity QA
         run: php well-known/tests/retired-software-category-qa.php
 
