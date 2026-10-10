@@ -18,7 +18,7 @@ class BlogController extends Controller
             if (!\App\Services\PublicSeoUrls::isSlug($categorySlug)) {
                 \App\Services\PublicSeoUrls::notFound('Blog Kategorisi Bulunamadı'); return;
             }
-            $categoryInfo = $db->fetch("SELECT slug, name, description FROM blog_categories WHERE slug=? AND status='active' LIMIT 1", [$categorySlug]);
+            $categoryInfo = $db->fetch("SELECT slug, name, description, seo_title, seo_description FROM blog_categories WHERE slug=? AND status='active' LIMIT 1", [$categorySlug]);
             if (!$categoryInfo) {
                 foreach (\App\Services\NetveraBlogSnapshot::categories() as $legacyCategory) {
                     if ($legacyCategory['slug'] === $categorySlug) {
@@ -173,10 +173,10 @@ class BlogController extends Controller
         $this->render('frontend/blog/index', [
             'blogPaginationBase' => $blogPaginationBase,
             'pageTitle' => $categoryInfo
-                ? $categoryInfo['name'] . ' | Blog - ' . setting('site_name')
+                ? (trim((string)($categoryInfo['seo_title'] ?? '')) ?: $categoryInfo['name'] . ' | Blog - ' . setting('site_name'))
                 : ($tagInfo ? $tagInfo['name'] . ' | Blog - ' . setting('site_name') : 'Blog - ' . setting('site_name')),
             'metaDescription' => $categoryInfo
-                ? (trim((string)($categoryInfo['description'] ?? '')) ?: $categoryInfo['name'] . ' hakkında güncel rehberler ve makaleler.')
+                ? (trim((string)($categoryInfo['seo_description'] ?? '')) ?: trim((string)($categoryInfo['description'] ?? '')) ?: $categoryInfo['name'] . ' hakkında güncel rehberler ve makaleler.')
                 : 'Dijital dünyadan güncel bilgiler, rehberler ve ipuçları.',
             'canonicalUrl' => url($canonicalPath),
             'noindex' => $hasSecondaryFilter,
