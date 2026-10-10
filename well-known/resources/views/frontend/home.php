@@ -100,7 +100,7 @@ if (!function_exists('yh6PackageCard')) {
         ob_start(); ?>
         <a class="yh6-package-card" href="/paket/<?= e($pkg['slug']) ?>">
             <div class="yh6-package-head">
-                <span class="yh6-package-icon <?= e($cls) ?>"><?= icon($ico, 22) ?></span>
+                <span class="yh6-package-icon <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($pkg['category_slug']??'').' '.($pkg['name']??'')))) ?>"><?= icon($ico, 22) ?></span>
                 <span class="yh6-package-badge"><?= e($pkg['badge'] ?: (!empty($pkg['is_featured']) ? 'En Popüler' : $label)) ?></span>
             </div>
             <h3><?= e(package_display_name($pkg)) ?></h3>
@@ -130,7 +130,7 @@ if (!function_exists('yh18FeaturedCard')) {
         $delivery = trim((string)($pkg['delivery_time'] ?? ''));
         $short = trim(strip_tags((string)($pkg['short_description'] ?? '')));
         ob_start(); ?>
-        <article class="yh18-featured-card <?= e($cls) ?>">
+        <article class="yh18-featured-card <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($pkg['category_slug']??'').' '.($pkg['category_name']??'').' '.($pkg['name']??'')))) ?>">
             <?php if ($favorite): ?><span class="yh18-favorite">Favori Paket</span><?php endif; ?>
             <div class="yh18-card-brand">
                 <span class="yh18-card-icon"><?= icon($ico, 22) ?></span>
@@ -504,8 +504,9 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 </div>
                 <?php foreach(($featuredChildCategories ?? []) as $parentId=>$children):
                     $hasParentInGroup=false;
+                    $nvChildParentPlatform=null;
                     foreach($navGroup['categories'] as $nc) {
-                        if((int)$nc['id']===(int)$parentId){$hasParentInGroup=true;break;}
+                        if((int)$nc['id']===(int)$parentId){$hasParentInGroup=true;$nvChildParentPlatform=\App\Services\SocialPlatformIdentity::fromCategory($nc);break;}
                         if((int)($nc['id']??0)===-100000 && (int)$parentId < -100000){$hasParentInGroup=true;break;}
                     }
                     if(!$hasParentInGroup || !$children)continue;
@@ -529,13 +530,13 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             $childUrl=$child['url']??'/kategori/'.rawurlencode((string)$child['slug']);
                             $childIcon=$child['icon']??'folder';
                             if($childType==='link'): ?>
-                            <a class="nv43-subcategory-link <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??'')))) ?>" href="<?= e($childUrl) ?>"
+                            <a class="nv43-subcategory-link <?= e(\App\Services\SocialPlatformIdentity::classFor((\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??''))??$nvChildParentPlatform))) ?>" href="<?= e($childUrl) ?>"
                                title="<?= e($child['name']) ?>" data-menu-link>
                                 <?= icon($childIcon, 15) ?> <span><?= e($child['name']) ?></span>
                                 <?= icon('arrow-up-right',12) ?>
                             </a>
                             <?php else: ?>
-                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??'')))) ?>"
+                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e(\App\Services\SocialPlatformIdentity::classFor((\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??''))??$nvChildParentPlatform))) ?>"
                                     type="button" data-featured-tab="<?= (int)$child['id'] ?>"
                                     data-featured-root-id="<?= $childRoot ?>"
                                     data-featured-parent-id="<?= (int)$child['parent_featured_id'] ?>"
