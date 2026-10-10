@@ -26,7 +26,13 @@ if (!function_exists('yvCatDesign')) {
     }
 }
 [$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
-$nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($category));
+$categoryPlatform=\App\Services\SocialPlatformIdentity::fromCategory($category);
+if($categoryPlatform!==null){
+    $platformClass=$categoryPlatform;
+    $platformIcon=\App\Services\SocialPlatformIdentity::iconFor($categoryPlatform);
+    $platformColor=\App\Services\SocialPlatformIdentity::brand($categoryPlatform)[2];
+}
+$nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor($categoryPlatform);
 $categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
 $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
@@ -66,7 +72,10 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
  <div class="container">
   <div class="yv-category-chip-row-v5">
    <a class="<?= empty($altSlug)?'active':'' ?>" href="?<?= http_build_query(array_merge($_GET,['alt'=>''])) ?>"><?= icon('grid',12) ?> Tümü</a>
-   <?php foreach($subCategories as $sub): ?><a class="<?= $altSlug===$sub['slug']?'active':'' ?>" href="?<?= http_build_query(array_merge($_GET,['alt'=>$sub['slug']])) ?>"><?= icon($sub['icon_key']??'package',12) ?> <?= e($sub['name']) ?></a><?php endforeach; ?>
+   <?php foreach($subCategories as $sub):
+     $subPlatform=\App\Services\SocialPlatformIdentity::fromCategory($sub,$category);
+     $subIcon=\App\Services\SocialPlatformIdentity::iconFor($subPlatform,$sub['icon_key']??'package');
+   ?><a class="<?= $altSlug===$sub['slug']?'active':'' ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($subPlatform)) ?>" href="?<?= http_build_query(array_merge($_GET,['alt'=>$sub['slug']])) ?>"><?= icon($subIcon,12) ?> <?= e($sub['name']) ?></a><?php endforeach; ?>
   </div>
   <div class="yv-category-filter-tools-v5">
    <form method="GET" class="yv-category-search-form-v5">
