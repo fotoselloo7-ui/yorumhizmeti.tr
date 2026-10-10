@@ -25,6 +25,16 @@ class SitemapService
             );
         }
         $xml .= $this->url($baseUrl . '/hazir-yazilimlar', '0.8', 'weekly');
+        $softwareSlugs = array_fill_keys(array_column(SoftwareCatalogService::definitions(), 1), true);
+        foreach (SoftwareCatalogService::publicPackages() as $software) {
+            $slug = (string)($software['category_slug'] ?? '');
+            if (!isset($softwareSlugs[$slug])) continue;
+            $softwareSlugs[$slug] = false; // each populated type once
+            $xml .= $this->url(
+                $baseUrl . PublicSeoUrls::path('/hazir-yazilimlar/tur', $slug),
+                '0.6', 'weekly'
+            );
+        }
 
         // Kategoriler
         $categories = $db->fetchAll("SELECT slug, updated_at FROM categories WHERE status = 'active'");
@@ -49,6 +59,13 @@ class SitemapService
                 $xml .= $this->url(
                     $baseUrl . PublicSeoUrls::path('/hazir-scriptler/kategori', (string)$category['slug']),
                     '0.7', 'weekly'
+                );
+            }
+            foreach (NetveraScriptTypeService::counts(NetveraBridgeService::all()) as $typeSlug=>$count) {
+                if ($count < 1) continue;
+                $xml .= $this->url(
+                    $baseUrl . PublicSeoUrls::path('/hazir-scriptler/tur', (string)$typeSlug),
+                    '0.6', 'weekly'
                 );
             }
             foreach (NetveraBridgeService::all() as $script) {
@@ -93,6 +110,18 @@ class SitemapService
             $xml .= $this->url(
                 $baseUrl . PublicSeoUrls::path('/blog/kategori', (string)$bc['slug']),
                 '0.6', 'weekly'
+            );
+        }
+
+        // Only tags with a published article are included; no empty taxonomies.
+        $tagRows = $db->fetchAll("SELECT DISTINCT bt.slug FROM blog_tags bt
+            JOIN blog_post_tags bpt ON bpt.tag_id = bt.id
+            JOIN blog_posts bp ON bp.id = bpt.post_id
+            WHERE bp.status = 'active' AND bp.noindex = 0");
+        foreach ($tagRows as $tagRow) {
+            $xml .= $this->url(
+                $baseUrl . PublicSeoUrls::path('/blog/etiket', (string)$tagRow['slug']),
+                '0.5', 'weekly'
             );
         }
 
