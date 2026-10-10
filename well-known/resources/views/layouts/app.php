@@ -302,9 +302,9 @@
                               ? mb_strimwidth($nv27Description, 0, 75, '…', 'UTF-8')
                               : ($nv27ChildCount > 0 ? $nv27ChildCount.' alt hizmet ve paket seçeneği' : 'Hizmet seçeneklerini keşfedin');
                       ?>
-                      <article class="nv27-service-card nv27-style-<?= e($nv26Cat['style']) ?>">
+                      <article class="nv27-service-card nv27-style-<?= e($nv26Cat['style']) ?> <?= preg_match('/itibar|reputat/iu',(string)($nv26Cat['name']??'').' '.(string)($nv26Cat['slug']??''))?'nv83-header-reputation':'' ?>">
                         <a href="<?= e($nv26Cat['url']) ?>" class="nv27-service-parent">
-                          <span class="nv27-service-icon"><?= icon($nv26Cat['icon'], 23) ?></span>
+                          <span class="nv27-service-icon"><?= icon(preg_match('/itibar|reputat/iu',(string)($nv26Cat['name']??'').' '.(string)($nv26Cat['slug']??''))?'shield-check':$nv26Cat['icon'], 23) ?></span>
                           <span class="nv27-service-parent-copy">
                             <strong><?= e($nv26Cat['name']) ?></strong>
                             <small><?= e($nv27Description) ?></small>
