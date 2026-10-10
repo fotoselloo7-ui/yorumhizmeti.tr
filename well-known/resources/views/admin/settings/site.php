@@ -18,7 +18,7 @@
                 <div class="adm-card-header">
                     <h3 id="nv90-logo-heading"><?= icon('image',16) ?> Site Logosu</h3>
                 </div>
-                <div class="adm-card-body" style="display:grid;grid-template-columns: minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center;">
+                <div class="adm-card-body nv90-admin-logo-grid" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center;">
                     <div class="nv90-admin-logo-preview" style="background:linear-gradient(135deg,#fff,#f5f7ff);border:1px solid #e2e6f3;border-radius:14px;min-width:0;padding:18px;">
                         <img id="nv90-site-logo-preview" src="<?= e($nv90Preview) ?>"
                              alt="Sitede görüntülenecek NetVera logosu" width="856" height="179"
@@ -46,6 +46,12 @@
                     </div>
                 </div>
             </section>
+            <style>
+            @media(max-width:760px){
+                .nv90-admin-logo-grid{grid-template-columns:minmax(0,1fr)!important}
+                .nv90-admin-logo-preview{padding:14px!important}
+            }
+            </style>
             <script>
             (function(){
                 var file=document.getElementById('nv90-logo-file');
