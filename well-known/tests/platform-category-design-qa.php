@@ -57,6 +57,22 @@ foreach($mustStyle as $selector){
     if(!str_contains($styles,$selector))
         throw new RuntimeException('Platform design token missing: '.$selector);
 }
+// Regression: the social mega menu and catalog directory MUST keep their
+// own pastel backgrounds and swap to brand color/inverse text on hover.
+// The later v80 stylesheet must not flatten them into white cards again.
+foreach([
+  'background:var(--np-soft)!important;',
+  'background:var(--np)!important;',
+  'color:var(--np-ink,var(--np))!important;',
+  'color:var(--np-on,#fff)!important;',
+  '.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]',
+  '.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]',
+  ':is(:hover,:focus-visible)',
+  ':is(:hover,:focus-within)'
+] as $rule){
+  if(!str_contains($styles,$rule))
+    throw new RuntimeException('Brand-color inverse hover regression: '.$rule);
+}
 if(str_contains($styles,'Flat outlines across all major site elements'))
     throw new RuntimeException('Outdated blanket shadow-removal CSS still overrides all site cards.');
 if(!str_contains($js,"rail.dataset.featuredRailKind === 'root'") ||
