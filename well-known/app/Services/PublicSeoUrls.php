@@ -12,6 +12,27 @@ final class PublicSeoUrls
         return rtrim($prefix, '/') . '/' . rawurlencode($slug);
     }
 
+    /**
+     * Imported NetVera child categories already have indexed /parent/child
+     * routes. Keep those originals instead of creating duplicate category URLs.
+     */
+    public static function scriptCategory(array $category, array $allCategories): string
+    {
+        $slug = (string)($category['slug'] ?? '');
+        $parentId = (int)($category['parent_legacy_id'] ?? 0);
+        if ($parentId > 0) {
+            foreach ($allCategories as $parent) {
+                if ((int)($parent['legacy_id'] ?? 0) === $parentId) {
+                    return self::path(
+                        self::path('/hazir-scriptler', (string)$parent['slug']),
+                        $slug
+                    );
+                }
+            }
+        }
+        return self::path('/hazir-scriptler/kategori', $slug);
+    }
+
     public static function withQuery(string $path, array $params): string
     {
         $params = array_filter($params, static fn($v): bool => $v !== null && $v !== '');
