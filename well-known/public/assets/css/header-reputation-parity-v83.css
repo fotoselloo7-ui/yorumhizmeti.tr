@@ -1,0 +1,75 @@
+/* Header mega menu only — align "İtibar Yönetimi" with the Google card.
+   No changes to homepage category sliders, product cards, routes or category data. */
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation){
+  --nv27-card-accent:#4285F4;
+  --nv27-card-bg:#EAF3FF;
+  position:relative;
+  border:1px solid #DCE7F9;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(33,79,143,.075);
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation)::before{
+  content:"";position:absolute;inset:0 0 auto;height:3px;pointer-events:none;z-index:1;
+  background:linear-gradient(90deg,#4285F4 0 33%,#EA4335 33% 51%,#FBBC05 51% 70%,#34A853 70% 100%);
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-parent{
+  display:flex;align-items:center;gap:11px;min-height:84px;
+  padding:14px 13px 13px;background:linear-gradient(120deg,#FFFFFF 55%,#F3F8FF);
+  border-bottom:1px solid #E9EEF8;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-icon{
+  display:grid;place-items:center;flex:0 0 45px;width:45px;height:45px;
+  border:1px solid #D5E6FF;border-radius:13px;
+  background:linear-gradient(145deg,#F6FAFF,#E8F2FF);
+  color:#4285F4;
+  box-shadow:0 5px 12px rgba(66,133,244,.12);
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-icon :is(svg,.icon,i){
+  width:24px;height:24px;color:#4285F4;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-parent-copy{
+  flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-parent-copy strong{
+  font-size:12px;font-weight:800;line-height:1.4;color:#19355E;
+  overflow-wrap:anywhere;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-parent-copy small{
+  font-size:10px;line-height:1.55;color:#697C99;
+  -webkit-line-clamp:2;min-height:0;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-parent-arrow{
+  display:grid;place-items:center;color:#4285F4;background:#EFF5FF;
+  border:1px solid #E0EBFC;border-radius:8px;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-subcategory-caption{
+  color:#6983AB;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-subcategory-link{
+  background:#F8FBFF;border-color:#E0EAF9;color:#335B8F;
+  font-weight:700;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-subcategory-symbol{
+  color:#4285F4;background:#EAF3FF;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-category-footer{
+  color:#256EDB;
+  border-top-color:#E3ECFA;
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation):hover{
+  border-color:#B7D1FF;
+  box-shadow:0 14px 29px rgba(35,91,162,.13);
+}
+.nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) :is(.nv27-service-parent,.nv27-subcategory-link,.nv27-category-footer):focus-visible{
+  outline:2px solid #4285F4;outline-offset:2px;
+}
+@media(max-width:600px){
+  .nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation) .nv27-service-parent{
+    min-height:73px;padding:12px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+ .nv26-menu-shell .nv27-service-layout--marketing .nv27-service-card:is(.nv27-style-google,.nv83-header-reputation){
+   transition:none!important;
+ }
+}
