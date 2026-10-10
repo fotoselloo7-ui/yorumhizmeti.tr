@@ -328,12 +328,16 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 <div class="yh49-marquee-track">
                     <?php for ($yh49Repeat = 0; $yh49Repeat < 2; $yh49Repeat++): ?>
                     <div class="yh49-marquee-set" <?= $yh49Repeat ? 'aria-hidden="true"' : '' ?>>
-                        <?php foreach ($yh49Items as $yh49Item): ?>
+                        <?php foreach ($yh49Items as $yh49Item):
+                          $yh49Platform=\App\Services\SocialPlatformIdentity::fromText(($yh49Item['style']??'').' '.($yh49Item['detail']??'').' '.($yh49Item['name']??''));
+                          $yh49Icon=\App\Services\SocialPlatformIdentity::iconFor($yh49Platform,
+                            yh50MarqueeIcon((string)$yh49Item['name'],(string)$yh49Item['style'],(string)$yh49Item['icon']));
+                        ?>
                         <a href="<?= e($yh49Item['url']) ?>"
-                           class="yh49-category-link <?= e($yh49Item['style']) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($yh49Item['style']??'').' '.($yh49Item['name']??'').' '.($yh49Item['detail']??'')))) ?>"
+                           class="yh49-category-link <?= e($yh49Item['style']) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($yh49Platform)) ?>"
                            <?= $yh49Repeat ? 'tabindex="-1"' : '' ?>
                            title="<?= e($yh49Item['name']) ?>">
-                            <span class="yh49-category-icon"><?= icon(yh50MarqueeIcon((string)$yh49Item['name'], (string)$yh49Item['style'], (string)$yh49Item['icon']), 20) ?></span>
+                            <span class="yh49-category-icon"><?= icon($yh49Icon,20) ?></span>
                             <span class="yh49-category-copy">
                                 <strong><?= e($yh49Item['name']) ?></strong>
                                 <small><?= e($yh49Item['detail']) ?></small>
