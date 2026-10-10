@@ -94,6 +94,7 @@
     <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=81.2">
     <link rel="stylesheet" href="<?= asset('css/service-category-identity-v82.css') ?>?v=82.1">
     <link rel="stylesheet" href="<?= asset('css/header-reputation-parity-v83.css') ?>?v=83.1">
+    <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=84.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
