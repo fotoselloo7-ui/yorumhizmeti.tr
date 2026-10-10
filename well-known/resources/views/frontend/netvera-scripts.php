@@ -116,8 +116,7 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context, $nv40
       <div class="nv40-store-head">
         <div><h2>Yazılım Ürünleri</h2><p><?= count($products) ?> ürün listeleniyor</p></div>
         <form role="search" method="get" action="<?= e($nv40CatalogPath) ?>">
-            <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
-        <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
+          <?php if(($filterType??'')!=='' && $filterCategory !== ''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
           <?php if($filterMinPrice !== null): ?><input type="hidden" name="min_price" value="<?= e((string)$filterMinPrice) ?>"><?php endif; ?>
           <?php if($filterMaxPrice !== null): ?><input type="hidden" name="max_price" value="<?= e((string)$filterMaxPrice) ?>"><?php endif; ?>
           <?php if($filterMinRating): ?><input type="hidden" name="min_rating" value="<?= (int)$filterMinRating ?>"><?php endif; ?>
