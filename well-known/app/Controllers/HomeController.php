@@ -145,7 +145,7 @@ class HomeController extends Controller
                 $tab=[
                     'id'=>-100000-$catId,'name'=>$nc['name'],
                     'slug'=>$nc['slug'],
-                    'url'=>'/hazir-scriptler/kategori/'.rawurlencode((string)$nc['slug']),
+                    'url'=>\App\Services\PublicSeoUrls::scriptCategory($nc, $netveraCategories),
                     'kind'=>'software','icon'=>$parentLegacy?'code':'layers',
                     'parent_featured_id'=>$parentLegacy?-100000-$parentLegacy:-100000
                 ];
