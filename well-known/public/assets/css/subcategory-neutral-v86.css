@@ -1,0 +1,82 @@
+/* NetVera v86 — child category chips
+   Neutral premium design: white surface + dark text. Platform identity is
+   limited to the small icon accent instead of tinting the whole button. */
+#featured .nv43-child-panel{
+  background:#fbfcff!important;
+  border:1px solid #e5e8f0!important;
+  box-shadow:none!important;
+}
+#featured .nv43-child-rail>.nv43-subcategory-link,
+#featured .nv43-subcategory-link[class*="nv-platform-"],
+#featured .nv43-subcategory-link[class*="nv-sector-"],
+body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-platform-"],
+body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-sector-"]{
+  min-height:40px!important;
+  padding:9px 14px!important;
+  border:1px solid #dfe3ec!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#1f2a44!important;
+  box-shadow:0 2px 7px rgba(24,35,64,.025)!important;
+  font-weight:700!important;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease!important;
+}
+#featured .nv43-subcategory-link span{
+  color:#1f2a44!important;
+}
+#featured .nv43-subcategory-link :is(svg,.icon,i){
+  color:#53617c!important;
+  opacity:.92;
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"] :is(svg,.icon,i){
+  color:var(--np-ink,var(--np,#53617c))!important;
+}
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]) :is(svg,.icon,i){
+  color:#6658ca!important;
+}
+#featured .nv43-subcategory-link:is(:hover,:focus-visible),
+#featured .nv43-subcategory-link[class*="nv-platform-"]:is(:hover,:focus-visible),
+#featured .nv43-subcategory-link[class*="nv-sector-"]:is(:hover,:focus-visible){
+  background:#f7f8fb!important;
+  color:#151e33!important;
+  border-color:#c8cfdd!important;
+  box-shadow:0 5px 14px rgba(24,35,64,.055)!important;
+  transform:translateY(-1px)!important;
+}
+#featured .nv43-subcategory-link:is(.active,[aria-selected="true"]),
+#featured .nv43-subcategory-link[class*="nv-platform-"]:is(.active,[aria-selected="true"]),
+#featured .nv43-subcategory-link[class*="nv-sector-"]:is(.active,[aria-selected="true"]){
+  background:#fff!important;
+  color:#141d33!important;
+  border-color:#7a68df!important;
+  box-shadow:0 0 0 2px rgba(122,104,223,.10),0 5px 14px rgba(24,35,64,.05)!important;
+  transform:none!important;
+}
+#featured .nv43-subcategory-link:is(.active,[aria-selected="true"]) span{
+  color:#141d33!important;
+}
+#featured .nv43-subcategory-link:is(.active,[aria-selected="true"]) :is(svg,.icon,i){
+  color:#6658ca!important;
+}
+#featured .nv43-subcategory-link > :last-child:is(svg,.icon,i){
+  color:#9aa3b7!important;
+}
+#featured .nv43-subcategory-link:hover > :last-child:is(svg,.icon,i),
+#featured .nv43-subcategory-link:is(.active,[aria-selected="true"]) > :last-child:is(svg,.icon,i){
+  color:#6c5bd3!important;
+}
+@media(max-width:800px){
+  #featured .nv43-subcategory-link{
+    min-height:38px!important;
+    padding:8px 12px!important;
+    font-size:10px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #featured .nv43-subcategory-link{transition:none!important}
+}
