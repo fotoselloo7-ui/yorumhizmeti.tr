@@ -310,11 +310,12 @@ body.nv-theme-enabled .site-footer .footer-col a:hover{
   letter-spacing:-.055em!important;
   row-gap:0;
 }
-.yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-line:first-child{
-  padding-left:clamp(12px,4.8vw,60px);
-}
+/* All three lines share exactly the same left edge. No decorative offsets. */
+.yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-line:first-child,
 .yh6-hero .yh6-hero-copy h1.nv75-hero-heading .nv75-hero-middle{
-  padding-left:clamp(8px,2vw,27px);
+  padding-left:0!important;
+  margin-left:0!important;
+  text-align:left!important;
 }
 .yh6-hero .yh6-hero-art{
   min-width:0!important;
