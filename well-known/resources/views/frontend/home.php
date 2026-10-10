@@ -501,10 +501,15 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                                     $gico=$filterCategory['icon'];
                                 }
                             }
+                            // Use the same saved category style that drives the
+                            // mega menu and /kategoriler, not a second colour guess.
+                            $gcls=(string)($filterCategory['style']??$gcls);
+                            $sectorClass=preg_match('/^[a-z][a-z0-9-]{0,32}$/D',$gcls)
+                                ?'nv-sector-'.$gcls:'nv-sector-default';
                             $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
                         ?>
                         <button type="button"
-                                class="yh18-featured-tab yh24-featured-filter nv43-category-card <?= $selected?'active':'' ?> <?= e($gcls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($filterCategory))) ?>"
+                                class="yh18-featured-tab yh24-featured-filter nv43-category-card <?= $selected?'active':'' ?> <?= e($gcls) ?> <?= e($sectorClass) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($filterCategory))) ?>"
                                 data-featured-tab="<?= (int)$filterCategory['id'] ?>"
                                 data-featured-root-id="<?= (int)$filterCategory['id'] ?>"
                                 data-featured-parent-group="<?= e($navGroup['key']) ?>"
@@ -527,8 +532,9 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 <?php foreach(($featuredChildCategories ?? []) as $parentId=>$children):
                     $hasParentInGroup=false;
                     $nvChildParentPlatform=null;
+                    $nvChildParentStyle='default';
                     foreach($navGroup['categories'] as $nc) {
-                        if((int)$nc['id']===(int)$parentId){$hasParentInGroup=true;$nvChildParentPlatform=\App\Services\SocialPlatformIdentity::fromCategory($nc);break;}
+                        if((int)$nc['id']===(int)$parentId){$hasParentInGroup=true;$nvChildParentPlatform=\App\Services\SocialPlatformIdentity::fromCategory($nc);$nvChildParentStyle=(string)($nc['style']??'default');break;}
                         if((int)($nc['id']??0)===-100000 && (int)$parentId < -100000){$hasParentInGroup=true;break;}
                     }
                     if(!$hasParentInGroup || !$children)continue;
@@ -554,14 +560,21 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                                 ?? $nvChildParentPlatform;
                             $childIcon=$childType==='software'?($child['icon']??'folder'):
                                \App\Services\SocialPlatformIdentity::iconFor($childPlatform,$child['icon']??'folder');
+                            $childStyle=(string)($child['style']??$nvChildParentStyle);
+                            // For sector roots such as SEO / Ads the CHILD chip
+                            // inherits the selected parent palette.
+                            if($childPlatform===null && $nvChildParentStyle!=='default')
+                                $childStyle=$nvChildParentStyle;
+                            $childSectorClass=preg_match('/^[a-z][a-z0-9-]{0,32}$/D',$childStyle)
+                                ?'nv-sector-'.$childStyle:'nv-sector-default';
                             if($childType==='link'): ?>
-                            <a class="nv43-subcategory-link <?= e(\App\Services\SocialPlatformIdentity::classFor($childPlatform)) ?>" href="<?= e($childUrl) ?>"
+                            <a class="nv43-subcategory-link <?= e($childSectorClass) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($childPlatform)) ?>" href="<?= e($childUrl) ?>"
                                title="<?= e($child['name']) ?>" data-menu-link>
                                 <?= icon($childIcon, 15) ?> <span><?= e($child['name']) ?></span>
                                 <?= icon('arrow-up-right',12) ?>
                             </a>
                             <?php else: ?>
-                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e(\App\Services\SocialPlatformIdentity::classFor($childPlatform)) ?>"
+                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e($childSectorClass) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($childPlatform)) ?>"
                                     type="button" data-featured-tab="<?= (int)$child['id'] ?>"
                                     data-featured-root-id="<?= $childRoot ?>"
                                     data-featured-parent-id="<?= (int)$child['parent_featured_id'] ?>"
