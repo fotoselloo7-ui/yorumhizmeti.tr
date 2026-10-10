@@ -24,7 +24,30 @@ class NetveraScriptController extends Controller
 
     public function index(): void
     {
+        $category = trim((string)($_GET['category'] ?? ''));
+        if ($category !== '') {
+            foreach (Catalog::categories() as $row) {
+                if ($row['slug'] === $category) {
+                    \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                        \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $category), 'category'
+                    );
+                }
+            }
+        }
         $this->renderCatalog('/hazir-scriptler');
+    }
+
+    public function categoryPage(string $slug): void
+    {
+        $slug = rawurldecode($slug);
+        foreach (Catalog::categories() as $row) {
+            if ($row['slug'] === $slug) {
+                $_GET['category'] = $slug;
+                $this->renderCatalog(\App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $slug));
+                return;
+            }
+        }
+        \App\Services\PublicSeoUrls::notFound('Yazılım Kategorisi Bulunamadı');
     }
 
     private function renderCatalog(string $canonicalPath): void
@@ -60,6 +83,8 @@ class NetveraScriptController extends Controller
             'pageTitle'=>'Hazır Scriptler ve Profesyonel Yazılımlar',
             'metaDescription'=>'Sektörel PHP web yazılımları, otomasyon, CMS ve hazır script ürünleri.',
             'canonicalUrl'=>url($canonicalPath),
+            'noindex'=>$q!=='' || $type!=='' || $minPrice!==null || $maxPrice!==null
+                || $minRating>0 || $sort!=='recommended',
             'products'=>$visibleProducts, 'softwareTypes'=>$typeDefinitions,
             'filterType'=>$type, 'softwareTypeCounts'=>$typeCounts,
             'categories'=>$categories,'filterCategory'=>$cat,'filterQuery'=>$q,
