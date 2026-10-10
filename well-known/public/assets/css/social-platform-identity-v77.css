@@ -290,3 +290,54 @@
     transition:none !important
   }
 }
+
+
+/* v78: mega menu + quick category shortcuts share the SAME real platform tokens. */
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]{
+  --brand:var(--np);
+  --wash:var(--np-soft);
+  background:linear-gradient(135deg,#fff 1%,var(--np-soft) 100%) !important;
+  color:color-mix(in srgb,var(--np) 77%,#151f35) !important;
+  border-color:color-mix(in srgb,var(--np) 26%,white) !important;
+  box-shadow:0 7px 20px color-mix(in srgb,var(--np) 10%,transparent);
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] strong,
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] small{
+  color:color-mix(in srgb,var(--np) 77%,#151f35) !important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon{
+  background:linear-gradient(125deg,var(--np),var(--np-2)) !important;
+  color:var(--np-on,#fff) !important;
+  box-shadow:0 8px 18px color-mix(in srgb,var(--np) 20%,transparent);
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon .icon{
+  color:var(--np-on,#fff) !important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]:hover{
+  border-color:color-mix(in srgb,var(--np) 60%,white) !important;
+  box-shadow:0 15px 27px color-mix(in srgb,var(--np) 17%,transparent) !important;
+}
+.nv26-quick .nv56-quick-category[class*="nv-platform-"]{
+  border:1px solid color-mix(in srgb,var(--np) 14%,white) !important;
+  background:var(--np-soft) !important;
+  color:color-mix(in srgb,var(--np) 74%,#162039) !important;
+}
+.nv26-quick .nv56-quick-category[class*="nv-platform-"] .icon{
+  color:var(--np) !important;
+}
+.nv26-quick .nv56-quick-category[class*="nv-platform-"]:hover{
+  color:color-mix(in srgb,var(--np) 83%,#111b2e) !important;
+  background:color-mix(in srgb,var(--np) 13%,white) !important;
+  border-color:color-mix(in srgb,var(--np) 40%,white) !important;
+}
+/* X/Threads black marks and bright Snapchat/Kick/Spotify retain legible foregrounds. */
+.nv26-menu-groups .nv26-social-mega-card:is(.nv-platform-twitter,.nv-platform-threads){
+  background:linear-gradient(140deg,#fff,#ededed) !important;
+}
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-spotify{
+  background:linear-gradient(145deg,#fff,#E5FAEB) !important;
+}
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-google .nv26-social-mega-icon{
+  background:conic-gradient(#4285F4 0 28%,#34A853 28% 54%,#FBBC05 54% 76%,#EA4335 76% 100%) !important;
+  color:white !important;
+}
