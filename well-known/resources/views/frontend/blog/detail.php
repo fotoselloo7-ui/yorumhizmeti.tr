@@ -74,7 +74,7 @@
          <?php endif; ?>
        </div>
      <?php endif; ?>
-     <?php if(!empty($tags)): ?><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid #edf0f4"><?php foreach($tags as $tag): ?><a class="yv-blog-chip" href="/blog?tag=<?= e($tag['slug']) ?>">#<?= e($tag['name']) ?></a><?php endforeach; ?></div><?php endif; ?>
+     <?php if(!empty($tags)): ?><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid #edf0f4"><?php foreach($tags as $tag): ?><a class="yv-blog-chip" href="/blog/etiket/<?= rawurlencode((string)$tag['slug']) ?>">#<?= e($tag['name']) ?></a><?php endforeach; ?></div><?php endif; ?>
     </article>
 
     <?php if(!empty($faqs)): ?><section class="yv-product-section" style="margin-top:14px"><div class="yv-kicker">Merak edilenler</div><h3>Bu yazıyla ilgili sorular</h3><?php foreach($faqs as $faq): ?><div class="premium-faq-item"><button type="button" class="premium-faq-question"><span><?= e($faq['question']) ?></span><?= icon('chevron-down',12) ?></button><div class="premium-faq-answer"><?= e($faq['answer']) ?></div></div><?php endforeach; ?></section><?php endif; ?>
@@ -86,7 +86,7 @@
    </main>
    <aside>
     <?php if(!empty($latestPosts)): ?><div class="yv-sidebar-card"><h3><?= icon('clock',13) ?> Son Yazılar</h3><?php foreach($latestPosts as $i=>$lp): ?><div class="yv-popular-item"><span class="yv-popular-num"><?= $i+1 ?></span><a href="/blog/<?= e($lp['slug']) ?>"><?= e($lp['title']) ?></a></div><?php endforeach; ?></div><?php endif; ?>
-    <?php if(!empty($categories)): ?><div class="yv-sidebar-card"><h3><?= icon('folder',13) ?> Kategoriler</h3><div style="display:flex;gap:6px;flex-wrap:wrap"><?php foreach($categories as $cat): ?><a class="yv-blog-chip" href="/blog?category=<?= e($cat['slug']) ?>"><?= e($cat['name']) ?></a><?php endforeach; ?></div></div><?php endif; ?>
+    <?php if(!empty($categories)): ?><div class="yv-sidebar-card"><h3><?= icon('folder',13) ?> Kategoriler</h3><div style="display:flex;gap:6px;flex-wrap:wrap"><?php foreach($categories as $cat): ?><a class="yv-blog-chip" href="/blog/kategori/<?= rawurlencode((string)$cat['slug']) ?>"><?= e($cat['name']) ?></a><?php endforeach; ?></div></div><?php endif; ?>
     <?php if(!empty($popularPackages)): ?><div class="yv-sidebar-card"><h3><?= icon('shopping-cart',13) ?> Popüler Paketler</h3><?php foreach($popularPackages as $pkg): ?><a href="/paket/<?= e($pkg['slug']) ?>" style="display:block;padding:9px 0;border-bottom:1px solid #edf0f4"><strong style="font-size:8px;color:#25304d"><?= e(package_display_name($pkg)) ?></strong><span style="display:block;margin-top:3px;font-size:8px;color:#664be8"><?= money((!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']) ?></span></a><?php endforeach; ?></div><?php endif; ?>
    </aside>
   </div>
