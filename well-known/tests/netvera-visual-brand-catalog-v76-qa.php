@@ -64,7 +64,7 @@ $b=strpos($home,'</section>',$a);
 if($a===false||$b===false)throw new RuntimeException('No why-section');
 if(str_contains(substr($home,$a,$b-$a),"icon('check-circle'"))
  throw new RuntimeException('Old weak green ticks still present in why-section.');
-if(!str_contains($home,'/hazir-scriptler?type='))
+if(!str_contains($home,'/hazir-scriptler/tur/'))
  throw new RuntimeException('Homepage still links new software categories to wrong catalogue.');
 $defs=\App\Services\NetveraScriptTypeService::definitions();
 if(count($defs)<28)throw new RuntimeException('Missing software type facets.');
