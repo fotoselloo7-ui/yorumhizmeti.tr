@@ -208,11 +208,14 @@
   outline:3px solid var(--np) !important;
   outline-offset:3px;
 }
-/* Spotify (#1DB954) is GREEN and needs dark typography for contrast. */
-.nv-platform-spotify{--np-on:#0B2515}
+/* Spotify's saturated brand green did not meet white-text contrast.
+   Use a darker green on large filled surfaces, keeping the official #1DB954
+   brand token/icons and white foreground. */
+.nv-platform-spotify{--np-on:#FFFFFF;--np-filled-from:#117b39;--np-filled-to:#0b622e}
 .yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify{
-  background:linear-gradient(115deg,#1ED760,#1DB954) !important;
+  background:linear-gradient(115deg,var(--np-filled-from),var(--np-filled-to)) !important;
   border-color:#159545 !important;
+  color:#FFFFFF !important;
 }
 .yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-tiktok{
   background:linear-gradient(125deg,#0d1118,#161b25 60%,#282f39) !important;
@@ -358,4 +361,59 @@
 #featured .nv43-subcategory-link:is(.nv-platform-snapchat,.nv-platform-kick),
 .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-sub a:is(.nv-platform-snapchat,.nv-platform-kick){
   color:#172019 !important;
+}
+
+/* V79 accessibility pass.
+   Saturated full-color category cards use accessible white foregrounds.
+   Soft backgrounds and deliberately bright yellow/lime brands retain their
+   darker label variants as defined above. */
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-copy :is(strong,small),
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-icon,
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-icon .icon {
+  color:#FFFFFF !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-telegram{
+  background:linear-gradient(115deg,#126e9c,#075e8d) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-soundcloud{
+  background:linear-gradient(115deg,#c84200,#9e3700) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-bluesky{
+  background:linear-gradient(115deg,#1262b8,#0a55a4) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-instagram{
+  background:linear-gradient(112deg,#ca285c 0%,#ae286c 54%,#833AB4 100%) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-youtube{
+  background:linear-gradient(120deg,#d6002b,#a50029) !important;
+}
+/* Filled Spotify icons, actions and highlighted chips throughout the site.
+   Brand token #1DB954 stays intact; only surfaces under white lettering darken. */
+.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-spotify .nv26-tile-icon,
+#featured .nv43-category-card.yh18-featured-tab.nv-platform-spotify .yh26-filter-icon,
+.yv-category-v5.nv-platform-spotify .yv-category-brand-v5>span,
+.yv-category-v5.nv-platform-spotify .yv-category-brand-orbit-v5.main,
+.yv-category-v5.nv-platform-spotify .yv-category-package-icon-v5,
+.yv-category-v5.nv-platform-spotify .yv-category-phone-art-v5 .screen>span,
+.yv-product-v5.nv-platform-spotify .yv-product-brand-v5>span,
+.yv-product-v5.nv-platform-spotify .yv-product-orbit-v5.brand,
+.yv-product-v5.nv-platform-spotify .yv-product-device-v5 .screen>span,
+.yh18-featured-card.nv-platform-spotify .yh18-card-icon,
+.yh6-package-icon.nv-platform-spotify{
+  background:linear-gradient(135deg,#117b39,#0b622e) !important;
+  color:#FFFFFF !important;
+}
+.yv-category-v5.nv-platform-spotify .yv-category-hero-v5 .yv-btn-primary,
+.yv-category-v5.nv-platform-spotify .yv-category-cta-v5 .yv-btn,
+.yv-category-v5.nv-platform-spotify .yv-category-chip-row-v5 a.active,
+.yv-product-v5.nv-platform-spotify .yv-product-hero-v5 .yv-btn-primary{
+  background:linear-gradient(110deg,#117b39,#0b622e) !important;
+  color:#FFFFFF !important;
+  border-color:#117b39 !important;
+}
+/* Text/icons on branded filled backgrounds must not inherit generic theme
+   dark ink, while light list/menu tiles retain their own dark copy. */
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]:not(.nv-platform-snapchat):not(.nv-platform-kick):not(.nv-platform-whatsapp)
+  .yh49-category-copy :is(strong,small){
+  color:#FFFFFF !important;
 }
