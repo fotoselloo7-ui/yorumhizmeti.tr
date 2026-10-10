@@ -24,25 +24,23 @@ class NetveraScriptController extends Controller
 
     public function index(): void
     {
+        // A query filter in this new project is not a moved/indexed page.
+        // Render it normally; the canonical address still uses a clean path.
+        $category = trim((string)($_GET['category'] ?? ''));
         $type = trim((string)($_GET['type'] ?? ''));
-        $category = trim((string)($_GET['category'] ?? ''));
-        if ($category === '' && $type !== '' && \App\Services\NetveraScriptTypeService::valid($type)) {
-            \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $type), 'type'
-            );
-        }
-        $category = trim((string)($_GET['category'] ?? ''));
+        $canonical = '/hazir-scriptler';
         if ($category !== '') {
             $allCategories = Catalog::categories();
             foreach ($allCategories as $row) {
-                if ($row['slug'] === $category) {
-                    \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                        \App\Services\PublicSeoUrls::scriptCategory($row, $allCategories), 'category'
-                    );
+                if ((string)$row['slug'] === $category) {
+                    $canonical = \App\Services\PublicSeoUrls::scriptCategory($row, $allCategories);
+                    break;
                 }
             }
+        } elseif ($type !== '' && \App\Services\NetveraScriptTypeService::valid($type)) {
+            $canonical = \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $type);
         }
-        $this->renderCatalog('/hazir-scriptler');
+        $this->renderCatalog($canonical);
     }
 
     public function typePage(string $slug): void
@@ -63,7 +61,10 @@ class NetveraScriptController extends Controller
             if ($row['slug'] === $slug) {
                 $canonicalPath = \App\Services\PublicSeoUrls::scriptCategory($row, $allCategories);
                 if (!empty($row['parent_legacy_id'])) {
-                    \App\Services\PublicSeoUrls::redirectLegacyFacet($canonicalPath, 'category');
+                    // Imported nested paths remain at /hazir-scriptler/{parent}/{child}.
+                    // Do not create a duplicate child alias or a 301 migration.
+                    \App\Services\PublicSeoUrls::notFound('Yazılım Kategorisi Bulunamadı');
+                    return;
                 }
                 $_GET['category'] = $slug;
                 $this->renderCatalog($canonicalPath);
