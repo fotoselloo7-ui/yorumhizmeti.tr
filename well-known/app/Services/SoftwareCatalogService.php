@@ -118,47 +118,10 @@ final class SoftwareCatalogService
 
     public static function installCategories(): array
     {
-        $db = Database::getInstance();
-        $pdo = $db->getPdo();
-        $created = 0; $existing = 0; $conflicts = 0;
-        $pdo->beginTransaction();
-        try {
-            $root = self::root();
-            if (!$root) {
-                $id = $db->insert('categories', [
-                    'parent_id' => null, 'name' => 'Hazır Yazılımlar & Scriptler',
-                    'slug' => self::ROOT_SLUG,
-                    'description' => 'Sektöre özel hazır web sitesi yazılımları, yönetim panelli PHP scriptleri ve dijital platform çözümleri.',
-                    'icon_key' => 'monitor', 'sort_order' => 85, 'status' => 'active',
-                    'seo_title' => 'Hazır Yazılım ve Web Sitesi Scriptleri | Yorum Hizmeti',
-                    'seo_description' => 'Haber, emlak, e-ticaret, blog, otel, rezervasyon ve kurumsal sektörler için hazır yazılım scriptlerini inceleyin.',
-                ]);
-                $root = ['id' => $id];
-                $created++;
-            }
-            $rootId = (int)$root['id'];
-            foreach (self::definitions() as $index => [$name, $slug, $description, $icon]) {
-                $match = $db->fetch("SELECT id, parent_id FROM categories WHERE slug = ? LIMIT 1", [$slug]);
-                if ($match) {
-                    if ((int)$match['parent_id'] === $rootId) $existing++;
-                    else $conflicts++;
-                    continue;
-                }
-                $db->insert('categories', [
-                    'parent_id' => $rootId, 'name' => $name, 'slug' => $slug,
-                    'description' => $description, 'icon_key' => $icon,
-                    'sort_order' => ($index+1)*10, 'status' => 'active',
-                    'seo_title' => $name . ' | Hazır Yazılımlar',
-                    'seo_description' => $description,
-                ]);
-                $created++;
-            }
-            $pdo->commit();
-            return compact('created', 'existing', 'conflicts');
-        } catch (\Throwable $e) {
-            if ($pdo->inTransaction()) $pdo->rollBack();
-            throw $e;
-        }
+        // The duplicate YorumHizmeti software category tree was retired after
+        // importing NetVera's actual ready-script catalogue. Never re-create
+        // local parent/child categories on admin setup; no DB data is deleted.
+        return ['created'=>0, 'existing'=>0, 'conflicts'=>0];
     }
 
     /**
