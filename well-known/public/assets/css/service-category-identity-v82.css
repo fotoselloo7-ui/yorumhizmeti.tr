@@ -1,0 +1,139 @@
+/* NetVera category identity v82.
+ * All services inherit their category's database-defined sector/style,
+ * while the platform logos remain on the dedicated v77/v81 official palettes.
+ * Retired Google review services are filtered in PHP, never via CSS tricks.
+ */
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-seo,
+.nv26-catalog-tile.nv26-tile-seo{--ns:#6952DC;--ns-dark:#4E3BC1;--ns-soft:#F0EDFF;--ns-ink:#5141B9;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-ads,
+.nv26-catalog-tile.nv26-tile-ads{--ns:#DC681A;--ns-dark:#B84511;--ns-soft:#FFF2E9;--ns-ink:#AC4817;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-reputation,
+.nv26-catalog-tile.nv26-tile-reputation{--ns:#0C907B;--ns-dark:#076D64;--ns-soft:#E8F8F3;--ns-ink:#066C5B;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-local,
+.nv26-catalog-tile.nv26-tile-local{--ns:#0F997B;--ns-dark:#05745F;--ns-soft:#E7FAF3;--ns-ink:#086B59;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-web,
+.nv26-catalog-tile.nv26-tile-web{--ns:#2775D8;--ns-dark:#1852B5;--ns-soft:#EBF5FF;--ns-ink:#1C59AA;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-software,
+.nv26-catalog-tile.nv26-tile-software{--ns:#6250DD;--ns-dark:#462EB9;--ns-soft:#F0EDFF;--ns-ink:#4F3BAE;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-ecommerce,
+.nv26-catalog-tile.nv26-tile-ecommerce{--ns:#0C9F66;--ns-dark:#08764F;--ns-soft:#EAF9F1;--ns-ink:#08724C;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-mobileapp,
+.nv26-catalog-tile.nv26-tile-mobileapp{--ns:#6661D7;--ns-dark:#4647B8;--ns-soft:#EFEEFF;--ns-ink:#5351B0;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-content,
+.nv26-catalog-tile.nv26-tile-content{--ns:#DF6C22;--ns-dark:#B34815;--ns-soft:#FFF2EB;--ns-ink:#AB4D1C;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-graphic,
+.nv26-catalog-tile.nv26-tile-graphic{--ns:#CE408E;--ns-dark:#A52C79;--ns-soft:#FFF0F7;--ns-ink:#AB317B;--ns-on:#fff}
+#featured :is(.nv43-category-card,.nv43-subcategory-link).nv-sector-default,
+.nv26-catalog-tile.nv26-tile-default{--ns:#6459C4;--ns-dark:#4940A9;--ns-soft:#F2F0FE;--ns-ink:#5044B0;--ns-on:#fff}
+
+/* Non-platform sector roots: same premium size, brand bar, pastel background,
+   active filled state and readable contrast as Instagram, Google and TikTok. */
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]){
+  position:relative;isolation:isolate;overflow:hidden;
+  background:var(--ns-soft,#F2F0FE)!important;
+  border:1px solid color-mix(in srgb,var(--ns,#6459C4) 15%,white)!important;
+  box-shadow:0 5px 13px rgba(26,34,70,.05)!important;
+  color:var(--ns-ink,#5141B9)!important;
+  border-radius:15px!important;
+  transform:none!important;filter:none!important;
+  transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"])::before{
+  content:"";position:absolute;left:16px;right:16px;top:0;height:3px;
+  border-radius:0 0 8px 8px;background:var(--ns,#6459C4);pointer-events:none
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]) .yh26-filter-name{
+  color:var(--ns-ink,#5141B9)!important;
+  -webkit-text-fill-color:currentColor!important;
+  font-size:11px;font-weight:800;line-height:1.43;text-shadow:none!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]) .yh26-filter-icon{
+  background:#fff!important;
+  border:1px solid color-mix(in srgb,var(--ns,#6459C4) 15%,white)!important;
+  color:var(--ns,#6459C4)!important;
+  box-shadow:none!important;opacity:1!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]) .yh26-filter-icon :is(.icon,i,svg){
+  color:var(--ns,#6459C4)!important;opacity:1!important;filter:none!important;
+  -webkit-text-fill-color:currentColor!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]):is(:hover,:focus-visible){
+  background:linear-gradient(145deg,#fff 12%,var(--ns-soft,#F2F0FE))!important;
+  border-color:var(--ns,#6459C4)!important;
+  box-shadow:0 8px 24px rgba(30,40,82,.11)!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,.is-parent-selected),
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,.is-parent-selected):hover{
+  background:linear-gradient(115deg,var(--ns,#6459C4),var(--ns-dark,#4940A9))!important;
+  color:var(--ns-on,#fff)!important;border-color:var(--ns,#6459C4)!important;
+  box-shadow:0 10px 22px rgba(28,36,77,.17)!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,.is-parent-selected) .yh26-filter-name{
+  color:var(--ns-on,#fff)!important;-webkit-text-fill-color:currentColor!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,.is-parent-selected) .yh26-filter-icon{
+  background:rgba(255,255,255,.18)!important;color:#fff!important;border-color:rgba(255,255,255,.2)!important
+}
+#featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,.is-parent-selected) .yh26-filter-icon :is(.icon,svg,i){
+  color:#fff!important
+}
+/* Non-platform subcategories inherit the selected sector accent.
+   They use the same white chip and left-colour rail as Google/Instagram. */
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]){
+  min-width:0!important;flex:0 0 auto!important;
+  padding:9px 12px!important;border-radius:10px!important;
+  border:1px solid #DCE3EF!important;
+  border-left:3px solid var(--ns,#6459C4)!important;
+  color:#273755!important;
+  background:#fff!important;
+  font-size:11px!important;font-weight:700!important;
+  box-shadow:none!important;filter:none!important;
+}
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]) :is(.icon,i,svg){
+  color:var(--ns,#6459C4)!important;flex:none!important;filter:none!important
+}
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]):is(:hover,:focus-visible){
+  background:var(--ns-soft,#F2F0FE)!important;
+  color:var(--ns-ink,#5141B9)!important;
+  border-color:#BFC9D9!important;border-left-color:var(--ns,#6459C4)!important
+}
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,[aria-selected="true"]){
+  background:linear-gradient(112deg,var(--ns,#6459C4),var(--ns-dark,#4940A9))!important;
+  border-color:var(--ns,#6459C4)!important;
+  color:var(--ns-on,#fff)!important
+}
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,[aria-selected="true"]) :is(.icon,i,svg){
+  color:var(--ns-on,#fff)!important
+}
+/* Category index follows the same sector palette rather than unrelated pastels. */
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]){
+  background:var(--ns-soft,#F2F0FE)!important;
+  border:1px solid color-mix(in srgb,var(--ns,#6459C4) 17%,white)!important;
+  box-shadow:0 7px 20px rgba(25,35,72,.06)!important
+}
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]) .nv26-tile-icon{
+  background:#fff!important;border:1px solid color-mix(in srgb,var(--ns,#6459C4) 12%,white)!important;
+  color:var(--ns,#6459C4)!important
+}
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]) .nv26-tile-icon :is(svg,i,.icon){
+  color:var(--ns,#6459C4)!important
+}
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]) .nv26-tile-top :is(strong,small){
+  color:var(--ns-ink,#5141B9)!important
+}
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]):hover{
+  background:var(--ns,#6459C4)!important;border-color:var(--ns,#6459C4)!important
+}
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]):hover .nv26-tile-top :is(strong,small){
+  color:var(--ns-on,#fff)!important
+}
+.nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]):hover .nv26-tile-icon{
+  background:rgba(255,255,255,.18)!important;color:#fff!important
+}
+@media(max-width:820px){
+ #featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]) .yh26-filter-name{font-size:10px}
+ #featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]){font-size:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]){transition:none!important}
+}
