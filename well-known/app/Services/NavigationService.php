@@ -20,9 +20,9 @@ final class NavigationService
         foreach (CatalogMenuService::groups() as $group) $enabledGroups[$group['key']] = true;
 
         $definitions = [
-            ['key'=>'group_social','label'=>'Sosyal Medya Hizmetleri','url'=>'/kategoriler?grup=social','default_enabled'=>true,'sort'=>20,'available'=>isset($enabledGroups['social'])],
-            ['key'=>'group_agency','label'=>'Ajans & Yazılım','url'=>'/kategoriler?grup=agency','default_enabled'=>true,'sort'=>30,'available'=>isset($enabledGroups['agency'])],
-            ['key'=>'group_marketing','label'=>'SEO & Dijital Pazarlama','url'=>'/kategoriler?grup=marketing','default_enabled'=>true,'sort'=>40,'available'=>isset($enabledGroups['marketing'])],
+            ['key'=>'group_social','label'=>'Sosyal Medya Hizmetleri','url'=>'/kategoriler/grup/social','default_enabled'=>true,'sort'=>20,'available'=>isset($enabledGroups['social'])],
+            ['key'=>'group_agency','label'=>'Ajans & Yazılım','url'=>'/kategoriler/grup/agency','default_enabled'=>true,'sort'=>30,'available'=>isset($enabledGroups['agency'])],
+            ['key'=>'group_marketing','label'=>'SEO & Dijital Pazarlama','url'=>'/kategoriler/grup/marketing','default_enabled'=>true,'sort'=>40,'available'=>isset($enabledGroups['marketing'])],
             ['key' => 'all', 'label' => 'Tüm Hizmetler', 'url' => '/kategoriler', 'default_enabled' => true, 'sort' => 10, 'available' => true],
             ['key' => 'blog', 'label' => 'Blog', 'url' => '/blog', 'default_enabled' => true, 'sort' => 100, 'available' => true],
             ['key' => 'faq', 'label' => 'SSS', 'url' => '/sss', 'default_enabled' => false, 'sort' => 110, 'available' => true],
