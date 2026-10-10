@@ -32,7 +32,7 @@ $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
 $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 ?>
-<div class="yv-category-v5">
+<div class="yv-category-v5 <?= e($nvPlatformClass) ?>">
 <section class="yv-category-hero-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>">
  <div class="container">
   <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="separator">/</span><a href="/kategoriler">Hizmetler</a><span class="separator">/</span><span><?= e($category['name']) ?></span></div>
