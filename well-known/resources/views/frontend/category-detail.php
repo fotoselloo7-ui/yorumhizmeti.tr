@@ -26,13 +26,14 @@ if (!function_exists('yvCatDesign')) {
     }
 }
 [$platformClass,$platformIcon,$platformColor]=yvCatDesign($category);
+$nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($category));
 $categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
 $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
 $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 ?>
 <div class="yv-category-v5">
-<section class="yv-category-hero-v5 <?= e($platformClass) ?>">
+<section class="yv-category-hero-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>">
  <div class="container">
   <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="separator">/</span><a href="/kategoriler">Hizmetler</a><span class="separator">/</span><span><?= e($category['name']) ?></span></div>
   <div class="yv-category-hero-grid-v5">
@@ -85,8 +86,8 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
     $price=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price'];
     $discount=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price']&&$pkg['price']>0)?round((1-$pkg['discount_price']/$pkg['price'])*100):0;
    ?>
-   <a class="yv-category-package-card-v5" href="/paket/<?= e($pkg['slug']) ?>">
-    <div class="yv-category-package-icon-v5 <?= e($platformClass) ?>"><?= icon($platformIcon,23) ?></div>
+   <a class="yv-category-package-card-v5 <?= e($nvPlatformClass) ?>" href="/paket/<?= e($pkg['slug']) ?>">
+    <div class="yv-category-package-icon-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>"><?= icon($platformIcon,23) ?></div>
     <?php if($index===0 || !empty($pkg['is_featured'])): ?><span class="yv-package-ribbon-v5"><?= $index===0?'EN POPÜLER':'ÇOK TERCİH EDİLEN' ?></span><?php endif; ?>
     <h3><?= e(package_display_name($pkg)) ?></h3>
     <?php if(!empty($pkg['short_description'])): ?><p class="nv67-category-package-summary"><?= e(excerpt(strip_tags((string)$pkg['short_description']),125)) ?></p><?php endif; ?>
@@ -110,7 +111,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 <section class="yv-category-story-v5 yh-story-premium-v23" aria-labelledby="yh23-story-heading">
  <div class="container">
   <div class="yv-category-story-grid-v5">
-   <div class="yv-category-phone-art-v5 <?= e($platformClass) ?>" aria-label="<?= e($category['name']) ?> tanıtım görseli">
+   <div class="yv-category-phone-art-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>" aria-label="<?= e($category['name']) ?> tanıtım görseli">
     <div class="yh23-art-halo" aria-hidden="true"></div>
     <div class="yh23-visual-label"><?= icon('sparkles',13) ?> Dijital büyüme</div>
     <div class="phone" aria-hidden="true">
