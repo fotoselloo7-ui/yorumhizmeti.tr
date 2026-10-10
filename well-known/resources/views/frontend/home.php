@@ -482,7 +482,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
                         ?>
                         <button type="button"
-                                class="yh18-featured-tab yh24-featured-filter nv43-category-card <?= $selected?'active':'' ?> <?= e($gcls) ?>"
+                                class="yh18-featured-tab yh24-featured-filter nv43-category-card <?= $selected?'active':'' ?> <?= e($gcls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($filterCategory))) ?>"
                                 data-featured-tab="<?= (int)$filterCategory['id'] ?>"
                                 data-featured-root-id="<?= (int)$filterCategory['id'] ?>"
                                 data-featured-parent-group="<?= e($navGroup['key']) ?>"
@@ -529,13 +529,13 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             $childUrl=$child['url']??'/kategori/'.rawurlencode((string)$child['slug']);
                             $childIcon=$child['icon']??'folder';
                             if($childType==='link'): ?>
-                            <a class="nv43-subcategory-link" href="<?= e($childUrl) ?>"
+                            <a class="nv43-subcategory-link <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??'')))) ?>" href="<?= e($childUrl) ?>"
                                title="<?= e($child['name']) ?>" data-menu-link>
                                 <?= icon($childIcon, 15) ?> <span><?= e($child['name']) ?></span>
                                 <?= icon('arrow-up-right',12) ?>
                             </a>
                             <?php else: ?>
-                            <button class="nv43-subcategory-link nv43-subcategory-tab"
+                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??'')))) ?>"
                                     type="button" data-featured-tab="<?= (int)$child['id'] ?>"
                                     data-featured-root-id="<?= $childRoot ?>"
                                     data-featured-parent-id="<?= (int)$child['parent_featured_id'] ?>"
