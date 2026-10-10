@@ -607,6 +607,14 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                     <?php foreach($group['packages'] as $pidx=>$pkg): ?>
                         <?= yh18FeaturedCard($pkg, $pidx===1) ?>
                     <?php endforeach; ?>
+                    <?php if(empty($group['packages'])): ?>
+                        <div class="nv82-featured-empty">
+                            <span><?= icon('layout-grid',22) ?></span>
+                            <strong><?= e($group['category']['name']) ?></strong>
+                            <p>Bu kategorinin hizmet seçeneklerini ve alt kategorilerini inceleyin.</p>
+                            <a href="/kategori/<?= e($group['category']['slug']) ?>">Hizmetleri İncele <?= icon('arrow-right',14) ?></a>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="yh18-carousel-row">
                     <div class="yh18-carousel-controls" aria-label="Paket kaydırma">
