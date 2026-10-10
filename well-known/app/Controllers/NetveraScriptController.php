@@ -33,10 +33,11 @@ class NetveraScriptController extends Controller
         }
         $category = trim((string)($_GET['category'] ?? ''));
         if ($category !== '') {
-            foreach (Catalog::categories() as $row) {
+            $allCategories = Catalog::categories();
+            foreach ($allCategories as $row) {
                 if ($row['slug'] === $category) {
                     \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                        \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $category), 'category'
+                        \App\Services\PublicSeoUrls::scriptCategory($row, $allCategories), 'category'
                     );
                 }
             }
@@ -57,10 +58,15 @@ class NetveraScriptController extends Controller
     public function categoryPage(string $slug): void
     {
         $slug = rawurldecode($slug);
-        foreach (Catalog::categories() as $row) {
+        $allCategories = Catalog::categories();
+        foreach ($allCategories as $row) {
             if ($row['slug'] === $slug) {
+                $canonicalPath = \App\Services\PublicSeoUrls::scriptCategory($row, $allCategories);
+                if (!empty($row['parent_legacy_id'])) {
+                    \App\Services\PublicSeoUrls::redirectLegacyFacet($canonicalPath, 'category');
+                }
                 $_GET['category'] = $slug;
-                $this->renderCatalog(\App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $slug));
+                $this->renderCatalog($canonicalPath);
                 return;
             }
         }
