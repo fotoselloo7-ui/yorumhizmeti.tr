@@ -45,15 +45,12 @@ final class SocialPlatformIdentity
     }
     public static function fromCategory(array $category,?array $parent=null):?string
     {
-        $subject=implode(' ',[
-            (string)($category['slug']??''),
-            (string)($category['name']??''),
-            (string)($parent['slug']??''),
-            (string)($parent['name']??''),
-            (string)($category['parent_category_slug']??''),
-            (string)($category['parent_category_name']??'')
-        ]);
-        return self::fromText($subject);
+        $parentBrand=self::fromText(implode(' ',[
+            (string)($parent['slug']??$category['parent_category_slug']??''),
+            (string)($parent['name']??$category['parent_category_name']??'')
+        ]));
+        if($parentBrand!==null)return $parentBrand;
+        return self::fromText((string)($category['slug']??'').' '.(string)($category['name']??''));
     }
     /**
      * Product identity is inherited from its real DB parent category; child
