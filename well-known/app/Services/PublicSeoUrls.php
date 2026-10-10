@@ -40,14 +40,6 @@ final class PublicSeoUrls
         return $path . ($qs === '' ? '' : '?' . $qs);
     }
 
-    public static function redirectLegacyFacet(string $target, string $facet): void
-    {
-        $params = $_GET;
-        unset($params[$facet]);
-        header('Location: ' . self::withQuery($target, $params), true, 301);
-        exit;
-    }
-
     public static function isSlug(string $slug): bool
     {
         return (bool) preg_match('/^[\pL\pN][\pL\pN_-]{0,199}$/uD', $slug);
