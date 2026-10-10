@@ -126,6 +126,41 @@ for(const screen of screens){
           await filtered.close();
         }
       }
+      // Category palette parity: the homepage carousel cannot fall back to
+      // white generic cards while the MEGA MENU uses brand-specific pastel tiles.
+      if (p.route==='/' && screen.name==='masaustu') {
+        const categoryTheme=await page.evaluate(()=>{
+          const header=document.querySelector('.nv26-social-mega-card.nv-platform-instagram');
+          const home=document.querySelector('#featured .nv43-category-card.nv-platform-instagram');
+          if(!header||!home)return {missing:!header?'header':'homepage'};
+          function sample(el){
+            const css=getComputedStyle(el);
+            const icon=getComputedStyle(el.querySelector('.nv26-social-mega-icon,.yh26-filter-icon')||el);
+            return {
+              bg:css.backgroundColor,
+              image:css.backgroundImage,
+              soft:css.getPropertyValue('--np-soft').trim(),
+              text:css.color,
+              iconBg:icon.backgroundColor,
+            };
+          }
+          return {header:sample(header),home:sample(home)};
+        });
+        if(categoryTheme.missing){
+          errors.push('Category parity: missing '+categoryTheme.missing+' Instagram tile');
+          failed=true;
+        }else{
+          const white='rgb(255, 255, 255)';
+          if(categoryTheme.home.bg===white && categoryTheme.home.image==='none'){
+            errors.push('Homepage category still forced to white instead of matching menu pastel');
+            failed=true;
+          }
+          if(categoryTheme.header.soft!==categoryTheme.home.soft){
+            errors.push('Homepage and mega menu platform color tokens differ');
+            failed=true;
+          }
+        }
+      }
       // Netvera blog covers include text on the artwork; no responsive crop
       // may hide original titles in the 4-card homepage layout.
       if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
