@@ -65,6 +65,14 @@ class CategoryController extends Controller
 
     public function show(string $slug): void
     {
+        // The retired ready-software landing page is replaced by the actual
+        // imported NetVera script catalogue. Redirect before DB lookup so
+        // historical bookmarks work even if this old category is unpublished.
+        if ($slug === \App\Services\ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT) {
+            header('Location: /hazir-scriptler', true, 301);
+            exit;
+        }
+
         $db = Database::getInstance();
         $category = $db->fetch("
             SELECT c.*, parent.slug AS parent_category_slug, parent.name AS parent_category_name
@@ -74,6 +82,12 @@ class CategoryController extends Controller
               AND (c.parent_id IS NULL OR parent.status = 'active')
         ", [$slug]);
         if (!$category) { $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
+        // Old software subcategories belonged to the duplicate, empty
+        // showcase. They now resolve to the live imported script catalogue.
+        if (\App\Services\ServiceCategoryVisibility::isLegacySoftware($category)) {
+            header('Location: /hazir-scriptler', true, 301);
+            exit;
+        }
         $category = \App\Services\CategorySearchBlueprint::decorate($category);
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
