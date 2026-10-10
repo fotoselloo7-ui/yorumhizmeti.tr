@@ -263,7 +263,7 @@
                 <?php if ($nv26Group['key'] === 'social'): ?>
                 <div class="nv26-social-mega-grid" aria-label="Sosyal medya platformları">
                   <?php foreach ($nv26Group['categories'] as $nv26Cat): ?>
-                  <a href="<?= e($nv26Cat['url']) ?>" class="nv26-social-mega-card nv26-social-<?= e($nv26Cat['style']) ?>">
+                  <a href="<?= e($nv26Cat['url']) ?>" class="nv26-social-mega-card nv26-social-<?= e($nv26Cat['style']) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($nv26Cat))) ?>">
                     <span class="nv26-social-mega-icon"><?= icon($nv26Cat['icon'], 27) ?></span>
                     <strong><?= e($nv26Cat['name']) ?></strong>
                     <small><?= count($nv26Cat['children']) ? count($nv26Cat['children']).' alt hizmet' : 'Hizmetleri gör' ?></small>
@@ -395,6 +395,7 @@
                           'label' => (string)$nv56Cat['name'],
                           'url' => $nv56Link,
                           'icon' => (string)($nv56Cat['icon'] ?? 'package'),
+                          'brand' => \App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($nv56Cat)),
                           'explicit' => isset($nv56Visible[$nv56Link])
                       ];
                   }
@@ -435,7 +436,7 @@
                   <section class="nv56-quick-group" aria-label="<?= e($nv56Group['label']) ?>">
                     <h3><?= icon($nv56Group['icon'],14) ?> <?= e($nv56Group['label']) ?></h3>
                     <?php foreach ($nv56Group['links'] as $nv56Link): ?>
-                    <a href="<?= e($nv56Link['url']) ?>" class="nv56-quick-category">
+                    <a href="<?= e($nv56Link['url']) ?>" class="nv56-quick-category <?= e($nv56Link['brand']??'') ?>">
                       <?= icon($nv56Link['icon'],14) ?><span><?= e($nv56Link['label']) ?></span>
                     </a>
                     <?php endforeach; ?>
