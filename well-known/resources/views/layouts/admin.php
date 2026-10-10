@@ -54,11 +54,8 @@
                 <a href="/admin/smm" class="<?= isActive('/admin/smm') ? 'active' : '' ?>">
                     <?= icon('share-2', 18) ?> Sosyal Medya API &amp; Servisler
                 </a>
-                <a href="/admin/hazir-yazilimlar" class="<?= isActive('/admin/hazir-yazilimlar') ? 'active' : '' ?>">
-                    <?= icon('monitor', 18) ?> Hazır Yazılım Vitrini
-                </a>
                 <a href="/admin/netvera-yazilimlar" class="<?= isActive('/admin/netvera-yazilimlar') ? 'active' : '' ?>">
-                    <?= icon('layers',18) ?> Netvera Yazılımları
+                    <?= icon('layers',18) ?> Hazır Yazılımlar &amp; Scriptler
                 </a>
                 <a href="/admin/netvera-kategoriler" class="<?= isActive('/admin/netvera-kategoriler') ? 'active' : '' ?>">
                     <?= icon('folder',18) ?> Yazılım Kategorileri
