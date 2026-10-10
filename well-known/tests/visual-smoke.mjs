@@ -1696,6 +1696,80 @@ try {
   console.error('FAIL product detail tabs:',String(e).slice(0,650));
 } finally {await productTabContext.close();}
 
+// End-to-end visual regression for screenshot-reported platform color conflicts.
+// Uses actual rendered parent/child category trees; no mocked styling values.
+for (const viewport of [{width:1440,height:900},{width:390,height:844}]) {
+  const ctx = await browser.newContext({viewport});
+  const page = await ctx.newPage();
+  try {
+    await page.goto(origin+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#featured').scrollIntoViewIfNeeded();
+    await page.locator('#featured [data-featured-group="social"]').click();
+    const instagram = page.locator('#featured [data-featured-filter-panel="social"] .nv43-category-card.nv-platform-instagram').first();
+    if (!(await instagram.count())) throw new Error('Instagram parent category lost its identity');
+    await instagram.click();
+    const instagramStyle = await instagram.evaluate(el => ({
+      active:el.classList.contains('active'),
+      background:getComputedStyle(el).backgroundImage,
+      label:getComputedStyle(el.querySelector('.yh26-filter-name')).color,
+      border:getComputedStyle(el).borderTopColor
+    }));
+    if (!instagramStyle.active || !instagramStyle.background.includes('gradient'))
+      throw new Error('Instagram active root must use saturated brand fill: '+JSON.stringify(instagramStyle));
+    const id = await instagram.getAttribute('data-featured-tab');
+    const rail = page.locator('#featured [data-featured-children-for="'+id+'"] .nv43-child-rail');
+    if (!(await rail.count()) || !(await rail.isVisible()))throw new Error('Instagram child rail hidden');
+    const geometry=await rail.evaluate(el=>{
+      const first=el.querySelector('.nv43-subcategory-link');
+      if(!first)return null;
+      const a=el.getBoundingClientRect(),b=first.getBoundingClientRect(),style=getComputedStyle(first);
+      return {scroll:el.scrollLeft,railLeft:a.left,firstLeft:b.left,
+        background:style.backgroundColor,leftBorder:parseFloat(style.borderLeftWidth),
+        rightBorder:parseFloat(style.borderRightWidth)};
+    });
+    if (!geometry || geometry.scroll > 3 || geometry.firstLeft < geometry.railLeft-3)
+      throw new Error('First Instagram subcategory button is clipped: '+JSON.stringify(geometry));
+    if (geometry.leftBorder <= geometry.rightBorder)
+      throw new Error('Subcategories must have crisp brand-side accent but neutral outer border: '+JSON.stringify(geometry));
+    const bg = geometry.background.replaceAll(' ','');
+    if (bg !== 'rgb(255,255,255)')
+      throw new Error('Platform subcategory buttons must be white, not pastel tinted: '+JSON.stringify(geometry));
+
+    const tiktok = page.locator('#featured [data-featured-filter-panel="social"] .nv43-category-card.nv-platform-tiktok').first();
+    if(await tiktok.count()){
+      await tiktok.click();
+      const tk=await tiktok.evaluate(el=>({active:el.classList.contains('active'),
+        fill:getComputedStyle(el).backgroundImage,
+        icon:getComputedStyle(el.querySelector('.yh26-filter-icon')).backgroundColor}));
+      if (!tk.active || !tk.fill.includes('gradient'))
+        throw new Error('TikTok parent platform identity lost: '+JSON.stringify(tk));
+      await instagram.click();
+      const reset=await rail.evaluate(el=>el.scrollLeft);
+      if(reset>3)throw new Error('Switching platform must reset subcategory rail to its first card: '+reset);
+    }
+    await page.locator('#featured [data-featured-group="marketing"]').click();
+    const google = page.locator('#featured [data-featured-filter-panel="marketing"] .nv43-category-card.nv-platform-google').first();
+    if(await google.count()){
+      await google.click();
+      const g=await google.evaluate(el=>({
+        active:el.classList.contains('active'),
+        fill:getComputedStyle(el).backgroundImage,
+        iconBackground:getComputedStyle(el.querySelector('.yh26-filter-icon')).backgroundColor
+      }));
+      if(!g.active || !g.fill.includes('gradient') || g.iconBackground.replaceAll(' ','')!=='rgb(255,255,255)')
+        throw new Error('Google needs saturated platform header and white multi-color G container: '+JSON.stringify(g));
+    }
+    const width=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,vw:innerWidth}));
+    if(width.doc>width.vw+3)throw new Error('Platform showcase overflows viewport: '+JSON.stringify(width));
+    console.log('PASS official platform palette, crisp neutral subcategory outlines and unclipped chips:',viewport.width);
+    results.push({route:'Platform category identity',screen:String(viewport.width),status:200,errors:[]});
+  }catch(error){
+    failed=true;
+    results.push({route:'Platform category identity',screen:String(viewport.width),status:0,errors:[String(error)]});
+    console.error('FAIL official platform design',viewport.width,String(error).slice(0,650));
+  }finally{await ctx.close();}
+}
+
 // Validate the visible mobile package slider (not just presence of HTML controls).
 const sliderContext=await browser.newContext({viewport:{width:390,height:844}});
 const sliderPage=await sliderContext.newPage();
