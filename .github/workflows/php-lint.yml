@@ -35,6 +35,9 @@ jobs:
           node --check well-known/public/assets/js/home-featured-tabs-v18.js
           node --check well-known/tests/visual-smoke.mjs
 
+      - name: Header reputation / Google menu visual parity QA
+        run: php well-known/tests/header-reputation-parity-v83-qa.php
+
       - name: NetVera screenshot fixes and script catalog QA
         run: php well-known/tests/netvera-visual-brand-catalog-v76-qa.php
 
