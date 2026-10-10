@@ -18,6 +18,9 @@ jobs:
             php -l "$file"
           done
 
+      - name: Retired ready-software category 301 and menu parity QA
+        run: php well-known/tests/retired-software-category-qa.php
+
       - name: Public SEO slug, redirects and canonical URL QA
         run: php well-known/tests/public-slug-url-qa.php
 
