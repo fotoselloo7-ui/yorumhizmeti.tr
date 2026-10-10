@@ -202,6 +202,69 @@
   outline:2px solid var(--np,#6B4DE8)!important;
   outline-offset:2px
 }
+/* Marquee/category quick links are also children of the same brand system. */
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"],
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]:hover{
+  box-shadow:none!important;
+  -webkit-box-shadow:none!important;
+  filter:none!important;
+  border-image:none!important;
+  transform:none!important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-google .yh49-category-icon{
+  background:#fff!important;
+  border:1px solid #e2e9f3!important;
+  box-shadow:none!important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-google .yh49-category-icon .icon{
+  color:#4285F4!important;
+  background:conic-gradient(#4285F4 0 28%,#34A853 28% 52%,#FBBC05 52% 76%,#EA4335 76% 89%,#4285F4 89%);
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  filter:none!important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-tiktok .yh49-category-icon{
+  background:#111418!important;border:1px solid #363e45!important;
+  box-shadow:none!important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-tiktok .yh49-category-icon .icon{
+  color:#fff!important;
+  filter:drop-shadow(-1px 0 #00F2EA) drop-shadow(1px 0 #FE2C55)!important
+}
+/* The complete featured-section wrappers had independent old blurred strokes. */
+:is(
+  #featured .yh24-featured-subfilters,
+  #featured .yh24-featured-filter-panel,
+  #featured .nv43-rail-shell,
+  #featured .nv43-child-shell,
+  #featured .nv43-child-panel,
+  #featured .yh18-featured-panes,
+  #featured .yh18-featured-footer,
+  #featured .yh18-slide-arrow,
+  #featured .nv43-rail-arrow,
+  .nv26-catalog-group,
+  .nv26-catalog-banner,
+  .yv-category-chip-row-v5>a,
+  .yv-category-package-grid-v5>a,
+  .yv-product-gallery-v5,
+  .yv-product-device-v5
+){
+  box-shadow:none!important;
+  -webkit-box-shadow:none!important;
+  border-image:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important
+}
+:is(
+  #featured .yh18-slide-arrow,
+  #featured .nv43-rail-arrow,
+  #featured .yh24-featured-group,
+  .yv-category-chip-row-v5>a
+):is(:hover,:focus-visible){
+  box-shadow:none!important;
+  filter:none!important
+}
+
 @media (prefers-reduced-motion:reduce){
   #featured .nv43-category-card[class*="nv-platform-"],
   #featured .nv43-subcategory-link[class*="nv-platform-"]{transition:none!important}
