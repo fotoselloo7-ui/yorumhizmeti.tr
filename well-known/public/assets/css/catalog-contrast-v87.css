@@ -1,0 +1,90 @@
+/*
+ * NetVera UI v87 — category directory contrast lock.
+ * Fixes the late v80 hover inversion colliding with the newer pastel v84 cards.
+ * Scope is intentionally limited to /kategoriler catalogue tiles.
+ */
+
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{
+  --nv87-ink:var(--np-ink,var(--np,#1f2a44));
+  background:var(--np-soft,#f5f6fa)!important;
+  color:var(--nv87-ink)!important;
+  border:1px solid color-mix(in srgb,var(--np,#667085) 18%,#fff)!important;
+  box-shadow:0 5px 16px rgba(23,35,74,.045)!important;
+}
+
+/* X / Threads are black marks on a soft neutral card, never white-on-grey. */
+.nv26-catalog .nv26-catalog-tile:is(.nv-platform-twitter,.nv-platform-threads){
+  --nv87-ink:#17191f;
+}
+
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within){
+  background:linear-gradient(140deg,#fff 0%,var(--np-soft,#f5f6fa) 84%)!important;
+  color:var(--nv87-ink)!important;
+  border:1px solid color-mix(in srgb,var(--np,#667085) 46%,#fff)!important;
+  box-shadow:0 11px 26px color-mix(in srgb,var(--np,#667085) 11%,transparent)!important;
+  transform:translateY(-1px)!important;
+}
+
+/* Override the older full-brand hover rule that turned labels white. */
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top strong,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top small,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-top,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-top strong,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-top small{
+  color:var(--nv87-ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  text-shadow:none!important;
+  opacity:1!important;
+}
+
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top small{
+  opacity:.64!important;
+}
+
+/* Logo wells stay white; glyphs retain the platform identity on hover too. */
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-icon{
+  background:#fff!important;
+  color:var(--nv87-ink)!important;
+  border:1px solid color-mix(in srgb,var(--np,#667085) 14%,#fff)!important;
+  box-shadow:none!important;
+  opacity:1!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon :is(.icon,svg,i),
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-icon :is(.icon,svg,i){
+  color:var(--nv87-ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  opacity:1!important;
+}
+
+/* Keep the recognizable TikTok shadow and Google blue mark. */
+.nv26-catalog .nv26-catalog-tile.nv-platform-tiktok .nv26-tile-icon :is(.icon,svg,i){
+  color:#111318!important;
+  filter:drop-shadow(-1px 0 #00F2EA) drop-shadow(1px 0 #FE2C55)!important;
+}
+.nv26-catalog .nv26-catalog-tile.nv-platform-google .nv26-tile-icon :is(.icon,svg,i){
+  color:#4285F4!important;
+  -webkit-text-fill-color:#4285F4!important;
+}
+
+/* Child service chips remain readable even while the parent card is hovered. */
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-sub a{
+  background:color-mix(in srgb,var(--np-soft,#f5f6fa) 62%,#fff)!important;
+  color:var(--nv87-ink)!important;
+  border-color:color-mix(in srgb,var(--np,#667085) 18%,#fff)!important;
+  -webkit-text-fill-color:currentColor!important;
+  text-shadow:none!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-sub a:is(:hover,:focus-visible){
+  background:#fff!important;
+  color:var(--nv87-ink)!important;
+  border-color:color-mix(in srgb,var(--np,#667085) 42%,#fff)!important;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{
+    transition:none!important;
+    transform:none!important;
+  }
+}
