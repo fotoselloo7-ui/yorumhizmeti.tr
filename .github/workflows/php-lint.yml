@@ -35,6 +35,9 @@ jobs:
           node --check well-known/public/assets/js/home-featured-tabs-v18.js
           node --check well-known/tests/visual-smoke.mjs
 
+      - name: Single category color and icon system QA
+        run: php well-known/tests/catalog-visual-parity-v84-qa.php
+
       - name: Header reputation / Google menu visual parity QA
         run: php well-known/tests/header-reputation-parity-v83-qa.php
 
