@@ -13,9 +13,10 @@ $layout=file_get_contents($root.'/resources/views/layouts/app.php');
 
 foreach (array_keys(Identity::all()) as $platform){
     $name='nv-platform-'.$platform;
-    if(!str_contains($tokens,'.'.$name.'{') ||
-       !str_contains($styles,'.'.$name.'{'))
-        throw new RuntimeException('Missing consistent platform palette: '.$name);
+    // v77 is the single source for ALL supported brands.
+    // v80 overrides only the few colors that need accessibility adjustments.
+    if(!str_contains($tokens,'.'.$name.'{'))
+        throw new RuntimeException('Missing official platform palette: '.$name);
     if(Identity::classFor($platform)!==$name)
         throw new RuntimeException('Identity class mismatch: '.$platform);
 }
