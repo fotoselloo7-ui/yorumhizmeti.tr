@@ -27,12 +27,13 @@ if (!function_exists('yvPkgDesign')) {
 }
 $lower=mb_strtolower((package_display_name($package)).' '.($package['category_name']??''));
 [$pclass,$platform]=yvPkgDesign(package_display_name($package), $package['category_name']??'');
+$nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($package['category_slug']??'').' '.($package['category_name']??'').' '.package_display_name($package)));
 $price=(!empty($package['discount_price'])&&$package['discount_price']<$package['price'])?$package['discount_price']:$package['price'];
 $discount=(!empty($package['discount_price'])&&$package['discount_price']<$package['price']&&$package['price']>0)?round((1-$package['discount_price']/$package['price'])*100):0;
 $reviews=$testimonialSection['extra']??[];
 ?>
 <div class="yv-product-v5">
-<section class="yv-product-hero-v5 <?= e($pclass) ?>">
+<section class="yv-product-hero-v5 <?= e($pclass) ?> <?= e($nvPlatformClass) ?>">
  <div class="container">
   <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a><span class="sep">/</span><a href="/kategori/<?= e($package['category_slug']??'') ?>"><?= e($package['category_name']??'Hizmetler') ?></a><span class="sep">/</span><span><?= e(package_display_name($package)) ?></span></div>
   <div class="yv-product-hero-grid-v5">
