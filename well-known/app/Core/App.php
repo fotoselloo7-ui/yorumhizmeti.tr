@@ -47,6 +47,7 @@ class App
         $r->get('/netvera/canli-destek/mesajlar', 'NetveraInquiryController@messages');
         $r->get('/hazir-scriptler', 'NetveraScriptController@index');
         $r->get('/hazir-scriptler/kategori/{slug}', 'NetveraScriptController@categoryPage');
+        $r->get('/hazir-scriptler/tur/{slug}', 'NetveraScriptController@typePage');
         $r->get('/hazir-scriptler/{mainSlug}/{subSlug}', 'NetveraScriptController@subCategoryPage');
         $r->get('/hazir-scriptler/{slug}', 'NetveraScriptController@detail');
         $r->get('/hazir-yazilimlar', 'SoftwareController@index');
