@@ -48,7 +48,7 @@ if (!function_exists('yvBlogPlatform')) {
     <div class="yv-blog-chip-grid-v8">
       <a class="<?= empty($_GET['category'])?'active':'' ?>" href="/blog"><?= icon('grid',14) ?><span>Tümü</span></a>
       <?php foreach(array_slice($categories,0,9) as $cat): [$cls,$ico]=yvBlogPlatform($cat['name']??''); ?>
-      <a class="<?= (($_GET['category']??'')===$cat['slug'])?'active':'' ?>" href="/blog?category=<?= e($cat['slug']) ?>"><?= icon($ico,14) ?><span><?= e($cat['name']) ?></span></a>
+      <a class="<?= (($_GET['category']??'')===$cat['slug'])?'active':'' ?>" href="/blog/kategori/<?= rawurlencode((string)$cat['slug']) ?>"><?= icon($ico,14) ?><span><?= e($cat['name']) ?></span></a>
       <?php endforeach; ?>
     </div>
   </div>
@@ -89,7 +89,7 @@ if (!function_exists('yvBlogPlatform')) {
         <div class="yv-empty"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>İçerik bulunamadı</h2><p>Arama veya filtre kriterlerine uygun yazı bulunamadı.</p></div>
         <?php endif; ?>
 
-        <?php if($totalPages>1): ?><div class="pagination yv-blog-pagination-v8"><?php for($i=1;$i<=$totalPages;$i++): ?><a class="<?= $i==$page?'active':'' ?>" href="?<?= http_build_query(array_merge($_GET,['page'=>$i])) ?>"><?= $i ?></a><?php endfor; ?></div><?php endif; ?>
+        <?php if($totalPages>1): ?><div class="pagination yv-blog-pagination-v8"><?php for($i=1;$i<=$totalPages;$i++): ?><a class="<?= $i==$page?'active':'' ?>" href="<?= e(\App\Services\PublicSeoUrls::withQuery($blogPaginationBase ?? '/blog', array_merge(array_diff_key($_GET,array_flip(['category','tag'])),['page'=>$i]))) ?>"><?= $i ?></a><?php endfor; ?></div><?php endif; ?>
       </main>
 
       <aside class="yv-blog-sidebar-v8">
