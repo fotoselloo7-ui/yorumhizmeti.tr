@@ -23,8 +23,8 @@ $check(str_contains($layout,'site-logo-v90.css'),'Responsive logo styles not loa
 $check(str_contains($form,'enctype="multipart/form-data"'),'Admin form cannot upload files');
 $check(str_contains($form,'name="site_logo_file"'),'Admin upload input missing');
 $check(str_contains($form,'name="site_logo_reset"'),'Admin reset missing');
-$check(str_contains($admin,"Upload::image($logoFile, 'branding')"),'Existing secure image upload not used');
-$check(str_contains($admin,"$config->set('site_logo', $uploadedLogo, 'branding')"),'Uploaded logo is not saved');
-$check(str_contains($admin,"$config->set('site_logo', '', 'branding')"),'Default logo cannot be restored');
+$check(str_contains($admin,\'Upload::image($logoFile, \\'branding\\')\'),'Existing secure image upload not used');
+$check(str_contains($admin,\'$config->set(\\'site_logo\\', $uploadedLogo, \\'branding\\')\'),'Uploaded logo is not saved');
+$check(str_contains($admin,\'$config->set(\\'site_logo\\', \\'\\', \\'branding\\')\'),'Default logo cannot be restored');
 $check(str_contains($css,'.nv90-site-logo')&&str_contains($css,'@media(max-width:480px)'),'Mobile logo sizing missing');
 echo "PASS: admin-changeable NetVera site logo, uploaded override, reset, responsive header and footer\n";
