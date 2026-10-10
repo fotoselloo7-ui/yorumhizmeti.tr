@@ -170,3 +170,123 @@
 @media(prefers-reduced-motion:reduce){
  .nv26-catalog-tile[class*="nv-platform-"]{transition:none!important}
 }
+
+
+/* v78: the moving HOME category ribbons were still painted generic purple.
+   These are the ACTUAL .yh49-category-link cards seen in the screenshot.
+   Match BOTH parent and child rows. Keep agency/software categories separate. */
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]{
+  position:relative;
+  isolation:isolate;
+  border:1px solid color-mix(in srgb,var(--np) 72%,#0c122b) !important;
+  background:linear-gradient(125deg,var(--np) 0%,var(--np-2) 100%) !important;
+  box-shadow:0 7px 17px color-mix(in srgb,var(--np) 20%,transparent) !important;
+  color:var(--np-on,#fff) !important;
+  text-decoration:none;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"] .yh49-category-copy strong,
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"] .yh49-category-copy small{
+  color:var(--np-on,#fff) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"] .yh49-category-copy small{
+  opacity:.84 !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"] .yh49-category-icon{
+  background:color-mix(in srgb,var(--np-on,#fff) 16%,transparent) !important;
+  color:var(--np-on,#fff) !important;
+  border:1px solid color-mix(in srgb,var(--np-on,#fff) 11%,transparent) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"] .yh49-category-icon .icon{
+  color:var(--np-on,#fff) !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]:hover{
+  border-color:color-mix(in srgb,var(--np-on,#fff) 42%,var(--np)) !important;
+  box-shadow:0 11px 26px color-mix(in srgb,var(--np) 32%,transparent) !important;
+  filter:brightness(1.045);
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]:focus-visible{
+  outline:3px solid var(--np) !important;
+  outline-offset:3px;
+}
+/* Spotify (#1DB954) is GREEN and needs dark typography for contrast. */
+.nv-platform-spotify{--np-on:#0B2515}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify{
+  background:linear-gradient(115deg,#1ED760,#1DB954) !important;
+  border-color:#159545 !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-tiktok{
+  background:linear-gradient(125deg,#0d1118,#161b25 60%,#282f39) !important;
+  border-bottom:2px solid #25F4EE !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-tiktok .yh49-category-icon .icon{
+  filter:drop-shadow(-1px 0 #25F4EE) drop-shadow(1px 0 #FE2C55)
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-google{
+  background:linear-gradient(116deg,#1967D2,#185ABC) !important;
+  border-left:4px solid #34A853 !important;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-google .yh49-category-icon{
+  background:conic-gradient(#4285F4 0 28%,#34A853 28% 55%,#FBBC05 55% 75%,#EA4335 75% 100%) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-instagram{
+  background:linear-gradient(112deg,#E1306C 0%,#C13584 54%,#833AB4 100%) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-youtube{
+  background:linear-gradient(120deg,#F30028,#BE0030) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-facebook{
+  background:linear-gradient(115deg,#1877F2,#0F55AD) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-telegram{
+  background:linear-gradient(115deg,#1889C1,#096294) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-twitter,
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-threads{
+  background:linear-gradient(115deg,#151515,#303030) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-discord{
+  background:linear-gradient(115deg,#5865F2,#404DCC) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-twitch{
+  background:linear-gradient(115deg,#9146FF,#6441A5) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-linkedin{
+  background:linear-gradient(115deg,#0A66C2,#004182) !important
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-snapchat{
+  background:linear-gradient(115deg,#FFFC00,#F1E900) !important;
+  color:#111 !important;
+  --np-on:#151515;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-kick{
+  background:linear-gradient(115deg,#53FC18,#9BFD6A) !important;
+  --np-on:#111A0D;
+}
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-whatsapp{
+  background:linear-gradient(115deg,#25D366,#1DB954) !important;
+  --np-on:#112A1B;
+}
+/* Featured group primary tabs + subcategory chips inherit platform color too. */
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
+  --np-label:color-mix(in srgb,var(--np) 76%,#101729);
+  border-color:color-mix(in srgb,var(--np) 33%,white) !important;
+  background:linear-gradient(135deg,#fff 4%,var(--np-soft) 96%) !important;
+  color:var(--np-label) !important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-name{
+  color:var(--np-label) !important;
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"] .icon{
+  color:var(--np) !important;
+}
+/* Catalog index nested service chips explicitly inherit their platform. */
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-sub a[class*="nv-platform-"]{
+  border-color:color-mix(in srgb,var(--np) 24%,white) !important;
+  background:color-mix(in srgb,var(--np) 10%,white) !important;
+  color:color-mix(in srgb,var(--np) 76%,#151d35) !important;
+}
+@media(prefers-reduced-motion:reduce){
+  .yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]{
+    transition:none !important
+  }
+}
