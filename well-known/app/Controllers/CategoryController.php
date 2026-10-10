@@ -24,13 +24,6 @@ class CategoryController extends Controller
         $groups = \App\Services\CatalogMenuService::groups();
         $keys = array_column($groups, 'key');
         if ($activeGroup !== '' && !in_array($activeGroup, $keys, true)) $activeGroup = '';
-        $uriPath = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/kategoriler', PHP_URL_PATH) ?: '/kategoriler'), '/');
-        if ($activeGroup !== '' && $uriPath === '/kategoriler') {
-            \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                \App\Services\PublicSeoUrls::path('/kategoriler/grup', $activeGroup), 'grup'
-            );
-        }
-
         if ($q !== '') {
             $groups = array_map(static function (array $group) use ($q): array {
                 $needle = mb_strtolower($q,'UTF-8');
@@ -65,12 +58,12 @@ class CategoryController extends Controller
 
     public function show(string $slug): void
     {
-        // The retired ready-software landing page is replaced by the actual
-        // imported NetVera script catalogue. Redirect before DB lookup so
-        // historical bookmarks work even if this old category is unpublished.
+        // This is an unused, never-indexed page in the new project, not
+        // a migrated NetVera address. There must be NO redirect or duplicate
+        // public content; all internal links now point to /hazir-scriptler.
         if ($slug === \App\Services\ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT) {
-            header('Location: /hazir-scriptler', true, 301);
-            exit;
+            \App\Services\PublicSeoUrls::notFound('Kategori Bulunamadı');
+            return;
         }
 
         $db = Database::getInstance();
@@ -82,26 +75,15 @@ class CategoryController extends Controller
               AND (c.parent_id IS NULL OR parent.status = 'active')
         ", [$slug]);
         if (!$category) { $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
-        // Old software subcategories belonged to the duplicate, empty
-        // showcase. They now resolve to the live imported script catalogue.
+        // Retired local-only child category pages are also excluded.
+        // Keep the DB rows for existing package/order foreign keys.
         if (\App\Services\ServiceCategoryVisibility::isLegacySoftware($category)) {
-            header('Location: /hazir-scriptler', true, 301);
-            exit;
+            \App\Services\PublicSeoUrls::notFound('Kategori Bulunamadı');
+            return;
         }
         $category = \App\Services\CategorySearchBlueprint::decorate($category);
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
-        $oldSubSlug = trim((string)($_GET['alt'] ?? ''));
-        if ($oldSubSlug !== '') {
-            foreach ($subCategories as $child) {
-                if ($child['slug'] === $oldSubSlug) {
-                    \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                        \App\Services\PublicSeoUrls::path('/kategori', $oldSubSlug), 'alt'
-                    );
-                }
-            }
-        }
-
         // Filters
         $altSlug = $_GET['alt'] ?? '';
         $q = trim($_GET['q'] ?? '');
