@@ -48,7 +48,7 @@ class CategoryController extends Controller
     {
         $db = Database::getInstance();
         $category = $db->fetch("
-            SELECT c.*
+            SELECT c.*, parent.slug AS parent_category_slug, parent.name AS parent_category_name
             FROM categories c
             LEFT JOIN categories parent ON c.parent_id = parent.id
             WHERE c.slug = ? AND c.status = 'active'
