@@ -56,7 +56,7 @@ $searchQuery = $searchQuery ?? '';
           <?php if(!empty($cat['children'])): ?>
           <div class="nv26-tile-sub">
             <?php foreach(array_slice($cat['children'],0,2) as $sub): ?>
-            <a class="<?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($sub,$cat))) ?>" href="<?= e($sub['url']) ?>"><?= e($sub['name']) ?></a>
+            <a class="<?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($sub,$cat))) ?>" href="<?= e($sub['url']) ?>"><?= icon(\App\Services\SocialPlatformIdentity::iconFor(\App\Services\SocialPlatformIdentity::fromCategory($sub,$cat),'arrow-right'),12) ?> <?= e($sub['name']) ?></a>
             <?php endforeach; ?>
             <?php if(count($cat['children'])>2): ?><a href="<?= e($cat['url']) ?>">Diğerleri <?= icon('arrow-right',10) ?></a><?php endif; ?>
           </div>
