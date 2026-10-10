@@ -1,0 +1,208 @@
+/*
+ * NetVera Platform Identity v80
+ * One platform identity from root > subcategory > product. Overrides historical
+ * generic purple hover and luminous outline CSS WITHOUT removing focus outlines.
+ * Real flat 1px borders stay, blurred strokes/oversized glowing shadows do not.
+ */
+:root{
+  --nv-flat-border:#e4e8f2;
+}
+.nv-platform-instagram{--np:#D62976;--np-2:#833AB4;--np-soft:#FFF1F7;--np-ink:#9D1A61;--np-on:#fff}
+.nv-platform-tiktok{--np:#111418;--np-2:#00F2EA;--np-soft:#F2F6F7;--np-ink:#111418;--np-on:#fff}
+.nv-platform-youtube{--np:#FF0033;--np-2:#C90027;--np-soft:#FFF2F4;--np-ink:#C90027;--np-on:#fff}
+.nv-platform-facebook{--np:#1877F2;--np-2:#0D5DBB;--np-soft:#ECF4FF;--np-ink:#1459B3;--np-on:#fff}
+.nv-platform-google{--np:#4285F4;--np-2:#34A853;--np-soft:#F1F7FF;--np-ink:#205BB5;--np-on:#fff}
+/* Icon containers stay recognizable and consistent across the catalog */
+:is(
+  #featured .nv43-category-card,
+  #featured .nv43-subcategory-link,
+  .nv26-catalog-tile,
+  .nv26-social-mega-card,
+  .nv56-quick-category,
+  .yv-category-package-card-v5,
+  .yh18-featured-card,
+  .yh6-package-card,
+  .yv-product-v5 .yv-product-hero-v5,
+  .yv-category-v5 .yv-category-hero-v5
+)[class*="nv-platform-"]{
+  border-image:none!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
+  background:var(--np-soft)!important;
+  border:1px solid color-mix(in srgb,var(--np) 26%,#fff)!important;
+  color:var(--np-ink,var(--np))!important;
+  box-shadow:none!important;
+  filter:none!important;
+  transform:none!important
+}
+#featured .nv43-category-card.yh18-featured-tab:is(.active,.is-parent-selected)[class*="nv-platform-"]{
+  border:2px solid var(--np)!important;
+  background:color-mix(in srgb,var(--np) 10%,#fff)!important;
+  box-shadow:none!important
+}
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible)[class*="nv-platform-"]{
+  border-color:var(--np)!important;
+  background:color-mix(in srgb,var(--np) 11%,#fff)!important;
+  color:var(--np-ink,var(--np))!important;
+  filter:none!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-name,
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible)[class*="nv-platform-"] .yh26-filter-name{
+  color:var(--np-ink,var(--np))!important
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon,
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible)[class*="nv-platform-"] .yh26-filter-icon,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon,
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon,
+.yh18-featured-card[class*="nv-platform-"] .yh18-card-icon,
+.yh6-package-icon[class*="nv-platform-"],
+.yv-category-v5[class*="nv-platform-"] :is(.yv-category-brand-v5>span,.yv-category-package-icon-v5,.yv-category-brand-orbit-v5.main),
+.yv-product-v5[class*="nv-platform-"] :is(.yv-product-brand-v5>span,.yv-product-orbit-v5.brand){
+  background:var(--np)!important;
+  color:var(--np-on,#fff)!important;
+  border-color:transparent!important;
+  transform:none!important;
+  filter:none!important;
+  box-shadow:none!important
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon :is(.icon,i,svg){
+  transform:none!important;filter:none!important;
+  color:var(--np-on,#fff)!important
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"],
+#featured .nv43-subcategory-link:is(:hover,:focus-visible)[class*="nv-platform-"],
+.nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-sub a[class*="nv-platform-"]{
+  color:var(--np-ink,var(--np))!important;
+  background:var(--np-soft)!important;
+  border:1px solid color-mix(in srgb,var(--np) 24%,white)!important;
+  box-shadow:none!important;
+  filter:none!important;
+  transform:none!important;
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"] .icon,
+#featured .nv43-subcategory-link:is(:hover,:focus-visible)[class*="nv-platform-"] .icon,
+.nv26-catalog-tiles .nv26-tile-sub a[class*="nv-platform-"] .icon{
+  color:var(--np)!important;
+  filter:none!important;transform:none!important
+}
+#featured .nv43-subcategory-link:is([aria-selected="true"],.active)[class*="nv-platform-"]{
+  background:color-mix(in srgb,var(--np) 14%,white)!important;
+  border-color:var(--np)!important
+}
+.yh18-featured-card[class*="nv-platform-"]{
+  border:1px solid color-mix(in srgb,var(--np) 25%,white)!important;
+  box-shadow:none!important
+}
+.yh18-featured-card[class*="nv-platform-"]:hover{
+  border-color:var(--np)!important;
+  box-shadow:none!important;filter:none!important;transform:none!important
+}
+.yh18-featured-card[class*="nv-platform-"] .yh18-card-brand small,
+.yh18-featured-card[class*="nv-platform-"] .yh18-card-price strong,
+.yv-category-v5[class*="nv-platform-"] .yv-category-package-card-v5 em{
+  color:var(--np-ink,var(--np))!important
+}
+.yh18-featured-card[class*="nv-platform-"] .yh18-card-cta,
+.yh18-featured-card[class*="nv-platform-"] .yh18-card-cta:hover,
+.yv-category-v5[class*="nv-platform-"] .yv-category-hero-v5 .yv-btn-primary,
+.yv-product-v5[class*="nv-platform-"] .yv-product-hero-v5 .yv-btn-primary{
+  background:var(--np)!important;
+  color:#fff!important;
+  box-shadow:none!important
+}
+/* Uniform TikTok: black mark + cyan/red accent, never purple/teal gradient. */
+:is(.nv-platform-tiktok .yh26-filter-icon,
+    .nv-platform-tiktok .nv26-tile-icon,
+    .nv-platform-tiktok .nv26-social-mega-icon,
+    .nv-platform-tiktok .yh18-card-icon,
+    .nv-platform-tiktok .yv-category-package-icon-v5,
+    .nv-platform-tiktok .yv-product-brand-v5>span){
+  background:#111418!important;color:#fff!important;
+  border:1px solid #1F2932!important
+}
+:is(.nv-platform-tiktok .yh26-filter-icon,
+    .nv-platform-tiktok .nv26-tile-icon,
+    .nv-platform-tiktok .nv26-social-mega-icon,
+    .nv-platform-tiktok .yh18-card-icon,
+    .nv-platform-tiktok .yv-category-package-icon-v5,
+    .nv-platform-tiktok .yv-product-brand-v5>span) .icon{
+  color:#fff!important;
+  filter:drop-shadow(-1px 0 #00F2EA) drop-shadow(1px 0 #FE2C55)!important
+}
+/* Google's letter G must be four-color on a WHITE surface, not plain teal or a white G. */
+:is(.nv-platform-google .yh26-filter-icon,
+    .nv-platform-google .nv26-tile-icon,
+    .nv-platform-google .nv26-social-mega-icon,
+    .nv-platform-google .yh18-card-icon,
+    .nv-platform-google .yv-category-brand-v5>span,
+    .nv-platform-google .yv-category-package-icon-v5,
+    .nv-platform-google .yv-product-brand-v5>span,
+    .nv-platform-google .yv-product-orbit-v5.brand){
+  background:#fff!important;
+  border:1px solid #dce5f5!important;
+  box-shadow:none!important
+}
+:is(.nv-platform-google .yh26-filter-icon,
+    .nv-platform-google .nv26-tile-icon,
+    .nv-platform-google .nv26-social-mega-icon,
+    .nv-platform-google .yh18-card-icon,
+    .nv-platform-google .yv-category-brand-v5>span,
+    .nv-platform-google .yv-category-package-icon-v5,
+    .nv-platform-google .yv-product-brand-v5>span,
+    .nv-platform-google .yv-product-orbit-v5.brand) .icon{
+  color:#4285F4!important;
+  background:conic-gradient(#4285F4 0deg 98deg,#34A853 98deg 185deg,#FBBC05 185deg 270deg,#EA4335 270deg 320deg,#4285F4 320deg)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  filter:none!important
+}
+:is(.nv-platform-google .nv43-subcategory-link,
+    .nv-platform-google.nv43-subcategory-link) .icon{
+  color:#4285F4!important;
+  background:conic-gradient(#4285F4 0 28%,#34A853 28% 52%,#FBBC05 52% 76%,#EA4335 76% 89%,#4285F4 89%);
+  background-clip:text!important;-webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important
+}
+/* Flat outlines across all major site elements, not only the two screenshots.
+   These are high-specificity overrides for the original CSS glow/blur rules. */
+:is(
+  .yh18-featured-card,.yh6-package-card,.nv43-category-card,.nv43-subcategory-link,
+  .nv43-rail-arrow,.nv43-child-panel,.yh24-featured-navigation,.yh24-featured-group,
+  .nv26-catalog-tile,.nv26-social-mega-card,.nv56-quick-category,
+  .yh49-category-link,.nv29-service-card,.nv75-benefit,.nv75-ecosystem,
+  .yv-category-package-card-v5,.yv-category-hero-v5,.yv-product-hero-v5,
+  .yv-product-gallery-main-v5,.nv30-review-card,.yh31-software-card,
+  .nv40-product-card,.nv75-ecosystem-item
+){
+  box-shadow:none!important;
+  -webkit-box-shadow:none!important;
+  border-image:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important
+}
+:is(
+  .yh18-featured-card,.yh6-package-card,.nv43-category-card,.nv43-subcategory-link,
+  .nv26-catalog-tile,.nv26-social-mega-card,.nv56-quick-category,
+  .nv29-service-card,.nv30-review-card,.yv-category-package-card-v5,.nv40-product-card
+):is(:hover,:focus-within){
+  box-shadow:none!important;
+  -webkit-box-shadow:none!important;
+}
+:is(.yh49-category-link,.nv29-service-card,.nv26-catalog-tile):hover{
+  filter:none!important
+}
+:is(.yh18-featured-card,.nv43-category-card,.nv26-catalog-tile,.yv-category-package-card-v5)[class*="nv-platform-"]:focus-visible,
+:is(a,button)[class*="nv-platform-"]:focus-visible{
+  outline:2px solid var(--np,#6B4DE8)!important;
+  outline-offset:2px
+}
+@media (prefers-reduced-motion:reduce){
+  #featured .nv43-category-card[class*="nv-platform-"],
+  #featured .nv43-subcategory-link[class*="nv-platform-"]{transition:none!important}
+}
