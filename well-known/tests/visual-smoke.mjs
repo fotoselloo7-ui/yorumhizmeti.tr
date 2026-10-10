@@ -505,11 +505,13 @@ for(const screen of screens){
             return {cards:cards.length,childLinks:links.length,
               badHref:links.some(a=>{
                 const href=a.getAttribute('href')||'';
-                // Agency's ready-scripts tile routes to a dedicated live catalog;
-                // legacy service cards still use their original ?alt= links.
-                return !(href.startsWith('/kategori/')&&href.includes('?alt='))
+                // Real category child links now point directly to their own
+                // indexed SEO pages. Old ?alt= links are still supported.
+                // NetVera script filters preserve their separate legacy URLs.
+                return !(/^\/kategori\/[^/?#]+(?:\?alt=[^&#]+)?$/.test(href))
                   && !(href.startsWith('/hazir-scriptler?category=')&&href.split('=')[1])
-                  && href!=='/hazir-yazilimlar';
+                  && !(href.startsWith('/hazir-scriptler?type=')&&href.split('=')[1])
+                  && href!=='/hazir-scriptler' && href!=='/hazir-yazilimlar';
               }),
               overflow:!!grid && grid.scrollWidth>grid.clientWidth+3,
               overlap:duplicateCard,
