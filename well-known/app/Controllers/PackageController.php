@@ -21,7 +21,8 @@ class PackageController extends Controller
         }
         $db = Database::getInstance();
         $package = $db->fetch("
-            SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            SELECT p.*, c.name AS category_name, c.slug AS category_slug,
+                   parent.slug AS parent_category_slug, parent.name AS parent_category_name
             FROM packages p
             INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
             LEFT JOIN categories parent ON c.parent_id = parent.id
