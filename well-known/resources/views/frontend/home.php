@@ -314,7 +314,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 if (empty($scriptCat['slug'])) continue;
                 $yh49Children[] = [
                     'name' => (string)$scriptCat['name'], 'detail' => 'Hazır Yazılımlar',
-                    'url' => '/hazir-scriptler/kategori/'.rawurlencode((string)$scriptCat['slug']),
+                    'url' => \App\Services\PublicSeoUrls::scriptCategory($scriptCat, \App\Services\NetveraBridgeService::categories()),
                     'icon' => 'code', 'style' => 'software'
                 ];
             }
