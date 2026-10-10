@@ -168,9 +168,14 @@
       pauseTemporarily();
     };
 
+    let visibleRootId = tabs.find(tab => tab.classList.contains('active'))?.dataset.featuredRootId || '';
     const revealChildren = tab => {
       const id = tab?.dataset.featuredTab || '';
       const rootId = tab?.dataset.featuredRootId || id;
+      // A newly selected platform always starts with the first FULL chip.
+      // Earlier auto-rotation left half-visible labels after switching tabs.
+      const rootChanged = visibleRootId !== rootId;
+      visibleRootId = rootId;
       const immediateParent = tab?.dataset.featuredParentId || '';
       childPanels.forEach(panel => {
         const key = panel.dataset.featuredChildrenFor;
@@ -183,6 +188,12 @@
         const parent = item.dataset.featuredTab === rootId && rootId !== id;
         item.classList.toggle('is-parent-selected', parent);
       });
+      if (rootChanged) {
+        childPanels.filter(panel => panel.dataset.featuredChildrenFor === rootId).forEach(panel => {
+          const rail = panel.querySelector('[data-featured-rail-kind="child"]');
+          if (rail) rail.scrollLeft = 0;
+        });
+      }
     };
 
     // All parent cards and nested links share the same accessible horizontal
@@ -283,7 +294,11 @@
       if(reducedMotion.matches||document.hidden||!visible||paused||switcher.matches(':hover'))return;
       const activePanel=filterPanels.find(panel=>!panel.hidden);
       if(!activePanel)return;
-      const candidates=categoryRails.filter(rail=>activePanel.contains(rail)&&
+      // Only the root row may rotate automatically. Child subcategory labels
+      // must remain fully readable and anchored at the first item until a user
+      // deliberately swipes or clicks the navigation arrows.
+      const candidates=categoryRails.filter(rail=>
+        rail.dataset.featuredRailKind === 'root' && activePanel.contains(rail) &&
         isVisiblyOpen(rail) && !rail.contains(document.activeElement) &&
         !rail.matches(':hover') && !rail.classList.contains('is-dragging'));
       if(!candidates.length)return;
