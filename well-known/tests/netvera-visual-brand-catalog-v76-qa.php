@@ -57,7 +57,7 @@ if(!str_contains($heroCss,'text-align:left!important') ||
 if(str_contains($heroCss,'padding-left:clamp(0px,1.7vw,24px)'))
  throw new RuntimeException('Misaligned middle hero line was reintroduced.');
 $head=$read('resources/views/layouts/app.php');
-if(!str_contains($head,'netvera-premium-v76.css') || !str_contains($head,'?v=76.2'))
+if(!preg_match('/netvera-premium-v76\\.css[^\\n]*\\?v=76\\.\\d+/', $head))
  throw new RuntimeException('New hero styles may be served from stale browser cache.');
 $a=strpos($home,'<section class="yh6-why nv75-why"');
 $b=strpos($home,'</section>',$a);
