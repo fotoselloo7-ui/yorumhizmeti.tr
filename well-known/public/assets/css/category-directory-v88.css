@@ -1,0 +1,140 @@
+/* NetVera v88 — unified category directory, matching the homepage pastel identity.
+ * The entire tile is one link; no duplicated child-category buttons.
+ * Applies to social platforms AND agency/software/SEO sector tiles. */
+.nv26-catalog .nv26-catalog-tiles{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:16px!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile{
+  --nv88-bg:var(--np-soft,var(--ns-soft,var(--shade,#f3f1ff)));
+  --nv88-ink:var(--np-ink,var(--ns-ink,var(--tile,#5144a3)));
+  --nv88-accent:var(--np,var(--ns,var(--tile,#6853d9)));
+  min-width:0!important;
+  min-height:190px!important;
+  display:flex!important;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:var(--nv88-bg)!important;
+  border:1px solid color-mix(in srgb,var(--nv88-accent) 17%,white)!important;
+  border-radius:16px!important;
+  box-shadow:0 5px 17px rgba(20,35,70,.045)!important;
+  color:var(--nv88-ink)!important;
+  filter:none!important;
+  transform:none!important;
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within){
+  background:var(--nv88-bg)!important;
+  border-color:color-mix(in srgb,var(--nv88-accent) 44%,white)!important;
+  box-shadow:0 12px 28px rgba(25,36,75,.11)!important;
+  color:var(--nv88-ink)!important;
+  transform:translateY(-3px)!important;
+  filter:none!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-top,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within) .nv26-tile-top{
+  display:flex!important;
+  flex:1;
+  flex-direction:column;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  min-width:0;
+  min-height:190px!important;
+  width:100%;
+  gap:8px!important;
+  padding:22px!important;
+  text-align:left!important;
+  text-decoration:none!important;
+  color:var(--nv88-ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  background:transparent!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-icon,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within) .nv26-tile-icon{
+  display:grid!important;
+  place-items:center!important;
+  width:47px!important;
+  height:47px!important;
+  flex:0 0 47px!important;
+  margin:0 0 5px!important;
+  background:#fff!important;
+  color:var(--nv88-ink)!important;
+  border:1px solid color-mix(in srgb,var(--nv88-accent) 13%,#fff)!important;
+  border-radius:13px!important;
+  box-shadow:none!important;
+  opacity:1!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-icon :is(.icon,i,svg),
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within) .nv26-tile-icon :is(.icon,i,svg){
+  color:var(--nv88-ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  opacity:1!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-top strong,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within) .nv26-tile-top strong{
+  color:var(--nv88-ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  text-shadow:none!important;
+  opacity:1!important;
+  font-size:13px!important;
+  line-height:1.45!important;
+  font-weight:800!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-top small,
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within) .nv26-tile-top small{
+  color:var(--nv88-ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  opacity:.75!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  text-shadow:none!important;
+}
+.nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv88-tile-arrow{
+  position:absolute;
+  right:19px;
+  bottom:19px;
+  display:grid;
+  place-items:center;
+  width:29px;height:29px;
+  border-radius:9px;
+  background:rgba(255,255,255,.82);
+  color:var(--nv88-ink)!important;
+  border:1px solid color-mix(in srgb,var(--nv88-accent) 14%,white);
+  transition:transform .2s ease;
+}
+.nv26-catalog .nv26-catalog-tile:is(:hover,:focus-within) .nv88-tile-arrow{transform:translateX(3px)}
+.nv26-catalog .nv26-catalog-tile .nv26-tile-sub{display:none!important}
+.nv26-catalog .nv26-catalog-tile .nv26-tile-top:focus-visible{
+  outline:3px solid var(--nv88-accent)!important;
+  outline-offset:-4px!important;
+  border-radius:16px;
+}
+/* Black platform glyphs never invert to white over light neutral backgrounds. */
+.nv26-catalog .nv26-catalog-tile:is(.nv-platform-twitter,.nv-platform-threads,.nv-platform-tiktok){
+  --nv88-ink:#1a1d23;
+}
+.nv26-catalog .nv26-catalog-tile.nv-platform-tiktok .nv26-tile-icon :is(.icon,i,svg){
+  filter:drop-shadow(-1px 0 #00f2ea) drop-shadow(1px 0 #fe2c55)!important;
+}
+@media(max-width:1050px){
+  .nv26-catalog .nv26-catalog-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+  .nv26-catalog .nv26-catalog-tiles{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile,
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-top{min-height:165px!important}
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-top{padding:16px!important}
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-top strong{font-size:12px!important}
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile .nv88-tile-arrow{right:12px;bottom:12px;width:25px;height:25px}
+  .nv26-catalog .nv26-catalog-group-head{align-items:flex-start}
+}
+@media(max-width:360px){
+  .nv26-catalog .nv26-catalog-tiles{grid-template-columns:1fr!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile,
+  .nv26-catalog .nv26-catalog-tile .nv88-tile-arrow{transition:none!important}
+  .nv26-catalog .nv26-catalog-tiles .nv26-catalog-tile:is(:hover,:focus-within){transform:none!important}
+}
