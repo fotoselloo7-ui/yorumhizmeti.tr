@@ -17,6 +17,12 @@ $assert(Seo::path('/kategori', 'içerik') === '/kategori/i%C3%A7erik', 'UTF-8 pa
 $assert(Seo::withQuery('/blog/kategori/google-isletme-profili', ['page'=>2, 'q'=>'seo ipuçları']) === '/blog/kategori/google-isletme-profili?page=2&q=seo%20ipu%C3%A7lar%C4%B1', 'Pagination filters incorrect');
 $assert(Seo::withQuery('/blog', ['q'=>'', 'page'=>null]) === '/blog', 'Empty query should be removed');
 $assert(Seo::isSlug('google-isletme-profili'), 'Valid slug rejected');
+$scriptCategories = [
+    ['legacy_id'=>10, 'parent_legacy_id'=>null, 'slug'=>'web-scriptleri'],
+    ['legacy_id'=>11, 'parent_legacy_id'=>10, 'slug'=>'haber-scriptleri']
+];
+$assert(Seo::scriptCategory($scriptCategories[0], $scriptCategories)==='/hazir-scriptler/kategori/web-scriptleri', 'New parent path invalid');
+$assert(Seo::scriptCategory($scriptCategories[1], $scriptCategories)==='/hazir-scriptler/web-scriptleri/haber-scriptleri', 'Indexed child path changed');
 $assert(!Seo::isSlug('test/../../admin'), 'Unsafe slug accepted');
 
 $routes = $load('app/Core/App.php');
@@ -40,9 +46,9 @@ $checks = [
     'resources/views/frontend/blog/detail.php' => ['/blog/kategori/', '/blog/etiket/'],
     'resources/views/frontend/categories.php' => ['/kategoriler/grup/'],
     'resources/views/frontend/category-detail.php' => ['/kategori/'],
-    'resources/views/frontend/netvera-scripts.php' => ['/hazir-scriptler/kategori', '/hazir-scriptler/tur'],
+    'resources/views/frontend/netvera-scripts.php' => ['PublicSeoUrls::scriptCategory', '/hazir-scriptler/tur'],
     'resources/views/frontend/software.php' => ['/hazir-yazilimlar/tur'],
-    'resources/views/layouts/app.php' => ['/kategoriler/grup/', '/hazir-scriptler/kategori/'],
+    'resources/views/layouts/app.php' => ['/kategoriler/grup/', 'PublicSeoUrls::scriptCategory'],
     'app/Services/SitemapService.php' => ['/blog/kategori', '/hazir-scriptler/kategori'],
 ];
 foreach ($checks as $file=>$needles) {
