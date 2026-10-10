@@ -8,15 +8,19 @@ $nv40Context = array_filter([
     'min_rating' => ($filterMinRating ?? 0) ?: null,
     'sort' => ($filterSort ?? 'recommended') === 'recommended' ? null : $filterSort,
 ], static fn($value) => $value !== null && $value !== '');
+$nv40CategoryUrlBySlug = [];
+foreach ($categories as $row) {
+    $nv40CategoryUrlBySlug[$row['slug']] = \App\Services\PublicSeoUrls::scriptCategory($row, $categories);
+}
 $nv40CatalogPath = $filterCategory !== ''
-    ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $filterCategory)
+    ? ($nv40CategoryUrlBySlug[$filterCategory] ?? '/hazir-scriptler')
     : (($filterType ?? '') !== ''
         ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $filterType)
         : '/hazir-scriptler');
-$nv40CategoryLink = static function (?string $category) use ($nv40Context): string {
+$nv40CategoryLink = static function (?string $category) use ($nv40Context, $nv40CategoryUrlBySlug): string {
     $params = $nv40Context;
     $path = $category !== null && $category !== ''
-        ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $category)
+        ? ($nv40CategoryUrlBySlug[$category] ?? '/hazir-scriptler')
         : (!empty($params['type']) ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', (string)$params['type']) : '/hazir-scriptler');
     if ($category === null || $category === '') unset($params['type']);
     return \App\Services\PublicSeoUrls::withQuery($path, $params);
