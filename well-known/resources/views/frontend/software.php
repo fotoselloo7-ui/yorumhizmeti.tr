@@ -1,5 +1,8 @@
 <?php
 $nv36Active = $softwareFilter !== '' || $softwareQuery !== '' || $softwareMin !== null || $softwareMax !== null || $softwareDiscount || $softwareFeatured;
+$nv36CurrentPath = $softwareFilter !== ''
+    ? \App\Services\PublicSeoUrls::path('/hazir-yazilimlar/tur', $softwareFilter)
+    : '/hazir-yazilimlar';
 $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwareQuery,$softwareSort,$softwareMin,$softwareMax,$softwareDiscount,$softwareFeatured): string {
     $args = [
         'tur'=>$softwareFilter,'q'=>$softwareQuery,'siralama'=>$softwareSort,
@@ -7,7 +10,10 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
         'indirim'=>$softwareDiscount?'1':'','one_cikan'=>$softwareFeatured?'1':'',
     ];
     foreach($overrides as $key=>$value) $args[$key]=$value;
-    return '/hazir-yazilimlar'.(($q=http_build_query(array_filter($args,static fn($v)=>$v!==''&&$v!==null)))?'?'.$q:'');
+    $type = (string)($args['tur'] ?? '');
+    unset($args['tur']);
+    $path = $type !== '' ? \App\Services\PublicSeoUrls::path('/hazir-yazilimlar/tur', $type) : '/hazir-yazilimlar';
+    return \App\Services\PublicSeoUrls::withQuery($path, $args);
 };
 ?>
 <main class="nv36-marketplace">
@@ -31,7 +37,7 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
         <button type="button" class="nv36-mobile-filter-toggle" data-software-filter-toggle aria-expanded="false" aria-controls="nv36-filter-content">
           <?= icon('sliders',17) ?> Filtreleri Aç <?= icon('chevron-down',15) ?>
         </button>
-        <form id="nv36-filter-form" action="/hazir-yazilimlar" method="get" class="nv36-filter-content">
+        <form id="nv36-filter-form" action="<?= e($nv36CurrentPath) ?>" method="get" class="nv36-filter-content">
           <div class="nv36-filter-top">
             <div><span><?= icon('sliders',15) ?></span><strong>Filtreler</strong></div>
             <a href="/hazir-yazilimlar">Temizle</a>
@@ -61,7 +67,6 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
               <?php endforeach; ?>
             </nav>
           </div>
-          <?php if($softwareFilter!==''): ?><input type="hidden" name="tur" value="<?= e($softwareFilter) ?>"><?php endif; ?>
           <?php if($softwareQuery!==''): ?><input type="hidden" name="q" value="<?= e($softwareQuery) ?>"><?php endif; ?>
           <div class="nv36-filter-section">
             <label class="nv36-filter-label" for="nv36-min">Fiyat Aralığı (₺)</label>
@@ -88,9 +93,8 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
             <h2>Satıştaki <span>Yazılımlar</span></h2>
             <p><strong><?= count($softwareProducts) ?></strong> ürün listeleniyor<?= $softwareAllCount!==count($softwareProducts)?' · toplam '.(int)$softwareAllCount.' yazılım':'' ?></p>
           </div>
-          <form action="/hazir-yazilimlar" method="get" class="nv36-search-form" role="search">
-            <?php if($softwareFilter!==''): ?><input type="hidden" name="tur" value="<?= e($softwareFilter) ?>"><?php endif; ?>
-            <?php if($softwareMin!==null): ?><input type="hidden" name="min" value="<?= e((string)$softwareMin) ?>"><?php endif; ?>
+          <form action="<?= e($nv36CurrentPath) ?>" method="get" class="nv36-search-form" role="search">
+              <?php if($softwareMin!==null): ?><input type="hidden" name="min" value="<?= e((string)$softwareMin) ?>"><?php endif; ?>
             <?php if($softwareMax!==null): ?><input type="hidden" name="max" value="<?= e((string)$softwareMax) ?>"><?php endif; ?>
             <?php if($softwareDiscount): ?><input type="hidden" name="indirim" value="1"><?php endif; ?>
             <?php if($softwareFeatured): ?><input type="hidden" name="one_cikan" value="1"><?php endif; ?>
@@ -99,9 +103,8 @@ $nv36Query = static function(array $overrides = []) use($softwareFilter,$softwar
             <input id="nv36-search" name="q" type="search" maxlength="90" value="<?= e($softwareQuery) ?>" placeholder="Yazılım, script veya tema ara...">
             <button type="submit" aria-label="Ara"><?= icon('arrow-right',15) ?></button>
           </form>
-          <form action="/hazir-yazilimlar" method="get" class="nv36-sort-form">
-            <?php if($softwareFilter!==''): ?><input type="hidden" name="tur" value="<?= e($softwareFilter) ?>"><?php endif; ?>
-            <?php if($softwareQuery!==''): ?><input type="hidden" name="q" value="<?= e($softwareQuery) ?>"><?php endif; ?>
+          <form action="<?= e($nv36CurrentPath) ?>" method="get" class="nv36-sort-form">
+              <?php if($softwareQuery!==''): ?><input type="hidden" name="q" value="<?= e($softwareQuery) ?>"><?php endif; ?>
             <?php if($softwareMin!==null): ?><input type="hidden" name="min" value="<?= e((string)$softwareMin) ?>"><?php endif; ?>
             <?php if($softwareMax!==null): ?><input type="hidden" name="max" value="<?= e((string)$softwareMax) ?>"><?php endif; ?>
             <?php if($softwareDiscount): ?><input type="hidden" name="indirim" value="1"><?php endif; ?>
