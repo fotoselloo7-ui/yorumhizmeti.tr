@@ -47,7 +47,7 @@ $searchQuery = $searchQuery ?? '';
       </div>
       <div class="nv26-catalog-tiles">
         <?php foreach($group['categories'] as $cat): ?>
-        <article class="nv26-catalog-tile nv26-tile-<?= e($cat['style']) ?> <?= e(\\App\\Services\\SocialPlatformIdentity::classFor(\\App\\Services\\SocialPlatformIdentity::fromCategory($cat))) ?>">
+        <article class="nv26-catalog-tile nv26-tile-<?= e($cat['style']) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromCategory($cat))) ?>">
           <a class="nv26-tile-top" href="<?= e($cat['url']) ?>" aria-label="<?= e($cat['name']) ?> kategorisini incele">
             <span class="nv26-tile-icon"><?= icon($cat['icon'],27) ?></span>
             <strong><?= e($cat['name']) ?></strong>
