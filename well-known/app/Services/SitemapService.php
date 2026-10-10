@@ -37,8 +37,14 @@ class SitemapService
         }
 
         // Kategoriler
-        $categories = $db->fetchAll("SELECT slug, updated_at FROM categories WHERE status = 'active'");
+        $categories = $db->fetchAll(
+            "SELECT c.slug, c.updated_at, parent.slug AS parent_category_slug
+             FROM categories c
+             LEFT JOIN categories parent ON parent.id = c.parent_id
+             WHERE c.status = 'active'"
+        );
         foreach ($categories as $cat) {
+            if (ServiceCategoryVisibility::isLegacySoftware($cat)) continue;
             $xml .= $this->url($baseUrl . '/kategori/' . $cat['slug'], '0.8', 'weekly', $cat['updated_at']);
         }
 
