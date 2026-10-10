@@ -28,12 +28,6 @@ class SoftwareController extends Controller
         $params = $_GET;
         $filter = trim((string)($params['tur'] ?? ''));
         if (!in_array($filter, $allowed, true)) $filter = '';
-        $uriPath = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/hazir-yazilimlar', PHP_URL_PATH) ?: '/hazir-yazilimlar'), '/');
-        if ($filter !== '' && $uriPath === '/hazir-yazilimlar') {
-            \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                \App\Services\PublicSeoUrls::path('/hazir-yazilimlar/tur', $filter), 'tur'
-            );
-        }
         $query = mb_substr(trim((string)($params['q'] ?? '')), 0, 90, 'UTF-8');
         $sort = (string)($params['siralama'] ?? 'onerilen');
         if (!in_array($sort, ['onerilen','yeni','ucuz','pahali','ad'],true)) $sort='onerilen';
