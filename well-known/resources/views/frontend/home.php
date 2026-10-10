@@ -94,13 +94,19 @@ if (!function_exists('yh6PackagePrice')) {
 if (!function_exists('yh6PackageCard')) {
     function yh6PackageCard(array $pkg): string {
         [$cls,$ico,$label] = yh6Platform($pkg['category_slug'] ?? '', $pkg['name'] ?? '');
+        $platformKey=\App\Services\SocialPlatformIdentity::fromPackage($pkg);
+        if($platformKey!==null){
+            $cls=$platformKey;
+            $ico=\App\Services\SocialPlatformIdentity::iconFor($platformKey);
+            $label=\App\Services\SocialPlatformIdentity::brand($platformKey)[0];
+        }
         $price = yh6PackagePrice($pkg);
         $old = (!empty($pkg['discount_price']) && $pkg['discount_price'] < $pkg['price']) ? (float)$pkg['price'] : null;
         $discount = ($old && $old > 0) ? round((1 - $price / $old) * 100) : null;
         ob_start(); ?>
         <a class="yh6-package-card" href="/paket/<?= e($pkg['slug']) ?>">
             <div class="yh6-package-head">
-                <span class="yh6-package-icon <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($pkg['category_slug']??'').' '.($pkg['name']??'')))) ?>"><?= icon($ico, 22) ?></span>
+                <span class="yh6-package-icon <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($platformKey)) ?>"><?= icon($ico, 22) ?></span>
                 <span class="yh6-package-badge"><?= e($pkg['badge'] ?: (!empty($pkg['is_featured']) ? 'En Popüler' : $label)) ?></span>
             </div>
             <h3><?= e(package_display_name($pkg)) ?></h3>
@@ -124,13 +130,19 @@ if (!function_exists('yh6PackageCard')) {
 if (!function_exists('yh18FeaturedCard')) {
     function yh18FeaturedCard(array $pkg, bool $favorite = false): string {
         [$cls,$ico,$label] = yh6Platform($pkg['category_slug'] ?? '', $pkg['category_name'] ?? $pkg['name'] ?? '');
+        $platformKey=\App\Services\SocialPlatformIdentity::fromPackage($pkg);
+        if($platformKey!==null){
+            $cls=$platformKey;
+            $ico=\App\Services\SocialPlatformIdentity::iconFor($platformKey);
+            $label=\App\Services\SocialPlatformIdentity::brand($platformKey)[0];
+        }
         $price = yh6PackagePrice($pkg);
         $old = (!empty($pkg['discount_price']) && $pkg['discount_price'] < $pkg['price']) ? (float)$pkg['price'] : null;
         $discount = ($old && $old > 0) ? round((1 - $price / $old) * 100) : null;
         $delivery = trim((string)($pkg['delivery_time'] ?? ''));
         $short = trim(strip_tags((string)($pkg['short_description'] ?? '')));
         ob_start(); ?>
-        <article class="yh18-featured-card <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($pkg['category_slug']??'').' '.($pkg['category_name']??'').' '.($pkg['name']??'')))) ?>">
+        <article class="yh18-featured-card <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($platformKey)) ?>">
             <?php if ($favorite): ?><span class="yh18-favorite">Favori Paket</span><?php endif; ?>
             <div class="yh18-card-brand">
                 <span class="yh18-card-icon"><?= icon($ico, 22) ?></span>
@@ -476,8 +488,14 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             if ($isSoftware) {
                                 $gcls = 'software';
                                 $gico = $filterCategory['icon'] ?? 'monitor';
-                            } elseif (!empty($filterCategory['icon'])) {
-                                $gico = $filterCategory['icon'];
+                            } else {
+                                $parentPlatform=\App\Services\SocialPlatformIdentity::fromCategory($filterCategory);
+                                if($parentPlatform!==null) {
+                                    $gcls=$parentPlatform;
+                                    $gico=\App\Services\SocialPlatformIdentity::iconFor($parentPlatform);
+                                } elseif (!empty($filterCategory['icon'])) {
+                                    $gico=$filterCategory['icon'];
+                                }
                             }
                             $selected = ((int)$filterCategory['id'] === (int)$firstFeaturedGroup['category']['id']);
                         ?>
@@ -528,15 +546,18 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             $childType=$child['kind']??'package';
                             $childRoot=$childType==='software'?-100000:(int)($child['parent_featured_id']??0);
                             $childUrl=$child['url']??'/kategori/'.rawurlencode((string)$child['slug']);
-                            $childIcon=$child['icon']??'folder';
+                            $childPlatform=\App\Services\SocialPlatformIdentity::fromCategory($child)
+                                ?? $nvChildParentPlatform;
+                            $childIcon=$childType==='software'?($child['icon']??'folder'):
+                               \App\Services\SocialPlatformIdentity::iconFor($childPlatform,$child['icon']??'folder');
                             if($childType==='link'): ?>
-                            <a class="nv43-subcategory-link <?= e(\App\Services\SocialPlatformIdentity::classFor((\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??''))??$nvChildParentPlatform))) ?>" href="<?= e($childUrl) ?>"
+                            <a class="nv43-subcategory-link <?= e(\App\Services\SocialPlatformIdentity::classFor($childPlatform)) ?>" href="<?= e($childUrl) ?>"
                                title="<?= e($child['name']) ?>" data-menu-link>
                                 <?= icon($childIcon, 15) ?> <span><?= e($child['name']) ?></span>
                                 <?= icon('arrow-up-right',12) ?>
                             </a>
                             <?php else: ?>
-                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e(\App\Services\SocialPlatformIdentity::classFor((\App\Services\SocialPlatformIdentity::fromText(($child['slug']??'').' '.($child['name']??''))??$nvChildParentPlatform))) ?>"
+                            <button class="nv43-subcategory-link nv43-subcategory-tab <?= e(\App\Services\SocialPlatformIdentity::classFor($childPlatform)) ?>"
                                     type="button" data-featured-tab="<?= (int)$child['id'] ?>"
                                     data-featured-root-id="<?= $childRoot ?>"
                                     data-featured-parent-id="<?= (int)$child['parent_featured_id'] ?>"
