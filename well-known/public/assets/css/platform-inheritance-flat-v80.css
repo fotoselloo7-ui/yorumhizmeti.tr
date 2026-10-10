@@ -275,8 +275,6 @@
 
 /* Other site components keep the same parent-derived brand identity without
    flattening every card, CTA, logo, footer, or hover across the whole website. */
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"],
-.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"],
 .yh18-featured-card[class*="nv-platform-"],
 .yv-category-v5[class*="nv-platform-"] .yv-category-package-card-v5,
 .yv-product-v5[class*="nv-platform-"] .yv-product-hero-v5{
@@ -284,15 +282,11 @@
   box-shadow:0 7px 23px rgba(27,40,83,.055)!important;
   background-color:#fff;
 }
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:hover,
-.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]:hover,
 .yh18-featured-card[class*="nv-platform-"]:hover,
 .yv-category-v5[class*="nv-platform-"] .yv-category-package-card-v5:hover{
   border-color:var(--np)!important;
   box-shadow:0 14px 29px rgba(25,38,79,.105)!important;
 }
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon,
-.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon,
 .yh18-featured-card[class*="nv-platform-"] .yh18-card-icon{
   background:linear-gradient(125deg,var(--np),var(--np-2))!important;
   color:var(--np-on,#fff)!important;
@@ -307,8 +301,6 @@
   color:var(--np-on,#fff)!important;
   box-shadow:0 7px 19px rgba(27,38,80,.12)!important
 }
-.nv26-catalog-tile.nv-platform-google .nv26-tile-icon,
-.nv26-social-mega-card.nv-platform-google .nv26-social-mega-icon,
 .yh18-featured-card.nv-platform-google .yh18-card-icon{
   background:#fff!important;
   color:#4285F4!important;
@@ -343,4 +335,99 @@
 @media(prefers-reduced-motion:reduce){
   #featured .nv43-category-card[class*="nv-platform-"],
   #featured .nv43-subcategory-link[class*="nv-platform-"]{transition:none!important;transform:none!important}
+}
+
+
+/* Social platform tiles only: restore the intended per-brand identity.
+   Normal = platform pastel + colored glyph/text.
+   Hover/keyboard focus = its own full brand color + inverse foreground.
+   Do not repaint software cards, checkout, product CTAs, sitewide palette. */
+.nv-platform-whatsapp{--np-on:#FFFFFF}
+.nv-platform-snapchat{--np:#F1D200;--np-2:#DFC000;--np-soft:#FFFBE2;--np-ink:#665600;--np-on:#172132}
+.nv-platform-kick{--np:#38CA10;--np-2:#31BD0B;--np-soft:#EBFFE7;--np-ink:#286D11;--np-on:#142316}
+
+/* Menu and category directory draw from the same CSS tokens. */
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"],
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{
+  --tile:var(--np);
+  --shade:var(--np-soft);
+  background:var(--np-soft)!important;
+  border:1px solid color-mix(in srgb,var(--np) 13%,#fff)!important;
+  box-shadow:none!important;
+  color:var(--np-ink,var(--np))!important;
+  filter:none!important;
+  transition:background-color .25s ease,color .25s ease,border-color .25s ease,
+    transform .25s ease,box-shadow .25s ease!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] strong,
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] small,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top strong,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top small{
+  color:var(--np-ink,var(--np))!important;
+  -webkit-text-fill-color:currentColor!important;
+  transition:color .25s ease!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon{
+  background:color-mix(in srgb,#fff 74%,var(--np-soft))!important;
+  border:1px solid color-mix(in srgb,var(--np) 12%,#fff)!important;
+  box-shadow:none!important;
+  color:var(--np)!important;
+  transition:background-color .25s ease,color .25s ease,border-color .25s ease!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon :is(.icon,svg,i),
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon :is(.icon,svg,i){
+  color:var(--np)!important;
+  -webkit-text-fill-color:currentColor!important;
+  filter:none!important;
+  transition:color .25s ease!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]:is(:hover,:focus-visible),
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within){
+  background:var(--np)!important;
+  border-color:var(--np)!important;
+  color:var(--np-on,#fff)!important;
+  box-shadow:0 12px 24px color-mix(in srgb,var(--np) 24%,transparent)!important;
+  transform:translateY(-3px)!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]:is(:hover,:focus-visible) :is(strong,small),
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-top,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-top :is(strong,small){
+  color:var(--np-on,#fff)!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]:is(:hover,:focus-visible) .nv26-social-mega-icon,
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-icon{
+  color:var(--np-on,#fff)!important;
+  background:color-mix(in srgb,var(--np-on,#fff) 15%,transparent)!important;
+  border-color:color-mix(in srgb,var(--np-on,#fff) 20%,transparent)!important;
+}
+.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]:is(:hover,:focus-visible) .nv26-social-mega-icon :is(.icon,svg,i),
+.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-within) .nv26-tile-icon :is(.icon,svg,i){
+  color:var(--np-on,#fff)!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+/* Google stays a recognizable multicolor mark, on an actual white icon surface. */
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-google .nv26-social-mega-icon,
+.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-google .nv26-tile-icon,
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-google:is(:hover,:focus-visible) .nv26-social-mega-icon,
+.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-google:is(:hover,:focus-within) .nv26-tile-icon{
+  background:#fff!important;border-color:#dce5f4!important;color:#4285F4!important;
+}
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-google .nv26-social-mega-icon :is(.icon,svg,i),
+.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-google .nv26-tile-icon :is(.icon,svg,i),
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-google:is(:hover,:focus-visible) .nv26-social-mega-icon :is(.icon,svg,i),
+.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-google:is(:hover,:focus-within) .nv26-tile-icon :is(.icon,svg,i){
+  color:#4285F4!important;-webkit-text-fill-color:currentColor!important;
+}
+.nv26-menu-groups .nv26-social-mega-card.nv-platform-tiktok .nv26-social-mega-icon :is(.icon,svg,i),
+.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-tiktok .nv26-tile-icon :is(.icon,svg,i){
+  filter:drop-shadow(-1px 0 #00F2EA) drop-shadow(1px 0 #FE2C55)!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"],
+  .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{
+    transition:none!important;transform:none!important;
+  }
 }
