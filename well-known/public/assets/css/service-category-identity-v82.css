@@ -137,3 +137,26 @@
 @media(prefers-reduced-motion:reduce){
  #featured .nv43-category-card[class*="nv-sector-"]:not([class*="nv-platform-"]){transition:none!important}
 }
+
+/* A category may be active while its previous featured products were retired.
+   Never leave a blank white product rail or resurface old review packages. */
+#featured .nv82-featured-empty{
+  grid-column:1/-1;flex:1 0 100%;min-height:188px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:9px;text-align:center;padding:28px 18px;
+  border-radius:17px;border:1px solid #E4E8F2;
+  background:linear-gradient(125deg,#FFFFFF,#F8F7FF);
+}
+#featured .nv82-featured-empty>span{
+  display:grid;place-items:center;width:40px;height:40px;border-radius:12px;
+  color:#6755CF;background:#ECE9FF
+}
+#featured .nv82-featured-empty strong{color:#192749;font-size:14px}
+#featured .nv82-featured-empty p{margin:0;color:#71809A;font-size:12px;line-height:1.6}
+#featured .nv82-featured-empty a{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(120deg,#6952DB,#9347DD);
+  color:#fff!important;padding:10px 16px;font-size:11px;font-weight:800;
+  text-decoration:none;border-radius:10px;margin-top:4px
+}
+#featured .nv82-featured-empty a:hover{filter:brightness(1.06)}
