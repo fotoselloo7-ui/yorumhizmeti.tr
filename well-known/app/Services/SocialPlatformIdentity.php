@@ -49,9 +49,25 @@ final class SocialPlatformIdentity
             (string)($category['slug']??''),
             (string)($category['name']??''),
             (string)($parent['slug']??''),
-            (string)($parent['name']??'')
+            (string)($parent['name']??''),
+            (string)($category['parent_category_slug']??''),
+            (string)($category['parent_category_name']??'')
         ]);
         return self::fromText($subject);
+    }
+    /**
+     * Product identity is inherited from its real DB parent category; child
+     * category or product titles cannot accidentally repaint a Google service
+     * card as a different brand.
+     */
+    public static function fromPackage(array $package): ?string
+    {
+        $parent=self::fromText((string)($package['featured_group_slug']??$package['parent_category_slug']??'').' '.
+                               (string)($package['featured_group_name']??$package['parent_category_name']??''));
+        if($parent!==null)return $parent;
+        return self::fromText((string)($package['category_slug']??'').' '.
+                              (string)($package['category_name']??'').' '.
+                              (string)($package['name']??''));
     }
     public static function classFor(?string $key):string
     {
