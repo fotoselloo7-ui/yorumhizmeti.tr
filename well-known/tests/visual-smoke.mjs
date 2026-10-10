@@ -1088,8 +1088,10 @@ try {
   if(!(await showcasePage.locator('a[href="/hazir-scriptler/netvera-temizlik-firmasi-script-yazilimi-pro"]').count()))
     throw new Error('Unfeatured script incorrectly hidden from full catalog');
   await showcasePage.goto(origin+'/odeme/paytr-onizleme',{waitUntil:'domcontentloaded'});
-  if(!(await showcasePage.locator('.nv45-checkout .nv45-preview-alert').count()))
-    throw new Error('Local PayTR branded payment preview not present');
+  // The owner explicitly removed legacy demo-warning banners. The proper
+  // preview is the branded, non-payment placeholder; no real iframe may load.
+  if(!(await showcasePage.locator('.nv45-checkout .nv45-preview-frame').count()))
+    throw new Error('Local PayTR branded payment preview frame not present');
   if(await showcasePage.locator('#paytriframe').count())
     throw new Error('Local preview unexpectedly opened a live card entry iframe');
   console.log('PASS featured script toggle and separate full catalog, branded PayTR preview');
