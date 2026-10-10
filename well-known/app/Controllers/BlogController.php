@@ -8,7 +8,6 @@ class BlogController extends Controller
     public function index(): void
     {
         $db = Database::getInstance();
-        $routePath = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/blog', PHP_URL_PATH) ?: '/blog'), '/') ?: '/';
         $categorySlug = trim((string)($_GET['category'] ?? ''));
         $tagSlug = trim((string)($_GET['tag'] ?? ''));
         $categoryInfo = null;
@@ -30,11 +29,6 @@ class BlogController extends Controller
             if (!$categoryInfo) {
                 \App\Services\PublicSeoUrls::notFound('Blog Kategorisi Bulunamadı'); return;
             }
-            if ($routePath === '/blog') {
-                \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                    \App\Services\PublicSeoUrls::path('/blog/kategori', $categorySlug), 'category'
-                );
-            }
         }
         if ($tagSlug !== '') {
             if (!\App\Services\PublicSeoUrls::isSlug($tagSlug)) {
@@ -43,11 +37,6 @@ class BlogController extends Controller
             $tagInfo = $db->fetch('SELECT slug,name FROM blog_tags WHERE slug=? LIMIT 1', [$tagSlug]);
             if (!$tagInfo) {
                 \App\Services\PublicSeoUrls::notFound('Blog Etiketi Bulunamadı'); return;
-            }
-            if ($routePath === '/blog' && $categorySlug === '') {
-                \App\Services\PublicSeoUrls::redirectLegacyFacet(
-                    \App\Services\PublicSeoUrls::path('/blog/etiket', $tagSlug), 'tag'
-                );
             }
         }
         $page = max(1, (int) ($_GET['page'] ?? 1));
