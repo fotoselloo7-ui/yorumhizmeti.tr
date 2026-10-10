@@ -37,8 +37,32 @@ class SettingsController extends Controller
             redirect('/admin/site-ayarlari');
             return;
         }
+        // Admin-managed logo takes priority over the bundled v90 SVG.
+        // Use the existing secure image upload service; never overwrite the
+        // shipped asset and never require a code commit to change branding.
+        $logoFile = $_FILES['site_logo_file'] ?? null;
+        $hasLogoUpload = is_array($logoFile) &&
+            (int)($logoFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+        if ($hasLogoUpload) {
+            if ((int)($logoFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                flash('error', 'Logo yüklenemedi. Lütfen başka bir dosya deneyin.');
+                redirect('/admin/site-ayarlari');
+                return;
+            }
+            $uploadedLogo = \App\Core\Upload::image($logoFile, 'branding');
+            if ($uploadedLogo === null) {
+                // Upload::image already reports why the upload was rejected.
+                redirect('/admin/site-ayarlari');
+                return;
+            }
+            $config->set('site_logo', $uploadedLogo, 'branding');
+        } elseif (($_POST['site_logo_reset'] ?? '') === '1') {
+            $config->set('site_logo', '', 'branding');
+        }
+
         foreach ($_POST as $key => $value) {
             if ($key === '_csrf_token') continue;
+            if ($key === 'site_logo_reset') continue;
             if ($key === '_action') continue;
             if (str_starts_with($key, '_group_')) continue;
             $group = $_POST['_group_' . $key] ?? 'general';
