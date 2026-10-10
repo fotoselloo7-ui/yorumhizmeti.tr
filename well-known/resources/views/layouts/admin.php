@@ -66,9 +66,6 @@
                 <a href="/admin/netvera-yazilimlar/ekle" class="<?= isActive('/admin/netvera-yazilimlar/ekle') ? 'active' : '' ?>">
                     <?= icon('plus',18) ?> Netvera Yazılım Ekle
                 </a>
-                <a href="/admin/yazilim/ekle" class="<?= isActive('/admin/yazilim/ekle') ? 'active' : '' ?>">
-                    <?= icon('package',18) ?> Paket Tipi Yazılım Ekle
-                </a>
                 <a href="/admin/import" class="<?= isActive('/admin/import') ?>">
                     <?= icon('upload', 18) ?> İçe Aktar
                 </a>
