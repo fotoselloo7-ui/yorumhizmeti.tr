@@ -10,12 +10,16 @@ $nv40Context = array_filter([
 ], static fn($value) => $value !== null && $value !== '');
 $nv40CatalogPath = $filterCategory !== ''
     ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $filterCategory)
-    : '/hazir-scriptler';
+    : (($filterType ?? '') !== ''
+        ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $filterType)
+        : '/hazir-scriptler');
 $nv40CategoryLink = static function (?string $category) use ($nv40Context): string {
+    $params = $nv40Context;
     $path = $category !== null && $category !== ''
         ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/kategori', $category)
-        : '/hazir-scriptler';
-    return \App\Services\PublicSeoUrls::withQuery($path, $nv40Context);
+        : (!empty($params['type']) ? \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', (string)$params['type']) : '/hazir-scriptler');
+    if ($category === null || $category === '') unset($params['type']);
+    return \App\Services\PublicSeoUrls::withQuery($path, $params);
 };
 ?>
 <main class="nv40-store">
@@ -43,9 +47,14 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
         <div class="nv75-types-heading"><?= icon('grid',14) ?> Yazılım Türleri</div>
         <nav class="nv75-types-list" aria-label="NetVera hazır yazılım türleri">
           <?php foreach(($softwareTypes??[]) as [$typeName,$typeSlug,$typeDescription,$typeIcon]): ?>
-          <a href="<?= e(\App\Services\PublicSeoUrls::withQuery($nv40CatalogPath, [
-                  'type'=>$typeSlug,'q'=>$filterQuery??''
-              ])) ?>"
+          <a href="<?= e(\App\Services\PublicSeoUrls::withQuery(
+                  $filterCategory !== '' ? $nv40CatalogPath
+                      : \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $typeSlug),
+                  array_filter([
+                      'type'=>$filterCategory !== '' ? $typeSlug : '',
+                      'q'=>$filterQuery??''
+                  ], static fn($v)=>$v!=='')
+              )) ?>"
              class="nv75-type-link <?= ($filterType??'')===$typeSlug?'active':'' ?>"
              title="<?= e($typeDescription) ?>">
              <?= icon($typeIcon,14) ?><span><?= e($typeName) ?></span>
@@ -55,7 +64,7 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context): stri
         </nav>
       </div>
       <form class="nv40-filter-form" role="search" method="get" action="<?= e($nv40CatalogPath) ?>">
-        <?php if(($filterType??'')!==''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
+        <?php if(($filterType??'')!=='' && $filterCategory !== ''): ?><input type="hidden" name="type" value="<?= e($filterType) ?>"><?php endif; ?>
         <?php if($filterQuery !== ''): ?><input type="hidden" name="q" value="<?= e($filterQuery) ?>"><?php endif; ?>
         <fieldset class="nv40-filter-group">
           <legend><?= icon('wallet',15) ?> Fiyat Aralığı</legend>
