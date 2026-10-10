@@ -29,6 +29,12 @@ jobs:
       - name: Parent-platform identity and flat CSS regression QA
         run: php well-known/tests/platform-parent-flat-ui-v80-qa.php
 
+      - name: Platform category visual identities and carousel QA
+        run: |
+          php well-known/tests/platform-category-design-qa.php
+          node --check well-known/public/assets/js/home-featured-tabs-v18.js
+          node --check well-known/tests/visual-smoke.mjs
+
       - name: NetVera screenshot fixes and script catalog QA
         run: php well-known/tests/netvera-visual-brand-catalog-v76-qa.php
 
