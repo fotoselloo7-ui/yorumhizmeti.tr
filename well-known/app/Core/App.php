@@ -46,10 +46,13 @@ class App
         $r->post('/netvera/canli-destek/gonder', 'NetveraInquiryController@send');
         $r->get('/netvera/canli-destek/mesajlar', 'NetveraInquiryController@messages');
         $r->get('/hazir-scriptler', 'NetveraScriptController@index');
+        $r->get('/hazir-scriptler/kategori/{slug}', 'NetveraScriptController@categoryPage');
         $r->get('/hazir-scriptler/{mainSlug}/{subSlug}', 'NetveraScriptController@subCategoryPage');
         $r->get('/hazir-scriptler/{slug}', 'NetveraScriptController@detail');
         $r->get('/hazir-yazilimlar', 'SoftwareController@index');
+        $r->get('/hazir-yazilimlar/tur/{slug}', 'SoftwareController@typePage');
         $r->get('/kategoriler', 'CategoryController@index');
+        $r->get('/kategoriler/grup/{slug}', 'CategoryController@group');
         $r->get('/kategori/{slug}', 'CategoryController@show');
         $r->get('/paket/{slug}', 'PackageController@show');
 
@@ -102,6 +105,7 @@ class App
         // Blog
         $r->get('/blog', 'BlogController@index');
         $r->get('/blog/kategori/{slug}', 'BlogController@category');
+        $r->get('/blog/etiket/{slug}', 'BlogController@tag');
         $r->get('/blog/{slug}', 'BlogController@show');
 
         // Sayfalar
