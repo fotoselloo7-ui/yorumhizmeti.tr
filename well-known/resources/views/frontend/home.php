@@ -609,7 +609,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                     <?php endforeach; ?>
                     <?php if(empty($group['packages'])): ?>
                         <div class="nv82-featured-empty">
-                            <span><?= icon('layout-grid',22) ?></span>
+                            <span><?= icon('layers',22) ?></span>
                             <strong><?= e($group['category']['name']) ?></strong>
                             <p>Bu kategorinin hizmet seçeneklerini ve alt kategorilerini inceleyin.</p>
                             <a href="/kategori/<?= e($group['category']['slug']) ?>">Hizmetleri İncele <?= icon('arrow-right',14) ?></a>
