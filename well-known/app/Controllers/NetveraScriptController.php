@@ -24,6 +24,13 @@ class NetveraScriptController extends Controller
 
     public function index(): void
     {
+        $type = trim((string)($_GET['type'] ?? ''));
+        $category = trim((string)($_GET['category'] ?? ''));
+        if ($category === '' && $type !== '' && \App\Services\NetveraScriptTypeService::valid($type)) {
+            \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                \App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $type), 'type'
+            );
+        }
         $category = trim((string)($_GET['category'] ?? ''));
         if ($category !== '') {
             foreach (Catalog::categories() as $row) {
@@ -35,6 +42,16 @@ class NetveraScriptController extends Controller
             }
         }
         $this->renderCatalog('/hazir-scriptler');
+    }
+
+    public function typePage(string $slug): void
+    {
+        $slug = rawurldecode($slug);
+        if (!\App\Services\NetveraScriptTypeService::valid($slug) || $slug === '') {
+            \App\Services\PublicSeoUrls::notFound('Yazılım Türü Bulunamadı'); return;
+        }
+        $_GET['type'] = $slug;
+        $this->renderCatalog(\App\Services\PublicSeoUrls::path('/hazir-scriptler/tur', $slug));
     }
 
     public function categoryPage(string $slug): void
