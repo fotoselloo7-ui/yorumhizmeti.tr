@@ -51,14 +51,14 @@ final class CatalogMenuService
     }
     public static function bucket(array $cat): string
     {
-        $t=mb_strtolower(($cat['slug']??'').' '.($cat['name']??''),'UTF-8');
+        $t=preg_replace('/\x{0307}/u','',mb_strtolower(($cat['slug']??'').' '.($cat['name']??''),'UTF-8'));
         if (preg_match('/instagram|tiktok|youtube|facebook|twitter|threads|telegram|spotify|discord|linkedin|twitch|pinterest|snapchat|whatsapp|bluesky|soundcloud|tumblr|kick|sosyal.?medya|x-twitter/u',$t)) return 'social';
         if (preg_match('/web|site|yazılım|yazilim|software|e.?ticaret|eticaret|commerce|mobil|uygulama|app|içerik|icerik|grafik|tasarım|tasarim|kurumsal|wordpress|hosting|ajans|marka.?tescil/u',$t)) return 'agency';
         return 'marketing';
     }
     public static function style(array $cat,?array $parent=null): string
     {
-        $t=mb_strtolower(($parent['slug']??'').' '.($cat['slug']??'').' '.($cat['name']??''),'UTF-8');
+        $t=preg_replace('/\x{0307}/u','',mb_strtolower(($parent['slug']??'').' '.($cat['slug']??'').' '.($cat['name']??''),'UTF-8'));
         foreach (['instagram','tiktok','youtube','facebook','threads','telegram','spotify','discord','linkedin','twitch','twitter','pinterest','snapchat','whatsapp','github','soundcloud','bluesky','google','seo'] as $name)
             if (str_contains($t,$name)) return $name;
         if (preg_match('/(^|[ -])x[ -]|x-twitter/u',$t))return 'twitter';
@@ -77,7 +77,7 @@ final class CatalogMenuService
         // Google Yorum, Google Harita, Instagram Takipçi and Reels.
         $platform=SocialPlatformIdentity::fromCategory($child,$parent);
         if($platform!==null)return SocialPlatformIdentity::iconFor($platform);
-        $term = mb_strtolower(($child['slug'] ?? '') . ' ' . ($child['name'] ?? ''), 'UTF-8');
+        $term = preg_replace('/\x{0307}/u','',mb_strtolower(($child['slug'] ?? '') . ' ' . ($child['name'] ?? ''), 'UTF-8'));
         $rules = [
             ['/yıldız|yildiz|5.?star|puan|rating/u', 'star-fill'],
             ['/harita|maps?|konum|lokasyon|location/u', 'map-pin'],
