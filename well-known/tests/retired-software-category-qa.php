@@ -24,20 +24,31 @@ $assert(!Visibility::showPackage([
 $assert(Visibility::show(['slug'=>'web-site-hizmetleri','name'=>'Web Site Hizmetleri']), 'Unrelated active service hidden');
 
 $categoryCtrl = $read('app/Controllers/CategoryController.php');
-$assert(str_contains($categoryCtrl, 'ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT'), 'Legacy root redirect absent');
-$assert(str_contains($categoryCtrl, 'ServiceCategoryVisibility::isLegacySoftware($category)'), 'Child category redirect absent');
-$assert(substr_count($categoryCtrl, "header('Location: /hazir-scriptler', true, 301)") >= 2, '301 redirect missing');
+$assert(str_contains($categoryCtrl, 'ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT'), 'Retired root guard absent');
+$assert(str_contains($categoryCtrl, 'ServiceCategoryVisibility::isLegacySoftware($category)'), 'Retired child guard absent');
+$assert(!str_contains($categoryCtrl, "header('Location: /hazir-scriptler'"), 'Old project page must not redirect');
 $assert(strpos($categoryCtrl, 'ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT')
         < strpos($categoryCtrl, 'Database::getInstance();', strpos($categoryCtrl, 'public function show(')),
-    'Retired root redirect must not depend on the database');
+    'Retired root 404 must not depend on the database');
 $assert(str_contains($read('app/Services/CatalogMenuService.php'), 'ServiceCategoryVisibility::show($cat)'), 'Menu does not filter retired categories');
 $assert(str_contains($read('app/Controllers/HomeController.php'), 'ServiceCategoryVisibility::show($category)'), 'Homepage category discovery shows old software');
 $assert(str_contains($read('app/Controllers/HomeController.php'), 'ServiceCategoryVisibility::showPackage($p)'), 'Homepage featured package block includes old software');
 $assert(str_contains($read('app/Services/NavigationService.php'), "'/hazir-scriptler'"), 'Menu links not mapped to canonical software catalogue');
-$assert(str_contains($read('app/Services/SitemapService.php'), 'ServiceCategoryVisibility::isLegacySoftware($cat)'), 'Redirect-only category still in sitemap');
+$assert(str_contains($read('app/Services/SitemapService.php'), 'ServiceCategoryVisibility::isLegacySoftware($cat)'), 'Retired category still in sitemap');
 $directory = $read('resources/views/frontend/categories.php');
 $assert(str_contains($directory, 'href="/hazir-scriptler"'), 'Ready software tile not linked to imported catalogue');
 $assert(str_contains($directory, '$liveScriptCount'), 'Ready software tile does not use the real imported catalogue');
 $packageView = $read('resources/views/frontend/package-detail.php');
 $assert(str_contains($packageView, 'ServiceCategoryVisibility::isLegacySoftware($package)'), 'Legacy package breadcrumbs link to retired path');
-echo "PASS: retired category and children 301 to imported scripts, public navigation consolidated, sitemap clean, data untouched\n";
+$assert(str_contains($categoryCtrl, 'PublicSeoUrls::notFound'), 'Retired category must return 404');
+$adminMenu = $read('resources/views/layouts/admin.php');
+$assert(!str_contains($adminMenu, 'href="/admin/hazir-yazilimlar"'), 'Duplicate admin software entry remains');
+$assert(str_contains($adminMenu, 'href="/admin/netvera-yazilimlar"'), 'Real NetVera admin entry missing');
+$routes = $read('app/Core/App.php');
+$assert(str_contains($routes, "'/admin/hazir-yazilimlar'"), 'Existing admin bookmark route missing');
+$assert(str_contains($routes, 'NetveraScriptController@index'), 'Legacy admin route not mapped to imported catalogue');
+$softwareCode = $read('app/Services/SoftwareCatalogService.php');
+$assert(str_contains($softwareCode, "return ['created'=>0, 'existing'=>0, 'conflicts'=>0];"), 'Obsolete category setup remains writable');
+$assert(!str_contains($softwareCode, "\\$db->insert('categories'"), 'Old category installer can still duplicate records');
+$assert(is_file($root.'/database/migrations/retired-software-links-v1.sql'), 'DB link replacement migration missing');
+echo "PASS: old local-only category removed, internal links point to imported scripts, no 301, database entries preserved\n";
