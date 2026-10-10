@@ -167,7 +167,11 @@ class BlogController extends Controller
         $canonicalPath = \App\Services\PublicSeoUrls::withQuery(
             $canonicalPath, !$hasSecondaryFilter && $page > 1 ? ['page' => $page] : []
         );
+        $blogPaginationBase = $categoryInfo
+            ? \App\Services\PublicSeoUrls::path('/blog/kategori', $categorySlug)
+            : ($tagInfo ? \App\Services\PublicSeoUrls::path('/blog/etiket', $tagSlug) : '/blog');
         $this->render('frontend/blog/index', [
+            'blogPaginationBase' => $blogPaginationBase,
             'pageTitle' => $categoryInfo
                 ? $categoryInfo['name'] . ' | Blog - ' . setting('site_name')
                 : ($tagInfo ? $tagInfo['name'] . ' | Blog - ' . setting('site_name') : 'Blog - ' . setting('site_name')),
