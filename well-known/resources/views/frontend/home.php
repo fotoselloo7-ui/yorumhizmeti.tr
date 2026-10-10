@@ -318,7 +318,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                     <div class="yh49-marquee-set" <?= $yh49Repeat ? 'aria-hidden="true"' : '' ?>>
                         <?php foreach ($yh49Items as $yh49Item): ?>
                         <a href="<?= e($yh49Item['url']) ?>"
-                           class="yh49-category-link <?= e($yh49Item['style']) ?>"
+                           class="yh49-category-link <?= e($yh49Item['style']) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor(\App\Services\SocialPlatformIdentity::fromText(($yh49Item['style']??'').' '.($yh49Item['name']??'').' '.($yh49Item['detail']??'')))) ?>"
                            <?= $yh49Repeat ? 'tabindex="-1"' : '' ?>
                            title="<?= e($yh49Item['name']) ?>">
                             <span class="yh49-category-icon"><?= icon(yh50MarqueeIcon((string)$yh49Item['name'], (string)$yh49Item['style'], (string)$yh49Item['icon']), 20) ?></span>
