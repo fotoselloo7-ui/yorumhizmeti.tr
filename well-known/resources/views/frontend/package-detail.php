@@ -32,7 +32,7 @@ $price=(!empty($package['discount_price'])&&$package['discount_price']<$package[
 $discount=(!empty($package['discount_price'])&&$package['discount_price']<$package['price']&&$package['price']>0)?round((1-$package['discount_price']/$package['price'])*100):0;
 $reviews=$testimonialSection['extra']??[];
 ?>
-<div class="yv-product-v5">
+<div class="yv-product-v5 <?= e($nvPlatformClass) ?>">
 <section class="yv-product-hero-v5 <?= e($pclass) ?> <?= e($nvPlatformClass) ?>">
  <div class="container">
   <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a><span class="sep">/</span><a href="/kategori/<?= e($package['category_slug']??'') ?>"><?= e($package['category_name']??'Hizmetler') ?></a><span class="sep">/</span><span><?= e(package_display_name($package)) ?></span></div>
