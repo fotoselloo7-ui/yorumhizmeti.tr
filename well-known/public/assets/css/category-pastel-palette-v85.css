@@ -1,0 +1,196 @@
+/* NetVera v85 — CATEGORY COLOUR POLISH ONLY.
+   Structure, category ordering, filters, URLs and JS behavior are intentionally untouched.
+   Visual direction: calm white surfaces + indigo navigation + pastel platform identities. */
+
+#featured.yh18-featured{
+  background:#f8f9fd!important;
+  border-top:10px solid #f3f5fa!important;
+  border-bottom:10px solid #f3f5fa!important;
+}
+#featured .yh18-featured-head{
+  background:transparent!important;
+}
+#featured .yh18-featured-title h2{color:#111b38!important}
+#featured .yh18-featured-title p{color:#7e89a2!important}
+#featured .yh18-featured-avatar{
+  box-shadow:0 10px 24px rgba(52,71,146,.10)!important
+}
+
+/* top industry selector — quiet white rail, clean indigo active state */
+#featured .yh24-featured-groups{
+  background:#fff!important;
+  border:1px solid #dfe5f1!important;
+  box-shadow:0 10px 30px rgba(30,45,89,.07)!important;
+  padding:5px!important;
+  border-radius:18px!important;
+}
+#featured .yh24-featured-group{
+  color:#53617f!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#featured .yh24-featured-group:hover:not(.is-open){
+  background:#f4f6fb!important;
+  color:#35476b!important;
+}
+#featured .yh24-featured-group.is-open{
+  background:linear-gradient(110deg,#4f63ec,#5c55df)!important;
+  color:#fff!important;
+  box-shadow:0 8px 18px rgba(79,99,236,.22)!important;
+}
+
+/* main white category canvas */
+#featured .nv43-featured-panel{
+  background:#fff!important;
+  border:1px solid #dfe5f1!important;
+  box-shadow:0 10px 32px rgba(28,43,83,.055)!important;
+  border-radius:18px!important;
+}
+#featured .yh24-featured-filter-caption{color:#53617e!important}
+#featured .yh24-featured-filter-caption .icon{color:#5465e8!important}
+#featured .nv43-rail-heading small{color:#a2aabe!important}
+#featured .nv43-rail-instruction{color:#8c96aa!important}
+#featured .nv43-rail-arrow{
+  color:#5364e6!important;
+  border-color:#e0e5f1!important;
+  background:#fbfcff!important;
+}
+#featured .nv43-rail-arrow:hover:not(:disabled){
+  color:#4356df!important;
+  border-color:#cdd5ec!important;
+  background:#f4f6ff!important;
+}
+
+/* platform cards — pastel surface, white logo well, never full saturated fill */
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
+  background:var(--np-soft)!important;
+  color:var(--np-ink,var(--np))!important;
+  border:1px solid color-mix(in srgb,var(--np) 16%,#e6e9f2)!important;
+  box-shadow:0 5px 16px rgba(28,42,80,.04)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon{
+  background:#fff!important;
+  color:var(--np-ink,var(--np))!important;
+  border:1px solid color-mix(in srgb,var(--np) 12%,#eef0f6)!important;
+  box-shadow:none!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon :is(svg,.icon,i){
+  color:var(--np-ink,var(--np))!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-name{
+  color:var(--np-ink,var(--np))!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:hover{
+  background:color-mix(in srgb,var(--np-soft) 82%,#fff)!important;
+  border-color:color-mix(in srgb,var(--np) 34%,#fff)!important;
+  box-shadow:0 8px 20px color-mix(in srgb,var(--np) 8%,transparent)!important;
+  transform:translateY(-1px)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected){
+  background:var(--np-soft)!important;
+  color:var(--np-ink,var(--np))!important;
+  border:2px solid color-mix(in srgb,var(--np) 68%,#fff)!important;
+  box-shadow:0 9px 22px color-mix(in srgb,var(--np) 10%,transparent)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected) .yh26-filter-name,
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected) .yh26-filter-icon{
+  color:var(--np-ink,var(--np))!important;
+}
+
+/* keep recognisable multi-colour / dark marks while their cards stay pastel */
+#featured .nv43-category-card.nv-platform-tiktok .yh26-filter-icon{background:#fff!important;color:#13151a!important}
+#featured .nv43-category-card.nv-platform-tiktok .yh26-filter-icon .icon{
+  color:#111!important;
+  filter:drop-shadow(-1px 0 #00F2EA) drop-shadow(1px 0 #FE2C55)!important;
+}
+#featured .nv43-category-card.nv-platform-google .yh26-filter-icon{background:#fff!important;color:#4285F4!important}
+
+/* non-social sector cards get the same calm pastel treatment */
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-sector-"]:not([class*="nv-platform-"]){
+  background:var(--ns-soft,#f2f2fb)!important;
+  color:var(--ns-ink,#4e5680)!important;
+  border:1px solid color-mix(in srgb,var(--ns,#6c70c9) 16%,#e7e9f2)!important;
+  box-shadow:0 5px 16px rgba(28,42,80,.04)!important;
+}
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-sector-"]:not([class*="nv-platform-"]):is(.active,.is-parent-selected){
+  background:var(--ns-soft,#f2f2fb)!important;
+  border:2px solid color-mix(in srgb,var(--ns,#6c70c9) 60%,#fff)!important;
+  box-shadow:0 9px 22px color-mix(in srgb,var(--ns,#6c70c9) 9%,transparent)!important;
+}
+
+/* child rail — soft continuation of the selected platform, not pink outline everywhere */
+#featured .nv43-child-panel{
+  background:#fafbfe!important;
+  border:1px solid #e7eaf2!important;
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"]{
+  background:color-mix(in srgb,var(--np-soft) 86%,#fff)!important;
+  color:var(--np-ink,var(--np))!important;
+  border:1px solid color-mix(in srgb,var(--np) 14%,#e6e9f1)!important;
+  box-shadow:none!important;
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"]:is(:hover,:focus-visible,.active,[aria-selected="true"]){
+  background:var(--np-soft)!important;
+  color:var(--np-ink,var(--np))!important;
+  border-color:color-mix(in srgb,var(--np) 36%,#fff)!important;
+  box-shadow:0 4px 12px color-mix(in srgb,var(--np) 6%,transparent)!important;
+}
+#featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]){
+  background:color-mix(in srgb,var(--ns-soft,#f2f2fb) 88%,#fff)!important;
+  color:var(--ns-ink,#525a80)!important;
+  border-color:color-mix(in srgb,var(--ns,#6c70c9) 14%,#e6e9f1)!important;
+}
+
+/* product cards beneath the categories: neutral white, platform accents only */
+#featured .yh18-featured-card[class*="nv-platform-"]{
+  background:#fff!important;
+  border:1px solid #e1e6f0!important;
+  box-shadow:0 8px 24px rgba(27,40,83,.045)!important;
+}
+#featured .yh18-featured-card[class*="nv-platform-"]:hover{
+  border-color:color-mix(in srgb,var(--np) 28%,#dfe4ef)!important;
+  box-shadow:0 15px 30px color-mix(in srgb,var(--np) 8%,transparent)!important;
+}
+#featured .yh18-featured-card[class*="nv-platform-"] .yh18-card-icon{
+  background:var(--np-soft)!important;
+  border:1px solid color-mix(in srgb,var(--np) 14%,#fff)!important;
+  color:var(--np-ink,var(--np))!important;
+}
+#featured .yh18-featured-card[class*="nv-platform-"] .yh18-card-icon :is(svg,.icon,i),
+#featured .yh18-featured-card[class*="nv-platform-"] .yh18-card-brand small,
+#featured .yh18-featured-card[class*="nv-platform-"] .yh18-card-features :is(svg,.icon){
+  color:var(--np-ink,var(--np))!important;
+}
+#featured .yh18-featured-card[class*="nv-platform-"] .yh18-card-cta{
+  background:linear-gradient(110deg,#5368ed,#6657df)!important;
+  color:#fff!important;
+}
+
+/* software category/product colors stay neutral-indigo, matching the same visual family */
+#featured .nv43-category-card.software,
+#featured .yh41-software-card{
+  background:#f1f0fb!important;
+  border-color:#e0def1!important;
+  color:#514d83!important;
+}
+#featured .nv43-category-card.software.active,
+#featured .nv43-category-card.software.is-parent-selected{
+  background:#eeecfb!important;
+  border-color:#7770d7!important;
+  color:#484388!important;
+}
+
+/* do not let optional custom site theme destroy platform recognition in this block */
+body.nv-theme-enabled #featured .nv43-category-card[class*="nv-platform-"],
+body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-platform-"]{
+  color:var(--np-ink,var(--np))!important;
+}
+body.nv-theme-enabled #featured .yh24-featured-group.is-open{
+  background:linear-gradient(110deg,#4f63ec,#5c55df)!important;
+  color:#fff!important;
+}
+
+@media(max-width:800px){
+  #featured.yh18-featured{border-top-width:8px!important;border-bottom-width:8px!important}
+}
