@@ -38,6 +38,9 @@ jobs:
       - name: NetVera screenshot fixes and script catalog QA
         run: php well-known/tests/netvera-visual-brand-catalog-v76-qa.php
 
+      - name: Service category visibility and brand palette QA
+        run: php well-known/tests/service-category-visibility-v82-qa.php
+
       - name: NetVera global brand settings and SEO GEO AIO QA
         run: php well-known/tests/netvera-brand-settings-qa.php
 
