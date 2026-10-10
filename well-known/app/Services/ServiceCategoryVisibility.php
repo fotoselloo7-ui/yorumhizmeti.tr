@@ -8,8 +8,21 @@ namespace App\Services;
  */
 final class ServiceCategoryVisibility
 {
+    // Obsolete storefront category from the old standalone software showcase.
+    // Its canonical public destination is the imported NetVera /hazir-scriptler catalogue.
+    // Keep rows intact for admin, existing orders and product relationships.
+    public const LEGACY_SOFTWARE_ROOT = 'hazir-yazilim-scriptleri';
+
+    public static function isLegacySoftware(array $category, ?array $parent=null): bool
+    {
+        return (string)($category['slug'] ?? '') === self::LEGACY_SOFTWARE_ROOT
+            || (string)($parent['slug'] ?? $category['parent_category_slug'] ?? '') === self::LEGACY_SOFTWARE_ROOT
+            || (string)($category['featured_group_slug'] ?? '') === self::LEGACY_SOFTWARE_ROOT;
+    }
+
     public static function show(array $category, ?array $parent=null):bool
     {
+        if (self::isLegacySoftware($category,$parent)) return false;
         $root=mb_strtolower((string)($parent['slug']??$category['parent_category_slug']??'').' '.(string)($parent['name']??$category['parent_category_name']??''),'UTF-8');
         $text=mb_strtolower((string)($category['slug']??'').' '.(string)($category['name']??''),'UTF-8');
         $isGoogle=str_contains($root,'google') || str_contains($text,'google');
@@ -24,6 +37,7 @@ final class ServiceCategoryVisibility
 
     public static function showPackage(array $package):bool
     {
+        if (self::isLegacySoftware($package)) return false;
         $parent=['name'=>(string)($package['featured_group_name']??''),
                  'slug'=>(string)($package['featured_group_slug']??'')];
         $child=['name'=>(string)($package['category_name']??''),
