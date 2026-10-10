@@ -31,6 +31,11 @@ class HomeController extends Controller
                      p.is_featured DESC, p.sort_order ASC, p.id ASC
         ");
 
+        // Keep orders and historical URLs intact; the NetVera homepage no
+        // longer advertises the old Google review/5-star acquisition packages.
+        $featuredPackages=array_values(array_filter($featuredPackages,
+            static fn(array $p):bool=>\App\Services\ServiceCategoryVisibility::showPackage($p)));
+
         $featuredPackageGroups = [];
         foreach ($featuredPackages as $pkg) {
             if ((int)($pkg['is_featured'] ?? 0) !== 1) continue;
@@ -153,7 +158,7 @@ class HomeController extends Controller
                 [$label,$slug,$description,$iconName]=$type;
                 $featuredChildCategories[-100000][]=[
                     'id'=>0,'name'=>$label,'slug'=>$slug,
-                    'url'=>'/hazir-yazilimlar?tur='.rawurlencode($slug),
+                    'url'=>'/hazir-scriptler?type='.rawurlencode($slug),
                     'kind'=>'link','icon'=>$iconName,'parent_featured_id'=>-100000
                 ];
             }
