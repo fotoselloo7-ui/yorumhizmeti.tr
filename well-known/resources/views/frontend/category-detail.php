@@ -71,11 +71,11 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 <section class="yv-category-filter-v5">
  <div class="container">
   <div class="yv-category-chip-row-v5">
-   <a class="<?= empty($altSlug)?'active':'' ?>" href="?<?= http_build_query(array_merge($_GET,['alt'=>''])) ?>"><?= icon('grid',12) ?> Tümü</a>
+   <a class="<?= empty($altSlug)?'active':'' ?>" href="/kategori/<?= rawurlencode((string)$category['slug']) ?>"><?= icon('grid',12) ?> Tümü</a>
    <?php foreach($subCategories as $sub):
      $subPlatform=\App\Services\SocialPlatformIdentity::fromCategory($sub,$category);
      $subIcon=\App\Services\SocialPlatformIdentity::iconFor($subPlatform,$sub['icon_key']??'package');
-   ?><a class="<?= $altSlug===$sub['slug']?'active':'' ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($subPlatform)) ?>" href="?<?= http_build_query(array_merge($_GET,['alt'=>$sub['slug']])) ?>"><?= icon($subIcon,12) ?> <?= e($sub['name']) ?></a><?php endforeach; ?>
+   ?><a class="<?= $altSlug===$sub['slug']?'active':'' ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($subPlatform)) ?>" href="/kategori/<?= rawurlencode((string)$sub['slug']) ?>"><?= icon($subIcon,12) ?> <?= e($sub['name']) ?></a><?php endforeach; ?>
   </div>
   <div class="yv-category-filter-tools-v5">
    <form method="GET" class="yv-category-search-form-v5">
