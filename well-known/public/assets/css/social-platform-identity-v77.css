@@ -341,3 +341,21 @@
   background:conic-gradient(#4285F4 0 28%,#34A853 28% 54%,#FBBC05 54% 76%,#EA4335 76% 100%) !important;
   color:white !important;
 }
+
+
+/* v78 readable small subcategory labels on bright platform tones. */
+#featured .nv43-subcategory-link[class*="nv-platform-"]{
+  color:color-mix(in srgb,var(--np) 58%,#132039) !important
+}
+#featured .nv43-subcategory-link[class*="nv-platform-"] .icon{
+  color:currentColor !important
+}
+#featured .nv43-subcategory-link.nv-platform-spotify,
+.nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-sub a.nv-platform-spotify,
+.nv26-quick .nv56-quick-category.nv-platform-spotify{
+  color:#0E602D !important;
+}
+#featured .nv43-subcategory-link:is(.nv-platform-snapchat,.nv-platform-kick),
+.nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-sub a:is(.nv-platform-snapchat,.nv-platform-kick){
+  color:#172019 !important;
+}
