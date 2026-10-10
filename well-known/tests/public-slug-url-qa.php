@@ -71,13 +71,17 @@ foreach ([
         $assert(!str_contains($body, $legacy), 'Legacy navigation remains: '.$file.' / '.$legacy);
     }
 }
+// The project is new. Legacy GET filters may still render, but must NOT
+// create HTTP redirects: direct links already point to the clean routes.
 foreach ([
     'app/Controllers/BlogController.php',
     'app/Controllers/CategoryController.php',
-    'app/Controllers/NetveraScriptController.php',
     'app/Controllers/SoftwareController.php',
 ] as $controller) {
-    $assert(str_contains($load($controller), 'redirectLegacyFacet'), 'Legacy redirect missing: '.$controller);
+    $assert(!str_contains($load($controller), 'redirectLegacyFacet'), 'Unneeded project redirect remains: '.$controller);
 }
-$assert(str_contains($load('app/Services/PublicSeoUrls.php'), ', true, 301)'), 'Permanent redirect must be 301');
-echo "PASS: canonical taxonomy URLs, UTF-8 safe paths, old query aliases, preserved product slugs and internal navigation\n";
+$scriptController = $load('app/Controllers/NetveraScriptController.php');
+$assert(!str_contains($scriptController, 'redirectLegacyFacet'), 'New-project script filter redirect remains');
+$assert(str_contains($scriptController, 'function legacyRedirect'), 'Imported NetVera alias handling changed');
+$assert(!str_contains($load('app/Services/PublicSeoUrls.php'), 'redirectLegacyFacet'), 'Old 301 helper remains');
+echo "PASS: clean internal routes without migration redirects, original imported NetVera paths preserved\n";
