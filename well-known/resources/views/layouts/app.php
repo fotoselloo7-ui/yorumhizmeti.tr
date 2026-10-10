@@ -99,6 +99,7 @@
     <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=86.1">
     <link rel="stylesheet" href="<?= asset('css/catalog-contrast-v87.css') ?>?v=87.1">
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
+    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
