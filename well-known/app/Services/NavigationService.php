@@ -47,7 +47,9 @@ final class NavigationService
                 $definitions[] = [
                     'key' => 'category_' . (int)$cat['id'],
                     'label' => $priority[1] ?? $cat['name'],
-                    'url' => '/kategori/' . $cat['slug'],
+                    'url' => $cat['slug'] === \App\Services\ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT
+                        ? '/hazir-scriptler'
+                        : '/kategori/' . $cat['slug'],
                     'default_enabled' => $priority !== null,
                     'sort' => $priority[0] ?? (70 + (int)$cat['sort_order']),
                     'available' => $cat['status'] === 'active',
