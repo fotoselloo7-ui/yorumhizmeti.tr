@@ -5,6 +5,17 @@ use App\Core\Database;
 
 class CategoryController extends Controller
 {
+    public function group(string $slug): void
+    {
+        $slug = rawurldecode($slug);
+        $keys = array_column(\App\Services\CatalogMenuService::groups(), 'key');
+        if (!in_array($slug, $keys, true)) {
+            \App\Services\PublicSeoUrls::notFound('Hizmet Grubu Bulunamadı'); return;
+        }
+        $_GET['grup'] = $slug;
+        $this->index();
+    }
+
     public function index(): void
     {
         $q = trim((string)($_GET['q'] ?? ''));
@@ -13,6 +24,12 @@ class CategoryController extends Controller
         $groups = \App\Services\CatalogMenuService::groups();
         $keys = array_column($groups, 'key');
         if ($activeGroup !== '' && !in_array($activeGroup, $keys, true)) $activeGroup = '';
+        $uriPath = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/kategoriler', PHP_URL_PATH) ?: '/kategoriler'), '/');
+        if ($activeGroup !== '' && $uriPath === '/kategoriler') {
+            \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                \App\Services\PublicSeoUrls::path('/kategoriler/grup', $activeGroup), 'grup'
+            );
+        }
 
         if ($q !== '') {
             $groups = array_map(static function (array $group) use ($q): array {
@@ -36,7 +53,9 @@ class CategoryController extends Controller
         $this->render('frontend/categories', [
             'pageTitle' => 'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera',
             'metaDescription' => 'NetVera Teknoloji Yazılım: yazılım çözümleri, Instagram ve TikTok hizmetleri, SEO, grafik tasarım ve dijital reklam yönetimini sektörlerine göre inceleyin.',
-            'canonicalUrl' => url('/kategoriler'),
+            'canonicalUrl' => url($activeGroup !== ''
+                ? \App\Services\PublicSeoUrls::path('/kategoriler/grup', $activeGroup)
+                : '/kategoriler'),
             'noindex' => $q!=='',
             'catalogGroups' => $groups,
             'activeCatalogGroup' => $activeGroup,
@@ -58,6 +77,16 @@ class CategoryController extends Controller
         $category = \App\Services\CategorySearchBlueprint::decorate($category);
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
+        $oldSubSlug = trim((string)($_GET['alt'] ?? ''));
+        if ($oldSubSlug !== '') {
+            foreach ($subCategories as $child) {
+                if ($child['slug'] === $oldSubSlug) {
+                    \App\Services\PublicSeoUrls::redirectLegacyFacet(
+                        \App\Services\PublicSeoUrls::path('/kategori', $oldSubSlug), 'alt'
+                    );
+                }
+            }
+        }
 
         // Filters
         $altSlug = $_GET['alt'] ?? '';
