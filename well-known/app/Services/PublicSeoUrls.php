@@ -50,7 +50,7 @@ final class PublicSeoUrls
 
     public static function isSlug(string $slug): bool
     {
-        return (bool) preg_match('/^[\pL\pN][\pL\pN_-]{0,119}$/uD', $slug);
+        return (bool) preg_match('/^[\pL\pN][\pL\pN_-]{0,199}$/uD', $slug);
     }
 
     public static function notFound(string $title = 'Sayfa Bulunamadı'): void
