@@ -360,7 +360,7 @@
                           <span class="nv27-subcategory-caption">YAZILIM KATEGORİLERİ</span>
                           <div class="nv27-subcategory-grid">
                             <?php foreach ($nv35NetveraCategories as $nv35Category): ?>
-                            <a class="nv27-subcategory-link" href="/hazir-scriptler/kategori/<?= rawurlencode((string)$nv35Category['slug']) ?>" title="<?= e($nv35Category['name']) ?>">
+                            <a class="nv27-subcategory-link" href="<?= e(\App\Services\PublicSeoUrls::scriptCategory($nv35Category, $nv35NetveraCategories)) ?>" title="<?= e($nv35Category['name']) ?>">
                               <span class="nv27-subcategory-symbol"><?= icon('folder', 13) ?></span>
                               <span><?= e($nv35Category['name']) ?></span>
                             </a>
@@ -506,7 +506,7 @@
                         if (!$footerHasProduct) continue;
                         $footerScripts[] = [
                             'name' => $footerCategory['name'],
-                            'url' => '/hazir-scriptler/kategori/'.rawurlencode((string)$footerCategory['slug'])
+                            'url' => \App\Services\PublicSeoUrls::scriptCategory($footerCategory, \App\Services\NetveraBridgeService::categories())
                         ];
                         if (count($footerScripts) >= 5) break;
                     }
