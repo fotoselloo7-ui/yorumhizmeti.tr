@@ -97,6 +97,7 @@
     <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=84.1">
     <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=85.1">
     <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=86.1">
+    <link rel="stylesheet" href="<?= asset('css/catalog-contrast-v87.css') ?>?v=87.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
