@@ -1,0 +1,52 @@
+/* v90 - Site logo is a configurable image, not a hardcoded header SVG.
+   Preserves original header/footer grids and public UI color palette. */
+body .site-header .site-logo.nv90-site-brand{
+  display:inline-flex;
+  align-items:center;
+  flex:0 1 auto;
+  width:clamp(158px,18vw,222px);
+  min-width:0;
+  max-width:222px;
+  padding:0;
+  text-decoration:none;
+  line-height:1;
+}
+body .site-header .site-logo .nv90-site-logo{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:54px;
+  object-fit:contain;
+  object-position:left center;
+  vertical-align:middle;
+  flex-shrink:1;
+}
+body .site-footer .nv90-footer-brand-heading{margin:0 0 12px}
+body .site-footer .nv90-footer-logo-link{
+  display:inline-flex;
+  align-items:center;
+  max-width:250px;
+  min-width:0;
+}
+body .site-footer .nv90-footer-logo{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:63px;
+  object-fit:contain;
+  object-position:left center;
+}
+body .site-footer .nv90-footer-logo.nv90-logo-default{
+  filter:brightness(0) invert(1);
+}
+@media(max-width:980px){
+  body .site-header .site-logo.nv90-site-brand{
+    width:clamp(154px,28vw,196px);
+  }
+}
+@media(max-width:480px){
+  body .site-header .site-logo.nv90-site-brand{
+    width:clamp(146px,48vw,188px);
+  }
+  body .site-header .site-logo .nv90-site-logo{max-height:46px}
+}
