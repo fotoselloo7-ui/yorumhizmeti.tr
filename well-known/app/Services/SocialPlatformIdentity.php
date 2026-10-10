@@ -21,7 +21,7 @@ final class SocialPlatformIdentity
         'discord'=>['Discord','discord','#5865F2','#404EED','#EFF1FF'],
         'linkedin'=>['LinkedIn','linkedin','#0A66C2','#004182','#EBF5FF'],
         'whatsapp'=>['WhatsApp','whatsapp','#25D366','#128C7E','#E8FBF0'],
-        'snapchat'=>['Snapchat','snapchat','#242424','#FFFC00','#FFFDEB'],
+        'snapchat'=>['Snapchat','snapchat','#FFFC00','#F2EB00','#FFFDEB'],
         'pinterest'=>['Pinterest','pinterest','#E60023','#B8001C','#FFF0F2'],
         'soundcloud'=>['SoundCloud','soundcloud','#FF5500','#FF8800','#FFF1E8'],
         'bluesky'=>['Bluesky','bluesky','#1185FE','#0869D3','#EAF4FF'],
