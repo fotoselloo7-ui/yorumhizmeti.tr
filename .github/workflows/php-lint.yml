@@ -18,6 +18,9 @@ jobs:
             php -l "$file"
           done
 
+      - name: Public SEO slug, redirects and canonical URL QA
+        run: php well-known/tests/public-slug-url-qa.php
+
       - name: Admin release text QA
         run: php well-known/tests/admin-release-copy-qa.php
       - name: Minimal production UI copy QA
