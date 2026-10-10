@@ -12,6 +12,9 @@ class HomeController extends Controller
 
         // Kategoriler
         $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' AND parent_id IS NULL ORDER BY sort_order ASC, id ASC");
+        // Only the imported NetVera /hazir-scriptler catalogue is promoted.
+        $categories = array_values(array_filter($categories,
+            static fn(array $category): bool => \App\Services\ServiceCategoryVisibility::show($category)));
 
         // Admin paketleri aynı veritabanından gelir; manuel/demo paket listesi yoktur.
         // Kategori promosyonları aktif paketlerden; öne çıkan alanı ise yalnızca is_featured=1 kayıtlarından oluşur.
