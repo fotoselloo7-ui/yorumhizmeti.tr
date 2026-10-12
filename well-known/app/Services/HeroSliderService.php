@@ -52,6 +52,7 @@ final class HeroSliderService
         ");
         self::$ready = true;
         self::seedDefaults();
+        self::applyBundledCategoryAssets();
     }
 
     private static function seedDefaults(): void
@@ -61,81 +62,151 @@ final class HeroSliderService
 
         $rows = [
             [
-                'eyebrow'=>'Dijitalde tek merkez',
-                'title'=>'Yazılım, dijital ajans ve sosyal medya çözümleri.',
-                'description'=>'Hazır ve özel yazılım, SEO, reklam yönetimi ve sosyal medya hizmetlerini NetVera çatısı altında yönetin.',
-                'category_label'=>'NetVera Teknoloji Yazılım',
-                'category_url'=>'/kategoriler',
-                'category_icon'=>'sparkles',
-                'primary_button_text'=>'Hizmetleri Görüntüle',
-                'primary_button_url'=>'/kategoriler',
+                'eyebrow'=>'Sosyal medyada güçlü büyüme',
+                'title'=>'Sosyal medya hizmetleriyle markanızı büyütün.',
+                'description'=>'Instagram, TikTok, YouTube ve diğer platformlarda görünürlük, etkileşim ve hedef kitle büyümesi için profesyonel sosyal medya çözümleri.',
+                'category_label'=>'Sosyal Medya Hizmetleri',
+                'category_url'=>'/kategoriler/grup/social',
+                'category_icon'=>'heart',
+                'primary_button_text'=>'Sosyal Medya Hizmetleri',
+                'primary_button_url'=>'/kategoriler/grup/social',
                 'primary_button_icon'=>'arrow-right',
-                'secondary_button_text'=>'Hazır Yazılımlar',
-                'secondary_button_url'=>'/hazir-scriptler',
-                'secondary_button_icon'=>'code',
-                'desktop_image'=>'/assets/img/hero-woman-cutout.png',
-                'image_alt'=>'NetVera dijital hizmetler',
-                'background_start'=>'#111d56',
-                'background_end'=>'#6d28d9',
-                'accent_color'=>'#8b5cf6',
-                'stat_text'=>'Tüm dijital çözümler',
+                'secondary_button_text'=>'Tüm Hizmetler',
+                'secondary_button_url'=>'/kategoriler',
+                'secondary_button_icon'=>'grid',
+                'desktop_image'=>'/assets/img/slider/social-media-v95.webp',
+                'image_alt'=>'NetVera sosyal medya hizmetleri, içerik etkileşimi ve dijital büyüme çözümleri',
+                'background_start'=>'#20104f',
+                'background_end'=>'#a32078',
+                'overlay_color'=>'rgba(24,10,65,.52)',
+                'accent_color'=>'#ff4fa3',
+                'stat_text'=>'Instagram, TikTok, YouTube ve daha fazlası',
                 'quick_links'=>json_encode([
-                    ['label'=>'Instagram','url'=>'/kategoriler/grup/social','icon'=>'instagram','color'=>'#ff2d8d'],
-                    ['label'=>'Yazılım','url'=>'/hazir-scriptler','icon'=>'code','color'=>'#5b6cff'],
-                    ['label'=>'SEO','url'=>'/kategoriler/grup/marketing','icon'=>'search','color'=>'#17b6d4'],
+                    ['label'=>'Instagram','url'=>'/kategoriler/grup/social','icon'=>'instagram','color'=>'#f02d85'],
+                    ['label'=>'TikTok','url'=>'/kategoriler/grup/social','icon'=>'tiktok','color'=>'#111827'],
+                    ['label'=>'YouTube','url'=>'/kategoriler/grup/social','icon'=>'youtube','color'=>'#ff0033'],
                 ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
                 'autoplay_delay'=>6500,'sort_order'=>10,'status'=>'active'
             ],
             [
-                'eyebrow'=>'Yazılım çözümleri',
+                'eyebrow'=>'Ajans ve yazılım çözümleri',
                 'title'=>'Hazır scriptlerden özel geliştirmeye güçlü altyapı.',
-                'description'=>'Sektörel hazır yazılımları keşfedin veya işletmenize özel web ve yazılım çözümleri oluşturun.',
+                'description'=>'Web sitesi, e-ticaret, mobil uygulama, hazır yazılım ve özel geliştirme ihtiyaçlarınız için ölçeklenebilir NetVera çözümlerini keşfedin.',
                 'category_label'=>'Ajans & Yazılım',
-                'category_url'=>'/hazir-scriptler',
-                'category_icon'=>'monitor',
-                'primary_button_text'=>'Yazılımları Görüntüle',
-                'primary_button_url'=>'/hazir-scriptler',
-                'primary_button_icon'=>'monitor',
-                'secondary_button_text'=>'Ajans Hizmetleri',
-                'secondary_button_url'=>'/kategoriler/grup/agency',
-                'secondary_button_icon'=>'layers',
+                'category_url'=>'/kategoriler/grup/agency',
+                'category_icon'=>'layers',
+                'primary_button_text'=>'Ajans & Yazılımı İncele',
+                'primary_button_url'=>'/kategoriler/grup/agency',
+                'primary_button_icon'=>'arrow-right',
+                'secondary_button_text'=>'Hazır Yazılımlar',
+                'secondary_button_url'=>'/hazir-scriptler',
+                'secondary_button_icon'=>'code',
+                'desktop_image'=>'/assets/img/slider/agency-software-v95.webp',
+                'image_alt'=>'NetVera ajans ve yazılım hizmetleri, web sitesi, uygulama ve özel yazılım geliştirme',
                 'background_start'=>'#071b3e',
-                'background_end'=>'#0c6fb8',
+                'background_end'=>'#2140a8',
+                'overlay_color'=>'rgba(5,17,54,.55)',
                 'accent_color'=>'#1fc7ff',
-                'stat_text'=>'Hazır ve özel çözümler',
+                'stat_text'=>'Web, e-ticaret, mobil ve hazır yazılım',
                 'quick_links'=>json_encode([
                     ['label'=>'Web Site','url'=>'/kategoriler/grup/agency','icon'=>'globe','color'=>'#2c7cff'],
                     ['label'=>'E-Ticaret','url'=>'/kategoriler/grup/agency','icon'=>'store','color'=>'#16a879'],
-                    ['label'=>'Mobil','url'=>'/kategoriler/grup/agency','icon'=>'mobile-app','color'=>'#7c5cff'],
+                    ['label'=>'Hazır Yazılım','url'=>'/hazir-scriptler','icon'=>'code','color'=>'#7c5cff'],
                 ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
                 'autoplay_delay'=>7000,'sort_order'=>20,'status'=>'active'
             ],
             [
-                'eyebrow'=>'Büyüme ve görünürlük',
-                'title'=>'SEO, reklam ve sosyal medya ile markanızı büyütün.',
-                'description'=>'Arama motoru görünürlüğü, performans reklamları ve sosyal medya etkileşimi için ölçülebilir hizmetler.',
+                'eyebrow'=>'Arama görünürlüğü ve ölçülebilir büyüme',
+                'title'=>'SEO, GEO, AIO ve dijital pazarlama ile öne çıkın.',
+                'description'=>'Arama motoru görünürlüğü, yapay zekâ odaklı içerik optimizasyonu, yerel keşfedilebilirlik ve performans reklamlarıyla markanızı ölçülebilir şekilde büyütün.',
                 'category_label'=>'SEO & Dijital Pazarlama',
                 'category_url'=>'/kategoriler/grup/marketing',
                 'category_icon'=>'trending-up',
-                'primary_button_text'=>'Çözümleri İncele',
+                'primary_button_text'=>'SEO & Pazarlamayı İncele',
                 'primary_button_url'=>'/kategoriler/grup/marketing',
                 'primary_button_icon'=>'arrow-right',
-                'secondary_button_text'=>'Sosyal Medya',
-                'secondary_button_url'=>'/kategoriler/grup/social',
-                'secondary_button_icon'=>'share-2',
-                'background_start'=>'#3a124f',
-                'background_end'=>'#d24a79',
-                'accent_color'=>'#ff4fa3',
-                'stat_text'=>'SEO, Ads ve sosyal medya',
+                'secondary_button_text'=>'Tüm Hizmetler',
+                'secondary_button_url'=>'/kategoriler',
+                'secondary_button_icon'=>'grid',
+                'desktop_image'=>'/assets/img/slider/seo-digital-marketing-v95.webp',
+                'image_alt'=>'NetVera SEO, GEO, AIO, yerel arama ve dijital pazarlama analiz çözümleri',
+                'background_start'=>'#10134f',
+                'background_end'=>'#6d2ca5',
+                'overlay_color'=>'rgba(7,16,58,.55)',
+                'accent_color'=>'#22d3ee',
+                'stat_text'=>'SEO, GEO, AIO, Ads ve yerel görünürlük',
                 'quick_links'=>json_encode([
-                    ['label'=>'Google','url'=>'/kategoriler/grup/marketing','icon'=>'google','color'=>'#4285f4'],
-                    ['label'=>'Instagram','url'=>'/kategoriler/grup/social','icon'=>'instagram','color'=>'#f02d85'],
-                    ['label'=>'TikTok','url'=>'/kategoriler/grup/social','icon'=>'tiktok','color'=>'#111827'],
+                    ['label'=>'SEO','url'=>'/kategoriler/grup/marketing','icon'=>'search','color'=>'#4f7cff'],
+                    ['label'=>'Yerel Arama','url'=>'/kategoriler/grup/marketing','icon'=>'map-pin','color'=>'#22c7a8'],
+                    ['label'=>'Dijital Reklam','url'=>'/kategoriler/grup/marketing','icon'=>'trending-up','color'=>'#9b5cff'],
                 ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
                 'autoplay_delay'=>6200,'sort_order'=>30,'status'=>'active'
             ],
         ];
         foreach ($rows as $row) $db->insert('hero_slides', $row);
+    }
+
+    private static function applyBundledCategoryAssets(): void
+    {
+        $db = Database::getInstance();
+        $rows = $db->fetchAll("SELECT * FROM hero_slides ORDER BY sort_order ASC, id ASC LIMIT 20");
+
+        foreach ($rows as $row) {
+            $current = trim((string)($row['desktop_image'] ?? ''));
+            $isBundledCandidate = $current === '' || $current === '/assets/img/hero-woman-cutout.png';
+            if (!$isBundledCandidate) continue;
+
+            $label = trim((string)($row['category_label'] ?? ''));
+            $order = (int)($row['sort_order'] ?? 0);
+            $data = null;
+
+            if (($label === 'NetVera Teknoloji Yazılım' || $order === 10) && $current === '/assets/img/hero-woman-cutout.png') {
+                $data = [
+                    'eyebrow'=>'Sosyal medyada güçlü büyüme',
+                    'title'=>'Sosyal medya hizmetleriyle markanızı büyütün.',
+                    'description'=>'Instagram, TikTok, YouTube ve diğer platformlarda görünürlük, etkileşim ve hedef kitle büyümesi için profesyonel sosyal medya çözümleri.',
+                    'category_label'=>'Sosyal Medya Hizmetleri',
+                    'category_url'=>'/kategoriler/grup/social',
+                    'category_icon'=>'heart',
+                    'primary_button_text'=>'Sosyal Medya Hizmetleri',
+                    'primary_button_url'=>'/kategoriler/grup/social',
+                    'secondary_button_text'=>'Tüm Hizmetler',
+                    'secondary_button_url'=>'/kategoriler',
+                    'desktop_image'=>'/assets/img/slider/social-media-v95.webp',
+                    'image_alt'=>'NetVera sosyal medya hizmetleri, içerik etkileşimi ve dijital büyüme çözümleri',
+                    'background_start'=>'#20104f',
+                    'background_end'=>'#a32078',
+                    'overlay_color'=>'rgba(24,10,65,.52)',
+                    'accent_color'=>'#ff4fa3',
+                    'stat_text'=>'Instagram, TikTok, YouTube ve daha fazlası',
+                ];
+            } elseif ($label === 'Ajans & Yazılım' || ($order === 20 && $current === '')) {
+                $data = [
+                    'desktop_image'=>'/assets/img/slider/agency-software-v95.webp',
+                    'image_alt'=>'NetVera ajans ve yazılım hizmetleri, web sitesi, uygulama ve özel yazılım geliştirme',
+                    'background_start'=>'#071b3e',
+                    'background_end'=>'#2140a8',
+                    'overlay_color'=>'rgba(5,17,54,.55)',
+                    'accent_color'=>'#1fc7ff',
+                ];
+            } elseif ($label === 'SEO & Dijital Pazarlama' || ($order === 30 && $current === '')) {
+                $data = [
+                    'title'=>'SEO, GEO, AIO ve dijital pazarlama ile öne çıkın.',
+                    'description'=>'Arama motoru görünürlüğü, yapay zekâ odaklı içerik optimizasyonu, yerel keşfedilebilirlik ve performans reklamlarıyla markanızı ölçülebilir şekilde büyütün.',
+                    'desktop_image'=>'/assets/img/slider/seo-digital-marketing-v95.webp',
+                    'image_alt'=>'NetVera SEO, GEO, AIO, yerel arama ve dijital pazarlama analiz çözümleri',
+                    'background_start'=>'#10134f',
+                    'background_end'=>'#6d2ca5',
+                    'overlay_color'=>'rgba(7,16,58,.55)',
+                    'accent_color'=>'#22d3ee',
+                    'stat_text'=>'SEO, GEO, AIO, Ads ve yerel görünürlük',
+                ];
+            }
+
+            if ($data) {
+                $db->update('hero_slides', $data, 'id=?', [(int)$row['id']]);
+            }
+        }
     }
 
     public static function all(bool $activeOnly = false): array
