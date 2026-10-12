@@ -139,7 +139,7 @@ class MarketingPopupController extends Controller
             'text_color'=>$this->color((string)($_POST['text_color']??'#ffffff'),'#ffffff'),
             'accent_color'=>$this->color((string)($_POST['accent_color']??'#d936a1'),'#d936a1'),
             'coupon_items'=>json_encode($this->couponItems(),JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
-            'open_delay_ms'=>max(0,min(600000,(int)($_POST['open_delay_ms']??1800))),
+            'open_delay_ms'=>max(0,min(600000,(int)round(((float)($_POST['open_delay_seconds']??1.8))*1000))),
             'reopen_hours'=>max(0,min(8760,(int)($_POST['reopen_hours']??24))),
             'auto_close_seconds'=>max(0,min(3600,(int)($_POST['auto_close_seconds']??0))),
             'closable'=>!empty($_POST['closable'])?1:0,
