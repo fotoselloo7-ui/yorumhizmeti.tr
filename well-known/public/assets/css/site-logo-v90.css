@@ -37,9 +37,7 @@ body .site-footer .nv90-footer-logo{
   max-height:63px;
   object-fit:contain;
   object-position:left center;
-}
-body .site-footer .nv90-footer-logo.nv90-logo-default{
-  filter:brightness(0) invert(1);
+  filter:none!important;
 }
 @media(max-width:980px){
   body .site-header .site-logo.nv90-site-brand{
