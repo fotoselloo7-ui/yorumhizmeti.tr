@@ -12,14 +12,14 @@ $layout=$get('resources/views/layouts/app.php');
 $form=$get('resources/views/admin/settings/site.php');
 $admin=$get('app/Controllers/Admin/SettingsController.php');
 $css=$get('public/assets/css/site-logo-v90.css');
-$svg=$get('public/assets/img/netvera-brand-v90.svg');
-$check(str_contains($svg,'viewBox="0 0 856 179"'),'Default logo missing dimensions');
-$check(str_contains($svg,'SOSYAL MEDYA'),'Default logo tagline missing');
+$logoPath='public/assets/img/netvera-logo-current.webp';
+$check(is_file($root.'/'.$logoPath),'Default NetVera logo asset missing');
+$check(filesize($root.'/'.$logoPath)>10000,'Default NetVera logo asset looks invalid');
 $service=$get('app/Services/SiteLogoService.php');
 $check(str_contains($service,"setting('site_logo_mode', 'default')"),'Legacy imported logo might hide default');
 $check(str_contains($service,"setting('site_logo', '')"),'Custom logo setting unreadable');
 $check(str_contains($service,'is_file($full)'),'Uploaded logo file is not checked');
-$check(str_contains($service,"'img/netvera-brand-v90.svg'"),'Default fallback missing');
+$check(str_contains($service,"'img/netvera-logo-current.webp'"),'Default fallback missing');
 $check(str_contains($layout,'SiteLogoService::url()'),'Header does not use shared logo service');
 $check(str_contains($layout,'onerror="this.onerror=null;this.src='),'Broken image fallback missing');
 $check(substr_count($layout,'$nv90LogoUrl')>=3,'Footer and header do not share selected logo');
@@ -47,7 +47,7 @@ function upload_url(?string $path,string $fallbackType='default'):string {
 }
 require_once $root.'/app/Services/SiteLogoService.php';
 $logoClass=\App\Services\SiteLogoService::class;
-$expected='/assets/img/netvera-brand-v90.svg';
+$expected='/assets/img/netvera-logo-current.webp';
 $GLOBALS['nv90LogoTestSettings']=['site_logo'=>'/uploads/branding/retired-logo.png'];
 $check($logoClass::url()===$expected,'Legacy logo path hides NetVera default');
 $GLOBALS['nv90LogoTestSettings']['site_logo_mode']='custom';
