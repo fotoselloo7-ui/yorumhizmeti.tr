@@ -91,298 +91,47 @@
   }
 }
 
-
-/* V102 — vector/CSS artwork for the three bundled service banners.
-   This replaces the old 1000/1200px raster images on the storefront, so the
-   default banners stay crisp at any desktop pixel density. Custom admin uploads
-   still render normally and are protected by the HD upload validation. */
-.nv102-hero-art{
-  position:absolute;
-  z-index:1;
-  top:0;
-  right:0;
-  bottom:0;
-  width:46%;
+/* V103 — slider and expertise cards are separate systems.
+   Hero always renders the exact desktop/mobile files stored in hero_slides.
+   No generated replacement artwork, no blur filter and no transform scaling. */
+.nv94-hero-media{
   overflow:hidden;
-  pointer-events:none;
 }
-.nv102-art-halo{
+.nv94-hero-media picture{
   position:absolute;
-  width:86%;
-  aspect-ratio:1;
-  right:2%;
-  top:5%;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 38% 35%,rgba(255,255,255,.40),rgba(255,255,255,.12) 38%,transparent 68%);
-  border:1px solid rgba(255,255,255,.12);
-}
-.nv102-float{
-  position:absolute;
-  z-index:5;
-  display:grid;
-  place-items:center;
-  width:54px;
-  height:54px;
-  border-radius:15px;
-  background:#fff;
-  box-shadow:0 16px 34px rgba(5,12,44,.18);
-}
-
-/* Social */
-.nv102-social-woman{
-  position:absolute!important;
-  z-index:3;
-  right:4%!important;
-  bottom:0!important;
-  top:auto!important;
-  left:auto!important;
-  width:auto!important;
-  height:96%!important;
-  max-width:92%!important;
-  object-fit:contain!important;
-  object-position:right bottom!important;
-  filter:none!important;
-  transform:none!important;
-  image-rendering:auto!important;
-}
-.nv102-float-instagram{left:7%;top:24%;color:#e72d86}
-.nv102-float-tiktok{right:7%;top:11%;color:#101827}
-.nv102-float-youtube{right:12%;bottom:18%;color:#e90031}
-
-/* Agency / software */
-.nv102-hero-art-agency{color:#6d63df}
-.nv102-browser{
-  position:absolute;
-  z-index:3;
-  right:5%;
-  top:16%;
-  width:82%;
-  height:61%;
-  overflow:hidden;
-  border:7px solid #9eb8ed;
-  border-radius:20px;
-  background:#f7f9ff;
-  box-shadow:0 26px 48px rgba(5,15,53,.26);
-}
-.nv102-browser-top{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  height:38px;
-  padding:0 14px;
-  border-bottom:1px solid #dbe3f3;
-  background:#eaf0fb;
-}
-.nv102-browser-top i{
-  width:7px;height:7px;border-radius:50%;background:#efa3bd;
-}
-.nv102-browser-top i:nth-child(2){background:#f1c87e}
-.nv102-browser-top i:nth-child(3){background:#6fd0aa}
-.nv102-browser-top span{
-  margin-left:auto;width:38%;height:7px;border-radius:7px;background:#c2cee5;
-}
-.nv102-browser-body{
-  display:grid;
-  grid-template-columns:58px minmax(0,1fr);
-  height:calc(100% - 38px);
-}
-.nv102-browser-body aside{
-  display:flex;
-  flex-direction:column;
-  gap:17px;
-  padding:20px 17px;
-  background:#e3e9f7;
-}
-.nv102-browser-body aside b{
-  width:15px;height:15px;border-radius:5px;background:#8d9dca;
-}
-.nv102-browser-body aside b:first-child{background:#7868e5}
-.nv102-browser-body main{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-width:0;
-  padding:18px;
-}
-.nv102-browser-line{
-  width:52%;height:10px;border-radius:5px;background:#bdcae7;
-}
-.nv102-browser-chart{
-  display:flex;
-  align-items:flex-end;
-  gap:10px;
-  height:94px;
-  padding:13px;
-  border-radius:10px;
-  background:#edf2fb;
-}
-.nv102-browser-chart i{
-  flex:1;
-  height:42%;
-  border-radius:5px 5px 2px 2px;
-  background:#7160e6;
-}
-.nv102-browser-chart i:nth-child(2){height:67%;background:#5888ec}
-.nv102-browser-chart i:nth-child(3){height:36%;background:#56bccc}
-.nv102-browser-chart i:nth-child(4){height:82%;background:#7b64e7}
-.nv102-browser-chart i:nth-child(5){height:96%;background:#45baaa}
-.nv102-browser-tiles{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  height:46px;
-}
-.nv102-browser-tiles b{border-radius:8px;background:#e1e7f5}
-.nv102-browser-tiles b:first-child{background:#d4cbfb}
-.nv102-phone{
-  position:absolute;
-  z-index:4;
-  left:5%;
-  bottom:8%;
-  width:82px;
-  height:142px;
-  padding:12px 8px;
-  border:6px solid #30477e;
-  border-radius:21px;
-  background:#e8efff;
-  box-shadow:0 20px 34px rgba(5,15,53,.30);
-}
-.nv102-phone i{
-  display:block;width:30px;height:5px;margin:0 auto 18px;border-radius:5px;background:#7283aa;
-}
-.nv102-phone span{
-  display:block;width:100%;height:43px;border-radius:8px;background:linear-gradient(135deg,#8d85fa,#4e9ee1);
-}
-.nv102-phone b{
-  display:block;width:62%;height:8px;margin-top:14px;border-radius:6px;background:#b6c7e6;
-}
-.nv102-float-code{right:5%;top:7%;color:#604ddb}
-
-/* SEO / marketing */
-.nv102-hero-art-marketing{color:#0aa1a6}
-.nv102-analytics{
-  position:absolute;
-  z-index:3;
-  right:5%;
-  top:15%;
-  width:82%;
-  height:64%;
-  padding:22px;
-  border:1px solid rgba(255,255,255,.75);
-  border-radius:23px;
-  background:linear-gradient(155deg,#f5fdff,#e6f9f8);
-  box-shadow:0 28px 50px rgba(3,72,101,.23);
-}
-.nv102-analytics-top{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  height:24px;
-  color:#07999e;
-}
-.nv102-analytics-top span{
-  width:12px;height:12px;border-radius:50%;background:#27c9a8;
-}
-.nv102-analytics-top b{
-  width:50%;height:8px;border-radius:8px;background:#c2e4e6;
-}
-.nv102-analytics-top>.icon{margin-left:auto}
-.nv102-analytics svg{
+  inset:0;
   display:block;
   width:100%;
-  height:160px;
-  margin-top:8px;
-  color:#13a7ad;
+  height:100%;
+  overflow:hidden;
 }
-.nv102-analytics-bars{
-  display:flex;
-  align-items:flex-end;
-  gap:7px;
-  height:42px;
+.nv94-hero-media picture img,
+.nv94-hero-media>img{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  filter:none!important;
+  -webkit-filter:none!important;
+  transform:none!important;
+  scale:none!important;
+  opacity:1!important;
+  image-rendering:auto!important;
+  backface-visibility:visible!important;
+  will-change:auto!important;
 }
-.nv102-analytics-bars i{
-  flex:1;
-  height:34%;
-  border-radius:5px 5px 2px 2px;
-  background:#9cdcd9;
+.nv94-hero-media:before{
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
 }
-.nv102-analytics-bars i:nth-child(2){height:58%}
-.nv102-analytics-bars i:nth-child(3){height:45%}
-.nv102-analytics-bars i:nth-child(4){height:74%}
-.nv102-analytics-bars i:nth-child(5){height:51%}
-.nv102-analytics-bars i:nth-child(6){height:87%}
-.nv102-analytics-bars i:nth-child(7){height:100%;background:#20bea5}
-.nv102-float-search{left:6%;top:8%;color:#138da3}
-.nv102-float-growth{right:4%;bottom:10%;color:#09aa94}
-
-/* Default bundled artwork uses these crisp compositions instead of the old
-   low-resolution raster files, so the old file-fitting rule becomes irrelevant. */
-.nv94-hero-media.is-bundled-lowres>picture{display:none!important}
-
 @media(max-width:900px){
-  .nv102-hero-art{
-    top:auto;
-    right:0;
-    bottom:0;
-    width:100%;
-    height:43%;
+  .nv94-hero-media picture img,
+  .nv94-hero-media>img{
+    object-position:center!important;
   }
-  .nv102-art-halo{
-    width:56%;
-    right:7%;
-    top:-22%;
-  }
-  .nv102-social-woman{
-    right:8%!important;
-    height:108%!important;
-    max-width:58%!important;
-  }
-  .nv102-float{
-    width:46px;height:46px;border-radius:13px;
-  }
-  .nv102-float-instagram{left:46%;top:15%}
-  .nv102-float-tiktok{right:10%;top:5%}
-  .nv102-float-youtube{right:19%;bottom:11%}
-
-  .nv102-browser{
-    right:9%;
-    top:4%;
-    width:60%;
-    height:78%;
-  }
-  .nv102-phone{
-    left:28%;
-    bottom:3%;
-    width:66px;
-    height:112px;
-  }
-  .nv102-float-code{right:7%;top:0}
-
-  .nv102-analytics{
-    right:9%;
-    top:3%;
-    width:60%;
-    height:80%;
-    padding:16px;
-  }
-  .nv102-analytics svg{height:100px}
-  .nv102-analytics-bars{height:30px}
-  .nv102-float-search{left:29%;top:0}
-  .nv102-float-growth{right:7%;bottom:5%}
-}
-
-@media(max-width:600px){
-  .nv102-hero-art{height:40%}
-  .nv102-social-woman{
-    right:4%!important;
-    max-width:66%!important;
-  }
-  .nv102-browser,
-  .nv102-analytics{
-    right:4%;
-    width:72%;
-  }
-  .nv102-phone{left:14%}
-  .nv102-float-search{left:15%}
 }
