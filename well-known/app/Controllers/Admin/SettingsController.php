@@ -56,8 +56,10 @@ class SettingsController extends Controller
                 return;
             }
             $config->set('site_logo', $uploadedLogo, 'branding');
+            $config->set('site_logo_mode', 'custom', 'branding');
         } elseif (($_POST['site_logo_reset'] ?? '') === '1') {
             $config->set('site_logo', '', 'branding');
+            $config->set('site_logo_mode', 'default', 'branding');
         }
 
         foreach ($_POST as $key => $value) {
