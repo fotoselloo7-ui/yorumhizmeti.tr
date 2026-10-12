@@ -288,6 +288,28 @@ final class DiscountService
         return $out;
     }
 
+    public static function publicCouponsForScript(int $scriptId,int $categoryId=0): array
+    {
+        $out=[];
+        foreach(self::publicCoupons() as $coupon){
+            $targets=self::targets((int)$coupon['id']);
+            if(!$targets){
+                $out[]=$coupon;
+                continue;
+            }
+            foreach($targets as $target){
+                $type=(string)$target['target_type'];
+                $id=(int)$target['target_id'];
+                if(($type==='script' && $id===$scriptId) ||
+                   ($type==='script_category' && $categoryId>0 && $id===$categoryId)){
+                    $out[]=$coupon;
+                    break;
+                }
+            }
+        }
+        return $out;
+    }
+
     public static function targetOptions(): array
     {
         self::ensureSchema();
