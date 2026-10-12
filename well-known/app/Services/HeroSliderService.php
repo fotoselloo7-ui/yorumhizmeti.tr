@@ -75,7 +75,7 @@ final class HeroSliderService
                 'secondary_button_text'=>'Tüm Hizmetler',
                 'secondary_button_url'=>'/kategoriler',
                 'secondary_button_icon'=>'grid',
-                'desktop_image'=>'/assets/img/slider/social-media-v96.webp',
+                'desktop_image'=>'/assets/img/slider/social-media-v103.webp',
                 'image_alt'=>'NetVera sosyal medya hizmetleri, içerik etkileşimi ve dijital büyüme çözümleri',
                 'background_start'=>'#20104f',
                 'background_end'=>'#a32078',
@@ -102,7 +102,7 @@ final class HeroSliderService
                 'secondary_button_text'=>'Hazır Yazılımlar',
                 'secondary_button_url'=>'/hazir-scriptler',
                 'secondary_button_icon'=>'code',
-                'desktop_image'=>'/assets/img/slider/agency-software-v96.webp',
+                'desktop_image'=>'/assets/img/slider/agency-software-v103.webp',
                 'image_alt'=>'NetVera ajans ve yazılım hizmetleri, web sitesi, uygulama ve özel yazılım geliştirme',
                 'background_start'=>'#071b3e',
                 'background_end'=>'#2140a8',
@@ -129,7 +129,7 @@ final class HeroSliderService
                 'secondary_button_text'=>'Tüm Hizmetler',
                 'secondary_button_url'=>'/kategoriler',
                 'secondary_button_icon'=>'grid',
-                'desktop_image'=>'/assets/img/slider/seo-digital-marketing-v96.webp',
+                'desktop_image'=>'/assets/img/slider/seo-digital-marketing-v103.webp',
                 'image_alt'=>'NetVera SEO, GEO, AIO, yerel arama ve dijital pazarlama analiz çözümleri',
                 'background_start'=>'#10134f',
                 'background_end'=>'#6d2ca5',
@@ -174,7 +174,7 @@ final class HeroSliderService
                     'secondary_button_text'=>'Tüm Hizmetler',
                     'secondary_button_url'=>'/kategoriler',
                     'secondary_button_icon'=>'grid',
-                    'desktop_image'=>'/assets/img/slider/social-media-v96.webp',
+                    'desktop_image'=>'/assets/img/slider/social-media-v103.webp',
                     'image_alt'=>'NetVera sosyal medya hizmetleri, içerik etkileşimi ve dijital büyüme çözümleri',
                     'background_start'=>'#20104f',
                     'background_end'=>'#a32078',
@@ -189,7 +189,7 @@ final class HeroSliderService
                 ];
             } elseif ($current === '' && $label === 'Ajans & Yazılım' && trim((string)($row['stat_text'] ?? '')) === 'Hazır ve özel çözümler') {
                 $data = [
-                    'desktop_image'=>'/assets/img/slider/agency-software-v96.webp',
+                    'desktop_image'=>'/assets/img/slider/agency-software-v103.webp',
                     'image_alt'=>'NetVera ajans ve yazılım hizmetleri, web sitesi, uygulama ve özel yazılım geliştirme',
                     'background_start'=>'#071b3e',
                     'background_end'=>'#2140a8',
@@ -201,7 +201,7 @@ final class HeroSliderService
                 $data = [
                     'title'=>'SEO, GEO, AIO ve dijital pazarlama ile öne çıkın.',
                     'description'=>'Arama motoru görünürlüğü, yapay zekâ odaklı içerik optimizasyonu, yerel keşfedilebilirlik ve performans reklamlarıyla markanızı ölçülebilir şekilde büyütün.',
-                    'desktop_image'=>'/assets/img/slider/seo-digital-marketing-v96.webp',
+                    'desktop_image'=>'/assets/img/slider/seo-digital-marketing-v103.webp',
                     'image_alt'=>'NetVera SEO, GEO, AIO, yerel arama ve dijital pazarlama analiz çözümleri',
                     'background_start'=>'#10134f',
                     'background_end'=>'#6d2ca5',
@@ -232,9 +232,12 @@ final class HeroSliderService
     {
         $db = Database::getInstance();
         $map = [
-            '/assets/img/slider/social-media-v95.webp' => '/assets/img/slider/social-media-v96.webp',
-            '/assets/img/slider/agency-software-v95.webp' => '/assets/img/slider/agency-software-v96.webp',
-            '/assets/img/slider/seo-digital-marketing-v95.webp' => '/assets/img/slider/seo-digital-marketing-v96.webp',
+            '/assets/img/slider/social-media-v95.webp' => '/assets/img/slider/social-media-v103.webp',
+            '/assets/img/slider/agency-software-v95.webp' => '/assets/img/slider/agency-software-v103.webp',
+            '/assets/img/slider/seo-digital-marketing-v95.webp' => '/assets/img/slider/seo-digital-marketing-v103.webp',
+            '/assets/img/slider/social-media-v96.webp' => '/assets/img/slider/social-media-v103.webp',
+            '/assets/img/slider/agency-software-v96.webp' => '/assets/img/slider/agency-software-v103.webp',
+            '/assets/img/slider/seo-digital-marketing-v96.webp' => '/assets/img/slider/seo-digital-marketing-v103.webp',
         ];
         foreach ($map as $old => $new) {
             $db->query("UPDATE hero_slides SET desktop_image=? WHERE desktop_image=?", [$new, $old]);
