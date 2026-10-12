@@ -194,7 +194,7 @@
                 <a href="/" class="site-logo nv90-site-brand" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
                     <img class="nv90-site-logo" src="<?= e($nv90LogoUrl) ?>"
                          alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
-                         width="856" height="179" decoding="async" fetchpriority="high"
+                         width="1004" height="199" decoding="async" fetchpriority="high"
                          onerror="this.onerror=null;this.src='<?= e($nv90DefaultLogoUrl) ?>';">
                 </a>
 
