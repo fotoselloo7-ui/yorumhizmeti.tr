@@ -267,7 +267,8 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 </a>
                 <?php endif; ?>
                 <?php if(!empty($nv94Slide['eyebrow'])): ?><span class="nv94-hero-eyebrow"><?= e($nv94Slide['eyebrow']) ?></span><?php endif; ?>
-                <h1 class="nv94-hero-title"><?= e($nv94Slide['title']) ?></h1>
+                <?php $nv94HeadingTag=$nv94Index===0?'h1':'h2'; ?>
+                <<?= $nv94HeadingTag ?> class="nv94-hero-title"><?= e($nv94Slide['title']) ?></<?= $nv94HeadingTag ?>>
                 <?php if(!empty($nv94Slide['description'])): ?><p class="nv94-hero-description"><?= e($nv94Slide['description']) ?></p><?php endif; ?>
                 <div class="nv94-hero-actions">
                   <?php if(!empty($nv94Slide['primary_button_text'])&& !empty($nv94Slide['primary_button_url'])): ?>
