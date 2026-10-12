@@ -1,6 +1,14 @@
 <?php
 $subtotal=0;$discount=0;
-foreach($cartItems as $item){$subtotal+=$item['price']*$item['quantity'];if(!empty($item['discount_price'])&&$item['discount_price']<$item['price'])$discount+=($item['price']-$item['discount_price'])*$item['quantity'];}
+foreach($cartItems as $item){
+    $subtotal+=(float)$item['price']*(int)$item['quantity'];
+    if(!empty($item['discount_price'])&&$item['discount_price']<$item['price'])
+        $discount+=((float)$item['price']-(float)$item['discount_price'])*(int)$item['quantity'];
+}
+$pricing=$pricing??[];
+$campaignDiscount=max(0,(float)($pricing['discount_amount']??0));
+$couponCode=(string)($couponCode??'');
+$campaignName=(string)($pricing['campaign_name']??'');
 ?>
 <div class="yv-cart-v5">
 <section class="yv-checkout-hero-v5"><div class="container"><div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="separator">/</span><span>Sepet</span></div><div class="yv-checkout-hero-grid-v5"><div><div class="yv-kicker"><?= icon('shopping-cart',12) ?> Sipariş özeti</div><h1><span>Sepetinizi</span> gözden geçirin.</h1></div><div class="yv-checkout-shield-v5"><span><?= icon('shield',34) ?></span><div><strong>Güvenli Sipariş Süreci</strong><small>Ödeme ve sipariş adımları korumalı altyapıda ilerler.</small></div></div></div><div class="yv-checkout-steps-v5"><div class="active"><span><?= icon('shopping-cart',15) ?></span><b>1</b><strong>Sepet</strong><small>Ürünlerini gözden geçir</small></div><i></i><div><span><?= icon('credit-card',15) ?></span><b>2</b><strong>Ödeme</strong><small>Bilgilerini tamamla</small></div><i></i><div><span><?= icon('check',15) ?></span><b>3</b><strong>Onay</strong><small>Siparişini tamamla</small></div></div></div></section>
@@ -16,7 +24,33 @@ foreach($cartItems as $item){$subtotal+=$item['price']*$item['quantity'];if(!emp
   ?><div class="yv-cart-row-v5"><span class="<?= e($cls) ?>"><?= icon($ico,24) ?></span><div class="copy"><a href="/paket/<?= e($item['slug']) ?>"><?= e(package_display_name($item)) ?></a><small><?= e(excerpt(strip_tags($item['short_description']??'Dijital hizmet paketi'),90)) ?></small><em><?= icon('zap',10) ?> <?= e($item['delivery_time']??'Hızlı teslimat') ?></em></div><div class="qty"><?= (int)$item['quantity'] ?> adet</div><strong><?= money($item['line_total']) ?></strong><form method="POST" action="/sepet/sil"><?= csrfField() ?><input type="hidden" name="key" value="<?= (int)$item['cart_key'] ?>"><button type="submit" aria-label="Sepetten kaldır"><?= icon('trash',14) ?></button></form></div><?php endforeach; ?></div>
   <div class="yv-cart-note-v5"><a href="/kategoriler"><?= icon('arrow-left',11) ?> Alışverişe devam et</a></div>
  </div>
- <aside class="yv-cart-summary-v5"><div class="yv-checkout-card-head-v5"><span><?= icon('file-text',16) ?></span><div><h2>Sipariş Özeti</h2></div></div><div class="yv-checkout-summary-row-v5"><span>Ara Toplam</span><b><?= money($subtotal) ?></b></div><?php if($discount>0): ?><div class="yv-checkout-summary-row-v5 discount"><span>İndirim</span><b>-<?= money($discount) ?></b></div><?php endif; ?><div class="yv-checkout-summary-total-v5"><span>Toplam</span><strong><?= money($total) ?></strong></div><a class="yv-checkout-pay-v5" href="/odeme"><?= icon('lock',14) ?> Güvenli Ödemeye Geç <?= icon('arrow-right',12) ?></a><small class="yv-checkout-ssl-v5"><?= icon('shield',11) ?> SSL korumalı ödeme süreci</small><?php if(count(array_filter($paymentOptions ?? [], static fn($option) => ($option['type'] ?? '') === 'online')) > 0): ?><div class="yv-checkout-payments-v5 yv-payment-networks-v24" aria-label="Desteklenen kart ağları"><span><img src="<?= asset('img/payments/visa.svg') ?>" alt="Visa" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/mastercard.svg') ?>" alt="Mastercard" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="74" height="32" loading="lazy"></span></div><?php else: ?><div class="yv-checkout-payments-v5 yv-payment-transfer-v24"><span><?= icon('landmark',13) ?> Havale / EFT ile ödeme</span></div><?php endif; ?><div class="yv-cart-summary-benefits-v5"><div><?= icon('zap',13) ?> Hızlı işleme alma</div><div><?= icon('headphones',13) ?> 7/24 destek</div><div><?= icon('user',13) ?> Şifresiz işlem</div></div></aside>
+ <aside class="yv-cart-summary-v5">
+  <div class="yv-checkout-card-head-v5"><span><?= icon('file-text',16) ?></span><div><h2>Sipariş Özeti</h2></div></div>
+  <div class="yv-checkout-summary-row-v5"><span>Ara Toplam</span><b><?= money($subtotal) ?></b></div>
+  <?php if($discount>0): ?><div class="yv-checkout-summary-row-v5 discount"><span>Paket İndirimi</span><b>-<?= money($discount) ?></b></div><?php endif; ?>
+  <?php if($campaignDiscount>0): ?><div class="yv-checkout-summary-row-v5 discount nv98-coupon-summary-row"><span><?= e($campaignName?:'Kupon İndirimi') ?></span><b>-<?= money($campaignDiscount) ?></b></div><?php endif; ?>
+
+  <div class="nv98-cart-coupon">
+    <div class="nv98-cart-coupon-title"><?= icon('tag',14) ?><strong>Kupon Kodu</strong></div>
+    <?php if($couponCode!=='' && $campaignDiscount>0): ?>
+      <div class="nv98-applied-coupon">
+        <div><code><?= e($couponCode) ?></code><small><?= e($campaignName) ?></small></div>
+        <form method="POST" action="/sepet/kupon/kaldir"><?= csrfField() ?><button type="submit" aria-label="Kuponu kaldır"><?= icon('x',13) ?> Kaldır</button></form>
+      </div>
+    <?php elseif(($pricing['kind']??'')==='automatic' && $campaignDiscount>0): ?>
+      <div class="nv98-auto-discount"><?= icon('check-circle',13) ?><span><strong>Otomatik indirim uygulandı</strong><small><?= e($campaignName) ?></small></span></div>
+    <?php else: ?>
+      <form method="POST" action="/sepet/kupon/uygula" class="nv98-coupon-form">
+        <?= csrfField() ?>
+        <input type="text" name="coupon_code" maxlength="64" autocomplete="off" placeholder="Kupon kodunuzu yazın" required>
+        <button type="submit">Uygula</button>
+      </form>
+    <?php endif; ?>
+  </div>
+
+  <div class="yv-checkout-summary-total-v5"><span>Toplam</span><strong><?= money($total) ?></strong></div>
+  <a class="yv-checkout-pay-v5" href="/odeme"><?= icon('lock',14) ?> Güvenli Ödemeye Geç <?= icon('arrow-right',12) ?></a>
+  <small class="yv-checkout-ssl-v5"><?= icon('shield',11) ?> SSL korumalı ödeme süreci</small><?php if(count(array_filter($paymentOptions ?? [], static fn($option) => ($option['type'] ?? '') === 'online')) > 0): ?><div class="yv-checkout-payments-v5 yv-payment-networks-v24" aria-label="Desteklenen kart ağları"><span><img src="<?= asset('img/payments/visa.svg') ?>" alt="Visa" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/mastercard.svg') ?>" alt="Mastercard" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="74" height="32" loading="lazy"></span></div><?php else: ?><div class="yv-checkout-payments-v5 yv-payment-transfer-v24"><span><?= icon('landmark',13) ?> Havale / EFT ile ödeme</span></div><?php endif; ?><div class="yv-cart-summary-benefits-v5"><div><?= icon('zap',13) ?> Hızlı işleme alma</div><div><?= icon('headphones',13) ?> 7/24 destek</div><div><?= icon('user',13) ?> Şifresiz işlem</div></div></aside>
 </div><?php endif; ?>
 </div></section>
 </div>
