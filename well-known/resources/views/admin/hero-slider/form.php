@@ -32,7 +32,7 @@ $iconOptions=$icons??[];
     </section>
 
     <section class="adm-card">
-      <div class="adm-card-header"><h3><?= icon('mouse-pointer',16) ?> Butonlar</h3></div>
+      <div class="adm-card-header"><h3><?= icon('link',16) ?> Butonlar</h3></div>
       <div class="adm-card-body">
         <div class="nv94-button-editor">
           <h4>Ana Buton</h4>
