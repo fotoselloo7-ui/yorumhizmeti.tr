@@ -104,7 +104,7 @@
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=96.2">
     <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
     <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=97.2">
-    <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.1">
+    <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.2">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
