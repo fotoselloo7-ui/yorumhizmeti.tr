@@ -100,7 +100,7 @@
     <link rel="stylesheet" href="<?= asset('css/catalog-contrast-v87.css') ?>?v=87.1">
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
-    <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=92.1">
+    <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
@@ -186,8 +186,10 @@
                     // Uploaded logo wins. The shipped NetVera SVG is only the default
                     // until an administrator changes or resets it in Site Settings.
                     $nv90LogoUrl = \App\Services\SiteLogoService::url();
+                    $nv90FooterLogoUrl = \App\Services\SiteLogoService::footerUrl();
                     $nv90HasCustomLogo = \App\Services\SiteLogoService::isCustom();
                     $nv90DefaultLogoUrl = \App\Services\SiteLogoService::defaultUrl();
+                    $nv90FooterDefaultLogoUrl = \App\Services\SiteLogoService::footerDefaultUrl();
                 ?>
                 <a href="/" class="site-logo nv90-site-brand" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
                     <img class="nv90-site-logo" src="<?= e($nv90LogoUrl) ?>"
@@ -524,10 +526,10 @@
                 <div class="footer-brand">
                     <h3 class="nv90-footer-brand-heading">
                         <a href="/" class="nv90-footer-logo-link" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
-                            <img class="nv90-footer-logo <?= !$nv90HasCustomLogo ? 'nv90-logo-default' : '' ?>"
-                                 src="<?= e($nv90LogoUrl) ?>" alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
-                                 width="856" height="179" loading="lazy" decoding="async"
-                                 onerror="this.onerror=null;this.src='<?= e($nv90DefaultLogoUrl) ?>';">
+                            <img class="nv90-footer-logo"
+                                 src="<?= e($nv90FooterLogoUrl) ?>" alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
+                                 width="1004" height="199" loading="lazy" decoding="async"
+                                 onerror="this.onerror=null;this.src='<?= e($nv90FooterDefaultLogoUrl) ?>';">
                         </a>
                     </h3>
                     <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
