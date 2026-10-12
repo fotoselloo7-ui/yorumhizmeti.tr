@@ -18,7 +18,7 @@ $check(str_contains($svg,'SOSYAL MEDYA'),'Default logo tagline missing');
 $service=$get('app/Services/SiteLogoService.php');
 $check(str_contains($service,"setting('site_logo_mode', 'default')"),'Legacy imported logo might hide default');
 $check(str_contains($service,"setting('site_logo', '')"),'Custom logo setting unreadable');
-$check(str_contains($service,"is_file($full)"),'Uploaded logo file is not checked');
+$check(str_contains($service,'is_file($full)'),'Uploaded logo file is not checked');
 $check(str_contains($service,"'img/netvera-brand-v90.svg'"),'Default fallback missing');
 $check(str_contains($layout,'SiteLogoService::url()'),'Header does not use shared logo service');
 $check(str_contains($layout,'onerror="this.onerror=null;this.src='),'Broken image fallback missing');
