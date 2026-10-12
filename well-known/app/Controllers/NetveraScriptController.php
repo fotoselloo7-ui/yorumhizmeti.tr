@@ -192,6 +192,10 @@ class NetveraScriptController extends Controller
             'license'=>Catalog::arrayField($data,'license_json'),
             'faqs'=>Catalog::arrayField($data,'faq_json'),
             'demoUrl'=>Catalog::publicUrl($data['demo_url']??null),
+            'productCoupons'=>\App\Services\DiscountService::publicCouponsForScript(
+                (int)$p['legacy_id'],
+                (int)($p['category_legacy_id']??0)
+            ),
         ]);
     }
 }
