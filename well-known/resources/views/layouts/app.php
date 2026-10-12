@@ -185,15 +185,15 @@
                 <?php
                     // Uploaded logo wins. The shipped NetVera SVG is only the default
                     // until an administrator changes or resets it in Site Settings.
-                    $nv90CustomLogo = trim((string)setting('site_logo', ''));
-                    $nv90LogoUrl = $nv90CustomLogo !== ''
-                        ? upload_url($nv90CustomLogo)
-                        : asset('img/netvera-brand-v90.svg');
+                    $nv90LogoUrl = \App\Services\SiteLogoService::url();
+                    $nv90HasCustomLogo = \App\Services\SiteLogoService::isCustom();
+                    $nv90DefaultLogoUrl = \App\Services\SiteLogoService::defaultUrl();
                 ?>
                 <a href="/" class="site-logo nv90-site-brand" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
                     <img class="nv90-site-logo" src="<?= e($nv90LogoUrl) ?>"
                          alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
-                         width="856" height="179" decoding="async" fetchpriority="high">
+                         width="856" height="179" decoding="async" fetchpriority="high"
+                         onerror="this.onerror=null;this.src='<?= e($nv90DefaultLogoUrl) ?>';">
                 </a>
 
                 <?php
@@ -524,9 +524,10 @@
                 <div class="footer-brand">
                     <h3 class="nv90-footer-brand-heading">
                         <a href="/" class="nv90-footer-logo-link" aria-label="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?> - Ana Sayfa">
-                            <img class="nv90-footer-logo <?= $nv90CustomLogo === '' ? 'nv90-logo-default' : '' ?>"
+                            <img class="nv90-footer-logo <?= !$nv90HasCustomLogo ? 'nv90-logo-default' : '' ?>"
                                  src="<?= e($nv90LogoUrl) ?>" alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"
-                                 width="856" height="179" loading="lazy" decoding="async">
+                                 width="856" height="179" loading="lazy" decoding="async"
+                                 onerror="this.onerror=null;this.src='<?= e($nv90DefaultLogoUrl) ?>';">
                         </a>
                     </h3>
                     <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
