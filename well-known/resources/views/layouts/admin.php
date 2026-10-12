@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="<?= asset('css/admin-sidebar-readable-v77.css') ?>?v=77.1">
     <link rel="stylesheet" href="<?= asset('css/admin-hero-slider-v94.css') ?>?v=95.1">
     <link rel="stylesheet" href="<?= asset('css/admin-popup-v97.css') ?>?v=97.2">
+    <link rel="stylesheet" href="<?= asset('css/admin-discounts-v98.css') ?>?v=98.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body>
@@ -115,6 +116,9 @@
                 </a>
                 <a href="/admin/popuplar" class="<?= isActive('/admin/popuplar') ? 'active' : '' ?>">
                     <?= icon('image', 18) ?> Popup & Kampanyalar
+                </a>
+                <a href="/admin/kuponlar" class="<?= isActive('/admin/kuponlar') ? 'active' : '' ?>">
+                    <?= icon('tag', 18) ?> Kupon & İndirimler
                 </a>
                 <a href="/admin/yorumlar" class="<?= isActive('/admin/yorumlar') ? 'active' : '' ?>">
                     <?= icon('message-circle',18) ?> Müşteri Yorumları
