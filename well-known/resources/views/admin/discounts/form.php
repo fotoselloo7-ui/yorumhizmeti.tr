@@ -2,7 +2,9 @@
 $isEdit=!empty($campaign['id']);
 $selected=[];
 foreach(($campaign['targets']??[]) as $t)$selected[$t['target_type'].':'.$t['target_id']]=true;
+if(!$isEdit && !empty($presetTarget))$selected[(string)$presetTarget]=true;
 $kind=$campaign['kind']??'coupon';
+$presetName=(string)($presetName??'');
 ?>
 <div class="adm-page-top nv98-top">
   <div>
@@ -21,7 +23,7 @@ $kind=$campaign['kind']??'coupon';
   <section class="adm-card">
    <div class="adm-card-header"><h3><?= icon('edit',15) ?> Kampanya Bilgileri</h3></div>
    <div class="adm-card-body nv98-grid">
-    <div class="form-group nv98-span"><label>Kampanya Adı *</label><input class="form-control" name="name" maxlength="160" required value="<?= e($campaign['name']??'') ?>" placeholder="Örn. Haber Yazılımı Lansman Kuponu"></div>
+    <div class="form-group nv98-span"><label>Kampanya Adı *</label><input class="form-control" name="name" maxlength="160" required value="<?= e($campaign['name']??$presetName) ?>" placeholder="Örn. Haber Yazılımı Lansman Kuponu"></div>
     <div class="form-group"><label>Tür</label><select class="form-control" name="kind" data-nv98-kind>
       <option value="coupon" <?= $kind==='coupon'?'selected':'' ?>>Kupon Kodu</option>
       <option value="automatic" <?= $kind==='automatic'?'selected':'' ?>>Otomatik İndirim</option>
