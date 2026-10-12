@@ -103,6 +103,7 @@
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=96.2">
     <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
+    <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=97.1">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
@@ -693,11 +694,14 @@
         <?php require BASE_PATH.'/resources/views/frontend/partials/netvera-live-chat.php'; ?>
     <?php endif; ?>
 
+    <?php require BASE_PATH.'/resources/views/frontend/partials/marketing-popup.php'; ?>
+
     <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
     <script src="<?= asset('js/app.js') ?>"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=81.1"></script>
     <script src="<?= asset('js/home-hero-slider-v94.js') ?>?v=94.1" defer></script>
+    <script src="<?= asset('js/marketing-popup-v97.js') ?>?v=97.1" defer></script>
     <script src="<?= asset('js/package-benefits-v67.js') ?>?v=67.1"></script>
     <script src="<?= asset('js/reviews-v68.js') ?>?v=68.1" defer></script>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
