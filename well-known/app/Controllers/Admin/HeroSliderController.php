@@ -184,6 +184,8 @@ class HeroSliderController extends Controller
 
         $width=(int)$size[0];
         $height=(int)$size[1];
+        $bytes=(int)($file['size']??0);
+        if($bytes<=0 && is_file((string)$file['tmp_name'])) $bytes=(int)filesize((string)$file['tmp_name']);
 
         if($field==='desktop_image'){
             if($width<1920 || $height<820){
@@ -191,10 +193,20 @@ class HeroSliderController extends Controller
                     'Masaüstü slider görseli HD kalite için en az 1920 × 820 px olmalıdır. Önerilen 2400 × 1025 px. Yüklenen: '.$width.' × '.$height.' px.'
                 );
             }
+            if($bytes<102400){
+                throw new \InvalidArgumentException(
+                    'Masaüstü banner aşırı sıkıştırılmış görünüyor. HD kaliteyi korumak için dosya en az 100 KB olmalıdır. Yüklenen: '.round($bytes/1024).' KB.'
+                );
+            }
         }else{
             if($width<1080 || $height<1350){
                 throw new \InvalidArgumentException(
                     'Mobil slider görseli HD kalite için en az 1080 × 1350 px olmalıdır. Önerilen 1440 × 1800 px. Yüklenen: '.$width.' × '.$height.' px.'
+                );
+            }
+            if($bytes<102400){
+                throw new \InvalidArgumentException(
+                    'Mobil banner aşırı sıkıştırılmış görünüyor. HD kaliteyi korumak için dosya en az 100 KB olmalıdır. Yüklenen: '.round($bytes/1024).' KB.'
                 );
             }
         }
