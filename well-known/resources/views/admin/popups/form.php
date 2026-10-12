@@ -1,6 +1,7 @@
 <?php
 $isEdit=!empty($popup['id']);
 $coupons=$popup['coupon_items']??[];
+$iconOptions=$icons??[];
 if(!$coupons)$coupons=[['title'=>'','code'=>'','discount'=>'','description'=>'']];
 ?>
 <div class="adm-page-top nv97-popup-top">
@@ -40,11 +41,25 @@ if(!$coupons)$coupons=[['title'=>'','code'=>'','discount'=>'','description'=>'']
     <section class="adm-card">
       <div class="adm-card-header"><h3><?= icon('link',16) ?> Butonlar</h3></div>
       <div class="adm-card-body">
-        <div class="nv97-form-grid">
-          <div class="form-group"><label>Ana Buton Metni</label><input class="form-control" name="primary_button_text" value="<?= e($popup['primary_button_text']??'') ?>" placeholder="Kampanyayı İncele"></div>
-          <div class="form-group"><label>Ana Buton Linki</label><input class="form-control" name="primary_button_url" value="<?= e($popup['primary_button_url']??'') ?>" placeholder="/kategoriler"></div>
-          <div class="form-group"><label>İkinci Buton Metni</label><input class="form-control" name="secondary_button_text" value="<?= e($popup['secondary_button_text']??'') ?>" placeholder="Tüm Hizmetler"></div>
-          <div class="form-group"><label>İkinci Buton Linki</label><input class="form-control" name="secondary_button_url" value="<?= e($popup['secondary_button_url']??'') ?>" placeholder="/kategoriler"></div>
+        <div class="nv97-button-editor">
+          <h4>Ana Buton</h4>
+          <div class="nv97-form-grid">
+            <div class="form-group"><label>Metin</label><input class="form-control" name="primary_button_text" value="<?= e($popup['primary_button_text']??'') ?>" placeholder="Kampanyayı İncele"></div>
+            <div class="form-group"><label>Link</label><input class="form-control" name="primary_button_url" value="<?= e($popup['primary_button_url']??'') ?>" placeholder="/kategoriler"></div>
+            <div class="form-group"><label>İkon</label><select class="form-control" name="primary_button_icon"><?php foreach($iconOptions as $ico): ?><option value="<?= e($ico) ?>" <?= ($popup['primary_button_icon']??'arrow-right')===$ico?'selected':'' ?>><?= e($ico) ?></option><?php endforeach; ?></select></div>
+            <div class="form-group"><label>Arka Plan</label><input class="form-control" name="primary_button_bg" value="<?= e($popup['primary_button_bg']??'#ffffff') ?>"></div>
+            <div class="form-group"><label>Yazı Rengi</label><input class="form-control" name="primary_button_text_color" value="<?= e($popup['primary_button_text_color']??'#17264e') ?>"></div>
+          </div>
+        </div>
+        <div class="nv97-button-editor">
+          <h4>İkinci Buton</h4>
+          <div class="nv97-form-grid">
+            <div class="form-group"><label>Metin</label><input class="form-control" name="secondary_button_text" value="<?= e($popup['secondary_button_text']??'') ?>" placeholder="Tüm Hizmetler"></div>
+            <div class="form-group"><label>Link</label><input class="form-control" name="secondary_button_url" value="<?= e($popup['secondary_button_url']??'') ?>" placeholder="/kategoriler"></div>
+            <div class="form-group"><label>İkon</label><select class="form-control" name="secondary_button_icon"><?php foreach($iconOptions as $ico): ?><option value="<?= e($ico) ?>" <?= ($popup['secondary_button_icon']??'grid')===$ico?'selected':'' ?>><?= e($ico) ?></option><?php endforeach; ?></select></div>
+            <div class="form-group"><label>Arka Plan</label><input class="form-control" name="secondary_button_bg" value="<?= e($popup['secondary_button_bg']??'#ffffff') ?>"></div>
+            <div class="form-group"><label>Yazı Rengi</label><input class="form-control" name="secondary_button_text_color" value="<?= e($popup['secondary_button_text_color']??'#ffffff') ?>"></div>
+          </div>
         </div>
       </div>
     </section>
