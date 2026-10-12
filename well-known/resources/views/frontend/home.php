@@ -253,6 +253,11 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
               $nv94Delay=max(2500,(int)($nv94Slide['autoplay_delay']??6500));
               $nv94Quick=is_array($nv94Slide['quick_links']??null)?$nv94Slide['quick_links']:[];
               $nv94IsCutout=$nv94Desktop!=='' && str_contains($nv94Desktop,'hero-woman-cutout');
+              $nv94IsBundledLowRes=$nv94Desktop!=='' && (
+                str_contains($nv94Desktop,'/assets/img/slider/social-media-v96.webp') ||
+                str_contains($nv94Desktop,'/assets/img/slider/agency-software-v96.webp') ||
+                str_contains($nv94Desktop,'/assets/img/slider/seo-digital-marketing-v96.webp')
+              );
             ?>
             <article class="nv94-hero-slide <?= $nv94Index===0?'is-active':'' ?>"
               data-nv94-slide data-delay="<?= $nv94Delay ?>"
@@ -295,7 +300,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 </div>
                 <?php endif; ?>
               </div>
-              <div class="nv94-hero-media <?= $nv94IsCutout?'is-cutout':'' ?>">
+              <div class="nv94-hero-media <?= $nv94IsCutout?'is-cutout':'' ?> <?= $nv94IsBundledLowRes?'is-bundled-lowres':'' ?>">
                 <?php if($nv94Desktop): ?>
                 <picture>
                   <?php if($nv94Mobile): ?><source media="(max-width:600px)" srcset="<?= e($nv94Mobile) ?>"><?php endif; ?>
