@@ -46,7 +46,7 @@ function upload_url(?string $path,string $fallbackType='default'):string {
     return (string)$path;
 }
 require_once $root.'/app/Services/SiteLogoService.php';
-$logoClass=\\App\\Services\\SiteLogoService::class;
+$logoClass=\App\Services\SiteLogoService::class;
 $expected='/assets/img/netvera-brand-v90.svg';
 $GLOBALS['nv90LogoTestSettings']=['site_logo'=>'/uploads/branding/retired-logo.png'];
 $check($logoClass::url()===$expected,'Legacy logo path hides NetVera default');
