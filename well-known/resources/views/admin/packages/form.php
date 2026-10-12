@@ -171,6 +171,7 @@
                     <a href="<?= $softwareOnly ? '/admin/hazir-yazilimlar' : '/admin/paketler' ?>" class="btn btn-outline btn-block btn-sm" style="margin-top: var(--space-3);"><?= icon('x', 14) ?> Vazgeç</a>
                     <?php if ($isEdit): ?>
                     <a href="/admin/paket/<?= $package['id'] ?>/alanlar" class="btn btn-light btn-block btn-sm" style="margin-top: var(--space-2);"><?= icon('list', 14) ?> Sipariş Alanları</a>
+                    <a href="/admin/kuponlar/yeni?target=package:<?= (int)$package['id'] ?>&amp;name=<?= rawurlencode((string)$package['name']) ?>" class="btn btn-outline btn-block btn-sm" style="margin-top: var(--space-2);"><?= icon('tag', 14) ?> Bu Ürüne Kupon Tanımla</a>
                     <?php endif; ?>
                 </div>
             </div>
