@@ -41,7 +41,7 @@ final class DiscountService
             CREATE TABLE IF NOT EXISTS discount_targets (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 campaign_id BIGINT UNSIGNED NOT NULL,
-                target_type ENUM('package','category','script','script_category') NOT NULL,
+                target_type ENUM('script','service','script_category','service_category','package') NOT NULL,
                 target_id INT UNSIGNED NOT NULL,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE KEY uq_discount_target (campaign_id,target_type,target_id),
@@ -292,13 +292,13 @@ final class DiscountService
     {
         self::ensureSchema();
         $db=Database::getInstance();
-        $out=['package'=>[],'category'=>[],'script'=>[],'script_category'=>[]];
+        $out=['package'=>[],'service_category'=>[],'script'=>[],'script_category'=>[]];
 
         try{
             $out['package']=$db->fetchAll(
                 "SELECT id,name,slug FROM packages ORDER BY name ASC"
             );
-            $out['category']=$db->fetchAll(
+            $out['service_category']=$db->fetchAll(
                 "SELECT id,name,slug FROM categories ORDER BY name ASC"
             );
         }catch(\Throwable $e){}
@@ -394,7 +394,7 @@ final class DiscountService
             $type=$target['target_type'];
             $id=(int)$target['target_id'];
             if($type==='package' && (int)($item['id']??0)===$id) return true;
-            if($type==='category' && (int)($item['category_id']??0)===$id) return true;
+            if($type==='service_category' && (int)($item['category_id']??0)===$id) return true;
         }
         return false;
     }
@@ -428,7 +428,7 @@ final class DiscountService
 
     private static function sanitizeTargets(array $targets): array
     {
-        $allowed=['package','category','script','script_category'];
+        $allowed=['package','service_category','script','script_category'];
         $out=[];$seen=[];
         foreach($targets as $raw){
             if(is_string($raw) && str_contains($raw,':')) [$type,$id]=explode(':',$raw,2);
@@ -453,7 +453,7 @@ final class DiscountService
         $labels=[];
         foreach($targets as $target){
             $type=$target['target_type'];$id=(int)$target['target_id'];
-            $prefix=['package'=>'Paket','category'=>'Kategori','script'=>'Yazılım','script_category'=>'Yazılım Kategorisi'][$type]??$type;
+            $prefix=['package'=>'Paket','service_category'=>'Hizmet Kategorisi','script'=>'Yazılım','script_category'=>'Yazılım Kategorisi'][$type]??$type;
             $labels[]=$prefix.': '.($maps[$type][$id]??('#'.$id));
         }
         return $labels;
