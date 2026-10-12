@@ -161,12 +161,43 @@ class HeroSliderController extends Controller
         foreach(['desktop_image'=>'slider/desktop','mobile_image'=>'slider/mobile'] as $field=>$folder){
             if(!empty($_POST['remove_'.$field])) $row[$field]='';
             if(!empty($_FILES[$field]['name'])){
+                $this->validateSliderImage($_FILES[$field],$field);
                 $upload=Upload::image($_FILES[$field],$folder);
                 if(!$upload) throw new \InvalidArgumentException(($field==='desktop_image'?'Masaüstü':'Mobil').' görsel yüklenemedi. PNG, JPG veya WebP kullanın.');
                 $row[$field]=$upload;
             }
         }
         return $row;
+    }
+
+    /**
+     * Slider uploads are stored as the original file; they are never silently
+     * downscaled or recompressed. This guard only blocks source files that are
+     * too small to stay sharp at the site's rendered sizes.
+     */
+    private function validateSliderImage(array $file,string $field): void
+    {
+        if(($file['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_OK || empty($file['tmp_name'])) return;
+        $size=@getimagesize((string)$file['tmp_name']);
+        if(!$size || empty($size[0]) || empty($size[1]))
+            throw new \InvalidArgumentException('Slider görselinin ölçüleri okunamadı.');
+
+        $width=(int)$size[0];
+        $height=(int)$size[1];
+
+        if($field==='desktop_image'){
+            if($width<1440 || $height<600){
+                throw new \InvalidArgumentException(
+                    'Masaüstü slider görseli en az 1440 × 600 px olmalıdır. Önerilen 1920 × 820 px. Yüklenen: '.$width.' × '.$height.' px.'
+                );
+            }
+        }else{
+            if($width<900 || $height<1125){
+                throw new \InvalidArgumentException(
+                    'Mobil slider görseli en az 900 × 1125 px olmalıdır. Önerilen 1080 × 1350 px. Yüklenen: '.$width.' × '.$height.' px.'
+                );
+            }
+        }
     }
 
     private function quickLinks(): array
