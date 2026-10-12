@@ -65,3 +65,28 @@
     overflow:visible;
   }
 }
+
+
+/* V101.2 — never upscale the three old bundled 1000/1200px artworks.
+   They are fitted at or below their natural pixel density; the slide gradient
+   fills the remaining left-side canvas. New admin uploads use the full cover
+   mode because the backend now requires true HD source dimensions. */
+@media(min-width:901px){
+  .nv94-hero-media.is-bundled-lowres picture{
+    overflow:hidden;
+  }
+  .nv94-hero-media.is-bundled-lowres img{
+    left:auto!important;
+    right:0!important;
+    top:0!important;
+    bottom:0!important;
+    width:auto!important;
+    height:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    object-fit:contain!important;
+    object-position:right center!important;
+    filter:none!important;
+    transform:none!important;
+  }
+}
