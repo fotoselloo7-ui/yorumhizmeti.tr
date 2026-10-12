@@ -101,11 +101,11 @@
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
-    <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=102.1">
+    <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=103.2">
     <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
     <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=97.2">
     <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.2">
-    <link rel="stylesheet" href="<?= asset('css/home-service-cards-v101.css') ?>?v=101.2">
+    <link rel="stylesheet" href="<?= asset('css/home-service-cards-v101.css') ?>?v=103.2">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
