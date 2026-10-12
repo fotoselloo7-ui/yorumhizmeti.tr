@@ -172,6 +172,7 @@ final class HeroSliderService
                     'primary_button_url'=>'/kategoriler/grup/social',
                     'secondary_button_text'=>'Tüm Hizmetler',
                     'secondary_button_url'=>'/kategoriler',
+                    'secondary_button_icon'=>'grid',
                     'desktop_image'=>'/assets/img/slider/social-media-v95.webp',
                     'image_alt'=>'NetVera sosyal medya hizmetleri, içerik etkileşimi ve dijital büyüme çözümleri',
                     'background_start'=>'#20104f',
@@ -179,6 +180,11 @@ final class HeroSliderService
                     'overlay_color'=>'rgba(24,10,65,.52)',
                     'accent_color'=>'#ff4fa3',
                     'stat_text'=>'Instagram, TikTok, YouTube ve daha fazlası',
+                    'quick_links'=>json_encode([
+                        ['label'=>'Instagram','url'=>'/kategoriler/grup/social','icon'=>'instagram','color'=>'#f02d85'],
+                        ['label'=>'TikTok','url'=>'/kategoriler/grup/social','icon'=>'tiktok','color'=>'#111827'],
+                        ['label'=>'YouTube','url'=>'/kategoriler/grup/social','icon'=>'youtube','color'=>'#ff0033'],
+                    ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
                 ];
             } elseif ($label === 'Ajans & Yazılım' || ($order === 20 && $current === '')) {
                 $data = [
@@ -199,7 +205,18 @@ final class HeroSliderService
                     'background_end'=>'#6d2ca5',
                     'overlay_color'=>'rgba(7,16,58,.55)',
                     'accent_color'=>'#22d3ee',
+                    'primary_button_text'=>'SEO & Pazarlamayı İncele',
+                    'primary_button_url'=>'/kategoriler/grup/marketing',
+                    'primary_button_icon'=>'arrow-right',
+                    'secondary_button_text'=>'Tüm Hizmetler',
+                    'secondary_button_url'=>'/kategoriler',
+                    'secondary_button_icon'=>'grid',
                     'stat_text'=>'SEO, GEO, AIO, Ads ve yerel görünürlük',
+                    'quick_links'=>json_encode([
+                        ['label'=>'SEO','url'=>'/kategoriler/grup/marketing','icon'=>'search','color'=>'#4f7cff'],
+                        ['label'=>'Yerel Arama','url'=>'/kategoriler/grup/marketing','icon'=>'map-pin','color'=>'#22c7a8'],
+                        ['label'=>'Dijital Reklam','url'=>'/kategoriler/grup/marketing','icon'=>'trending-up','color'=>'#9b5cff'],
+                    ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
                 ];
             }
 
