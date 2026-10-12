@@ -34,4 +34,27 @@ $check(str_contains($admin,'$config->set(\'site_logo_mode\', \'custom\', \'brand
 $check(str_contains($admin,'$config->set(\'site_logo\', \'\', \'branding\')'),'Default logo cannot be restored');
 $check(str_contains($admin,'$config->set(\'site_logo_mode\', \'default\', \'branding\')'),'Reset does not restore bundled logo mode');
 $check(str_contains($css,'.nv90-site-logo')&&str_contains($css,'@media(max-width:480px)'),'Mobile logo sizing missing');
+// Behavioral regression: a stale logo path from the imported project must
+// never override the shipped NetVera logo until this admin uploads a new one.
+if (!defined('PUBLIC_PATH')) define('PUBLIC_PATH', $root.'/public');
+$GLOBALS['nv90LogoTestSettings']=[];
+function setting(string $key,string $default=''):string {
+    return (string)($GLOBALS['nv90LogoTestSettings'][$key]??$default);
+}
+function asset(string $path):string {return '/assets/'.ltrim($path,'/');}
+function upload_url(?string $path,string $fallbackType='default'):string {
+    return (string)$path;
+}
+require_once $root.'/app/Services/SiteLogoService.php';
+$logoClass=\\App\\Services\\SiteLogoService::class;
+$expected='/assets/img/netvera-brand-v90.svg';
+$GLOBALS['nv90LogoTestSettings']=['site_logo'=>'/uploads/branding/retired-logo.png'];
+$check($logoClass::url()===$expected,'Legacy logo path hides NetVera default');
+$GLOBALS['nv90LogoTestSettings']['site_logo_mode']='custom';
+$check($logoClass::url()===$expected,'Nonexistent uploaded logo hides default');
+$GLOBALS['nv90LogoTestSettings']['site_logo']='https://example.org/brand.png';
+$check($logoClass::url()==='https://example.org/brand.png','Admin HTTPS logo not honored');
+$GLOBALS['nv90LogoTestSettings']['site_logo_mode']='default';
+$check($logoClass::url()===$expected,'Reset does not restore default');
+
 echo "PASS: admin-changeable NetVera site logo, uploaded override, reset, responsive header and footer\n";
