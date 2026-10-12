@@ -184,7 +184,12 @@ final class DiscountService
     {
         self::ensureSchema();
         Database::getInstance()->update(
-            'discount_campaigns',['is_active'=>0,'deleted_at'=>date('Y-m-d H:i:s')],'id=?',[$id]
+            'discount_campaigns',[
+                'is_active'=>0,
+                'deleted_at'=>date('Y-m-d H:i:s'),
+                // Allow an archived code to be reused in a future campaign.
+                'code'=>null,
+            ],'id=?',[$id]
         );
     }
 
