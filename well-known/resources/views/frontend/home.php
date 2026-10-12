@@ -253,11 +253,6 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
               $nv94Delay=max(2500,(int)($nv94Slide['autoplay_delay']??6500));
               $nv94Quick=is_array($nv94Slide['quick_links']??null)?$nv94Slide['quick_links']:[];
               $nv94IsCutout=$nv94Desktop!=='' && str_contains($nv94Desktop,'hero-woman-cutout');
-              $nv94BundledKind='';
-              if($nv94Desktop!=='' && str_contains($nv94Desktop,'/assets/img/slider/social-media-v96.webp')) $nv94BundledKind='social';
-              elseif($nv94Desktop!=='' && str_contains($nv94Desktop,'/assets/img/slider/agency-software-v96.webp')) $nv94BundledKind='agency';
-              elseif($nv94Desktop!=='' && str_contains($nv94Desktop,'/assets/img/slider/seo-digital-marketing-v96.webp')) $nv94BundledKind='marketing';
-              $nv94IsBundledLowRes=$nv94BundledKind!=='';
             ?>
             <article class="nv94-hero-slide <?= $nv94Index===0?'is-active':'' ?>"
               data-nv94-slide data-delay="<?= $nv94Delay ?>"
@@ -300,53 +295,20 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 </div>
                 <?php endif; ?>
               </div>
-              <div class="nv94-hero-media <?= $nv94IsCutout?'is-cutout':'' ?> <?= $nv94IsBundledLowRes?'is-bundled-lowres':'' ?>">
-                <?php if($nv94BundledKind==='social'): ?>
-                  <div class="nv102-hero-art nv102-hero-art-social" aria-hidden="true">
-                    <span class="nv102-art-halo"></span>
-                    <img src="<?= asset('img/hero-woman-cutout.png') ?>" alt="" class="nv102-social-woman" <?= $nv94Index===0?'loading="eager" fetchpriority="high"':'loading="lazy"' ?> decoding="async">
-                    <span class="nv102-float nv102-float-instagram"><?= icon('instagram',25) ?></span>
-                    <span class="nv102-float nv102-float-tiktok"><?= icon('tiktok',23) ?></span>
-                    <span class="nv102-float nv102-float-youtube"><?= icon('youtube',22) ?></span>
-                  </div>
-                <?php elseif($nv94BundledKind==='agency'): ?>
-                  <div class="nv102-hero-art nv102-hero-art-agency" aria-hidden="true">
-                    <span class="nv102-art-halo"></span>
-                    <div class="nv102-browser">
-                      <div class="nv102-browser-top"><i></i><i></i><i></i><span></span></div>
-                      <div class="nv102-browser-body">
-                        <aside><b></b><b></b><b></b><b></b></aside>
-                        <main>
-                          <span class="nv102-browser-line"></span>
-                          <div class="nv102-browser-chart"><i></i><i></i><i></i><i></i><i></i></div>
-                          <div class="nv102-browser-tiles"><b></b><b></b><b></b></div>
-                        </main>
-                      </div>
-                    </div>
-                    <div class="nv102-phone"><i></i><span></span><b></b></div>
-                    <span class="nv102-float nv102-float-code"><?= icon('code',23) ?></span>
-                  </div>
-                <?php elseif($nv94BundledKind==='marketing'): ?>
-                  <div class="nv102-hero-art nv102-hero-art-marketing" aria-hidden="true">
-                    <span class="nv102-art-halo"></span>
-                    <div class="nv102-analytics">
-                      <div class="nv102-analytics-top"><span></span><b></b><?= icon('trending-up',20) ?></div>
-                      <svg viewBox="0 0 330 150" fill="none" aria-hidden="true">
-                        <path d="M15 120H315M15 78H315M15 36H315" stroke="currentColor" stroke-opacity=".14" stroke-dasharray="5 7"/>
-                        <path d="M15 126L72 104L126 112L174 64L225 80L276 36L314 22" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="314" cy="22" r="8" fill="white" stroke="currentColor" stroke-width="5"/>
-                      </svg>
-                      <div class="nv102-analytics-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                    </div>
-                    <span class="nv102-float nv102-float-search"><?= icon('search',24) ?></span>
-                    <span class="nv102-float nv102-float-growth"><?= icon('trending-up',22) ?></span>
-                  </div>
-                <?php elseif($nv94Desktop): ?>
-                  <picture>
-                    <?php if($nv94Mobile): ?><source media="(max-width:600px)" srcset="<?= e($nv94Mobile) ?>"><?php endif; ?>
-                    <img src="<?= e($nv94Desktop) ?>" alt="<?= e($nv94Slide['image_alt']?:$nv94Slide['title']) ?>" <?= $nv94Index===0?'loading="eager" fetchpriority="high"':'loading="lazy"' ?> decoding="async">
-                  </picture>
-                <?php else: ?><span class="nv94-hero-media-placeholder" aria-hidden="true"></span><?php endif; ?>
+              <div class="nv94-hero-media <?= $nv94IsCutout?'is-cutout':'' ?>">
+                <?php if($nv94Desktop): ?>
+                <picture>
+                  <?php if($nv94Mobile): ?><source media="(max-width:600px)" srcset="<?= e($nv94Mobile) ?>"><?php endif; ?>
+                  <img
+                    src="<?= e($nv94Desktop) ?>"
+                    alt="<?= e($nv94Slide['image_alt']?:$nv94Slide['title']) ?>"
+                    <?= $nv94Index===0?'loading="eager" fetchpriority="high"':'loading="lazy"' ?>
+                    decoding="async"
+                  >
+                </picture>
+                <?php else: ?>
+                  <span class="nv94-hero-media-placeholder" aria-hidden="true"></span>
+                <?php endif; ?>
               </div>
               <span class="nv94-hero-progress" aria-hidden="true"></span>
             </article>
