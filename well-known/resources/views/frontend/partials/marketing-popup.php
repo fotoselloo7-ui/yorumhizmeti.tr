@@ -15,7 +15,7 @@ $nv97HasBody=$nv97Type!=='image';
      data-close-backdrop="<?= !empty($nv97Popup['close_on_backdrop'])?'1':'0' ?>"
      data-once-session="<?= !empty($nv97Popup['once_per_session'])?'1':'0' ?>"
      hidden>
-  <section class="nv97-popup <?= e($nv97Popup['orientation']??'horizontal') ?> <?= $nv97Type==='image'?'image-only':'' ?>"
+  <section class="nv97-popup <?= e($nv97Popup['orientation']??'horizontal') ?> <?= $nv97Type==='image'?'image-only':'' ?> <?= $nv97Img?'has-image':'no-image' ?>"
            role="dialog" aria-modal="true"
            aria-label="<?= e($nv97Popup['title']?:$nv97Popup['internal_name']) ?>"
            tabindex="-1"
@@ -26,7 +26,9 @@ $nv97HasBody=$nv97Type!=='image';
 
     <?php if($nv97Img): ?>
     <div class="nv97-popup-image">
+      <?php if($nv97Type==='image'&&!empty($nv97Popup['primary_button_url'])): ?><a href="<?= e($nv97Popup['primary_button_url']) ?>" aria-label="<?= e($nv97Popup['primary_button_text']?:$nv97Popup['title']?:'Duyuruyu aç') ?>"><?php endif; ?>
       <img src="<?= e($nv97Img) ?>" alt="<?= e($nv97Popup['image_alt']?:$nv97Popup['title']) ?>" loading="eager" decoding="async">
+      <?php if($nv97Type==='image'&&!empty($nv97Popup['primary_button_url'])): ?></a><?php endif; ?>
     </div>
     <?php endif; ?>
 
@@ -55,8 +57,8 @@ $nv97HasBody=$nv97Type!=='image';
 
       <?php if((!empty($nv97Popup['primary_button_text'])&&!empty($nv97Popup['primary_button_url']))||(!empty($nv97Popup['secondary_button_text'])&&!empty($nv97Popup['secondary_button_url']))): ?>
       <div class="nv97-popup-actions">
-        <?php if(!empty($nv97Popup['primary_button_text'])&&!empty($nv97Popup['primary_button_url'])): ?><a class="nv97-popup-cta primary" href="<?= e($nv97Popup['primary_button_url']) ?>"><?= e($nv97Popup['primary_button_text']) ?> <?= icon('arrow-right',12) ?></a><?php endif; ?>
-        <?php if(!empty($nv97Popup['secondary_button_text'])&&!empty($nv97Popup['secondary_button_url'])): ?><a class="nv97-popup-cta secondary" href="<?= e($nv97Popup['secondary_button_url']) ?>"><?= e($nv97Popup['secondary_button_text']) ?></a><?php endif; ?>
+        <?php if(!empty($nv97Popup['primary_button_text'])&&!empty($nv97Popup['primary_button_url'])): ?><a class="nv97-popup-cta primary" href="<?= e($nv97Popup['primary_button_url']) ?>" style="background:<?= e($nv97Popup['primary_button_bg']?:'#ffffff') ?>;color:<?= e($nv97Popup['primary_button_text_color']?:'#17264e') ?>"><?= icon($nv97Popup['primary_button_icon']?:'arrow-right',12) ?> <?= e($nv97Popup['primary_button_text']) ?></a><?php endif; ?>
+        <?php if(!empty($nv97Popup['secondary_button_text'])&&!empty($nv97Popup['secondary_button_url'])): ?><a class="nv97-popup-cta secondary" href="<?= e($nv97Popup['secondary_button_url']) ?>" style="background:<?= e($nv97Popup['secondary_button_bg']?:'#ffffff') ?>;color:<?= e($nv97Popup['secondary_button_text_color']?:'#ffffff') ?>"><?= icon($nv97Popup['secondary_button_icon']?:'grid',12) ?> <?= e($nv97Popup['secondary_button_text']) ?></a><?php endif; ?>
       </div>
       <?php endif; ?>
     </div>
