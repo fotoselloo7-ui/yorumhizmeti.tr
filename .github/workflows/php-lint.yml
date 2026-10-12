@@ -21,6 +21,11 @@ jobs:
       - name: Editable site logo, upload and responsive display QA
         run: php well-known/tests/site-logo-v90-qa.php
 
+      - name: Homepage hero slider and login logo QA
+        run: |
+          php well-known/tests/home-hero-slider-v94-qa.php
+          node --check well-known/public/assets/js/home-hero-slider-v94.js
+
       - name: Retired ready-software category 301 and menu parity QA
         run: php well-known/tests/retired-software-category-qa.php
 
