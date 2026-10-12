@@ -8,11 +8,17 @@ namespace App\Services;
  */
 final class SiteLogoService
 {
-    public const DEFAULT_ASSET = 'img/netvera-logo-current.webp';
+    public const DEFAULT_ASSET = 'img/netvera-logo-current.svg';
+    public const FOOTER_DEFAULT_ASSET = 'img/netvera-logo-footer-white.svg';
 
     public static function defaultUrl(): string
     {
         return \asset(self::DEFAULT_ASSET);
+    }
+
+    public static function footerDefaultUrl(): string
+    {
+        return \asset(self::FOOTER_DEFAULT_ASSET);
     }
 
     public static function customUrl(): ?string
@@ -49,6 +55,11 @@ final class SiteLogoService
     public static function url(): string
     {
         return self::customUrl() ?? self::defaultUrl();
+    }
+
+    public static function footerUrl(): string
+    {
+        return self::customUrl() ?? self::footerDefaultUrl();
     }
 
     public static function isCustom(): bool
