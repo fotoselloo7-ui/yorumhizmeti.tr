@@ -17,10 +17,17 @@ final class DiscountController extends Controller
 
     public function create(): void
     {
+        $presetTarget='';
+        $raw=trim((string)($_GET['target']??''));
+        if(preg_match('/^(package|service_category|script|script_category):([1-9][0-9]*)$/',$raw,$m)){
+            $presetTarget=$m[1].':'.(int)$m[2];
+        }
         $this->renderAdmin('admin/discounts/form',[
             'pageTitle'=>'Yeni Kupon / İndirim',
             'campaign'=>null,
             'targetOptions'=>DiscountService::targetOptions(),
+            'presetTarget'=>$presetTarget,
+            'presetName'=>mb_substr(trim((string)($_GET['name']??'')),0,160),
         ]);
     }
 
