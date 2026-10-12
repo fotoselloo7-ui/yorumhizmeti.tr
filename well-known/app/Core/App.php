@@ -62,6 +62,8 @@ class App
         $r->post('/sepet/ekle', 'CartController@add');
         $r->post('/sepet/guncelle', 'CartController@update');
         $r->post('/sepet/sil', 'CartController@remove');
+        $r->post('/sepet/kupon/uygula', 'CartController@applyCoupon');
+        $r->post('/sepet/kupon/kaldir', 'CartController@removeCoupon');
 
         // Ödeme
         $r->get('/odeme', 'CheckoutController@index');
@@ -317,6 +319,14 @@ class App
         $r->post('/admin/popuplar/{id}/durum', 'Admin\\MarketingPopupController@toggle');
         $r->post('/admin/popuplar/{id}/kopyala', 'Admin\\MarketingPopupController@duplicate');
         $r->post('/admin/popuplar/{id}/sil', 'Admin\\MarketingPopupController@delete');
+
+        // Admin Kupon & İndirim Yönetimi
+        $r->get('/admin/kuponlar', 'Admin\\DiscountController@index');
+        $r->get('/admin/kuponlar/yeni', 'Admin\\DiscountController@create');
+        $r->get('/admin/kuponlar/{id}/duzenle', 'Admin\\DiscountController@edit');
+        $r->post('/admin/kuponlar/kaydet', 'Admin\\DiscountController@save');
+        $r->post('/admin/kuponlar/{id}/durum', 'Admin\\DiscountController@toggle');
+        $r->post('/admin/kuponlar/{id}/sil', 'Admin\\DiscountController@delete');
 
         // Admin Lisans Yönetimi
         $r->get('/admin/lisans', 'Admin\\LicenseController@index');
