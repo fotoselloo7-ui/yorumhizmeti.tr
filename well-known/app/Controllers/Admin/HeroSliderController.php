@@ -186,15 +186,15 @@ class HeroSliderController extends Controller
         $height=(int)$size[1];
 
         if($field==='desktop_image'){
-            if($width<1440 || $height<600){
+            if($width<1920 || $height<820){
                 throw new \InvalidArgumentException(
-                    'Masaüstü slider görseli en az 1440 × 600 px olmalıdır. Önerilen 1920 × 820 px. Yüklenen: '.$width.' × '.$height.' px.'
+                    'Masaüstü slider görseli HD kalite için en az 1920 × 820 px olmalıdır. Önerilen 2400 × 1025 px. Yüklenen: '.$width.' × '.$height.' px.'
                 );
             }
         }else{
-            if($width<900 || $height<1125){
+            if($width<1080 || $height<1350){
                 throw new \InvalidArgumentException(
-                    'Mobil slider görseli en az 900 × 1125 px olmalıdır. Önerilen 1080 × 1350 px. Yüklenen: '.$width.' × '.$height.' px.'
+                    'Mobil slider görseli HD kalite için en az 1080 × 1350 px olmalıdır. Önerilen 1440 × 1800 px. Yüklenen: '.$width.' × '.$height.' px.'
                 );
             }
         }
