@@ -243,7 +243,6 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
     <div class="container">
         <?php
         $nv94Slides=$heroSlides??[];
-        $nv94BrandLogo=\App\Services\SiteLogoService::url();
         ?>
         <?php if($nv94Slides): ?>
         <div class="nv94-hero-slider" data-nv94-slider aria-roledescription="carousel" aria-label="NetVera öne çıkan hizmetler">
@@ -303,10 +302,6 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                   <img src="<?= e($nv94Desktop) ?>" alt="<?= e($nv94Slide['image_alt']?:$nv94Slide['title']) ?>" <?= $nv94Index===0?'loading="eager" fetchpriority="high"':'loading="lazy"' ?> decoding="async">
                 </picture>
                 <?php else: ?><span class="nv94-hero-media-placeholder" aria-hidden="true"></span><?php endif; ?>
-                <div class="nv94-hero-brand-card">
-                  <img src="<?= e($nv94BrandLogo) ?>" alt="NetVera" loading="lazy" decoding="async">
-                  <small>Teknoloji ve Yazılım</small>
-                </div>
               </div>
               <span class="nv94-hero-progress" aria-hidden="true"></span>
             </article>
