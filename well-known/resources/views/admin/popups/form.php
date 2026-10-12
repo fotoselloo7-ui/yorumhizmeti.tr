@@ -67,7 +67,7 @@ if(!$coupons)$coupons=[['title'=>'','code'=>'','discount'=>'','description'=>'']
     <section class="adm-card" data-coupon-section>
       <div class="adm-card-header nv97-card-head"><h3><?= icon('grid',16) ?> Kuponlar & İndirimler</h3><button type="button" class="btn btn-outline btn-sm" data-coupon-add><?= icon('plus',13) ?> Kupon Ekle</button></div>
       <div class="adm-card-body">
-        <p class="nv97-help">Tek popup içinde en fazla 20 kupon/indirim yayınlayabilirsiniz. Kod alanı boşsa sadece kampanya duyurusu olarak görünür.</p>
+        <p class="nv97-help">Tek popup içinde tüm kupon ve indirimlerinizi yayınlayabilirsiniz. Kod alanı boşsa sadece kampanya duyurusu olarak görünür.</p>
         <div data-coupon-list>
         <?php foreach($coupons as $item): ?>
           <div class="nv97-coupon-row">
@@ -150,7 +150,7 @@ document.addEventListener('click',function(e){
   const add=e.target.closest('[data-coupon-add]');
   if(add){
     const list=document.querySelector('[data-coupon-list]');
-    if(list&&list.children.length<20) list.append(document.getElementById('nv97-coupon-template').content.cloneNode(true));
+    if(list) list.append(document.getElementById('nv97-coupon-template').content.cloneNode(true));
   }
   const remove=e.target.closest('[data-coupon-remove]');
   if(remove){
