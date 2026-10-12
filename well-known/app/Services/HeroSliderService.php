@@ -186,7 +186,7 @@ final class HeroSliderService
                         ['label'=>'YouTube','url'=>'/kategoriler/grup/social','icon'=>'youtube','color'=>'#ff0033'],
                     ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
                 ];
-            } elseif ($label === 'Ajans & Yazılım' || ($order === 20 && $current === '')) {
+            } elseif ($current === '' && $label === 'Ajans & Yazılım' && trim((string)($row['stat_text'] ?? '')) === 'Hazır ve özel çözümler') {
                 $data = [
                     'desktop_image'=>'/assets/img/slider/agency-software-v95.webp',
                     'image_alt'=>'NetVera ajans ve yazılım hizmetleri, web sitesi, uygulama ve özel yazılım geliştirme',
@@ -194,8 +194,9 @@ final class HeroSliderService
                     'background_end'=>'#2140a8',
                     'overlay_color'=>'rgba(5,17,54,.55)',
                     'accent_color'=>'#1fc7ff',
+                    'stat_text'=>'Web, e-ticaret, mobil ve hazır yazılım',
                 ];
-            } elseif ($label === 'SEO & Dijital Pazarlama' || ($order === 30 && $current === '')) {
+            } elseif ($current === '' && $label === 'SEO & Dijital Pazarlama' && trim((string)($row['stat_text'] ?? '')) === 'SEO, Ads ve sosyal medya') {
                 $data = [
                     'title'=>'SEO, GEO, AIO ve dijital pazarlama ile öne çıkın.',
                     'description'=>'Arama motoru görünürlüğü, yapay zekâ odaklı içerik optimizasyonu, yerel keşfedilebilirlik ve performans reklamlarıyla markanızı ölçülebilir şekilde büyütün.',
