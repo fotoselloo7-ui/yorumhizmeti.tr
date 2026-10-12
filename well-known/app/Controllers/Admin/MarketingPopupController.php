@@ -6,6 +6,7 @@ use App\Core\Csrf;
 use App\Core\Database;
 use App\Core\Upload;
 use App\Services\MarketingPopupService;
+use App\Services\IconService;
 
 class MarketingPopupController extends Controller
 {
@@ -23,6 +24,7 @@ class MarketingPopupController extends Controller
         $this->renderAdmin('admin/popups/form',[
             'pageTitle'=>'Yeni Popup Oluştur',
             'popup'=>null,
+            'icons'=>IconService::list(),
         ]);
     }
 
@@ -33,6 +35,7 @@ class MarketingPopupController extends Controller
         $this->renderAdmin('admin/popups/form',[
             'pageTitle'=>'Popup Düzenle',
             'popup'=>$popup,
+            'icons'=>IconService::list(),
         ]);
     }
 
@@ -123,8 +126,14 @@ class MarketingPopupController extends Controller
             'image_alt'=>mb_substr(trim((string)($_POST['image_alt']??'')),0,255),
             'primary_button_text'=>mb_substr(trim((string)($_POST['primary_button_text']??'')),0,100),
             'primary_button_url'=>$this->url((string)($_POST['primary_button_url']??'')),
+            'primary_button_icon'=>$this->icon((string)($_POST['primary_button_icon']??'arrow-right'),'arrow-right'),
+            'primary_button_bg'=>$this->color((string)($_POST['primary_button_bg']??'#ffffff'),'#ffffff'),
+            'primary_button_text_color'=>$this->color((string)($_POST['primary_button_text_color']??'#17264e'),'#17264e'),
             'secondary_button_text'=>mb_substr(trim((string)($_POST['secondary_button_text']??'')),0,100),
             'secondary_button_url'=>$this->url((string)($_POST['secondary_button_url']??'')),
+            'secondary_button_icon'=>$this->icon((string)($_POST['secondary_button_icon']??'grid'),'grid'),
+            'secondary_button_bg'=>$this->color((string)($_POST['secondary_button_bg']??'#ffffff'),'#ffffff'),
+            'secondary_button_text_color'=>$this->color((string)($_POST['secondary_button_text_color']??'#ffffff'),'#ffffff'),
             'background_start'=>$this->color((string)($_POST['background_start']??'#151a45'),'#151a45'),
             'background_end'=>$this->color((string)($_POST['background_end']??'#6b4de8'),'#6b4de8'),
             'text_color'=>$this->color((string)($_POST['text_color']??'#ffffff'),'#ffffff'),
@@ -171,6 +180,12 @@ class MarketingPopupController extends Controller
             if(count($rows)>=20) break;
         }
         return $rows;
+    }
+
+    private function icon(string $value,string $fallback): string
+    {
+        $value=trim($value);
+        return IconService::has($value)?$value:$fallback;
     }
 
     private function url(string $value): string
