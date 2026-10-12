@@ -91,10 +91,10 @@ $iconOptions=$icons??[];
     <section class="adm-card">
       <div class="adm-card-header"><h3><?= icon('image',16) ?> Banner Görselleri</h3></div>
       <div class="adm-card-body">
-        <div class="form-group"><label>Masaüstü Görsel</label><input class="form-control" type="file" name="desktop_image" accept="image/png,image/jpeg,image/webp,image/gif">
+        <div class="form-group"><label>Masaüstü Görsel</label><div class="nv94-size-note">Önerilen: <strong>1920 × 820 px</strong> (21:9). Minimum 1440 × 617 px. WebP tercih edin.</div><input class="form-control" type="file" name="desktop_image" accept="image/png,image/jpeg,image/webp,image/gif">
           <?php if(!empty($slide['desktop_image'])): ?><img class="nv94-current-image" src="<?= e(AppServicesHeroSliderService::imageUrl($slide['desktop_image'])) ?>" alt="Mevcut masaüstü banner"><label class="nv94-check"><input type="checkbox" name="remove_desktop_image" value="1"> Görseli kaldır</label><?php endif; ?>
         </div>
-        <div class="form-group"><label>Mobil Görsel</label><input class="form-control" type="file" name="mobile_image" accept="image/png,image/jpeg,image/webp,image/gif">
+        <div class="form-group"><label>Mobil Görsel</label><div class="nv94-size-note">Önerilen: <strong>1080 × 1350 px</strong> (4:5). Ana konu merkez/sağ bölgede kalsın.</div><input class="form-control" type="file" name="mobile_image" accept="image/png,image/jpeg,image/webp,image/gif">
           <?php if(!empty($slide['mobile_image'])): ?><img class="nv94-current-image" src="<?= e(AppServicesHeroSliderService::imageUrl($slide['mobile_image'])) ?>" alt="Mevcut mobil banner"><label class="nv94-check"><input type="checkbox" name="remove_mobile_image" value="1"> Görseli kaldır</label><?php endif; ?>
         </div>
         <div class="form-group"><label>Görsel Alt Metni</label><input class="form-control" name="image_alt" value="<?= e($slide['image_alt']??'') ?>"></div>
