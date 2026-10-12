@@ -1,5 +1,10 @@
 <?php
-$nv97Popup=\App\Services\MarketingPopupService::activeForPath($_SERVER['REQUEST_URI']??'/');
+try{
+    $nv97Popup=\App\Services\MarketingPopupService::activeForPath($_SERVER['REQUEST_URI']??'/');
+}catch(\Throwable $e){
+    error_log('Marketing popup module unavailable: '.$e->getMessage());
+    return;
+}
 if(!$nv97Popup)return;
 $nv97Img=\App\Services\MarketingPopupService::imageUrl($nv97Popup['image']??'');
 $nv97Type=$nv97Popup['type']??'campaign';
