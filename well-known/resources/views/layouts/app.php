@@ -65,7 +65,7 @@
     <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
     <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=27.1">
     <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=28.1">
-    <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=29.2">
+    <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=100.1">
     <link rel="stylesheet" href="<?= asset('css/premium-trust-steps-v30.css') ?>?v=30.1">
     <link rel="stylesheet" href="<?= asset('css/software-showcase-v31.css') ?>?v=32.1">
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=35.1">
@@ -101,7 +101,7 @@
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
-    <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=96.2">
+    <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=100.1">
     <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
     <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=97.2">
     <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.2">
