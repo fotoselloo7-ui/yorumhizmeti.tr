@@ -123,6 +123,15 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
             <div class="nvpa-field"><label for="nvpa-price">Satış Fiyatı (TL)</label><input id="nvpa-price" type="number" step="0.01" min="0" class="form-control" name="price" value="<?= e($product['price']??'0') ?>" required></div>
             <div class="nvpa-field"><label for="nvpa-old-price">İndirimsiz Eski Fiyat (TL)</label><input id="nvpa-old-price" type="number" step="0.01" min="0" class="form-control" name="old_price" value="<?= e($product['old_price']??'') ?>"></div>
             <div class="nvpa-field"><label for="nvpa-badge">Ürün Rozeti</label><input id="nvpa-badge" class="form-control" name="badge" value="<?= e($product['badge']??'') ?>" placeholder="Örn: Çok Satan"></div>
+            <?php if($edit): ?>
+            <div class="nvpa-field">
+              <label>Ürüne Özel Kupon</label>
+              <a class="btn btn-outline btn-sm" href="/admin/kuponlar/yeni?target=script:<?= (int)$product['legacy_id'] ?>&amp;name=<?= rawurlencode((string)$product['name']) ?>">
+                <?= icon('tag',14) ?> Bu Ürüne Kupon Tanımla
+              </a>
+              <small>Kupon ekranında bu yazılım otomatik seçili gelir.</small>
+            </div>
+            <?php endif; ?>
           </div>
         </section>
         <section class="adm-card nvpa-card">
