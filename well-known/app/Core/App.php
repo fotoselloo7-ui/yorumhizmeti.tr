@@ -299,6 +299,14 @@ class App
         $r->get('/admin/ana-sayfa/{id}/duzenle', 'Admin\\HomeSectionController@edit');
         $r->post('/admin/ana-sayfa/{id}/guncelle', 'Admin\\HomeSectionController@update');
         $r->post('/admin/ana-sayfa/{id}/durum', 'Admin\\HomeSectionController@toggleStatus');
+        $r->get('/admin/sliderlar', 'Admin\\HeroSliderController@index');
+        $r->get('/admin/sliderlar/yeni', 'Admin\\HeroSliderController@create');
+        $r->post('/admin/sliderlar/ekle', 'Admin\\HeroSliderController@store');
+        $r->get('/admin/sliderlar/{id}/duzenle', 'Admin\\HeroSliderController@edit');
+        $r->post('/admin/sliderlar/{id}/guncelle', 'Admin\\HeroSliderController@update');
+        $r->post('/admin/sliderlar/{id}/durum', 'Admin\\HeroSliderController@toggle');
+        $r->post('/admin/sliderlar/{id}/kopyala', 'Admin\\HeroSliderController@duplicate');
+        $r->post('/admin/sliderlar/{id}/sil', 'Admin\\HeroSliderController@delete');
 
         // Admin Lisans Yönetimi
         $r->get('/admin/lisans', 'Admin\\LicenseController@index');
