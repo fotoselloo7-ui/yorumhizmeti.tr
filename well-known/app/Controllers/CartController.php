@@ -4,6 +4,7 @@ use App\Core\Controller;
 use App\Core\Auth;
 use App\Core\Database;
 use App\Core\Csrf;
+use App\Services\DiscountService;
 
 class CartController extends Controller
 {
@@ -37,11 +38,21 @@ class CartController extends Controller
             $_SESSION['cart'] = $validCart;
         }
 
+        $couponCode=(string)($_SESSION['discount_code']??'');
+        $pricing=DiscountService::quotePackages(
+            $cartItems,
+            Auth::check()?Auth::user():null,
+            $couponCode
+        );
+        $payableTotal=(float)($pricing['final_total']??$total);
+
         $this->render('frontend/cart', [
             'pageTitle' => 'Sepet - ' . setting('site_name'),
             'paymentOptions' => (new \App\Services\PaymentGatewayManager())->getCheckoutOptions(),
             'cartItems' => $cartItems,
-            'total' => $total,
+            'total' => $payableTotal,
+            'pricing' => $pricing,
+            'couponCode' => $couponCode,
         ]);
     }
 
@@ -137,5 +148,73 @@ class CartController extends Controller
         }
         flash('success', 'Paket sepetten çıkarıldı.');
         redirect('/sepet');
+    }
+
+    public function applyCoupon(): void
+    {
+        Csrf::check();
+        $code=strtoupper(trim((string)($_POST['coupon_code']??'')));
+        if($code===''){
+            flash('error','Kupon kodunu girin.');
+            redirect('/sepet');
+            return;
+        }
+        $items=$this->discountItems();
+        if(!$items){
+            flash('error','Kupon uygulamak için sepetinizde ürün olmalı.');
+            redirect('/sepet');
+            return;
+        }
+        $quote=DiscountService::quotePackages(
+            $items,
+            Auth::check()?Auth::user():null,
+            $code
+        );
+        if(empty($quote['valid']) || (float)$quote['discount_amount']<=0){
+            unset($_SESSION['discount_code']);
+            flash('error',$quote['error']?:'Bu kupon sepetinize uygulanamıyor.');
+            redirect('/sepet');
+            return;
+        }
+        $_SESSION['discount_code']=$code;
+        flash('success',$code.' kuponu uygulandı. '.money((float)$quote['discount_amount']).' indirim kazandınız.');
+        redirect('/sepet');
+    }
+
+    public function removeCoupon(): void
+    {
+        Csrf::check();
+        unset($_SESSION['discount_code']);
+        flash('success','Kupon sepetten kaldırıldı.');
+        redirect('/sepet');
+    }
+
+    private function discountItems(): array
+    {
+        $cart=$_SESSION['cart']??[];
+        if(!$cart) return [];
+        $db=Database::getInstance();
+        $items=[];
+        foreach($cart as $item){
+            $pkg=$db->fetch(
+                "SELECT p.* FROM packages p
+                 INNER JOIN categories c ON p.category_id=c.id AND c.status='active'
+                 LEFT JOIN categories parent ON parent.id=c.parent_id
+                 WHERE p.id=? AND p.status='active'
+                   AND (c.parent_id IS NULL OR parent.status='active')",
+                [(int)($item['id']??0)]
+            );
+            if(!$pkg) continue;
+            $price=($pkg['discount_price']&&$pkg['discount_price']<$pkg['price'])
+                ?(float)$pkg['discount_price']:(float)$pkg['price'];
+            $min=max(1,(int)$pkg['min_quantity']);
+            $max=max($min,(int)$pkg['max_quantity']);
+            $qty=max($min,min($max,(int)($item['quantity']??$min)));
+            $items[]=array_merge($pkg,[
+                'quantity'=>$qty,
+                'line_total'=>round($price*$qty,2),
+            ]);
+        }
+        return $items;
     }
 }
