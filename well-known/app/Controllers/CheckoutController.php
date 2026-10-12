@@ -7,6 +7,7 @@ use App\Core\Csrf;
 use App\Services\OrderService;
 use App\Services\PaymentGatewayManager;
 use App\Services\BankTransferService;
+use App\Services\DiscountService;
 
 class CheckoutController extends Controller
 {
@@ -41,6 +42,16 @@ class CheckoutController extends Controller
             return;
         }
 
+        $couponCode=(string)($_SESSION['discount_code']??'');
+        $pricing=DiscountService::quotePackages($cartItems,Auth::user(),$couponCode);
+        if($couponCode!=='' && empty($pricing['valid'])){
+            unset($_SESSION['discount_code']);
+            flash('error',$pricing['error']?:'Kupon artık kullanılamıyor.');
+            $pricing=DiscountService::quotePackages($cartItems,Auth::user(),'');
+            $couponCode='';
+        }
+        $total=(float)($pricing['final_total']??$total);
+
         $gatewayManager = new PaymentGatewayManager();
         $paymentOptions = $gatewayManager->getCheckoutOptions();
 
@@ -60,6 +71,8 @@ class CheckoutController extends Controller
             'total' => $total,
             'paymentOptions' => $paymentOptions,
             'user' => Auth::user(),
+            'pricing' => $pricing,
+            'couponCode' => $couponCode,
             'testimonialSection' => $testimonialSection,
         ]);
     }
@@ -109,6 +122,7 @@ class CheckoutController extends Controller
             $minQty = max(1, (int)$pkg['min_quantity']);
             $maxQty = max($minQty, (int)$pkg['max_quantity']);
             $orderItem['quantity'] = max($minQty, min($maxQty, (int)($item['quantity'] ?? $minQty)));
+            $orderItem['line_total'] = round($price * (int)$orderItem['quantity'], 2);
 
             // Dinamik alanlar
             $fields = \App\Services\SmmOrderFields::fields($pkg);
@@ -139,6 +153,15 @@ class CheckoutController extends Controller
             return;
         }
 
+        $couponCode=(string)($_SESSION['discount_code']??'');
+        $pricing=DiscountService::quotePackages($orderItems,$user,$couponCode);
+        if($couponCode!=='' && empty($pricing['valid'])){
+            unset($_SESSION['discount_code']);
+            flash('error',$pricing['error']?:'Kupon kodu artık kullanılamıyor.');
+            redirect('/odeme');
+            return;
+        }
+
         $paymentMethod = $selectedPayment['type'] === 'manual' ? 'bank_transfer' : 'online';
 
         $orderService = new OrderService();
@@ -148,7 +171,9 @@ class CheckoutController extends Controller
                 $orderItems,
                 $paymentMethod,
                 $paymentGateway,
-                $_POST['customer_note'] ?? null
+                $_POST['customer_note'] ?? null,
+                $pricing,
+                $user
             );
         } catch (\Throwable $e) {
             error_log('Checkout persistence failed: '.get_class($e));
@@ -167,8 +192,8 @@ class CheckoutController extends Controller
             'payment_method' => $paymentGateway === 'bank_transfer' ? 'Havale/EFT' : 'Online Ödeme',
         ]);
 
-        // Sepeti temizle
-        unset($_SESSION['cart']);
+        // Sepeti ve uygulanan kuponu temizle
+        unset($_SESSION['cart'], $_SESSION['discount_code']);
 
         if ($paymentGateway === 'bank_transfer') {
             flash('success', 'Siparişiniz oluşturuldu. Havale bilgilerini aşağıda görebilirsiniz.');
