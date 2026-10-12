@@ -1,4 +1,13 @@
-<?php $subtotal=0;foreach($cartItems as $item){$subtotal+=$item['price']*$item['quantity'];} ?>
+<?php
+$subtotal=0;
+foreach($cartItems as $item)$subtotal+=(float)$item['price']*(int)$item['quantity'];
+$pricing=$pricing??[];
+$effectiveSubtotal=(float)($pricing['subtotal']??$total);
+$packageDiscount=max(0,$subtotal-$effectiveSubtotal);
+$campaignDiscount=max(0,(float)($pricing['discount_amount']??0));
+$couponCode=(string)($couponCode??'');
+$campaignName=(string)($pricing['campaign_name']??'');
+?>
 <div class="yv-checkout-v5">
 <section class="yv-checkout-hero-v5">
  <div class="container">
@@ -34,7 +43,25 @@
       <button class="yv-checkout-remove-v9" type="button" onclick="removeCheckoutItem(<?= (int)$item['cart_key'] ?>)" aria-label="Sepetten çıkar"><?= icon('trash',13) ?></button>
     </div><?php endforeach; ?>
   </div>
-  <div class="yv-checkout-campaign-v9"><span><?= icon('package',16) ?></span><div><strong>Kampanya Avantajı</strong><small>Uygun kampanyalar ve paket indirimleri sipariş özetine otomatik yansıtılır.</small></div><em><?= icon('check-circle',12) ?> Otomatik uygulanır</em></div>
+  <div class="nv98-checkout-coupon">
+    <div class="nv98-checkout-coupon-head">
+      <span><?= icon('tag',16) ?></span>
+      <div><strong>Kupon & Kampanya</strong><small>Ürüne özel kupon kodunuzu burada uygulayın.</small></div>
+    </div>
+    <?php if($couponCode!=='' && $campaignDiscount>0): ?>
+      <div class="nv98-applied-coupon">
+        <div><code><?= e($couponCode) ?></code><small><?= e($campaignName) ?> · -<?= money($campaignDiscount) ?></small></div>
+        <button type="button" onclick="removeCheckoutCoupon()"><?= icon('x',12) ?> Kaldır</button>
+      </div>
+    <?php elseif(($pricing['kind']??'')==='automatic' && $campaignDiscount>0): ?>
+      <div class="nv98-auto-discount"><?= icon('check-circle',13) ?><span><strong>Otomatik indirim uygulandı</strong><small><?= e($campaignName) ?> · -<?= money($campaignDiscount) ?></small></span></div>
+    <?php else: ?>
+      <div class="nv98-checkout-coupon-form">
+        <input type="text" id="checkoutCouponCode" maxlength="64" autocomplete="off" placeholder="Kupon kodunuzu yazın">
+        <button type="button" onclick="applyCheckoutCoupon()">Uygula</button>
+      </div>
+    <?php endif; ?>
+  </div>
   </section>
 
   <section class="yv-checkout-card-v5"><div class="yv-checkout-card-head-v5"><span><?= icon('user',16) ?></span><div><h2>Fatura ve İletişim Bilgileri</h2><small>Siparişle ilgili bilgilendirmeler bu bilgiler üzerinden iletilir.</small></div></div><div class="yv-checkout-user-v5"><div><label>Ad Soyad</label><input class="form-control" value="<?= e($user['name']??'') ?>" disabled></div><div><label>E-posta Adresi</label><input class="form-control" value="<?= e($user['email']??'') ?>" disabled></div><div><label>Telefon Numarası</label><input class="form-control" value="<?= e($user['phone']??'') ?>" disabled placeholder="Hesabınızdan güncelleyebilirsiniz"></div><div class="yv-checkout-login-state-v5"><?= icon('check-circle',13) ?> Giriş yapılmış güvenli hesap</div></div></section>
@@ -50,7 +77,14 @@
  </div>
 
  <aside class="yv-checkout-right-v5">
-  <section class="yv-checkout-summary-v5"><div class="yv-checkout-card-head-v5"><span><?= icon('file-text',16) ?></span><div><h2>Sipariş Özeti</h2></div></div><div class="yv-checkout-summary-row-v5"><span>Ara Toplam</span><b><?= money($subtotal) ?></b></div><?php if($total<$subtotal): ?><div class="yv-checkout-summary-row-v5 discount"><span>İndirim</span><b>-<?= money($subtotal-$total) ?></b></div><?php endif; ?><div class="yv-checkout-summary-total-v5"><span>Toplam Tutar</span><strong><?= money($total) ?></strong></div><button id="btnCheckoutSubmit" type="submit" class="yv-checkout-pay-v5" <?= empty($paymentOptions)?'disabled title="Aktif ödeme yöntemi bulunmuyor"':'' ?>><?= icon('lock',14) ?> <?= money($total) ?> Öde <?= icon('arrow-right',12) ?></button><small class="yv-checkout-ssl-v5"><?= icon('shield',11) ?> Ödemeniz güvenli altyapı ile korunur.</small><?php if(count(array_filter($paymentOptions ?? [], static fn($option) => ($option['type'] ?? '') === 'online')) > 0): ?><div class="yv-checkout-payments-v5 yv-payment-networks-v24" aria-label="Desteklenen kart ağları"><span><img src="<?= asset('img/payments/visa.svg') ?>" alt="Visa" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/mastercard.svg') ?>" alt="Mastercard" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="74" height="32" loading="lazy"></span></div><?php else: ?><div class="yv-checkout-payments-v5 yv-payment-transfer-v24"><span><?= icon('landmark',13) ?> Havale / EFT ile ödeme</span></div><?php endif; ?></section>
+  <section class="yv-checkout-summary-v5">
+    <div class="yv-checkout-card-head-v5"><span><?= icon('file-text',16) ?></span><div><h2>Sipariş Özeti</h2></div></div>
+    <div class="yv-checkout-summary-row-v5"><span>Ara Toplam</span><b><?= money($subtotal) ?></b></div>
+    <?php if($packageDiscount>0): ?><div class="yv-checkout-summary-row-v5 discount"><span>Paket İndirimi</span><b>-<?= money($packageDiscount) ?></b></div><?php endif; ?>
+    <?php if($campaignDiscount>0): ?><div class="yv-checkout-summary-row-v5 discount nv98-coupon-summary-row"><span><?= e($campaignName?:'Kupon İndirimi') ?></span><b>-<?= money($campaignDiscount) ?></b></div><?php endif; ?>
+    <div class="yv-checkout-summary-total-v5"><span>Toplam Tutar</span><strong><?= money($total) ?></strong></div>
+    <button id="btnCheckoutSubmit" type="submit" class="yv-checkout-pay-v5" <?= empty($paymentOptions)?'disabled title="Aktif ödeme yöntemi bulunmuyor"':'' ?>><?= icon('lock',14) ?> <?= money($total) ?> Öde <?= icon('arrow-right',12) ?></button>
+    <small class="yv-checkout-ssl-v5"><?= icon('shield',11) ?> Ödemeniz güvenli altyapı ile korunur.</small><?php if(count(array_filter($paymentOptions ?? [], static fn($option) => ($option['type'] ?? '') === 'online')) > 0): ?><div class="yv-checkout-payments-v5 yv-payment-networks-v24" aria-label="Desteklenen kart ağları"><span><img src="<?= asset('img/payments/visa.svg') ?>" alt="Visa" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/mastercard.svg') ?>" alt="Mastercard" width="74" height="32" loading="lazy"></span><span><img src="<?= asset('img/payments/troy.svg') ?>" alt="TROY" width="74" height="32" loading="lazy"></span></div><?php else: ?><div class="yv-checkout-payments-v5 yv-payment-transfer-v24"><span><?= icon('landmark',13) ?> Havale / EFT ile ödeme</span></div><?php endif; ?></section>
   <section class="yv-checkout-why-v5"><h3>Neden NetVera Teknoloji Yazılım?</h3><div><?= icon('zap',15) ?><span><strong>Anında İşleme Alma</strong><small>Siparişiniz hızlıca işleme alınır.</small></span></div><div><?= icon('shield',15) ?><span><strong>%100 Güvenli Ödeme</strong><small>Tüm süreç korumalı altyapıda ilerler.</small></span></div><div><?= icon('users',15) ?><span><strong>Kaliteli Hizmet</strong><small>Güvenilir ve şeffaf süreç.</small></span></div><div><?= icon('headphones',15) ?><span><strong>7/24 Müşteri Desteği</strong><small>İhtiyacınızda yanınızdayız.</small></span></div></section>
   <section class="yv-checkout-support-v5"><img class="woman" src="<?= e(asset('img/support-woman-cutout.png')) ?>" alt="Canlı destek uzmanı"><div><small>Soruların mı var?</small><h3>7/24 Canlı Destek</h3><a href="/iletisim"><?= icon('headphones',12) ?> Destek Başlat</a></div></section>
  </aside>
@@ -70,5 +104,13 @@ function checkoutCartPost(url,data){
 }
 function changeCheckoutQty(key,qty){ if(qty<1)return; checkoutCartPost('/sepet/guncelle',{key,quantity:qty}); }
 function removeCheckoutItem(key){ checkoutCartPost('/sepet/sil',{key}); }
+function applyCheckoutCoupon(){
+  const input=document.getElementById('checkoutCouponCode');
+  const code=(input?.value||'').trim().toUpperCase();
+  if(!code){input?.focus();return;}
+  checkoutCartPost('/sepet/kupon/uygula',{coupon_code:code});
+}
+function removeCheckoutCoupon(){checkoutCartPost('/sepet/kupon/kaldir',{});}
+document.getElementById('checkoutCouponCode')?.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();applyCheckoutCoupon();}});
 document.getElementById('checkoutForm').addEventListener('submit',function(){if(!this.checkValidity())return;const b=document.getElementById('btnCheckoutSubmit');b.disabled=true;b.textContent='Lütfen bekleyin...'});
 </script>
