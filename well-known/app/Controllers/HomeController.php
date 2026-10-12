@@ -203,6 +203,9 @@ class HomeController extends Controller
             }
         }
 
+        // Admin-managed Bayigram-style homepage hero banners.
+        $heroSlides = \App\Services\HeroSliderService::all(true);
+
         // Son blog yazıları
         $latestPosts = $db->fetchAll("SELECT bp.*, bc.name as category_name, bc.slug as category_slug FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.blog_category_id = bc.id WHERE bp.status = 'active' ORDER BY bp.published_at DESC LIMIT 4");
         if (count($latestPosts) < 4) {
@@ -412,6 +415,7 @@ class HomeController extends Controller
                 'author_type'=>setting('seo_org_type')
             ],
             'metaDescription' => setting('default_seo_description', 'NetVera Teknoloji Yazılım: hazır yazılım, dijital ajans, SEO, reklam yönetimi ve sosyal medya hizmetleri.'),
+            'heroSlides' => $heroSlides,
             'categories' => $categories,
             'featuredPackages' => $featuredPackages,
             'featuredPackageGroups' => $featuredPackageGroups,
