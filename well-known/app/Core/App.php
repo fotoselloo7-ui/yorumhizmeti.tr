@@ -308,6 +308,16 @@ class App
         $r->post('/admin/sliderlar/{id}/kopyala', 'Admin\\HeroSliderController@duplicate');
         $r->post('/admin/sliderlar/{id}/sil', 'Admin\\HeroSliderController@delete');
 
+        // Admin Popup & Kampanya Yönetimi
+        $r->get('/admin/popuplar', 'Admin\\MarketingPopupController@index');
+        $r->get('/admin/popuplar/yeni', 'Admin\\MarketingPopupController@create');
+        $r->post('/admin/popuplar/ekle', 'Admin\\MarketingPopupController@store');
+        $r->get('/admin/popuplar/{id}/duzenle', 'Admin\\MarketingPopupController@edit');
+        $r->post('/admin/popuplar/{id}/guncelle', 'Admin\\MarketingPopupController@update');
+        $r->post('/admin/popuplar/{id}/durum', 'Admin\\MarketingPopupController@toggle');
+        $r->post('/admin/popuplar/{id}/kopyala', 'Admin\\MarketingPopupController@duplicate');
+        $r->post('/admin/popuplar/{id}/sil', 'Admin\\MarketingPopupController@delete');
+
         // Admin Lisans Yönetimi
         $r->get('/admin/lisans', 'Admin\\LicenseController@index');
         $r->post('/admin/lisans/aktifle', 'Admin\\LicenseController@activate');
