@@ -12,7 +12,15 @@ class OrderService
         $this->db = Database::getInstance();
     }
 
-    public function createOrder(int $userId, array $cartItems, string $paymentMethod, string $paymentGateway, ?string $customerNote = null): int
+    public function createOrder(
+        int $userId,
+        array $cartItems,
+        string $paymentMethod,
+        string $paymentGateway,
+        ?string $customerNote = null,
+        array $discountQuote = [],
+        ?array $user = null
+    ): int
     {
         $pdo = $this->db->getPdo();
         $pdo->beginTransaction();
@@ -23,6 +31,17 @@ class OrderService
         foreach ($cartItems as $item) {
             $price = $this->effectivePrice($item);
             $totalAmount += $price * ($item['quantity'] ?? 1);
+        }
+
+        $lockedQuote = [];
+        if (!empty($discountQuote['campaign_id'])) {
+            $lockedQuote = DiscountService::lockedQuoteForOrder(
+                $cartItems,
+                $user,
+                (int)$discountQuote['campaign_id'],
+                (string)($discountQuote['code'] ?? '')
+            );
+            $totalAmount = (float)$lockedQuote['final_total'];
         }
 
         $orderId = $this->db->insert('orders', [
@@ -64,7 +83,19 @@ class OrderService
             \App\Services\SmmFulfillmentService::attachOrderItem($orderId, $orderItemId, (int)$item['id'], (int)$qty, $item['fields'] ?? []);
         }
 
-        $this->logStatus($orderId, null, 'payment_pending', 'Sipariş oluşturuldu.', 'system');
+        if ($lockedQuote) {
+            DiscountService::recordUsage($orderId, $user, $lockedQuote);
+        }
+
+        $this->logStatus(
+            $orderId,
+            null,
+            'payment_pending',
+            $lockedQuote
+                ? 'Sipariş oluşturuldu. Kupon/indirim: '.($lockedQuote['campaign_name'] ?? '').' (-'.money((float)$lockedQuote['discount_amount']).')'
+                : 'Sipariş oluşturuldu.',
+            'system'
+        );
 
         $pdo->commit();
         return $orderId;
