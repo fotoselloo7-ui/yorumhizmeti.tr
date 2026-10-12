@@ -8,7 +8,7 @@ namespace App\Services;
  */
 final class SiteLogoService
 {
-    public const DEFAULT_ASSET = 'img/netvera-brand-v90.svg';
+    public const DEFAULT_ASSET = 'img/netvera-logo-current.webp';
 
     public static function defaultUrl(): string
     {
