@@ -44,7 +44,7 @@ $kind=$campaign['kind']??'coupon';
     <?php
       $groups=[
         'package'=>['Hizmet Paketleri','package'],
-        'category'=>['Hizmet Kategorileri','grid'],
+        'service_category'=>['Hizmet Kategorileri','grid'],
         'script'=>['Hazır Yazılımlar','monitor'],
         'script_category'=>['Yazılım Kategorileri','layers'],
       ];
