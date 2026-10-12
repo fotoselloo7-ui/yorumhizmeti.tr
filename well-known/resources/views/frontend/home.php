@@ -241,43 +241,89 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 
 <section class="yh6-hero">
     <div class="container">
-        <div class="yh6-hero-grid">
-            <div class="yh6-hero-copy">
-                <span class="yh6-eyebrow"><?= icon('award', 12) ?> NetVera Teknoloji Yazılım</span>
-                <h1 class="nv75-hero-heading"><span class="nv75-hero-line">Yazılım,</span><span class="nv75-hero-line nv75-hero-middle">Dijital Ajans ve</span><span class="nv75-hero-line nv75-hero-highlight">Sosyal Medya Hizmetleri</span></h1>
-                <p>Hazır ve özel yazılım çözümleri, SEO, dijital reklam yönetimi ve Instagram, TikTok, YouTube hizmetleri NetVera Teknoloji Yazılım çatısı altında.</p>
-                <div class="yh6-hero-actions">
-                    <a href="/kategoriler" class="yh6-btn primary">Hemen İncele <?= icon('arrow-right', 12) ?></a>
-                    <a href="#how" class="yh6-btn ghost"><?= icon('play-circle', 14) ?> Nasıl Çalışır?</a>
+        <?php
+        $nv94Slides=$heroSlides??[];
+        $nv94BrandLogo=\App\Services\SiteLogoService::url();
+        ?>
+        <?php if($nv94Slides): ?>
+        <div class="nv94-hero-slider" data-nv94-slider aria-roledescription="carousel" aria-label="NetVera öne çıkan hizmetler">
+          <div class="nv94-hero-track">
+            <?php foreach($nv94Slides as $nv94Index=>$nv94Slide):
+              $nv94Desktop=\App\Services\HeroSliderService::imageUrl($nv94Slide['desktop_image']??'');
+              $nv94Mobile=\App\Services\HeroSliderService::imageUrl($nv94Slide['mobile_image']??'');
+              $nv94Delay=max(2500,(int)($nv94Slide['autoplay_delay']??6500));
+              $nv94Quick=is_array($nv94Slide['quick_links']??null)?$nv94Slide['quick_links']:[];
+              $nv94IsCutout=$nv94Desktop!=='' && str_contains($nv94Desktop,'hero-woman-cutout');
+            ?>
+            <article class="nv94-hero-slide <?= $nv94Index===0?'is-active':'' ?>"
+              data-nv94-slide data-delay="<?= $nv94Delay ?>"
+              aria-hidden="<?= $nv94Index===0?'false':'true' ?>"
+              style="--nv94-bg-a:<?= e($nv94Slide['background_start']?:'#13255b') ?>;--nv94-bg-b:<?= e($nv94Slide['background_end']?:'#6d28d9') ?>;--nv94-overlay:<?= e($nv94Slide['overlay_color']?:'rgba(7,16,48,.34)') ?>;--nv94-text:<?= e($nv94Slide['text_color']?:'#fff') ?>;--nv94-accent:<?= e($nv94Slide['accent_color']?:'#7c5cff') ?>;--nv94-delay:<?= $nv94Delay ?>ms">
+              <div class="nv94-hero-copy">
+                <?php if(!empty($nv94Slide['category_label'])): ?>
+                <a class="nv94-hero-category" href="<?= e($nv94Slide['category_url']?:'/kategoriler') ?>">
+                  <?= icon($nv94Slide['category_icon']?:'sparkles',14) ?>
+                  <span><?= e($nv94Slide['category_label']) ?></span>
+                </a>
+                <?php endif; ?>
+                <?php if(!empty($nv94Slide['eyebrow'])): ?><span class="nv94-hero-eyebrow"><?= e($nv94Slide['eyebrow']) ?></span><?php endif; ?>
+                <h1 class="nv94-hero-title"><?= e($nv94Slide['title']) ?></h1>
+                <?php if(!empty($nv94Slide['description'])): ?><p class="nv94-hero-description"><?= e($nv94Slide['description']) ?></p><?php endif; ?>
+                <div class="nv94-hero-actions">
+                  <?php if(!empty($nv94Slide['primary_button_text'])&& !empty($nv94Slide['primary_button_url'])): ?>
+                  <a class="nv94-hero-btn" href="<?= e($nv94Slide['primary_button_url']) ?>"
+                    style="background:<?= e($nv94Slide['primary_button_bg']?:'#fff') ?>;color:<?= e($nv94Slide['primary_button_text_color']?:'#14224a') ?>">
+                    <?= icon($nv94Slide['primary_button_icon']?:'arrow-right',13) ?> <?= e($nv94Slide['primary_button_text']) ?>
+                  </a>
+                  <?php endif; ?>
+                  <?php if(!empty($nv94Slide['secondary_button_text'])&& !empty($nv94Slide['secondary_button_url'])): ?>
+                  <a class="nv94-hero-btn" href="<?= e($nv94Slide['secondary_button_url']) ?>"
+                    style="background:<?= e($nv94Slide['secondary_button_bg']?:'rgba(255,255,255,.12)') ?>;color:<?= e($nv94Slide['secondary_button_text_color']?:'#fff') ?>">
+                    <?= icon($nv94Slide['secondary_button_icon']?:'play-circle',13) ?> <?= e($nv94Slide['secondary_button_text']) ?>
+                  </a>
+                  <?php endif; ?>
                 </div>
-                <div class="yh6-hero-metrics">
-                    <div><?= icon('code', 16) ?><span><strong>Yazılım</strong><small>Sektörel Çözümler</small></span></div>
-                    <div><?= icon('layers', 16) ?><span><strong>Dijital Ajans</strong><small>SEO ve Reklam</small></span></div>
-                    <div><?= icon('share-2', 16) ?><span><strong>Sosyal Medya</strong><small>Takipçi ve Etkileşim</small></span></div>
-                    <div><?= icon('package', 16) ?><span><strong>Hizmet Paketleri</strong><small>Online Sipariş</small></span></div>
+                <?php if($nv94Quick || !empty($nv94Slide['stat_text'])): ?>
+                <div class="nv94-hero-quick">
+                  <?php foreach($nv94Quick as $nv94QuickItem): if(empty($nv94QuickItem['label']))continue; ?>
+                  <a class="nv94-hero-quick-item" href="<?= e($nv94QuickItem['url']?:'#') ?>" title="<?= e($nv94QuickItem['label']) ?>" aria-label="<?= e($nv94QuickItem['label']) ?>" style="--nv94-q:<?= e($nv94QuickItem['color']??'#6d5dfc') ?>">
+                    <?= icon($nv94QuickItem['icon']??'link',17) ?>
+                  </a>
+                  <?php endforeach; ?>
+                  <?php if($nv94Quick && !empty($nv94Slide['stat_text'])): ?><span class="nv94-hero-quick-sep" aria-hidden="true"></span><?php endif; ?>
+                  <?php if(!empty($nv94Slide['stat_text'])): ?><span class="nv94-hero-stat"><?= e($nv94Slide['stat_text']) ?></span><?php endif; ?>
                 </div>
+                <?php endif; ?>
+              </div>
+              <div class="nv94-hero-media <?= $nv94IsCutout?'is-cutout':'' ?>">
+                <?php if($nv94Desktop): ?>
+                <picture>
+                  <?php if($nv94Mobile): ?><source media="(max-width:600px)" srcset="<?= e($nv94Mobile) ?>"><?php endif; ?>
+                  <img src="<?= e($nv94Desktop) ?>" alt="<?= e($nv94Slide['image_alt']?:$nv94Slide['title']) ?>" <?= $nv94Index===0?'loading="eager" fetchpriority="high"':'loading="lazy"' ?> decoding="async">
+                </picture>
+                <?php else: ?><span class="nv94-hero-media-placeholder" aria-hidden="true"></span><?php endif; ?>
+                <div class="nv94-hero-brand-card">
+                  <img src="<?= e($nv94BrandLogo) ?>" alt="NetVera" loading="lazy" decoding="async">
+                  <small>Teknoloji ve Yazılım</small>
+                </div>
+              </div>
+              <span class="nv94-hero-progress" aria-hidden="true"></span>
+            </article>
+            <?php endforeach; ?>
+          </div>
+          <?php if(count($nv94Slides)>1): ?>
+          <div class="nv94-hero-controls" aria-label="Slider kontrolleri">
+            <button class="nv94-hero-arrow" type="button" data-nv94-prev aria-label="Önceki banner"><?= icon('chevron-left',14) ?></button>
+            <div class="nv94-hero-dots">
+              <?php foreach($nv94Slides as $nv94Index=>$nv94Slide): ?>
+              <button class="nv94-hero-dot <?= $nv94Index===0?'is-active':'' ?>" type="button" data-nv94-dot aria-label="<?= ($nv94Index+1) ?>. banner" <?= $nv94Index===0?'aria-current="true"':'' ?>></button>
+              <?php endforeach; ?>
             </div>
-
-            <div class="yh6-hero-art">
-                <div class="yh6-hero-blob"></div>
-                <img class="yh6-hero-person" src="<?= e($heroCutout) ?>" alt="NetVera dijital hizmetler" loading="eager" fetchpriority="high">
-
-                <span class="yh6-social-float instagram"><?= icon('instagram', 27) ?></span>
-                <span class="yh6-social-float tiktok"><?= icon('tiktok', 24) ?></span>
-                <span class="yh6-social-float google"><?= icon('google', 25) ?></span>
-                <span class="yh6-social-float youtube"><?= icon('youtube', 24) ?></span>
-
-                <div class="yh6-rating-float"><span>NETVERA</span></div>
-                <div class="yh6-review-float">
-                    <?= icon('google', 19) ?>
-                    <div><strong>Dijital Çözümler</strong><small>SEO, yazılım ve sosyal medya</small></div>
-                </div>
-                <div class="yh6-growth-float">
-                    <strong>NetVera</strong><small>Teknoloji ve Yazılım</small>
-                    <i></i><i></i><i></i><i></i><i></i>
-                </div>
-            </div>
+            <button class="nv94-hero-arrow" type="button" data-nv94-next aria-label="Sonraki banner"><?= icon('chevron-right',14) ?></button>
+          </div>
+          <?php endif; ?>
         </div>
+        <?php endif; ?>
 
         <?php
         // New category rails reuse the same live catalog as the main navigation.
