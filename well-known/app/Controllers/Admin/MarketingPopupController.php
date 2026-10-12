@@ -177,7 +177,6 @@ class MarketingPopupController extends Controller
             $description=mb_substr(trim((string)($descriptions[$i]??'')),0,180);
             if($title===''&&$code===''&&$discount==='') continue;
             $rows[]=['title'=>$title,'code'=>$code,'discount'=>$discount,'description'=>$description];
-            if(count($rows)>=20) break;
         }
         return $rows;
     }
