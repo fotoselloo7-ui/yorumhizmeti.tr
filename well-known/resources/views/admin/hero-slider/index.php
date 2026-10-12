@@ -15,7 +15,7 @@
 
 <div class="nv94-slider-admin-grid">
 <?php foreach($slides as $slide):
-  $img=AppServicesHeroSliderService::imageUrl($slide['desktop_image']??'');
+  $img=\App\Services\HeroSliderService::imageUrl($slide['desktop_image']??'');
 ?>
   <article class="nv94-slider-admin-card">
     <div class="nv94-slider-admin-preview" style="--nv94-a:<?= e($slide['background_start']?:'#13255b') ?>;--nv94-b:<?= e($slide['background_end']?:'#6d28d9') ?>">
