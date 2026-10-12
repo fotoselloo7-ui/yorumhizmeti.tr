@@ -3,18 +3,20 @@
 body .site-header .site-logo.nv90-site-brand{
   display:inline-flex;
   align-items:center;
-  flex:0 1 auto;
-  width:clamp(158px,18vw,222px);
-  min-width:0;
-  max-width:222px;
+  flex:0 0 clamp(176px,18vw,236px)!important;
+  width:clamp(176px,18vw,236px)!important;
+  min-width:176px!important;
+  max-width:236px;
   padding:0;
   text-decoration:none;
   line-height:1;
 }
 body .site-header .site-logo .nv90-site-logo{
-  display:block;
-  width:100%;
-  height:auto;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  width:100%!important;
+  height:auto!important;
   max-height:54px;
   object-fit:contain;
   object-position:left center;
@@ -41,12 +43,22 @@ body .site-footer .nv90-footer-logo.nv90-logo-default{
 }
 @media(max-width:980px){
   body .site-header .site-logo.nv90-site-brand{
-    width:clamp(154px,28vw,196px);
+    flex-basis:clamp(158px,23vw,195px)!important;
+    width:clamp(158px,23vw,195px)!important;
+    min-width:158px!important;
   }
 }
 @media(max-width:480px){
   body .site-header .site-logo.nv90-site-brand{
-    width:clamp(146px,48vw,188px);
+    flex-basis:clamp(146px,45vw,182px)!important;
+    width:clamp(146px,45vw,182px)!important;
+    min-width:146px!important;
   }
   body .site-header .site-logo .nv90-site-logo{max-height:46px}
+}
+
+@media(max-width:355px){
+  body .site-header .site-logo.nv90-site-brand{
+    flex-basis:140px!important;width:140px!important;min-width:140px!important;
+  }
 }
