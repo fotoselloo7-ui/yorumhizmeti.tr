@@ -85,6 +85,17 @@ if ($nv60ShowAccounts) {
           <small>Yazılım Fiyatı</small>
           <div><strong><?= money($nv40Price) ?></strong>
             <?php if($nv40Old>$nv40Price): ?><del><?= money($nv40Old) ?></del><?php endif; ?></div>
+          <?php if(!empty($productCoupons)): ?>
+          <div class="nv98-product-coupons" aria-label="Bu yazılıma özel aktif kuponlar">
+            <?php foreach(array_slice($productCoupons,0,3) as $coupon): ?>
+            <div class="nv98-product-coupon">
+              <span><?= icon('tag',13) ?></span>
+              <div><small><?= e($coupon['discount']) ?></small><strong><?= e($coupon['title']) ?></strong></div>
+              <button type="button" data-copy-coupon="<?= e($coupon['code']) ?>" title="Kupon kodunu kopyala"><?= e($coupon['code']) ?></button>
+            </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endif; ?>
           <p>Profesyonel yazılım, kurulum ve lisans seçenekleri hakkında teklif alın veya canlı demoyu inceleyin.</p>
           <div class="nv40-cta-row">
             <a href="<?= e($nv40OfferHref) ?>" class="nv40-cta-primary" <?= $nv40InquiryReady?'data-nv60-jump-tab="teklif-al"':'' ?>><?= icon('message-square',16) ?> Teklif Al</a>
@@ -227,3 +238,16 @@ if ($nv60ShowAccounts) {
     </div>
   </div></section>
 </main>
+<script>
+document.querySelectorAll('[data-copy-coupon]').forEach(function(btn){
+  btn.addEventListener('click',async function(){
+    var code=btn.getAttribute('data-copy-coupon')||'';
+    if(!code)return;
+    try{await navigator.clipboard.writeText(code);}catch(e){
+      var t=document.createElement('textarea');t.value=code;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
+    }
+    var old=btn.textContent;btn.textContent='Kopyalandı';btn.classList.add('is-copied');
+    setTimeout(function(){btn.textContent=old;btn.classList.remove('is-copied');},1500);
+  });
+});
+</script>
