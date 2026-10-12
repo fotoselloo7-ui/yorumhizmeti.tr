@@ -106,7 +106,7 @@ if(!$coupons)$coupons=[['title'=>'','code'=>'','discount'=>'','description'=>'']
     <section class="adm-card">
       <div class="adm-card-header"><h3><?= icon('clock',16) ?> Açılış & Tekrar</h3></div>
       <div class="adm-card-body">
-        <div class="form-group"><label>Açılış Gecikmesi (ms)</label><input class="form-control" type="number" min="0" max="600000" step="100" name="open_delay_ms" value="<?= (int)($popup['open_delay_ms']??1800) ?>"><small class="nv97-help">1800 = 1,8 saniye sonra açılır.</small></div>
+        <div class="form-group"><label>Açılış Gecikmesi (sn)</label><input class="form-control" type="number" min="0" max="600" step="0.1" name="open_delay_seconds" value="<?= e(number_format(((int)($popup['open_delay_ms']??1800))/1000,1,'.','')) ?>"><small class="nv97-help">Örn. 1.8 = sayfa açıldıktan 1,8 saniye sonra.</small></div>
         <div class="form-group"><label>Kapatınca Tekrar Göster (saat)</label><input class="form-control" type="number" min="0" max="8760" name="reopen_hours" value="<?= (int)($popup['reopen_hours']??24) ?>"><small class="nv97-help">0 = sonraki sayfa ziyaretinde tekrar gösterebilir.</small></div>
         <div class="form-group"><label>Otomatik Kapanma (sn)</label><input class="form-control" type="number" min="0" max="3600" name="auto_close_seconds" value="<?= (int)($popup['auto_close_seconds']??0) ?>"><small class="nv97-help">0 = otomatik kapanmaz.</small></div>
         <label class="nv97-switch"><input type="checkbox" name="closable" value="1" <?= !isset($popup['closable'])||!empty($popup['closable'])?'checked':'' ?>><span>Kapatma butonu göster</span></label>
