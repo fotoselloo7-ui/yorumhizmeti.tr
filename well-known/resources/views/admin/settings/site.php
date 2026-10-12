@@ -11,8 +11,8 @@
         <!-- Main Form Grid -->
         <div class="adm-form-main" style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);">
             <?php
-            $nv90CurrentLogo=trim((string)setting('site_logo',''));
-            $nv90Preview=$nv90CurrentLogo!=='' ? upload_url($nv90CurrentLogo) : asset('img/netvera-brand-v90.svg');
+            $nv90CurrentLogo=\App\Services\SiteLogoService::customUrl();
+            $nv90Preview=\App\Services\SiteLogoService::url();
             ?>
             <section class="adm-card" style="grid-column:1/-1" aria-labelledby="nv90-logo-heading">
                 <div class="adm-card-header">
@@ -22,6 +22,7 @@
                     <div class="nv90-admin-logo-preview" style="background:linear-gradient(135deg,#fff,#f5f7ff);border:1px solid #e2e6f3;border-radius:14px;min-width:0;padding:18px;">
                         <img id="nv90-site-logo-preview" src="<?= e($nv90Preview) ?>"
                              alt="Sitede görüntülenecek NetVera logosu" width="856" height="179"
+                             onerror="this.onerror=null;this.src='<?= e(\App\Services\SiteLogoService::defaultUrl()) ?>';"
                              style="display:block;width:100%;height:auto;max-height:104px;object-fit:contain;object-position:left center;">
                         <small style="display:block;margin-top:10px;color:#677491">Üst menü ve alt alanda aynı logo ayarı kullanılır.</small>
                     </div>
@@ -38,7 +39,7 @@
                             <input type="checkbox" id="nv90-logo-reset" name="site_logo_reset" value="1">
                             <span>Varsayılan NetVera logosuna dön</span>
                         </label>
-                        <?php if($nv90CurrentLogo!==''): ?>
+                        <?php if($nv90CurrentLogo!==null): ?>
                         <small style="display:block;margin-top:6px;color:#677491">Şu anda yüklediğiniz özel logo kullanılıyor.</small>
                         <?php else: ?>
                         <small style="display:block;margin-top:6px;color:#677491">Şu anda değiştirilebilir varsayılan logo kullanılıyor.</small>
