@@ -91,10 +91,10 @@ $iconOptions=$icons??[];
     <section class="adm-card">
       <div class="adm-card-header"><h3><?= icon('image',16) ?> Banner Görselleri</h3></div>
       <div class="adm-card-body">
-        <div class="form-group"><label>Masaüstü Görsel</label><div class="nv94-size-note">Önerilen: <strong>1920 × 820 px</strong>. Minimum <strong>1440 × 600 px</strong>. Sistem küçük görseli kabul etmez ve yüklenen dosyayı yeniden sıkıştırmaz.</div><input class="form-control" type="file" name="desktop_image" accept="image/png,image/jpeg,image/webp,image/gif">
+        <div class="form-group"><label>Masaüstü Görsel</label><div class="nv94-size-note">Minimum: <strong>1920 × 820 px</strong>. Önerilen: <strong>2400 × 1025 px</strong>. Küçük görsel reddedilir; yüklenen dosya yeniden sıkıştırılmaz.</div><input class="form-control" type="file" name="desktop_image" accept="image/png,image/jpeg,image/webp,image/gif">
           <?php if(!empty($slide['desktop_image'])): ?><img class="nv94-current-image" src="<?= e(\App\Services\HeroSliderService::imageUrl($slide['desktop_image'])) ?>" alt="Mevcut masaüstü banner"><label class="nv94-check"><input type="checkbox" name="remove_desktop_image" value="1"> Görseli kaldır</label><?php endif; ?>
         </div>
-        <div class="form-group"><label>Mobil Görsel</label><div class="nv94-size-note">Önerilen: <strong>1080 × 1350 px</strong>. Minimum <strong>900 × 1125 px</strong>. Ana konu merkez/sağ bölgede kalsın.</div><input class="form-control" type="file" name="mobile_image" accept="image/png,image/jpeg,image/webp,image/gif">
+        <div class="form-group"><label>Mobil Görsel</label><div class="nv94-size-note">Minimum: <strong>1080 × 1350 px</strong>. Önerilen: <strong>1440 × 1800 px</strong>. Ana konu merkez/sağ bölgede kalsın; dosya yeniden sıkıştırılmaz.</div><input class="form-control" type="file" name="mobile_image" accept="image/png,image/jpeg,image/webp,image/gif">
           <?php if(!empty($slide['mobile_image'])): ?><img class="nv94-current-image" src="<?= e(\App\Services\HeroSliderService::imageUrl($slide['mobile_image'])) ?>" alt="Mevcut mobil banner"><label class="nv94-check"><input type="checkbox" name="remove_mobile_image" value="1"> Görseli kaldır</label><?php endif; ?>
         </div>
         <div class="form-group"><label>Görsel Alt Metni</label><input class="form-control" name="image_alt" value="<?= e($slide['image_alt']??'') ?>"></div>
