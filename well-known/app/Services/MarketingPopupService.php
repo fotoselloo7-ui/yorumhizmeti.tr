@@ -99,7 +99,35 @@ final class MarketingPopupService
     private static function decode(array &$row): void
     {
         $items=json_decode((string)($row['coupon_items']??'[]'),true);
-        $row['coupon_items']=is_array($items)?$items:[];
+        $items=is_array($items)?$items:[];
+
+        // Coupon-center popups automatically include every currently valid,
+        // public coupon from the real checkout discount engine.
+        if (($row['type']??'')==='coupons') {
+            try {
+                $realCoupons=DiscountService::publicCoupons();
+                $byCode=[];
+                foreach($items as $item){
+                    $code=strtoupper(trim((string)($item['code']??'')));
+                    if($code!=='') $byCode[$code]=true;
+                }
+                foreach($realCoupons as $coupon){
+                    $code=strtoupper(trim((string)($coupon['code']??'')));
+                    if($code!=='' && isset($byCode[$code])) continue;
+                    $items[]=[
+                        'title'=>(string)($coupon['title']??'Kupon'),
+                        'code'=>$code,
+                        'discount'=>(string)($coupon['discount']??''),
+                        'description'=>(string)($coupon['description']??''),
+                    ];
+                    if($code!=='') $byCode[$code]=true;
+                }
+            } catch (\Throwable $e) {
+                error_log('Popup coupon sync unavailable: '.$e->getMessage());
+            }
+        }
+
+        $row['coupon_items']=$items;
     }
 
     private static function matchesPath(array $popup,string $path): bool
