@@ -135,3 +135,109 @@
     object-position:center!important;
   }
 }
+
+
+/* V107 — exact-fit HD artwork created for the real NetVera slider viewport.
+   Desktop files are 2400x840 (20:7, exactly 2x the 1200x420 viewport).
+   Mobile files are 1080x1920 with a protected text-safe upper field. */
+.nv94-hero-slide.is-composed-banner:before{
+  background:
+    linear-gradient(90deg,rgba(8,13,55,.90) 0%,rgba(8,13,55,.64) 29%,rgba(8,13,55,.22) 49%,rgba(8,13,55,.04) 65%,transparent 76%),
+    radial-gradient(circle at 16% 18%,rgba(115,91,255,.16),transparent 32%)!important;
+}
+.nv94-hero-slide.is-composed-banner .nv94-hero-media:before{
+  background:none!important;
+}
+.nv94-hero-slide.is-composed-banner .nv94-hero-media picture,
+.nv94-hero-slide.is-composed-banner .nv94-hero-media picture img{
+  width:100%!important;
+  height:100%!important;
+}
+.nv94-hero-slide.is-composed-banner .nv94-hero-media picture img{
+  object-fit:cover!important;
+  object-position:center center!important;
+  filter:none!important;
+  transform:none!important;
+  image-rendering:auto!important;
+}
+@media(min-width:901px){
+  .nv94-hero-slide.is-composed-banner .nv94-hero-copy{
+    width:50%!important;
+    max-width:610px!important;
+    min-height:420px!important;
+    padding:42px 16px 42px 54px!important;
+    justify-content:center!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-title{
+    max-width:555px!important;
+    font-size:clamp(29px,2.55vw,43px)!important;
+    line-height:1.065!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-description{
+    max-width:530px!important;
+    font-size:13px!important;
+    line-height:1.62!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-actions{
+    margin-top:19px!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-quick{
+    margin-top:17px!important;
+  }
+}
+@media(max-width:900px){
+  .nv94-hero-slide.is-composed-banner:before{
+    background:
+      linear-gradient(180deg,rgba(10,14,56,.96) 0%,rgba(10,14,56,.90) 34%,rgba(10,14,56,.62) 53%,rgba(10,14,56,.14) 74%,transparent 88%)!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-media picture img{
+    object-position:center center!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-copy{
+    width:100%!important;
+    max-width:none!important;
+    min-height:650px!important;
+    padding:31px 28px 285px!important;
+    justify-content:flex-start!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-title{
+    max-width:610px!important;
+    font-size:clamp(29px,5.3vw,40px)!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-description{
+    max-width:580px!important;
+  }
+}
+@media(max-width:600px){
+  .nv94-hero-slide.is-composed-banner .nv94-hero-copy{
+    min-height:620px!important;
+    padding:23px 18px 250px!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-category{
+    padding:8px 11px!important;
+    font-size:9.5px!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-eyebrow{
+    margin-top:12px!important;
+    font-size:9px!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-title{
+    margin:9px 0 10px!important;
+    font-size:clamp(27px,8vw,32px)!important;
+    line-height:1.05!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-description{
+    font-size:11px!important;
+    line-height:1.5!important;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:3;
+    overflow:hidden;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-actions{
+    margin-top:14px!important;
+  }
+  .nv94-hero-slide.is-composed-banner .nv94-hero-quick{
+    margin-top:13px!important;
+  }
+}
