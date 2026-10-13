@@ -62,14 +62,15 @@ if((string)($_ENV['NETVERA_IMPORT_ALLOWED']??getenv('NETVERA_IMPORT_ALLOWED'))!=
 }
 $db=\App\Core\Database::getInstance();
 $pdo=$db->getPdo();
-foreach(['netvera-legacy-bridge-v1.sql','netvera-inquiries-v1.sql'] as $migration){
-    $schema=file_get_contents(BASE_PATH.'/database/migrations/'.$migration);
-    if($schema===false)exit(3);
-    foreach(explode(';',$schema) as $part){
-        $part=trim(preg_replace('/^\s*--[^\n]*$/m','',$part));
-        if($part!=='')$pdo->exec($part);
-    }
-}
+\App\Services\ConsolidatedDatabaseSchema::ensureTables($pdo,[
+    'nv_legacy_script_categories',
+    'nv_legacy_script_products',
+    'nv_legacy_script_images',
+    'nv_legacy_public_reviews',
+    'nv_legacy_blog_meta',
+    'nv_public_inquiries',
+    'nv_public_inquiry_replies',
+]);
 function nvImportRow(PDO $pdo,string $table,array $record):void {
     $cols=array_keys($record);
     $sql='INSERT INTO '.$table.' ('.implode(',',$cols).') VALUES ('
