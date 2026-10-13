@@ -11,6 +11,9 @@ $nv40ListTitle=static function($entry):string {
 };
 $nv40InquiryReady=\App\Services\NetveraInquiryService::ready();
 $nv40OfferHref=$nv40InquiryReady?'#teklif-al':'/iletisim';
+$nv60BuyUrl=\App\Services\NetveraBridgeService::publicUrl($productData['buy_url']??null);
+$nv60CanBuy=$nv40Price>0 && $nv60BuyUrl;
+$nv60DemoNote=trim((string)($productData['demo_note']??''));
 $nv60PublicDemo=[];
 if ($nv40DemoAllowed) {
     // Public preview destinations only, never private demo passwords or customer login data.
@@ -96,11 +99,28 @@ if ($nv60ShowAccounts) {
             <?php endforeach; ?>
           </div>
           <?php endif; ?>
-          <p>Profesyonel yazılım, kurulum ve lisans seçenekleri hakkında teklif alın veya canlı demoyu inceleyin.</p>
+          <p><?= $nv60CanBuy
+            ? 'Yazılımı doğrudan satın alabilir, teklif isteyebilir veya canlı demoyu inceleyebilirsiniz.'
+            : 'Profesyonel yazılım, kurulum ve lisans seçenekleri hakkında teklif alın veya canlı demoyu inceleyin.' ?></p>
           <div class="nv40-cta-row">
+            <?php if($nv60CanBuy): ?>
+            <a href="<?= e($nv60BuyUrl) ?>" class="nv40-cta-buy"><?= icon('shopping-cart',16) ?> Satın Al</a>
+            <?php endif; ?>
             <a href="<?= e($nv40OfferHref) ?>" class="nv40-cta-primary" <?= $nv40InquiryReady?'data-nv60-jump-tab="teklif-al"':'' ?>><?= icon('message-square',16) ?> Teklif Al</a>
             <?php if($nv40DemoAllowed): ?><a href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer" class="nv40-cta-demo"><?= icon('external-link',16) ?> Canlı Demo</a><?php endif; ?>
           </div>
+          <?php if($nv40DemoAllowed): ?>
+          <div class="nv62-demo-summary" aria-label="Demo erişim özeti">
+            <div class="nv62-demo-summary-head"><?= icon('monitor',14) ?><strong>Demo Bilgileri</strong></div>
+            <div class="nv62-demo-summary-grid">
+              <span><small>Canlı Site</small><a href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e((string)parse_url($demoUrl,PHP_URL_HOST)) ?></a></span>
+              <?php if($nv60DemoAdminUrl): ?><span><small>Yönetim Paneli</small><a href="<?= e($nv60DemoAdminUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e((string)parse_url($nv60DemoAdminUrl,PHP_URL_PATH)?:'/admin') ?></a></span><?php endif; ?>
+              <?php if($nv60DemoAccounts): foreach(array_slice($nv60DemoAccounts,0,2) as $nv62Account): ?>
+              <span class="nv62-demo-login"><small><?= e($nv62Account['label']) ?></small><b><?= e($nv62Account['username']??'') ?></b><?php if(!empty($nv62Account['password'])): ?><code><?= e($nv62Account['password']) ?></code><?php endif; ?></span>
+              <?php endforeach; endif; ?>
+            </div>
+          </div>
+          <?php endif; ?>
         </div>
 
       </div>
@@ -134,7 +154,10 @@ if ($nv60ShowAccounts) {
         </section>
         <?php if($nv40DemoAllowed): ?>
         <section class="nv40-info-card" id="demo" role="tabpanel" aria-labelledby="nv60-tab-demo" tabindex="0" data-nv60-panel="demo">
-          <h2>Canlı Demo & Yazılımı İncele</h2>
+          <div class="nv62-demo-panel-head">
+            <div><h2>Canlı Demo & Yazılımı İncele</h2><p>Ön yüzü ve varsa yönetim panelini ayrı ayrı açabilir, yayınlanmış demo hesabı bilgilerini aşağıdan kullanabilirsiniz.</p></div>
+            <?php if($nv60CanBuy): ?><a class="nv62-demo-buy" href="<?= e($nv60BuyUrl) ?>"><?= icon('shopping-cart',14) ?> Satın Al</a><?php endif; ?>
+          </div>
           
           <div class="nv60-demo-grid">
             <a class="nv60-demo-link" href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer">
@@ -152,6 +175,7 @@ if ($nv60ShowAccounts) {
             <?php endif; ?>
           </div>
           <?php if($nv60DemoAccounts): ?>
+          <div class="nv62-demo-credentials-title"><?= icon('key',15) ?><div><strong>Demo Giriş Bilgileri</strong><small>Bu bilgiler yalnızca ürünün herkese açık tanıtım hesabı içindir.</small></div></div>
           <div class="nv60-demo-accounts" aria-label="Herkese açık tanıtım demo hesapları">
             <?php foreach($nv60DemoAccounts as $nv60Account): ?>
             <div class="nv60-demo-account">
@@ -162,7 +186,7 @@ if ($nv60ShowAccounts) {
             <?php endforeach; ?>
           </div>
           <?php endif; ?>
-          <?php if(!empty($productData['demo_note'])): ?><p class="nv60-demo-disclaimer"><?= nl2br(e((string)$productData['demo_note'])) ?></p><?php endif; ?>
+          <?php if($nv60DemoNote!==''): ?><div class="nv62-demo-note"><?= icon('info',14) ?><p><?= nl2br(e($nv60DemoNote)) ?></p></div><?php endif; ?>
           
         </section>
         <?php endif; ?>
