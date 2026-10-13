@@ -91,9 +91,13 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
           <div class="adm-card-header"><h3><?= icon('shield-check',18) ?> Lisans, Destek ve Güncellemeler</h3><span>03 / Teslimat</span></div>
           <div class="adm-card-body">
             <div class="nvpa-two">
-              <?php foreach(['support_duration_type'=>'Destek Süresi Türü','support_duration_months'=>'Destek Süresi (ay)','update_duration_type'=>'Güncelleme Süresi Türü','update_duration_months'=>'Güncelleme Süresi (ay)','buy_url'=>'Mevcut Satış Linki','tags'=>'Ürün Etiketleri'] as $key=>$label): ?>
+              <?php foreach(['support_duration_type'=>'Destek Süresi Türü','support_duration_months'=>'Destek Süresi (ay)','update_duration_type'=>'Güncelleme Süresi Türü','update_duration_months'=>'Güncelleme Süresi (ay)','buy_url'=>'Satın Alma Linki','tags'=>'Ürün Etiketleri'] as $key=>$label): ?>
               <div class="nvpa-field"><label for="nvpa-<?= e($key) ?>"><?= e($label) ?></label><input id="nvpa-<?= e($key) ?>" class="form-control" name="<?= e($key) ?>" value="<?= e($d[$key]??'') ?>"></div>
               <?php endforeach; ?>
+            </div>
+            <div class="nvpa-checks nvpa-checks-stack">
+              <label><input type="checkbox" name="purchase_enabled" value="1" <?= (array_key_exists('purchase_enabled',$d)?!empty($d['purchase_enabled']):!empty($d['buy_url']))?'checked':'' ?>> Satışa Aç / ürün detayında “Satın Al” butonunu göster</label>
+              <small>Satışa açmak için fiyat ve geçerli bir satın alma linki girin. Kapalıyken ürün yayında ve demo aktif kalabilir.</small>
             </div>
             
           </div>
