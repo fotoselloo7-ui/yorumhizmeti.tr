@@ -1,102 +1,165 @@
-/* NetVera V106
-   Isolated repair for the separate "Tek platform, üç güçlü uzmanlık alanı" section.
-   This file is loaded after every legacy homepage stylesheet. It does not style
-   the hero slider. */
+/* NetVera V106.2
+   Final isolated layout for "Tek platform, üç güçlü uzmanlık alanı".
+   Loaded after legacy homepage CSS so this section keeps one predictable,
+   aligned composition on desktop, tablet and mobile. Hero slider untouched. */
 
 .nv29-services{
+  position:relative;
   overflow:clip;
+  padding:38px 0 42px;
+  background:
+    radial-gradient(ellipse at 50% -10%,rgba(112,79,238,.07),transparent 62%),
+    #fff;
+}
+
+.nv29-services .nv29-section-intro{
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:22px;
+}
+
+.nv29-services .nv29-section-intro h2{
+  margin-top:9px;
+  max-width:760px;
+  font-size:clamp(25px,2.35vw,34px);
+  line-height:1.18;
+  letter-spacing:-.045em;
+}
+
+.nv29-services .nv29-view-all{
+  min-height:40px;
+  padding:10px 14px;
+  border-radius:11px;
+  box-shadow:0 8px 24px rgba(40,52,100,.055);
 }
 
 .nv29-services .nv29-services-grid{
-  align-items:stretch;
-  gap:16px;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:18px!important;
+  min-width:0;
 }
 
+/* One card geometry for all three expertise areas. */
 .nv29-services .nv29-service-card,
 .nv29-services .nv29-service-card:nth-child(3){
   position:relative!important;
-  display:grid!important;
-  grid-template-columns:minmax(0,58%) minmax(0,42%)!important;
-  grid-template-rows:minmax(304px,1fr) 58px!important;
-  min-width:0!important;
-  min-height:362px!important;
-  height:100%!important;
-  overflow:hidden!important;
   isolation:isolate;
-  transform:none!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,60%) minmax(0,40%)!important;
+  grid-template-rows:318px 62px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:380px!important;
+  height:380px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+  border-radius:23px!important;
+  box-shadow:
+    0 15px 34px rgba(29,39,86,.11),
+    inset 0 1px 0 rgba(255,255,255,.12)!important;
+  transform:translateZ(0)!important;
   filter:none!important;
   -webkit-filter:none!important;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease!important;
 }
 
-/* text lane */
+.nv29-services .nv29-service-card:hover{
+  transform:translate3d(0,-4px,0)!important;
+  border-color:rgba(255,255,255,.34)!important;
+  box-shadow:
+    0 22px 45px rgba(29,39,86,.17),
+    inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+.nv29-services .nv29-card-glow{
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  width:auto!important;
+  height:auto!important;
+  background:
+    radial-gradient(circle at 82% 18%,rgba(255,255,255,.18),transparent 36%),
+    radial-gradient(circle at 38% 108%,rgba(255,255,255,.08),transparent 42%)!important;
+  pointer-events:none!important;
+}
+
+/* Copy lane: title, description and CTA share the same rhythm in every card. */
 .nv29-services .nv106-card-content,
 .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
   grid-column:1!important;
   grid-row:1!important;
   position:relative!important;
   z-index:5!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:flex-start!important;
+  display:grid!important;
+  grid-template-rows:minmax(0,1fr) 42px!important;
+  align-items:stretch!important;
   width:auto!important;
   min-width:0!important;
   max-width:none!important;
   min-height:0!important;
   height:auto!important;
-  padding:22px 8px 20px 22px!important;
+  margin:0!important;
+  padding:22px 10px 20px 22px!important;
   overflow:visible!important;
 }
 
 .nv29-services .nv106-copy-stack{
-  display:flex!important;
-  flex:0 0 auto!important;
-  flex-direction:column!important;
-  align-items:flex-start!important;
+  display:grid!important;
+  grid-template-rows:30px minmax(82px,auto) minmax(54px,auto)!important;
+  align-content:start!important;
+  align-items:start!important;
   width:100%!important;
   min-width:0!important;
-  gap:0!important;
+  max-width:100%!important;
+  gap:11px!important;
+  overflow:visible!important;
 }
 
 .nv29-services .nv106-copy-stack .nv29-eyebrow{
   display:inline-flex!important;
-  flex:0 0 auto!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  align-self:start!important;
   width:max-content!important;
   max-width:100%!important;
   min-width:0!important;
-  min-height:29px!important;
+  min-height:30px!important;
+  height:30px!important;
   margin:0!important;
   padding:7px 10px!important;
-  align-items:center!important;
   gap:6px!important;
+  border-radius:999px!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
+  font-size:8px!important;
+  line-height:1!important;
   transform:none!important;
-  filter:none!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
 
-/* Titles use natural height. No fixed title slot and no clipping. */
 .nv29-services .nv106-card-title{
   display:block!important;
   position:relative!important;
-  flex:0 0 auto!important;
+  align-self:start!important;
   width:100%!important;
   min-width:0!important;
   max-width:100%!important;
   height:auto!important;
   min-height:0!important;
   max-height:none!important;
-  margin:15px 0 0!important;
+  margin:0!important;
   padding:0!important;
   overflow:visible!important;
   color:#fff!important;
   font-family:Poppins,sans-serif!important;
-  font-size:25px!important;
+  font-size:clamp(21px,1.55vw,24px)!important;
   font-weight:800!important;
-  line-height:1.08!important;
-  letter-spacing:-.04em!important;
+  line-height:1.12!important;
+  letter-spacing:-.038em!important;
   text-wrap:balance!important;
   overflow-wrap:normal!important;
   word-break:normal!important;
@@ -107,47 +170,50 @@
 .nv29-services .nv106-card-description{
   display:-webkit-box!important;
   position:relative!important;
-  flex:0 0 auto!important;
+  align-self:start!important;
   width:100%!important;
   min-width:0!important;
   max-width:100%!important;
   height:auto!important;
   min-height:0!important;
-  max-height:64px!important;
-  margin:10px 0 0!important;
+  max-height:54px!important;
+  margin:0!important;
   padding:0!important;
   overflow:hidden!important;
   color:rgba(255,255,255,.92)!important;
   font-family:Poppins,sans-serif!important;
-  font-size:10px!important;
+  font-size:10.5px!important;
   font-weight:500!important;
   line-height:1.55!important;
   overflow-wrap:break-word!important;
   -webkit-box-orient:vertical!important;
-  -webkit-line-clamp:4!important;
+  -webkit-line-clamp:3!important;
 }
 
 .nv29-services .nv106-card-cta{
   display:inline-flex!important;
-  flex:0 0 42px!important;
+  grid-row:2!important;
   align-items:center!important;
   justify-content:space-between!important;
-  align-self:flex-start!important;
+  align-self:end!important;
+  justify-self:start!important;
   gap:12px!important;
   width:auto!important;
   max-width:100%!important;
   min-width:0!important;
   height:42px!important;
   min-height:42px!important;
-  margin:auto 0 0!important;
+  margin:0!important;
   padding:10px 14px!important;
+  border-radius:10px!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
+  font-size:10px!important;
   transform:none!important;
 }
 
-/* illustration lane: strictly separate from the text lane */
+/* Illustration lane: artwork is physically separated from the copy. */
 .nv29-services .nv29-visual,
 .nv29-services .nv29-service-card:nth-child(3) .nv29-visual{
   grid-column:2!important;
@@ -175,19 +241,20 @@
 /* Social artwork */
 .nv29-services .nv29-visual-social .nv29-visual-disc{
   position:absolute!important;
-  width:158%!important;
+  width:154%!important;
   aspect-ratio:1!important;
-  left:-31%!important;
-  top:-2%!important;
+  left:-28%!important;
+  top:0!important;
+  border-radius:50%!important;
 }
 .nv29-services .nv29-social-person{
   position:absolute!important;
   left:auto!important;
-  right:0!important;
+  right:-2px!important;
   top:auto!important;
   bottom:0!important;
-  width:105%!important;
-  height:94%!important;
+  width:104%!important;
+  height:92%!important;
   max-width:none!important;
   object-fit:contain!important;
   object-position:right bottom!important;
@@ -196,103 +263,123 @@
   transform:none!important;
   image-rendering:auto!important;
 }
-.nv29-services .nv29-social-float{
+.nv29-services .nv29-social-float,
+.nv29-services .nv29-visual-mini{
+  width:38px!important;
+  height:38px!important;
+  border-radius:12px!important;
   transform:none!important;
   filter:none!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
 .nv29-services .nv29-float-instagram{
-  left:4px!important;
+  left:2px!important;
   right:auto!important;
-  top:69px!important;
+  top:72px!important;
 }
 .nv29-services .nv29-float-tiktok{
   left:auto!important;
-  right:7px!important;
+  right:8px!important;
   top:12px!important;
 }
 
 /* Agency artwork */
 .nv29-services .nv29-agency-window{
   position:absolute!important;
-  left:2px!important;
-  right:5px!important;
-  top:64px!important;
+  left:3px!important;
+  right:9px!important;
+  top:67px!important;
   width:auto!important;
   height:150px!important;
   transform:none!important;
   filter:none!important;
+  border-width:5px!important;
 }
 .nv29-services .nv29-agency-device{
   position:absolute!important;
-  left:4px!important;
+  left:5px!important;
   right:auto!important;
-  bottom:7px!important;
+  bottom:9px!important;
   transform:none!important;
   filter:none!important;
 }
 .nv29-services .nv29-agency-code{
   left:auto!important;
-  right:6px!important;
-  top:24px!important;
+  right:8px!important;
+  top:22px!important;
   transform:none!important;
 }
 
 /* Marketing artwork */
 .nv29-services .nv29-analytics-card{
   position:absolute!important;
-  left:2px!important;
-  right:5px!important;
-  top:62px!important;
+  left:3px!important;
+  right:9px!important;
+  top:64px!important;
   width:auto!important;
-  height:161px!important;
+  height:164px!important;
   transform:none!important;
   filter:none!important;
 }
 .nv29-services .nv29-marketing-search{
-  left:4px!important;
+  left:3px!important;
   right:auto!important;
   top:27px!important;
   transform:none!important;
 }
 .nv29-services .nv29-marketing-target{
   left:auto!important;
-  right:7px!important;
-  bottom:11px!important;
+  right:8px!important;
+  bottom:12px!important;
   transform:none!important;
 }
 
-/* chip footer has its own row and cannot collide with body content */
+/* Footer chips: identical columns = no random-looking pill widths. */
 .nv29-services .nv29-service-chips{
   grid-column:1 / -1!important;
   grid-row:2!important;
   position:relative!important;
   z-index:8!important;
-  display:flex!important;
-  flex-wrap:nowrap!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
   align-items:center!important;
   gap:6px!important;
   width:100%!important;
   min-width:0!important;
-  min-height:58px!important;
-  max-height:58px!important;
+  min-height:62px!important;
+  max-height:62px!important;
+  height:62px!important;
   margin:0!important;
   padding:10px 14px!important;
   overflow:hidden!important;
+  border-top:1px solid rgba(255,255,255,.16)!important;
+  background:linear-gradient(0deg,rgba(12,22,57,.12),rgba(12,22,57,.025))!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
 
 .nv29-services .nv29-service-chip{
   display:inline-flex!important;
-  flex:0 1 auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  width:100%!important;
   min-width:0!important;
-  max-width:none!important;
-  padding:7px 9px!important;
+  max-width:100%!important;
+  height:34px!important;
+  margin:0!important;
+  padding:7px 7px!important;
+  border-radius:8px!important;
+  font-size:8.5px!important;
+  line-height:1!important;
   transform:none!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
+}
+
+.nv29-services .nv29-service-chip .icon{
+  flex:0 0 auto!important;
 }
 
 .nv29-services .nv29-service-chip span{
@@ -304,6 +391,7 @@
 
 .nv29-services .nv29-service-chip:hover{
   transform:none!important;
+  background:rgba(255,255,255,.24)!important;
 }
 
 .nv29-services .nv29-agency-window,
@@ -315,68 +403,159 @@
   backface-visibility:visible!important;
 }
 
-/* tablet */
+/* Tablet: two cards + full-width third card, all still share the same internal system. */
 @media(max-width:1150px){
+  .nv29-services .nv29-services-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .nv29-services .nv29-service-card:nth-child(3){
+    grid-column:1 / -1!important;
+  }
+
   .nv29-services .nv29-service-card,
   .nv29-services .nv29-service-card:nth-child(3){
     grid-template-columns:minmax(0,60%) minmax(0,40%)!important;
-    grid-template-rows:minmax(300px,1fr) 58px!important;
-    min-height:358px!important;
+    grid-template-rows:312px 62px!important;
+    min-height:374px!important;
+    height:374px!important;
   }
+
   .nv29-services .nv106-card-content,
   .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
-    padding:20px 8px 18px 18px!important;
+    padding:21px 9px 19px 20px!important;
   }
+
   .nv29-services .nv106-card-title{
-    font-size:23px!important;
+    font-size:22px!important;
   }
 }
 
-/* mobile */
+/* Mobile: one comfortable card per row; artwork remains separate from text. */
 @media(max-width:700px){
+  .nv29-services{
+    padding:30px 0 34px;
+  }
+
+  .nv29-services .nv29-section-intro{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:12px!important;
+    margin-bottom:17px!important;
+  }
+
+  .nv29-services .nv29-section-intro h2{
+    font-size:26px!important;
+    line-height:1.2!important;
+  }
+
   .nv29-services .nv29-services-grid{
     grid-template-columns:1fr!important;
+    gap:14px!important;
   }
+
   .nv29-services .nv29-service-card,
   .nv29-services .nv29-service-card:nth-child(3){
     grid-column:auto!important;
     grid-template-columns:minmax(0,61%) minmax(0,39%)!important;
-    grid-template-rows:minmax(292px,1fr) 58px!important;
-    min-height:350px!important;
+    grid-template-rows:300px 60px!important;
+    min-height:360px!important;
+    height:360px!important;
+    border-radius:20px!important;
   }
+
   .nv29-services .nv106-card-content,
   .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
-    padding:18px 6px 16px 15px!important;
+    padding:18px 7px 16px 16px!important;
   }
+
+  .nv29-services .nv106-copy-stack{
+    grid-template-rows:29px minmax(74px,auto) minmax(51px,auto)!important;
+    gap:9px!important;
+  }
+
   .nv29-services .nv106-card-title{
-    margin-top:12px!important;
     font-size:21px!important;
-    line-height:1.08!important;
+    line-height:1.1!important;
   }
+
   .nv29-services .nv106-card-description{
-    max-height:59px!important;
+    max-height:51px!important;
+    font-size:9.8px!important;
+    line-height:1.52!important;
+  }
+
+  .nv29-services .nv106-card-cta{
+    height:40px!important;
+    min-height:40px!important;
+    padding-inline:11px!important;
     font-size:9.5px!important;
-    line-height:1.5!important;
   }
+
   .nv29-services .nv29-service-chips{
-    padding-inline:12px!important;
+    min-height:60px!important;
+    max-height:60px!important;
+    height:60px!important;
+    padding:9px 11px!important;
   }
+
   .nv29-services .nv29-service-chip{
-    padding-inline:7px!important;
+    height:32px!important;
     font-size:8px!important;
+    padding-inline:5px!important;
+  }
+
+  .nv29-services .nv29-agency-window{
+    left:2px!important;
+    right:6px!important;
+  }
+
+  .nv29-services .nv29-analytics-card{
+    left:2px!important;
+    right:6px!important;
   }
 }
 
-@media(max-width:420px){
+/* Small phones: chip footer becomes 2x2 instead of crushing four labels. */
+@media(max-width:480px){
   .nv29-services .nv29-service-card,
   .nv29-services .nv29-service-card:nth-child(3){
-    grid-template-columns:minmax(0,63%) minmax(0,37%)!important;
+    grid-template-columns:minmax(0,62%) minmax(0,38%)!important;
+    grid-template-rows:296px 88px!important;
+    min-height:384px!important;
+    height:384px!important;
   }
+
+  .nv29-services .nv106-card-content,
+  .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
+    padding-left:15px!important;
+  }
+
   .nv29-services .nv106-card-title{
-    font-size:19px!important;
+    font-size:20px!important;
   }
-  .nv29-services .nv106-card-cta{
-    padding-inline:10px!important;
-    font-size:9px!important;
+
+  .nv29-services .nv29-service-chips{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,32px)!important;
+    min-height:88px!important;
+    max-height:88px!important;
+    height:88px!important;
+    padding:9px 11px!important;
+    gap:6px!important;
+  }
+
+  .nv29-services .nv29-service-chip{
+    justify-content:flex-start!important;
+    padding-inline:8px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nv29-services .nv29-service-card{
+    transition:none!important;
+  }
+  .nv29-services .nv29-service-card:hover{
+    transform:none!important;
   }
 }
