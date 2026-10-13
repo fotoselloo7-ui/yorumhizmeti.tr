@@ -25,6 +25,33 @@ final class NetveraPublicDemoImportService
         $rows=self::extractPublicDemoRows($sql);
         if(!$rows)throw new \RuntimeException('Herkese açık demo ürünü bulunamadı.');
 
+        return self::applyRows($rows);
+    }
+
+    public static function importLegacyTable(): array
+    {
+        $db=Database::getInstance();
+        $exists=$db->fetch(
+            "SELECT 1 AS ok FROM information_schema.tables
+             WHERE table_schema=DATABASE() AND table_name='script_products' LIMIT 1"
+        );
+        if(!$exists)throw new \RuntimeException('Eski NetVera script_products tablosu bulunamadı.');
+
+        $rows=$db->fetchAll(
+            "SELECT id,slug,demo_url,demo_admin_url,demo_user_url,demo_video_url,
+                    demo_username,demo_password,demo_admin_username,demo_admin_password,
+                    demo_note,demo_accounts_json,demo_display_mode,
+                    demo_is_active,demo_is_public,is_active
+             FROM script_products
+             WHERE is_active=1 AND demo_is_active=1 AND demo_is_public=1"
+        );
+        if(!$rows)throw new \RuntimeException('Eski tabloda herkese açık demo ürünü bulunamadı.');
+
+        return self::applyRows($rows);
+    }
+
+    private static function applyRows(array $rows): array
+    {
         $db=Database::getInstance();
         $matched=0;$skipped=0;
 
@@ -57,11 +84,11 @@ final class NetveraPublicDemoImportService
 
             $extra=json_decode((string)($source['demo_accounts_json']??'[]'),true);
             if(!is_array($extra)||!array_is_list($extra))$extra=[];
-            $hasLogin=
+            $data['demo_credentials_public']=(
                 trim((string)($source['demo_username']??''))!=='' ||
                 trim((string)($source['demo_admin_username']??''))!=='' ||
-                !empty($extra);
-            $data['demo_credentials_public']=$hasLogin?1:0;
+                !empty($extra)
+            ) ? 1 : 0;
 
             $db->update(
                 'nv_legacy_script_products',
