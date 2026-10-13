@@ -6,9 +6,8 @@ on:
     branches: [main]
     paths:
       - 'well-known/scripts/import-netvera-private-customers.php'
-      - 'well-known/tests/netvera-private-synthetic-fixture.sql'
-      - 'well-known/database/migrations/netvera-private-customer-v1.sql'
-      - 'well-known/database/migrations/netvera-dealer-program-v2.sql'
+      - 'well-known/tests/netvera-private-synthetic-fixture.php'
+      - 'well-known/database/database.sql'
       - 'well-known/app/Services/DealerProgramService.php'
       - 'well-known/tests/netvera-dealer-program-qa.php'
       - 'well-known/resources/views/frontend/account/partials/netvera-owned-software.php'
@@ -56,11 +55,8 @@ jobs:
           sudo apt-get install -y -qq default-mysql-client
           db() { mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only "$@"; }
           db -e "CREATE DATABASE netvera_private_target_qa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
-          db netvera_private_target_qa < yorumhizmeti_yorumhizmeti.sql
-          db netvera_private_target_qa < well-known/database/migrations/netvera-dealer-program-v2.sql
-          db netvera_private_source_qa < well-known/tests/netvera-private-synthetic-fixture.sql
-          qa_hash=$(php -r 'echo password_hash("synthetic-only-qa-password", PASSWORD_BCRYPT);')
-          db netvera_private_source_qa -e "UPDATE customers SET password_hash='${qa_hash}'; UPDATE admin_users SET password_hash='${qa_hash}'"
+          db netvera_private_target_qa < well-known/database/database.sql
+          php well-known/tests/netvera-private-synthetic-fixture.php 127.0.0.1 netvera_private_source_qa root isolated_synthetic_qa_only
           cat > well-known/.env <<'EOF'
           APP_ENV=staging
           APP_DEBUG=false
@@ -83,8 +79,8 @@ jobs:
           php -l well-known/scripts/import-netvera-private-customers.php
           php well-known/scripts/import-netvera-private-customers.php > /tmp/dry-run.txt
           grep -q "SAFE: no target rows modified" /tmp/dry-run.txt
-          ! mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only netvera_private_target_qa -e "SELECT COUNT(*) FROM nv_private_orders" 2>/dev/null
-          echo "PASS: dry-run does not create/write customer or order records"
+          [ "$(mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only -N -B netvera_private_target_qa -e "SELECT COUNT(*) FROM nv_private_orders")" = "0" ]
+          echo "PASS: dry-run does not write customer or order records"
       - name: Import once, verify all historical relationships, then import twice
         shell: bash
         env:
