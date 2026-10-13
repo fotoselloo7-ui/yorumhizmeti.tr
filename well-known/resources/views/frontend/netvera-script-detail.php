@@ -112,18 +112,6 @@ if ($nv60ShowAccounts) {
             <a href="<?= e($nv40OfferHref) ?>" class="nv40-cta-primary" <?= $nv40InquiryReady?'data-nv60-jump-tab="teklif-al"':'' ?>><?= icon('message-square',16) ?> Teklif Al</a>
             <?php if($nv40DemoAllowed): ?><a href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer" class="nv40-cta-demo"><?= icon('external-link',16) ?> Canlı Demo</a><?php endif; ?>
           </div>
-          <?php if($nv40DemoAllowed): ?>
-          <div class="nv62-demo-summary" aria-label="Demo erişim özeti">
-            <div class="nv62-demo-summary-head"><?= icon('monitor',14) ?><strong>Demo Bilgileri</strong></div>
-            <div class="nv62-demo-summary-grid">
-              <span><small>Canlı Site</small><a href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e((string)parse_url($demoUrl,PHP_URL_HOST)) ?></a></span>
-              <?php if($nv60DemoAdminUrl): ?><span><small>Yönetim Paneli</small><a href="<?= e($nv60DemoAdminUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e((string)parse_url($nv60DemoAdminUrl,PHP_URL_PATH)?:'/admin') ?></a></span><?php endif; ?>
-              <?php if($nv60DemoAccounts): foreach(array_slice($nv60DemoAccounts,0,2) as $nv62Account): ?>
-              <span class="nv62-demo-login"><small><?= e($nv62Account['label']) ?></small><b><?= e($nv62Account['username']??'') ?></b><?php if(!empty($nv62Account['password'])): ?><code><?= e($nv62Account['password']) ?></code><?php endif; ?></span>
-              <?php endforeach; endif; ?>
-            </div>
-          </div>
-          <?php endif; ?>
         </div>
 
       </div>
