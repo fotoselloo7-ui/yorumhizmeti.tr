@@ -89,7 +89,7 @@
   min-height:0!important;
   height:320px!important;
   margin:0!important;
-  padding:22px 8px 19px 22px!important;
+  padding:22px 8px 76px 22px!important;
   overflow:hidden!important;
 }
 
@@ -176,17 +176,20 @@
 
 .nv29-services .nv106-card-cta{
   display:inline-flex!important;
+  position:absolute!important;
+  left:22px!important;
+  bottom:19px!important;
   flex:0 0 42px!important;
   align-items:center!important;
   justify-content:space-between!important;
-  align-self:flex-start!important;
+  align-self:auto!important;
   gap:11px!important;
   width:auto!important;
-  max-width:100%!important;
+  max-width:calc(100% - 30px)!important;
   min-width:0!important;
   height:42px!important;
   min-height:42px!important;
-  margin:auto 0 0!important;
+  margin:0!important;
   padding:10px 14px!important;
   border-radius:10px!important;
   overflow:hidden!important;
@@ -417,7 +420,11 @@
   }
   .nv29-services .nv106-card-content,
   .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
-    padding:20px 8px 18px 19px!important;
+    padding:20px 8px 72px 19px!important;
+  }
+  .nv29-services .nv106-card-cta{
+    left:19px!important;
+    bottom:18px!important;
   }
   .nv29-services .nv106-card-title{
     font-size:22px!important;
@@ -459,7 +466,11 @@
   }
   .nv29-services .nv106-card-content,
   .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
-    padding:17px 6px 15px 15px!important;
+    padding:17px 6px 68px 15px!important;
+  }
+  .nv29-services .nv106-card-cta{
+    left:15px!important;
+    bottom:14px!important;
   }
   .nv29-services .nv106-card-title{
     max-height:92px!important;
