@@ -9,7 +9,7 @@ on:
       - 'well-known/database/netvera-public-catalog.json'
       - 'well-known/tests/netvera-blog-media-qa.php'
       - 'well-known/public/uploads/blog/**'
-      - 'well-known/database/migrations/netvera-*.sql'
+      - 'well-known/database/database.sql'
       - '.github/workflows/netvera-local-bootstrap-qa.yml'
   workflow_dispatch:
 
@@ -43,7 +43,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq default-mysql-client
-          mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci < yorumhizmeti_yorumhizmeti.sql
+          mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci < well-known/database/database.sql
           mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci -N -e "SELECT COUNT(*) FROM nv_public_inquiries" > /tmp/should-not-exist 2>/dev/null && exit 1 || true
           mysql -h127.0.0.1 -uroot -pnetvera_local_ci_only local_netvera_ci -N -e "SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM payment_gateways),(SELECT COUNT(*) FROM users)" > /tmp/untouched.before
           cat > well-known/.env <<'EOF'
