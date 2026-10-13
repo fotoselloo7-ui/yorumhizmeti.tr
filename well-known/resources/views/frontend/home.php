@@ -760,11 +760,13 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
         <?php foreach (($homePromoGroups ?? []) as $promo): ?>
             <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>">
                 <div class="nv29-card-glow" aria-hidden="true"></div>
-                <div class="nv29-card-content">
-                    <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 12) ?> <?= e($promo['eyebrow']) ?></span>
-                    <h3><?= e($promo['title']) ?></h3>
-                    <p><?= e($promo['description']) ?></p>
-                    <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">
+                <div class="nv29-card-content nv106-card-content">
+                    <div class="nv106-copy-stack">
+                        <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 12) ?> <?= e($promo['eyebrow']) ?></span>
+                        <h3 class="nv106-card-title"><?= e($promo['title']) ?></h3>
+                        <p class="nv106-card-description"><?= e($promo['description']) ?></p>
+                    </div>
+                    <a href="<?= e($promo['url']) ?>" class="nv29-card-cta nv106-card-cta">
                         <?= e($promo['cta']) ?> <?= icon('arrow-right', 15) ?>
                     </a>
                 </div>
