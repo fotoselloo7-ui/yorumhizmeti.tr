@@ -255,7 +255,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
               $nv94IsCutout=$nv94Desktop!=='' && str_contains($nv94Desktop,'hero-woman-cutout');
               $nv94IsComposed=$nv94Desktop!=='' && str_contains($nv94Desktop,'-v107.webp');
             ?>
-            <article class="nv94-hero-slide <?= $nv94Index===0?'is-active':'' ?>"
+            <article class="nv94-hero-slide <?= $nv94Index===0?'is-active':'' ?> <?= $nv94IsComposed?'is-composed-banner':'' ?>"
               data-nv94-slide data-delay="<?= $nv94Delay ?>"
               aria-hidden="<?= $nv94Index===0?'false':'true' ?>"
               style="--nv94-bg-a:<?= e($nv94Slide['background_start']?:'#13255b') ?>;--nv94-bg-b:<?= e($nv94Slide['background_end']?:'#6d28d9') ?>;--nv94-overlay:<?= e($nv94Slide['overlay_color']?:'rgba(7,16,48,.34)') ?>;--nv94-text:<?= e($nv94Slide['text_color']?:'#fff') ?>;--nv94-accent:<?= e($nv94Slide['accent_color']?:'#7c5cff') ?>;--nv94-delay:<?= $nv94Delay ?>ms">
