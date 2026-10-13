@@ -17,9 +17,9 @@
    <div>
     <label for="nv-demo-source-sql" style="display:block;font-weight:700;margin-bottom:6px">Eski NetVera SQL yedeği</label>
     <input id="nv-demo-source-sql" type="file" name="source_sql" accept=".sql,text/plain,application/sql" class="form-control">
-    <small class="text-secondary">Dosya seçmezseniz aynı veritabanındaki eski <code>script_products</code> tablosu otomatik taranır. Kaynak SQL çalıştırılmaz; yalnızca public demo alanları okunur.</small>
+    <small class="text-secondary">Bu projede eski <code>script_products</code> tablosu bulunmuyorsa eski NetVera <strong>.sql</strong> yedeğini burada seçmeniz gerekir. Dosya çalıştırılmaz; yalnızca herkese açık demo alanları okunup mevcut ürünlerle eşleştirilir.</small>
    </div>
-   <button type="submit" class="btn btn-primary"><?= icon('download',14) ?> Demo Bilgilerini Aktar</button>
+   <button type="submit" class="btn btn-primary"><?= icon('download',14) ?> SQL'den Demo Bilgilerini Aktar</button>
   </form>
  </div>
 </div>
