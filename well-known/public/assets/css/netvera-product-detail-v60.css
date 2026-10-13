@@ -189,3 +189,90 @@
  .nv40-detail .nv60-demo-accounts{grid-template-columns:1fr}
  .nv40-detail .nv60-demo-credential{grid-template-columns:85px minmax(0,1fr)}
 }
+
+
+/* V62: purchase CTA + explicit demo access summary.
+   The source NetVera purchase link remains authoritative; credentials render
+   only when the product is explicitly marked as a public demo account. */
+.nv40-detail .nv40-cta-buy{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:44px;padding:11px 16px;border:1px solid #5638d9;border-radius:10px;
+  background:linear-gradient(110deg,#563ff0,#7b45e7);color:#fff!important;
+  font-size:11px;font-weight:800;text-decoration:none;
+  box-shadow:0 10px 22px rgba(87,60,218,.22);
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.nv40-detail .nv40-cta-buy:hover{
+  transform:translateY(-2px);filter:brightness(1.04);
+  box-shadow:0 14px 27px rgba(87,60,218,.28);
+}
+.nv40-detail .nv62-demo-summary{
+  margin-top:16px;padding:13px;border:1px solid #e4e1f4;border-radius:12px;
+  background:linear-gradient(145deg,#fbfaff,#f6f5ff);
+}
+.nv40-detail .nv62-demo-summary-head{
+  display:flex;align-items:center;gap:7px;margin-bottom:10px;color:#4935b8;
+  font-size:11px;
+}
+.nv40-detail .nv62-demo-summary-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+}
+.nv40-detail .nv62-demo-summary-grid>span{
+  min-width:0;padding:9px 10px;border:1px solid #e9e6f5;border-radius:9px;background:#fff;
+}
+.nv40-detail .nv62-demo-summary-grid small{
+  display:block;margin-bottom:4px;color:#818ba1;font-size:8.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.nv40-detail .nv62-demo-summary-grid a,
+.nv40-detail .nv62-demo-summary-grid b,
+.nv40-detail .nv62-demo-summary-grid code{
+  display:block;min-width:0;color:#26385c;font-size:10px;font-weight:750;
+  overflow-wrap:anywhere;text-decoration:none;
+}
+.nv40-detail .nv62-demo-summary-grid a:hover{color:#6540d1;text-decoration:underline}
+.nv40-detail .nv62-demo-login code{
+  margin-top:5px;padding:5px 7px;border-radius:6px;background:#f4f1ff;color:#5c43c4;
+}
+.nv40-detail .nv62-demo-panel-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:4px;
+}
+.nv40-detail .nv62-demo-panel-head h2{margin-bottom:5px!important}
+.nv40-detail .nv62-demo-panel-head p{
+  margin:0;max-width:720px;color:#66738d;font-size:11px;line-height:1.65;
+}
+.nv40-detail .nv62-demo-buy{
+  display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:7px;
+  min-height:39px;padding:9px 13px;border-radius:9px;
+  background:#6544dc;color:#fff!important;font-size:10px;font-weight:800;text-decoration:none!important;
+  box-shadow:0 8px 18px rgba(88,65,190,.16);
+}
+.nv40-detail .nv62-demo-buy:hover{background:#5938d0}
+.nv40-detail .nv62-demo-credentials-title{
+  display:flex;align-items:flex-start;gap:9px;margin:18px 0 2px;padding:11px 13px;
+  border:1px solid #e6e2f4;border-radius:10px;background:#faf9ff;color:#5541b5;
+}
+.nv40-detail .nv62-demo-credentials-title strong{
+  display:block;color:#2c3c60;font-size:11px;
+}
+.nv40-detail .nv62-demo-credentials-title small{
+  display:block;margin-top:3px;color:#7a8499;font-size:9px;
+}
+.nv40-detail .nv62-demo-note{
+  display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:12px 13px;
+  border:1px solid #dedff0;border-radius:10px;background:#f8f9fd;color:#55647f;
+}
+.nv40-detail .nv62-demo-note>svg{flex:0 0 14px;margin-top:3px;color:#6d4bd5}
+.nv40-detail .nv62-demo-note p{margin:0;font-size:10.5px;line-height:1.75}
+@media(max-width:700px){
+  .nv40-detail .nv40-cta-row{display:grid;grid-template-columns:1fr 1fr}
+  .nv40-detail .nv40-cta-row>a{width:100%;min-width:0}
+  .nv40-detail .nv40-cta-row>a:first-child:nth-last-child(3){grid-column:1/-1}
+  .nv40-detail .nv62-demo-summary-grid{grid-template-columns:1fr}
+  .nv40-detail .nv62-demo-panel-head{align-items:stretch;flex-direction:column}
+  .nv40-detail .nv62-demo-buy{align-self:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  .nv40-detail .nv40-cta-buy{transition:none}
+  .nv40-detail .nv40-cta-buy:hover{transform:none}
+}
