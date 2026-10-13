@@ -3,6 +3,28 @@
  <p class="text-sm text-secondary">Orijinal slug, ürün görselleri, lisans, demo ve SEO alanlarını koruyan bağımsız yazılım kataloğu.</p></div>
  <?php if($ready): ?><a href="/admin/netvera-yazilimlar/ekle" class="btn btn-primary btn-sm"><?= icon('plus',15) ?> Yeni Yazılım Ekle</a><?php endif; ?>
 </div>
+<?php if($ready): ?>
+<div class="adm-card" style="margin-bottom:16px">
+ <div class="adm-card-header">
+  <div>
+   <h3><?= icon('key',17) ?> Eski NetVera Demo Girişlerini Aktar</h3>
+   <p class="text-sm text-secondary" style="margin:4px 0 0">Eski NetVera ürünlerindeki herkese açık demo admin kullanıcı/e-posta ve şifre alanlarını yeni ürün kayıtlarıyla eşleştirir.</p>
+  </div>
+ </div>
+ <div class="adm-card-body">
+  <form method="post" action="/admin/netvera-yazilimlar/demo-aktar" enctype="multipart/form-data" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end">
+   <?= csrfField() ?>
+   <div>
+    <label for="nv-demo-source-sql" style="display:block;font-weight:700;margin-bottom:6px">Eski NetVera SQL yedeği</label>
+    <input id="nv-demo-source-sql" type="file" name="source_sql" accept=".sql,text/plain,application/sql" class="form-control">
+    <small class="text-secondary">Dosya seçmezseniz aynı veritabanındaki eski <code>script_products</code> tablosu otomatik taranır. Kaynak SQL çalıştırılmaz; yalnızca public demo alanları okunur.</small>
+   </div>
+   <button type="submit" class="btn btn-primary"><?= icon('download',14) ?> Demo Bilgilerini Aktar</button>
+  </form>
+ </div>
+</div>
+<?php endif; ?>
+
 <div class="adm-card">
  <div class="adm-card-header"><h3><?= icon('layers',17) ?> Yazılım Ürünleri (<?= count($products) ?>)</h3></div>
  <div class="adm-card-body">
