@@ -9,8 +9,7 @@ on:
       - 'well-known/app/Services/NetveraBridgeService.php'
       - 'well-known/app/Services/NetveraBlogSnapshot.php'
       - 'well-known/app/Controllers/BlogController.php'
-      - 'well-known/database/migrations/netvera-legacy-bridge-v1.sql'
-      - 'well-known/database/migrations/netvera-inquiries-v1.sql'
+      - 'well-known/database/database.sql'
       - 'well-known/app/Controllers/NetveraInquiryController.php'
       - 'well-known/tests/netvera-inquiry-e2e.php'
       - 'well-known/tests/netvera-link-parity.php'
@@ -45,7 +44,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq default-mysql-client
-          mysql -h127.0.0.1 -uroot -pmigration_qa_only netvera_migration_qa < yorumhizmeti_yorumhizmeti.sql
+          mysql -h127.0.0.1 -uroot -pmigration_qa_only netvera_migration_qa < well-known/database/database.sql
           cat > well-known/.env <<'EOF'
           APP_ENV=staging
           APP_DEBUG=false
