@@ -18,13 +18,13 @@ CREATE DATABASE yorumpanel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ### 2. Veritabanı Kurulumu
 
-```bash
-# Tabloları kur
-mysql -u root yorumpanel < database/install.sql
+Proje artık **tek ve kanonik SQL dosyası** kullanır. Boş MySQL/MariaDB veritabanına yalnızca aşağıdaki dosyayı içe aktarın:
 
-# Seed verileri yükle
-mysql -u root yorumpanel < database/seeds.sql
+```bash
+mysql -u root yorumpanel < database/database.sql
 ```
+
+`database/database.sql`; güncel tablo şemalarını, gerekli başlangıç verilerini, NetVera katalog verilerini ve uygulanmış tüm eski migration sonuçlarını tek dosyada içerir. Eski `install.sql`, `seeds.sql` ve ayrı migration dosyaları kullanılmaz.
 
 ### 3. Ortam Değişkenleri
 
@@ -62,8 +62,7 @@ Site adresi: [http://127.0.0.1:8006](http://127.0.0.1:8006)
 │   ├── Core/                 # MVC çekirdek sınıfları
 │   └── Services/             # İş mantığı servisleri
 ├── database/
-│   ├── install.sql           # Tablo şemaları (24 tablo)
-│   └── seeds.sql             # Başlangıç verileri
+│   ├── database.sql          # Tek kanonik veritabanı: güncel şema + gerekli veriler
 ├── public/
 │   ├── index.php             # Giriş noktası
 │   └── assets/               # CSS, JS dosyaları
@@ -110,7 +109,7 @@ Eğer projeyi cPanel veya paylaşımlı bir sunucuda yayınlayacaksanız aşağ�
        RewriteRule ^(.*)$ public/$1 [L]
    </IfModule>
    ```
-3. **Veritabanı**: cPanel MySQL Veritabanları menüsünden yeni bir DB ve kullanıcı oluşturun. `database/install.sql` ve `database/seeds.sql` dosyalarını phpMyAdmin üzerinden içe aktarın.
+3. **Veritabanı**: cPanel MySQL Veritabanları menüsünden yeni ve boş bir DB ile kullanıcı oluşturun. Yalnızca `database/database.sql` dosyasını phpMyAdmin üzerinden içe aktarın. Başka SQL veya migration dosyası çalıştırmayın.
 4. **.env Ayarları**: Oluşturduğunuz veritabanı bilgilerini `.env` dosyasına girin. `APP_URL` ayarını kendi domaininiz ile değiştirin.
 5. **Dosya ve Klasör İzinleri**: Aşağıdaki izinler bölümüne göre chmod izinlerini ayarlayın.
 
