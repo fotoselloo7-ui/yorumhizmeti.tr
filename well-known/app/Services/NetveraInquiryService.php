@@ -24,14 +24,11 @@ final class NetveraInquiryService
     public static function install(): void
     {
         if (self::ready()) return;
-        $file=BASE_PATH.'/database/migrations/netvera-inquiries-v1.sql';
-        $sql=@file_get_contents($file);
-        if($sql===false)throw new \RuntimeException('Gelen kutusu kurulum dosyası okunamadı.');
-        $sql=preg_replace('/^\s*--[^\r\n]*(?:\r?\n|$)/m','',$sql);
         $pdo=Database::getInstance()->getPdo();
-        foreach(explode(';',$sql) as $statement) {
-            if(trim($statement)!=='') $pdo->exec(trim($statement));
-        }
+        ConsolidatedDatabaseSchema::ensureTables($pdo,[
+            'nv_public_inquiries',
+            'nv_public_inquiry_replies',
+        ]);
         if(!self::ready())throw new \RuntimeException('Gelen kutusu tabloları doğrulanamadı.');
     }
 
