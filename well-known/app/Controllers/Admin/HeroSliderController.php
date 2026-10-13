@@ -188,25 +188,31 @@ class HeroSliderController extends Controller
         if($bytes<=0 && is_file((string)$file['tmp_name'])) $bytes=(int)filesize((string)$file['tmp_name']);
 
         if($field==='desktop_image'){
-            if($width<1920 || $height<820){
+            $ratio=$height>0?$width/$height:0.0;
+            if($width<1920 || $height<672){
                 throw new \InvalidArgumentException(
-                    'Masaüstü slider görseli HD kalite için en az 1920 × 820 px olmalıdır. Önerilen 2400 × 1025 px. Yüklenen: '.$width.' × '.$height.' px.'
+                    'Masaüstü slider görseli en az 1920 × 672 px olmalıdır. NetVera sliderının tam oranı 20:7, önerilen ölçü 2400 × 840 px. Yüklenen: '.$width.' × '.$height.' px.'
                 );
             }
-            if($bytes<102400){
+            if($ratio<2.70 || $ratio>3.02){
                 throw new \InvalidArgumentException(
-                    'Masaüstü banner aşırı sıkıştırılmış görünüyor. HD kaliteyi korumak için dosya en az 100 KB olmalıdır. Yüklenen: '.round($bytes/1024).' KB.'
+                    'Masaüstü slider görselinin oranı 20:7 ölçüsüne yakın olmalıdır. Önerilen 2400 × 840 px. Yüklenen oran: '.number_format($ratio,2,',','.').'.'
+                );
+            }
+            if($bytes<61440){
+                throw new \InvalidArgumentException(
+                    'Masaüstü banner aşırı sıkıştırılmış görünüyor. HD kaliteyi korumak için dosya en az 60 KB olmalıdır. Yüklenen: '.round($bytes/1024).' KB.'
                 );
             }
         }else{
-            if($width<1080 || $height<1350){
+            if($width<1080 || $height<1600){
                 throw new \InvalidArgumentException(
-                    'Mobil slider görseli HD kalite için en az 1080 × 1350 px olmalıdır. Önerilen 1440 × 1800 px. Yüklenen: '.$width.' × '.$height.' px.'
+                    'Mobil slider görseli en az 1080 × 1600 px olmalıdır. Önerilen ölçü 1080 × 1920 px. Yüklenen: '.$width.' × '.$height.' px.'
                 );
             }
-            if($bytes<102400){
+            if($bytes<40960){
                 throw new \InvalidArgumentException(
-                    'Mobil banner aşırı sıkıştırılmış görünüyor. HD kaliteyi korumak için dosya en az 100 KB olmalıdır. Yüklenen: '.round($bytes/1024).' KB.'
+                    'Mobil banner aşırı sıkıştırılmış görünüyor. HD kaliteyi korumak için dosya en az 40 KB olmalıdır. Yüklenen: '.round($bytes/1024).' KB.'
                 );
             }
         }
