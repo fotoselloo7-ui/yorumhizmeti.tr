@@ -33,7 +33,13 @@ if ($nv40DemoAllowed) {
 }
 $nv60DemoAdminUrl=\App\Services\NetveraBridgeService::publicUrl($productData['demo_admin_url']??$nv60PublicDemo['demo_admin_url']??null);
 $nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($productData['demo_user_url']??$nv60PublicDemo['demo_user_url']??null);
-$nv60ShowAccounts=$nv40DemoAllowed && !empty($productData['demo_credentials_public']);
+$nv60ShowAccounts=$nv40DemoAllowed && (
+    !empty($productData['demo_credentials_public']) ||
+    trim((string)($productData['demo_admin_username']??''))!=='' ||
+    trim((string)($productData['demo_admin_password']??''))!=='' ||
+    trim((string)($productData['demo_username']??''))!=='' ||
+    trim((string)($productData['demo_password']??''))!==''
+);
 $nv60DemoAccounts=[];
 if ($nv60ShowAccounts) {
     foreach ([
