@@ -166,17 +166,33 @@ if ($nv60ShowAccounts) {
             <?php endif; ?>
           </div>
           <?php if($nv60DemoAccounts): ?>
-          <div class="nv62-demo-credentials-title"><?= icon('key',15) ?><div><strong>Demo Giriş Bilgileri</strong><small>Bu bilgiler yalnızca ürünün herkese açık tanıtım hesabı içindir.</small></div></div>
-          <div class="nv60-demo-accounts" aria-label="Herkese açık tanıtım demo hesapları">
-            <?php foreach($nv60DemoAccounts as $nv60Account): ?>
-            <?php $nv62LoginLabel=($nv60Account['type']??'')==='admin'
-              ? (str_contains((string)($nv60Account['username']??''),'@')?'Admin E-posta':'Admin Kullanıcı Adı')
-              : (str_contains((string)($nv60Account['username']??''),'@')?'E-posta':'Kullanıcı Adı'); ?>
-            <div class="nv60-demo-account <?= ($nv60Account['type']??'')==='admin'?'is-admin':'' ?>">
-              <h3><?= icon(($nv60Account['type']??'')==='admin'?'settings':'key',15) ?> <?= e($nv60Account['label']) ?></h3>
-              <?php if(!empty($nv60Account['username'])): ?><div class="nv60-demo-credential"><strong><?= e($nv62LoginLabel) ?></strong><code><?= e($nv60Account['username']) ?></code></div><?php endif; ?>
-              <?php if(!empty($nv60Account['password'])): ?><div class="nv60-demo-credential"><strong><?= ($nv60Account['type']??'')==='admin'?'Admin Şifresi':'Demo Şifresi' ?></strong><code><?= e($nv60Account['password']) ?></code></div><?php endif; ?>
+          <div class="nv62-demo-access">
+            <div class="nv62-demo-access-head">
+              <div><span><?= icon('monitor',15) ?></span><div><small>Satın almadan önce</small><strong>Demo Yönetim Paneli</strong></div></div>
+              <span class="nv62-demo-badge">ADMIN</span>
             </div>
+            <?php foreach($nv60DemoAccounts as $nv60Account): ?>
+            <?php if(($nv60Account['type']??'')==='admin'): ?>
+              <?php $nv62LoginLabel=str_contains((string)($nv60Account['username']??''),'@')?'Admin E-posta':'Admin Kullanıcı Adı'; ?>
+              <?php if(!empty($nv60Account['username'])): ?>
+              <div class="nv62-demo-row">
+                <span><?= e($nv62LoginLabel) ?></span>
+                <code data-nv62-value><?= e($nv60Account['username']) ?></code>
+                <button type="button" class="nv62-demo-copy" data-nv62-copy>Kopyala</button>
+              </div>
+              <?php endif; ?>
+              <?php if(!empty($nv60Account['password'])): ?>
+              <div class="nv62-demo-row">
+                <span>Admin Şifresi</span>
+                <code data-nv62-value data-nv62-secret><?= e($nv60Account['password']) ?></code>
+                <button type="button" class="nv62-demo-toggle" data-nv62-toggle>Göster</button>
+                <button type="button" class="nv62-demo-copy" data-nv62-copy>Kopyala</button>
+              </div>
+              <?php endif; ?>
+              <?php if(!empty($nv60Account['url'])): ?>
+              <a class="nv62-demo-login" href="<?= e($nv60Account['url']) ?>" target="_blank" rel="noopener noreferrer">Giriş Yap <?= icon('external-link',13) ?></a>
+              <?php endif; ?>
+            <?php endif; ?>
             <?php endforeach; ?>
           </div>
           <?php endif; ?>
@@ -257,6 +273,33 @@ if ($nv60ShowAccounts) {
   </div></section>
 </main>
 <script>
+document.querySelectorAll('[data-nv62-copy]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var row=btn.closest('.nv62-demo-row');
+    var value=row&&row.querySelector('[data-nv62-value]');
+    if(!value)return;
+    var text=value.textContent||'';
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text);
+    }else{
+      var area=document.createElement('textarea');
+      area.value=text;document.body.appendChild(area);area.select();
+      document.execCommand('copy');area.remove();
+    }
+    btn.textContent='Kopyalandı';
+    setTimeout(function(){btn.textContent='Kopyala';},1200);
+  });
+});
+document.querySelectorAll('[data-nv62-toggle]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var row=btn.closest('.nv62-demo-row');
+    var value=row&&row.querySelector('[data-nv62-secret]');
+    if(!value)return;
+    var hidden=value.classList.toggle('is-hidden');
+    btn.textContent=hidden?'Göster':'Gizle';
+  });
+});
+document.querySelectorAll('[data-nv62-secret]').forEach(function(value){value.classList.add('is-hidden');});
 document.querySelectorAll('[data-copy-coupon]').forEach(function(btn){
   btn.addEventListener('click',async function(){
     var code=btn.getAttribute('data-copy-coupon')||'';
