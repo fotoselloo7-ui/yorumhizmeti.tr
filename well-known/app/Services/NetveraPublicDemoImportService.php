@@ -35,7 +35,7 @@ final class NetveraPublicDemoImportService
             "SELECT 1 AS ok FROM information_schema.tables
              WHERE table_schema=DATABASE() AND table_name='script_products' LIMIT 1"
         );
-        if(!$exists)throw new \RuntimeException('Eski NetVera script_products tablosu bulunamadı.');
+        if(!$exists)throw new \RuntimeException('Bu veritabanında eski script_products tablosu yok. Üstteki SQL dosyası alanından eski NetVera yedeğini seçip tekrar aktarın.');
 
         $rows=$db->fetchAll(
             "SELECT id,slug,demo_url,demo_admin_url,demo_user_url,demo_video_url,
