@@ -20,6 +20,8 @@ if (!extension_loaded('pdo_mysql') || !extension_loaded('openssl')) {
     fwrite(STDERR, "PDO MySQL and OpenSSL are required.\n"); exit(2);
 }
 $base=dirname(__DIR__);
+if(!defined('BASE_PATH')) define('BASE_PATH',$base);
+require_once $base.'/app/Services/ConsolidatedDatabaseSchema.php';
 $envFile=$base.'/.env';
 if (!is_file($envFile)) { fwrite(STDERR,"Missing target staging .env.\n"); exit(2); }
 foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
@@ -95,14 +97,18 @@ try {
         if($cipher===false)throw new RuntimeException('Private entitlement encryption failed');
         return base64_encode($iv.$tag.$cipher);
     };
-    $migration=file_get_contents($base.'/database/migrations/netvera-private-customer-v1.sql');
-    if($migration===false)throw new RuntimeException('Private target migration missing');
-    foreach(explode(';',preg_replace('/^\s*--[^\r\n]*(?:\r?\n|$)/m','',$migration)) as $statement){
-        $statement=trim($statement);if($statement==='')continue;
-        if(!preg_match('/^CREATE TABLE IF NOT EXISTS nv_private_[a-z_]+/i',$statement))
-            throw new RuntimeException('Unsafe migration DDL');
-        $new->exec($statement);
-    }
+    \App\Services\ConsolidatedDatabaseSchema::ensureTables($new,[
+        'nv_private_user_map',
+        'nv_private_orders',
+        'nv_private_order_items',
+        'nv_private_affiliates',
+        'nv_private_affiliate_commissions',
+        'nv_private_admin_map',
+        'nv_private_support_tickets',
+        'nv_private_support_replies',
+        'nv_private_affiliate_clicks',
+        'nv_private_order_referrals',
+    ]);
 
     $one=static function(PDO $db,string $sql,array $params):?array{
         $stmt=$db->prepare($sql);$stmt->execute($params);
