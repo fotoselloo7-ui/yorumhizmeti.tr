@@ -37,8 +37,8 @@ $nv60ShowAccounts=$nv40DemoAllowed && !empty($productData['demo_credentials_publ
 $nv60DemoAccounts=[];
 if ($nv60ShowAccounts) {
     foreach ([
-        ['label'=>'Kullanıcı Demo Hesabı','username'=>$productData['demo_username']??'', 'password'=>$productData['demo_password']??'','url'=>$nv60DemoUserUrl?:$demoUrl],
-        ['label'=>'Yönetim Paneli Demo Hesabı','username'=>$productData['demo_admin_username']??'', 'password'=>$productData['demo_admin_password']??'','url'=>$nv60DemoAdminUrl?:$demoUrl]
+        ['label'=>'Yönetim Paneli Demo Girişi','username'=>$productData['demo_admin_username']??'', 'password'=>$productData['demo_admin_password']??'','url'=>$nv60DemoAdminUrl?:$demoUrl,'type'=>'admin'],
+        ['label'=>'Kullanıcı Demo Girişi','username'=>$productData['demo_username']??'', 'password'=>$productData['demo_password']??'','url'=>$nv60DemoUserUrl?:$demoUrl,'type'=>'user']
     ] as $nv60Account) {
         if (trim((string)$nv60Account['username'])!=='' || trim((string)$nv60Account['password'])!=='') $nv60DemoAccounts[]=$nv60Account;
     }
@@ -169,10 +169,13 @@ if ($nv60ShowAccounts) {
           <div class="nv62-demo-credentials-title"><?= icon('key',15) ?><div><strong>Demo Giriş Bilgileri</strong><small>Bu bilgiler yalnızca ürünün herkese açık tanıtım hesabı içindir.</small></div></div>
           <div class="nv60-demo-accounts" aria-label="Herkese açık tanıtım demo hesapları">
             <?php foreach($nv60DemoAccounts as $nv60Account): ?>
-            <div class="nv60-demo-account">
-              <h3><?= icon('key',15) ?> <?= e($nv60Account['label']) ?></h3>
-              <?php if(!empty($nv60Account['username'])): ?><div class="nv60-demo-credential"><strong>Kullanıcı Adı</strong><code><?= e($nv60Account['username']) ?></code></div><?php endif; ?>
-              <?php if(!empty($nv60Account['password'])): ?><div class="nv60-demo-credential"><strong>Demo Şifresi</strong><code><?= e($nv60Account['password']) ?></code></div><?php endif; ?>
+            <?php $nv62LoginLabel=($nv60Account['type']??'')==='admin'
+              ? (str_contains((string)($nv60Account['username']??''),'@')?'Admin E-posta':'Admin Kullanıcı Adı')
+              : (str_contains((string)($nv60Account['username']??''),'@')?'E-posta':'Kullanıcı Adı'); ?>
+            <div class="nv60-demo-account <?= ($nv60Account['type']??'')==='admin'?'is-admin':'' ?>">
+              <h3><?= icon(($nv60Account['type']??'')==='admin'?'settings':'key',15) ?> <?= e($nv60Account['label']) ?></h3>
+              <?php if(!empty($nv60Account['username'])): ?><div class="nv60-demo-credential"><strong><?= e($nv62LoginLabel) ?></strong><code><?= e($nv60Account['username']) ?></code></div><?php endif; ?>
+              <?php if(!empty($nv60Account['password'])): ?><div class="nv60-demo-credential"><strong><?= ($nv60Account['type']??'')==='admin'?'Admin Şifresi':'Demo Şifresi' ?></strong><code><?= e($nv60Account['password']) ?></code></div><?php endif; ?>
             </div>
             <?php endforeach; ?>
           </div>
