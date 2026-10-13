@@ -54,6 +54,50 @@ final class NetveraScriptController extends Controller
         ]);
     }
 
+    public function importDemoAccess():void
+    {
+        Csrf::check();
+        if(!NetveraBridgeService::ready()){
+            flash('error','Yazılım kataloğu veritabanı hazır değil.');
+            redirect('/admin/netvera-yazilimlar');return;
+        }
+
+        try{
+            $result=null;
+            if(!empty($_FILES['source_sql']['name'])){
+                $file=$_FILES['source_sql'];
+                if(($file['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_OK){
+                    throw new \RuntimeException('SQL dosyası yüklenemedi.');
+                }
+                $name=(string)($file['name']??'');
+                if(strtolower(pathinfo($name,PATHINFO_EXTENSION))!=='sql'){
+                    throw new \RuntimeException('Yalnızca .sql dosyası kullanılabilir.');
+                }
+                if((int)($file['size']??0)<=0 || (int)$file['size']>50*1024*1024){
+                    throw new \RuntimeException('SQL dosyası boş veya 50 MB sınırını aşıyor.');
+                }
+                $result=\App\Services\NetveraPublicDemoImportService::importSql((string)$file['tmp_name']);
+            }else{
+                $result=\App\Services\NetveraPublicDemoImportService::importLegacyTable();
+            }
+
+            logActivity(
+                'netvera_public_demo_import',
+                'Eski NetVera herkese açık demo bilgileri aktarıldı. Eşleşen: '.(int)($result['matched']??0)
+            );
+            flash(
+                'success',
+                'Demo girişleri aktarıldı. Eşleşen ürün: '.(int)($result['matched']??0).
+                ', atlanan: '.(int)($result['skipped']??0).'.'
+            );
+        }catch(\Throwable $e){
+            error_log('NetVera public demo import: '.$e->getMessage());
+            flash('error','Demo bilgileri aktarılamadı: '.$e->getMessage());
+        }
+
+        redirect('/admin/netvera-yazilimlar');
+    }
+
     public function save():void
     {
         Csrf::check();
