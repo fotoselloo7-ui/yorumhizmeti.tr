@@ -12,7 +12,10 @@ $nv40ListTitle=static function($entry):string {
 $nv40InquiryReady=\App\Services\NetveraInquiryService::ready();
 $nv40OfferHref=$nv40InquiryReady?'#teklif-al':'/iletisim';
 $nv60BuyUrl=\App\Services\NetveraBridgeService::publicUrl($productData['buy_url']??null);
-$nv60CanBuy=$nv40Price>0 && $nv60BuyUrl;
+$nv60PurchaseEnabled=array_key_exists('purchase_enabled',$productData)
+    ? !empty($productData['purchase_enabled'])
+    : (bool)$nv60BuyUrl;
+$nv60CanBuy=$nv40Price>0 && $nv60PurchaseEnabled && $nv60BuyUrl;
 $nv60DemoNote=trim((string)($productData['demo_note']??''));
 $nv60PublicDemo=[];
 if ($nv40DemoAllowed) {
