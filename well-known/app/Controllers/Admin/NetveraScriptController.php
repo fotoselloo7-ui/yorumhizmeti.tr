@@ -91,7 +91,7 @@ final class NetveraScriptController extends Controller
             $value=trim((string)($_POST[$key]??($newData[$key]??'')));
             $newData[$key]=mb_substr($value,0,in_array($key,['install_info','tags','secondary_keywords','demo_note'],true)?2000:500);
         }
-        foreach(['demo_url','demo_admin_url','demo_user_url','demo_video_url'] as $urlField){
+        foreach(['demo_url','demo_admin_url','demo_user_url','demo_video_url','buy_url'] as $urlField){
             $value=trim((string)($newData[$urlField]??''));
             if($value!=='' && !\App\Services\NetveraBridgeService::publicUrl($value)){
                 flash('error',$urlField.' alanında geçerli HTTPS veya HTTP bağlantısı kullanın.');
@@ -136,6 +136,7 @@ final class NetveraScriptController extends Controller
         // Publishing demo credentials is an explicit decision, restricted to
         // accounts made only for public software demonstrations.
         $newData['demo_credentials_public']=isset($_POST['demo_credentials_public'])?1:0;
+        $newData['purchase_enabled']=isset($_POST['purchase_enabled'])?1:0;
         $newData['is_featured']=isset($_POST['is_featured'])?1:0;
         $newData['is_popular']=isset($_POST['is_popular'])?1:0;
         $newData['is_new']=isset($_POST['is_new'])?1:0;
