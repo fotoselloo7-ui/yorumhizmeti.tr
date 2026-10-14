@@ -278,7 +278,9 @@
 }
 
 
-/* V63 demo login card */
+.nv62-copy-buffer{position:fixed;inset:0 auto auto -10000px;width:1px;height:1px;opacity:0}
+
+/* Public demo login card */
 .nv40-detail .nv62-demo-access{
   max-width:520px;
   margin-top:20px;
@@ -337,7 +339,7 @@
 }
 .nv40-detail .nv62-demo-row{
   display:grid;
-  grid-template-columns:118px minmax(0,1fr) auto auto;
+  grid-template-columns:minmax(0,1fr) auto auto;
   align-items:center;
   gap:8px;
   margin-top:9px;
@@ -347,8 +349,9 @@
   background:#fff;
 }
 .nv40-detail .nv62-demo-row>span{
+  grid-column:1/-1;
   color:#7d879d;
-  font-size:8.5px;
+  font-size:11px;
   font-weight:800;
   text-transform:uppercase;
   letter-spacing:.04em;
@@ -361,7 +364,7 @@
   background:#fbfcff;
   color:#1f3159;
   font-family:Poppins,sans-serif;
-  font-size:10px;
+  font-size:12px;
   font-weight:700;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -369,8 +372,7 @@
   user-select:all;
 }
 .nv40-detail .nv62-demo-row code.is-hidden{
-  color:transparent;
-  text-shadow:0 0 8px #22345e;
+  -webkit-text-security:disc;
   user-select:none;
 }
 .nv40-detail .nv62-demo-copy,
@@ -385,7 +387,7 @@
   background:#fff;
   color:#5267db;
   font-family:Poppins,sans-serif;
-  font-size:9px;
+  font-size:11px;
   font-weight:800;
   cursor:pointer;
 }

@@ -28,7 +28,7 @@ body{font-family:Poppins,system-ui,sans-serif!important;background:#fff;color:va
 .nv-topbar-inner{height:28px!important;min-height:28px!important}
 .nv-topbar-main,.nv-topbar-meta{font-size:7px!important;color:#68738a}
 .nv-topbar-meta{gap:18px!important}.nv-topbar-meta span{gap:5px}
-.site-header{height:60px!important;position:sticky;top:0;z-index:90;background:rgba(255,255,255,.97)!important;border-bottom:1px solid #edf0f5!important;box-shadow:0 5px 18px rgba(30,42,86,.035)!important;backdrop-filter:blur(14px)}
+.site-header{height:60px!important;position:sticky;top:0;z-index:var(--z-sticky);background:rgba(255,255,255,.97)!important;border-bottom:1px solid #edf0f5!important;box-shadow:0 5px 18px rgba(30,42,86,.035)!important;backdrop-filter:blur(14px)}
 .header-inner{height:60px!important}
 .site-logo{font-size:14px!important;font-weight:800!important;letter-spacing:-.03em;color:#111936!important}
 .site-logo .logo-icon{width:31px!important;height:31px!important}

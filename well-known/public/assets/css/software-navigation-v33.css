@@ -7,11 +7,6 @@
 .nv35-software-card .nv27-subcategory-symbol{background:#efe9ff;color:#6d4ae2}
 .nv35-software-card .nv27-service-parent-copy small{min-height:28px}
 .nv35-software-card .nv27-category-footer{color:#6d4ae2}
-@media(min-width:1081px){
-  /* The previous full-width banner pushed the second row outside the viewport.
-     Two uniform rows now fit the natural height of the dropdown. */
-  .nv27-pro-panel--agency{max-height:min(820px, calc(100dvh - 88px))}
-}
 @media(max-width:600px){
   .nv35-software-card .nv27-service-parent-copy small{min-height:0}
 }

@@ -2,6 +2,44 @@
 (() => {
   "use strict";
   const init = () => {
+    const copyText = async text => {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* Insecure contexts can still use the selection fallback. */ }
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.className = 'nv62-copy-buffer';
+      document.body.appendChild(area);
+      area.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { copied = false; } finally { area.remove(); }
+      return copied;
+    };
+    document.querySelectorAll('[data-nv62-copy],[data-copy-coupon]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const value = button.hasAttribute('data-copy-coupon')
+          ? button.dataset.copyCoupon
+          : button.closest('.nv62-demo-row')?.querySelector('[data-nv62-value]')?.textContent;
+        if (!value) return;
+        const label = button.textContent;
+        button.textContent = await copyText(value) ? 'Kopyalandı' : 'Tekrar dene';
+        setTimeout(() => { button.textContent = label; }, 1500);
+      });
+    });
+    document.querySelectorAll('[data-nv62-toggle]').forEach(button => {
+      button.addEventListener('click', () => {
+        const value = button.closest('.nv62-demo-row')?.querySelector('[data-nv62-secret]');
+        if (!value) return;
+        const hidden = value.classList.toggle('is-hidden');
+        button.textContent = hidden ? 'Göster' : 'Gizle';
+        button.setAttribute('aria-pressed', String(!hidden));
+        button.setAttribute('aria-label', hidden ? 'Demo şifresini göster' : 'Demo şifresini gizle');
+      });
+    });
     document.querySelectorAll(".nv40-detail [data-nv60-tabs]").forEach(nav => {
       const root = nav.closest(".nv40-product-body");
       if (!root) return;
@@ -9,6 +47,24 @@
       const panels = tabs.map(t => root.querySelector('[role="tabpanel"][data-nv60-panel="' + t.dataset.nv60Tab + '"]'));
       if (!tabs.length || panels.some(p => !p)) return;
       const ids = new Set(tabs.map(t => t.dataset.nv60Tab));
+      const article=root.querySelector("[data-nv60-article]");
+      const toggle=root.querySelector("[data-nv60-description-toggle]");
+      const refreshDescription = () => {
+        // A hidden tab has no measurable height; defer until it is activated.
+        if (!article || !toggle || article.closest('[hidden]')) return;
+        const overflowing = article.scrollHeight > 575;
+        toggle.hidden = !overflowing;
+        article.classList.toggle("nv60-article-collapsed", overflowing && toggle.getAttribute("aria-expanded") !== "true");
+      };
+      if (article && toggle) {
+        toggle.addEventListener("click",()=>{
+          const expanded=toggle.getAttribute("aria-expanded")==="true";
+          toggle.setAttribute("aria-expanded", expanded?"false":"true");
+          article.classList.toggle("nv60-article-collapsed",expanded);
+          toggle.textContent=expanded ? "Açıklamanın tamamını göster ↓" : "Açıklamayı daralt ↑";
+        });
+        window.addEventListener("resize", refreshDescription);
+      }
       const activate = (id, options={}) => {
         const selected = ids.has(id) ? id : tabs[0].dataset.nv60Tab;
         tabs.forEach(t => {
@@ -19,6 +75,7 @@
         panels.forEach(p => {
           p.hidden = p.dataset.nv60Panel !== selected;
         });
+        refreshDescription();
         if (options.focus) tabs.find(t => t.dataset.nv60Tab === selected)?.focus({preventScroll:true});
         if (options.updateUrl) {
           // replaceState changes the shareable section without triggering anchor scrolling.
@@ -54,22 +111,6 @@
         const id=decodeURIComponent(location.hash.slice(1));
         if(ids.has(id)) activate(id);
       });
-      const article=root.querySelector("[data-nv60-article]");
-      const toggle=root.querySelector("[data-nv60-description-toggle]");
-      if (article && toggle) {
-        const inner=article.scrollHeight;
-        if (inner <= 575) {
-          article.classList.remove("nv60-article-collapsed");
-          toggle.hidden=true;
-        } else {
-          toggle.addEventListener("click",()=>{
-            const expanded=toggle.getAttribute("aria-expanded")==="true";
-            toggle.setAttribute("aria-expanded", expanded?"false":"true");
-            article.classList.toggle("nv60-article-collapsed",expanded);
-            toggle.textContent=expanded ? "Açıklamanın tamamını göster ↓" : "Açıklamayı daralt ↑";
-          });
-        }
-      }
     });
   };
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", init, {once:true});

@@ -1,3 +1,4 @@
+
 /* YorumHizmeti v55 | premium micro-interactions on public storefront only.
    Design principle: existing brand hues, subtle elevation, intentional icon motion.
    Nothing changes until hover/focus. Does not alter site routes or active selection. */
@@ -90,37 +91,14 @@
 }
 .yh-home-v6 .yh49-category-icon :is(.icon,svg,i){transition:transform .5s var(--yh55-ease)}
 .yh-home-v6 .yh49-category-link:hover .yh49-category-icon :is(.icon,svg,i){transform:rotate(32deg)}
-/* Promo cards and calls-to-action: preserve the CTA grid baseline. */
-.nv29-service-card{transition:transform .3s var(--yh55-ease),box-shadow .3s ease,border-color .3s ease!important}
-.nv29-service-card:hover{
- transform:translateY(-4px)!important;
- box-shadow:0 22px 41px rgba(30,37,88,.19)!important;
- border-color:rgba(255,255,255,.36)!important;
-}
-.nv29-service-card .nv29-eyebrow{transition:background .25s ease,box-shadow .25s ease}
-.nv29-service-card:hover .nv29-eyebrow{background:rgba(255,255,255,.23);box-shadow:0 7px 18px rgba(17,22,62,.12)}
-.nv29-service-card .nv29-eyebrow .icon{transition:transform .5s var(--yh55-ease)}
-.nv29-service-card:hover .nv29-eyebrow .icon{transform:rotate(-28deg) scale(1.12)}
-.nv29-service-card .nv29-card-cta{
- transition:color .26s ease,background .26s ease,border-color .26s ease,
- box-shadow .26s ease,transform .26s ease!important;
-}
-.nv29-service-card .nv29-card-cta:hover{
- color:#fff!important;background:#613fe1!important;border-color:rgba(255,255,255,.75)!important;
- box-shadow:0 11px 23px rgba(22,31,88,.2)!important;
-}
-.nv29-service-card.nv29-social .nv29-card-cta:hover{background:#e32c99!important}
-.nv29-service-card.nv29-marketing .nv29-card-cta:hover{background:#0c8190!important}
-.nv29-card-cta .icon{transition:transform .24s ease}
-.nv29-card-cta:hover .icon{transform:translateX(4px)}
 /* Secondary chips and cards across catalog, news, projects and steps. */
-:is(.nv29-service-chip,.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
+:is(.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
  .nv27-subcategory-link,.yv-category-card,.nv31-software-card,.nv51-reference-card,
  .nv30-step,.yh6-blog-card,.yh6-review-grid>article,.yh6-how-grid>div){
  transition:transform .27s var(--yh55-ease),box-shadow .27s ease,
  border-color .27s ease,background-color .27s ease,color .27s ease!important;
 }
-:is(.nv29-service-chip,.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
+:is(.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
  .nv27-subcategory-link):hover{
  transform:translateY(-2px)!important;
  box-shadow:0 8px 17px rgba(77,69,156,.11);
@@ -139,27 +117,19 @@
 .nv51-main-filter[aria-pressed="true"]:hover{
  filter:brightness(1.07);box-shadow:0 11px 22px rgba(77,61,188,.23);
 }
-:is(.nv51-main-filter,.nv51-format-filters button,.nv29-service-chip,.nv30-step-icon,
+:is(.nv51-main-filter,.nv51-format-filters button,.nv30-step-icon,
  .yh6-package-icon,.yh49-stat-icon,.nv31-software-image-arrow,
  .nv27-service-parent-arrow,.nv27-subcategory-symbol) :is(.icon,svg,i){
  transition:transform .45s var(--yh55-ease),color .27s ease;
 }
 .nv51-main-filter:hover :is(.icon,svg,i),
 .nv51-format-filters button:hover :is(.icon,svg,i),
-.nv29-service-chip:hover :is(.icon,svg,i),
 .nv30-step:hover .nv30-step-icon :is(.icon,svg,i),
 .yh6-package-card:hover .yh6-package-icon :is(.icon,svg,i),
 .nv31-software-card:hover .nv31-software-image-arrow :is(.icon,svg,i),
 .nv27-service-card:hover .nv27-subcategory-symbol :is(.icon,svg,i){
  transform:rotate(-22deg) scale(1.13);
 }
-/* Distinct inverse tone for each expertise chip, without changing brand content */
-.nv29-service-chip:hover{
- background:rgba(255,255,255,.97)!important;color:#6040bd!important;
- border-color:rgba(255,255,255,.83)!important;
-}
-.nv29-service-card.nv29-marketing .nv29-service-chip:hover{color:#087c86!important}
-.nv29-service-card.nv29-social .nv29-service-chip:hover{color:#bf278f!important}
 .nv30-step:hover .nv30-step-icon{transform:rotate(-11deg) scale(1.06);background:#6b4ce0;color:#fff}
 .yh-home-v6 .yh6-stats .yh49-stat:hover .yh49-stat-icon{
  background:rgba(255,255,255,.29)!important;transform:rotate(-12deg) scale(1.06)
@@ -170,55 +140,51 @@
 }
 .yh6-faq-item [data-faq-trigger]:hover .yh6-faq-toggle-icon{transform:rotate(90deg);color:#6744dc}
 .yh6-faq-item.open [data-faq-trigger] .yh6-faq-toggle-icon{transform:rotate(45deg)}
-:is(.yh6-btn,.nv31-heading-link,.nv29-view-all,.nv32-primary-cta):hover .icon{
+:is(.yh6-btn,.nv31-heading-link,.nv32-primary-cta):hover .icon{
  transform:translateX(3px);
 }
-:is(.yh6-btn,.nv31-heading-link,.nv29-view-all,.nv32-primary-cta) .icon{
+:is(.yh6-btn,.nv31-heading-link,.nv32-primary-cta) .icon{
  transition:transform .22s ease;
 }
 }
 /* Keyboard: stay visible, including for elements that become colorful on hover. */
 #featured :is(.nv43-category-card,.nv43-subcategory-link,.nv43-rail-arrow):focus-visible,
-:is(.nv51-main-filter,.nv51-sub-filter,.nv29-service-chip,.nv29-card-cta):focus-visible{
+:is(.nv51-main-filter,.nv51-sub-filter):focus-visible{
  outline:3px solid #b491ff;outline-offset:3px;
 }
 /* Touch devices have no stable hover state: preserve scrolling and tappable areas. */
 @media (hover:none),(pointer:coarse){
- #featured .nv43-category-card.yh18-featured-tab:active{filter:brightness(1.025)}
+#featured .nv43-category-card.yh18-featured-tab:active{filter:brightness(1.025)}
 }
 /* Respect reduced-motion system preferences throughout every new interaction. */
 @media (prefers-reduced-motion:reduce){
- #featured .nv43-category-card.yh18-featured-tab,
+#featured .nv43-category-card.yh18-featured-tab,
  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon,
  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon :is(.icon,svg,i),
  #featured .yh24-featured-group,#featured .yh24-featured-group>.icon:first-child,
  #featured .nv43-subcategory-link,#featured .nv43-subcategory-link :is(.icon,svg):first-child,
  .yh-home-v6 .yh49-category-link,.yh-home-v6 .yh49-category-icon,
  .yh-home-v6 .yh49-category-icon :is(.icon,svg,i),
- .nv29-service-card,.nv29-card-cta,.nv29-card-cta .icon,
- .nv29-service-card .nv29-eyebrow .icon,
- :is(.nv29-service-chip,.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
+ :is(.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
  .nv27-subcategory-link,.yv-category-card,.nv31-software-card,.nv51-reference-card,
  .nv30-step,.yh6-blog-card,.yh6-review-grid>article,.yh6-how-grid>div){
  transition:none!important;animation:none!important;
  }
- #featured .nv43-category-card.yh18-featured-tab:hover,
+#featured .nv43-category-card.yh18-featured-tab:hover,
  #featured .nv43-subcategory-link:hover,
- .yh-home-v6 .yh49-category-link:hover,
- .nv29-service-card:hover{transform:none!important}
- #featured .nv43-category-card.yh18-featured-tab:hover .yh26-filter-icon,
+ .yh-home-v6 .yh49-category-link:hover{transform:none!important}
+#featured .nv43-category-card.yh18-featured-tab:hover .yh26-filter-icon,
  .yh-home-v6 .yh49-category-link:hover .yh49-category-icon,
  .nv30-step:hover .nv30-step-icon{transform:none!important}
 }
 
 /* Reduced motion: no instant icon spin or elevation on hover either. */
 @media (prefers-reduced-motion:reduce){
- #featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i),
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i),
  #featured .nv43-subcategory-link:is(:hover,:focus-visible) :is(.icon,svg):first-child,
  #featured .yh24-featured-group:hover>.icon:first-child,
  .yh-home-v6 .yh49-category-link:hover .yh49-category-icon :is(.icon,svg,i),
  .nv51-main-filter:hover :is(.icon,svg,i),
- .nv29-service-card:hover .nv29-eyebrow .icon,
  .nv30-step:hover .nv30-step-icon :is(.icon,svg,i),
  .yh6-faq-item [data-faq-trigger]:hover .yh6-faq-toggle-icon,
  :is(.nv27-service-card,.yv-category-card,.nv31-software-card,.nv51-reference-card,.nv30-step,.yh6-blog-card):hover{

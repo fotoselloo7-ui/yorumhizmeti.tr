@@ -1,5 +1,5 @@
 /* Isolated Netvera live chat and product quote UI, no global layout changes. */
-.nv-chat{position:fixed;right:24px;bottom:23px;z-index:1200;font-family:Poppins,system-ui,sans-serif}
+.nv-chat{position:fixed;right:24px;bottom:23px;z-index:var(--z-floating);font-family:Poppins,system-ui,sans-serif}
 .nv-chat *{box-sizing:border-box}
 .nv-chat-toggle{display:flex;gap:9px;align-items:center;justify-content:center;min-height:49px;padding:12px 18px;border:0;border-radius:999px;background:linear-gradient(120deg,#6147de,#3471f3);color:white;box-shadow:0 10px 25px rgba(50,58,142,.27);font-weight:750;font-size:12px;cursor:pointer}
 .nv-chat-panel{width:min(370px,calc(100vw - 32px));max-height:min(590px,calc(100dvh - 120px));display:flex;flex-direction:column;overflow:hidden;border:1px solid #e5e6f3;border-radius:19px;background:#fff;box-shadow:0 22px 65px rgba(29,38,87,.19);margin-bottom:10px}

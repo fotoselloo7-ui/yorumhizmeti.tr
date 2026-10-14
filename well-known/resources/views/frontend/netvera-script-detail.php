@@ -2,8 +2,8 @@
 $nv40Price=(float)$product['price'];
 $nv40Old=(float)($product['old_price']??0);
 $nv40Url='/hazir-scriptler/'.rawurlencode($product['slug']);
-$nv40DemoAllowed=$demoUrl && !empty($productData['demo_is_active']) &&
-    !empty($productData['demo_is_public']);
+$nv40DemoAllowed=$demoUrl && (int)($productData['demo_is_active']??0)===1 &&
+    (int)($productData['demo_is_public']??0)===1;
 $nv40ListTitle=static function($entry):string {
     return is_array($entry)
         ? trim((string)($entry['title']??$entry['name']??$entry['label']??$entry['text']??''))
@@ -33,13 +33,7 @@ if ($nv40DemoAllowed) {
 }
 $nv60DemoAdminUrl=\App\Services\NetveraBridgeService::publicUrl($productData['demo_admin_url']??$nv60PublicDemo['demo_admin_url']??null);
 $nv60DemoUserUrl=\App\Services\NetveraBridgeService::publicUrl($productData['demo_user_url']??$nv60PublicDemo['demo_user_url']??null);
-$nv60ShowAccounts=$nv40DemoAllowed && (
-    !empty($productData['demo_credentials_public']) ||
-    trim((string)($productData['demo_admin_username']??''))!=='' ||
-    trim((string)($productData['demo_admin_password']??''))!=='' ||
-    trim((string)($productData['demo_username']??''))!=='' ||
-    trim((string)($productData['demo_password']??''))!==''
-);
+$nv60ShowAccounts=$nv40DemoAllowed && (int)($productData['demo_credentials_public']??0)===1;
 $nv60DemoAccounts=[];
 if ($nv60ShowAccounts) {
     foreach ([
@@ -190,8 +184,8 @@ if ($nv60ShowAccounts) {
               <?php if(!empty($nv60Account['password'])): ?>
               <div class="nv62-demo-row">
                 <span>Admin Şifresi</span>
-                <code data-nv62-value data-nv62-secret><?= e($nv60Account['password']) ?></code>
-                <button type="button" class="nv62-demo-toggle" data-nv62-toggle>Göster</button>
+                <code class="is-hidden" data-nv62-value data-nv62-secret><?= e($nv60Account['password']) ?></code>
+                <button type="button" class="nv62-demo-toggle" data-nv62-toggle aria-pressed="false" aria-label="Demo şifresini göster">Göster</button>
                 <button type="button" class="nv62-demo-copy" data-nv62-copy>Kopyala</button>
               </div>
               <?php endif; ?>
@@ -278,43 +272,3 @@ if ($nv60ShowAccounts) {
     </div>
   </div></section>
 </main>
-<script>
-document.querySelectorAll('[data-nv62-copy]').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    var row=btn.closest('.nv62-demo-row');
-    var value=row&&row.querySelector('[data-nv62-value]');
-    if(!value)return;
-    var text=value.textContent||'';
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text);
-    }else{
-      var area=document.createElement('textarea');
-      area.value=text;document.body.appendChild(area);area.select();
-      document.execCommand('copy');area.remove();
-    }
-    btn.textContent='Kopyalandı';
-    setTimeout(function(){btn.textContent='Kopyala';},1200);
-  });
-});
-document.querySelectorAll('[data-nv62-toggle]').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    var row=btn.closest('.nv62-demo-row');
-    var value=row&&row.querySelector('[data-nv62-secret]');
-    if(!value)return;
-    var hidden=value.classList.toggle('is-hidden');
-    btn.textContent=hidden?'Göster':'Gizle';
-  });
-});
-document.querySelectorAll('[data-nv62-secret]').forEach(function(value){value.classList.add('is-hidden');});
-document.querySelectorAll('[data-copy-coupon]').forEach(function(btn){
-  btn.addEventListener('click',async function(){
-    var code=btn.getAttribute('data-copy-coupon')||'';
-    if(!code)return;
-    try{await navigator.clipboard.writeText(code);}catch(e){
-      var t=document.createElement('textarea');t.value=code;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
-    }
-    var old=btn.textContent;btn.textContent='Kopyalandı';btn.classList.add('is-copied');
-    setTimeout(function(){btn.textContent=old;btn.classList.remove('is-copied');},1500);
-  });
-});
-</script>

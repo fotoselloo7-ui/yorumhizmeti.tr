@@ -39,17 +39,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
@@ -61,30 +61,49 @@
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
-    <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=26.2">
+    <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
-    <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=27.1">
+    <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=28.1">
-    <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=100.1">
+    <?php if($template==='frontend/home'): ?>
+    <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=20261013">
+    <?php endif; ?>
+    <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/premium-trust-steps-v30.css') ?>?v=30.1">
+    <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/software-showcase-v31.css') ?>?v=32.1">
-    <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=35.1">
+    <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
-    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=40.1">
-    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=63.1">
-    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=1">
+    <?php if(in_array($template,['frontend/netvera-scripts','frontend/netvera-script-detail'],true)): ?>
+    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=20261013">
+    <?php endif; ?>
+    <?php if($template==='frontend/netvera-script-detail'): ?>
+    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=20261013">
+    <?php endif; ?>
+    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
+    <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
+    <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
-    <link rel="stylesheet" href="<?= asset('css/home-service-alignment-v45.css') ?>?v=45.1">
+    <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
-    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=50.1">
+    <?php endif; ?>
+    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261013">
+    <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-portfolio-v51.css') ?>?v=51.3">
+    <?php endif; ?>
+    <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
-    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=55.1">
+    <?php endif; ?>
+    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
+    <?php if(str_starts_with($template,'frontend/account/')): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-account-history-v57.css') ?>?v=57.1">
+    <?php endif; ?>
+    <?php if(str_starts_with($template,'frontend/account/')): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-dealer-v62.css') ?>?v=62.1">
+    <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/package-benefits-v67.css') ?>?v=67.1">
     <link rel="stylesheet" href="<?= asset('css/reviews-v68.css') ?>?v=68.1">
 
@@ -101,11 +120,12 @@
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
+    <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=107.1">
+    <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
-    <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=97.2">
+    <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.2">
-    <link rel="stylesheet" href="<?= asset('css/home-expertise-v106.css') ?>?v=107.3">
     <?php
       $nvThemeEnabled=setting('theme_preset_enabled','0')==='1';
       $nvPalette=[
@@ -473,7 +493,9 @@
     </nav>
 
     <script src="<?= asset('js/software-marketplace-v36.js') ?>?v=36.1" defer></script>
-    <script src="<?= asset('js/netvera-product-tabs-v60.js') ?>?v=61.1" defer></script>
+    <?php if($template==='frontend/netvera-script-detail'): ?>
+    <script src="<?= asset('js/netvera-product-tabs-v60.js') ?>?v=20261013" defer></script>
+    <?php endif; ?>
     <script src="<?= asset('js/category-marquee-drag-v56.js') ?>?v=56.2" defer></script>
 
     <!-- Flash Messages -->
@@ -699,13 +721,19 @@
     <?php require BASE_PATH.'/resources/views/frontend/partials/marketing-popup.php'; ?>
 
     <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
-    <script src="<?= asset('js/app.js') ?>"></script>
+    <script src="<?= asset('js/app.js') ?>?v=20261013"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
+    <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=81.1"></script>
+    <?php endif; ?>
+    <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-hero-slider-v94.js') ?>?v=94.1" defer></script>
+    <?php endif; ?>
     <script src="<?= asset('js/marketing-popup-v97.js') ?>?v=97.2" defer></script>
     <script src="<?= asset('js/package-benefits-v67.js') ?>?v=67.1"></script>
+    <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/reviews-v68.js') ?>?v=68.1" defer></script>
+    <?php endif; ?>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
     <style>.nv68-chat-person{display:flex;align-items:center;gap:10px}.nv68-chat-person>img,.nv68-chat-avatar{width:39px;height:39px;flex-shrink:0;border-radius:12px;object-fit:cover;background:rgba(255,255,255,.18);display:grid;place-items:center}.nv68-chat-person strong,.nv68-chat-person small{display:block}.nv68-chat-person small{opacity:.8;font-size:10px}</style>
     <?= setting('footer_script') ?>

@@ -6,42 +6,8 @@
    ============================================================ */
 
 :root{
-  --page-gutter:20px;
-  --content-max:1440px;
+  --content-max:var(--page-max-width);
   --content-width:min(var(--content-max), calc(100% - (var(--page-gutter) * 2)));
-}
-
-/* ---- global centered frame: minimum 20px gutter, max 1440px ---- */
-.container,
-.yh-home-v6 .container,
-.site-header .container,
-.nv-topbar .container,
-.site-footer .container,
-.panel-section>.container,
-.yv-page-hero>.container,
-.yv-simple-hero>.container{
-  width:var(--content-width)!important;
-  max-width:var(--content-max)!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-
-.container .container{
-  width:100%!important;
-  max-width:100%!important;
-  margin-left:0!important;
-  margin-right:0!important;
-}
-
-/* stop wide sections from visually stretching */
-.yh-home-v6 section> .container,
-.yv-category-v5 section> .container,
-.yv-product-v5 section> .container,
-.yv-checkout-v5 section> .container,
-.yv-blog-v8 section> .container{
-  width:var(--content-width)!important;
-  max-width:var(--content-max)!important;
-  margin-inline:auto!important;
 }
 
 /* ---------- header / topbar ---------- */
@@ -194,29 +160,6 @@
 
 /* smaller desktop / laptop: this is where the exact 20px gutter appears */
 @media(max-width:1480px){
-  .container,
-  .yh-home-v6 .container,
-  .site-header .container,
-  .nv-topbar .container,
-  .site-footer .container,
-  .panel-section>.container,
-  .yv-page-hero>.container,
-  .yv-simple-hero>.container{
-    width:calc(100% - 40px)!important;
-    max-width:none!important;
-    margin-inline:20px!important;
-  }
-
-  .yh-home-v6 section> .container,
-  .yv-category-v5 section> .container,
-  .yv-product-v5 section> .container,
-  .yv-checkout-v5 section> .container,
-  .yv-blog-v8 section> .container{
-    width:calc(100% - 40px)!important;
-    max-width:none!important;
-    margin-inline:20px!important;
-  }
-
   .yh6-hero-copy h1{font-size:clamp(48px,4vw,64px)!important}
 }
 
@@ -286,25 +229,6 @@
 
 /* mobile */
 @media(max-width:768px){
-  :root{--page-gutter:20px}
-
-  .container,
-  .yh-home-v6 .container,
-  .site-header .container,
-  .site-footer .container,
-  .panel-section>.container,
-  .yv-page-hero>.container,
-  .yv-simple-hero>.container,
-  .yh-home-v6 section> .container,
-  .yv-category-v5 section> .container,
-  .yv-product-v5 section> .container,
-  .yv-checkout-v5 section> .container,
-  .yv-blog-v8 section> .container{
-    width:calc(100% - 40px)!important;
-    max-width:none!important;
-    margin-inline:20px!important;
-  }
-
   .yh6-hero-copy h1{font-size:clamp(38px,11vw,54px)!important}
   .yh6-featured-grid,.yh6-promo-grid,.yh6-review-grid,.yh6-blog-grid{
     grid-template-columns:1fr!important;

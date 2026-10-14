@@ -7,7 +7,7 @@
 
 :root{
   --page-gutter:20px;
-  --page-width:calc(100% - (var(--page-gutter) * 2));
+  --page-width:min(var(--page-max-width),calc(100% - (var(--page-gutter) * 2)));
   --header-h:60px;
 }
 
@@ -19,7 +19,7 @@ main,section,article,aside,header,footer,nav,div{min-width:0}
 input,select,textarea,button{max-width:100%}
 table{max-width:100%}
 
-/* Exact 20px outer gutter on EVERY screen size */
+/* Shared bounded container; legacy layouts still require this boundary. */
 .container,
 .yh-home-v6 .container,
 .site-header .container,
@@ -29,9 +29,9 @@ table{max-width:100%}
 .yv-page-hero>.container,
 .yv-simple-hero>.container{
   width:var(--page-width)!important;
-  max-width:none!important;
-  margin-left:var(--page-gutter)!important;
-  margin-right:var(--page-gutter)!important;
+  max-width:var(--page-max-width)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
 }
 
 /* Any nested container should not add a second 20px gutter */
@@ -199,8 +199,9 @@ table{max-width:100%}
 .yv-checkout-left-v5,.yv-checkout-right-v5,
 .yv-checkout-card-v5,.yv-checkout-summary-v5{min-width:0!important}
 .yv-cart-row-v5{
-  grid-template-columns:minmax(0,1fr) auto auto auto!important;
+  grid-template-columns:50px minmax(0,1fr) auto auto 36px!important;
 }
+.yv-cart-row-v5 button{display:inline-grid;place-items:center;width:36px;min-width:36px;min-height:36px;padding:0}
 .yv-checkout-product-v5{
   grid-template-columns:46px minmax(0,1fr) auto auto 28px!important;
 }
@@ -459,20 +460,22 @@ table{max-width:100%}
   .yv-product-why-stats-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 
   .yv-cart-row-v5{
-    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-columns:42px minmax(0,1fr) 36px!important;
     gap:8px!important;
   }
   .yv-cart-row-v5>*{min-width:0!important}
+  .yv-cart-row-v5>span{grid-column:1;grid-row:1;width:42px;height:42px}
+  .yv-cart-row-v5>.copy{grid-column:2/-1;grid-row:1}
+  .yv-cart-row-v5>.qty{grid-column:1;grid-row:2}
+  .yv-cart-row-v5>strong{grid-column:2;grid-row:2;text-align:left;white-space:nowrap}
+  .yv-cart-row-v5>form{grid-column:3;grid-row:2}
   .yv-checkout-product-v5{
     grid-template-columns:42px minmax(0,1fr) auto!important;
     gap:8px!important;
   }
-  .yv-checkout-qty-v9,
-  .yv-checkout-line-total-v9,
-  .yv-checkout-remove-v9{
-    grid-column:auto!important;
-    grid-row:auto!important;
-  }
+  .yv-checkout-qty-v9{grid-column:3!important;grid-row:1/3!important}
+  .yv-checkout-line-total-v9{grid-column:2!important;grid-row:2!important;white-space:nowrap}
+  .yv-checkout-remove-v9{grid-column:3!important;grid-row:3!important;justify-self:end}
   .yv-checkout-payment-grid-v5{grid-template-columns:1fr!important}
   .yv-checkout-proofbar-v5>.container{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .yv-checkout-review-grid-v9{grid-template-columns:1fr!important}
@@ -516,6 +519,10 @@ table{max-width:100%}
   .footer-brand,.footer-subscribe-v9{grid-column:auto!important}
 
   .mobile-bottom-nav{padding-left:20px!important;padding-right:20px!important}
+}
+
+@media(max-width:420px){
+  :root{--page-gutter:16px}
 }
 
 /* ---------- horizontal scrollers instead of page overflow ---------- */

@@ -9,36 +9,43 @@ document.addEventListener('DOMContentLoaded', function () {
     const navMain = document.getElementById('navMain');
 
     if (menuBtn && navMain) {
+        const setMenuOpen = function (open) {
+            navMain.classList.toggle('open', open);
+            menuBtn.setAttribute('aria-expanded', String(open));
+            document.body.classList.toggle('mobile-menu-open', open);
+        };
         menuBtn.addEventListener('click', function () {
-            navMain.classList.toggle('open');
-            // Change icon
-            const isOpen = navMain.classList.contains('open');
-            menuBtn.setAttribute('aria-expanded', isOpen);
+            setMenuOpen(!navMain.classList.contains('open'));
         });
 
         // Close menu on link click
         navMain.querySelectorAll('a').forEach(function (link) {
             link.addEventListener('click', function () {
-                navMain.classList.remove('open');
-                menuBtn.setAttribute('aria-expanded', 'false');
+                setMenuOpen(false);
             });
         });
 
         // Close on outside click
         document.addEventListener('click', function (e) {
             if (!menuBtn.contains(e.target) && !navMain.contains(e.target)) {
-                navMain.classList.remove('open');
-                menuBtn.setAttribute('aria-expanded', 'false');
+                setMenuOpen(false);
             }
         });
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && navMain.classList.contains('open')) {
-                navMain.classList.remove('open');
-                menuBtn.setAttribute('aria-expanded', 'false');
+                setMenuOpen(false);
                 menuBtn.focus();
             }
         });
     }
+
+    window.matchMedia('(min-width: 961px)').addEventListener('change', function (event) {
+        if (event.matches && menuBtn && navMain) {
+            navMain.classList.remove('open');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('mobile-menu-open');
+        }
+    });
 
     // ── Header scroll effect ──
     const header = document.querySelector('.site-header');

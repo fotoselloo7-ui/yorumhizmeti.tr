@@ -40,7 +40,15 @@
     --color-digital: #F59E0B;
 
     /* Tipografi */
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --page-gutter: 20px;
+    --page-max-width: 1200px;
+    --z-sticky: 100;
+    --z-dropdown: 200;
+    --z-floating: 300;
+    --z-overlay: 400;
+    --z-modal: 500;
+    --z-toast: 600;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
@@ -112,11 +120,15 @@ button { cursor: pointer; font-family: inherit; }
 
 /* â”€â”€ Container â”€â”€ */
 .container {
-    width: min(1200px, calc(100% - 40px));
+    width: min(var(--page-max-width), calc(100% - var(--page-gutter) * 2));
     margin: 0 auto;
 }
 
 /* â”€â”€ Section â”€â”€ */
+@media (max-width: 420px) {
+    :root { --page-gutter: 16px; }
+}
+
 .section {
     padding: var(--space-12) 0;
 }
@@ -163,7 +175,7 @@ button { cursor: pointer; font-family: inherit; }
     border-bottom: 1px solid var(--color-border);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: var(--z-sticky);
     height: 72px;
 }
 
@@ -1331,7 +1343,7 @@ select.form-control {
     position: fixed;
     bottom: 100px;
     right: 20px;
-    z-index: 90;
+    z-index: var(--z-floating);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -1368,7 +1380,7 @@ select.form-control {
     right: 0;
     background: #fff;
     border-top: 1px solid var(--color-border);
-    z-index: 95;
+    z-index: var(--z-sticky);
     padding: var(--space-2) 0;
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -3229,10 +3241,10 @@ select.form-control {
 }
 .mt-4 { margin-top: var(--space-4); }
 /* ===================================================
-   FAZ 15 — CATEGORY DETAIL PAGE
+   FAZ 15 â€” CATEGORY DETAIL PAGE
    =================================================== */
 
-/* ¦¦ Hero ¦¦ */
+/* Â¦Â¦ Hero Â¦Â¦ */
 .cat-page-wrapper {
     display: flex;
     flex-direction: column;
@@ -3302,7 +3314,7 @@ select.form-control {
     font-weight: 500;
 }
 
-/* ¦¦ Filters & Search ¦¦ */
+/* Â¦Â¦ Filters & Search Â¦Â¦ */
 .cat-filters {
     display: flex;
     flex-direction: column;
@@ -3391,7 +3403,7 @@ select.form-control {
     min-width: 200px;
 }
 
-/* ¦¦ Modern Package Grid ¦¦ */
+/* Â¦Â¦ Modern Package Grid Â¦Â¦ */
 .pkg-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -3538,7 +3550,7 @@ select.form-control {
     margin: 0;
 }
 
-/* ¦¦ Modern Empty State ¦¦ */
+/* Â¦Â¦ Modern Empty State Â¦Â¦ */
 .modern-empty {
     background: var(--color-card);
     border: 1px dashed var(--color-border);
@@ -3566,7 +3578,7 @@ select.form-control {
     max-width: 400px;
 }
 
-/* ¦¦ Responsive ¦¦ */
+/* Â¦Â¦ Responsive Â¦Â¦ */
 @media (max-width: 768px) {
     .cat-hero {
         padding: var(--space-6) 0;
