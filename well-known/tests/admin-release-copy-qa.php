@@ -23,7 +23,7 @@ $total=0;
 foreach($folders as $folder) {
     $files=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder,FilesystemIterator::SKIP_DOTS));
     foreach($files as $file) {
-        if(!$file->isFile() || strtolower($file->getExtension())!=='php')continue;
+        if(!$file->isFile() || strtolower($file->getExtension())!=='php' || str_contains($file->getFilename(),'.sync-conflict-'))continue;
         $content=file_get_contents((string)$file);
         foreach($patterns as $pattern) {
             if(preg_match($pattern,$content)) {

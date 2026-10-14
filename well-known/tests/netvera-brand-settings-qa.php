@@ -84,7 +84,7 @@ if(!str_contains($settings,'NetveraBrandSettings::syncExisting'))
 $runtime=$read('app/Services/SiteConfigService.php');
 if(!str_contains($runtime,'NetveraBrandSettings::display'))
  throw new RuntimeException('Brand defaults are not applied at runtime.');
-$seed=$read('database/seeds.sql');
+$seed=$read('database/database.sql');
 if(!str_contains($seed, $defaults['default_seo_title'][0]) ||
    !str_contains($seed, $defaults['default_seo_description'][0]))
     throw new RuntimeException('Fresh-install SEO defaults diverge from live brand settings.');

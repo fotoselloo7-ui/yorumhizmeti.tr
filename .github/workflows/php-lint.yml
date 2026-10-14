@@ -14,7 +14,7 @@ jobs:
       - name: PHP syntax check
         run: |
           set -e
-          find well-known -type f -name "*.php" -print0 | while IFS= read -r -d '' file; do
+          find well-known -type f -name "*.php" ! -name '*sync-conflict*' -print0 | while IFS= read -r -d '' file; do
             php -l "$file"
           done
 
@@ -31,6 +31,13 @@ jobs:
 
       - name: Public SEO slug, redirects and canonical URL QA
         run: php well-known/tests/public-slug-url-qa.php
+
+      - name: Public demo publication and initial mask QA
+        run: |
+          php well-known/tests/public-demo-render-qa.php
+          node --check well-known/public/assets/js/netvera-product-tabs-v60.js
+          node --check well-known/public/assets/js/admin-references.js
+          node --check well-known/tests/ui-layout-probe.mjs
 
       - name: Admin release text QA
         run: php well-known/tests/admin-release-copy-qa.php

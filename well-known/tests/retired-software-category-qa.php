@@ -50,5 +50,8 @@ $assert(str_contains($routes, 'NetveraScriptController@index'), 'Legacy admin ro
 $softwareCode = $read('app/Services/SoftwareCatalogService.php');
 $assert(str_contains($softwareCode, "return ['created'=>0, 'existing'=>0, 'conflicts'=>0];"), 'Obsolete category setup remains writable');
 $assert(!str_contains($softwareCode, '$db->insert('), 'Old category installer can still duplicate records');
-$assert(is_file($root.'/database/migrations/retired-software-links-v1.sql'), 'DB link replacement migration missing');
+$schema=$read('database/database.sql');
+foreach(['CREATE TABLE `categories`','CREATE TABLE `nv_legacy_script_products`','INSERT INTO `nv_legacy_script_products`','/hazir-scriptler'] as $marker){
+    $assert(str_contains($schema,$marker),'Canonical installation is missing catalogue schema/data: '.$marker);
+}
 echo "PASS: old local-only category removed, internal links point to imported scripts, no 301, database entries preserved\n";
