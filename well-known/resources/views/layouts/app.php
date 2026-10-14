@@ -121,7 +121,7 @@
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=107.1">
+    <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=20261014">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
     <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=20261013">

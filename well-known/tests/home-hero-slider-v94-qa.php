@@ -59,8 +59,14 @@ $check(str_contains($home,'$nv94Mobile')&&str_contains($home,'<picture>'),'Mobil
 $check(str_contains($home,'$nv94IsComposed')&&str_contains($home,'is-composed-banner'),'HD composed banner rendering marker missing');
 $check(str_contains($layout,'home-hero-slider-v94.css')&&str_contains($layout,'home-hero-slider-v94.js'),'Slider assets not loaded globally');
 $check(str_contains($css,'.nv94-hero-controls')&&str_contains($css,'@media(max-width:600px)'),'Responsive Bayigram-like controls missing');
-$check(str_contains($css,'V107 — exact-fit HD artwork')&&str_contains($css,'.nv94-hero-slide.is-composed-banner'),'V107 exact-fit hero rules missing');
-$check(str_contains($css,'object-fit:cover')&&str_contains($css,'position:absolute;inset:0'),'Full-bleed 21:9 hero artwork layout missing');
+$check(str_contains($css,'Authoritative hero layout')&&str_contains($css,'.nv94-hero-slide.is-composed-banner'),'Authoritative HD hero framing missing');
+$check(str_contains($css,'.nv94-hero-track{position:relative;display:grid')&&str_contains($css,'grid-area:1/1'),'Slides must reserve a common grid height');
+$check(str_contains($css,'grid-template-rows:1fr auto')&&str_contains($css,'grid-row:2;height:var(--nv94-art-height)'),'Mobile artwork must occupy a real media row');
+$check(str_contains($css,'width:165%;height:auto;object-fit:contain'),'Portrait artwork must preserve its intrinsic ratio while excluding empty canvas');
+$check(str_contains($css,'.nv94-hero-controls{position:relative;inset:auto;'),'Tablet/mobile controls must remain outside the artwork row');
+$check(!str_contains($css,'!important')&&!str_contains($css,'is-bundled-lowres'),'Obsolete slider overrides returned');
+$check(!str_contains($css,'min-height:620px')&&!str_contains($css,'min-height:650px'),'Oversized mobile spacer returned');
+$check(str_contains($css,'object-fit:cover')&&str_contains($css,'position:absolute;inset:0'),'Desktop HD cover layout missing');
 $check(str_contains($js,'touchstart')&&str_contains($js,'setTimeout'),'Swipe/autoplay behavior missing');
 $check(str_contains($login,'SiteLogoService::url()')&&!str_contains($login,'auth25-brandmark">Y'),'Login still uses placeholder brand mark');
 $check(str_contains($sql,'CREATE TABLE `hero_slides`')&&str_contains($sql,'INSERT INTO `hero_slides`'),'Canonical database.sql is missing hero slider schema/data');
