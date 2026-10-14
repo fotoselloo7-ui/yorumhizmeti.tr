@@ -37,13 +37,13 @@
   letter-spacing:0;
   margin:0 0 7px;
 }
-.nv46-blog-editor .form-control,
+.nv46-blog-editor .form-control:not(.select2-hidden-accessible),
 .nv46-blog-editor input[type=text],
 .nv46-blog-editor input[type=url],
 .nv46-blog-editor input[type=number],
 .nv46-blog-editor input[type=date],
 .nv46-blog-editor input[type=datetime-local],
-.nv46-blog-editor select,
+.nv46-blog-editor select:not(.select2-hidden-accessible),
 .nv46-blog-editor textarea{
   display:block;
   max-width:100%;
@@ -186,6 +186,8 @@
 .nv46-blog-editor .nv44-quality-checks li{font-size:11px;line-height:1.55}
 .nv46-blog-editor .nv44-quality-meter-row{font-size:11px}
 .nv46-blog-editor .nv44-editorial-title{font-size:12px;line-height:1.4}
+/* Select2's hidden native field must stay outside the visible form geometry. */
+.nv46-blog-editor .select2-hidden-accessible{min-height:0;max-height:1px;min-width:0;width:1px;height:1px;padding:0;border:0;transition:none}
 .nv46-blog-editor .select2-container{width:100%!important;min-width:0}
 .nv46-blog-editor .select2-container .select2-selection{min-height:42px;background:#fff;border-color:#dfe4ef;border-radius:9px}
 .nv46-blog-editor .select2-container .select2-selection__rendered{font-size:12px}

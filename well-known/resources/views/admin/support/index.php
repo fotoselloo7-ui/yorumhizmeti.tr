@@ -7,7 +7,7 @@
 
 <!-- Desktop Table -->
 <div class="adm-card adm-tickets-desktop">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <?php if (empty($tickets)): ?>
         <div class="adm-empty-sm" style="padding: var(--space-8);"><?= icon('headphones', 32) ?><p>Henüz destek talebi yok.</p></div>
         <?php else: ?>

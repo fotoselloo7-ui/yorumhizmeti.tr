@@ -5,7 +5,7 @@
 </div>
 
 <div class="adm-card">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <div class="table-responsive">
             <table class="adm-table">
                 <thead>

@@ -110,7 +110,7 @@
             <h3><?= icon('shopping-cart', 18) ?> Son Siparişler</h3>
             <a href="/admin/siparisler" class="adm-card-link">Tümünü Gör <?= icon('arrow-right', 14) ?></a>
         </div>
-        <div class="adm-card-body" style="padding: 0;">
+        <div class="adm-card-body adm-table-scroll" style="padding: 0;">
             <?php if (empty($recentOrders)): ?>
             <div class="adm-empty-sm"><?= icon('package', 28) ?><p>Henüz sipariş yok</p></div>
             <?php else: ?>
@@ -137,7 +137,7 @@
             <h3><?= icon('headphones', 18) ?> Açık Destek Talepleri</h3>
             <a href="/admin/destek" class="adm-card-link">Tümünü Gör <?= icon('arrow-right', 14) ?></a>
         </div>
-        <div class="adm-card-body" style="padding: 0;">
+        <div class="adm-card-body adm-table-scroll" style="padding: 0;">
             <?php if (empty($recentTickets)): ?>
             <div class="adm-empty-sm"><?= icon('headphones', 28) ?><p>Açık talep yok</p></div>
             <?php else: ?>

@@ -64,7 +64,7 @@
             <div class="adm-card-header">
                 <h3><?= icon('list', 16) ?> Kayıtlı Hesaplar</h3>
             </div>
-            <div class="adm-card-body" style="padding: 0;">
+            <div class="adm-card-body adm-table-scroll" style="padding: 0;">
                 <?php if (empty($accounts)): ?>
                     <div class="adm-empty-sm" style="padding: var(--space-6);"><?= icon('briefcase', 32) ?><p>Henüz banka hesabı eklenmemiş.</p></div>
                 <?php else: ?>

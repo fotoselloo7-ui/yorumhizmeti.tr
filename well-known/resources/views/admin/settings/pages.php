@@ -5,7 +5,7 @@
 </div>
 
 <div class="adm-card">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <?php if (empty($pages)): ?>
             <div class="adm-empty-sm" style="padding: var(--space-8);"><?= icon('layout', 32) ?><p>Henüz sayfa oluşturulmamış.</p></div>
         <?php else: ?>

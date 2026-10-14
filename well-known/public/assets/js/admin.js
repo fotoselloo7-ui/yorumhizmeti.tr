@@ -8,8 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.querySelector('.admin-sidebar');
     if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
+        const overlay = document.getElementById('sidebarOverlay');
+        const setOpen = open => {
+            sidebar.classList.toggle('open', open);
+            overlay?.classList.toggle('is-open', open);
+            sidebarToggle.setAttribute('aria-expanded', String(open));
+            document.body.classList.toggle('admin-menu-open', open);
+        };
+        sidebarToggle.addEventListener('click', () => setOpen(!sidebar.classList.contains('open')));
+        overlay?.addEventListener('click', () => setOpen(false));
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && sidebar.classList.contains('open')) {
+                setOpen(false);
+                sidebarToggle.focus();
+            }
+        });
+        window.matchMedia('(min-width: 1025px)').addEventListener('change', event => {
+            if (event.matches) setOpen(false);
         });
     }
 

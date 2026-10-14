@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/admin-customers-v67.css') ?>?v=67.1">
     <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">
@@ -27,7 +27,7 @@
 <body>
     <div class="admin-layout">
         <!-- Sidebar Overlay (Mobile) -->
-        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
 
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
@@ -178,7 +178,7 @@
             <!-- Topbar -->
             <div class="admin-topbar">
                 <div class="flex-center gap-4">
-                    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menü">
+                    <button type="button" id="sidebarToggle" class="sidebar-toggle" aria-label="Menü" aria-controls="adminSidebar" aria-expanded="false">
                         <?= icon('menu', 22) ?>
                     </button>
                     <h1><?= e($pageTitle ?? 'Dashboard') ?></h1>
@@ -187,8 +187,8 @@
                 <div class="topbar-actions">
                     <a href="/admin/cep" class="btn btn-light btn-sm" title="Cep Paneli"><?= icon('smartphone',17) ?></a>
                     <button type="button" id="nv68AdminBell" class="btn btn-light btn-sm" data-sound-new="<?= e(\App\Services\SupportDeskSettings::sounds()['new']) ?>" data-sound-reply="<?= e(\App\Services\SupportDeskSettings::sounds()['reply']) ?>" title="Yeni sohbet bildirimlerini aç" aria-label="Bildirimleri Aç"><?= icon('bell',17) ?></button>
-                    <a href="/" target="_blank" class="btn btn-light btn-sm">
-                        <?= icon('external-link', 14) ?> Siteyi Gör
+                    <a href="/" target="_blank" rel="noopener" class="btn btn-light btn-sm" aria-label="Siteyi Gör">
+                        <?= icon('external-link', 14) ?> <span class="topbar-link-label">Siteyi Gör</span>
                     </a>
                     <div class="admin-user-menu">
                         <div class="admin-user-avatar">
@@ -218,15 +218,7 @@
         </main>
     </div>
 
-    <script>
-    function toggleSidebar() {
-        var sidebar = document.getElementById('adminSidebar');
-        var overlay = document.getElementById('sidebarOverlay');
-        sidebar.classList.toggle('open');
-        overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
-    }
-    </script>
-    <script src="<?= asset('js/admin.js') ?>"></script>
+    <script src="<?= asset('js/admin.js') ?>?v=20261013"></script>
     <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
     <script src="<?= asset('js/nv-desk-admin.js') ?>?v=1"></script>
     <style>.nv68-bell-enabled{background:#eeeaff!important;color:#6152c8!important}.nv68-bell-flash{animation:nv68-shake .6s ease 3}@keyframes nv68-shake{0%,100%{transform:rotate(0)}20%{transform:rotate(13deg)}60%{transform:rotate(-10deg)}}</style>

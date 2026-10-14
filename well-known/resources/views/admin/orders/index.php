@@ -10,7 +10,7 @@
 
 <!-- Desktop Table -->
 <div class="adm-card adm-orders-desktop">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <?php if (empty($orders)): ?>
         <div class="adm-empty-sm" style="padding: var(--space-8);"><?= icon('package', 32) ?><p>Bu filtrede sipariş bulunamadı.</p></div>
         <?php else: ?>

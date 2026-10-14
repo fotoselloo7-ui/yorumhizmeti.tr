@@ -47,7 +47,7 @@
     <!-- Table Side -->
     <div>
         <div class="adm-card">
-            <div class="adm-card-body" style="padding: 0;">
+            <div class="adm-card-body adm-table-scroll" style="padding: 0;">
                 <?php if (empty($faqs)): ?>
                     <div class="adm-empty-sm" style="padding: var(--space-6);"><?= icon('help-circle', 32) ?><p>Henüz SSS eklenmemiş.</p></div>
                 <?php else: ?>

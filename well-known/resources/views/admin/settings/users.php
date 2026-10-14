@@ -5,7 +5,7 @@
 </div>
 
 <div class="adm-card">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <?php if (empty($users)): ?>
             <div class="adm-empty-sm" style="padding: var(--space-6);"><?= icon('user', 32) ?><p>Henüz üye bulunmuyor.</p></div>
         <?php else: ?>

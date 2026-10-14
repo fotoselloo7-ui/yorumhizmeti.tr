@@ -14,7 +14,7 @@
 <?php endif; ?>
 <!-- Desktop Table -->
 <div class="adm-card adm-blog-desktop">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <table class="adm-table">
                 <thead>
                     <tr>

@@ -71,7 +71,7 @@ $badgeBg = $badgeBgMap[$info['badge']['color']] ?? '#f1f5f9';
             <div class="adm-card-header">
                 <h3><?= icon('info', 18) ?> Lisans Bilgileri</h3>
             </div>
-            <div class="adm-card-body" style="padding:0;">
+            <div class="adm-card-body adm-table-scroll" style="padding:0;">
                 <table style="width:100%; border-collapse:collapse;">
                     <?php
                     $rows = [

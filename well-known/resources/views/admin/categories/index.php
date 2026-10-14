@@ -2,7 +2,7 @@
     <div>
         <h2><?= icon('grid', 24) ?> Kategoriler</h2>
     </div>
-    <div style="display:flex; gap: 8px;">
+    <div class="adm-page-actions">
         <form method="POST" action="/admin/kategoriler/seo-optimize" style="margin:0;" onsubmit="return confirm('Mevcut URL ve Hazır Yazılımlar korunarak yalnız seçili sosyal medya/hizmet kategorilerinin eski veya boş SEO alanları doldurulsun mu?')">
             <?= csrfField() ?>
             <button class="btn btn-outline btn-sm" type="submit"><?= icon('search', 16) ?> SEO / GEO Profillerini Uygula</button>
@@ -39,7 +39,7 @@
 
 <!-- Desktop Table -->
 <div class="adm-card adm-cat-desktop">
-    <div class="adm-card-body" style="padding: 0;">
+    <div class="adm-card-body adm-table-scroll" style="padding: 0;">
         <table class="adm-table">
             <thead>
                 <tr>

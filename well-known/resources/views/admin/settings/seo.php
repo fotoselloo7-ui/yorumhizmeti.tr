@@ -70,7 +70,7 @@
             <div class="adm-card-header">
                 <h3><?= icon('folder', 16) ?> Kategoriler</h3>
             </div>
-            <div class="adm-card-body" style="padding: 0;">
+            <div class="adm-card-body adm-table-scroll" style="padding: 0;">
                 <table class="adm-table">
                     <thead>
                         <tr>
@@ -103,7 +103,7 @@
             <div class="adm-card-header">
                 <h3><?= icon('package', 16) ?> Paketler</h3>
             </div>
-            <div class="adm-card-body" style="padding: 0;">
+            <div class="adm-card-body adm-table-scroll" style="padding: 0;">
                 <table class="adm-table">
                     <thead>
                         <tr>
@@ -140,7 +140,7 @@
             <div class="adm-card-header">
                 <h3><?= icon('file-text', 16) ?> Blog Yazıları</h3>
             </div>
-            <div class="adm-card-body" style="padding: 0;">
+            <div class="adm-card-body adm-table-scroll" style="padding: 0;">
                 <table class="adm-table">
                     <thead>
                         <tr>

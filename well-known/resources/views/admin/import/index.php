@@ -3,7 +3,7 @@
         <a href="/admin/paketler" class="btn btn-outline btn-sm"><?= icon('arrow-left', 14) ?> Paketlere Dön</a>
         <h2><?= icon('upload', 24) ?> CSV / Excel İçe Aktar</h2>
     </div>
-    <div style="display:flex; gap: 8px;">
+    <div class="adm-page-actions">
         <a href="/admin/import/bos-sablon" class="btn btn-outline btn-sm"><?= icon('download', 14) ?> Boş CSV Şablonu İndir</a>
         <a href="/admin/import/ornek-sablon" class="btn btn-outline btn-sm"><?= icon('download', 14) ?> Örnek Paket CSV İndir</a>
         <a href="/admin/kategoriler/export" class="btn btn-primary btn-sm"><?= icon('download', 14) ?> Kategori ID CSV İndir</a>
@@ -39,7 +39,7 @@
         <div class="adm-card-header" style="background: rgba(220, 38, 38, 0.1); border-bottom: 1px solid rgba(220, 38, 38, 0.2); color: var(--color-red);">
             <h4 style="margin: 0; display:flex; align-items:center; gap: 8px;"><?= icon('alert-triangle', 18) ?> Hata Detayları</h4>
         </div>
-        <div class="adm-card-body" style="padding: 0;">
+        <div class="adm-card-body adm-table-scroll" style="padding: 0;">
             <table class="adm-table">
                 <thead>
                     <tr>
