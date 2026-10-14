@@ -63,7 +63,7 @@ foreach(['.nv-platform-instagram','.nv-platform-tiktok','.nv-platform-youtube',
   '.nv-platform-facebook','.nv-platform-google','--np-soft',
   'box-shadow:none!important','-webkit-background-clip:text',
   '.nv43-subcategory-link','.yh18-featured-card','.yv-category-package-card-v5',
-  '.nv26-catalog-tile','.nv26-social-mega-card'] as $rule){
+  '.nv26-social-mega-card'] as $rule){
  if(!str_contains($css,$rule))throw new RuntimeException('Missing flat platform CSS '.$rule);
 }
 $layout=file_get_contents($base.'/resources/views/layouts/app.php');

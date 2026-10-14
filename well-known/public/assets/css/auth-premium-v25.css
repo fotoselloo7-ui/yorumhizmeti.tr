@@ -3,7 +3,7 @@ body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;f
 .auth-wrapper.auth25-page{width:100%!important;max-width:none!important;min-height:100vh!important;min-height:100dvh!important;display:grid!important;place-items:center!important;padding:clamp(15px,3.6vw,48px)!important;background:radial-gradient(circle at 14% 16%,rgba(99,70,230,.12),transparent 32%),radial-gradient(circle at 92% 90%,rgba(239,51,139,.08),transparent 29%),#f8f9fd!important}
 .auth25-page,.auth25-page *{box-sizing:border-box}
 .auth25-shell{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);min-width:0;width:min(1140px,100%);min-height:min(710px,calc(100dvh - 96px));overflow:hidden;border:1px solid #e4e8f4;border-radius:27px;background:#fff;box-shadow:0 28px 85px rgba(32,37,92,.11)}
-.auth25-showcase{position:relative;isolation:isolate;display:flex;flex-direction:column;min-width:0;min-height:670px;padding:40px;overflow:hidden;color:#fff;background:linear-gradient(138deg,#3b46b7 0%,#5635c6 49%,#923cd2 80%,#c13b91 100%)}
+.auth25-showcase{position:relative;isolation:isolate;display:flex;flex-direction:column;min-width:0;min-height:670px;padding:40px;overflow:hidden;color:#fff;background:radial-gradient(ellipse at 90% 0,#7654d87a,transparent 60%),linear-gradient(145deg,#172749,#33245f)}
 .auth25-showcase:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 90% 12%,rgba(255,255,255,.2),transparent 25%),radial-gradient(circle at 11% 88%,rgba(46,118,255,.26),transparent 40%)}
 .auth25-showcase:after{content:"";position:absolute;z-index:-1;inset:0;opacity:.21;background-image:radial-gradient(rgba(255,255,255,.5) .8px,transparent 1px);background-size:23px 23px;mask-image:linear-gradient(transparent 10%,#000 95%)}
 .auth25-orbit{position:absolute;pointer-events:none;border:1px solid rgba(255,255,255,.1);border-radius:50%;z-index:-1}
@@ -101,7 +101,7 @@ body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;f
  .auth25-shell{border-radius:20px}
  .auth25-showcase{padding:18px 19px}
  .auth25-showcase-main h2,.auth25-register .auth25-showcase-main h2{font-size:21px;max-width:310px}
- .auth25-showcase-main p{font-size:10px;max-width:320px}
+ .auth25-showcase-main p{font-size:12px;max-width:320px}
  .auth25-art{display:none}
  .auth25-panel{padding:22px 20px 17px}
  .auth25-mobile-logo{margin-bottom:22px}
@@ -110,6 +110,7 @@ body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;f
  .auth25-fields-two{grid-template-columns:1fr;gap:14px}
  .auth25-form{gap:16px}
  .auth25-input-wrap{height:49px}
+ .auth25-input-wrap input,.auth25-fields-two .auth25-input-wrap input{font-size:16px}
  .auth25-footer{margin-top:20px}
 }
 /* Keep the account layout balanced on laptops without sacrificing form width. */

@@ -161,7 +161,7 @@
 .yv-simple-hero-visual-v12{overflow:hidden!important}
 .yv-simple-hero-visual-v12>.container{
   display:grid!important;
-  grid-template-columns:1fr .85fr!important;
+  grid-template-columns:var(--nv-info-columns,1fr .85fr)!important;
   gap:36px!important;
   align-items:center!important;
   min-height:310px!important
@@ -198,8 +198,8 @@
 .yv-faq-lead-v12{
   position:relative!important;
   overflow:hidden!important;
-  min-height:390px!important;
-  padding-bottom:170px!important
+  min-height:var(--nv-faq-lead-height,390px)!important;
+  padding-bottom:var(--nv-faq-lead-padding,170px)!important
 }
 .yv-faq-lead-v12>img{
   position:absolute;
@@ -237,7 +237,7 @@
   .yv-product-gallery-demo-v12 .logo{left:10px;top:10px;width:48px;height:48px}
   .yv-simple-hero-art-v12{min-height:220px}
   .yv-simple-hero-art-v12 img{right:7%;width:70%;height:94%}
-  .yv-faq-lead-v12{min-height:340px!important}
+  .yv-faq-lead-v12{min-height:var(--nv-faq-lead-height,340px)!important}
 }
 
 

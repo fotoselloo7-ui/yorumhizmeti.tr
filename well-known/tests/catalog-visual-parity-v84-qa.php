@@ -18,7 +18,7 @@ $baseColors=$load('public/assets/css/platform-inheritance-flat-v80.css');
 foreach(['nv-platform-instagram','nv-platform-tiktok','nv-platform-youtube','nv-platform-facebook','nv-platform-spotify'] as $platform)
  if(!str_contains($baseColors,$platform))throw new RuntimeException('Missing platform color '.$platform);
 $styles=$load('public/assets/css/catalog-visual-parity-v84.css');
-foreach(['nv26-social-mega-card','nv43-category-card','nv26-catalog-tile','nv43-subcategory-link','yh18-featured-card','--np-soft','--np-ink','--ns-soft','background:#fff!important','@media(max-width:800px)'] as $token)
+foreach(['nv26-social-mega-card','nv43-category-card','nv43-subcategory-link','yh18-featured-card','--np-soft','--np-ink','--ns-soft','background:#fff!important','@media(max-width:800px)'] as $token)
  if(!str_contains($styles,$token))throw new RuntimeException('Visual parity missing: '.$token);
 if(!str_contains($styles,'#featured .nv43-category-card.yh18-featured-tab:is(.active,.is-parent-selected)') &&
    !str_contains($styles,'#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected)'))

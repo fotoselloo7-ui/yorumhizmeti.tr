@@ -73,6 +73,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── FAQ Accordion ──
+    // Interior help center only; homepage/category accordions keep their owners.
+    document.querySelectorAll('.yv-faq-page .premium-faq-question').forEach(function (question) {
+        question.addEventListener('click', function () {
+            const answer = document.getElementById(question.getAttribute('aria-controls'));
+            if (!answer) return;
+            const open = question.getAttribute('aria-expanded') !== 'true';
+            question.setAttribute('aria-expanded', String(open));
+            question.classList.toggle('active', open);
+            answer.hidden = !open;
+        });
+    });
     document.querySelectorAll('.faq-question').forEach(function (q) {
         q.addEventListener('click', function () {
             const item = this.parentElement;

@@ -38,7 +38,7 @@ foreach([
  throw new RuntimeException('Theme reset not saved server-side: '.$marker);
 $layout=$read('resources/views/layouts/app.php');
 if(!str_contains($layout,'netvera-premium-v76.css') ||
-   !str_contains($layout,"nvThemeEnabled?' class=\"nv-theme-enabled\""))
+   !str_contains($layout,"nvThemeEnabled?' nv-theme-enabled'"))
  throw new RuntimeException('CSS reset mode is not scoped.');
 $heroStyles=$read('public/assets/css/netvera-premium-v76.css');
 if(!str_contains($heroStyles,'/* v77: fix legacy responsive') ||

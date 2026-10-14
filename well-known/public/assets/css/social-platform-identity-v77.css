@@ -21,39 +21,6 @@
 .nv-platform-kick{--np:#53FC18;--np-2:#2D8415;--np-soft:#EDFFE8;--np-on:#10191A}
 
 /* Category tiles: official platform colors + distinct icon surface and readable text */
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{
-  --tile:var(--np)!important;--shade:var(--np-soft)!important;
-  border:1px solid color-mix(in srgb,var(--np) 22%,#fff);
-  background:linear-gradient(142deg,#fff 0%,var(--np-soft) 76%,color-mix(in srgb,var(--np) 12%,#fff) 100%)!important;
-  box-shadow:0 5px 24px color-mix(in srgb,var(--np) 10%,transparent)
-}
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:hover{
-  border-color:color-mix(in srgb,var(--np) 48%,#fff)!important;
-  box-shadow:0 16px 35px color-mix(in srgb,var(--np) 16%,transparent)!important
-}
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon{
-  color:var(--np-on)!important;
-  background:linear-gradient(135deg,var(--np),var(--np-2))!important;
-  box-shadow:0 9px 20px color-mix(in srgb,var(--np) 20%,transparent)
-}
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top strong{
-  color:color-mix(in srgb,var(--np) 75%,#121b35)!important
-}
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-sub a{
-  background:color-mix(in srgb,var(--np) 8%,#fff)!important;
-  border:1px solid color-mix(in srgb,var(--np) 14%,#fff);
-  color:color-mix(in srgb,var(--np) 75%,#121b35)!important
-}
-.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-snapchat .nv26-tile-top strong,
-.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-kick .nv26-tile-top strong{
-  color:#172132!important
-}
-.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-tiktok .nv26-tile-icon .icon{
-  filter:drop-shadow(1px 0 #FE2C55) drop-shadow(-1px 0 #00F2EA)
-}
-.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-google .nv26-tile-icon{
-  background:conic-gradient(#4285F4 0 29%,#34A853 29% 54%,#FBBC05 54% 76%,#EA4335 76% 100%)!important
-}
 
 /* Home: the selected social platform NEVER becomes generic NetVera blue/purple. */
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
@@ -168,7 +135,7 @@
   color:var(--np-on)!important
 }
 @media(prefers-reduced-motion:reduce){
- .nv26-catalog-tile[class*="nv-platform-"]{transition:none!important}
+
 }
 
 
@@ -283,11 +250,7 @@
   color:var(--np) !important;
 }
 /* Catalog index nested service chips explicitly inherit their platform. */
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-sub a[class*="nv-platform-"]{
-  border-color:color-mix(in srgb,var(--np) 24%,white) !important;
-  background:color-mix(in srgb,var(--np) 10%,white) !important;
-  color:color-mix(in srgb,var(--np) 76%,#151d35) !important;
-}
+
 @media(prefers-reduced-motion:reduce){
   .yh-home-v6 .yh49-category-marquee .yh49-category-link[class*="nv-platform-"]{
     transition:none !important
@@ -354,12 +317,10 @@
   color:currentColor !important
 }
 #featured .nv43-subcategory-link.nv-platform-spotify,
-.nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-sub a.nv-platform-spotify,
 .nv26-quick .nv56-quick-category.nv-platform-spotify{
   color:#0E602D !important;
 }
-#featured .nv43-subcategory-link:is(.nv-platform-snapchat,.nv-platform-kick),
-.nv26-catalog-tiles .nv26-catalog-tile .nv26-tile-sub a:is(.nv-platform-snapchat,.nv-platform-kick){
+#featured .nv43-subcategory-link:is(.nv-platform-snapchat,.nv-platform-kick){
   color:#172019 !important;
 }
 
@@ -369,7 +330,7 @@
    darker label variants as defined above. */
 .yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-copy :is(strong,small),
 .yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-icon,
-.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-icon .icon {
+.yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-spotify .yh49-category-icon .icon{
   color:#FFFFFF !important;
 }
 .yh-home-v6 .yh49-category-marquee .yh49-category-link.nv-platform-telegram{
@@ -389,7 +350,6 @@
 }
 /* Filled Spotify icons, actions and highlighted chips throughout the site.
    Brand token #1DB954 stays intact; only surfaces under white lettering darken. */
-.nv26-catalog-tiles .nv26-catalog-tile.nv-platform-spotify .nv26-tile-icon,
 #featured .nv43-category-card.yh18-featured-tab.nv-platform-spotify .yh26-filter-icon,
 .yv-category-v5.nv-platform-spotify .yv-category-brand-v5>span,
 .yv-category-v5.nv-platform-spotify .yv-category-brand-orbit-v5.main,

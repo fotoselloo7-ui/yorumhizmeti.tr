@@ -44,7 +44,7 @@ $theme=strpos($layout,'theme-runtime-v71.css');
 $palette=strpos($layout,'social-platform-identity-v77.css');
 if($theme===false||$palette===false||$palette<=$theme)
     throw new RuntimeException('Brand CSS must override the generic NetVera theme.');
-foreach(['#featured .nv43-category-card','nv26-catalog-tiles',
+foreach(['#featured .nv43-category-card',
           '.yv-category-v5[class*="nv-platform-"]',
           '.yv-product-v5[class*="nv-platform-"]'] as $needle){
     if(!str_contains($css,$needle))
@@ -118,7 +118,7 @@ foreach(['snapchat','kick','whatsapp'] as $bright){
         throw new RuntimeException('Bright-background dark text override missing '.$bright);
 }
 if(!str_contains($layout,'social-platform-identity-v77.css') ||
-   !str_contains($layout,'?v=79.1'))
+   !str_contains($layout,"social-platform-identity-v77.css') ?>?v=20261014"))
     throw new RuntimeException('Platform stylesheet stale in browser cache.');
 if(Brand::fromText('Hazır Yazılımlar & Scriptler')!==null)
     throw new RuntimeException('Software categories picked up a platform brand.');

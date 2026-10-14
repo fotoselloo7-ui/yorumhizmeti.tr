@@ -57,8 +57,8 @@ foreach($mustStyle as $selector){
     if(!str_contains($styles,$selector))
         throw new RuntimeException('Platform design token missing: '.$selector);
 }
-// Regression: the social mega menu and catalog directory MUST keep their
-// own pastel backgrounds and swap to brand color/inverse text on hover.
+// The mega menu retains its inverse hover. The public directory now owns
+// neutral cards and brand icon accents in category-directory-v88.css.
 // The later v80 stylesheet must not flatten them into white cards again.
 foreach([
   'background:var(--np-soft)!important;',
@@ -66,9 +66,7 @@ foreach([
   'color:var(--np-ink,var(--np))!important;',
   'color:var(--np-on,#fff)!important;',
   '.nv26-menu-groups .nv26-social-mega-card[class*="nv-platform-"]',
-  '.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]',
-  ':is(:hover,:focus-visible)',
-  ':is(:hover,:focus-within)'
+  ':is(:hover,:focus-visible)'
 ] as $rule){
   if(!str_contains($styles,$rule))
     throw new RuntimeException('Brand-color inverse hover regression: '.$rule);

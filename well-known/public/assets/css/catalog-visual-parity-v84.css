@@ -11,8 +11,7 @@
 
 /* Share the same pastel tile geometry and recognizable white icon well. */
 .nv26-social-mega-card[class*="nv-platform-"],
-#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"],
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
   --nv84-ink:var(--np-ink,var(--np,#5D51B8));
   box-sizing:border-box;
   position:relative;
@@ -28,16 +27,14 @@
   display:none!important;
 }
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-name,
-.nv26-social-mega-card[class*="nv-platform-"] strong,
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-top strong{
+.nv26-social-mega-card[class*="nv-platform-"] strong{
   color:var(--nv84-ink)!important;
   -webkit-text-fill-color:currentColor!important;
   text-shadow:none!important;
   font-weight:800!important;
 }
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon,
-.nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon,
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon{
+.nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon{
   display:grid!important;
   place-items:center!important;
   flex:0 0 44px;
@@ -50,8 +47,7 @@
   opacity:1!important;
 }
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon :is(.icon,i,svg),
-.nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon :is(.icon,i,svg),
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"] .nv26-tile-icon :is(.icon,i,svg){
+.nv26-social-mega-card[class*="nv-platform-"] .nv26-social-mega-icon :is(.icon,i,svg){
   color:var(--nv84-ink)!important;
   -webkit-text-fill-color:currentColor!important;
   background:none!important;
@@ -61,8 +57,7 @@
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected),
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected):hover,
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(:hover,:focus-visible),
-.nv26-social-mega-card[class*="nv-platform-"]:is(:hover,:focus-visible),
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]:is(:hover,:focus-visible){
+.nv26-social-mega-card[class*="nv-platform-"]:is(:hover,:focus-visible){
   border:2px solid color-mix(in srgb,var(--np) 65%,#fff)!important;
   background:linear-gradient(140deg,#fff 0%,var(--np-soft) 80%)!important;
   color:var(--nv84-ink)!important;
@@ -83,23 +78,22 @@
   padding:11px 12px!important;
 }
 /* Platforms with tricky logo colors use the SAME symbol treatment on each surface. */
-:is(.nv26-social-mega-card,#featured .nv43-category-card,.nv26-catalog-tile).nv-platform-tiktok :is(.nv26-social-mega-icon,.yh26-filter-icon,.nv26-tile-icon){
+:is(.nv26-social-mega-card,#featured .nv43-category-card).nv-platform-tiktok :is(.nv26-social-mega-icon,.yh26-filter-icon){
   background:#fff!important;color:#17181e!important;border-color:#e5e8ef!important;
 }
-:is(.nv26-social-mega-card,#featured .nv43-category-card,.nv26-catalog-tile).nv-platform-tiktok :is(.nv26-social-mega-icon,.yh26-filter-icon,.nv26-tile-icon) .icon{
+:is(.nv26-social-mega-card,#featured .nv43-category-card).nv-platform-tiktok :is(.nv26-social-mega-icon,.yh26-filter-icon) .icon{
   color:#101216!important;
   filter:drop-shadow(-1px 0 #00F2EA) drop-shadow(1px 0 #FE2C55)!important;
 }
-:is(.nv26-social-mega-card,#featured .nv43-category-card,.nv26-catalog-tile).nv-platform-google :is(.nv26-social-mega-icon,.yh26-filter-icon,.nv26-tile-icon){
+:is(.nv26-social-mega-card,#featured .nv43-category-card).nv-platform-google :is(.nv26-social-mega-icon,.yh26-filter-icon){
   background:#fff!important;color:#4285F4!important;border-color:#dfe7f3!important;
 }
-:is(.nv26-social-mega-card,#featured .nv43-category-card,.nv26-catalog-tile).nv-platform-google :is(.nv26-social-mega-icon,.yh26-filter-icon,.nv26-tile-icon) .icon{
+:is(.nv26-social-mega-card,#featured .nv43-category-card).nv-platform-google :is(.nv26-social-mega-icon,.yh26-filter-icon) .icon{
   color:#4285F4!important;
   -webkit-text-fill-color:#4285F4!important;
 }
 /* Sector categories obey the exact same pastel-card rules as the social platforms. */
-#featured .nv43-category-card.yh18-featured-tab[class*="nv-sector-"]:not([class*="nv-platform-"]),
-.nv26-catalog-tiles .nv26-catalog-tile[class*="nv26-tile-"]:not([class*="nv-platform-"]){
+#featured .nv43-category-card.yh18-featured-tab[class*="nv-sector-"]:not([class*="nv-platform-"]){
   background:var(--ns-soft,#F2F0FE)!important;
   color:var(--ns-ink,#5044B0)!important;
   border:1px solid color-mix(in srgb,var(--ns,#6459C4) 18%,#fff)!important;
@@ -125,21 +119,18 @@
   background:#fff!important;border:1px solid color-mix(in srgb,var(--ns,#6459C4) 15%,white)!important;
 }
 /* Subcategory chips inherit their parent brand: no more generic purple/white rows. */
-#featured .nv43-subcategory-link[class*="nv-platform-"],
-.nv26-catalog-tiles .nv26-tile-sub a[class*="nv-platform-"]{
+#featured .nv43-subcategory-link[class*="nv-platform-"]{
   background:var(--np-soft)!important;
   color:var(--np-ink,var(--np))!important;
   border:1px solid color-mix(in srgb,var(--np) 22%,#fff)!important;
   border-radius:10px!important;
   box-shadow:none!important;
 }
-#featured .nv43-subcategory-link[class*="nv-platform-"] :is(.icon,i,svg),
-.nv26-catalog-tiles .nv26-tile-sub a[class*="nv-platform-"] :is(.icon,i,svg){
+#featured .nv43-subcategory-link[class*="nv-platform-"] :is(.icon,i,svg){
   color:var(--np-ink,var(--np))!important;
   -webkit-text-fill-color:currentColor!important;
 }
-#featured .nv43-subcategory-link[class*="nv-platform-"]:is(:hover,:focus-visible,.active,[aria-selected="true"]),
-.nv26-catalog-tiles .nv26-tile-sub a[class*="nv-platform-"]:is(:hover,:focus-visible){
+#featured .nv43-subcategory-link[class*="nv-platform-"]:is(:hover,:focus-visible,.active,[aria-selected="true"]){
   background:color-mix(in srgb,var(--np) 12%,white)!important;
   color:var(--np-ink,var(--np))!important;
   border-color:color-mix(in srgb,var(--np) 56%,#fff)!important;
@@ -224,6 +215,5 @@
 }
 @media(prefers-reduced-motion:reduce){
   #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"],
-  .nv26-social-mega-card[class*="nv-platform-"],
-  .nv26-catalog-tiles .nv26-catalog-tile[class*="nv-platform-"]{transition:none!important}
+.nv26-social-mega-card[class*="nv-platform-"]{transition:none!important}
 }

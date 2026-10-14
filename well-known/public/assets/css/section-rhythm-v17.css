@@ -192,11 +192,11 @@
 
 /* Contact, FAQ, legal/info pages */
 .yv-simple-hero{
-  padding-top:10px!important;
-  padding-bottom:10px!important;
+  padding-top:var(--nv-simple-hero-space,10px)!important;
+  padding-bottom:var(--nv-simple-hero-space,10px)!important;
 }
 .yv-simple-hero-visual-v12>.container{
-  min-height:250px!important;
+  min-height:var(--nv-simple-hero-height,250px)!important;
 }
 .yv-simple-hero-art-v12{
   min-height:240px!important;

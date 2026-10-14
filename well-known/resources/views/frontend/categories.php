@@ -10,11 +10,12 @@ $liveScriptCount = count(\App\Services\NetveraBridgeService::all());
   <section class="nv26-catalog-hero"><div class="container nv26-catalog-hero-inner">
     <div><span class="nv26-catalog-kicker"><?= icon('layers',15) ?> NetVera Dijital Hizmet Merkezi</span>
       <h1>İhtiyacınıza uygun <span>hizmeti keşfedin.</span></h1>
-      
+      <p>Sosyal medya, ajans ve SEO çözümlerini inceleyin; ihtiyacınız olan hizmete kolayca ulaşın.</p>
     </div>
     <a class="nv26-catalog-hero-link" href="#categories">Kategorileri keşfet <?= icon('arrow-right',15) ?></a>
   </div></section>
   <section id="categories" class="nv26-catalog-body"><div class="container">
+    <div class="nv26-catalog-controls">
     <div class="nv26-catalog-toolbar">
       <div class="nv26-catalog-toolbar-title"><span class="nv26-toolbar-icon"><?= icon('grid',20) ?></span>
         <div><strong>Tüm Hizmet Kategorileri</strong><small>Platformlara ve ihtiyaçlarınıza göre keşfedin.</small></div>
@@ -32,6 +33,7 @@ $liveScriptCount = count(\App\Services\NetveraBridgeService::all());
       </a>
       <?php endforeach; ?>
     </nav>
+    </div>
     <?php if(empty($catalogGroups)): ?>
     <div class="nv26-catalog-empty"><h2>Aramanızla eşleşen kategori bulunamadı.</h2>
       <a href="/kategoriler">Tüm hizmetleri görüntüle</a>

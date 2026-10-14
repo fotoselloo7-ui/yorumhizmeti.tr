@@ -47,12 +47,12 @@
     <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/forms-functional-v20.css') ?>">
@@ -62,9 +62,9 @@
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
     <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=26.2">
+    <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=28.1">
+    <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=20261014">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=20261013">
     <?php endif; ?>
@@ -109,16 +109,17 @@
 
     <link rel="stylesheet" href="<?= asset('css/theme-runtime-v71.css') ?>?v=71.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-premium-v76.css') ?>?v=76.3">
-    <link rel="stylesheet" href="<?= asset('css/social-platform-identity-v77.css') ?>?v=79.1">
-    <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=81.2">
-    <link rel="stylesheet" href="<?= asset('css/service-category-identity-v82.css') ?>?v=82.1">
+    <link rel="stylesheet" href="<?= asset('css/social-platform-identity-v77.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/service-category-identity-v82.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/header-reputation-parity-v83.css') ?>?v=83.1">
-    <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=84.1">
+    <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=85.1">
     <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=86.1">
-    <link rel="stylesheet" href="<?= asset('css/catalog-contrast-v87.css') ?>?v=87.1">
-    <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=88.1">
-    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=89.1">
+    <?php if($template==='frontend/categories'): ?>
+    <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261014">
+    <?php endif; ?>
+    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=20261014">
@@ -187,7 +188,7 @@
 
     <?= setting('header_script') ?>
 </head>
-<body<?= $nvThemeEnabled?' class="nv-theme-enabled"':'' ?>>
+<body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
 
     <div class="nv-topbar">
         <div class="container nv-topbar-inner">
@@ -721,7 +722,7 @@
     <?php require BASE_PATH.'/resources/views/frontend/partials/marketing-popup.php'; ?>
 
     <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
-    <script src="<?= asset('js/app.js') ?>?v=20261013"></script>
+    <script src="<?= asset('js/app.js') ?>?v=20261014"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=81.1"></script>
