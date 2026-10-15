@@ -39,10 +39,13 @@ export function validateExpertise(result, expectedLinks) {
   const rows = [];
   for (const c of result.cards) {
     if (!c.art || !c.copy || !c.title || !c.desc || !c.cta || !c.footer) { problems.push(c.key + ': missing geometry'); continue; }
-    if (c.art.bottom > c.copy.top + 2 || c.copy.bottom > c.footer.top + 2) problems.push(c.key + ': body overlap');
+    // Transparent art and copy share the same body; only the chip/footer region
+    // is disjoint. Mobile additionally reserves a clear CTA lane below artwork.
+    if (c.art.bottom > c.footer.top + 2 || c.copy.bottom > c.footer.top + 2) problems.push(c.key + ': footer overlap');
+    if (result.viewport[0] <= 700 && c.art.bottom > c.cta.top + 2) problems.push(c.key + ': artwork enters mobile CTA lane');
     if (c.title.bottom > c.desc.top + 2 || c.desc.bottom > c.cta.top + 2 || c.cta.bottom > c.footer.top - 10) problems.push(c.key + ': text/CTA overlap');
     if (c.overflow || c.chips.some(a => a.clipped)) problems.push(c.key + ': card/chip overflow');
-    if (!c.image.loaded || c.image.fit !== 'contain' || c.image.natural.join(',') !== '360,140') problems.push(c.key + ': incomplete/cropped artwork');
+    if (!c.image.loaded || c.image.fit !== 'contain' || Math.min(...c.image.natural) < 1000) problems.push(c.key + ': incomplete/cropped artwork');
     for (const child of [c.art,c.copy,c.footer,...c.chips.map(a => a.rect)]) {
       if (child.left < c.box.left - 2 || child.right > c.box.right + 2 || child.bottom > c.box.bottom + 2) problems.push(c.key + ': child outside card');
     }

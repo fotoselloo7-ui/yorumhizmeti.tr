@@ -749,36 +749,40 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 <?php endif; ?>
 
 <section class="nv29-services" aria-labelledby="nv29-services-title">
-    <div class="container">
+    <div class="nv29-container">
         <div class="nv29-section-intro">
             <div>
-                <span class="nv29-section-kicker"><?= icon('sparkles', 14) ?> HER İHTİYACA UYGUN DİJİTAL ÇÖZÜMLER</span>
+                <span class="nv29-section-kicker"><?= icon('sparkles', 20) ?> HER İHTİYACA UYGUN DİJİTAL ÇÖZÜMLER</span>
                 <h2 id="nv29-services-title">Tek platform, <span>üç güçlü uzmanlık alanı.</span></h2>
             </div>
-            <a href="/kategoriler" class="nv29-view-all">Tüm Hizmetleri Keşfet <?= icon('arrow-up-right', 15) ?></a>
+            <a href="/kategoriler" class="nv29-view-all">Tüm Hizmetleri Keşfet <?= icon('arrow-up-right', 20) ?></a>
         </div>
         <div class="nv29-services-grid" aria-label="Dijital hizmet ana kategorileri">
         <?php foreach (($homePromoGroups ?? []) as $promo):
             $nv29Artwork = match ($promo['key']) {
-                'social' => 'social.svg', 'marketing' => 'marketing.svg', default => 'agency.svg'
+                'social' => ['social.png', 1149, 1369],
+                'marketing' => ['marketing.png', 1328, 1184],
+                default => ['agency.png', 1312, 1199]
             };
         ?>
             <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>" aria-labelledby="nv29-title-<?= e($promo['key']) ?>">
-                <div class="nv29-visual" aria-hidden="true">
-                    <img class="nv29-artwork" src="<?= e(asset('img/expertise/'.$nv29Artwork)) ?>" alt="" width="360" height="140" loading="lazy" decoding="async">
-                </div>
-                <div class="nv29-card-content">
-                    <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 12) ?> <?= e($promo['eyebrow']) ?></span>
-                    <h3 class="nv29-card-title" id="nv29-title-<?= e($promo['key']) ?>"><?= e($promo['title']) ?></h3>
-                    <p class="nv29-card-description"><?= e($promo['description']) ?></p>
-                    <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">
-                        <?= e($promo['cta']) ?> <?= icon('arrow-right', 15) ?>
-                    </a>
+                <div class="nv29-card-body">
+                    <div class="nv29-visual" aria-hidden="true">
+                        <img class="nv29-artwork" src="<?= e(asset('img/expertise/'.$nv29Artwork[0])) ?>" alt="" width="<?= $nv29Artwork[1] ?>" height="<?= $nv29Artwork[2] ?>" loading="lazy" decoding="async">
+                    </div>
+                    <div class="nv29-card-content">
+                        <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 22) ?> <?= e($promo['eyebrow']) ?></span>
+                        <h3 class="nv29-card-title" id="nv29-title-<?= e($promo['key']) ?>"><?= e($promo['title']) ?></h3>
+                        <p class="nv29-card-description"><?= e($promo['description']) ?></p>
+                        <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">
+                            <?= e($promo['cta']) ?> <?= icon('arrow-right', 20) ?>
+                        </a>
+                    </div>
                 </div>
                 <div class="nv29-service-chips" aria-label="<?= e($promo['title']) ?> alt kategorileri">
                     <?php foreach ($promo['chips'] as $chip): ?>
                     <a href="<?= e($chip['url']) ?>" title="<?= e($chip['name']) ?>" class="nv29-service-chip">
-                        <?= icon($chip['icon'], 12) ?> <span><?= e($chip['name']) ?></span>
+                        <?= icon($chip['icon'], 24) ?> <span><?= e($chip['name']) ?></span>
                     </a>
                     <?php endforeach; ?>
                 </div>

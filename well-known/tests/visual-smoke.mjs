@@ -267,8 +267,9 @@ for(const screen of screens){
           for(const g of serviceGeometry){
             if(!g.copy||!g.visual||!g.chips||!g.title||!g.desc||!g.cta)
               throw new Error('Expertise card geometry node missing: '+JSON.stringify(g));
-            if(g.visual.bottom>g.copy.top+2)
-              throw new Error('Expertise artwork overlaps text body: '+JSON.stringify(g));
+            // Alpha artwork shares the pastel body, not a separate top strip.
+            if(g.visual.left<g.copy.left || g.visual.right>g.copy.right+2)
+              throw new Error('Expertise artwork leaves shared body: '+JSON.stringify(g));
             if(g.copy.bottom>g.chips.top+2||g.visual.bottom>g.chips.top+2||g.cta.bottom>g.chips.top+2)
               throw new Error('Expertise body overlaps chip footer: '+JSON.stringify(g));
             if(g.title.bottom>g.desc.top+2)
@@ -693,7 +694,7 @@ for(const screen of screens){
         }
         if(screen.name==='masaustu'){
           const images=page.locator('.nv29-artwork');
-          if(await images.count()!==3 || !(await images.evaluateAll(nodes=>nodes.every(el=>el.complete&&el.naturalWidth===360&&el.naturalHeight===140)))){
+          if(await images.count()!==3 || !(await images.evaluateAll(nodes=>nodes.every(el=>el.complete&&Math.min(el.naturalWidth,el.naturalHeight)>=1000&&getComputedStyle(el).objectFit==='contain')))){
             errors.push('Single-scene expertise artwork did not load');failed=true;
           }
           await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});

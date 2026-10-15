@@ -217,24 +217,30 @@ class HomeController extends Controller
 
         // Three permanent promotional service families, backed by the same live
         // catalog as the mega menu. Category chips only link to ACTIVE records.
+        // Preserve custom admin copy; shorten only the historical default to
+        // the heading in the approved expertise-card reference.
+        $socialTitle = setting('brand_sector_social', 'Sosyal Medya Hizmetleri');
+        if ($socialTitle === 'Instagram, TikTok ve YouTube Hizmetleri') {
+            $socialTitle = 'Sosyal Medya Hizmetleri';
+        }
         $promoConfig = [
             'social' => [
-                'title' => setting('brand_sector_social','Instagram, TikTok ve YouTube Hizmetleri'),
-                'eyebrow' => 'MARKANI SOSYALDE BÜYÜT',
-                'description' => 'Instagram, TikTok, YouTube ve diğer platformlarda etkileşiminizi ve görünürlüğünüzü artıran çözümler.',
+                'title' => $socialTitle,
+                'eyebrow' => 'MARKANIZI DAHA GÖRÜNÜR YAPIN',
+                'description' => 'Instagram, TikTok, YouTube ve diğer platformlarda etkileşiminizi ve görünürlüğünüzü artıran kreatif çözümler.',
                 'cta' => 'Paketleri İncele',
                 'preferred' => ['instagram', 'tiktok', 'youtube', 'facebook'],
             ],
             'agency' => [
                 'title' => setting('brand_sector_software','Hazır Yazılım ve Özel Web Çözümleri'),
-                'eyebrow' => 'DİJİTAL ALTYAPINI KUR',
+                'eyebrow' => 'İŞİNİZE ÖZEL TEKNOLOJİ ÇÖZÜMLERİ',
                 'description' => 'Web sitesi, e-ticaret, özel yazılım, mobil uygulama ve tasarım için profesyonel çözümler.',
                 'cta' => 'Hizmetleri İncele',
                 'preferred' => ['web', 'ecommerce', 'mobileapp', 'graphic'],
             ],
             'marketing' => [
                 'title' => setting('brand_sector_agency','Dijital Ajans, SEO ve Reklam Yönetimi'),
-                'eyebrow' => 'DİJİTALDE DAHA GÖRÜNÜR OL',
+                'eyebrow' => 'BÜYÜMENİZ İÇİN DİJİTAL GÜÇ',
                 'description' => 'SEO, reklam yönetimi, yerel işletme ve dijital büyüme hizmetleriyle markanızı öne çıkarın.',
                 'cta' => 'Çözümleri İncele',
                 'preferred' => ['seo', 'ads', 'local', 'reputation'],
