@@ -18,6 +18,7 @@ export function measureExpertise() {
     cards: [...section.querySelectorAll('.nv29-service-card')].map(card => ({
       key: card.dataset.promoGroup, box: rect(card),
       art: rect(card.querySelector('.nv29-visual')),
+      headingRow: rect(card.querySelector('.nv29-card-heading')),
       copy: rect(card.querySelector('.nv29-card-content')),
       title: rect(card.querySelector('h3')), desc: rect(card.querySelector('p')),
       cta: rect(card.querySelector('.nv29-card-cta')), footer: rect(card.querySelector('.nv29-service-chips')),
@@ -37,7 +38,7 @@ export function validateExpertise(result, expectedLinks) {
   if (result.missing) return ['Missing expertise section'];
   const problems = [];
   if(result.heading.display!=='block' || result.heading.purple.top < result.heading.box.top+result.heading.lineHeight-2) problems.push('Purple heading did not move to the next line');
-  if(result.viewport[0]>=1280 && result.cards.some(c=>c.box.height>490)) problems.push('Desktop cards stretched beyond compact target');
+  if(result.viewport[0]>=1280 && result.cards.some(c=>c.box.height>380)) problems.push('Desktop cards stretched beyond minimal target');
   if (result.doc > result.viewport[0] + 1) problems.push('Document overflow');
   if (JSON.stringify(result.cards.map(c => c.key)) !== JSON.stringify(['social','agency','marketing'])) problems.push('Service family order changed');
   if (expectedLinks && JSON.stringify(result.links) !== JSON.stringify(expectedLinks)) problems.push('Category links/content changed');
@@ -45,10 +46,10 @@ export function validateExpertise(result, expectedLinks) {
   const rows = [];
   for (const c of result.cards) {
     if (!c.art || !c.copy || !c.title || !c.desc || !c.cta || !c.footer) { problems.push(c.key + ': missing geometry'); continue; }
-    // Transparent art and copy share the same body; only the chip/footer region
-    // is disjoint. Mobile additionally reserves a clear CTA lane below artwork.
+    // Normal-flow thumbnail stays beside the heading, entirely above the copy.
     if (c.art.bottom > c.footer.top + 2 || c.copy.bottom > c.footer.top + 2) problems.push(c.key + ': footer overlap');
-    if (result.viewport[0] <= 700 && c.art.bottom > c.cta.top + 2) problems.push(c.key + ': artwork enters mobile CTA lane');
+    if (c.art.bottom > c.desc.top + 2 || c.title.right > c.art.left + 2) problems.push(c.key + ': artwork/text overlap');
+    if (Math.abs(c.desc.width-c.headingRow.width)>2) problems.push(c.key + ': description not full width');
     if (c.title.bottom > c.desc.top + 2 || c.desc.bottom > c.cta.top + 2 || c.cta.bottom > c.footer.top - 10) problems.push(c.key + ': text/CTA overlap');
     if (c.overflow || c.chips.some(a => a.clipped)) problems.push(c.key + ': card/chip overflow');
     if (!c.image.loaded || c.image.fit !== 'contain' || Math.min(...c.image.natural) < 1000) problems.push(c.key + ': incomplete/cropped artwork');

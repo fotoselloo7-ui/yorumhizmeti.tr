@@ -767,12 +767,13 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
         ?>
             <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>" aria-labelledby="nv29-title-<?= e($promo['key']) ?>">
                 <div class="nv29-card-body">
-                    <div class="nv29-visual" aria-hidden="true">
-                        <img class="nv29-artwork" src="<?= e(asset('img/expertise/'.$nv29Artwork[0])) ?>" alt="" width="<?= $nv29Artwork[1] ?>" height="<?= $nv29Artwork[2] ?>" loading="lazy" decoding="async">
-                    </div>
                     <div class="nv29-card-content">
-                        <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 22) ?> <?= e($promo['eyebrow']) ?></span>
-                        <h3 class="nv29-card-title" id="nv29-title-<?= e($promo['key']) ?>"><?= e($promo['title']) ?></h3>
+                        <div class="nv29-card-heading">
+                            <h3 class="nv29-card-title" id="nv29-title-<?= e($promo['key']) ?>"><?= e($promo['title']) ?></h3>
+                            <div class="nv29-visual" aria-hidden="true">
+                                <img class="nv29-artwork" src="<?= e(asset('img/expertise/'.$nv29Artwork[0])) ?>" alt="" width="<?= $nv29Artwork[1] ?>" height="<?= $nv29Artwork[2] ?>" loading="lazy" decoding="async">
+                            </div>
+                        </div>
                         <p class="nv29-card-description"><?= e($promo['description']) ?></p>
                         <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">
                             <?= e($promo['cta']) ?> <?= icon('arrow-right', 20) ?>

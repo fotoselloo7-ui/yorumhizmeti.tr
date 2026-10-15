@@ -10,11 +10,11 @@ foreach(['nv106-','nv29-social-person','nv29-card-glow','nv29-agency-window','nv
 }
 $css=$read('public/assets/css/home-service-groups-v29.css');
 if(!str_contains($css,'.nv29-section-intro h2 span{display:block;'))throw new RuntimeException('Purple heading must start below the black heading');
-if(!str_contains($css,'min-height:336px') || str_contains($css,'min-height:clamp(388px') || str_contains($css,'min-height:400px'))throw new RuntimeException('Stretched card body returned');
-foreach(['object-fit:contain','flex-wrap:wrap','justify-content:center','calc((100% - 32px)/3)','flex-basis:100%','margin-top:auto',':focus-visible','prefers-reduced-motion','container-type:inline-size','.nv29-card-body','bottom:80px'] as $token) {
+if(!str_contains($component,'class="nv29-card-heading"') || str_contains($component,'nv29-eyebrow'))throw new RuntimeException('Minimal heading/thumbnail structure missing');
+foreach(['object-fit:contain','flex-wrap:wrap','justify-content:center','calc((100% - 32px)/3)','flex-basis:100%','margin-top:auto',':focus-visible','prefers-reduced-motion','position:static','max-width:none','.nv29-card-body'] as $token) {
     if(!str_contains($css,$token))throw new RuntimeException('Responsive expertise contract missing '.$token);
 }
-foreach(['!important','overflow:hidden','object-fit:cover','nv106-',':last-child',':nth-child'] as $legacy) {
+foreach(['!important','overflow:hidden','object-fit:cover','nv106-',':last-child',':nth-child','position:absolute','min-height:336px','max-width:58%','max-width:46%','nv29-eyebrow','::before','::after'] as $legacy) {
     if(str_contains($css,$legacy))throw new RuntimeException('Clipped/split layout returned: '.$legacy);
 }
 // Pure synthetic template fixture: no database, requests or production data.
