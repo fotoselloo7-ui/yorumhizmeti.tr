@@ -9,7 +9,7 @@ foreach(['nv106-','nv29-social-person','nv29-card-glow','nv29-agency-window','nv
     if(str_contains($component,$legacy))throw new RuntimeException('Split artwork returned: '.$legacy);
 }
 $css=$read('public/assets/css/home-service-groups-v29.css');
-foreach(['object-fit:contain','flex-wrap:wrap','justify-content:center','calc((100% - 32px)/3)','flex-basis:100%','margin-top:auto',':focus-visible','prefers-reduced-motion','container-type:inline-size','.nv29-container','.nv29-card-body','bottom:80px'] as $token) {
+foreach(['object-fit:contain','flex-wrap:wrap','justify-content:center','calc((100% - 32px)/3)','flex-basis:100%','margin-top:auto',':focus-visible','prefers-reduced-motion','container-type:inline-size','.nv29-card-body','bottom:80px'] as $token) {
     if(!str_contains($css,$token))throw new RuntimeException('Responsive expertise contract missing '.$token);
 }
 foreach(['!important','overflow:hidden','object-fit:cover','nv106-',':last-child',':nth-child'] as $legacy) {

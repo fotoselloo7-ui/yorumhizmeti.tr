@@ -1,5 +1,17 @@
 # Ana sayfa hazır yazılım bölümü — 2026-10-15
 
+## Son düzeltme: bütün komşu bölümlerle hizalama
+
+Önceki çalışmada yalnız iki geniş bölüm karşılaştırılmış, alttaki mor hizmet şeridi ve müşteri yorumları ölçüme alınmamıştı. Kullanıcının yeni ekranı bu eksik doğrulamayı gösterdi. Aşağıdaki önceki uygulama notları tarihsel kayıttır; artık 1544px frame kullanılmıyor.
+
+Uzmanlık ve yazılım wrapper'ları mevcut genel `container` sınıfına geçirildi. `home-service-groups-v29.css` içindeki bağımsız 1544px genişlik ve üç breakpoint genişlik kuralı tamamen kaldırıldı; uzmanlık başlığının ilave 32px iç marjı da kaldırıldı. Cache anahtarı yenilendi. Global CSS, header/footer, alt bölümler ve iç sayfalar değiştirilmedi. Test ve browser probe artık uzmanlık, yazılım, mor hizmet şeridi, yorumlar ve referansları birlikte karşılaştırıyor.
+
+Gerçek Chrome ölçümü: 1920, 1440 ve 1280 desktop genişliklerinde beş bölümün tamamı 1200px; 1024'te 969px, 390'da 343px, 360'ta 313px. Sol kenarlar da aynı. Yatay taşma yok. Desktop uzmanlık kartları ve yazılım→hizmet şeridi→yorumlar geçişi görsel olarak kontrol edildi; mobil reflow korundu. Kanıt klasörü: `qa-artifacts/home-container-20261015`.
+
+İlgili uzmanlık, yazılım frame, yorum/mobil ve referans QA testleri başarılı; değişen PHP template'lerde lint ve browser probe syntax kontrolü başarılı. Önceki 26 test sonucu önceki commit'e aittir. Bu dar değişiklikte ödeme/admin uçtan uca testleri çalıştırılmadı. Genel eski CSS katmanları korunuyor; bu kapsamda yeni genişlik override'ı veya yeni stylesheet eklenmedi.
+
+360px görsel kontrolde hizmet şeridindeki “Sosyal Medya” başlığının legacy `white-space:nowrap` nedeniyle komşu hücreye taştığı da görüldü. `home-footer-motion-v49.css` içindeki mevcut kural `normal` yapıldı; yeni override eklenmedi. Menü metni mobilde iki satıra akıyor. İlgili cache anahtarı ve QA kontrolü güncellendi; footer kuralları değişmedi.
+
 ## Kapsam ve kök neden
 
 Kullanıcının son isteği doğrultusunda, tüm siteyi genişleten önceki commitlenmemiş çalışma geri alındı. Genel container, header/footer, iç sayfalar ve AGENTS.md tekrar `50582e8` durumunda bırakıldı. Kullanıcının mevcut local değişikliklerine ve `.sync-conflict-*` dosyalarına dokunulmadı.

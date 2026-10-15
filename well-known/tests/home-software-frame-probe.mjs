@@ -1,4 +1,4 @@
-/** Read-only geometry check for the two adjacent home sections. */
+/** Read-only geometry check across the actual homepage section chain. */
 export function measureHomeSoftwareFrame() {
   const rect=s=>document.querySelector(s)?.getBoundingClientRect().toJSON();
   const section=document.querySelector('.nv31-software');
@@ -6,7 +6,8 @@ export function measureHomeSoftwareFrame() {
   return {
     viewport:[innerWidth,innerHeight],client:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,
     header:rect('.site-header>.container'),footer:rect('.site-footer>.container'),
-    expertise:rect('.nv29-services>.nv29-container'),software:rect('.nv31-software>.nv31-container'),
+    expertise:rect('.nv29-services>.container'),software:rect('.nv31-software>.container'),
+    navigation:rect('.yh6-stats>.container'),feedback:rect('.nv30-feedback>.container'),portfolio:rect('.nv31-portfolio>.container'),
     section:{x:area.x,y:area.y+scrollY,width:area.width,height:area.height},
     clips:[...section.querySelectorAll('h2,h3,p,a')].filter(e=>e.scrollWidth>e.clientWidth+3).map(e=>e.className),
     cards:[...section.querySelectorAll('.nv31-software-card')].map(e=>{
@@ -18,7 +19,10 @@ export function measureHomeSoftwareFrame() {
 export function validateHomeSoftwareFrame(r) {
   const problems=[];
   if(!r.expertise||!r.software) return ['Adjacent frame missing'];
-  if(Math.abs(r.expertise.x-r.software.x)>1||Math.abs(r.expertise.width-r.software.width)>1)problems.push('Expertise/software alignment differs');
+  for(const key of ['expertise','software','navigation','feedback','portfolio']) {
+    const frame=r[key];
+    if(!frame || Math.abs(frame.x-r.header.x)>1 || Math.abs(frame.width-r.header.width)>1)problems.push(key+' differs from site container');
+  }
   if(r.scrollWidth>r.client+2)problems.push('Page horizontal overflow');
   if(r.viewport[0]>=1280&&(Math.abs(r.header.width-1200)>1||Math.abs(r.footer.width-1200)>1))problems.push('General page frame changed');
   if(r.clips.length)problems.push('Showcase text clips: '+r.clips.join(','));

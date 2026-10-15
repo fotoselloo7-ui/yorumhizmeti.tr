@@ -96,7 +96,7 @@
 }
 .yh-home-v6 .yh6-stats .yh49-stat strong{
  font-size:clamp(15px,1.42vw,19px)!important;line-height:1.2!important;
- letter-spacing:-.035em!important;color:#fff!important;white-space:nowrap;
+ letter-spacing:-.035em!important;color:#fff!important;white-space:normal;
 }
 .yh-home-v6 .yh6-stats .yh49-stat small{
  font-size:10px!important;font-weight:500!important;line-height:1.35!important;

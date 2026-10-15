@@ -66,7 +66,7 @@
     <link rel="stylesheet" href="<?= asset('css/agency-mega-premium-v27.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/icon-alignment-v28.css') ?>?v=20261014">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=20261015-reference">
+    <link rel="stylesheet" href="<?= asset('css/home-service-groups-v29.css') ?>?v=20261015-container">
     <?php endif; ?>
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/premium-trust-steps-v30.css') ?>?v=30.1">
@@ -89,7 +89,7 @@
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261015-wrap">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-portfolio-v51.css') ?>?v=51.3">
     <?php endif; ?>

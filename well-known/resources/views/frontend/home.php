@@ -749,7 +749,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 <?php endif; ?>
 
 <section class="nv29-services" aria-labelledby="nv29-services-title">
-    <div class="nv29-container">
+    <div class="container">
         <div class="nv29-section-intro">
             <div>
                 <span class="nv29-section-kicker"><?= icon('sparkles', 20) ?> HER İHTİYACA UYGUN DİJİTAL ÇÖZÜMLER</span>
@@ -793,7 +793,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 </section>
 
 <section class="nv31-software" id="hazir-yazilimlar" aria-labelledby="nv31-software-heading">
-  <div class="nv29-container nv31-container">
+  <div class="container">
     <div class="nv31-section-heading">
       <div>
         <span class="nv31-kicker"><?= icon('monitor',14) ?> HAZIR YAZILIM KATALOĞU</span>
