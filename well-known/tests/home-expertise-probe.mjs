@@ -9,6 +9,10 @@ export function measureExpertise() {
   return {
     viewport: [innerWidth, innerHeight],
     doc: document.documentElement.scrollWidth,
+    heading: (() => {
+      const h=section.querySelector('h2'),purple=h.querySelector('span');
+      return {box:rect(h),purple:rect(purple),display:getComputedStyle(purple).display,lineHeight:getComputedStyle(h).lineHeight.replace('px','')*1};
+    })(),
     section: { x: area.left, y: area.top + scrollY, width: area.width, height: area.height },
     links: [...section.querySelectorAll('a')].map(a => ({ text: a.textContent.trim(), href: a.getAttribute('href') })),
     cards: [...section.querySelectorAll('.nv29-service-card')].map(card => ({
@@ -32,6 +36,8 @@ export function measureExpertise() {
 export function validateExpertise(result, expectedLinks) {
   if (result.missing) return ['Missing expertise section'];
   const problems = [];
+  if(result.heading.display!=='block' || result.heading.purple.top < result.heading.box.top+result.heading.lineHeight-2) problems.push('Purple heading did not move to the next line');
+  if(result.viewport[0]>=1280 && result.cards.some(c=>c.box.height>490)) problems.push('Desktop cards stretched beyond compact target');
   if (result.doc > result.viewport[0] + 1) problems.push('Document overflow');
   if (JSON.stringify(result.cards.map(c => c.key)) !== JSON.stringify(['social','agency','marketing'])) problems.push('Service family order changed');
   if (expectedLinks && JSON.stringify(result.links) !== JSON.stringify(expectedLinks)) problems.push('Category links/content changed');
