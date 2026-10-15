@@ -14,6 +14,9 @@
 .nv31-software-card{min-width:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid #e4e7f2;border-radius:18px;background:#fff;box-shadow:0 9px 24px rgba(35,45,96,.048);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
 .nv31-software-card:hover{transform:translateY(-4px);border-color:#d5cef4;box-shadow:0 18px 36px rgba(37,46,99,.12)}
 .nv31-software-image{position:relative;display:block;height:176px;overflow:hidden;background:linear-gradient(132deg,#212e68,#6750ce);color:#fff;text-decoration:none}
+/* Only the homepage showcase shares the expertise frame. Preserve cover
+   proportions as its cards widen; other catalogues keep their existing layout. */
+.nv31-software .nv31-software-image{height:auto;aspect-ratio:16/10}
 .nv31-software-image>img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
 .nv31-software-card:hover .nv31-software-image>img{transform:scale(1.035)}
 .nv31-software-image-placeholder{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 72% 15%,rgba(255,255,255,.25),transparent 35%),linear-gradient(130deg,#253f91,#7452d8)}

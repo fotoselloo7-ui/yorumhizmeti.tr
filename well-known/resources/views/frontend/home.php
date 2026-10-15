@@ -793,7 +793,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 </section>
 
 <section class="nv31-software" id="hazir-yazilimlar" aria-labelledby="nv31-software-heading">
-  <div class="container">
+  <div class="nv29-container nv31-container">
     <div class="nv31-section-heading">
       <div>
         <span class="nv31-kicker"><?= icon('monitor',14) ?> HAZIR YAZILIM KATALOĞU</span>

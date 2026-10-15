@@ -71,7 +71,7 @@
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/premium-trust-steps-v30.css') ?>?v=30.1">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/software-showcase-v31.css') ?>?v=32.1">
+    <link rel="stylesheet" href="<?= asset('css/software-showcase-v31.css') ?>?v=20261015-frame">
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <?php if(in_array($template,['frontend/netvera-scripts','frontend/netvera-script-detail'],true)): ?>
