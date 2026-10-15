@@ -1,5 +1,11 @@
 # Minimal uzmanlık kartları — 2026-10-15
 
+## Son güncelleme: görselsiz kartlar
+
+Kullanıcının “görselleri kaldır veya büyüt” isteği doğrultusunda minimal görselsiz seçenek uygulandı. `home.php` içinden üç dekoratif img ve artwork eşleme bloğu, component CSS'inden thumbnail sınıfları ve 80px görsel sütunu kaldırıldı. Görsel dosyaları diskten silinmedi. Başlıklar artık tam genişliktedir; kategori ikonları/bağlantıları ve diğer bölümler korunur. `app.php` cache anahtarı ve iki uzmanlık testi güncellendi.
+
+Gerçek Chrome browser probe: 1440/1280'de üç kart 311px; 1024'te 284px; 390'da 304/342/309px; 360'ta 304/342/354px. Beş boyutta görsel sayısı sıfır; taşma/kırpılma ve CTA/chip çakışması kontrolleri başarılı. PHP lint, JS syntax, uzmanlık QA ve site container QA başarılı. Kanıt klasörü: `qa-artifacts/expertise-text-20261015`. Aşağıdaki thumbnail notları önceki tasarımın tarihsel kaydıdır. Fixed destek widget'ına ilişkin mevcut sınır değişmedi; ödeme/admin uçtan uca testi yapılmadı.
+
 ## Kök neden ve çözüm
 
 Önceki kartlarda görseller absolute konumdaydı; açıklamalar desktop'ta %58, mobilde %46 genişlikle sınırlanıyordu. Yükseklikleri azaltmak metinlerin dar sütunda gereksiz kırılmasını ve görsel ile aynı alana girmesini çözmüyordu.

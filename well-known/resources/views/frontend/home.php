@@ -758,21 +758,12 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
             <a href="/kategoriler" class="nv29-view-all">Tüm Hizmetleri Keşfet <?= icon('arrow-up-right', 20) ?></a>
         </div>
         <div class="nv29-services-grid" aria-label="Dijital hizmet ana kategorileri">
-        <?php foreach (($homePromoGroups ?? []) as $promo):
-            $nv29Artwork = match ($promo['key']) {
-                'social' => ['social.png', 1149, 1369],
-                'marketing' => ['marketing.png', 1328, 1184],
-                default => ['agency.png', 1312, 1199]
-            };
-        ?>
+        <?php foreach (($homePromoGroups ?? []) as $promo): ?>
             <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>" aria-labelledby="nv29-title-<?= e($promo['key']) ?>">
                 <div class="nv29-card-body">
                     <div class="nv29-card-content">
                         <div class="nv29-card-heading">
                             <h3 class="nv29-card-title" id="nv29-title-<?= e($promo['key']) ?>"><?= e($promo['title']) ?></h3>
-                            <div class="nv29-visual" aria-hidden="true">
-                                <img class="nv29-artwork" src="<?= e(asset('img/expertise/'.$nv29Artwork[0])) ?>" alt="" width="<?= $nv29Artwork[1] ?>" height="<?= $nv29Artwork[2] ?>" loading="lazy" decoding="async">
-                            </div>
                         </div>
                         <p class="nv29-card-description"><?= e($promo['description']) ?></p>
                         <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">

@@ -1,5 +1,5 @@
 /** Read-only browser check. Use with page.evaluate(measureExpertise).
- * Screenshots remain necessary for visual quality and illustration framing.
+ * Screenshots remain necessary for visual quality and text flow.
  */
 export function measureExpertise() {
   const rect = element => element?.getBoundingClientRect().toJSON();
@@ -17,17 +17,12 @@ export function measureExpertise() {
     links: [...section.querySelectorAll('a')].map(a => ({ text: a.textContent.trim(), href: a.getAttribute('href') })),
     cards: [...section.querySelectorAll('.nv29-service-card')].map(card => ({
       key: card.dataset.promoGroup, box: rect(card),
-      art: rect(card.querySelector('.nv29-visual')),
       headingRow: rect(card.querySelector('.nv29-card-heading')),
       copy: rect(card.querySelector('.nv29-card-content')),
       title: rect(card.querySelector('h3')), desc: rect(card.querySelector('p')),
       cta: rect(card.querySelector('.nv29-card-cta')), footer: rect(card.querySelector('.nv29-service-chips')),
       chips: [...card.querySelectorAll('.nv29-service-chip')].map(a => ({ rect: rect(a), clipped: a.scrollWidth > a.clientWidth + 2 })),
-      image: {
-        loaded: card.querySelector('img').complete,
-        natural: [card.querySelector('img').naturalWidth, card.querySelector('img').naturalHeight],
-        fit: getComputedStyle(card.querySelector('img')).objectFit
-      },
+      imageCount:card.querySelectorAll('img').length,
       overflow: card.scrollWidth > card.clientWidth + 2
     })),
     issues: [...section.querySelectorAll('h2,h3,p,a')].filter(e => e.scrollWidth > e.clientWidth + 3).map(e => e.className)
@@ -45,15 +40,13 @@ export function validateExpertise(result, expectedLinks) {
   problems.push(...result.issues.map(x => 'Clipped text: ' + x));
   const rows = [];
   for (const c of result.cards) {
-    if (!c.art || !c.copy || !c.title || !c.desc || !c.cta || !c.footer) { problems.push(c.key + ': missing geometry'); continue; }
-    // Normal-flow thumbnail stays beside the heading, entirely above the copy.
-    if (c.art.bottom > c.footer.top + 2 || c.copy.bottom > c.footer.top + 2) problems.push(c.key + ': footer overlap');
-    if (c.art.bottom > c.desc.top + 2 || c.title.right > c.art.left + 2) problems.push(c.key + ': artwork/text overlap');
+    if (!c.copy || !c.title || !c.desc || !c.cta || !c.footer) { problems.push(c.key + ': missing geometry'); continue; }
+    if (c.copy.bottom > c.footer.top + 2) problems.push(c.key + ': footer overlap');
     if (Math.abs(c.desc.width-c.headingRow.width)>2) problems.push(c.key + ': description not full width');
     if (c.title.bottom > c.desc.top + 2 || c.desc.bottom > c.cta.top + 2 || c.cta.bottom > c.footer.top - 10) problems.push(c.key + ': text/CTA overlap');
     if (c.overflow || c.chips.some(a => a.clipped)) problems.push(c.key + ': card/chip overflow');
-    if (!c.image.loaded || c.image.fit !== 'contain' || Math.min(...c.image.natural) < 1000) problems.push(c.key + ': incomplete/cropped artwork');
-    for (const child of [c.art,c.copy,c.footer,...c.chips.map(a => a.rect)]) {
+    if (c.imageCount) problems.push(c.key + ': decorative image returned');
+    for (const child of [c.copy,c.footer,...c.chips.map(a => a.rect)]) {
       if (child.left < c.box.left - 2 || child.right > c.box.right + 2 || child.bottom > c.box.bottom + 2) problems.push(c.key + ': child outside card');
     }
     if (result.viewport[0] <= 700 && c.box.width < result.doc - 42) problems.push(c.key + ': mobile did not reflow');
