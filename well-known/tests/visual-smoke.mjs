@@ -256,19 +256,19 @@ for(const screen of screens){
             throw new Error('Service category buttons do not share a horizontal baseline: '+JSON.stringify(ctas));
           const serviceGeometry=await cards.evaluateAll(nodes=>nodes.map(card=>{
             const rect=el=>el?.getBoundingClientRect();
-            const copy=rect(card.querySelector('.nv106-card-content'));
+            const copy=rect(card.querySelector('.nv29-card-content'));
             const visual=rect(card.querySelector('.nv29-visual'));
             const chips=rect(card.querySelector('.nv29-service-chips'));
-            const title=rect(card.querySelector('.nv106-card-title'));
-            const desc=rect(card.querySelector('.nv106-card-description'));
-            const cta=rect(card.querySelector('.nv106-card-cta'));
+            const title=rect(card.querySelector('.nv29-card-title'));
+            const desc=rect(card.querySelector('.nv29-card-description'));
+            const cta=rect(card.querySelector('.nv29-card-cta'));
             return {copy,visual,chips,title,desc,cta};
           }));
           for(const g of serviceGeometry){
             if(!g.copy||!g.visual||!g.chips||!g.title||!g.desc||!g.cta)
               throw new Error('Expertise card geometry node missing: '+JSON.stringify(g));
-            if(g.copy.right>g.visual.left+2)
-              throw new Error('Expertise copy overlaps artwork lane: '+JSON.stringify(g));
+            if(g.visual.bottom>g.copy.top+2)
+              throw new Error('Expertise artwork overlaps text body: '+JSON.stringify(g));
             if(g.copy.bottom>g.chips.top+2||g.visual.bottom>g.chips.top+2||g.cta.bottom>g.chips.top+2)
               throw new Error('Expertise body overlaps chip footer: '+JSON.stringify(g));
             if(g.title.bottom>g.desc.top+2)
@@ -649,13 +649,13 @@ for(const screen of screens){
               return {
                 key,
                 title:card.querySelector('h3')?.textContent?.trim(),
-                validCta:cta?.getAttribute('href')==='/kategoriler?grup='+key,
+                validCta:cta?.getAttribute('href')==='/kategoriler/grup/'+key,
                 badChips:chips.filter(a=>!a.getAttribute('href')?.startsWith('/kategori/')).length,
                 tooManyChips:chips.length>4,
                 artVisible:!!artwork && artwork.width>35 && artwork.height>65,
                 narrow:area.width<270,
-                // Intentional clipped decoration may enlarge scrollWidth.
-                // Check the actual content and CTA against the card and chip row.
+                // Single-scene artwork no longer relies on clipped decoration.
+                // Content and CTA must remain inside the card/chip boundaries.
                 contentOverflow:(()=>{
                   const content=card.querySelector('.nv29-card-content')?.getBoundingClientRect();
                   const footer=card.querySelector('.nv29-service-chips')?.getBoundingClientRect();
@@ -692,9 +692,9 @@ for(const screen of screens){
             throw new Error('Service CTA overlaps heading');
         }
         if(screen.name==='masaustu'){
-          const image=page.locator('.nv29-social-person');
-          if(!(await image.evaluate(el=>el.complete&&el.naturalWidth>0))){
-            errors.push('Social media promo model image did not load');failed=true;
+          const images=page.locator('.nv29-artwork');
+          if(await images.count()!==3 || !(await images.evaluateAll(nodes=>nodes.every(el=>el.complete&&el.naturalWidth===360&&el.naturalHeight===140)))){
+            errors.push('Single-scene expertise artwork did not load');failed=true;
           }
           await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});
         }

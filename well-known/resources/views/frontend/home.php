@@ -758,59 +758,23 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
             <a href="/kategoriler" class="nv29-view-all">Tüm Hizmetleri Keşfet <?= icon('arrow-up-right', 15) ?></a>
         </div>
         <div class="nv29-services-grid" aria-label="Dijital hizmet ana kategorileri">
-        <?php foreach (($homePromoGroups ?? []) as $promo): ?>
-            <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>">
-                <div class="nv29-card-glow" aria-hidden="true"></div>
-                <div class="nv29-card-content nv106-card-content">
-                    <div class="nv106-copy-stack">
-                        <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 12) ?> <?= e($promo['eyebrow']) ?></span>
-                        <h3 class="nv106-card-title"><?= e($promo['title']) ?></h3>
-                        <p class="nv106-card-description"><?= e($promo['description']) ?></p>
-                    </div>
-                    <a href="<?= e($promo['url']) ?>" class="nv29-card-cta nv106-card-cta">
+        <?php foreach (($homePromoGroups ?? []) as $promo):
+            $nv29Artwork = match ($promo['key']) {
+                'social' => 'social.svg', 'marketing' => 'marketing.svg', default => 'agency.svg'
+            };
+        ?>
+            <article class="nv29-service-card nv29-<?= e($promo['key']) ?>" data-promo-group="<?= e($promo['key']) ?>" aria-labelledby="nv29-title-<?= e($promo['key']) ?>">
+                <div class="nv29-visual" aria-hidden="true">
+                    <img class="nv29-artwork" src="<?= e(asset('img/expertise/'.$nv29Artwork)) ?>" alt="" width="360" height="140" loading="lazy" decoding="async">
+                </div>
+                <div class="nv29-card-content">
+                    <span class="nv29-eyebrow"><?= icon($promo['key']==='social'?'heart':($promo['key']==='agency'?'layers':'trending-up'), 12) ?> <?= e($promo['eyebrow']) ?></span>
+                    <h3 class="nv29-card-title" id="nv29-title-<?= e($promo['key']) ?>"><?= e($promo['title']) ?></h3>
+                    <p class="nv29-card-description"><?= e($promo['description']) ?></p>
+                    <a href="<?= e($promo['url']) ?>" class="nv29-card-cta">
                         <?= e($promo['cta']) ?> <?= icon('arrow-right', 15) ?>
                     </a>
                 </div>
-
-                <?php if ($promo['key'] === 'social'): ?>
-                <div class="nv29-visual nv29-visual-social" aria-hidden="true">
-                    <span class="nv29-visual-disc"></span>
-                    <img src="<?= asset('img/hero-woman-cutout.png') ?>" class="nv29-social-person" alt="" loading="lazy" width="240" height="285">
-                    <span class="nv29-social-float nv29-float-instagram"><?= icon('instagram', 22) ?></span>
-                    <span class="nv29-social-float nv29-float-tiktok"><?= icon('tiktok', 20) ?></span>
-                </div>
-                <?php elseif ($promo['key'] === 'agency'): ?>
-                <div class="nv29-visual nv29-visual-agency" aria-hidden="true">
-                    <div class="nv29-agency-window">
-                        <div class="nv29-window-top"><i></i><i></i><i></i><span></span></div>
-                        <div class="nv29-window-body">
-                            <div class="nv29-window-sidebar"><b></b><b></b><b></b><b></b></div>
-                            <div class="nv29-window-main">
-                                <span class="nv29-window-label"></span>
-                                <div class="nv29-window-chart"><i></i><i></i><i></i><i></i><i></i></div>
-                                <div class="nv29-window-tiles"><b></b><b></b><b></b></div>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="nv29-agency-device"><span></span><b></b></span>
-                    <span class="nv29-visual-mini nv29-agency-code"><?= icon('code', 17) ?></span>
-                </div>
-                <?php else: ?>
-                <div class="nv29-visual nv29-visual-marketing" aria-hidden="true">
-                    <div class="nv29-analytics-card">
-                        <div class="nv29-analytics-top"><span class="nv29-analytics-dot"></span><span class="nv29-analytics-line"></span><?= icon('trending-up', 16) ?></div>
-                        <svg class="nv29-analytics-graph" viewBox="0 0 210 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 84H200M10 57H200M10 30H200" stroke="currentColor" stroke-opacity=".14" stroke-dasharray="3 5"/>
-                            <path d="M10 89L46 74L79 80L111 46L141 57L175 26L199 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="199" cy="16" r="6" fill="white" stroke="currentColor" stroke-width="3"/>
-                        </svg>
-                        <div class="nv29-analytics-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                    </div>
-                    <span class="nv29-visual-mini nv29-marketing-search"><?= icon('search', 21) ?></span>
-                    <span class="nv29-visual-mini nv29-marketing-target"><?= icon('trending-up', 19) ?></span>
-                </div>
-                <?php endif; ?>
-
                 <div class="nv29-service-chips" aria-label="<?= e($promo['title']) ?> alt kategorileri">
                     <?php foreach ($promo['chips'] as $chip): ?>
                     <a href="<?= e($chip['url']) ?>" title="<?= e($chip['name']) ?>" class="nv29-service-chip">

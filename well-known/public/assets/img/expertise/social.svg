@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="140" viewBox="0 0 360 140" fill="none">
+  <defs><linearGradient id="a" x1="132" y1="20" x2="224" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="#E25199"/><stop offset="1" stop-color="#8C56D9"/></linearGradient></defs>
+  <ellipse cx="180" cy="73" rx="132" ry="56" fill="#FBF4FB"/>
+  <ellipse cx="180" cy="73" rx="104" ry="42" stroke="#E8D6EC" stroke-dasharray="4 6"/>
+  <path d="M95 72H133M227 72H266M180 26V39M180 105V121" stroke="#D7BBDD" stroke-width="2"/>
+  <rect x="132" y="31" width="96" height="82" rx="24" fill="url(#a)"/>
+  <path d="M158 58C158 51.4 164.8 47.8 170 51.5L180 59L190 51.5C195.2 47.8 202 51.4 202 58C202 67 190 77 180 84C170 77 158 67 158 58Z" fill="white"/>
+  <path d="M166 97H194" stroke="#FFF" stroke-opacity=".5" stroke-width="4" stroke-linecap="round"/>
+  <rect x="58" y="45" width="48" height="48" rx="16" fill="white" stroke="#E6D9EA"/>
+  <path d="M77 58L91 69L77 80V58Z" fill="#BC4E91"/>
+  <rect x="253" y="45" width="48" height="48" rx="16" fill="white" stroke="#E6D9EA"/>
+  <path d="M266 62H288V77H277L271 82V77H266V62Z" stroke="#8F57C2" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="180" cy="19" r="9" fill="white" stroke="#E8D6EC"/><circle cx="180" cy="19" r="3" fill="#D47BB8"/>
+  <circle cx="180" cy="124" r="7" fill="white" stroke="#E8D6EC"/><circle cx="180" cy="124" r="2" fill="#A47AC7"/>
+  <circle cx="47" cy="29" r="3" fill="#DFC4E2"/><circle cx="314" cy="111" r="3" fill="#D5C2E8"/>
+</svg>
