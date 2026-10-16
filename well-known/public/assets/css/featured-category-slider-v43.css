@@ -298,8 +298,10 @@
   #featured .nv43-category-card.yh18-featured-tab,
   #featured .nv43-subcategory-link,
   #featured .featured-mobile-all{flex:0 0 auto!important;width:auto;max-width:none;min-width:max-content;height:40px;min-height:40px;display:inline-flex;flex-direction:row;justify-content:center;align-items:center;gap:7px;padding:8px 12px;border:1px solid #dfe4ee;border-radius:10px;background:#fff;color:#263451;box-shadow:none;transform:none;font:500 12px/20px Poppins,sans-serif;white-space:nowrap;cursor:pointer}
-  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon{width:18px;height:18px;background:transparent;border:0;color:var(--np-ink,var(--ns-ink,#6554df));border-radius:0}
-  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon .icon{width:18px;height:18px}
+  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon{width:20px;height:20px;background:transparent;border:0;color:var(--np-ink,var(--ns-ink,#6554df));border-radius:0}
+  /* IconService emits a desktop-sized inline font. A 16px glyph uses the
+     shared 1.25em icon slot (20px), exactly matching the mobile wrapper. */
+  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon .icon{font-size:16px!important}
   #featured .nv43-category-card.yh18-featured-tab .yh26-filter-name{display:inline;overflow:visible;white-space:nowrap;text-align:left;font:inherit;color:inherit}
   #featured .nv43-subcategory-link span{overflow:visible;text-overflow:clip;color:inherit}
   #featured .nv43-category-card::before{display:none}

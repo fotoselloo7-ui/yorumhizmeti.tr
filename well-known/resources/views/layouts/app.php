@@ -83,7 +83,7 @@
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-filter-icons">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <?php if($template==='frontend/home'): ?>

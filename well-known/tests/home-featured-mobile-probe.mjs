@@ -17,6 +17,7 @@ export function measureFeaturedFilters() {
     rails:panels.flatMap(p=>[...p.querySelectorAll('[data-featured-rail]')].filter(visible).map(r=>({kind:r.dataset.featuredRailKind,box:rect(r),width:r.clientWidth,scrollWidth:r.scrollWidth,scrollLeft:r.scrollLeft,overflow:getComputedStyle(r).overflowX,
       chips:[...r.children].filter(visible).map(e=>({text:e.innerText,box:rect(e),clipped:e.scrollWidth>e.clientWidth+2,active:e.getAttribute('aria-selected')==='true'}))}))),
     arrows:[...s.querySelectorAll('.nv43-rail-arrow')].filter(visible).length,
+    icons:panels.flatMap(p=>[...p.querySelectorAll('.yh26-filter-icon')].filter(visible).map(w=>({wrapper:rect(w),glyph:rect(w.querySelector('.icon')),font:getComputedStyle(w.querySelector('.icon')).fontSize}))),
     children:panels.flatMap(p=>[...p.querySelectorAll('[data-featured-children-for]')].filter(visible).map(p=>p.dataset.featuredChildrenFor)),
     panes:panes.map(p=>p.dataset.featuredPane),
     cards:panes.flatMap(p=>[...p.querySelectorAll('.yh18-featured-card')].map(c=>({title:c.querySelector('h3')?.textContent,box:rect(c)})))
@@ -34,6 +35,7 @@ export function validateFeaturedFilters(r) {
     if(r.children.length>1)errors.push('Nested desktop child panels');
     if(r.rails.some(x=>x.overflow!=='auto'||x.chips.some(c=>c.clipped)))errors.push('Chip scrolling/clipping');
     if(r.cards[0]&&r.cards[0].box.width<r.doc-100)errors.push('Package card too narrow');
+    if(r.icons.some(i=>i.font!=='16px'||i.glyph.left<i.wrapper.left-1||i.glyph.right>i.wrapper.right+1||i.glyph.top<i.wrapper.top-1||i.glyph.bottom>i.wrapper.bottom+1))errors.push('Category icon exceeds mobile wrapper');
   }
   return errors;
 }

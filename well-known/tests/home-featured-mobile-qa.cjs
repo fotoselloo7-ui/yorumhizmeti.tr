@@ -67,5 +67,7 @@ assert.deepEqual(boot({hash:'#%broken'}).visible(),['1']);
 const css=fs.readFileSync(path.join(root,'public/assets/css/featured-category-slider-v43.css'),'utf8');
 assert.ok(css.includes('@media(max-width:768px)'));
 assert.ok(css.includes('scrollbar-width:none'));
+assert.ok(css.includes('.yh26-filter-icon{width:20px;height:20px'));
+assert.ok(css.includes('.yh26-filter-icon .icon{font-size:16px!important}'));
 assert.ok(!source.includes('cloneNode(true)') || source.includes('avatar.replaceChildren')); // only the existing header icon may be cloned
 console.log('PASS: mobile defaults, explicit query/hash/server state, group/category/child/Tümü, hover isolation and desktop resize; synthetic data only.');
