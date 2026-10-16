@@ -150,10 +150,12 @@
   overflow:visible;
   transition:.22s ease;
 }
+@media(min-width:769px){
 .yh18-featured-card:hover{
   transform:translateY(-4px);
   border-color:#d2d9e6;
   box-shadow:0 18px 38px rgba(25,38,78,.10);
+}
 }
 .yh18-favorite{
   position:absolute;

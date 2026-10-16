@@ -53,11 +53,11 @@
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261014">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261016-mobile-overflow">
+    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>?v=20261016-mobile-overflow">
     <link rel="stylesheet" href="<?= asset('css/forms-functional-v20.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>?v=20261016-mobile-overflow">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
@@ -80,10 +80,10 @@
     <?php if($template==='frontend/netvera-script-detail'): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=20261013">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261016-mobile-overflow">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-filter-icons">
+    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-mobile-overflow">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <?php if($template==='frontend/home'): ?>
@@ -686,6 +686,7 @@
         <?php endif; ?>
     </div>
 
+    <?php $nvLiveChatReady=\App\Services\NetveraInquiryService::ready(); ?>
     <!-- Mobile Bottom Nav -->
     <nav class="mobile-bottom-nav">
         <div class="nav-inner">
@@ -712,16 +713,24 @@
                 <?= icon('user', 20) ?>
                 <span>Hesabım</span>
             </a>
+            <?php if($nvLiveChatReady): ?>
+            <button type="button" class="nv-chat-mobile-toggle" data-nv-chat-mobile-toggle aria-label="Canlı Destek" aria-controls="nv-chat-panel" aria-expanded="false">
+                <?= icon('message-circle',20) ?><span>Sohbet</span>
+            </button>
+            <?php endif; ?>
         </div>
     </nav>
 
-    <?php if(\App\Services\NetveraInquiryService::ready()): ?>
+    <?php if($nvLiveChatReady): ?>
         <?php require BASE_PATH.'/resources/views/frontend/partials/netvera-live-chat.php'; ?>
     <?php endif; ?>
 
     <?php require BASE_PATH.'/resources/views/frontend/partials/marketing-popup.php'; ?>
 
     <script src="<?= asset('js/nv-desk-alerts.js') ?>?v=1"></script>
+    <?php if($nvLiveChatReady): ?>
+    <script src="<?= asset('js/netvera-live-chat.js') ?>?v=20261016-mobile-dock" defer></script>
+    <?php endif; ?>
     <script src="<?= asset('js/app.js') ?>?v=20261014"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
@@ -736,7 +745,6 @@
     <script src="<?= asset('js/reviews-v68.js') ?>?v=68.1" defer></script>
     <?php endif; ?>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
-    <style>.nv68-chat-person{display:flex;align-items:center;gap:10px}.nv68-chat-person>img,.nv68-chat-avatar{width:39px;height:39px;flex-shrink:0;border-radius:12px;object-fit:cover;background:rgba(255,255,255,.18);display:grid;place-items:center}.nv68-chat-person strong,.nv68-chat-person small{display:block}.nv68-chat-person small{opacity:.8;font-size:10px}</style>
     <?= setting('footer_script') ?>
 </body>
 </html>

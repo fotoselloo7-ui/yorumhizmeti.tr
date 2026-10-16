@@ -20,7 +20,11 @@ export function measureFeaturedFilters() {
     icons:panels.flatMap(p=>[...p.querySelectorAll('.yh26-filter-icon')].filter(visible).map(w=>({wrapper:rect(w),glyph:rect(w.querySelector('.icon')),font:getComputedStyle(w.querySelector('.icon')).fontSize}))),
     children:panels.flatMap(p=>[...p.querySelectorAll('[data-featured-children-for]')].filter(visible).map(p=>p.dataset.featuredChildrenFor)),
     panes:panes.map(p=>p.dataset.featuredPane),
-    cards:panes.flatMap(p=>[...p.querySelectorAll('.yh18-featured-card')].map(c=>({title:c.querySelector('h3')?.textContent,box:rect(c)})))
+    cards:panes.flatMap(p=>[...p.querySelectorAll('.yh18-featured-card')].map(c=>({title:c.querySelector('h3')?.textContent,box:rect(c),
+      badge:c.querySelector('.yh18-favorite')?rect(c.querySelector('.yh18-favorite')):null,
+      titleBox:rect(c.querySelector('h3')),price:c.querySelector('.yh18-card-price')?rect(c.querySelector('.yh18-card-price')):null,
+      cta:c.querySelector('.yh18-card-cta')?rect(c.querySelector('.yh18-card-cta')):null
+    })))
   };
 }
 export function validateFeaturedFilters(r) {
@@ -36,6 +40,11 @@ export function validateFeaturedFilters(r) {
     if(r.rails.some(x=>x.overflow!=='auto'||x.chips.some(c=>c.clipped)))errors.push('Chip scrolling/clipping');
     if(r.cards[0]&&r.cards[0].box.width<r.doc-100)errors.push('Package card too narrow');
     if(r.icons.some(i=>i.font!=='16px'||i.glyph.left<i.wrapper.left-1||i.glyph.right>i.wrapper.right+1||i.glyph.top<i.wrapper.top-1||i.glyph.bottom>i.wrapper.bottom+1))errors.push('Category icon exceeds mobile wrapper');
+    for(const card of r.cards){
+      if(card.badge&&(card.badge.top<card.box.top||card.badge.bottom>card.titleBox.top+1||card.badge.left<card.box.left||card.badge.right>card.box.right))errors.push('Package badge clipped or overlapping title');
+      if(card.price&&card.cta&&card.price.bottom>card.cta.top+1)errors.push('Price overlaps CTA');
+      if(card.cta&&(card.cta.left<card.box.left||card.cta.right>card.box.right||card.cta.bottom>card.box.bottom))errors.push('CTA outside package card');
+    }
   }
   return errors;
 }

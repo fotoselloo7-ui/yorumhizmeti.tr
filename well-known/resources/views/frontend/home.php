@@ -143,11 +143,11 @@ if (!function_exists('yh18FeaturedCard')) {
         $short = trim(strip_tags((string)($pkg['short_description'] ?? '')));
         ob_start(); ?>
         <article class="yh18-featured-card <?= e($cls) ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($platformKey)) ?>">
-            <?php if ($favorite): ?><span class="yh18-favorite">Favori Paket</span><?php endif; ?>
             <div class="yh18-card-brand">
                 <span class="yh18-card-icon"><?= icon($ico, 22) ?></span>
                 <div>
                     <small><?= e($label) ?></small>
+                    <?php if ($favorite): ?><span class="yh18-favorite">Favori Paket</span><?php endif; ?>
                     <h3><?= e(package_display_name($pkg)) ?></h3>
                 </div>
             </div>

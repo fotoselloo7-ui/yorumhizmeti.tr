@@ -140,7 +140,7 @@
 
   /* Avoid floating support buttons covering forms, prices and navigation. */
   .floating-contact{display:none!important}
-  body{padding-bottom:env(safe-area-inset-bottom, 0px)}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom, 0px))}
   .mobile-bottom-nav{
     z-index:100!important;
     padding-bottom:env(safe-area-inset-bottom, 0px)!important;

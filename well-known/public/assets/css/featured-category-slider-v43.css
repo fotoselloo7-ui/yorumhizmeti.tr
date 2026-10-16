@@ -309,6 +309,11 @@
   #featured .nv43-subcategory-link.active,
   #featured .featured-mobile-all[aria-selected=true]{background:#eeedff;border-color:#8375e5;color:#4937bd;box-shadow:inset 0 0 0 1px #8375e5}
   #featured .nv43-child-panel{padding:0;gap:2px;border:0;background:transparent;border-radius:0;animation:none}
+  #featured .yh18-card-brand>div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 8px;min-width:0;flex:1}
+  #featured .yh18-card-brand small{margin:0}
+  #featured .yh18-card-brand h3{grid-column:1/-1;overflow-wrap:anywhere}
+  /* Keep badges in the header flow: horizontal scrollers clip negative tops. */
+  #featured .yh18-favorite{position:static;transform:none;max-width:100%;padding:3px 7px;font-size:8px;line-height:12px;white-space:nowrap;box-shadow:none}
   #featured.is-group-results .yh18-featured-panes{display:grid;grid-auto-flow:column;grid-auto-columns:calc(100% - 24px);gap:14px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;min-width:0}
   #featured.is-group-results .yh18-featured-panes::-webkit-scrollbar{display:none}
   #featured.is-group-results .yh18-featured-pane:not([hidden]){display:contents}

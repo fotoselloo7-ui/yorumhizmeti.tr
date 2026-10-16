@@ -29,7 +29,7 @@
 .yh18-featured-card{
   transition:transform .3s var(--yh-motion-ease),box-shadow .3s var(--yh-motion-ease),border-color .3s var(--yh-motion-ease)!important;
 }
-.yh18-featured-card:hover{transform:translateY(-5px)!important}
+@media(min-width:769px){.yh18-featured-card:hover{transform:translateY(-5px)!important}}
 .yh18-carousel-row{display:flex;justify-content:flex-end;margin-top:16px}
 .yh18-carousel-controls{
   display:inline-flex;align-items:center;gap:9px;
