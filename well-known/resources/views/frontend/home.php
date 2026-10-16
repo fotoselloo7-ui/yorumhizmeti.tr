@@ -481,7 +481,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
 </section>
 
 <?php if (!empty($featuredPackageGroups)): ?>
-<section class="yh18-featured" id="featured" data-featured-switcher>
+<section class="yh18-featured" id="featured" data-featured-switcher data-featured-default-category="<?= (int)$featuredPackageGroups[0]['category']['id'] ?>">
     <div class="container">
         <?php
         $firstFeaturedGroup = $featuredPackageGroups[0];
@@ -495,7 +495,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 <span class="yh18-featured-avatar <?= e($firstFeaturedClass) ?>" data-featured-avatar><?= icon($firstFeaturedIcon, 24) ?></span>
                 <div>
                     <span class="yh6-eyebrow">Kategoriye Göre Popüler Paketler</span>
-                    <h2><span data-featured-title><?= e($firstFeaturedGroup['category']['name']) ?></span> <span data-featured-kind>Öne Çıkan Paketler</span></h2>
+                    <h2><span data-featured-title><?= e($firstFeaturedGroup['category']['name']) ?></span> <span data-featured-kind>Öne Çıkan Paketler</span><span class="featured-mobile-heading">Popüler Paketler</span></h2>
                     <p data-featured-subtitle><?= e(($firstFeaturedGroup['category']['name'] ?? 'Hizmet') . ' kategorisindeki öne çıkan paketleri inceleyin.') ?></p>
                 </div>
             </div>
@@ -511,9 +511,9 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             aria-controls="yh24-filter-<?= e($navGroup['key']) ?>"
                             aria-expanded="<?= $groupOpen?'true':'false' ?>"
                             aria-label="<?= e($navGroup['title']) ?> alt kategorilerini göster">
-                        <?= icon($navGroup['icon'], 17) ?>
+                        <span class="featured-group-icon"><?= icon($navGroup['icon'], 17) ?></span>
                         <span><?= e($navGroup['title']) ?></span>
-                        <?= icon('chevron-down', 13) ?>
+                        <span class="featured-group-chevron"><?= icon('chevron-down', 13) ?></span>
                     </button>
                     <?php endforeach; ?>
                 </div>
@@ -529,6 +529,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                  data-featured-filter-panel="<?= e($navGroup['key']) ?>"
                  <?= $groupOpen?'':'hidden' ?>>
                 <div class="nv43-rail-heading">
+                    <span class="featured-mobile-only">Kategoriler</span>
                     <span class="yh24-featured-filter-caption"><?= icon('sliders-horizontal', 14) ?> <?= e($navGroup['title']) ?> <small>ANA KATEGORİLER</small></span>
                     <span class="nv43-rail-instruction"><?= icon('mouse-pointer-2', 12) ?> Tutup kaydırabilir veya okları kullanabilirsiniz</span>
                 </div>
@@ -536,6 +537,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                     <button type="button" class="nv43-rail-arrow" data-featured-rail-prev aria-label="Önceki ana kategoriler"><?= icon('chevron-left',18) ?></button>
                     <div class="yh24-featured-filter-list nv43-root-rail" data-featured-rail data-featured-rail-kind="root"
                          role="tablist" aria-label="<?= e($navGroup['title']) ?> ana kategoriler">
+                        <button type="button" class="featured-mobile-only featured-mobile-all" data-featured-all="<?= e($navGroup['key']) ?>" role="tab" aria-selected="false">Tümü</button>
                         <?php foreach ($navGroup['categories'] as $filterCategory):
                             [$gcls,$gico,$glabel] = yh6Platform($filterCategory['slug']??'', $filterCategory['name']??'');
                             $isSoftware = (($filterCategory['kind'] ?? '') === 'software');
@@ -570,7 +572,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                                 aria-selected="<?= $selected?'true':'false' ?>"
                                 title="<?= e($filterCategory['name']) ?>">
                             <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
-                            <span class="yh26-filter-name"><?= e($filterCategory['name']) ?></span>
+                            <span class="yh26-filter-name"><span class="featured-desktop-label"><?= e($filterCategory['name']) ?></span><span class="featured-mobile-only"><?= e(preg_replace('/\s+(Hizmetleri|& Scriptler)$/u', '', $filterCategory['name'])) ?></span></span>
                             <?php if(!empty($featuredChildCategories[(int)$filterCategory['id']])): ?>
 
                             <?php endif; ?>
@@ -593,6 +595,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                 <div class="nv43-child-panel" data-featured-children-for="<?= (int)$parentId ?>"
                      <?= $showChildren?'':'hidden' ?>>
                     <div class="nv43-rail-heading nv43-child-heading">
+                        <span class="featured-mobile-only">Alt kategoriler</span>
                         <span class="nv43-child-heading-mark" aria-hidden="true"><?= icon('corner-down-right',14) ?></span>
                         <a href="<?= e((int)$parentId===-100000?'/hazir-scriptler':'/kategoriler') ?>" class="nv43-rail-all">
                             Tümünü gör <?= icon('arrow-up-right',13) ?>
@@ -602,6 +605,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                         <button type="button" class="nv43-rail-arrow" data-featured-rail-prev aria-label="Önceki alt kategoriler"><?= icon('chevron-left',16) ?></button>
                         <div class="nv43-child-rail" data-featured-rail data-featured-rail-kind="child"
                              role="tablist" aria-label="Alt kategoriler">
+                        <button type="button" class="featured-mobile-only featured-mobile-all" data-featured-parent-all="<?= (int)$parentId ?>" role="tab" aria-selected="false">Tümü</button>
                         <?php foreach($children as $child):
                             $childType=$child['kind']??'package';
                             $childRoot=$childType==='software'?-100000:(int)($child['parent_featured_id']??0);

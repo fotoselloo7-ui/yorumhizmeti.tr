@@ -263,7 +263,10 @@
 #featured .nv43-empty-category strong{color:#192a48}
 #featured .nv43-empty-category a{display:inline-flex;align-items:center;gap:7px;color:#6552d4;font-weight:800}
 @keyframes nv43-arrive{from{opacity:.45;transform:translateY(-6px)}to{opacity:1;transform:none}}
-@media(max-width:800px){
+/* Mobile has its own filter layout, not scaled-down desktop tiles. */
+#featured .nv43-featured-panel .featured-mobile-only{display:none}
+#featured .featured-mobile-heading{display:none}
+@media(min-width:769px) and (max-width:800px){
   #featured .nv43-featured-panel{padding:12px;gap:11px}
   #featured .nv43-rail-instruction{display:none}
   #featured .nv43-root-rail{gap:8px}
@@ -276,17 +279,46 @@
   #featured .nv43-rail-arrow{flex-basis:27px;min-width:27px}
   #featured .nv43-subcategory-link{max-width:200px}
 }
-@media(max-width:420px){
-  #featured .nv43-featured-panel{padding:10px}
-  #featured .nv43-rail-shell{gap:5px}
-  #featured .nv43-rail-arrow{flex-basis:25px;min-width:25px}
-  #featured .nv43-category-card.yh18-featured-tab{
-    flex-basis:clamp(138px,42vw,165px)!important;
-    width:clamp(138px,42vw,165px);
-    font-size:9px;
-  }
-  #featured .nv43-child-panel{padding:10px}
-  #featured .nv43-rail-heading small{display:none}
+@media(max-width:768px){
+  #featured>.container{width:100%!important;max-width:1200px;padding-inline:20px;min-width:0}
+  #featured .yh18-featured-title{display:block}
+  #featured .yh18-featured-title h2{font-size:24px;line-height:1.3;margin:0}
+  #featured .yh18-featured-title :is(.yh18-featured-avatar,.yh6-eyebrow,p,h2>span){display:none}
+  #featured .yh18-featured-title h2>.featured-mobile-heading{display:inline}
+  #featured .yh24-featured-subfilters{margin:0 0 8px}
+  #featured .nv43-featured-panel{padding:0;gap:4px;border:0;background:transparent;box-shadow:none;border-radius:0;animation:none}
+  #featured .nv43-rail-heading{font-size:11px;line-height:16px;font-weight:600;color:#63708a}
+  #featured .nv43-rail-heading>.yh24-featured-filter-caption,
+  #featured :is(.nv43-rail-instruction,.nv43-rail-arrow,.nv43-rail-all,.nv43-child-heading-mark){display:none}
+  #featured .nv43-featured-panel .featured-mobile-only{display:inline-flex}
+  #featured .featured-desktop-label{display:none}
+  #featured .nv43-child-heading>.nv43-child-heading-mark{display:none}
+  #featured .nv43-rail-shell,#featured .nv43-child-shell{display:flex!important;gap:0;overflow:hidden}
+  #featured .nv43-root-rail,#featured .nv43-child-rail{padding:2px;gap:8px;scroll-snap-type:none;scroll-behavior:auto;cursor:auto}
+  #featured .nv43-category-card.yh18-featured-tab,
+  #featured .nv43-subcategory-link,
+  #featured .featured-mobile-all{flex:0 0 auto!important;width:auto;max-width:none;min-width:max-content;height:40px;min-height:40px;display:inline-flex;flex-direction:row;justify-content:center;align-items:center;gap:7px;padding:8px 12px;border:1px solid #dfe4ee;border-radius:10px;background:#fff;color:#263451;box-shadow:none;transform:none;font:500 12px/20px Poppins,sans-serif;white-space:nowrap;cursor:pointer}
+  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon{width:18px;height:18px;background:transparent;border:0;color:var(--np-ink,var(--ns-ink,#6554df));border-radius:0}
+  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon .icon{width:18px;height:18px}
+  #featured .nv43-category-card.yh18-featured-tab .yh26-filter-name{display:inline;overflow:visible;white-space:nowrap;text-align:left;font:inherit;color:inherit}
+  #featured .nv43-subcategory-link span{overflow:visible;text-overflow:clip;color:inherit}
+  #featured .nv43-category-card::before{display:none}
+  #featured .nv43-category-card.yh18-featured-tab:is(.active,.is-parent-selected),
+  #featured .nv43-subcategory-link.active,
+  #featured .featured-mobile-all[aria-selected=true]{background:#eeedff;border-color:#8375e5;color:#4937bd;box-shadow:inset 0 0 0 1px #8375e5}
+  #featured .nv43-child-panel{padding:0;gap:2px;border:0;background:transparent;border-radius:0;animation:none}
+  #featured.is-group-results .yh18-featured-panes{display:grid;grid-auto-flow:column;grid-auto-columns:calc(100% - 24px);gap:14px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;min-width:0}
+  #featured.is-group-results .yh18-featured-panes::-webkit-scrollbar{display:none}
+  #featured.is-group-results .yh18-featured-pane:not([hidden]){display:contents}
+  /* Existing package rails declare display:grid!important in motion-v22.
+     Only the group-wide view flattens those rails into one native scroller. */
+  #featured.is-group-results .yh18-featured-pane .yh18-featured-grid{display:contents!important}
+  #featured.is-group-results .yh18-featured-card{min-width:0}
+  #featured.is-group-results .yh18-carousel-row,
+  #featured.is-group-results .yh18-featured-footer{display:none}
+}
+@media(max-width:375px){
+  #featured>.container{padding-inline:16px}
 }
 /* Desktop free-drag should never snap back to the nearest child link.
    Arrow and autoplay retain their explicit smooth scroll behavior. */

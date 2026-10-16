@@ -1,11 +1,14 @@
 /* NetVera v86 — child category chips
    Neutral premium design: white surface + dark text. Platform identity is
    limited to the small icon accent instead of tinting the whole button. */
+@media (min-width:769px){
 #featured .nv43-child-panel{
   background:#fbfcff!important;
   border:1px solid #e5e8f0!important;
   box-shadow:none!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-child-rail>.nv43-subcategory-link,
 #featured .nv43-subcategory-link[class*="nv-platform-"],
 #featured .nv43-subcategory-link[class*="nv-sector-"],
@@ -26,19 +29,29 @@ body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-sector-"]{
     box-shadow .18s ease,
     transform .18s ease!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link span{
   color:#1f2a44!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link :is(svg,.icon,i){
   color:#53617c!important;
   opacity:.92;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-platform-"] :is(svg,.icon,i){
   color:var(--np-ink,var(--np,#53617c))!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-sector-"]:not([class*="nv-platform-"]) :is(svg,.icon,i){
   color:#6658ca!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:is(:hover,:focus-visible),
 #featured .nv43-subcategory-link[class*="nv-platform-"]:is(:hover,:focus-visible),
 #featured .nv43-subcategory-link[class*="nv-sector-"]:is(:hover,:focus-visible){
@@ -48,6 +61,8 @@ body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-sector-"]{
   box-shadow:0 5px 14px rgba(24,35,64,.055)!important;
   transform:translateY(-1px)!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:is(.active,[aria-selected="true"]),
 #featured .nv43-subcategory-link[class*="nv-platform-"]:is(.active,[aria-selected="true"]),
 #featured .nv43-subcategory-link[class*="nv-sector-"]:is(.active,[aria-selected="true"]){
@@ -57,26 +72,39 @@ body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-sector-"]{
   box-shadow:0 0 0 2px rgba(122,104,223,.10),0 5px 14px rgba(24,35,64,.05)!important;
   transform:none!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:is(.active,[aria-selected="true"]) span{
   color:#141d33!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:is(.active,[aria-selected="true"]) :is(svg,.icon,i){
   color:#6658ca!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link > :last-child:is(svg,.icon,i){
   color:#9aa3b7!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:hover > :last-child:is(svg,.icon,i),
 #featured .nv43-subcategory-link:is(.active,[aria-selected="true"]) > :last-child:is(svg,.icon,i){
   color:#6c5bd3!important;
 }
+}
 @media(max-width:800px){
-  #featured .nv43-subcategory-link{
+  @media (min-width:769px){
+#featured .nv43-subcategory-link{
     min-height:38px!important;
     padding:8px 12px!important;
     font-size:10px!important;
   }
 }
+}
 @media(prefers-reduced-motion:reduce){
-  #featured .nv43-subcategory-link{transition:none!important}
+  @media (min-width:769px){
+#featured .nv43-subcategory-link{transition:none!important}
+}
 }

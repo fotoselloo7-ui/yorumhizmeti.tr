@@ -21,42 +21,57 @@
 .nv-platform-kick{--np:#53FC18;--np-2:#2D8415;--np-soft:#EDFFE8;--np-on:#10191A}
 
 /* Category tiles: official platform colors + distinct icon surface and readable text */
-
 /* Home: the selected social platform NEVER becomes generic NetVera blue/purple. */
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
   color:color-mix(in srgb,var(--np) 76%,#1b2440)!important;
   background:var(--np-soft)!important;
   border-color:color-mix(in srgb,var(--np) 22%,white)!important
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-icon{
   background:linear-gradient(135deg,var(--np),var(--np-2))!important;
   color:var(--np-on)!important;
   box-shadow:0 5px 15px color-mix(in srgb,var(--np) 20%,transparent)
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected){
   border:2px solid var(--np)!important;
   background:linear-gradient(145deg,#fff,var(--np-soft))!important;
   box-shadow:0 10px 24px color-mix(in srgb,var(--np) 21%,transparent)!important
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:hover{
   border-color:var(--np)!important;
   background:var(--np-soft)!important
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab.nv-platform-google .yh26-filter-icon{
   background:conic-gradient(#4285F4 0 29%,#34A853 29% 54%,#FBBC05 54% 76%,#EA4335 76% 100%)!important
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab.nv-platform-tiktok .yh26-filter-icon .icon{
   filter:drop-shadow(1px 0 #FE2C55) drop-shadow(-1px 0 #00F2EA)
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-platform-"]{
   color:var(--np)!important;
   border-color:color-mix(in srgb,var(--np) 20%,#fff)!important;
   background:var(--np-soft)!important
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-platform-"]:hover,
 #featured .nv43-subcategory-link[class*="nv-platform-"][aria-selected="true"]{
   border-color:var(--np)!important;
   background:color-mix(in srgb,var(--np) 15%,#fff)!important
+}
 }
 
 /* Platform service detail: tint hero, badges, links, chips and package lists */
@@ -237,17 +252,23 @@
   --np-on:#112A1B;
 }
 /* Featured group primary tabs + subcategory chips inherit platform color too. */
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]{
   --np-label:color-mix(in srgb,var(--np) 76%,#101729);
   border-color:color-mix(in srgb,var(--np) 33%,white) !important;
   background:linear-gradient(135deg,#fff 4%,var(--np-soft) 96%) !important;
   color:var(--np-label) !important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"] .yh26-filter-name{
   color:var(--np-label) !important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-platform-"] .icon{
   color:var(--np) !important;
+}
 }
 /* Catalog index nested service chips explicitly inherit their platform. */
 
@@ -310,18 +331,29 @@
 
 
 /* v78 readable small subcategory labels on bright platform tones. */
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-platform-"]{
   color:color-mix(in srgb,var(--np) 58%,#132039) !important
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link[class*="nv-platform-"] .icon{
   color:currentColor !important
 }
-#featured .nv43-subcategory-link.nv-platform-spotify,
+}
+
 .nv26-quick .nv56-quick-category.nv-platform-spotify{
   color:#0E602D !important;
 }
+@media (min-width:769px){
+#featured .nv43-subcategory-link.nv-platform-spotify{
+  color:#0E602D !important;
+}
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:is(.nv-platform-snapchat,.nv-platform-kick){
   color:#172019 !important;
+}
 }
 
 /* V79 accessibility pass.
@@ -350,7 +382,7 @@
 }
 /* Filled Spotify icons, actions and highlighted chips throughout the site.
    Brand token #1DB954 stays intact; only surfaces under white lettering darken. */
-#featured .nv43-category-card.yh18-featured-tab.nv-platform-spotify .yh26-filter-icon,
+
 .yv-category-v5.nv-platform-spotify .yv-category-brand-v5>span,
 .yv-category-v5.nv-platform-spotify .yv-category-brand-orbit-v5.main,
 .yv-category-v5.nv-platform-spotify .yv-category-package-icon-v5,
@@ -362,6 +394,12 @@
 .yh6-package-icon.nv-platform-spotify{
   background:linear-gradient(135deg,#117b39,#0b622e) !important;
   color:#FFFFFF !important;
+}
+@media (min-width:769px){
+#featured .nv43-category-card.yh18-featured-tab.nv-platform-spotify .yh26-filter-icon{
+  background:linear-gradient(135deg,#117b39,#0b622e) !important;
+  color:#FFFFFF !important;
+}
 }
 .yv-category-v5.nv-platform-spotify .yv-category-hero-v5 .yv-btn-primary,
 .yv-category-v5.nv-platform-spotify .yv-category-cta-v5 .yv-btn,

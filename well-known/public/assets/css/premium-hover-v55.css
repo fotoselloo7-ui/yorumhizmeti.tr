@@ -6,75 +6,113 @@
 /* Existing active states remain the source of truth, never stateful hover JS. */
 @media (hover:hover) and (pointer:fine){
 /* Featured category roots: tint-to-inverse in their own purple/blue palette */
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab{
  transition:background-color .3s var(--yh55-ease),color .3s var(--yh55-ease),
    border-color .3s var(--yh55-ease),box-shadow .3s var(--yh55-ease),
    transform .3s var(--yh55-ease)!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab:hover,
 #featured .nv43-category-card.yh18-featured-tab:focus-visible{
  transform:translateY(-3px)!important;
  background:#6b4edf!important;color:#fff!important;border-color:#7863e7!important;
  box-shadow:0 13px 26px rgba(79,64,183,.22)!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab.active:hover,
 #featured .nv43-category-card.yh18-featured-tab.is-parent-selected:hover{
  background:#2865d8!important;border-color:#497fff!important;
  box-shadow:0 15px 26px rgba(39,94,196,.24)!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab.software:hover{
  background:#6d47d4!important;border-color:#8d69ec!important;
  box-shadow:0 14px 26px rgba(99,63,197,.25)!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-name{
  color:#fff!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon{
  transform-origin:50% 50%;
  transition:transform .55s var(--yh55-ease),background .3s ease,color .3s ease,box-shadow .3s ease!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon{
  transform:rotate(-14deg) scale(1.14);
  background:rgba(255,255,255,.94)!important;color:#6048d6!important;
  box-shadow:0 5px 18px rgba(10,17,70,.15);
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab.active:is(:hover,:focus-visible) .yh26-filter-icon{
  color:#2164dd!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon :is(.icon,svg,i){
  transition:transform .58s var(--yh55-ease);
 }
+}
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i){
  transform:rotate(27deg);
 }
+}
 /* The two feature group tabs retain their clicked/expanded state */
+@media (min-width:769px){
 #featured .yh24-featured-group{
  transition:transform .24s var(--yh55-ease),box-shadow .24s ease,background .24s ease,color .24s ease!important;
 }
+}
+@media (min-width:769px){
 #featured .yh24-featured-group:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(93,67,195,.2)}
-#featured .yh24-featured-group>.icon:first-child{transition:transform .45s var(--yh55-ease)}
+}
+@media (min-width:769px){
+#featured .yh24-featured-group>.featured-group-icon>.icon{transition:transform .45s var(--yh55-ease)}
+}
+@media (min-width:769px){
 #featured .yh24-featured-group:hover>.icon:first-child{transform:rotate(-22deg) scale(1.14)}
+}
 /* Don't spin dropdown arrows: arrow orientation signals open/closed. */
+@media (min-width:769px){
 #featured .nv43-subcategory-link{
  transition:background .24s var(--yh55-ease),color .24s var(--yh55-ease),
  border-color .24s ease,box-shadow .24s ease,transform .24s ease!important;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:hover,
 #featured .nv43-subcategory-link:focus-visible{
  transform:translateY(-2px);
  color:#fff!important;background:#6c50dc!important;
  border-color:#6c50dc!important;box-shadow:0 7px 15px rgba(83,71,184,.16);
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link :is(.icon,svg):first-child{
  transition:transform .4s var(--yh55-ease),color .3s ease;
 }
+}
+@media (min-width:769px){
 #featured .nv43-subcategory-link:is(:hover,:focus-visible) :is(.icon,svg):first-child{
  transform:rotate(-18deg) scale(1.16);color:#fff;
 }
+}
+@media (min-width:769px){
 #featured .nv43-rail-arrow:not(:disabled):hover{
  background:#6848d9!important;color:#fff!important;
  border-color:#6848d9!important;transform:translateY(-1px) scale(1.045);
  box-shadow:0 6px 14px rgba(91,67,192,.15);
+}
 }
 /* On the home hero: slow, calm micro-interactions. */
 .yh-home-v6 .yh49-category-link{
@@ -148,21 +186,24 @@
 }
 }
 /* Keyboard: stay visible, including for elements that become colorful on hover. */
-#featured :is(.nv43-category-card,.nv43-subcategory-link,.nv43-rail-arrow):focus-visible,
+
 :is(.nv51-main-filter,.nv51-sub-filter):focus-visible{
  outline:3px solid #b491ff;outline-offset:3px;
 }
+@media (min-width:769px){
+#featured :is(.nv43-category-card,.nv43-subcategory-link,.nv43-rail-arrow):focus-visible{
+ outline:3px solid #b491ff;outline-offset:3px;
+}
+}
 /* Touch devices have no stable hover state: preserve scrolling and tappable areas. */
 @media (hover:none),(pointer:coarse){
+@media (min-width:769px){
 #featured .nv43-category-card.yh18-featured-tab:active{filter:brightness(1.025)}
+}
 }
 /* Respect reduced-motion system preferences throughout every new interaction. */
 @media (prefers-reduced-motion:reduce){
-#featured .nv43-category-card.yh18-featured-tab,
- #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon,
- #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon :is(.icon,svg,i),
- #featured .yh24-featured-group,#featured .yh24-featured-group>.icon:first-child,
- #featured .nv43-subcategory-link,#featured .nv43-subcategory-link :is(.icon,svg):first-child,
+
  .yh-home-v6 .yh49-category-link,.yh-home-v6 .yh49-category-icon,
  .yh-home-v6 .yh49-category-icon :is(.icon,svg,i),
  :is(.nv51-sub-filter,.nv51-main-filter,.nv51-format-filters button,
@@ -170,19 +211,32 @@
  .nv30-step,.yh6-blog-card,.yh6-review-grid>article,.yh6-how-grid>div){
  transition:none!important;animation:none!important;
  }
-#featured .nv43-category-card.yh18-featured-tab:hover,
- #featured .nv43-subcategory-link:hover,
+@media (min-width:769px){
+#featured .nv43-category-card.yh18-featured-tab,
+ #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon,
+ #featured .nv43-category-card.yh18-featured-tab .yh26-filter-icon :is(.icon,svg,i),
+ #featured .yh24-featured-group,#featured .yh24-featured-group>.featured-group-icon>.icon,
+ #featured .nv43-subcategory-link,#featured .nv43-subcategory-link :is(.icon,svg):first-child{
+ transition:none!important;animation:none!important;
+ }
+}
+
  .yh-home-v6 .yh49-category-link:hover{transform:none!important}
-#featured .nv43-category-card.yh18-featured-tab:hover .yh26-filter-icon,
+@media (min-width:769px){
+#featured .nv43-category-card.yh18-featured-tab:hover,
+ #featured .nv43-subcategory-link:hover{transform:none!important}
+}
+
  .yh-home-v6 .yh49-category-link:hover .yh49-category-icon,
  .nv30-step:hover .nv30-step-icon{transform:none!important}
+@media (min-width:769px){
+#featured .nv43-category-card.yh18-featured-tab:hover .yh26-filter-icon{transform:none!important}
+}
 }
 
 /* Reduced motion: no instant icon spin or elevation on hover either. */
 @media (prefers-reduced-motion:reduce){
-#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i),
- #featured .nv43-subcategory-link:is(:hover,:focus-visible) :is(.icon,svg):first-child,
- #featured .yh24-featured-group:hover>.icon:first-child,
+
  .yh-home-v6 .yh49-category-link:hover .yh49-category-icon :is(.icon,svg,i),
  .nv51-main-filter:hover :is(.icon,svg,i),
  .nv30-step:hover .nv30-step-icon :is(.icon,svg,i),
@@ -190,4 +244,11 @@
  :is(.nv27-service-card,.yv-category-card,.nv31-software-card,.nv51-reference-card,.nv30-step,.yh6-blog-card):hover{
   transform:none!important;
  }
+@media (min-width:769px){
+#featured .nv43-category-card.yh18-featured-tab:is(:hover,:focus-visible) .yh26-filter-icon :is(.icon,svg,i),
+ #featured .nv43-subcategory-link:is(:hover,:focus-visible) :is(.icon,svg):first-child,
+ #featured .yh24-featured-group:hover>.icon:first-child{
+  transform:none!important;
+ }
+}
 }

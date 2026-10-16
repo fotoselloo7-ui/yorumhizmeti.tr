@@ -59,7 +59,7 @@
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
     <link rel="stylesheet" href="<?= asset('css/agency-navigation-v26.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/agency-catalog-v26.css') ?>?v=20261014">
@@ -83,7 +83,7 @@
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=43.1">
+    <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-mobile-filters">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <?php if($template==='frontend/home'): ?>
@@ -96,7 +96,7 @@
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
     <?php if(str_starts_with($template,'frontend/account/')): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-account-history-v57.css') ?>?v=57.1">
@@ -109,13 +109,13 @@
 
     <link rel="stylesheet" href="<?= asset('css/theme-runtime-v71.css') ?>?v=71.1">
     <link rel="stylesheet" href="<?= asset('css/netvera-premium-v76.css') ?>?v=76.3">
-    <link rel="stylesheet" href="<?= asset('css/social-platform-identity-v77.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/service-category-identity-v82.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/social-platform-identity-v77.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/platform-inheritance-flat-v80.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/service-category-identity-v82.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/header-reputation-parity-v83.css') ?>?v=83.1">
-    <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=85.1">
-    <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=86.1">
+    <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=20261016-mobile-filters">
     <?php if($template==='frontend/categories'): ?>
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261014">
     <?php endif; ?>
@@ -725,7 +725,7 @@
     <script src="<?= asset('js/app.js') ?>?v=20261014"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
-    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=81.1"></script>
+    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261016-mobile-filters"></script>
     <?php endif; ?>
     <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-hero-slider-v94.js') ?>?v=94.1" defer></script>

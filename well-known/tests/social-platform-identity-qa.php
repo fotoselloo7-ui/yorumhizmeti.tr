@@ -117,8 +117,8 @@ foreach(['snapchat','kick','whatsapp'] as $bright){
     if(!str_contains($css,'.yh49-category-link.nv-platform-'.$bright))
         throw new RuntimeException('Bright-background dark text override missing '.$bright);
 }
-if(!str_contains($layout,'social-platform-identity-v77.css') ||
-   !str_contains($layout,"social-platform-identity-v77.css') ?>?v=20261014"))
+if(!preg_match('/social-platform-identity-v77\.css[^\r\n]*\?v=(\d{8})/', $layout, $assetVersion) ||
+   (int)$assetVersion[1] < 20261014)
     throw new RuntimeException('Platform stylesheet stale in browser cache.');
 if(Brand::fromText('Hazır Yazılımlar & Scriptler')!==null)
     throw new RuntimeException('Software categories picked up a platform brand.');
