@@ -119,7 +119,7 @@
     <?php if($template==='frontend/categories'): ?>
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261014">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261017-social-sales">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=20261014">

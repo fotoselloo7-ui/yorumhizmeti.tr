@@ -1,5 +1,6 @@
 <?php $isEdit = !empty($package); ?>
 <?php $softwareOnly = !empty($softwareOnly); ?>
+<?php $socialOptions = $isEdit ? \App\Services\SocialPackageService::info($package) : null; ?>
 <div class="adm-page-top">
     <div class="adm-page-top-left">
         <a href="<?= $softwareOnly ? '/admin/hazir-yazilimlar' : '/admin/paketler' ?>" class="btn btn-outline btn-sm"><?= icon('arrow-left', 14) ?> Geri</a>
@@ -56,6 +57,19 @@
             </div>
 
             <!-- Pricing -->
+            <?php if(!$softwareOnly): ?>
+            <div class="adm-card">
+                <div class="adm-card-header"><h3><?= icon('users',18) ?> Sosyal Medya Paket İçeriği</h3></div>
+                <div class="adm-card-body">
+                    <p>Yalnızca Sosyal Medya Hizmetleri kategorilerinde uygulanır. Bir paket, aşağıdaki miktarın tamamını belirtilen fiyatla satar. Min/Max adet sosyal paketlerde 1'dir.</p>
+                    <div class="form-group"><label for="social-service">Hizmet Türü</label><input id="social-service" class="form-control" name="social_service" maxlength="120" value="<?= e($socialOptions['service'] ?? '') ?>" placeholder="Örnek: Instagram Türk Takipçi / Instagram Bot Takipçi"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="social-quantity">Paketin Teslim Miktarı</label><input id="social-quantity" class="form-control" type="number" name="social_quantity" min="1" max="100000000" value="<?= !empty($socialOptions['quantity'])?(int)$socialOptions['quantity']:'' ?>" placeholder="Örnek: 100 / 500 / 1000"></div>
+                        <div class="form-group"><label for="social-unit">Miktar Birimi</label><input id="social-unit" class="form-control" name="social_unit" maxlength="40" value="<?= e($socialOptions['unit'] ?? '') ?>" placeholder="takipçi / beğeni / izlenme / abone"></div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
             <div class="adm-card">
                 <div class="adm-card-header"><h3><?= icon('dollar-sign', 18) ?> Fiyatlandırma</h3></div>
                 <div class="adm-card-body">

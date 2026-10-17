@@ -13,6 +13,11 @@ final class SmmFulfillmentService
     {
         $m = SmmCatalogService::mapping($packageId);
         if ($m === null) return;
+        $package = Database::getInstance()->fetch('SELECT * FROM packages WHERE id=?',[$packageId]);
+        if ($package && SocialPackageService::isSocialCategory((int)$package['category_id'])) {
+            SocialPackageService::assertPurchasable($package);
+            if ($cartQty !== 1) throw new \RuntimeException('Sosyal medya paketleri sabit teslim miktarıyla satın alınır.');
+        }
         if (!$m['enabled'] || !$m['is_available'] || !$m['provider_active']
             || (int)$m['fulfillment_quantity'] < (int)$m['min_quantity']
             || (int)$m['fulfillment_quantity'] > (int)$m['max_quantity']
@@ -21,8 +26,7 @@ final class SmmFulfillmentService
             throw new \RuntimeException('Seçtiğiniz hizmet şu an siparişe kapalı. Lütfen sepetinizden çıkarın.');
         }
         $raw = self::findLink($m['field_key'], $fields);
-        $p = Database::getInstance()->fetch('SELECT name FROM packages WHERE id=?',[$packageId]);
-        $link = \App\Services\SmmOrderFields::target($raw,(string)($p['name']??''));
+        $link = \App\Services\SmmOrderFields::target($raw,SmmOrderFields::packageTitle($package ?? []));
         $parts = parse_url($link);
         if (!filter_var($link,FILTER_VALIDATE_URL) || !$parts
             || !in_array(strtolower((string)($parts['scheme'] ?? '')),['https'],true)
@@ -53,7 +57,7 @@ final class SmmFulfillmentService
             'provider_id'=>(int)$m['provider_id'],'external_service_id'=>$m['external_service_id'],
             'quantity'=>(int)$m['fulfillment_quantity'] * max(1,$cartQty),
             'target_link'=>\App\Services\SmmOrderFields::target(self::findLink($m['field_key'],$fields),
-                (string)(Database::getInstance()->fetch('SELECT name FROM packages WHERE id=?',[$packageId])['name']??'')),
+                SmmOrderFields::packageTitle(Database::getInstance()->fetch('SELECT name,seo_title,slug FROM packages WHERE id=?',[$packageId]) ?? [])),
             'state'=>'queued',
         ]);
     }

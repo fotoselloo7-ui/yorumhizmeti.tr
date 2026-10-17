@@ -25,9 +25,7 @@ class CartController extends Controller
                    AND (c.parent_id IS NULL OR parent.status = 'active')", [(int)($item['id'] ?? 0)]);
                 if ($pkg) {
                     $price = $pkg['discount_price'] && $pkg['discount_price'] < $pkg['price'] ? $pkg['discount_price'] : $pkg['price'];
-                    $min = max(1, (int)$pkg['min_quantity']);
-                    $max = max($min, (int)$pkg['max_quantity']);
-                    $qty = max($min, min($max, (int)($item['quantity'] ?? $min)));
+                    $qty = \App\Services\SocialPackageService::cartQuantity($pkg,(int)($item['quantity'] ?? 1));
                     $cartKey = count($validCart);
                     $validCart[] = ['id' => (int)$pkg['id'], 'quantity' => $qty, 'fields' => $item['fields'] ?? []];
                     $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'cart_key' => $cartKey, 'fields' => $item['fields'] ?? []]);
@@ -79,9 +77,10 @@ class CartController extends Controller
             redirect('/paket/' . $pkg['slug']);
             return;
         }
-        $min = max(1, (int)$pkg['min_quantity']);
-        $max = max($min, (int)$pkg['max_quantity']);
-        $quantity = max($min, min($max, $quantity));
+        try { \App\Services\SocialPackageService::assertPurchasable($pkg); }
+        catch (\RuntimeException $e) { flash('error',$e->getMessage()); redirect('/paket/'.$pkg['slug']); return; }
+        $quantity = \App\Services\SocialPackageService::cartQuantity($pkg,$quantity);
+        $isSocial = \App\Services\SocialPackageService::isSocialCategory((int)$pkg['category_id']);
         $cart = $_SESSION['cart'] ?? [];
         $captured = [];
         foreach (\App\Services\SmmOrderFields::fields($pkg) as $field) {
@@ -90,10 +89,16 @@ class CartController extends Controller
                 $captured[$key]=mb_substr(trim((string)$_POST['field_'.$packageId.'_'.$key]),0,2048);
             }
         }
+        if ($isSocial) {
+            $values = [];
+            foreach ($captured as $key=>$value) $values[] = ['field_key'=>$key,'value'=>$value];
+            try { \App\Services\SmmOrderFields::validateCustomerFields($pkg,$values); }
+            catch (\RuntimeException $e) { flash('error',$e->getMessage()); redirect('/paket/'.$pkg['slug']); return; }
+        }
         $found = false;
         foreach ($cart as &$item) {
-            if ($item['id'] == $packageId) {
-                $item['quantity'] = max($min, min((int)$item['quantity'] + $quantity, $max));
+            if ($item['id'] == $packageId && (!$isSocial || ($item['fields'] ?? []) === $captured)) {
+                $item['quantity'] = \App\Services\SocialPackageService::cartQuantity($pkg,(int)$item['quantity'] + $quantity);
                 if ($captured) $item['fields']=$captured;
                 $found = true;
                 break;
@@ -106,7 +111,7 @@ class CartController extends Controller
 
         $_SESSION['cart'] = $cart;
         flash('success', 'Paket sepete eklendi.');
-        redirect('/sepet');
+        redirect(!empty($_POST['checkout']) ? '/odeme' : '/sepet');
     }
 
     public function update(): void
@@ -119,7 +124,7 @@ class CartController extends Controller
 
         $item = $_SESSION['cart'][$key];
         $pkg = Database::getInstance()->fetch(
-            "SELECT p.min_quantity, p.max_quantity, p.status FROM packages p
+            "SELECT p.* FROM packages p
              INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
              LEFT JOIN categories parent ON parent.id = c.parent_id
              WHERE p.id = ? AND p.status = 'active'
@@ -131,9 +136,7 @@ class CartController extends Controller
             redirect('/sepet');
         }
 
-        $min = max(1, (int)$pkg['min_quantity']);
-        $max = max($min, (int)$pkg['max_quantity']);
-        $quantity = max($min, min($max, (int)($_POST['quantity'] ?? $min)));
+        $quantity = \App\Services\SocialPackageService::cartQuantity($pkg,(int)($_POST['quantity'] ?? 1));
         $_SESSION['cart'][$key]['quantity'] = $quantity;
         redirect('/sepet');
     }
@@ -207,9 +210,7 @@ class CartController extends Controller
             if(!$pkg) continue;
             $price=($pkg['discount_price']&&$pkg['discount_price']<$pkg['price'])
                 ?(float)$pkg['discount_price']:(float)$pkg['price'];
-            $min=max(1,(int)$pkg['min_quantity']);
-            $max=max($min,(int)$pkg['max_quantity']);
-            $qty=max($min,min($max,(int)($item['quantity']??$min)));
+            $qty=\App\Services\SocialPackageService::cartQuantity($pkg,(int)($item['quantity']??1));
             $items[]=array_merge($pkg,[
                 'quantity'=>$qty,
                 'line_total'=>round($price*$qty,2),

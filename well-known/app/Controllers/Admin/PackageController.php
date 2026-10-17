@@ -185,6 +185,7 @@ class PackageController extends Controller
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $pkgId = $this->db->insert('packages', $data);
+        \App\Services\SocialPackageService::save((int)$pkgId,$_POST);
         \App\Services\PackageHighlightsService::save((int)$pkgId,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$pkgId,$_POST);
         logActivity('package_create', 'Paket oluşturuldu: ' . $data['name']);
@@ -209,11 +210,12 @@ class PackageController extends Controller
     public function update(string $id): void
     {
         Csrf::check();
-        $data = $this->getPackageData();
+        $data = $this->getPackageData((int)$id);
         if (!empty($_FILES['image']['name'])) { $data['image'] = Upload::image($_FILES['image'], 'packages'); }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $this->db->update('packages', $data, 'id = ?', [(int) $id]);
+        \App\Services\SocialPackageService::save((int)$id,$_POST);
         \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('package_update', 'Paket güncellendi: ' . $data['name']);
@@ -355,9 +357,9 @@ class PackageController extends Controller
         redirect('/admin/paketler');
     }
 
-    private function getPackageData(): array
+    private function getPackageData(int $packageId=0): array
     {
-        return [
+        $data = [
             'category_id' => (int) ($_POST['category_id'] ?? 0),
             'name' => trim($_POST['name'] ?? ''),
             'slug' => trim($_POST['slug'] ?? '') ?: slugify($_POST['name'] ?? ''),
@@ -380,5 +382,17 @@ class PackageController extends Controller
             'og_title' => trim($_POST['og_title'] ?? ''),
             'og_description' => trim($_POST['og_description'] ?? ''),
         ];
+        if (\App\Services\SocialPackageService::isSocialCategory((int)$data['category_id'])) {
+            try {
+                $options = \App\Services\SocialPackageService::validateOptions($_POST);
+                $mapping = $packageId > 0 ? \App\Services\SmmCatalogService::mapping($packageId) : null;
+                if ($mapping && $options['quantity'] !== (int)$mapping['fulfillment_quantity']) throw new \RuntimeException('Teslim miktarı sağlayıcı eşlemesindeki miktarla aynı olmalı.');
+            } catch (\RuntimeException $e) {
+                flash('error',$e->getMessage());
+                redirect($packageId > 0 ? '/admin/paket/'.$packageId.'/duzenle' : '/admin/paket/ekle');
+            }
+            $data['min_quantity'] = $data['max_quantity'] = 1;
+        }
+        return $data;
     }
 }

@@ -38,7 +38,7 @@ $categoryLead = array_shift($categoryWords) ?: 'Dijital';
 $categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
 $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 ?>
-<div class="yv-category-v5 <?= e($nvPlatformClass) ?>">
+<div class="yv-category-v5 <?= e($nvPlatformClass) ?> <?= !empty($socialCatalog)?'nv-social-catalog':'' ?>">
 <section class="yv-category-hero-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>">
  <div class="container">
   <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="separator">/</span><a href="/kategoriler">Hizmetler</a><span class="separator">/</span><span><?= e($category['name']) ?></span></div>
@@ -70,6 +70,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 
 <section class="yv-category-filter-v5">
  <div class="container">
+  <?php if(!empty($socialCatalog)): require __DIR__.'/partials/social-category-filters.php'; else: ?>
   <div class="yv-category-chip-row-v5">
    <a class="<?= empty($altSlug)?'active':'' ?>" href="/kategori/<?= rawurlencode((string)$category['slug']) ?>"><?= icon('grid',12) ?> Tümü</a>
    <?php foreach($subCategories as $sub):
@@ -84,12 +85,14 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
     <select name="sort" onchange="this.form.submit()"><option value="recommended" <?= $currentSort==='recommended'?'selected':'' ?>>Sıralama: Önerilen</option><option value="price_asc" <?= $currentSort==='price_asc'?'selected':'' ?>>Fiyat: Artan</option><option value="price_desc" <?= $currentSort==='price_desc'?'selected':'' ?>>Fiyat: Azalan</option><option value="featured" <?= $currentSort==='featured'?'selected':'' ?>>En Popüler</option></select>
    </form>
   </div>
+  <?php endif; ?>
  </div>
 </section>
 
 <section class="yv-category-packages-v5" id="packages">
  <div class="container">
-  <?php if(!empty($packages)): ?>
+  <?php if(!empty($socialCatalog['show_services'])): require __DIR__.'/partials/social-service-cards.php'; elseif(!empty($packages)): ?>
+  <?php if(!empty($socialCatalog['selected'])): ?><div class="nv-social-section-heading"><h2><?= e($socialCatalog['selected']['name']) ?></h2><p>Miktarı belli paketinizi seçin. Gösterilen fiyat, paketteki miktarın tamamı içindir.</p></div><?php endif; ?>
   <div class="yv-category-package-grid-v5">
    <?php foreach($packages as $index=>$pkg):
     $price=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price'];
@@ -98,7 +101,9 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
    <a class="yv-category-package-card-v5 <?= e($nvPlatformClass) ?>" href="/paket/<?= e($pkg['slug']) ?>">
     <div class="yv-category-package-icon-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>"><?= icon($platformIcon,23) ?></div>
     <?php if($index===0 || !empty($pkg['is_featured'])): ?><span class="yv-package-ribbon-v5"><?= $index===0?'EN POPÜLER':'ÇOK TERCİH EDİLEN' ?></span><?php endif; ?>
-    <h3><?= e(package_display_name($pkg)) ?></h3>
+    <?php $socialInfo=!empty($socialCatalog)?\App\Services\SocialPackageService::info($pkg):null; ?>
+    <?php if($socialInfo): ?><div class="nv-social-package-amount"><?= e($socialInfo['label']) ?></div><?php endif; ?>
+    <h3><?= e($socialInfo ? $socialInfo['service'] : package_display_name($pkg)) ?></h3>
     <?php if(!empty($pkg['short_description'])): ?><p class="nv67-category-package-summary"><?= e(excerpt(strip_tags((string)$pkg['short_description']),125)) ?></p><?php endif; ?>
     <ul>
      <?php foreach(array_slice(\App\Services\PackageHighlightsService::get((int)$pkg['id'],$pkg),0,4) as $highlight): ?>
@@ -107,7 +112,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
     </ul>
     <div class="yv-category-delivery-v5"><?= icon('truck',12) ?> Teslimat: <?= e($pkg['delivery_time'] ?: 'Hızlı') ?></div>
     <div class="yv-category-price-v5"><div><?php if($discount): ?><del><?= money($pkg['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong></div><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
-    <em>Paketleri İncele <?= icon('arrow-right',11) ?></em>
+    <em><?= $socialInfo?'Paketi Satın Al':'Paketleri İncele' ?> <?= icon('arrow-right',11) ?></em>
    </a>
    <?php endforeach; ?>
   </div>

@@ -41,7 +41,7 @@ final class SmmOrderFields
         $fields=$db->fetchAll('SELECT * FROM package_fields WHERE package_id=? ORDER BY sort_order ASC,id ASC',[(int)$package['id']]);
         if ($fields) return self::displayFields($fields,$package);
         $m=SmmCatalogService::mapping((int)$package['id']);
-        $title=(string)($package['name']??'').' '.(string)($package['category_name']??'');
+        $title=self::packageTitle($package);
         $social=($m!==null || self::platform($title)!=='');
         if (!$social) return [];
         $mode=self::mode($title);
@@ -58,7 +58,7 @@ final class SmmOrderFields
     {
         $m=SmmCatalogService::mapping((int)$package['id']);
         if (!$m) return $fields;
-        $title=(string)($package['name']??'').' '.(string)($package['category_name']??'');
+        $title=self::packageTitle($package);
         $mode=self::mode($title);
         foreach ($fields as &$field) {
             if (($field['field_key']??'')!==$m['field_key']) continue;
@@ -117,8 +117,13 @@ final class SmmOrderFields
             }
             if ($found==='') throw new \RuntimeException('Zorunlu hizmet alanını doldurun: '.$field['field_label']);
             if ($field['field_type']==='url' || preg_match('/smm_target|smm_link|^link$/',(string)$field['field_key'])) {
-                self::target($found,(string)($package['name']??'').' '.(string)($package['category_name']??''));
+                self::target($found,self::packageTitle($package));
             }
         }
+    }
+
+    public static function packageTitle(array $package): string
+    {
+        return (string)(($package['name'] ?? '') ?: ($package['seo_title'] ?? '') ?: ($package['slug'] ?? '')).' '.(string)($package['category_name'] ?? '');
     }
 }

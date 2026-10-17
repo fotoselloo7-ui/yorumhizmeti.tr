@@ -29,7 +29,7 @@ class CheckoutController extends Controller
                    AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
             if ($pkg) {
                 $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
-                $qty = $item['quantity'] ?? 1;
+                $qty = \App\Services\SocialPackageService::cartQuantity($pkg,(int)($item['quantity'] ?? 1));
                 $fields = \App\Services\SmmOrderFields::fields($pkg);
                 $cartItems[] = array_merge($pkg, ['quantity' => $qty, 'line_total' => $price * $qty, 'fields' => $fields, 'saved_fields'=>$item['fields'] ?? [], 'cart_key' => $key]);
                 $total += $price * $qty;
@@ -109,7 +109,7 @@ class CheckoutController extends Controller
 
         // Sipariş itemlerini hazırla
         $orderItems = [];
-        foreach ($cart as $item) {
+        foreach ($cart as $cartKey => $item) {
             $pkg = $db->fetch("SELECT p.* FROM packages p
                  INNER JOIN categories c ON p.category_id = c.id AND c.status = 'active'
                  LEFT JOIN categories parent ON parent.id = c.parent_id
@@ -119,16 +119,16 @@ class CheckoutController extends Controller
             $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
 
             $orderItem = $pkg;
-            $minQty = max(1, (int)$pkg['min_quantity']);
-            $maxQty = max($minQty, (int)$pkg['max_quantity']);
-            $orderItem['quantity'] = max($minQty, min($maxQty, (int)($item['quantity'] ?? $minQty)));
+            $orderItem['quantity'] = \App\Services\SocialPackageService::cartQuantity($pkg,(int)($item['quantity'] ?? 1));
             $orderItem['line_total'] = round($price * (int)$orderItem['quantity'], 2);
 
             // Dinamik alanlar
             $fields = \App\Services\SmmOrderFields::fields($pkg);
             $itemFields = [];
             foreach ($fields as $field) {
-                $fieldValue = $_POST['field_' . $pkg['id'] . '_' . $field['field_key']] ?? ($item['fields'][$field['field_key']] ?? '');
+                $fieldName = \App\Services\SocialPackageService::isSocialCategory((int)$pkg['category_id'])
+                    ? 'field_line_'.$cartKey.'_'.$field['field_key'] : 'field_'.$pkg['id'].'_'.$field['field_key'];
+                $fieldValue = $_POST[$fieldName] ?? ($item['fields'][$field['field_key']] ?? '');
                 $itemFields[] = [
                     'field_key' => $field['field_key'],
                     'field_label' => $field['field_label'],
@@ -138,6 +138,7 @@ class CheckoutController extends Controller
             $orderItem['fields'] = $itemFields;
             try {
                 \App\Services\SmmOrderFields::validateCustomerFields($pkg, $itemFields);
+                \App\Services\SocialPackageService::assertPurchasable($pkg);
                 \App\Services\SmmFulfillmentService::validateLine((int)$pkg['id'], $itemFields, (int)$orderItem['quantity']);
             } catch (\RuntimeException $e) {
                 flash('error', $e->getMessage());

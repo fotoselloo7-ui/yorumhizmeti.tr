@@ -95,7 +95,12 @@ $reviews=$testimonialSection['extra']??[];
     <div class="yv-product-price-v5"><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
     <p><?= e((string)($package['short_description'] ?: 'Seçtiğiniz dijital hizmet paketinin ayrıntılarını aşağıda inceleyebilirsiniz.')) ?></p>
 
-    <?php if(!empty($variantPackages) && count($variantPackages) > 1): ?>
+    <?php if(!empty($socialSale)): ?>
+    <div class="nv-social-order-summary" aria-label="Seçilen sosyal medya paketi">
+      <span>Seçtiğiniz paket</span><strong><?= e($socialSale['label']) ?></strong>
+      <p><?= e($socialSale['service']) ?> · Fiyat bu miktarın tamamı içindir.</p>
+    </div>
+    <?php elseif(!empty($variantPackages) && count($variantPackages) > 1): ?>
     <div class="yv-product-variants-v9">
       <label>Paket Seçimi <?= icon('help-circle',11) ?></label>
       <div>
@@ -106,6 +111,8 @@ $reviews=$testimonialSection['extra']??[];
     </div>
     <?php endif; ?>
 
+    <?php $saleClosed=!empty($socialSale) && ($socialSale['quantity']<1 || $socialSale['unit']==='' || !$socialSale['mapping_matches']); ?>
+    <?php if($saleClosed): ?><p role="status">Bu paketin miktar yapılandırması tamamlanana kadar sipariş alınamıyor. Lütfen destek ekibine ulaşın.</p><?php endif; ?>
     <form id="packageForm" method="POST" action="/sepet/ekle" class="yv-buy-form-v5">
      <?= csrfField() ?><input type="hidden" name="package_id" value="<?= $package['id'] ?>">
      <?php if(!empty($fields)): foreach($fields as $field): ?><div class="yv-form-group"><label><?= e($field['field_label']) ?><?= $field['is_required']?' *':'' ?></label>
@@ -113,9 +120,11 @@ $reviews=$testimonialSection['extra']??[];
       <?php elseif($field['field_type']==='select'): ?><select class="form-control" name="field_<?= $package['id'] ?>_<?= e($field['field_key']) ?>" <?= $field['is_required']?'required':'' ?>><option value="">Seçiniz</option><?php foreach(explode(',',$field['options']??'') as $opt): if(trim($opt)!==''): ?><option value="<?= e(trim($opt)) ?>"><?= e(trim($opt)) ?></option><?php endif; endforeach; ?></select>
       <?php else: ?><input class="form-control" type="<?= $field['field_type']==='url'?'url':'text' ?>" name="field_<?= $package['id'] ?>_<?= e($field['field_key']) ?>" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>><?php endif; ?>
      </div><?php endforeach; endif; ?>
-     <?php if(($package['max_quantity']??1)>1): ?><div class="yv-product-qty-v9"><label>Adet</label><div><button type="button" onclick="stepProductQty(-1)">−</button><input id="productQty" type="number" name="quantity" value="<?= (int)($package['min_quantity']?:1) ?>" min="<?= (int)($package['min_quantity']?:1) ?>" max="<?= (int)$package['max_quantity'] ?>"><button type="button" onclick="stepProductQty(1)">+</button></div></div><?php else: ?><input type="hidden" name="quantity" value="1"><?php endif; ?>
-     <button class="yv-product-add-v5" type="submit"><?= icon('shopping-cart',15) ?> Sepete Ekle</button>
-     <button class="yv-product-now-v5" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button>
+     <?php if(empty($socialSale) && ($package['max_quantity']??1)>1): ?><div class="yv-product-qty-v9"><label>Adet</label><div><button type="button" onclick="stepProductQty(-1)">−</button><input id="productQty" type="number" name="quantity" value="<?= (int)($package['min_quantity']?:1) ?>" min="<?= (int)($package['min_quantity']?:1) ?>" max="<?= (int)$package['max_quantity'] ?>"><button type="button" onclick="stepProductQty(1)">+</button></div></div><?php else: ?><input type="hidden" name="quantity" value="1"><?php endif; ?>
+     <button class="yv-product-add-v5" type="submit" <?= $saleClosed?'disabled':'' ?>><?= icon('shopping-cart',15) ?> Sepete Ekle</button>
+     <?php if(!empty($socialSale)): ?>
+     <button class="yv-product-now-v5" type="submit" name="checkout" value="1" <?= $saleClosed?'disabled':'' ?>><?= icon('zap',15) ?> Hemen Satın Al</button>
+     <?php else: ?><button class="yv-product-now-v5" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button><?php endif; ?>
     </form>
     <div class="yv-product-mini-trust-v5"><div><?= icon('shield',14) ?><span><strong>Güvenli Ödeme</strong><small>256 Bit SSL</small></span></div><div><?= icon('zap',14) ?><span><strong>Hızlı Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Hızlı') ?></small></span></div><div><?= icon('headphones',14) ?><span><strong>7/24 Destek</strong><small>Her zaman yanınızda</small></span></div></div>
    </aside>
@@ -143,7 +152,7 @@ $reviews=$testimonialSection['extra']??[];
 
 <?php if(!empty($relatedPackages)): ?><section class="yv-product-related-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">İlgili paketler</div><h2>İlgili Paketler</h2><p>İşletmenizi daha da güçlendirecek diğer popüler paketlere göz atın.</p></div><a class="yv-link-button" href="/kategoriler">Tüm Paketleri Gör <?= icon('arrow-right',11) ?></a></div><div class="yv-product-related-grid-v5"><?php foreach($relatedPackages as $rp): $rpPrice=(!empty($rp['discount_price'])&&$rp['discount_price']<$rp['price'])?$rp['discount_price']:$rp['price']; [$rpClass,$rpIcon]=yvPkgDesign(package_display_name($rp), $rp['category_name']??''); ?><a class="yv-product-related-card-v5 <?= e($rpClass) ?>" href="/paket/<?= e($rp['slug']) ?>"><?php if(!empty($rp['image'])): ?><img src="<?= e(upload_url($rp['image'])) ?>" alt="<?= e($rp['image_alt']??$rp['name']) ?>"><?php else: ?><div class="art <?= e($rpClass) ?>"><span><?= icon($rpIcon,28) ?></span></div><?php endif; ?><div><small><?= e($rp['category_name']??'Hizmet') ?></small><h3><?= e(package_display_name($rp)) ?></h3><ul><li><?= icon('check',10) ?> Hızlı teslimat</li><li><?= icon('check',10) ?> Güvenli işlem</li><li><?= icon('check',10) ?> 7/24 destek</li></ul><strong><?= money($rpPrice) ?></strong><em>Detayları İncele <?= icon('arrow-right',10) ?></em></div></a><?php endforeach; ?></div></div></section><?php endif; ?>
 </div>
-<script>
+<?php if(empty($socialSale)): ?><script>
 function stepProductQty(delta){const q=document.getElementById('productQty');if(!q)return;const min=parseInt(q.min||'1',10),max=parseInt(q.max||'999999',10);q.value=Math.min(max,Math.max(min,parseInt(q.value||min,10)+delta));}
 function buyNow(){const f=document.getElementById('packageForm');if(!f.reportValidity())return;const b=f.querySelector('.yv-product-now-v5');b.disabled=true;b.textContent='Yönlendiriliyor...';fetch(f.action,{method:'POST',body:new FormData(f),headers:{'X-Requested-With':'XMLHttpRequest'}}).finally(()=>location.href='/odeme')}
-</script>
+</script><?php endif; ?>

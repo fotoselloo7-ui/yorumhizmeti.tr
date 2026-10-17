@@ -82,6 +82,7 @@ class CategoryController extends Controller
             return;
         }
         $category = \App\Services\CategorySearchBlueprint::decorate($category);
+        $isSocialSale = \App\Services\SocialPackageService::isSocialCategory((int)$category['id']);
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
         // Filters
@@ -111,8 +112,8 @@ class CategoryController extends Controller
         $params = array_merge($params, $targetCategoryIds);
 
         if ($q) {
-            $where .= " AND p.name LIKE ?";
-            $params[] = "%{$q}%";
+            $where .= $isSocialSale ? " AND (p.name LIKE ? OR p.seo_title LIKE ? OR p.short_description LIKE ?)" : " AND p.name LIKE ?";
+            foreach (range(1,$isSocialSale ? 3 : 1) as $unused) $params[] = "%{$q}%";
         }
 
         $orderBy = "ORDER BY p.sort_order ASC, p.id DESC";
@@ -125,6 +126,8 @@ class CategoryController extends Controller
         }
 
         $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
+        $socialCatalog = $isSocialSale ? \App\Services\SocialPackageService::catalog($packages,$category,mb_substr((string)($_GET['hizmet'] ?? ''),0,160)) : null;
+        if ($socialCatalog !== null) $packages = $socialCatalog['packages'];
 
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
         $testimonialSection = null;
@@ -159,9 +162,16 @@ class CategoryController extends Controller
              (string)$category['slug'].' '.(string)$category['name'])){
             $canonical=url('/kategori/'.$category['slug']);
             $items=[];
-            foreach(array_slice($packages,0,35) as $n=>$p){
-                $items[]=['@type'=>'ListItem','position'=>$n+1,
-                    'name'=>$p['name'],'url'=>url('/paket/'.$p['slug'])];
+            if (!empty($socialCatalog['show_services'])) {
+                foreach (array_slice($socialCatalog['groups'],0,35) as $n=>$service) {
+                    $items[]=['@type'=>'ListItem','position'=>$n+1,
+                        'name'=>$service['name'],'url'=>url($service['url'])];
+                }
+            } else {
+                foreach(array_slice($packages,0,35) as $n=>$p){
+                    $items[]=['@type'=>'ListItem','position'=>$n+1,
+                        'name'=>$isSocialSale ? package_display_name($p) : $p['name'],'url'=>url('/paket/'.$p['slug'])];
+                }
             }
             $graph=[
               ['@type'=>'BreadcrumbList','@id'=>$canonical.'#breadcrumbs','itemListElement'=>[
@@ -179,6 +189,10 @@ class CategoryController extends Controller
                 JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
         }
 
+        $socialFilter = $isSocialSale && (!empty($_GET['hizmet']) || $q !== '');
+        // Filter variants must not inherit an admin-managed index directive.
+        if ($socialFilter) $categorySeo['robots'] = 'noindex,follow';
+
         $this->render('frontend/category-detail', [
             'pageTitle' => $category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name'),
             'metaDescription' => $category['seo_description'] ?: $category['description'],
@@ -189,6 +203,8 @@ class CategoryController extends Controller
             'schema' => $schema,
             'nvSeoData' => $categorySeo,
             'packages' => $packages,
+            'socialCatalog' => $socialCatalog,
+            'noindex' => $socialFilter,
             'subCategories' => $subCategories,
             'selectedSubCategory' => $selectedSubCategory,
             'currentSort' => $sort,

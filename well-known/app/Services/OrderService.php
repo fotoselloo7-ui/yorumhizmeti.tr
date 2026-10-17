@@ -27,6 +27,15 @@ class OrderService
         try {
         $orderNumber = $this->generateOrderNumber();
         $totalAmount = 0;
+        foreach ($cartItems as &$item) {
+            if (SocialPackageService::info($item) === null) continue;
+            $item['quantity'] = SocialPackageService::cartQuantity($item,(int)($item['quantity'] ?? 1));
+            $item['line_total'] = round($this->effectivePrice($item) * $item['quantity'],2);
+            $item['fields'] = array_values(array_filter($item['fields'] ?? [],static fn(array $field): bool => !str_starts_with((string)($field['field_key'] ?? ''),'nv_social_')));
+            SmmOrderFields::validateCustomerFields($item,$item['fields']);
+            $item['fields'] = array_merge($item['fields'],SocialPackageService::snapshot($item));
+        }
+        unset($item);
 
         foreach ($cartItems as $item) {
             $price = $this->effectivePrice($item);
@@ -62,7 +71,7 @@ class OrderService
             $orderItemId = $this->db->insert('order_items', [
                 'order_id' => $orderId,
                 'package_id' => $item['id'],
-                'package_name' => $item['name'],
+                'package_name' => SocialPackageService::info($item) !== null ? SocialPackageService::info($item)['title'] : $item['name'],
                 'quantity' => $qty,
                 'price' => $price,
                 'total' => $price * $qty,
