@@ -29,5 +29,5 @@ foreach(['CatalogMenuService::groups','SocialPlatformIdentity::classFor','/hazir
 $faq=$read('resources/views/frontend/faq.php');
 if(str_contains($faq,'<script>') || !str_contains($faq,'aria-expanded="false"') || !str_contains($faq,'aria-controls="nv-faq-'))throw new RuntimeException('Help center accessibility or external script ownership lost.');
 $js=$read('public/assets/js/app.js');
-if(!str_contains($js,".yv-faq-page .premium-faq-question") || !str_contains($js,'answer.hidden = !open'))throw new RuntimeException('Help accordion state handling missing.');
+if(!str_contains($js,"querySelectorAll('.premium-faq-question')") || !str_contains($js,'answer.hidden = !open') || !str_contains($js,"question.setAttribute('aria-controls', panel.id)"))throw new RuntimeException('Shared public accordion state handling missing.');
 echo "PASS: isolated interior typography, single directory style owner, data-driven links, accessible responsive cards\n";

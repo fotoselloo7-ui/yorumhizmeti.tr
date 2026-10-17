@@ -1,5 +1,8 @@
 /* YorumHizmeti Motion V22 — original visuals preserved. */
 :root{--yh-motion-ease:cubic-bezier(.2,.7,.2,1)}
+/* Animation is applied only after intersection, never as a hidden initial state. */
+.nv-motion-enter{animation:nv-editorial-enter .48s var(--yh-motion-ease)}
+@keyframes nv-editorial-enter{from{opacity:.86;translate:0 12px}to{opacity:1;translate:0 0}}
 .yh18-featured-pane .yh18-featured-grid{
   display:grid!important;
   grid-template-columns:none!important;
@@ -101,6 +104,7 @@
   .yh18-slide-arrow{width:42px;height:42px}
 }
 @media(prefers-reduced-motion:reduce){
+  .nv-motion-enter{animation:none}
   .yh18-featured-pane .yh18-featured-grid{scroll-behavior:auto!important;scroll-snap-type:none!important}
   .yh6-hero-copy h1,.yv-category-hero-v5 h1,.yv-blog-hero-v8 h1,
   .yh6-hero-copy>p,.yh6-hero-actions,.yh6-hero-person,

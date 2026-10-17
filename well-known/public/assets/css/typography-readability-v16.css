@@ -39,8 +39,6 @@
 .yv-chip{font-size:var(--nv-inner-type-10,10px)!important}
 .yv-section-head-v5 p{font-size:var(--nv-inner-type-9,9px)!important;line-height:1.7!important}
 .yv-link-button{font-size:var(--nv-inner-type-9,9px)!important}
-.premium-faq-question{font-size:var(--nv-inner-type-9,9px)!important}
-.premium-faq-answer{font-size:var(--nv-inner-type-9,9px)!important;line-height:1.7!important}
 
 /* ---------- homepage ---------- */
 .yh6-eyebrow{font-size:var(--nv-inner-type-10,10px)!important}
@@ -241,7 +239,7 @@
 .yv-blog-head-v8 p{font-size:var(--nv-inner-type-9,9px)!important}
 .yv-blog-head-v8>a{font-size:var(--nv-inner-type-8,8px)!important}
 .yv-blog-post-image-v8 b{font-size:var(--nv-inner-type-8,8px)!important}
-.yv-blog-post-body-v8 h3{font-size:var(--nv-inner-type-11,11px)!important;line-height:1.4!important}
+.yv-blog-post-body-v8 h3{font-size:var(--nv-card-title-size,var(--nv-inner-type-11,11px))!important;line-height:1.4!important}
 .yv-blog-post-body-v8 p{font-size:var(--nv-inner-type-8,8px)!important;line-height:1.6!important}
 .yv-blog-post-body-v8>div{font-size:var(--nv-inner-type-8,8px)!important}
 .yv-blog-side-title-v8 a{font-size:var(--nv-inner-type-8,8px)!important}
@@ -319,7 +317,5 @@
   .yh6-package-card li,
   .yv-category-package-card-v5 li,
   .yv-product-related-card-v5 li{font-size:var(--nv-inner-type-9,9px)!important}
-  .premium-faq-question,
-  .premium-faq-answer{font-size:var(--nv-inner-type-9,9px)!important}
   .panel-nav a{font-size:var(--nv-inner-type-11,11px)!important}
 }

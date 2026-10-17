@@ -920,15 +920,7 @@ textarea{
 
 /* FAQ standalone */
 .premium-faq-container{gap:12px!important}
-.premium-faq-item{
-    border:1px solid #e7ebf2!important;
-    border-radius:16px!important;
-    background:#fff!important;
-    box-shadow:0 7px 22px rgba(15,23,42,.035)!important;
-}
-.premium-faq-question{
-    font-weight:650!important;
-}
+/* Public FAQ panels are owned by storefront-design-language-v89.css. */
 .faq-cta{
     border-radius:22px!important;
     background:linear-gradient(135deg,#f5f8ff,#fbf8ff)!important;

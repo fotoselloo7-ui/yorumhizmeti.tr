@@ -41,6 +41,10 @@
 .nv-product-offer button{display:inline-flex;gap:7px;align-items:center;justify-content:center;border:0;border-radius:10px;padding:12px 16px;background:#6550db;color:#fff;font-size:11px;font-weight:800;cursor:pointer}
 .nv-product-offer .nv-offer-policy{font-size:9px;color:#7d8aa1;margin-top:10px}
 .nv-chat-mobile-toggle{display:none}
+@media(min-width:769px) and (max-width:1280px){
+ .nv-chat-toggle{width:44px;min-height:44px;padding:10px}
+ .nv-chat-toggle>span{display:none}
+}
 /* The mobile launcher lives in the reserved bottom navigation, never on CTAs. */
 @media(max-width:768px){
  .nv-chat{left:16px;right:16px;bottom:calc(72px + env(safe-area-inset-bottom,0px))}

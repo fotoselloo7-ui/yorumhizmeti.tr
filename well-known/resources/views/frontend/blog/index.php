@@ -25,7 +25,7 @@ if (!function_exists('yvBlogPlatform')) {
         <p>Sosyal medya, Google, web siteniz ve daha fazlası için uzman bilgileri, stratejileri ve pratik rehberleri keşfedin. NetVera Teknoloji Yazılım blogu ile dijital dünyada her zaman bir adım önde olun.</p>
         <form class="yv-blog-search-v8" method="GET" action="/blog">
           <?= icon('search',15) ?>
-          <input name="q" value="<?= e($_GET['q']??'') ?>" placeholder="Hangi konuda bilgi arıyorsunuz?">
+          <input name="q" value="<?= e($_GET['q']??'') ?>" aria-label="Blog yazılarında ara" placeholder="Hangi konuda bilgi arıyorsunuz?">
           <button type="submit">Ara <?= icon('arrow-right',11) ?></button>
         </form>
         <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Hazır Yazılım</span><span>Instagram Takipçi</span><span>Dijital Ajans</span><span>Teknik SEO</span></div>
@@ -64,12 +64,11 @@ if (!function_exists('yvBlogPlatform')) {
             <span>ÖNE ÇIKAN YAZI</span>
             <h2><?= e($featured['title']) ?></h2>
             <p><?= e(excerpt(strip_tags($featured['excerpt']??$featured['content']??''),170)) ?></p>
-            <div class="yv-blog-featured-meta-v8"><small><?= !empty($featured['published_at'])?formatDate($featured['published_at'],'d M Y'):'Güncel' ?></small><small><?= (int)($featured['views']??0) ?> okunma</small><small>24 yorum</small></div>
+            <div class="yv-blog-featured-meta-v8"><small><?= !empty($featured['published_at'])?formatDate($featured['published_at'],'d M Y'):'Güncel' ?></small><small><?= (int)($featured['views']??0) ?> okunma</small></div>
             <a href="/blog/<?= e($featured['slug']) ?>">Yazıyı Oku <?= icon('arrow-right',11) ?></a>
           </div>
           <div class="yv-blog-featured-media-v8">
             <img class="yv-blog-featured-photo-v12" src="<?= e(!empty($featured['image']) ? upload_url($featured['image']) : demo_visual_url($featured['title'].' '.($featured['category_name']??''),'featured blog')) ?>" alt="<?= e($featured['image_alt']??$featured['title']) ?>">
-            <div class="yv-blog-featured-overlay-v12"><span><?= icon('trending-up',18) ?></span><strong>4.8</strong><em>★★★★★</em></div>
           </div>
         </article>
         <?php endif; ?>
@@ -80,7 +79,7 @@ if (!function_exists('yvBlogPlatform')) {
         <div class="yv-blog-post-grid-v8">
           <?php foreach($gridPosts as $post): [$cls,$ico]=yvBlogPlatform($post['category_name']??$post['title']); ?>
           <a class="yv-blog-post-card-v8 <?= e($cls) ?>" href="/blog/<?= e($post['slug']) ?>">
-            <div class="yv-blog-post-image-v8"><img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog card')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><span class="yv-blog-post-brand-v12"><?= icon($ico,16) ?></span><b><?= e($post['category_name']??'Rehber') ?></b></div>
+            <div class="yv-blog-post-image-v8"><img src="<?= e(!empty($post['image']) ? upload_url($post['image']) : demo_visual_url($post['title'].' '.($post['category_name']??''),'blog card')) ?>" alt="<?= e($post['image_alt']??$post['title']) ?>"><b><?= e($post['category_name']??'Rehber') ?></b></div>
             <div class="yv-blog-post-body-v8"><h3><?= e($post['title']) ?></h3><p><?= e(excerpt(strip_tags($post['excerpt']??$post['content']??''),105)) ?></p><div><span><?= icon('calendar',10) ?> <?= !empty($post['published_at'])?formatDate($post['published_at'],'d M Y'):'Güncel' ?></span><span><?= icon('eye',10) ?> <?= number_format((int)($post['views']??0)) ?> okunma</span></div></div>
           </a>
           <?php endforeach; ?>

@@ -8,19 +8,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/auth-premium-v25.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/auth-premium-v25.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body class="auth25-body">
     <?= $content ?>
-    <script src="<?= asset('js/app.js') ?>?v=20261013"></script>
+    <script src="<?= asset('js/app.js') ?>?v=20261016-premium-polish"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <script src="<?= asset('js/auth-premium-v25.js') ?>"></script>
 </body>

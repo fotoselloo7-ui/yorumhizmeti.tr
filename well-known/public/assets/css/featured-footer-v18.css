@@ -380,6 +380,12 @@ body.footer-in-view .floating-contact{
 .floating-contact{
   transition:opacity .2s ease,transform .2s ease!important;
 }
+/* Compact laptop support rail: keep the right-hand product column readable. */
+@media(min-width:769px) and (max-width:1280px){
+  .floating-contact{right:80px;bottom:23px;flex-direction:row;gap:8px}
+  .floating-contact a{width:44px;height:44px}
+}
+body:has(.nv-chat-panel:not([hidden])) .floating-contact{visibility:hidden}
 
 /* ============================================================
    RESPONSIVE

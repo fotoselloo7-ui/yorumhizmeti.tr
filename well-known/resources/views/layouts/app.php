@@ -39,25 +39,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/premium.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/premium.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261016-mobile-overflow">
-    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>?v=20261016-mobile-overflow">
+    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/forms-functional-v20.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>?v=20261016-mobile-overflow">
+    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
@@ -75,13 +75,13 @@
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <?php if(in_array($template,['frontend/netvera-scripts','frontend/netvera-script-detail'],true)): ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=20261016-premium-polish">
     <?php endif; ?>
     <?php if($template==='frontend/netvera-script-detail'): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=20261013">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261016-mobile-overflow">
-    <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=20261016-premium-polish">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-mobile-overflow">
     <?php endif; ?>
@@ -96,7 +96,7 @@
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
     <?php if(str_starts_with($template,'frontend/account/')): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-account-history-v57.css') ?>?v=57.1">
@@ -119,7 +119,7 @@
     <?php if($template==='frontend/categories'): ?>
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261014">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=20261014">
@@ -731,7 +731,7 @@
     <?php if($nvLiveChatReady): ?>
     <script src="<?= asset('js/netvera-live-chat.js') ?>?v=20261016-mobile-dock" defer></script>
     <?php endif; ?>
-    <script src="<?= asset('js/app.js') ?>?v=20261014"></script>
+    <script src="<?= asset('js/app.js') ?>?v=20261016-premium-polish"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261016-mobile-filters"></script>

@@ -141,7 +141,7 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
    <div class="yv-category-story-copy-v5">
     <div class="yv-kicker">Neden NetVera Teknoloji Yazılım?</div>
     <h2 id="yh23-story-heading"><?= e($category['name']) ?> ile markanızı <span>güvenle büyütün.</span></h2>
-    
+
     <ul>
      <li><?= icon('check-circle',15) ?> Gerçek ve aktif hesaplar</li>
      <li><?= icon('check-circle',15) ?> Hızlı teslimat</li>
@@ -181,4 +181,3 @@ $categoryHeroCutout = asset('img/hero-woman-cutout.png');
 
 <section class="yv-category-cta-v5"><div class="container"><div><span><?= icon('zap',20) ?></span><strong><?= e($category['name']) ?>'da Bugün Fark Yaratın!</strong><small>Hemen paketleri inceleyin, hesabınızı güvenle büyütün.</small></div><a class="yv-btn yv-btn-light" href="#packages">Paketleri İncele <?= icon('arrow-right',11) ?></a></div></section>
 </div>
-<script>document.querySelectorAll('.premium-faq-question').forEach(q=>q.addEventListener('click',()=>{const a=q.nextElementSibling;a.style.display=a.style.display==='block'?'none':'block'}));</script>

@@ -5,7 +5,7 @@ if($nvCurrentChat>0 && !\App\Services\NetveraInquiryService::visibleToVisitor($n
     $nvCurrentChat=0;
 ?>
 <div class="nv-chat" data-nv-chat>
- <button type="button" class="nv-chat-toggle" data-nv-chat-toggle aria-controls="nv-chat-panel" aria-expanded="false">
+ <button type="button" class="nv-chat-toggle" data-nv-chat-toggle aria-label="Canlı Destek" aria-controls="nv-chat-panel" aria-expanded="false">
    <?= icon('message-circle',20) ?> <span>Canlı Destek</span>
  </button>
  <section class="nv-chat-panel" id="nv-chat-panel" aria-label="NetVera canlı destek" hidden>

@@ -223,7 +223,7 @@ table{max-width:100%}
   gap:clamp(28px,4vw,72px)!important;
 }
 .yv-blog-chip-grid-v8{
-  grid-template-columns:repeat(auto-fit,minmax(110px,1fr))!important;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
 }
 .yv-blog-layout-v8{
   grid-template-columns:minmax(0,1fr) clamp(280px,23vw,360px)!important;
@@ -480,7 +480,7 @@ table{max-width:100%}
   .yv-checkout-proofbar-v5>.container{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .yv-checkout-review-grid-v9{grid-template-columns:1fr!important}
 
-  .yv-blog-chip-grid-v8{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  /* Mobile editorial navigation is owned by the shared design language. */
   .yv-blog-post-grid-v8{grid-template-columns:1fr!important}
   .yv-blog-sidebar-v8{grid-template-columns:1fr!important}
   .yv-blog-benefits-v8 .container>div{grid-template-columns:repeat(2,minmax(0,1fr))!important}

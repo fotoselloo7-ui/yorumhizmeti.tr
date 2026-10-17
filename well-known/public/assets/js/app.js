@@ -73,14 +73,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── FAQ Accordion ──
-    // Interior help center only; homepage/category accordions keep their owners.
-    document.querySelectorAll('.yv-faq-page .premium-faq-question').forEach(function (question) {
+    // Shared public accordion; replaces the duplicate inline category/article handlers.
+    document.querySelectorAll('.premium-faq-question').forEach(function (question, index) {
+        const panel = question.nextElementSibling;
+        if (!panel || !panel.classList.contains('premium-faq-answer')) return;
+        if (!panel.id) panel.id = 'nv-public-faq-' + index;
+        question.setAttribute('aria-controls', panel.id);
+        question.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
         question.addEventListener('click', function () {
             const answer = document.getElementById(question.getAttribute('aria-controls'));
             if (!answer) return;
             const open = question.getAttribute('aria-expanded') !== 'true';
             question.setAttribute('aria-expanded', String(open));
-            question.classList.toggle('active', open);
             answer.hidden = !open;
         });
     });
@@ -174,21 +179,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Scroll Fade-In Animations ──
-    var fadeElements = document.querySelectorAll('.fade-in-up');
-    if (fadeElements.length > 0 && 'IntersectionObserver' in window) {
+    // One entrance observer; progressive enhancement never hides page content.
+    var fadeElements = document.querySelectorAll('.fade-in-up, .nv29-section-intro, .nv30-section-head, .nv31-section-heading, .yh6-section-head, .nv26-catalog-group-head, .yv-blog-head-v8, .yv-section-head-v5');
+    var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (fadeElements.length > 0 && 'IntersectionObserver' in window && !motionPreference.matches) {
         var fadeObserver = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                    entry.target.classList.add('visible', 'nv-motion-enter');
                     fadeObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.1 });
 
-        fadeElements.forEach(function (el, index) {
-            el.style.transitionDelay = (index % 4) * 0.1 + 's';
+        fadeElements.forEach(function (el) {
             fadeObserver.observe(el);
+        });
+        motionPreference.addEventListener('change', function (event) {
+            if (event.matches) {
+                fadeObserver.disconnect();
+                fadeElements.forEach(function (el) { el.classList.remove('nv-motion-enter'); });
+            }
         });
     } else {
         // Fallback: show all immediately

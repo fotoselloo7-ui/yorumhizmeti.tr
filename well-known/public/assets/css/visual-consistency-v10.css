@@ -258,7 +258,7 @@
 .yv-product-review-grid-v5 article,
 .yv-checkout-review-grid-v9 article{border-radius:13px!important}
 .yh6-how-grid>div{border-radius:12px!important}
-.yh6-faq-item,.premium-faq-item,.yv-blog-faq-grid-v8>div{border-radius:10px!important}
+.yh6-faq-item,.yv-blog-faq-grid-v8>div{border-radius:10px!important}
 .yh6-final .container,.yv-blog-final-v8 .container{border-radius:17px!important}
 
 /* keep body copy and labels visually consistent across supplied refs */

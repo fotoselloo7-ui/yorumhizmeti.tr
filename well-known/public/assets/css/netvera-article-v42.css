@@ -1,4 +1,14 @@
 /* Readable long-form Netvera editorial content, scoped to actual article body. */
+.nv42-article-hero{margin-top:16px}
+.nv42-article-hero h1{font-size:clamp(28px,3.5vw,48px);line-height:1.2;letter-spacing:-.035em}
+.nv42-article-content{padding:40px 0 64px;background:#f8f9fd}
+.nv42-article-content .yv-content-card{max-width:none;margin:0;padding:clamp(20px,3vw,40px);border:1px solid #e4eaf5;border-radius:20px;box-shadow:0 8px 28px #18294c0b}
+.nv42-article-content .blog-toc{margin-bottom:24px;padding:20px;border:1px solid #e5dff6;border-radius:14px;background:#faf8ff}
+.nv42-article-content .blog-toc strong{font-size:14px;color:#334361}
+.nv42-article-content .blog-toc ul{margin:12px 0 0;padding-left:20px}
+.nv42-article-content .blog-toc li{margin:8px 0;font-size:13px;line-height:1.7}
+.nv42-article-content .blog-toc a{color:#6349c4;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#6349c433}
+.nv42-article-content .blog-toc a:focus-visible{outline:2px solid #7054db;outline-offset:3px}
 .nv42-article-body{
   font-size:clamp(14px,1vw,16px)!important;
   line-height:1.88!important;

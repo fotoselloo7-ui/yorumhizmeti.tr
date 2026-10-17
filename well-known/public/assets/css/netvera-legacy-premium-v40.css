@@ -22,8 +22,8 @@
 .nv40-store-head button{padding:8px 12px;border:0;color:#6c48dc;background:#f1edff;cursor:pointer}
 .nv40-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
 .nv40-product-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #e3e7f0;border-radius:16px;background:white;box-shadow:0 9px 25px rgba(43,50,92,.045);transition:transform .2s ease,box-shadow .2s ease}
-.nv40-product-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(55,51,120,.10)}
-.nv40-product-cover{position:relative;display:grid;place-items:center;height:172px;background:linear-gradient(135deg,#313a7b,#7650ce);color:white}
+@media(hover:hover) and (pointer:fine){.nv40-product-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(55,51,120,.10)}}
+.nv40-product-cover{position:relative;display:grid;place-items:center;height:auto;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#313a7b,#7650ce);color:white}
 .nv40-product-cover img{width:100%;height:100%;object-fit:cover}
 .nv40-product-cover>.icon{position:absolute;right:11px;top:11px;display:grid;place-items:center;width:31px;height:31px;border-radius:10px;background:white;color:#674de1}
 .nv40-product-copy{display:flex;flex:1;flex-direction:column;min-height:188px;padding:16px}

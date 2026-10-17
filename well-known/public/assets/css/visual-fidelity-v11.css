@@ -207,31 +207,7 @@
 .yv-compare-table-wrap-v5{box-shadow:var(--vf-shadow)!important}
 .yv-compare-table-wrap-v5 th{font-weight:800!important}
 .yv-compare-table-wrap-v5 td .icon{color:#18ae79!important}
-.premium-faq-question{
-  width:100%!important;
-  min-height:40px!important;
-  padding:0 12px!important;
-  border:0!important;
-  outline:0!important;
-  background:#fff!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  text-align:left!important;
-  color:#26314d!important;
-  font-family:Poppins,sans-serif!important;
-  font-size:7px!important;
-  font-weight:700!important;
-}
-.premium-faq-answer{
-  display:none;
-  padding:0 12px 12px!important;
-  border:0!important;
-  color:#737e93!important;
-  font-size:7px!important;
-  line-height:1.6!important;
-}
-.premium-faq-item{overflow:hidden!important}
+/* Public FAQ geometry is consolidated in the shared design language. */
 
 /* ============================================================
    BLOG — blank artwork/icons and low-contrast featured copy
@@ -315,7 +291,7 @@
   .yv-hub-hero-art-v11{min-height:260px!important}
   .yv-hub-hero-cutout-v11{right:7%!important;width:72%!important;height:96%!important}
   .yv-category-package-card-v5{min-height:280px!important}
-  .yv-category-package-card-v5 h3{min-height:32px!important;font-size:11px!important}
+  .yv-category-package-card-v5 h3{min-height:32px!important;font-size:var(--nv-card-title-size,11px)!important}
   .yv-category-review-grid-v5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
@@ -376,13 +352,6 @@
 /* homepage dark cards and category cards should never lose their names */
 .yh6-package-card h3:empty,
 .yv-category-package-card-v5 h3:empty{display:none!important}
-
-/* smoother FAQ accordion visuals */
-.premium-faq-item:has(.premium-faq-answer[style*="block"]){
-  border-color:#d5cff8!important;
-  box-shadow:0 10px 24px rgba(91,70,210,.06)!important;
-}
-.premium-faq-question .icon{color:#654ce3!important}
 
 /* footer/logo polish */
 .footer-brand h3,.site-logo{color:#fff}

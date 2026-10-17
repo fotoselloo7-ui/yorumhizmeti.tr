@@ -3,6 +3,13 @@
    Design principle: existing brand hues, subtle elevation, intentional icon motion.
    Nothing changes until hover/focus. Does not alter site routes or active selection. */
 :root{--yh55-ease:cubic-bezier(.2,.7,.25,1);--yh55-purple:#6b49dc;--yh55-dark:#192b58}
+/* Shared CTA feedback: no touch-only hover lift and no layout movement. */
+:is(.nv29-card-cta,.nv29-view-all,.nv40-cta-row a,.nv40-product-bottom a,.yv-btn,.yv-link-button,.nv26-catalog-hero-link){transition:box-shadow .2s ease,background-color .2s ease,border-color .2s ease,filter .2s ease}
+:is(.nv29-card-cta,.nv29-view-all,.nv40-cta-row a,.nv40-product-bottom a,.yv-btn,.yv-link-button,.nv26-catalog-hero-link)>.icon:last-child{transition:translate .2s ease}
+@media(hover:hover) and (pointer:fine){
+ :is(.nv29-card-cta,.nv40-cta-row a,.nv40-product-bottom a,.yv-btn-primary):hover{box-shadow:0 8px 20px #5840ba20;filter:brightness(1.04)}
+ :is(.nv29-card-cta,.nv29-view-all,.nv40-cta-row a,.nv40-product-bottom a,.yv-btn,.yv-link-button,.nv26-catalog-hero-link):hover>.icon:last-child{translate:3px 0}
+}
 /* Existing active states remain the source of truth, never stateful hover JS. */
 @media (hover:hover) and (pointer:fine){
 /* Featured category roots: tint-to-inverse in their own purple/blue palette */
@@ -203,6 +210,8 @@
 }
 /* Respect reduced-motion system preferences throughout every new interaction. */
 @media (prefers-reduced-motion:reduce){
+ :is(.nv29-card-cta,.nv29-view-all,.nv40-cta-row a,.nv40-product-bottom a,.yv-btn,.yv-link-button,.nv26-catalog-hero-link),
+ :is(.nv29-card-cta,.nv29-view-all,.nv40-cta-row a,.nv40-product-bottom a,.yv-btn,.yv-link-button,.nv26-catalog-hero-link)>.icon:last-child{transition:none;translate:none}
 
  .yh-home-v6 .yh49-category-link,.yh-home-v6 .yh49-category-icon,
  .yh-home-v6 .yh49-category-icon :is(.icon,svg,i),

@@ -2,10 +2,10 @@
 <section class="yv-page-hero">
  <div class="container">
   <div class="breadcrumb"><a href="/">Ana Sayfa</a> / <a href="/blog">Blog</a><?php if(!empty($post['category_name'])): ?> / <span><?= e($post['category_name']) ?></span><?php endif; ?></div>
-  <div class="yv-hero-grid" style="margin-top:16px">
+  <div class="yv-hero-grid nv42-article-hero">
    <div>
     <div class="yv-kicker"><?= icon('file-text',12) ?> <?= e($post['category_name']??'Bilgi Merkezi') ?></div>
-    <h1 style="font-size:clamp(34px,4vw,54px)"><?= e($post['title']) ?></h1>
+    <h1><?= e($post['title']) ?></h1>
     <p><?= e($post['excerpt'] ?: excerpt(strip_tags($post['content']),180)) ?></p>
     <div class="yv-trust-row">
      <span class="yv-trust-pill"><?= icon('calendar',11) ?> <?= !empty($post['published_at'])?formatDate($post['published_at'],'d.m.Y'):'Güncel' ?></span>
@@ -22,12 +22,12 @@
  </div>
 </section>
 
-<section style="padding:42px 0 72px;background:#f8f9fd">
+<section class="nv42-article-content">
  <div class="container">
   <div class="yv-blog-layout">
    <main>
-    <article class="yv-content-card" style="max-width:none;margin:0">
-     <?php if(!empty($toc)): ?><div class="blog-toc" style="margin-bottom:22px;padding:16px"><strong style="font-size:11px">İçindekiler</strong><ul style="margin:10px 0 0;padding-left:18px"><?php foreach($toc as $item): ?><li style="font-size:9px;margin:6px 0"><a href="#<?= e($item['id']??'') ?>"><?= e($item['text']??'') ?></a></li><?php endforeach; ?></ul></div><?php endif; ?>
+    <article class="yv-content-card">
+     <?php if(!empty($toc)): ?><nav class="blog-toc" aria-label="İçindekiler"><strong>İçindekiler</strong><ul><?php foreach($toc as $item): ?><li><a href="#<?= e($item['id']??'') ?>"><?= e($item['text']??'') ?></a></li><?php endforeach; ?></ul></nav><?php endif; ?>
      <?php
        $nvAnswer=trim((string)($nvSeoData['direct_answer']??''));
        $nvQuestion=trim((string)($nvSeoData['main_question']??''));
@@ -93,4 +93,3 @@
  </div>
 </section>
 </div>
-<script>document.querySelectorAll('.premium-faq-question').forEach(q=>q.addEventListener('click',()=>{const a=q.nextElementSibling;a.style.display=a.style.display==='block'?'none':'block'}));</script>

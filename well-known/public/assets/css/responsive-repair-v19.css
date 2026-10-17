@@ -12,7 +12,7 @@
 .yv-product-hero-grid-v5 > .yv-product-hero-visual-v5,
 .yv-hero-grid > .yv-hub-hero-art-v11 {
   position:relative!important;
-  display:block!important;
+  display:var(--nv-decorative-art-display,block)!important;
   width:100%!important;
   min-width:0!important;
   max-width:720px!important;
@@ -108,7 +108,7 @@
 .yv-category-benefits-v5 b,.yv-product-proof-v5 b{font-size:10px!important}
 .yv-category-benefits-v5 small,.yv-product-proof-v5 small{font-size:9px!important}
 .yv-blog-post-body-v8 p,.yh6-blog-card p{font-size:11px!important}
-.yv-blog-post-body-v8 h3{font-size:13px!important}
+/* Blog card title typography is owned by v16 tokens and v89. */
 .yh6-blog-card h3{font-size:13px!important}
 .yh6-why-copy>p,.yh6-section-head p{font-size:12px!important}
 .yh6-hero-copy>p{font-size:13px!important}
