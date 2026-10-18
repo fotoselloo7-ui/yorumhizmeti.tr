@@ -49,7 +49,7 @@
                         <?php
                         $stBadge = 'info';
                         if ($t['status'] === 'closed') $stBadge = 'default';
-                        elseif ($t['status'] === 'admin_reply') $stBadge = 'success';
+                        elseif (in_array($t['status'], ['answered', 'admin_reply'], true)) $stBadge = 'success';
                         elseif ($t['status'] === 'customer_reply') $stBadge = 'warning';
                         ?>
                         <span class="status-badge <?= $stBadge ?>"><?= e(supportStatusLabel($t['status'])) ?></span>
@@ -73,7 +73,7 @@
             <?php
             $stBadge = 'info';
             if ($t['status'] === 'closed') $stBadge = 'default';
-            elseif ($t['status'] === 'admin_reply') $stBadge = 'success';
+            elseif (in_array($t['status'], ['answered', 'admin_reply'], true)) $stBadge = 'success';
             elseif ($t['status'] === 'customer_reply') $stBadge = 'warning';
             ?>
             <span class="status-badge <?= $stBadge ?>"><?= e(supportStatusLabel($t['status'])) ?></span>

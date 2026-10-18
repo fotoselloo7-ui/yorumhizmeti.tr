@@ -223,27 +223,5 @@ document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.removeItem('prefill_fields');
         } catch(e) {}
     }
-    // ── Panel Sidebar Toggle (Mobile) ──
-    const panelToggle = document.getElementById('panelSidebarToggle');
-    const panelSidebar = document.getElementById('panelSidebar');
-    if (panelToggle && panelSidebar) {
-        panelToggle.addEventListener('click', function () {
-            panelSidebar.classList.toggle('open');
-            const isOpen = panelSidebar.classList.contains('open');
-            panelToggle.querySelector('span').textContent = isOpen ? 'Menüyü Kapat' : 'Panel Menüsü';
-        });
-    }
-
-    // ── Panel File Upload Display ──
-    const fileInput = document.getElementById('supportAttachment');
-    const filePlaceholder = document.getElementById('filePlaceholder');
-    if (fileInput && filePlaceholder) {
-        fileInput.addEventListener('change', function () {
-            if (this.files.length) {
-                const label = filePlaceholder.querySelector('span');
-                if (label) label.textContent = this.files[0].name;
-            }
-        });
-    }
 
 });

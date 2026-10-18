@@ -424,6 +424,7 @@ function supportStatusLabel(string $status): string
     $labels = [
         'open' => 'Açık',
         'admin_reply' => 'Yanıtlandı',
+        'answered' => 'Yanıtlandı',
         'customer_reply' => 'Müşteri Yanıtı',
         'closed' => 'Kapatıldı',
     ];

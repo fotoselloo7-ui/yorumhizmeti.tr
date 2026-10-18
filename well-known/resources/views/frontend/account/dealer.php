@@ -1,12 +1,12 @@
-<section class="section panel-section nv62-dealer">
-  <div class="container"><div class="panel-layout">
+<section class="member-panel nv62-dealer">
+  <div class="container"><div class="member-layout">
     <?php include __DIR__.'/../partials/user-sidebar.php'; ?>
-    <main class="panel-content">
-      <div class="panel-welcome">
-        <div class="panel-welcome-text"><h1>Bayilik & İş Ortaklığı</h1>
+    <main class="member-main">
+      <div class="member-hero">
+        <div class="member-hero-copy"><h1>Bayilik & İş Ortaklığı</h1>
           
         </div>
-        <div class="panel-welcome-actions"><a href="/hazir-scriptler" class="btn btn-outline btn-sm"><?= icon('monitor',15) ?> Yazılımlar</a></div>
+        <div class="member-hero-actions"><a href="/hazir-scriptler" class="member-btn is-soft"><?= icon('monitor',15) ?> Yazılımlar</a></div>
       </div>
       <?php if(!$dealerReady): ?>
         <div class="nv62-dealer-card">
@@ -20,7 +20,7 @@
           
           <form method="post" action="/bayilik/basvur">
             <?= csrfField() ?>
-            <button type="submit" class="btn btn-primary"><?= icon('send',15) ?> Bayilik Başvurusu Gönder</button>
+            <button type="submit" class="member-btn"><?= icon('send',15) ?> Bayilik Başvurusu Gönder</button>
           </form>
           <small>Başvuru ücretsizdir; onay ve oranlar yönetici değerlendirmesine bağlıdır. Otomatik ödeme taahhüdü içermez.</small>
         </div>

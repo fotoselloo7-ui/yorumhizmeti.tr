@@ -5,12 +5,12 @@ $nvAffiliate = $nvHistory['affiliate'] ?? null;
 $nvTickets = $nvHistory['tickets'] ?? [];
 ?>
 <?php if ($nvOrders || $nvAffiliate || $nvTickets): ?>
-<section class="panel-card nv57-legacy-history" aria-label="NetVera eski satın alma ve bayilik geçmişi">
-    <div class="panel-card-header">
+<section class="member-card nv57-legacy-history" aria-label="NetVera eski satın alma ve bayilik geçmişi">
+    <div class="member-card-heading">
         <h3><?= icon('layers',18) ?> NetVera Satın Almalarım & Bayilik</h3>
         <span class="nv57-history-pill">Eski hesabınızdan aktarılan kayıtlar</span>
     </div>
-    <div class="panel-card-body">
+    <div class="member-card-body">
         <?php if ($nvAffiliate): ?>
         <div class="nv57-dealer-summary">
             <div><small>Bayilik / İş Ortağı Durumu</small>
@@ -21,11 +21,11 @@ $nvTickets = $nvHistory['tickets'] ?? [];
         
         <?php endif; ?>
         <?php if ($nvTickets): ?>
-        <div class="nv57-dealer-summary" style="margin:10px 0 15px;grid-template-columns:1fr">
+        <div class="nv57-dealer-summary nv57-archive-tickets">
           <div>
             <strong><?= icon('headphones',15) ?> Eski NetVera destek talepleriniz</strong>
             <?php foreach ($nvTickets as $oldTicket): ?>
-              <span style="display:flex;gap:10px;justify-content:space-between;align-items:center;font-size:11px">
+              <span class="nv57-archive-ticket">
                 <?= e($oldTicket['subject']) ?>
                 <small><?= e($oldTicket['status'] ?: 'Eski talep') ?></small>
               </span>

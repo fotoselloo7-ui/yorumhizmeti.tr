@@ -60,7 +60,7 @@ final class SeoMetadataService
     public static function prepare(array $data,string $template,string $layout,string $request,int $status=200): array
     {
         $path=(string)(parse_url($request,PHP_URL_PATH)?:'/');
-        $private=$layout!=='app'||(bool)preg_match('~^/(?:admin|hesabim|siparislerim|siparis|sepet|odeme|destek|giris|kayit|sifremi-unuttum|sifre-sifirla|cikis)(?:/|$)~',$path);
+        $private=$layout!=='app'||str_starts_with($template,'frontend/account/')||str_starts_with($template,'frontend/support/')||(bool)preg_match('~^/(?:admin|hesabim|siparislerim|siparis|sepet|odeme|destek|giris|kayit|sifremi-unuttum|sifre-sifirla|cikis)(?:/|$)~',$path);
         $error=$template==='frontend/404'||$status>=400;
         $query=[];parse_str((string)(parse_url($request,PHP_URL_QUERY)??''),$query);
         $filtered=false;

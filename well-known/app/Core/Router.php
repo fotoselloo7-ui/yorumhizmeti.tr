@@ -87,7 +87,8 @@ class Router
         // User middleware (account, support, orders)
         $protectedControllers = ['AccountController', 'SupportController'];
         if (in_array($controllerName, $protectedControllers)) {
-            if (!Auth::check()) {
+            $supportAdminDownload=$controllerName==='SupportController'&&$methodName==='attachment'&&AdminAuth::admin()!==null;
+            if (!$supportAdminDownload && (!Auth::check() || !Auth::user())) {
                 redirect('/giris');
                 return;
             }

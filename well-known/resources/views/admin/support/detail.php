@@ -9,7 +9,7 @@
                 <?php
                 $stBadge = 'info';
                 if ($ticket['status'] === 'closed') $stBadge = 'default';
-                elseif ($ticket['status'] === 'admin_reply') $stBadge = 'success';
+                elseif (in_array($ticket['status'], ['answered', 'admin_reply'], true)) $stBadge = 'success';
                 elseif ($ticket['status'] === 'customer_reply') $stBadge = 'warning';
                 ?>
                 <span class="status-badge <?= $stBadge ?>"><?= e(supportStatusLabel($ticket['status'])) ?></span>
@@ -47,7 +47,7 @@
                     <div class="adm-chat-text"><?= nl2br(e($msg['message'])) ?></div>
                     <?php if ($msg['attachment']): ?>
                     <div class="adm-chat-attach">
-                        <a href="<?= e($msg['attachment']) ?>" target="_blank" class="btn btn-light btn-sm"><?= icon('link', 14) ?> Ek Dosya</a>
+                        <a href="/destek/dosya/<?= (int)$msg['id'] ?>" class="btn btn-light btn-sm"><?= icon('download', 14) ?> Ek Dosya</a>
                     </div>
                     <?php endif; ?>
                     <div class="adm-chat-time"><?= icon('clock', 11) ?> <?= formatDate($msg['created_at'], 'd M Y H:i') ?></div>
@@ -73,7 +73,7 @@
                 <div class="form-group" style="margin-bottom: 0; min-width: 180px;">
                     <label>Talep Durumu</label>
                     <select name="status" class="form-control">
-                        <option value="admin_reply">Yanıtlandı</option>
+                        <option value="answered">Yanıtlandı</option>
                         <option value="closed">Kapat</option>
                     </select>
                 </div>

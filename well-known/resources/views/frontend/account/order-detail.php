@@ -1,223 +1,27 @@
-<section class="section panel-section">
-    <div class="container">
-        <div class="panel-layout">
-            <?php include __DIR__ . '/../partials/user-sidebar.php'; ?>
-            <div class="panel-content">
-                <!-- Üst Başlık (Header) -->
-                <div class="order-detail-header fade-in-up">
-                    <div style="display:flex; align-items:center; gap:var(--space-4);">
-                        <a href="/siparislerim" class="btn btn-outline btn-sm" aria-label="Geri Dön" style="padding: 6px 12px; border-radius: var(--radius-lg);"><?= icon('arrow-left', 16) ?> Geri</a>
-                        <div>
-                            <h1 style="font-size: var(--font-size-lg); font-weight: 800; margin:0; color: var(--color-dark);">Sipariş #<?= e($order['order_number']) ?></h1>
-                            <span style="font-size: var(--font-size-xs); color: var(--color-text-secondary);"><?= formatDate($order['created_at'], 'd M Y H:i') ?></span>
-                        </div>
-                    </div>
-                    <span class="status-badge <?= orderStatusColor($order['order_status']) ?>"><?= e(orderStatusLabel($order['order_status'])) ?></span>
-                </div>
-
-                <div class="order-detail-layout">
-                    <!-- Sol Kolon: Ana İçerik -->
-                    <div class="order-detail-main">
-                        
-                        <?php if ($order['admin_note'] && empty($order['customer_visible_note'])): ?>
-                            <!-- Admin Notu Müşteriye Gösterilmeyecek (Sadece comment olarak bırakıldı) -->
-                        <?php endif; ?>
-
-                        <?php if (!empty($order['customer_visible_note'])): ?>
-                        <div class="alert alert-info fade-in-up" style="margin-bottom: var(--space-6); background: rgba(37,99,235,0.05); border: 1px solid rgba(37,99,235,0.1); border-radius: var(--radius-lg); padding: var(--space-4);">
-                            <div style="display:flex; align-items:flex-start; gap:var(--space-3);">
-                                <div style="color: var(--color-blue); margin-top:2px;"><?= icon('info', 20) ?></div>
-                                <div>
-                                    <h4 style="margin:0 0 4px 0; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-blue);">Sipariş Notu</h4>
-                                    <p style="margin:0; font-size: var(--font-size-sm); color: var(--color-text-secondary);"><?= e($order['customer_visible_note']) ?></p>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-
-                        <!-- Sipariş Kalemleri -->
-                        <div class="card mb-6 fade-in-up">
-                            <div class="card-header" style="background: var(--color-bg); padding: var(--space-4); border-bottom: 1px solid var(--color-border);"><h3 class="card-title m-0" style="font-size: var(--font-size-base);"><?= icon('package', 18) ?> Sipariş Edilen Paketler</h3></div>
-                            <div class="card-body" style="padding: 0;">
-                                <?php foreach ($items as $item): ?>
-                                <?php 
-                                    // Dinamik ikon çözümü (Mevcut paket adından veya veriden)
-                                    $pIcon = 'package';
-                                    if (stripos($item['package_name'], 'instagram') !== false) $pIcon = 'instagram';
-                                    elseif (stripos($item['package_name'], 'tiktok') !== false) $pIcon = 'tiktok';
-                                    elseif (stripos($item['package_name'], 'youtube') !== false) $pIcon = 'youtube';
-                                    elseif (stripos($item['package_name'], 'twitter') !== false || stripos($item['package_name'], 'x') !== false) $pIcon = 'twitter';
-                                    elseif (stripos($item['package_name'], 'facebook') !== false) $pIcon = 'facebook';
-                                    elseif (stripos($item['package_name'], 'google') !== false) $pIcon = 'google';
-                                ?>
-                                <div class="order-item-card">
-                                    <div class="order-item-icon">
-                                        <?= icon($pIcon, 24, "pill-icon-$pIcon") ?>
-                                    </div>
-                                    <div class="order-item-info">
-                                        <div style="font-weight: 700; font-size: var(--font-size-base); color: var(--color-dark);"><?= e($item['package_name']) ?></div>
-                                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-top: 2px;">Adet: <strong><?= $item['quantity'] ?></strong></div>
-                                    </div>
-                                    <div class="order-item-price"><?= money($item['total']) ?></div>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-
-                        <!-- Müşteri Bilgileri -->
-                        <?php if (!empty($fields)): ?>
-                        <div class="card mb-6 fade-in-up" style="animation-delay: 0.1s;">
-                            <div class="card-header" style="background: var(--color-bg); padding: var(--space-4); border-bottom: 1px solid var(--color-border);"><h3 class="card-title m-0" style="font-size: var(--font-size-base);"><?= icon('file-text', 18) ?> Girilen Bilgiler</h3></div>
-                            <div class="card-body" style="padding: var(--space-5);">
-                                <div class="customer-info-grid">
-                                    <?php foreach ($fields as $f): ?>
-                                    <div class="info-field">
-                                        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-text-secondary); margin-bottom: 4px; font-weight: 600;"><?= e($f['field_label']) ?></div>
-                                        <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--color-dark); word-break: break-all;"><?= e($f['field_value']) ?></div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-
-                        <!-- Havale Bildirimi Formu -->
-                        <?php if ($order['payment_method'] === 'bank_transfer' && $order['payment_status'] !== 'paid'): ?>
-                        <div class="card mb-6 fade-in-up" style="animation-delay: 0.2s; border-color: rgba(245,158,11,0.3); box-shadow: 0 4px 15px rgba(245,158,11,0.05);">
-                            <div class="card-header" style="background: rgba(245,158,11,0.05); padding: var(--space-4); border-bottom: 1px solid rgba(245,158,11,0.1);"><h3 class="card-title m-0" style="font-size: var(--font-size-base); color: #B45309;"><?= icon('inbox', 18) ?> Havale Bildirimi Gönder</h3></div>
-                            <div class="card-body" style="padding: var(--space-5);">
-                                <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--space-4);">Siparişinizin işleme alınması için lütfen ödemenizi aşağıdaki hesaplardan birine yapın ve bildirim formunu doldurun.</p>
-                                
-                                <?php if (!empty($bankAccounts)): ?>
-                                <div class="mb-4">
-                                    <?php foreach ($bankAccounts as $ba): ?>
-                                    <div style="background: #fff; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-bottom: var(--space-2); display:flex; align-items:center; justify-content:space-between;">
-                                        <div>
-                                            <div style="font-weight: 600; font-size: var(--font-size-sm);"><?= e($ba['bank_name']) ?></div>
-                                            <div style="font-size: var(--font-size-xs); color: var(--color-text-secondary);"><?= e($ba['account_holder']) ?></div>
-                                        </div>
-                                        <div style="font-family: monospace; font-size: var(--font-size-sm); background: var(--color-bg); padding: 4px 8px; border-radius: 4px;"><?= e($ba['iban']) ?></div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <?php endif; ?>
-
-                                <form method="POST" action="/havale-bildirimi" enctype="multipart/form-data">
-                                    <?= csrfField() ?>
-                                    <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
-                                    <div class="form-row">
-                                        <div class="form-group"><label>Gönderen Ad Soyad</label><input type="text" name="sender_name" class="form-control" required placeholder="İsim Soyisim"></div>
-                                        <div class="form-group"><label>Havale Yapılan Banka</label><input type="text" name="bank_name" class="form-control" required placeholder="Örn: Ziraat Bankası"></div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group"><label>Tutar (₺)</label><input type="number" name="amount" step="0.01" class="form-control" value="<?= $order['total_amount'] ?>" required></div>
-                                        <div class="form-group"><label>Dekont (Opsiyonel)</label><input type="file" name="receipt_file" class="form-control" accept="image/*,.pdf" style="padding: 7px 12px;"></div>
-                                    </div>
-                                    <div class="form-group"><label>Not (Opsiyonel)</label><textarea name="note" class="form-control" rows="2" placeholder="Belirtmek istediğiniz bir detay varsa buraya yazabilirsiniz."></textarea></div>
-                                    <button type="submit" class="btn btn-primary" style="width: 100%;"><?= icon('send', 16) ?> Bildirimi Gönder</button>
-                                </form>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-
-                        <!-- Durum Geçmişi (Timeline) -->
-                        <div class="card fade-in-up" style="animation-delay: 0.3s;">
-                            <div class="card-header" style="background: var(--color-bg); padding: var(--space-4); border-bottom: 1px solid var(--color-border);"><h3 class="card-title m-0" style="font-size: var(--font-size-base);"><?= icon('activity', 18) ?> Durum Geçmişi</h3></div>
-                            <div class="card-body" style="padding: var(--space-5);">
-                                <div class="order-timeline-modern">
-                                    <?php 
-                                    $logCount = count($logs);
-                                    foreach ($logs as $index => $log): 
-                                        $isLatest = ($index === 0);
-                                        $statusClass = '';
-                                        $iconName = 'check';
-                                        
-                                        if ($isLatest) {
-                                            $statusClass = 'active';
-                                            if (in_array($log['new_status'], ['cancelled', 'refunded'])) {
-                                                $statusClass = 'error';
-                                                $iconName = 'x';
-                                            } elseif ($log['new_status'] === 'completed') {
-                                                $statusClass = 'completed';
-                                            }
-                                        } else {
-                                            $statusClass = 'completed';
-                                        }
-                                    ?>
-                                    <div class="timeline-step <?= $statusClass ?>">
-                                        <div class="timeline-marker"><?= icon($iconName, 12) ?></div>
-                                        <div class="timeline-content">
-                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
-                                                <div style="font-weight: 600; font-size: var(--font-size-sm); color: var(--color-dark);"><?= e(orderStatusLabel($log['new_status'])) ?></div>
-                                                <div style="font-size: 11px; color: var(--color-text-secondary);"><?= formatDate($log['created_at'], 'd M Y H:i') ?></div>
-                                            </div>
-                                            <?php if ($log['note']): ?>
-                                            <p style="margin:0; font-size: var(--font-size-sm); color: var(--color-text-secondary);"><?= e($log['note']) ?></p>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sağ Kolon: Özet -->
-                    <div class="order-detail-sidebar">
-                        <div class="summary-card fade-in-up" style="animation-delay: 0.1s;">
-                            <div class="summary-card-header">
-                                Sipariş Özeti
-                            </div>
-                            <div class="summary-card-body">
-                                <div class="summary-row">
-                                    <span class="text-secondary">Tutar</span>
-                                    <strong style="color: var(--color-dark); font-size: var(--font-size-base);"><?= money($order['total_amount']) ?></strong>
-                                </div>
-                                <div class="summary-row">
-                                    <span class="text-secondary">Ödeme Yöntemi</span>
-                                    <span style="font-weight: 500;"><?= e($order['payment_gateway'] ?? ($order['payment_method'] === 'bank_transfer' ? 'Havale/EFT' : 'Bakiye')) ?></span>
-                                </div>
-                                <div class="summary-row" style="padding-top: var(--space-3); border-top: 1px dashed var(--color-border); margin-top: var(--space-3);">
-                                    <span class="text-secondary">Ödeme Durumu</span>
-                                    <?php 
-                                        $psClass = 'badge-outline ';
-                                        $psLabel = '';
-                                        switch($order['payment_status']) {
-                                            case 'paid': $psClass .= 'text-green'; $psLabel = 'Ödendi'; break;
-                                            case 'pending': $psClass .= 'text-amber'; $psLabel = 'Bekliyor'; break;
-                                            case 'failed': $psClass .= 'text-red'; $psLabel = 'Başarısız'; break;
-                                            case 'refunded': $psClass .= 'text-secondary'; $psLabel = 'İade Edildi'; break;
-                                        }
-                                    ?>
-                                    <span class="badge <?= $psClass ?>" style="padding: 2px 8px; font-size: 10px; font-weight: 700;"><?= $psLabel ?></span>
-                                </div>
-
-                                <div style="margin-top: var(--space-5);">
-                                    <a href="/destek/yeni" class="btn btn-outline" style="width: 100%; justify-content: center;">
-                                        <?= icon('life-buoy', 16) ?> Destek Talebi Aç
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card fade-in-up" style="margin-top: var(--space-4); background: linear-gradient(135deg, #F0F6FF 0%, #FFFFFF 100%); animation-delay: 0.2s;">
-                            <div class="card-body" style="padding: var(--space-4); text-align: center;">
-                                <div style="width: 48px; height: 48px; background: rgba(37,99,235,0.1); color: var(--color-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-3);">
-                                    <?= icon('shield-check', 24) ?>
-                                </div>
-                                <h4 style="font-size: var(--font-size-sm); font-weight: 600; margin-bottom: 4px; color: var(--color-dark);">Güvenli İşlem</h4>
-                                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">Siparişiniz sistemimizde %100 güvenle işlenmektedir.</p>
-                                
-                                <?php if (setting('site_whatsapp')): ?>
-                                <a href="https://wa.me/<?= e(setting('site_whatsapp')) ?>" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="width: 100%; justify-content: center; background: #25D366; border-color: #25D366;">
-                                    <?= icon('whatsapp', 16) ?> WhatsApp Destek
-                                </a>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<?php include __DIR__.'/../partials/member-open.php'; ?>
+<header class="member-heading"><div><a class="member-text-link" href="/siparislerim"><?= icon('arrow-left',14) ?> Siparişlerime dön</a><h1>Sipariş #<?= e($order['order_number']) ?></h1><p><?= formatDate($order['created_at'],'d.m.Y H:i') ?> tarihinde oluşturuldu.</p></div><button type="button" class="member-btn is-soft" data-member-print><?= icon('printer',16) ?> Yazdır</button></header>
+<div class="member-order-detail-grid">
+<div class="member-stack">
+ <section class="member-card"><div class="member-card-heading"><h2>Sipariş içeriği</h2><span class="member-badge is-<?= e(orderStatusColor($order['order_status'])) ?>"><?= e(orderStatusLabel($order['order_status'])) ?></span></div>
+ <?php foreach($items as $item): ?><article class="member-line-item"><span class="member-icon-soft"><?= icon('package',22) ?></span><div><h3><?= e($item['package_name']) ?></h3><p><?= (int)$item['quantity'] ?> paket × <?= money($item['price']) ?></p><?php if(!empty($item['slug'])&&$item['package_status']==='active'): ?><a href="<?= e(\App\Services\PublicSeoUrls::path('/paket',$item['slug'])) ?>" class="member-text-link">Paketi tekrar incele <?= icon('arrow-up-right',14) ?></a><?php endif; ?></div><strong><?= money($item['total']) ?></strong></article><?php endforeach; ?>
+ </section>
+ <?php if(trim((string)($order['customer_visible_note']??''))!==''): ?><section class="member-note"><span class="member-icon-soft"><?= icon('message-circle',20) ?></span><div><h2>Ekibimizin notu</h2><p><?= nl2br(e($order['customer_visible_note'])) ?></p></div></section><?php endif; ?>
+ <?php if($delivery): ?><section class="member-card"><div class="member-card-heading"><h2><?= icon('activity',19) ?> SMM teslimat takibi</h2></div><div class="member-card-body"><p class="member-note-text">Teslimat bilgileri son alınan durumu yansıtır. Her hizmetin güncelleme zamanı aşağıda gösterilir.</p>
+ <?php foreach($delivery as $job): ?><article class="member-delivery"><div><h3><?= e($job['package_name']) ?></h3><span class="member-badge"><?= e(\App\Services\MemberPanelService::deliveryLabel($job['state'])) ?></span></div><dl><div><dt>Hizmet miktarı</dt><dd><?= number_format((int)$job['quantity'],0,',','.') ?></dd></div><div><dt>Bildirilen kalan</dt><dd><?= $job['remains']===null?'Henüz bildirilmedi':number_format(max(0,(int)$job['remains']),0,',','.') ?></dd></div></dl>
+ <?php if($job['progress']!==null): ?><label class="member-progress-label">Bildirilen ilerleme <span>%<?= (int)$job['progress'] ?></span><progress max="100" value="<?= (int)$job['progress'] ?>">%<?= (int)$job['progress'] ?></progress></label><?php endif; ?><small>Son güncelleme: <?= formatDate($job['last_checked_at']?:$job['updated_at'],'d.m.Y H:i') ?></small></article><?php endforeach; ?></div></section><?php endif; ?>
+ <?php if($fields): ?><section class="member-card"><div class="member-card-heading"><h2>Paylaştığınız sipariş bilgileri</h2></div><dl class="member-fields"><?php foreach($fields as $field): ?><div><dt><?= e($field['field_label']) ?></dt><dd><?= nl2br(e($field['field_value'])) ?></dd></div><?php endforeach; ?></dl></section><?php endif; ?>
+ <?php $bankAllowed=$order['payment_method']==='bank_transfer'&&in_array($order['payment_status'],['pending','failed'],true)&&!in_array($order['order_status'],['cancelled','refunded'],true); ?>
+ <?php if($bankAllowed): ?><section class="member-card" id="havale"><div class="member-card-heading"><h2><?= icon('landmark',18) ?> Havale / EFT bildirimi</h2></div><div class="member-card-body"><p class="member-note-text">Bildiriminiz ödeme onayı değildir; kontrol sonrasında sipariş durumu güncellenir.</p>
+ <?php foreach($bankAccounts as $bank): ?><div class="member-bank"><strong><?= e($bank['bank_name']) ?></strong><span><?= e($bank['account_holder']) ?></span><div><code><?= e($bank['iban']) ?></code><button class="member-icon-button" type="button" data-member-copy="<?= e($bank['iban']) ?>" aria-label="IBAN kopyala"><?= icon('copy',17) ?></button></div></div><?php endforeach; ?>
+ <form action="/havale-bildirimi" method="post" enctype="multipart/form-data" class="member-form is-flush"><?= csrfField() ?><input type="hidden" name="order_id" value="<?= (int)$order['id'] ?>">
+ <div class="member-form-grid"><div class="member-field"><label for="member-bank-sender">Gönderen ad soyad</label><input id="member-bank-sender" class="member-control" name="sender_name" required maxlength="200" autocomplete="name"></div><div class="member-field"><label for="member-bank-name">Gönderen banka</label><input id="member-bank-name" class="member-control" name="bank_name" maxlength="100" required></div><div class="member-field"><label for="member-bank-amount">Tutar (₺)</label><input id="member-bank-amount" type="number" class="member-control" name="amount" min="0.01" step="0.01" value="<?= e($order['total_amount']) ?>" required></div><div class="member-field"><label for="member-bank-receipt">Dekont (isteğe bağlı)</label><input id="member-bank-receipt" class="member-control" type="file" name="receipt_file" accept=".jpg,.jpeg,.png,.webp,.pdf"><small>En fazla 10 MB.</small></div></div><div class="member-field"><label for="member-bank-note">Not (isteğe bağlı)</label><textarea id="member-bank-note" class="member-control" name="note" rows="2" maxlength="2000"></textarea></div><button type="submit" class="member-btn"><?= icon('send',16) ?> Havale bildirimi gönder</button></form></div></section><?php endif; ?>
+ <?php if($bankNotifications): ?><section class="member-card"><div class="member-card-heading"><h2>Havale bildirimleriniz</h2></div><div class="member-card-body"><?php foreach($bankNotifications as $notice): ?><div class="member-payment-notice"><div><strong><?= e($notice['bank_name']) ?> · <?= money($notice['amount']) ?></strong><small><?= formatDate($notice['created_at'],'d.m.Y H:i') ?></small></div><span class="member-badge"><?= e(['pending'=>'İnceleniyor','approved'=>'Onaylandı','rejected'=>'Reddedildi'][$notice['status']]??'İnceleniyor') ?></span></div><?php endforeach; ?></div></section><?php endif; ?>
+ <section class="member-card"><div class="member-card-heading"><h2><?= icon('history',19) ?> Durum geçmişi</h2></div><ol class="member-timeline"><?php if(!$logs): ?><li><strong>Sipariş oluşturuldu</strong><time><?= formatDate($order['created_at'],'d.m.Y H:i') ?></time></li><?php else: foreach($logs as $log): ?><li><strong><?= e(orderStatusLabel($log['new_status'])) ?></strong><?php if(!empty($log['public_note'])): ?><p class="member-note-text"><?= nl2br(e($log['public_note'])) ?></p><?php endif; ?><time><?= formatDate($log['created_at'],'d.m.Y H:i') ?></time></li><?php endforeach; endif; ?></ol></section>
+</div>
+<aside class="member-card member-order-summary"><div class="member-card-heading"><h2>Sipariş özeti</h2></div><div class="member-card-body"><span class="member-eyebrow">TOPLAM TUTAR</span><strong class="member-summary-price"><?= money($order['total_amount']) ?></strong><dl><div><dt>Ödeme durumu</dt><dd><?= e(paymentStatusLabel($order['payment_status'])) ?></dd></div><div><dt>Ödeme yöntemi</dt><dd><?= e($order['payment_method']==='bank_transfer'?'Havale / EFT':($order['payment_gateway']?:'Online ödeme')) ?></dd></div><div><dt>Sipariş durumu</dt><dd><?= e(orderStatusLabel($order['order_status'])) ?></dd></div></dl>
+ <a class="member-btn" href="/destek/yeni?order_id=<?= (int)$order['id'] ?>"><?= icon('headphones',16) ?> Bu sipariş için destek</a>
+ <p class="member-note-text">Sipariş numarası ve ilgili kayıt, destek talebinize bağlanır. Şifre paylaşmanız gerekmez.</p>
+ <?php if($bankAllowed): ?><a class="member-text-link" href="#havale">Havale bildirimi formuna git <?= icon('arrow-down',15) ?></a><?php endif; ?>
+ <p class="member-print-note">Sipariş özeti — fatura yerine geçmez.</p></div></aside>
+</div>
+<?php include __DIR__.'/../partials/member-close.php'; ?>

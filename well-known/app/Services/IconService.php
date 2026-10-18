@@ -23,6 +23,7 @@ class IconService
         'bar-chart-2'=>['solid','chart-column'],'file-text'=>['regular','file-lines'],'image'=>['regular','image'],
         'upload'=>['solid','cloud-arrow-up'],'download'=>['solid','cloud-arrow-down'],'filter'=>['solid','filter'],
         'calendar'=>['regular','calendar'],'clock'=>['regular','clock'],'tag'=>['solid','tag'],
+        'bell'=>['regular','bell'],'printer'=>['solid','printer'],'history'=>['solid','clock-rotate-left'],
         'bookmark'=>['regular','bookmark'],'arrow-left'=>['solid','arrow-left'],'arrow-right'=>['solid','arrow-right'],
         'arrow-up'=>['solid','arrow-up'],'arrow-down'=>['solid','arrow-down'],
         'chevron-right'=>['solid','chevron-right'],'chevron-left'=>['solid','chevron-left'],

@@ -1,4 +1,6 @@
 RewriteEngine On
+# Legacy support files are served only through the authenticated download action.
+RewriteRule ^uploads/support(?:/|$) - [F,L,NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]

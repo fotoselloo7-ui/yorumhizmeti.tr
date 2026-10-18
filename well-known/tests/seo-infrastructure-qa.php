@@ -26,6 +26,8 @@ foreach(['/giris','/sepet','/odeme/basarili','/siparis/123','/destek/1','/admin'
  $ok(!Meta::indexable($d['nvRobots'])&&!isset($d['canonicalUrl'])&&$d['seoPrivate'],'Private pages stay excluded and have no public canonical');
 }
 $d=Meta::prepare(['nvSeoData'=>['robots'=>'index,follow']],'frontend/404','app','/kategori/missing');
+$dealer=Meta::prepare([],'frontend/account/dealer','app','/bayilik');
+$ok($dealer['seoPrivate']&&!Meta::indexable($dealer['nvRobots']),'Member templates remain private even on a legacy alias');
 $ok($d['seoError']&&!Meta::indexable($d['nvRobots']),'404 robots override editor index');
 $d=Meta::prepare(['canonicalUrl'=>'https://example.test/authored?page=2'],'frontend/blog/index','app','/blog?page=2&utm_source=test');
 $ok($d['canonicalUrl']==='https://example.test/authored?page=2'&&Meta::indexable($d['nvRobots']),'Authored canonical and real pagination preserved');

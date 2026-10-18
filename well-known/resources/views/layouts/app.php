@@ -39,10 +39,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261018-member-workspace">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/premium.css') ?>?v=20261016-premium-polish">
-    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>?v=20261018-member-workspace">
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>?v=20261016-premium-polish">
@@ -155,6 +155,10 @@
     ?>
     <?php if($nvPaletteVars): ?><style>:root{<?= implode(';',$nvPaletteVars) ?>}</style><?php endif; ?>
 
+    <?php if(str_starts_with($template,'frontend/account/')||str_starts_with($template,'frontend/support/')): ?>
+    <link rel="stylesheet" href="<?= asset('css/member-panel.css') ?>?v=20261018">
+    <script src="<?= asset('js/member-panel.js') ?>?v=20261018" defer></script>
+    <?php endif; ?>
     <?php $nvGraph=\App\Services\SeoStructuredDataService::graph($schema??null,[
       'canonicalUrl'=>$canonicalUrl??'','pageTitle'=>$pageTitle??'','metaDescription'=>$metaDescription??'',
       'ogImage'=>$ogImage??null,'seoPrivate'=>$seoPrivate??false,'seoError'=>$seoError??false
@@ -706,7 +710,7 @@
     <?php if($nvLiveChatReady): ?>
     <script src="<?= asset('js/netvera-live-chat.js') ?>?v=20261016-mobile-dock" defer></script>
     <?php endif; ?>
-    <script src="<?= asset('js/app.js') ?>?v=20261016-premium-polish"></script>
+    <script src="<?= asset('js/app.js') ?>?v=20261018-member-workspace"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261016-mobile-filters"></script>

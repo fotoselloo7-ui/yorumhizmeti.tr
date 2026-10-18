@@ -1,0 +1,7 @@
+<?php include __DIR__.'/../partials/member-open.php'; ?>
+<header class="member-heading"><div><span class="member-eyebrow">ÖDEME TAKİBİ</span><h1>Ödemelerim</h1><p>Siparişlerinizin ödeme durumunu tek yerden inceleyin.</p></div><?= icon('credit-card',28) ?></header>
+<div class="member-payment-stats"><div class="member-stat"><span>Ödenmiş sipariş toplamı</span><strong><?= money($summary['paid_total']) ?></strong><small><?= (int)$summary['paid_count'] ?> ödenmiş sipariş</small></div><div class="member-stat"><span>Ödeme bekleyen / başarısız</span><strong><?= money($summary['awaiting_total']) ?></strong><small><?= (int)$summary['awaiting_payment'] ?> açık sipariş</small></div></div>
+<p class="member-note">Bu ekran sipariş bazlı ödeme özetidir; bakiye, fatura veya banka hesap ekstresi değildir. İade edilmiş siparişler ödenmiş toplama dahil edilmez.</p>
+<?php include __DIR__.'/partials/member-filters.php'; ?>
+<section class="member-card"><div class="member-card-heading"><h2>Ödeme kayıtları</h2><span><?= (int)$total ?> sipariş</span></div><?php if($orders): include __DIR__.'/partials/member-order-list.php';else: ?><div class="member-empty"><?= icon('credit-card',30) ?><h3>Bu filtrelerle ödeme kaydı yok.</h3><a href="/hesabim/odemeler" class="member-text-link">Filtreleri temizle</a></div><?php endif; ?></section>
+<?php include __DIR__.'/partials/member-pagination.php';include __DIR__.'/../partials/member-close.php'; ?>

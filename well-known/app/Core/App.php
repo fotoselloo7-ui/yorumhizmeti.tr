@@ -90,6 +90,11 @@ class App
 
         // Hesabım
         $r->get('/hesabim', 'AccountController@index');
+        $r->get('/hesabim/profil', 'AccountController@profile');
+        $r->get('/hesabim/guvenlik', 'AccountController@security');
+        $r->get('/hesabim/yazilimlar', 'AccountController@software');
+        $r->get('/hesabim/odemeler', 'AccountController@payments');
+        $r->get('/hesabim/hareketler', 'AccountController@activity');
         $r->post('/hesabim/guncelle', 'AccountController@update');
         $r->post('/hesabim/sifre-degistir', 'AccountController@changePassword');
         $r->get('/siparislerim', 'AccountController@orders');
@@ -101,9 +106,11 @@ class App
         // Destek
         $r->get('/destek', 'SupportController@index');
         $r->get('/destek/yeni', 'SupportController@create');
+        $r->get('/destek/dosya/{id}', 'SupportController@attachment');
         $r->post('/destek/olustur', 'SupportController@store');
         $r->get('/destek/{id}', 'SupportController@show');
         $r->post('/destek/{id}/yanit', 'SupportController@reply');
+        $r->post('/destek/{id}/kapat', 'SupportController@close');
 
         // Blog
         $r->get('/blog', 'BlogController@index');

@@ -1,0 +1,9 @@
+<?php include __DIR__.'/../partials/member-open.php'; ?>
+<header class="member-heading"><div><span class="member-eyebrow">HESAP AYARLARI</span><h1>Profil Bilgilerim</h1><p>Sipariş ve destek iletişimi için bilgilerinizi güncel tutun.</p></div></header>
+<div class="member-settings-grid"><section class="member-card"><div class="member-card-heading"><h2><?= icon('user',20) ?> Kişisel bilgiler</h2></div><form class="member-form" method="post" action="/hesabim/guncelle"><?= csrfField() ?>
+ <div class="member-field"><label for="member-name">Ad soyad</label><input id="member-name" class="member-control" name="name" value="<?= e($user['name']) ?>" required minlength="2" maxlength="100" autocomplete="name"></div>
+ <div class="member-field"><label for="member-phone">Telefon <span>(isteğe bağlı)</span></label><input id="member-phone" type="tel" class="member-control" name="phone" value="<?= e($user['phone']??'') ?>" maxlength="20" autocomplete="tel" placeholder="+90 5XX XXX XX XX"></div>
+ <div class="member-field"><label for="member-email">E-posta adresi</label><input id="member-email" class="member-control" type="email" value="<?= e($user['email']) ?>" readonly autocomplete="email"><small>E-posta değişikliği için destek merkezine başvurun.</small></div>
+ <button class="member-btn" type="submit"><?= icon('check',16) ?> Bilgileri kaydet</button>
+</form></section><aside class="member-card member-side-note"><span class="member-icon-soft"><?= icon('shield-check',24) ?></span><h2>Hesabınız size özel.</h2><p>Destek ekibimiz sosyal medya hesabınızın şifresini istemez. Profil ve gönderi bağlantılarını yalnızca ilgili sipariş formunda paylaşın.</p><dl><div><dt>Üyelik tarihi</dt><dd><?= formatDate($user['created_at'],'d.m.Y') ?></dd></div><div><dt>Hesap durumu</dt><dd>Aktif</dd></div></dl><a href="/hesabim/guvenlik" class="member-text-link">Güvenlik ayarları <?= icon('arrow-right',14) ?></a></aside></div>
+<?php include __DIR__.'/../partials/member-close.php'; ?>

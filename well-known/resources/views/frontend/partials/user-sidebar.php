@@ -1,37 +1,25 @@
-<div class="panel-sidebar" id="panelSidebar">
-    <div class="panel-sidebar-user">
-        <div class="panel-avatar"><?= strtoupper(mb_substr($user['name'] ?? 'U', 0, 1)) ?></div>
-        <div class="panel-user-info">
-            <strong><?= e($user['name'] ?? '') ?></strong>
-            <span><?= e($user['email'] ?? '') ?></span>
-        </div>
-    </div>
-    <nav class="panel-nav">
-        <a href="/hesabim" class="<?= ($_SERVER['REQUEST_URI'] ?? '') === '/hesabim' ? 'active' : '' ?>">
-            <?= icon('home', 18) ?> <span>Dashboard</span>
-        </a>
-        <a href="/siparislerim" class="<?= isActive('/siparis') ?>">
-            <?= icon('package', 18) ?> <span>Siparişlerim</span>
-        </a>
-        <a href="/bayilik" class="<?= isActive('/bayilik') ?>">
-            <?= icon('handshake', 18) ?> <span>Bayilik ve Ortaklık</span>
-        </a>
-        <a href="/destek" class="<?= isActive('/destek') ?>">
-            <?= icon('headphones', 18) ?> <span>Destek Taleplerim</span>
-        </a>
-        <div class="panel-nav-divider"></div>
-        <a href="/hesabim#profil" class="<?= ($_SERVER['REQUEST_URI'] ?? '') === '/hesabim' && isset($_GET['tab']) && $_GET['tab'] === 'profil' ? 'active' : '' ?>">
-            <?= icon('user', 18) ?> <span>Profil Bilgilerim</span>
-        </a>
-        <a href="/hesabim#sifre" class="<?= ($_SERVER['REQUEST_URI'] ?? '') === '/hesabim' && isset($_GET['tab']) && $_GET['tab'] === 'sifre' ? 'active' : '' ?>">
-            <?= icon('lock', 18) ?> <span>Şifre Değiştir</span>
-        </a>
-        <div class="panel-nav-divider"></div>
-        <a href="/cikis" class="panel-nav-logout">
-            <?= icon('log-out', 18) ?> <span>Çıkış Yap</span>
-        </a>
-    </nav>
-</div>
-<button class="panel-sidebar-toggle" id="panelSidebarToggle" type="button" aria-label="Menüyü Aç/Kapat">
-    <?= icon('menu', 20) ?> <span>Panel Menüsü</span>
-</button>
+<?php
+$memberUser=\App\Core\Auth::user()??[];
+$memberPath=(string)(parse_url($_SERVER['REQUEST_URI']??'/',PHP_URL_PATH)?:'/');
+$memberLinks=[
+ ['/hesabim','home','Hesap Özeti'],['/siparislerim','package','Siparişlerim'],
+ ['/hesabim/yazilimlar','monitor','Yazılımlarım'],['/hesabim/odemeler','credit-card','Ödemelerim'],
+ ['/destek','headphones','Destek Merkezi'],['/hesabim/hareketler','activity','Hesap Hareketleri'],
+ ['/bayilik','handshake','Bayilik & Ortaklık'],['/hesabim/profil','user','Profil Bilgilerim'],
+ ['/hesabim/guvenlik','shield-check','Hesap Güvenliği'],
+];
+?>
+<aside class="member-sidebar" aria-label="Üye paneli">
+ <button class="member-nav-toggle" type="button" data-member-nav-toggle aria-expanded="false" aria-controls="member-navigation" hidden><?= icon('menu',20) ?><span>Hesap menüsü</span><?= icon('chevron-down',16) ?></button>
+ <div class="member-nav-body" id="member-navigation">
+  <div class="member-identity"><span class="member-avatar"><?= e(mb_strtoupper(mb_substr($memberUser['name']??'Ü',0,1))) ?></span><div><strong><?= e($memberUser['name']??'') ?></strong><small><?= e($memberUser['email']??'') ?></small></div></div>
+  <p class="member-nav-label">ÇALIŞMA ALANINIZ</p>
+  <nav aria-label="Hesap navigasyonu">
+  <?php foreach($memberLinks as [$href,$glyph,$label]): $active=$memberPath===$href||($href==='/siparislerim'&&str_starts_with($memberPath,'/siparis/'))||($href==='/destek'&&str_starts_with($memberPath,'/destek/')); ?>
+   <a href="<?= e($href) ?>" <?= $active?'aria-current="page"':'' ?>><?= icon($glyph,18) ?><span><?= e($label) ?></span></a>
+  <?php endforeach; ?>
+  <a class="member-logout" href="/cikis"><?= icon('log-out',18) ?><span>Çıkış Yap</span></a>
+  </nav>
+  <div class="member-sidebar-help"><?= icon('sparkles',18) ?><strong>Bir sonraki projeniz</strong><p>Yazılım ve dijital hizmetleri tek yerden keşfedin.</p><a href="/kategoriler">Hizmetleri keşfet <?= icon('arrow-right',14) ?></a></div>
+ </div>
+</aside>

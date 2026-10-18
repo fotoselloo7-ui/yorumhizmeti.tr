@@ -295,15 +295,17 @@ class SettingsController extends Controller
         $ticket = $this->db->fetch("SELECT * FROM support_tickets WHERE id = ?", [(int) $id]);
         if (!$ticket) { redirect('/admin/destek'); }
 
-        $this->db->insert('support_messages', [
-            'ticket_id' => (int) $id,
-            'sender_type' => 'admin',
-            'sender_id' => $_SESSION['admin_id'],
-            'message' => trim($_POST['message'] ?? ''),
-        ]);
-
-        $status = $_POST['status'] ?? 'admin_reply';
-        $this->db->update('support_tickets', ['status' => $status], 'id = ?', [(int) $id]);
+        try {
+            $message=\App\Services\MemberSupportService::message($_POST['message']??null);
+            $status=$_POST['status']??'answered';
+            if(!is_string($status)||!in_array($status,['answered','admin_reply','closed'],true))throw new \InvalidArgumentException('Geçerli bir talep durumu seçin.');
+            \App\Services\MemberSupportService::reply((int)$id,(int)$_SESSION['admin_id'],$message,null,true,$status);
+        } catch (\InvalidArgumentException $e) {
+            flash('error',$e->getMessage());redirect('/admin/destek/'.(int)$id);return;
+        } catch (\Throwable $e) {
+            error_log('Admin support reply failed: '.get_class($e));
+            flash('error','Yanıt kaydedilemedi. Lütfen tekrar deneyin.');redirect('/admin/destek/'.(int)$id);return;
+        }
 
         $user = $this->db->fetch("SELECT * FROM users WHERE id = ?", [$ticket['user_id']]);
         if ($user) {
