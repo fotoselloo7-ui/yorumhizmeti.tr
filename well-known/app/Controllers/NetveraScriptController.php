@@ -177,6 +177,10 @@ class NetveraScriptController extends Controller
             ],
             'applicationCategory'=>'BusinessApplication',
         ];
+        // Schema mirrors the existing public CTA; never advertise quote-only software as a free/in-stock purchase.
+        $schemaBuyUrl=Catalog::publicUrl($data['buy_url']??null);
+        $schemaPurchaseEnabled=array_key_exists('purchase_enabled',$data)?!empty($data['purchase_enabled']):(bool)$schemaBuyUrl;
+        if((float)$p['price']<=0||!$schemaPurchaseEnabled||!$schemaBuyUrl)unset($schema['offers']);
         if(!empty($p['cover_image']))$schema['image']=url($p['cover_image']);
         if(!empty($data['current_version']))$schema['softwareVersion']=(string)$data['current_version'];
         if($reviews){

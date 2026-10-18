@@ -341,7 +341,7 @@ class HomeController extends Controller
             'name'=>$siteName,'url'=>$siteUrl,
             'description'=>setting('seo_org_description')
         ];
-        $logo=trim((string)setting('site_logo',''));
+        $logo=\App\Services\SiteLogoService::url();
         if($logo!==''){
             $logoUrl=upload_url($logo);
             $organization['logo']=filter_var($logoUrl,FILTER_VALIDATE_URL)

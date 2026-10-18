@@ -20,14 +20,14 @@
         </div>
     </div>
 </div>
-<style>
-.nv-brand-seo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.nv-brand-seo-grid>div{border:1px solid #e7eaf2;border-radius:12px;padding:15px;min-width:0;background:#fff}
-.nv-brand-seo-grid span{display:block;font-size:11px;color:#7b859e;font-weight:700;margin-bottom:7px}
-.nv-brand-seo-grid strong{font-size:13px;line-height:1.6;color:#1a2d50;overflow-wrap:anywhere}
-.nv-brand-seo-grid p{font-size:12px;line-height:1.65;color:#53627e;margin:0;overflow-wrap:anywhere}
-@media(max-width:650px){.nv-brand-seo-grid{grid-template-columns:1fr}}
-</style>
+<section class="adm-card" aria-labelledby="technical-seo-heading">
+ <div class="adm-card-header"><h3 id="technical-seo-heading"><?= icon('shield-check',18) ?> Teknik SEO / GEO / AIO Sağlığı</h3></div>
+ <div class="adm-card-body">
+  <p>Salt okunur teknik kontrol; Google sıralama puanı veya canlı indeks raporu değildir. URL, içerik veya ayarları otomatik değiştirmez.</p>
+  <ul class="nv-seo-health"><?php foreach($technicalSeoChecks??[]as $check): ?><li><div><strong><?= e($check['label']) ?></strong><p><?= e($check['detail']) ?></p></div><span class="nv-seo-health-state is-<?= e($check['status']) ?>"><?= $check['status']==='pass'?'Kontrol geçti':'İnceleyin' ?></span></li><?php endforeach; ?></ul>
+  <p class="text-xs text-secondary">Canlı indeksleme ve alıntılar: <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer">Google Search Console</a> · <a href="https://www.bing.com/webmasters/" target="_blank" rel="noopener noreferrer">Bing Webmaster Tools / AI Performance</a>. Bu hesaplardan veri alınmaz veya dışarı veri gönderilmez.</p>
+ </div>
+</section>
 
 <div class="adm-stats-grid mb-6">
     <div class="adm-stat-card">
@@ -37,7 +37,7 @@
         <div class="adm-stat-info">
             <?php $scoreClass = $avgScore >= 80 ? 'var(--color-green)' : ($avgScore >= 50 ? 'var(--color-amber)' : 'var(--color-red)'); ?>
             <h3 style="color: <?= $scoreClass ?>;"><?= $avgScore ?>/100</h3>
-            <p>Ortalama SEO Puanı</p>
+            <p>Ortalama Editoryal Kontrol Puanı</p>
         </div>
     </div>
     
@@ -62,6 +62,7 @@
     </div>
 </div>
 
+<p class="text-xs text-secondary">Aşağıdaki puanlar ve başlıklar veritabanındaki editoryal kayıtları gösterir; güncel sayfa çıktısındaki otomatik başlıkları, indeks durumunu veya Google sıralamasını ölçmez.</p>
 <div class="adm-form-layout" style="grid-template-columns:minmax(0,1fr)">
     <!-- Left Column: Tables -->
     <div class="adm-form-main" style="display:flex; flex-direction:column; gap:var(--space-6);">

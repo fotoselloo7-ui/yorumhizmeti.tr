@@ -61,9 +61,9 @@ class PackageController extends Controller
             'description' => strip_tags($package['short_description'] ?? ''),
             'offers' => [
                 '@type' => 'Offer',
-                'price' => $package['discount_price'] ?? $package['price'],
+                'price' => (!empty($package['discount_price'])&&$package['discount_price']<$package['price'])?$package['discount_price']:$package['price'],
                 'priceCurrency' => 'TRY',
-                'availability' => 'https://schema.org/InStock',
+                'availability' => !empty($socialSale)&&($socialSale['quantity']<1||$socialSale['unit']===''||!$socialSale['mapping_matches'])?'https://schema.org/OutOfStock':'https://schema.org/InStock',
             ],
         ], JSON_UNESCAPED_UNICODE);
 
@@ -71,6 +71,10 @@ class PackageController extends Controller
             'pageTitle' => $package['seo_title'] ?: package_display_name($package) . ' - ' . setting('site_name'),
             'metaDescription' => $package['seo_description'] ?: excerpt(strip_tags($package['short_description'] ?? ''), 160),
             'canonicalUrl' => url('/paket/' . $package['slug']),
+            'ogType'=>'product',
+            'ogTitle'=>$package['og_title']?:($package['seo_title']?:package_display_name($package)),
+            'ogDescription'=>$package['og_description']?:($package['seo_description']?:excerpt(strip_tags($package['short_description']??''),160)),
+            'ogImage'=>!empty($package['og_image'])?upload_url($package['og_image']):(!empty($package['image'])?upload_url($package['image']):null),
             'schema' => $schema,
             'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$package['id']),
             'package' => $package,

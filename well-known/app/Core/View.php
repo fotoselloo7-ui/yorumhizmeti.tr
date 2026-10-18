@@ -14,6 +14,9 @@ class View
 
     public function render(string $template, array $data = [], string $layout = 'app'): void
     {
+        if($template==='frontend/404')http_response_code(404);
+        $data=\App\Services\SeoMetadataService::prepare($data,$template,$layout,(string)($_SERVER['REQUEST_URI']??'/'),http_response_code()?:200);
+        if(!headers_sent()&&($data['seoPrivate']||$data['seoError']))header('X-Robots-Tag: noindex, nofollow');
         // Site ayarları her view'da erişilebilir
         try {
             $siteConfig = SiteConfigService::getInstance();

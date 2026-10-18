@@ -268,6 +268,9 @@ class CategoryController extends Controller
             if(isset($merged['category'][$key]))$data[$key]=$merged['category'][$key];
         foreach($merged['seo'] as $field=>$value){
             $key='nvseo_'.$field;
+            // Empty preview inputs explicitly reset to defaults; do not refill
+            // them from the old metadata as if they were missing SEO copy.
+            if(in_array($field,['max_snippet','max_image_preview','max_video_preview'],true)&&array_key_exists($key,$_POST))continue;
             if(trim((string)($_POST[$key]??''))==='')$_POST[$key]=(string)$value;
         }
         // image is not writable unless explicitly uploaded by this request.

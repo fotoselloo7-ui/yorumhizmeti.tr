@@ -321,6 +321,8 @@
                         </select>
                         <input type="hidden" name="_group_seo_org_type" value="geo">
                     </div>
+                    <div class="form-group"><label for="seo-google-verification">Google Search Console doğrulama kodu</label><input id="seo-google-verification" class="form-control" name="seo_google_verification" value="<?= e(setting('seo_google_verification')) ?>" maxlength="200" pattern="[A-Za-z0-9_-]{8,200}" placeholder="Yalnızca content kodu; isteğe bağlı"><input type="hidden" name="_group_seo_google_verification" value="seo"></div>
+                    <div class="form-group"><label for="seo-bing-verification">Bing Webmaster doğrulama kodu</label><input id="seo-bing-verification" class="form-control" name="seo_bing_verification" value="<?= e(setting('seo_bing_verification')) ?>" maxlength="200" pattern="[A-Za-z0-9_-]{8,200}" placeholder="Yalnızca content kodu; isteğe bağlı"><input type="hidden" name="_group_seo_bing_verification" value="seo"></div>
                     <div class="form-group">
                         <label>Kurumsal Tanım</label>
                         <textarea class="form-control" rows="4" name="seo_org_description" maxlength="750"><?= e(setting('seo_org_description')) ?></textarea>

@@ -5,13 +5,35 @@ use App\Core\Database;
 
 class SitemapService
 {
+    private array $seen=[];
+    private array $excluded=[];
+    private array $directives=[];
+
     public function generate(): string
     {
         $db = Database::getInstance();
-        $baseUrl = rtrim(setting('site_url', 'https://netvera.tr'), '/');
+        $this->seen=[];$this->excluded=[];$this->directives=[];
+        $baseUrl = rtrim(SeoMetadataService::webUrl(setting('site_url','https://netvera.tr'))??url('/'),'/');
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        // One bulk read of editorial metadata, not one query per catalogue URL.
+        try{
+            foreach($db->fetchAll('SELECT entity_type,entity_id,extra_json FROM nv_editorial_seo')as $row){
+                $meta=json_decode((string)$row['extra_json'],true);
+                if(!is_array($meta))continue;
+                $robots=(string)($meta['robots']??'');
+                $this->directives[$row['entity_type']][(int)$row['entity_id']]=$robots;
+                if(!SeoMetadataService::indexable($robots))$this->excluded[$row['entity_type']][(int)$row['entity_id']]=true;
+            }
+        }catch(\Throwable $ignored){} // Older compatible installs retain the existing default.
+        try{
+            foreach($db->fetchAll('SELECT blog_post_id,robots FROM nv_legacy_blog_meta')as $row){
+                $id=(int)$row['blog_post_id'];if(array_key_exists($id,$this->directives['blog']??[]))continue;
+                $this->directives['blog'][$id]=(string)$row['robots'];
+                if(!SeoMetadataService::indexable((string)$row['robots']))$this->excluded['blog'][$id]=true;
+            }
+        }catch(\Throwable $ignored){}
 
         // Ana sayfa
         $xml .= $this->url($baseUrl . '/', '1.0', 'daily');
@@ -38,23 +60,28 @@ class SitemapService
 
         // Kategoriler
         $categories = $db->fetchAll(
-            "SELECT c.slug, c.updated_at, parent.slug AS parent_category_slug
+            "SELECT c.id, c.slug, c.updated_at, parent.slug AS parent_category_slug
              FROM categories c
              LEFT JOIN categories parent ON parent.id = c.parent_id
-             WHERE c.status = 'active'"
+             WHERE c.status = 'active' AND (c.parent_id IS NULL OR parent.status='active')"
         );
         foreach ($categories as $cat) {
             if (ServiceCategoryVisibility::isLegacySoftware($cat)) continue;
-            $xml .= $this->url($baseUrl . '/kategori/' . $cat['slug'], '0.8', 'weekly', $cat['updated_at']);
+            if(isset($this->excluded['category'][(int)$cat['id']]))continue;
+            $xml .= $this->url($baseUrl . '/kategori/' . $cat['slug'], '0.8', 'weekly', $cat['updated_at'],$this->directives['category'][(int)$cat['id']]??null);
         }
 
         // Paketler
-        $packages = $db->fetchAll("SELECT slug, updated_at FROM packages WHERE status = 'active'");
+        $packages = $db->fetchAll("SELECT p.id,p.slug,p.updated_at FROM packages p
+            JOIN categories c ON c.id=p.category_id AND c.status='active'
+            LEFT JOIN categories parent ON parent.id=c.parent_id
+            WHERE p.status='active' AND (c.parent_id IS NULL OR parent.status='active')");
         foreach ($packages as $pkg) {
+            if(isset($this->excluded['package'][(int)$pkg['id']]))continue;
             // The imported canonical software product owns this legacy demo path.
             if ($pkg['slug']==='netvera-haber-sitesi-script-yazilimi' &&
                 NetveraBridgeService::find('haber-sitesi-scripti')) continue;
-            $xml .= $this->url($baseUrl . '/paket/' . $pkg['slug'], '0.7', 'weekly', $pkg['updated_at']);
+            $xml .= $this->url($baseUrl . '/paket/' . $pkg['slug'], '0.7', 'weekly', $pkg['updated_at'],$this->directives['package'][(int)$pkg['id']]??null);
         }
 
         // Preserve Netvera's indexed software URLs in the exact original structure.
@@ -131,9 +158,13 @@ class SitemapService
             );
         }
 
-        $posts = $db->fetchAll("SELECT slug, updated_at FROM blog_posts WHERE status = 'active' AND noindex = 0");
+        $posts = $db->fetchAll("SELECT id,slug,updated_at,canonical_url FROM blog_posts WHERE status = 'active' AND noindex = 0");
         foreach ($posts as $post) {
-            $xml .= $this->url($baseUrl . '/blog/' . $post['slug'], '0.6', 'weekly', $post['updated_at']);
+            if(isset($this->excluded['blog'][(int)$post['id']]))continue;
+            $own=$baseUrl . '/blog/' . $post['slug'];
+            $canonical=SeoMetadataService::webUrl((string)($post['canonical_url']??''));
+            if($canonical&&rtrim($canonical,'/')!==rtrim($own,'/'))continue;
+            $xml .= $this->url($baseUrl . '/blog/' . $post['slug'], '0.6', 'weekly', $post['updated_at'],$this->directives['blog'][(int)$post['id']]??null);
         }
         // Preserve original Netvera indexed blog paths even before staging
         // has imported its separate public-content SQL snapshot.
@@ -160,11 +191,15 @@ class SitemapService
         return $xml;
     }
 
-    private function url(string $loc, string $priority, string $changefreq, ?string $lastmod = null): string
+    private function url(string $loc, string $priority, string $changefreq, ?string $lastmod = null,?string $robots=null): string
     {
-        $xml = "  <url>\n    <loc>" . htmlspecialchars($loc) . "</loc>\n";
-        if ($lastmod) {
-            $xml .= "    <lastmod>" . date('Y-m-d', strtotime($lastmod)) . "</lastmod>\n";
+        if(!SeoMetadataService::indexable($robots?:setting('seo_default_robots')))return '';
+        $loc=SeoMetadataService::webUrl($loc);
+        if(!$loc||isset($this->seen[$loc]))return '';
+        $this->seen[$loc]=true;
+        $xml = "  <url>\n    <loc>" . htmlspecialchars($loc,ENT_QUOTES|ENT_XML1,'UTF-8') . "</loc>\n";
+        if ($lastmod=SeoMetadataService::lastmod($lastmod)) {
+            $xml .= "    <lastmod>" . $lastmod . "</lastmod>\n";
         }
         $xml .= "    <changefreq>{$changefreq}</changefreq>\n";
         $xml .= "    <priority>{$priority}</priority>\n";
@@ -174,7 +209,7 @@ class SitemapService
 
     public function robots(): string
     {
-        $baseUrl = rtrim(setting('site_url', 'https://netvera.tr'), '/');
-        return "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /hesabim\nDisallow: /siparislerim\nDisallow: /sepet\nDisallow: /odeme\n\nSitemap: {$baseUrl}/sitemap.xml\n";
+        $baseUrl = rtrim(SeoMetadataService::webUrl(setting('site_url','https://netvera.tr'))??url('/'),'/');
+        return "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /hesabim\nDisallow: /siparislerim\nDisallow: /siparis/\nDisallow: /destek\nDisallow: /sepet\nDisallow: /odeme\nDisallow: /payment/\nDisallow: /netvera/canli-destek/\n\nSitemap: {$baseUrl}/sitemap.xml\n";
     }
 }

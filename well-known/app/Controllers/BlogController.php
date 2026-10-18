@@ -261,7 +261,7 @@ class BlogController extends Controller
             '@type' => $schemaType,
             'headline' => $post['seo_title'] ?: $post['title'],
             'description' => $post['seo_description'] ?: excerpt(strip_tags($post['excerpt'] ?? ''), 160),
-            'image' => $post['image'] ? url('/uploads/' . $post['image']) : url('/assets/img/logo.png'),
+            'image' => $post['image'] ? (\App\Services\SeoMetadataService::webUrl(upload_url($post['image']))??url(upload_url($post['image']))) : (\App\Services\SeoMetadataService::webUrl(\App\Services\SiteLogoService::url())??url(\App\Services\SiteLogoService::url())),
             'datePublished' => date('c', strtotime($post['published_at'])),
             'dateModified' => date('c', strtotime($post['updated_at'])),
             'author' => $nvAuthor,
@@ -270,7 +270,7 @@ class BlogController extends Controller
                 'name' => setting('site_name'),
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => url('/assets/img/logo.png')
+                    'url' => \App\Services\SeoMetadataService::webUrl(\App\Services\SiteLogoService::url())??url(\App\Services\SiteLogoService::url())
                 ]
             ]
         ];
@@ -313,7 +313,7 @@ class BlogController extends Controller
             'canonicalUrl' => $post['canonical_url'] ?: url('/blog/' . $post['slug']),
             'ogTitle' => $post['og_title'] ?: ($post['seo_title'] ?: $post['title']),
             'ogDescription' => $post['og_description'] ?: ($post['seo_description'] ?: excerpt(strip_tags($post['excerpt'] ?? ''), 160)),
-            'ogImage' => $post['og_image'] ? url('/uploads/' . $post['og_image']) : ($post['image'] ? url('/uploads/' . $post['image']) : url('/assets/img/logo.png')),
+            'ogImage' => !empty($post['og_image']) ? upload_url($post['og_image']) : (!empty($post['image']) ? upload_url($post['image']) : null),
             'ogType' => 'article',
             'noindex' => $post['noindex'] == 1,
             'schema' => json_encode($schemas, JSON_UNESCAPED_UNICODE),

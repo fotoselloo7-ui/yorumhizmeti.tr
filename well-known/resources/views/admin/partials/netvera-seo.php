@@ -13,6 +13,14 @@ $nvseo=$nvSeoData??[];
     <option value="<?= e($v) ?>" <?= ($nvseo['robots']??'')===$v?'selected':'' ?>><?= e($label) ?></option>
     <?php endforeach; ?>
    </select></div>
+  <fieldset class="form-group nv-seo-preview"><legend>Arama / AI Önizleme Kontrolleri</legend>
+<p class="text-xs text-secondary">Boş alanlar içerik / site robots varsayılanlarını kullanır. 0 metin/video önizlemesini kısıtlar; -1 sınır belirtmez. Kısıtlamalar arama ve AI görünürlüğünü azaltabilir; bir sıralama puanı değildir.</p>
+   <div class="form-row">
+    <div class="form-group"><label for="nvseo-max-snippet">Metin önizlemesi (karakter)</label><input id="nvseo-max-snippet" class="form-control" type="number" min="-1" max="5000" name="nvseo_max_snippet" value="<?= e($nvseo['max_snippet']??'') ?>" placeholder="Varsayılan"></div>
+    <div class="form-group"><label for="nvseo-max-image">Görsel önizlemesi</label><select id="nvseo-max-image" class="form-control" name="nvseo_max_image_preview"><?php foreach([''=>'Varsayılan','none'=>'Kapalı','standard'=>'Standart','large'=>'Büyük']as $v=>$label): ?><option value="<?= e($v) ?>" <?= ($nvseo['max_image_preview']??'')===$v?'selected':'' ?>><?= e($label) ?></option><?php endforeach; ?></select></div>
+   </div>
+   <div class="form-group"><label for="nvseo-max-video">Video önizlemesi (saniye)</label><input id="nvseo-max-video" class="form-control" type="number" min="-1" max="3600" name="nvseo_max_video_preview" value="<?= e($nvseo['max_video_preview']??'') ?>" placeholder="Varsayılan"></div>
+  </fieldset>
   <div class="form-group"><label>GEO: Doğrulanmış İçerik Özeti</label>
    <textarea name="nvseo_geo_summary" rows="3" maxlength="500" class="form-control"><?= e($nvseo['geo_summary']??'') ?></textarea></div>
   <div class="form-group"><label>Entity / İlişkili Konular</label>

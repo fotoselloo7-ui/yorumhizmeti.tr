@@ -44,8 +44,8 @@ class CategoryController extends Controller
         }
 
         $this->render('frontend/categories', [
-            'pageTitle' => 'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera',
-            'metaDescription' => 'NetVera Teknoloji Yazılım: yazılım çözümleri, Instagram ve TikTok hizmetleri, SEO, grafik tasarım ve dijital reklam yönetimini sektörlerine göre inceleyin.',
+            'pageTitle' => $activeGroup!==''&&!empty($groups[0]['label'])?$groups[0]['label'].' | NetVera':'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera',
+            'metaDescription' => $activeGroup!==''&&!empty($groups[0]['description'])?$groups[0]['label'].': '.$groups[0]['description'].'. Kategori kapsamlarını ve mevcut hizmet seçeneklerini NetVera’da karşılaştırın.':'NetVera Teknoloji Yazılım: yazılım çözümleri, Instagram ve TikTok hizmetleri, SEO, grafik tasarım ve dijital reklam yönetimini sektörlerine göre inceleyin.',
             'canonicalUrl' => url($activeGroup !== ''
                 ? \App\Services\PublicSeoUrls::path('/kategoriler/grup', $activeGroup)
                 : '/kategoriler'),

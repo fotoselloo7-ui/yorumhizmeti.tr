@@ -89,3 +89,19 @@ table{border-collapse:separate!important;border-spacing:0!important}thead th{bac
   .adm-nav-order{grid-column:2;grid-row:2}
   .adm-nav-unavailable{grid-column:1/-1}
 }
+
+/* Existing SEO center: technical checks are distinct from editorial scores. */
+.nv-brand-seo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.nv-brand-seo-grid>div{border:1px solid #e7eaf2;border-radius:12px;padding:16px;min-width:0;background:#fff}
+.nv-brand-seo-grid span{display:block;font-size:11px;color:#7b859e;font-weight:700;margin-bottom:8px}
+.nv-brand-seo-grid strong{font-size:13px;line-height:1.6;color:#1a2d50;overflow-wrap:anywhere}
+.nv-brand-seo-grid p{font-size:12px;line-height:1.65;color:#53627e;margin:0;overflow-wrap:anywhere}
+.nv-seo-health{display:grid;gap:12px;list-style:none;margin:20px 0;padding:0}
+.nv-seo-health li{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:16px;border:1px solid #e7eaf2;border-radius:12px}
+.nv-seo-health li>div{min-width:0}.nv-seo-health strong{font-size:13px}.nv-seo-health p{font-size:12px;line-height:1.7;color:#53627e;margin:8px 0 0;overflow-wrap:anywhere}
+.nv-seo-health-state{flex-shrink:0;padding:4px 8px;border-radius:8px;font-size:11px;font-weight:600;background:#e7f7ef;color:#166546}
+.nv-seo-health-state.is-warn{background:#fff2d7;color:#805310}
+.nv-seo-preview{border:0;padding:0;min-width:0;margin:0 0 24px}
+.nv-seo-preview legend{font-size:13px;font-weight:600;color:#1a2d50;margin-bottom:8px}
+.nv-seo-preview>p{line-height:1.7;margin:0 0 16px}
+@media(max-width:650px){.nv-brand-seo-grid{grid-template-columns:1fr}.nv-seo-health li{flex-direction:column;gap:8px}}

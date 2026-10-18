@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261018-seo-infrastructure">
     <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/admin-customers-v67.css') ?>?v=67.1">
     <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">

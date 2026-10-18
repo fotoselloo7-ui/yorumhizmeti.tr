@@ -21,6 +21,11 @@ class SettingsController extends Controller
     public function saveSite(): void
     {
         Csrf::check();
+        foreach(['seo_google_verification','seo_bing_verification']as $key){
+            if(isset($_POST[$key])&&(!is_string($_POST[$key])||($_POST[$key]!==''&&!preg_match('/^[A-Za-z0-9_-]{8,200}$/D',$_POST[$key])))){
+                flash('error','Arama motoru doğrulaması için yalnızca doğrulama kodunu girin; HTML etiketi veya URL kullanmayın.');redirect('/admin/site-ayarlari');return;
+            }
+        }
         $config = SiteConfigService::getInstance();
         if(($_POST['_action']??'')==='reset_theme'){
             // Reset the *saved* palette, not just the browser's color picker.
@@ -337,6 +342,7 @@ class SettingsController extends Controller
             'packages' => $packages,
             'posts' => $posts,
             'avgScore' => $avgScore,
+            'technicalSeoChecks'=>\App\Services\SeoHealthService::report(),
         ]);
     }
 }

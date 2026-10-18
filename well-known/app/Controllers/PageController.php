@@ -14,7 +14,7 @@ class PageController extends Controller
 
         $this->render('frontend/page', [
             'pageTitle' => $page['seo_title'] ?: $page['title'],
-            'metaDescription' => $page['seo_description'],
+            'metaDescription' => $page['seo_description']?:excerpt(strip_tags((string)$page['content']),160),
             'canonicalUrl' => url('/sayfa/' . $page['slug']),
             'page' => $page,
         ]);
@@ -34,6 +34,8 @@ class PageController extends Controller
 
         $this->render('frontend/faq', [
             'pageTitle' => 'Sıkça Sorulan Sorular - ' . setting('site_name'),
+            'metaDescription'=>'NetVera hizmetleri, sipariş süreci, ödeme, teslimat ve destek hakkında sık sorulan soruların yanıtlarını inceleyin.',
+            'canonicalUrl'=>url('/sss'),
             'schema' => $schema,
             'faqs' => $faqs,
         ]);
@@ -41,7 +43,9 @@ class PageController extends Controller
 
     public function contact(): void
     {
-        $this->render('frontend/contact', ['pageTitle' => 'İletişim - ' . setting('site_name')]);
+        $this->render('frontend/contact', ['pageTitle' => 'İletişim - ' . setting('site_name'),
+            'metaDescription'=>'NetVera Teknoloji Yazılım ile iletişime geçin. Yazılım, dijital ajans ve sosyal medya hizmetleri için soru ve proje taleplerinizi iletin.',
+            'canonicalUrl'=>url('/iletisim')]);
     }
 
     public function contactPost(): void
