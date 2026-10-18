@@ -1,4 +1,5 @@
 <?php $isEdit = !empty($category); ?>
+<?php $heroOptions = $isEdit ? \App\Services\CategoryHeroService::options((int)$category['id']) : []; $heroDefaults = \App\Services\CategoryHeroService::defaults($category ?? []); ?>
 <div class="adm-page-top">
     <div class="adm-page-top-left">
         <a href="/admin/kategoriler" class="btn btn-outline btn-sm"><?= icon('arrow-left', 14) ?> Geri</a>
@@ -47,6 +48,21 @@
                 </div>
             </div>
 
+            <div class="adm-card">
+                <div class="adm-card-header"><h3><?= icon('image',18) ?> Kategori / Alt Kategori Banner</h3></div>
+                <div class="adm-card-body">
+                    <p>Boş metinler kategori hizmetine göre otomatik hazırlanır. Buradaki alanlar yalnızca sayfanın üst banner'ını değiştirir; kategori adı ve URL korunur.</p>
+                    <div class="form-row">
+                        <div class="form-group"><label for="hero-lead">Başlık — İlk Satır</label><input id="hero-lead" class="form-control" name="hero_lead" maxlength="120" value="<?= e($heroOptions['lead'] ?? '') ?>" placeholder="<?= e($heroDefaults['lead']) ?>"></div>
+                        <div class="form-group"><label for="hero-accent">Başlık — Vurgulu Satır</label><input id="hero-accent" class="form-control" name="hero_accent" maxlength="120" value="<?= e($heroOptions['accent'] ?? '') ?>" placeholder="<?= e($heroDefaults['accent']) ?>"></div>
+                    </div>
+                    <div class="form-group"><label for="hero-description">Banner Açıklaması</label><textarea id="hero-description" class="form-control" name="hero_description" maxlength="500" rows="3" placeholder="<?= e($heroDefaults['description']) ?>"><?= e($heroOptions['description'] ?? '') ?></textarea></div>
+                    <div class="form-group"><label for="hero-visual">Hizmet Görseli</label><select id="hero-visual" class="form-control" name="hero_visual">
+                        <?php foreach(array_merge(['auto'=>'Hizmete göre otomatik','upload'=>'Yüklediğim kategori görseli'],array_map(static fn($spec)=>$spec[0],\App\Services\CategoryHeroService::families())) as $key=>$label): ?><option value="<?= e($key) ?>" <?= ($heroOptions['visual'] ?? 'auto')===$key?'selected':'' ?>><?= e($label) ?></option><?php endforeach; ?>
+                    </select><small>Özel görsel kullanmak için aşağıdaki Görsel alanından yükleyip “Yüklediğim kategori görseli” seçeneğini seçin. Görseller kesilmeden, oranları korunarak gösterilir.</small></div>
+                    <div class="form-group"><label for="hero-alt">Banner Görsel Alt Metni</label><input id="hero-alt" class="form-control" name="hero_alt" maxlength="200" value="<?= e($heroOptions['alt'] ?? '') ?>" placeholder="<?= e($heroDefaults['alt']) ?>"></div>
+                </div>
+            </div>
             <!-- Image & Status -->
             <div class="adm-card">
                 <div class="adm-card-header"><h3><?= icon('image', 18) ?> Görsel & Durum</h3></div>
@@ -79,7 +95,7 @@
             <div class="adm-card">
                 <div class="adm-card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
                     <h3><?= icon('search', 18) ?> SEO Ayarları</h3>
-                    <?php if(empty($category) || !preg_match('/(haz[ıi]r.?script|yaz[ıi]l[ıi]m|yazilim|software|cms|script|web.?site|wordpress)/iu',(string)($category['slug']??'').' '.(string)($category['name']??''))): ?>
+                    <?php if(empty($category) || !preg_match('/(haz[ıi]r.?script|yaz[ıi]l[ıi]m|yazilim|software|cms|script|tema|eklenti)/iu',(string)($category['slug']??'').' '.(string)($category['name']??''))): ?>
                     <button id="nvSeoFillCategory" type="button" class="btn btn-outline btn-sm"><?= icon('sparkles',15) ?> SEO / GEO Alanlarını Doldur</button>
                     <?php endif; ?>
                 </div>
@@ -126,7 +142,7 @@
                     </div>
                 </div>
             </div>
-            <?php $nvSeoIsCategory = !preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|web.site|tema)/iu', (string)($category['slug']??'').' '.(string)($category['name']??'')); require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
+            <?php $nvSeoIsCategory = !preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|script|tema|eklenti)/iu', (string)($category['slug']??'').' '.(string)($category['name']??'')); require BASE_PATH.'/resources/views/admin/partials/netvera-seo.php'; ?>
         </div>
 
         <!-- Sidebar -->

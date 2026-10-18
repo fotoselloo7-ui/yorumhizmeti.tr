@@ -329,6 +329,7 @@ final class NetveraScriptController extends Controller
             'active'=>isset($_POST['active'])?1:0
         ];
         try{
+            \App\Services\CategoryHeroService::validate($_POST);
             if($original){
                 $this->db->update('nv_legacy_script_categories',$record,'legacy_id=?',[$id]);
             }else{
@@ -338,6 +339,7 @@ final class NetveraScriptController extends Controller
                 $record['legacy_id']=(int)$last['max_id']+1;
                 $this->db->insert('nv_legacy_script_categories',$record);
             }
+            \App\Services\CategoryHeroService::save($original?$id:(int)$record['legacy_id'],$_POST,'script');
             logActivity('netvera_category_save','Netvera kategori kaydı: '.$name);
             flash('success','Kategori kaydedildi; eski kategori slug ve ürün adresleri korunuyor.');
         }catch(\Throwable $e){

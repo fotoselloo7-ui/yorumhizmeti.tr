@@ -82,6 +82,8 @@ class CategoryController extends Controller
             return;
         }
         $category = \App\Services\CategorySearchBlueprint::decorate($category);
+        $category = \App\Services\CategoryHeroService::decorateSeo($category);
+        $categoryHero = \App\Services\CategoryHeroService::get($category);
         $isSocialSale = \App\Services\SocialPackageService::isSocialCategory((int)$category['id']);
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
@@ -150,7 +152,7 @@ class CategoryController extends Controller
         }
 
         // Editorial answers are visible immediately, even before the optional admin SEO batch is applied.
-        $categoryIntent=\App\Services\CategorySearchBlueprint::profileForCategory($category);
+        $categoryIntent=\App\Services\CategoryHeroService::seoProfile($category);
         if($categoryIntent){
             if(empty($categorySeo['main_question']))$categorySeo['main_question']=$categoryIntent['question'];
             if(empty($categorySeo['direct_answer']))$categorySeo['direct_answer']=$categoryIntent['answer'];
@@ -158,7 +160,7 @@ class CategoryController extends Controller
         }
 
         $schema=null;
-        if(!preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|web.site|tema)/iu',
+        if(!preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|script|tema|eklenti)/iu',
              (string)$category['slug'].' '.(string)$category['name'])){
             $canonical=url('/kategori/'.$category['slug']);
             $items=[];
@@ -173,12 +175,15 @@ class CategoryController extends Controller
                         'name'=>$isSocialSale ? package_display_name($p) : $p['name'],'url'=>url('/paket/'.$p['slug'])];
                 }
             }
-            $graph=[
-              ['@type'=>'BreadcrumbList','@id'=>$canonical.'#breadcrumbs','itemListElement'=>[
+            $breadcrumbs=[
                  ['@type'=>'ListItem','position'=>1,'name'=>'Ana Sayfa','item'=>url('/')],
-                 ['@type'=>'ListItem','position'=>2,'name'=>'Hizmet Kategorileri','item'=>url('/kategoriler')],
-                 ['@type'=>'ListItem','position'=>3,'name'=>$category['name'],'item'=>$canonical]
-              ]],
+                 ['@type'=>'ListItem','position'=>2,'name'=>'Hizmetler','item'=>url('/kategoriler')]
+            ];
+            if (!empty($category['parent_category_slug'])) $breadcrumbs[]=['@type'=>'ListItem','position'=>3,
+                'name'=>$category['parent_category_name'],'item'=>url(\App\Services\PublicSeoUrls::path('/kategori',$category['parent_category_slug']))];
+            $breadcrumbs[]=['@type'=>'ListItem','position'=>count($breadcrumbs)+1,'name'=>$category['name'],'item'=>$canonical];
+            $graph=[
+              ['@type'=>'BreadcrumbList','@id'=>$canonical.'#breadcrumbs','itemListElement'=>$breadcrumbs],
               ['@type'=>'CollectionPage','@id'=>$canonical.'#page',
                  'name'=>$category['seo_title']?:$category['name'],
                  'description'=>$category['seo_description']?:$category['description'],
@@ -200,6 +205,8 @@ class CategoryController extends Controller
             'ogTitle' => $category['og_title'] ?: $category['name'],
             'ogDescription' => $category['og_description'] ?: $category['seo_description'],
             'category' => $category,
+            'categoryHero' => $categoryHero,
+            'ogImage' => url($categoryHero['src']),
             'schema' => $schema,
             'nvSeoData' => $categorySeo,
             'packages' => $packages,

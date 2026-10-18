@@ -33,40 +33,10 @@ if($categoryPlatform!==null){
     $platformColor=\App\Services\SocialPlatformIdentity::brand($categoryPlatform)[2];
 }
 $nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor($categoryPlatform);
-$categoryWords = preg_split('/\s+/', trim($category['name'] ?? 'Hizmetler'));
-$categoryLead = array_shift($categoryWords) ?: 'Dijital';
-$categoryRest = implode(' ', $categoryWords) ?: 'Hizmetleri';
-$categoryHeroCutout = asset('img/hero-woman-cutout.png');
+$categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($category);
 ?>
 <div class="yv-category-v5 <?= e($nvPlatformClass) ?> <?= !empty($socialCatalog)?'nv-social-catalog':'' ?>">
-<section class="yv-category-hero-v5 <?= e($platformClass) ?> <?= e($nvPlatformClass) ?>">
- <div class="container">
-  <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="separator">/</span><a href="/kategoriler">Hizmetler</a><span class="separator">/</span><span><?= e($category['name']) ?></span></div>
-  <div class="yv-category-hero-grid-v5">
-   <div>
-    <div class="yv-category-brand-v5"><span><?= icon($platformIcon,26) ?></span><small><?= e($category['name']) ?></small></div>
-    <h1><span class="yv-cat-title-lead"><?= e($categoryLead) ?></span><span class="yv-cat-title-accent"><?= e($categoryRest) ?></span></h1>
-    <p><?= e($category['description'] ?: 'İhtiyacınıza uygun, güvenli ve hızlı dijital hizmet paketlerini keşfedin. Siparişinizi kolayca oluşturun ve süreci hesabınızdan takip edin.') ?></p>
-    <div class="yv-category-benefits-v5">
-     <span><?= icon('zap',13) ?><b>Hızlı Teslimat</b><small>Dakikalar içinde</small></span>
-     <span><?= icon('shield',13) ?><b>%100 Güvenli</b><small>Hesap bilgisi gerekmez</small></span>
-     <span><?= icon('users',13) ?><b>Gerçek & Aktif</b><small>Kaliteli hesaplar</small></span>
-     <span><?= icon('headphones',13) ?><b>7/24 Destek</b><small>Her zaman yanınızda</small></span>
-    </div>
-    <a class="yv-btn yv-btn-primary" href="#packages">Hemen Paketleri İncele <?= icon('arrow-right',12) ?></a>
-   </div>
-   <div class="yv-category-hero-art-v5">
-    <img class="yv-category-hero-woman-v5" src="<?= e($categoryHeroCutout) ?>" alt="<?= e($category['name']) ?>" loading="eager">
-    <span class="yv-category-brand-orbit-v5 main"><?= icon($platformIcon,34) ?></span>
-    <span class="yv-category-brand-orbit-v5 small one"><?= icon('heart',18) ?></span>
-    <span class="yv-category-brand-orbit-v5 small two"><?= icon('trending-up',18) ?></span>
-    <div class="yv-category-float-v5 a"><?= icon('heart',12) ?> +1.5K etkileşim</div>
-    <div class="yv-category-float-v5 b"><?= icon('users',12) ?> Organik büyüme</div>
-    <div class="yv-category-float-v5 c"><?= icon('trending-up',12) ?> Daha güçlü marka</div>
-   </div>
-  </div>
- </div>
-</section>
+<?php require __DIR__.'/partials/category-hero.php'; ?>
 
 <section class="yv-category-filter-v5">
  <div class="container">

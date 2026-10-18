@@ -19,7 +19,7 @@ final class CategorySeoCompleteService
     private static function software(array $category): bool
     {
         $text=mb_strtolower((string)($category['slug']??'').' '.(string)($category['name']??''),'UTF-8');
-        return (bool)preg_match('/haz[ıi]r[- ]?(yaz[ıi]l[ıi]m|script)|sekt[oö]rel[- ]?(y[oö]netim[- ]?)?yaz[ıi]l[ıi]m|yaz[ıi]l[ıi]m|yazilim|software|cms|script|web[- ]?site|wordpress|masa[uü]st[uü][- ]?bot/iu',$text);
+        return (bool)preg_match('/haz[ıi]r[- ]?(yaz[ıi]l[ıi]m|script)|sekt[oö]rel[- ]?(y[oö]netim[- ]?)?yaz[ıi]l[ıi]m|yaz[ıi]l[ıi]m|yazilim|software|cms|script|tema|eklenti|masa[uü]st[uü][- ]?bot/iu',$text);
     }
 
     public static function recommendations(array $category): array
@@ -28,7 +28,7 @@ final class CategorySeoCompleteService
         $name=trim((string)($category['name']??''));
         $slug=trim((string)($category['slug']??''));
         if($name==='')return [];
-        $profile=CategorySearchBlueprint::profileForCategory($category);
+        $profile=CategoryHeroService::seoProfile($category);
         // A fallback for real services not yet included in the researched topical map;
         // it is based on the actual category, NEVER creates a new thin SEO URL.
         $commercial=(bool)preg_match('/takipçi|takipci|beğeni|begeni|izlenme|görüntülenme|goruntulenme|abone|satın al|satin al/iu',$name.' '.$slug);

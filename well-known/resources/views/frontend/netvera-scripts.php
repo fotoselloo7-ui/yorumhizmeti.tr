@@ -27,12 +27,13 @@ $nv40CategoryLink = static function (?string $category) use ($nv40Context, $nv40
 };
 ?>
 <main class="nv40-store">
-  <section class="nv40-store-hero"><div class="container">
-    <span class="nv40-kicker"><?= icon('monitor',14) ?> NETVERA YAZILIM KOLEKSİYONU</span>
-    <h1>Hazır Yazılımlar <span>&amp; Scriptler</span></h1>
-    <p>Sektörel yazılımları karşılaştırın, demo ve teknik özelliklerini inceleyin.</p>
-  </div></section>
-  <section class="nv40-store-body"><div class="container nv40-store-layout">
+  <?php $categoryHero=$catalogHero; $heroCategory=$catalogHeroCategory; $heroPlatformIcon='code';
+  $heroFiltered=!empty($filterCategory)||!empty($filterType);
+  $heroBreadcrumbs=[['Ana Sayfa','/'],['Hazır Yazılımlar',$heroFiltered?'/hazir-scriptler':null]];
+  if(!empty($heroCategory['parent_legacy_id']))foreach($categories as $heroParent)if((int)$heroParent['legacy_id']===(int)$heroCategory['parent_legacy_id'])$heroBreadcrumbs[]=[$heroParent['name'],\App\Services\PublicSeoUrls::scriptCategory($heroParent,$categories)];
+  if($heroFiltered)$heroBreadcrumbs[]=[$heroCategory['name'],null];
+  require __DIR__.'/partials/category-hero.php'; ?>
+  <section class="nv40-store-body" id="packages"><div class="container nv40-store-layout">
     <aside class="nv40-categories" aria-label="Yazılım filtreleri">
       <div class="nv40-sidebar-heading">
         <strong><?= icon('sliders',17) ?> Yazılımları Filtrele</strong>

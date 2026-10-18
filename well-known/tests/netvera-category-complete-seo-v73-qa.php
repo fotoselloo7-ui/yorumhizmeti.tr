@@ -2,6 +2,11 @@
 declare(strict_types=1);
 
 $root=dirname(__DIR__);
+define('BASE_PATH',$root);
+define('PUBLIC_PATH',$root.'/public');
+require_once $root.'/app/Core/Helpers.php';
+require_once $root.'/app/Services/SocialPlatformIdentity.php';
+require_once $root.'/app/Services/CategoryHeroService.php';
 require_once $root.'/app/Services/CategorySearchBlueprint.php';
 require_once $root.'/app/Services/CategorySeoCompleteService.php';
 

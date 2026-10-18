@@ -54,6 +54,7 @@ class CategoryController extends Controller
         $data['seo_score'] = $score['score'];
 
         $newId = $this->db->insert('categories', $data);
+        \App\Services\CategoryHeroService::save((int)$newId,$_POST);
         \App\Services\NetveraSeoBridge::save('category', $newId, $_POST);
         logActivity('category_create', 'Kategori oluşturuldu: ' . $data['name']);
         flash('success', 'Kategori oluşturuldu.');
@@ -84,7 +85,7 @@ class CategoryController extends Controller
     public function update(string $id): void
     {
         Csrf::check();
-        $data = $this->getCategoryData();
+        $data = $this->getCategoryData((int)$id);
 
         if (!empty($_FILES['image']['name'])) {
             $data['image'] = Upload::image($_FILES['image'], 'categories');
@@ -97,6 +98,7 @@ class CategoryController extends Controller
         $data['seo_score'] = $score['score'];
 
         $this->db->update('categories', $data, 'id = ?', [(int) $id]);
+        \App\Services\CategoryHeroService::save((int)$id,$_POST);
         \App\Services\NetveraSeoBridge::save('category',(int)$id,$_POST);
         logActivity('category_update', 'Kategori güncellendi: ' . $data['name']);
         flash('success', 'Kategori güncellendi.');
@@ -290,8 +292,13 @@ class CategoryController extends Controller
         $this->json(['ok'=>true,'suggestion'=>$profile]);
     }
 
-    private function getCategoryData(): array
+    private function getCategoryData(int $id=0): array
     {
+        try { \App\Services\CategoryHeroService::validate($_POST); }
+        catch (\RuntimeException $e) {
+            flash('error',$e->getMessage());
+            redirect($id > 0 ? '/admin/kategori/'.$id.'/duzenle' : '/admin/kategori/ekle');
+        }
         return [
             'parent_id' => !empty($_POST['parent_id']) ? (int) $_POST['parent_id'] : null,
             'name' => trim($_POST['name'] ?? ''),

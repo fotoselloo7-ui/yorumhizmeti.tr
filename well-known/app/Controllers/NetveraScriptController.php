@@ -84,7 +84,17 @@ class NetveraScriptController extends Controller
         $type=trim((string)($_GET['type']??''));
         if(!\App\Services\NetveraScriptTypeService::valid($type))$type='';
         $typeDefinitions=\App\Services\NetveraScriptTypeService::definitions();
-        foreach($categories as $row)if($row['slug']===$cat)$categoryId=(int)$row['legacy_id'];
+        $catalogHeroCategory = ['name'=>'Hazır Yazılımlar & Scriptler','slug'=>'hazir-scriptler'];
+        foreach($categories as $row)if($row['slug']===$cat){$categoryId=(int)$row['legacy_id'];$catalogHeroCategory=$row;}
+        if ($cat === '' && $type !== '') {
+            foreach ($typeDefinitions as [$typeName,$typeSlug,$typeDescription]) if ($typeSlug === $type) {
+                $catalogHeroCategory = ['name'=>$typeName,'slug'=>$typeSlug,'description'=>$typeDescription];
+            }
+        }
+        if (!empty($catalogHeroCategory['parent_legacy_id'])) foreach ($categories as $parent) {
+            if ((int)$parent['legacy_id'] === (int)$catalogHeroCategory['parent_legacy_id']) $catalogHeroCategory['parent_category_name'] = $parent['name'];
+        }
+        $catalogHero = \App\Services\CategoryHeroService::catalog($catalogHeroCategory);
 
         // Untrusted query parameters never become SQL identifiers or free-form clauses.
         $priceFromQuery=static function(string $key):?float {
@@ -104,8 +114,10 @@ class NetveraScriptController extends Controller
         $typeCounts=\App\Services\NetveraScriptTypeService::counts(Catalog::all());
         $visibleProducts=\App\Services\NetveraScriptTypeService::filter($allProducts,$type);
         $this->render('frontend/netvera-scripts',[
-            'pageTitle'=>'Hazır Scriptler ve Profesyonel Yazılımlar',
-            'metaDescription'=>'Sektörel PHP web yazılımları, otomasyon, CMS ve hazır script ürünleri.',
+            'pageTitle'=>trim((string)($catalogHeroCategory['meta_title'] ?? '')) ?: $catalogHeroCategory['name'].' | NetVera',
+            'metaDescription'=>trim((string)($catalogHeroCategory['meta_description'] ?? '')) ?: $catalogHero['description'],
+            'ogImage'=>url($catalogHero['src']),
+            'catalogHero'=>$catalogHero,'catalogHeroCategory'=>$catalogHeroCategory,
             'canonicalUrl'=>url($canonicalPath),
             'noindex'=>$q!=='' || ($type!=='' && !str_starts_with($canonicalPath, '/hazir-scriptler/tur/'))
                 || $minPrice!==null || $maxPrice!==null || $minRating>0 || $sort!=='recommended'

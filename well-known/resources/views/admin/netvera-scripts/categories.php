@@ -40,6 +40,7 @@
           <div class="form-group"><label for="nvcat-seo-desc">Meta Açıklama</label><textarea id="nvcat-seo-desc" class="form-control" name="meta_description" rows="2"></textarea></div>
         </div>
         <label style="display:flex;align-items:center;gap:8px;margin:12px 0"><input type="checkbox" name="active" value="1" checked> Kategori yayında</label>
+        <?php $heroFieldId='script-category-new';$heroSaved=[];require BASE_PATH.'/resources/views/admin/partials/category-hero-visual.php'; ?>
         <button class="btn btn-primary" type="submit"><?= icon('save',16) ?> Yeni Kategoriyi Kaydet</button>
       </form>
     </div>
@@ -75,6 +76,7 @@
             </div>
             <div class="form-group"><label>Kategori Açıklaması</label><textarea class="form-control" rows="2" name="description"><?= e($cat['description']??'') ?></textarea></div>
             <div class="form-group"><label>SEO Meta Açıklama</label><textarea class="form-control" rows="2" name="meta_description"><?= e($cat['meta_description']??'') ?></textarea></div>
+            <?php $heroFieldId='script-category-'.(int)$cat['legacy_id'];$heroSaved=\App\Services\CategoryHeroService::options((int)$cat['legacy_id'],'script');require BASE_PATH.'/resources/views/admin/partials/category-hero-visual.php'; ?>
             <label style="display:flex;align-items:center;gap:8px;margin:12px 0">
               <input type="checkbox" name="active" value="1" <?= (int)$cat['active']?'checked':'' ?>> Kategori yayında
             </label>
