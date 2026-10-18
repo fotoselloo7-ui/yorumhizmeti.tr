@@ -124,7 +124,6 @@
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=20261014">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
     <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.2">
     <?php

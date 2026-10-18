@@ -1,4 +1,4 @@
-/* YorumHizmeti Auth V25 - independent responsive split page, preserves brand palette. */
+/* NetVera account pages: single owner for the responsive showcase and branding. */
 body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;font-family:Poppins,system-ui,sans-serif}
 .auth-wrapper.auth25-page{width:100%!important;max-width:none!important;min-height:100vh!important;min-height:100dvh!important;display:grid!important;place-items:center!important;padding:clamp(15px,3.6vw,48px)!important;background:radial-gradient(circle at 14% 16%,rgba(99,70,230,.12),transparent 32%),radial-gradient(circle at 92% 90%,rgba(239,51,139,.08),transparent 29%),#f8f9fd!important}
 .auth25-page,.auth25-page *{box-sizing:border-box}
@@ -11,7 +11,9 @@ body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;f
 .auth25-orbit-two{width:320px;height:320px;left:-180px;bottom:-100px;box-shadow:0 0 0 44px rgba(255,255,255,.035)}
 .auth25-brand,.auth25-mobile-logo{display:inline-flex;align-items:center;gap:11px;text-decoration:none}
 .auth25-brand{align-self:flex-start;position:relative;z-index:4;color:#fff}
-.auth25-brandmark{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border:1px solid rgba(255,255,255,.23);border-radius:13px;background:linear-gradient(115deg,#2d7dff,#7448f0 55%,#f03996);box-shadow:0 9px 21px rgba(25,21,78,.2);color:#fff;font-size:24px;font-weight:800}
+.auth25-logo-surface{display:grid;place-items:center;flex:0 0 auto;width:180px;min-height:50px;padding:9px 12px;border:1px solid #e6ebf5;border-radius:12px;background:#fff;box-shadow:0 8px 24px #070f3220}
+.auth25-brand-logo{display:block;width:100%;height:30px;object-fit:contain;filter:none}
+.auth25-mobile-logo .auth25-logo-surface{width:168px;box-shadow:none}
 .auth25-brand>span:last-child{display:flex;flex-direction:column;gap:2px}
 .auth25-brand strong{color:#fff;font-size:17px;font-weight:800;letter-spacing:-.035em}
 .auth25-brand small{color:rgba(255,255,255,.77);font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:600}
@@ -24,9 +26,10 @@ body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;f
 .auth25-benefits>span{display:inline-flex;align-items:center;justify-content:center;min-height:35px;gap:7px;padding:8px 10px;border:1px solid rgba(255,255,255,.19);border-radius:10px;background:rgba(255,255,255,.1);backdrop-filter:blur(9px);font-size:10px;font-weight:600;white-space:nowrap}
 .auth25-benefits .icon{color:#c5ffe9}
 /* Reserve a separate lower-right visual zone; never let the portrait cover title, copy or benefit chips. */
-.auth25-art{position:absolute;z-index:1;right:0;bottom:0;width:min(44%,220px);height:clamp(195px,19vw,232px);pointer-events:none}
+.auth25-art{position:absolute;z-index:1;right:8px;bottom:0;width:min(46%,230px);height:248px;overflow:hidden;pointer-events:none}
 .auth25-art-ring{position:absolute;right:-40px;bottom:-70px;width:235px;height:235px;border:1px solid rgba(255,255,255,.2);border-radius:50%;box-shadow:0 0 0 30px rgba(255,255,255,.048),0 0 0 60px rgba(255,255,255,.025)}
-.auth25-art img{position:absolute;right:0;bottom:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;filter:drop-shadow(0 12px 22px rgba(28,19,89,.18))}
+/* Intentional upper-body framing of the tall portrait; face and tablet stay in the reserved visual zone. */
+.auth25-art img{position:absolute;top:0;right:-9%;bottom:auto;width:118%;max-width:none;height:auto;object-fit:contain;object-position:center top;display:block;filter:drop-shadow(0 12px 22px rgba(28,19,89,.18))}
 .auth25-float{position:relative;z-index:3;display:flex;gap:9px;align-items:center;align-self:flex-start;max-width:min(210px,53%);margin-top:auto;margin-bottom:31px;padding:12px 13px;border:1px solid rgba(255,255,255,.2);border-radius:13px;background:rgba(38,31,105,.42);backdrop-filter:blur(14px)}
 .auth25-float>span{color:#8cf0cb}
 .auth25-float>div{display:flex;flex-direction:column;gap:4px}
@@ -119,12 +122,12 @@ body.auth25-body{margin:0;min-width:320px;overflow-x:hidden;background:#f7f8fd;f
  .auth25-benefits{max-width:min(390px,100%)}
  .auth25-showcase-main p{max-width:min(365px,100%)}
  .auth25-showcase-main h2{font-size:clamp(29px,3.2vw,35px)}
- .auth25-art{width:min(43%,205px);height:clamp(180px,18vw,216px)}
+ .auth25-art{width:min(44%,210px);height:232px}
  .auth25-float{max-width:min(205px,52%)}
 }
 @media(min-width:811px) and (max-height:750px){
  .auth25-showcase-main{margin-top:clamp(36px,5vh,58px)}
  .auth25-benefits{margin-top:17px}
- .auth25-art{height:185px}
+ .auth25-art{height:220px}
 }
 @media(prefers-reduced-motion:reduce){.auth25-submit,.auth25-input-wrap{transition:none}.auth25-submit:hover{transform:none}}

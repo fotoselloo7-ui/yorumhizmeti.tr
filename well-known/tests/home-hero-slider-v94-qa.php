@@ -68,6 +68,7 @@ $check(!str_contains($css,'!important')&&!str_contains($css,'is-bundled-lowres')
 $check(!str_contains($css,'min-height:620px')&&!str_contains($css,'min-height:650px'),'Oversized mobile spacer returned');
 $check(str_contains($css,'object-fit:cover')&&str_contains($css,'position:absolute;inset:0'),'Desktop HD cover layout missing');
 $check(str_contains($js,'touchstart')&&str_contains($js,'setTimeout'),'Swipe/autoplay behavior missing');
-$check(str_contains($login,'SiteLogoService::url()')&&!str_contains($login,'auth25-brandmark">Y'),'Login still uses placeholder brand mark');
+$authBrand=$get('resources/views/frontend/auth/brand.php');
+$check(str_contains($login,"require __DIR__.'/brand.php'")&&str_contains($authBrand,'SiteLogoService::url()')&&!str_contains($login,'auth25-brandmark">Y'),'Login must render the shared admin-managed logo');
 $check(str_contains($sql,'CREATE TABLE `hero_slides`')&&str_contains($sql,'INSERT INTO `hero_slides`'),'Canonical database.sql is missing hero slider schema/data');
 echo "PASS: admin-managed unlimited Bayigram-style hero slider, CTA/icon/color/link controls, per-slide images, responsive swipe and login logo\n";

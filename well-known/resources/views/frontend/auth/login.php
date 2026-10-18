@@ -1,6 +1,6 @@
 <main class="auth-wrapper auth25-page"><div class="auth25-shell">
 <section class="auth25-showcase" aria-label="Üyelik avantajları">
-<a class="auth25-brand" href="/" aria-label="NetVera ana sayfa"><img class="auth25-brand-logo" src="<?= e(\App\Services\SiteLogoService::url()) ?>" alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"><span class="auth25-brand-copy"><small>Dijital hizmet platformu</small></span></a>
+<?php $authBrandMobile=false;require __DIR__.'/brand.php'; ?>
 <div class="auth25-orbit auth25-orbit-one" aria-hidden="true"></div><div class="auth25-orbit auth25-orbit-two" aria-hidden="true"></div>
 <div class="auth25-showcase-main">
 <span class="auth25-eyebrow"><?= icon('sparkles',15) ?> Tüm hizmetler tek panelde</span>
@@ -10,12 +10,12 @@
 <span><?= icon('shield-check',16) ?> Güvenli hesap</span><span><?= icon('package-check',16) ?> Sipariş takibi</span><span><?= icon('headphones',16) ?> Destek merkezi</span>
 </div>
 </div>
-<div class="auth25-art" aria-hidden="true"><div class="auth25-art-ring"></div><img src="<?= asset('img/hero-woman-cutout.png') ?>" alt="" loading="eager"></div>
+<div class="auth25-art" aria-hidden="true"><div class="auth25-art-ring"></div><img src="<?= asset('img/auth-woman-fuchsia.webp') ?>" width="1024" height="1536" alt="" loading="eager" decoding="async"></div>
 <div class="auth25-float"><span><?= icon('check-circle',19) ?></span><div><strong>Tüm siparişler kontrolünüzde</strong><small>Her şey tek, düzenli bir panelde.</small></div></div>
 <a href="/" class="auth25-back"><?= icon('arrow-left',14) ?> Ana sayfaya dön</a>
 </section>
 <section class="auth25-panel" aria-labelledby="auth-title"><div class="auth25-panel-body">
-<a class="auth25-mobile-logo" href="/" aria-label="NetVera ana sayfa"><img class="auth25-brand-logo" src="<?= e(\App\Services\SiteLogoService::url()) ?>" alt="<?= e(setting('site_name','NetVera Teknoloji Yazılım')) ?>"></a>
+<?php $authBrandMobile=true;require __DIR__.'/brand.php'; ?>
 <span class="auth25-tag"><?= icon('log-in',14) ?> Üye Girişi</span>
 <h1 id="auth-title">Tekrar hoş geldiniz.</h1>
 <p class="auth25-lead">Siparişlerinize ve hesabınıza erişmek için giriş yapın.</p>
