@@ -56,6 +56,7 @@
                 </div>
             </div>
 
+            <?php if(!$softwareOnly && (!$isEdit || $socialOptions!==null)): require BASE_PATH.'/resources/views/admin/partials/social-landing.php'; endif; ?>
             <!-- Pricing -->
             <?php if(!$softwareOnly): ?>
             <div class="adm-card">

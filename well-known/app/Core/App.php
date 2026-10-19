@@ -138,6 +138,8 @@ class App
 
         // Admin Kategoriler
         $r->get('/admin/kategoriler', 'Admin\\CategoryController@index');
+        $r->get('/admin/sosyal-medya-tasarimi', 'Admin\\CategoryController@socialDirectory');
+        $r->post('/admin/sosyal-medya-tasarimi', 'Admin\\CategoryController@saveSocialDirectory');
         $r->post('/admin/kategoriler/seo-optimize', 'Admin\\CategoryController@optimizeCategorySeo');
         $r->post('/admin/kategoriler/seo-oneri', 'Admin\\CategoryController@seoSuggestion');
         $r->post('/admin/kategoriler/toplu-islem', 'Admin\\CategoryController@bulkAction');

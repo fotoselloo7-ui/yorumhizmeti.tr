@@ -12,13 +12,14 @@ $request=static function(string $path,?array $post=null)use($ch,$origin):array{
 };
 $assert=static function(bool $ok,string $why):void{if(!$ok)throw new RuntimeException($why);};
 [$code,$catalog]=$request('/kategori/instagram-hizmetleri');
-$assert($code===200 && str_contains($catalog,'class="nv-social-service-card"'),'Platform lists service types, not mixed quantity packages');
+$assert($code===200 && str_contains($catalog,'class="social-service-card"'),'Platform lists service types, not mixed quantity packages');
 preg_match_all('~<script type="application/ld\+json">(.*?)</script>~s',$catalog,$schemas);
 $collection=null;
 foreach($schemas[1] as $json){foreach((json_decode($json,true)['@graph']??[]) as $node){if(($node['@type']??'')==='CollectionPage')$collection=$node;}}
 $assert(($collection['mainEntity']['itemListElement'][0]['name']??'')==='Instagram Türk Takipçi','Schema names match visible service hierarchy');
 [$code,$selection]=$request('/kategori/instagram-takipci?hizmet=14-instagram-turk-takipci');
-$assert($code===200 && str_contains($selection,'100 takipçi') && str_contains($selection,'500 takipçi'),'Service selection keeps both fixed quantities');
+$selectionText=html_entity_decode(strip_tags($selection),ENT_QUOTES,'UTF-8');
+$assert($code===200 && str_contains($selectionText,'100 takipçi') && str_contains($selectionText,'500 takipçi'),'Service selection keeps both fixed quantities');
 $assert(str_contains($selection,'content="noindex,follow"') && str_contains($selection,'rel="canonical" href="'.$origin.'/kategori/instagram-takipci"'),'Query filter remains non-indexed with original canonical URL');
 [$code,$html]=$request('/paket/instagram-turk-takipci-baslangic-paketi-100-takipci');
 $assert($code===200,'QA package available');

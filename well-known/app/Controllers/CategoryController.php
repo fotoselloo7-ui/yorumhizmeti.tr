@@ -18,9 +18,9 @@ class CategoryController extends Controller
 
     public function index(): void
     {
-        $q = trim((string)($_GET['q'] ?? ''));
+        $q = is_string($_GET['q']??null) ? trim($_GET['q']) : '';
         $q = mb_substr($q, 0, 100);
-        $activeGroup = (string)($_GET['grup'] ?? '');
+        $activeGroup = is_string($_GET['grup']??null) ? $_GET['grup'] : '';
         $groups = \App\Services\CatalogMenuService::groups();
         $keys = array_column($groups, 'key');
         if ($activeGroup !== '' && !in_array($activeGroup, $keys, true)) $activeGroup = '';
@@ -43,9 +43,17 @@ class CategoryController extends Controller
             $groups = array_values(array_filter($groups, static fn($g) => $g['key'] === $activeGroup));
         }
 
+        $socialDirectoryPage=$activeGroup==='social'?\App\Services\SocialStorefrontService::page(['id'=>1,'name'=>'Sosyal Medya Hizmetleri','slug'=>'sosyal-medya-hizmetleri'],'directory'):null;
+        $socialDirectorySchema=null;
+        if($socialDirectoryPage){
+            $items=[];foreach($groups[0]['categories']??[]as $n=>$cat)$items[]=['@type'=>'ListItem','position'=>$n+1,'name'=>$cat['name'],'url'=>url($cat['url'])];
+            $socialDirectorySchema=json_encode(['@context'=>'https://schema.org','@type'=>'CollectionPage','name'=>$socialDirectoryPage['title'],'url'=>url('/kategoriler/grup/social'),'mainEntity'=>['@type'=>'ItemList','numberOfItems'=>count($items),'itemListElement'=>$items]],JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_AMP);
+        }
         $this->render('frontend/categories', [
-            'pageTitle' => $activeGroup!==''&&!empty($groups[0]['label'])?$groups[0]['label'].' | NetVera':'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera',
-            'metaDescription' => $activeGroup!==''&&!empty($groups[0]['description'])?$groups[0]['label'].': '.$groups[0]['description'].'. Kategori kapsamlarını ve mevcut hizmet seçeneklerini NetVera’da karşılaştırın.':'NetVera Teknoloji Yazılım: yazılım çözümleri, Instagram ve TikTok hizmetleri, SEO, grafik tasarım ve dijital reklam yönetimini sektörlerine göre inceleyin.',
+            'pageTitle' => $socialDirectoryPage?$socialDirectoryPage['title'].' | NetVera':($activeGroup!==''&&!empty($groups[0]['label'])?$groups[0]['label'].' | NetVera':'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera'),
+            'metaDescription' => $socialDirectoryPage?excerpt($socialDirectoryPage['summary'],160):($activeGroup!==''&&!empty($groups[0]['description'])?$groups[0]['label'].': '.$groups[0]['description'].'. Kategori kapsamlarını ve mevcut hizmet seçeneklerini NetVera’da karşılaştırın.':'NetVera Teknoloji Yazılım: yazılım çözümleri, Instagram ve TikTok hizmetleri, SEO, grafik tasarım ve dijital reklam yönetimini sektörlerine göre inceleyin.'),
+            'ogImage'=>$socialDirectoryPage?url($socialDirectoryPage['image']):null,
+            'schema'=>$socialDirectorySchema,
             'canonicalUrl' => url($activeGroup !== ''
                 ? \App\Services\PublicSeoUrls::path('/kategoriler/grup', $activeGroup)
                 : '/kategoriler'),
@@ -53,6 +61,8 @@ class CategoryController extends Controller
             'catalogGroups' => $groups,
             'activeCatalogGroup' => $activeGroup,
             'searchQuery' => $q,
+            'socialDirectory' => $activeGroup==='social' ? ($groups[0]['categories']??[]) : null,
+            'socialPage' => $socialDirectoryPage,
         ]);
     }
 
@@ -85,12 +95,13 @@ class CategoryController extends Controller
         $category = \App\Services\CategoryHeroService::decorateSeo($category);
         $categoryHero = \App\Services\CategoryHeroService::get($category);
         $isSocialSale = \App\Services\SocialPackageService::isSocialCategory((int)$category['id']);
+        $socialPage=$isSocialSale?\App\Services\SocialStorefrontService::page($category):null;
 
         $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
         // Filters
-        $altSlug = $_GET['alt'] ?? '';
-        $q = trim($_GET['q'] ?? '');
-        $sort = $_GET['sort'] ?? 'recommended';
+        $altSlug = is_string($_GET['alt']??null)?mb_substr($_GET['alt'],0,160):'';
+        $q = is_string($_GET['q']??null)?mb_substr(trim($_GET['q']),0,100):'';
+        $sort = is_string($_GET['sort']??null)&&in_array($_GET['sort'],['recommended','price_asc','price_desc','featured'],true)?$_GET['sort']:'recommended';
 
         $targetCategoryIds = [$category['id']];
         $selectedSubCategory = null;
@@ -128,7 +139,7 @@ class CategoryController extends Controller
         }
 
         $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
-        $socialCatalog = $isSocialSale ? \App\Services\SocialPackageService::catalog($packages,$category,mb_substr((string)($_GET['hizmet'] ?? ''),0,160)) : null;
+        $socialCatalog = $isSocialSale ? \App\Services\SocialPackageService::catalog($packages,$category,is_string($_GET['hizmet']??null)?mb_substr($_GET['hizmet'],0,160):'') : null;
         if ($socialCatalog !== null) $packages = $socialCatalog['packages'];
 
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
@@ -177,7 +188,7 @@ class CategoryController extends Controller
             }
             $breadcrumbs=[
                  ['@type'=>'ListItem','position'=>1,'name'=>'Ana Sayfa','item'=>url('/')],
-                 ['@type'=>'ListItem','position'=>2,'name'=>'Hizmetler','item'=>url('/kategoriler')]
+                 ['@type'=>'ListItem','position'=>2,'name'=>$isSocialSale?'Sosyal Medya':'Hizmetler','item'=>url($isSocialSale?'/kategoriler/grup/social':'/kategoriler')]
             ];
             if (!empty($category['parent_category_slug'])) $breadcrumbs[]=['@type'=>'ListItem','position'=>3,
                 'name'=>$category['parent_category_name'],'item'=>url(\App\Services\PublicSeoUrls::path('/kategori',$category['parent_category_slug']))];
@@ -206,11 +217,12 @@ class CategoryController extends Controller
             'ogDescription' => $category['og_description'] ?: $category['seo_description'],
             'category' => $category,
             'categoryHero' => $categoryHero,
-            'ogImage' => url($categoryHero['src']),
+            'ogImage' => url($socialPage['image']??$categoryHero['src']),
             'schema' => $schema,
             'nvSeoData' => $categorySeo,
             'packages' => $packages,
             'socialCatalog' => $socialCatalog,
+            'socialPage' => $socialPage,
             'noindex' => $socialFilter,
             'subCategories' => $subCategories,
             'selectedSubCategory' => $selectedSubCategory,

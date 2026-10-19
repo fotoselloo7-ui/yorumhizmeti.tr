@@ -3,6 +3,7 @@
         <h2><?= icon('grid', 24) ?> Kategoriler</h2>
     </div>
     <div class="adm-page-actions">
+        <a href="/admin/sosyal-medya-tasarimi" class="btn btn-outline btn-sm"><?= icon('palette',16) ?> Sosyal Medya Tasarımı</a>
         <form method="POST" action="/admin/kategoriler/seo-optimize" style="margin:0;" onsubmit="return confirm('Mevcut URL ve Hazır Yazılımlar korunarak yalnız seçili sosyal medya/hizmet kategorilerinin eski veya boş SEO alanları doldurulsun mu?')">
             <?= csrfField() ?>
             <button class="btn btn-outline btn-sm" type="submit"><?= icon('search', 16) ?> SEO / GEO Profillerini Uygula</button>

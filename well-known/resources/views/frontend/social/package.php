@@ -1,0 +1,30 @@
+<?php
+use App\Services\SocialStorefrontService as SocialUi;
+$socialParent=['name'=>$package['category_name'],'url'=>'/kategori/'.rawurlencode($package['category_slug'])];
+$socialCrumb=$socialSale['label'];$socialHeroTarget='#social-order';$socialHeroAction='Paketi incele';
+$price=SocialUi::price($package);$closed=$socialSale['quantity']<1||$socialSale['unit']===''||!$socialSale['mapping_matches'];
+?>
+<main class="social-storefront social-brand-<?= e($socialPage['platform']) ?>">
+ <?php require __DIR__.'/hero.php'; ?>
+ <section class="social-catalog-section" id="social-order"><div class="container"><div class="social-order-layout">
+  <div class="social-order-information">
+   <section class="social-detail-card"><div class="social-section-heading"><div><span class="social-eyebrow">PAKETİNİZİ TANIYIN</span><h2><?= e($socialSale['service']) ?></h2><p><?= e($package['short_description']??'') ?></p></div><span class="social-service-icon"><?= icon($socialPage['icon'],28) ?></span></div><ul class="social-detail-features"><?php foreach(\App\Services\PackageHighlightsService::get((int)$package['id'],$package)as $feature): ?><li><?= icon('check-circle',18) ?><span><?= e($feature) ?></span></li><?php endforeach; ?></ul></section>
+   <section class="social-detail-card"><span class="social-eyebrow">SİPARİŞ ÖNCESİ</span><h2>Net kapsam. Bilinçli seçim.</h2><dl class="social-detail-specs"><div><dt>Hizmet türü</dt><dd><?= e($socialSale['service']) ?></dd></div><div><dt>Teslim edilecek miktar</dt><dd><?= e($socialSale['label']) ?></dd></div><div><dt>Tahmini teslimat</dt><dd><?= e($package['delivery_time']?:'Destek ekibine danışın') ?></dd></div><div><dt>Hesap şifresi</dt><dd>Talep edilmez</dd></div></dl><?php if(trim(strip_tags((string)($package['description']??'')))!==''): ?><div class="social-package-description"><h3>Paket açıklaması</h3><p><?= nl2br(e(html_entity_decode(strip_tags(preg_replace('~</(?:p|div|li|h[1-6])>~i',"\n",$package['description'])),ENT_QUOTES,'UTF-8'))) ?></p></div><?php endif; ?><p class="social-small-note">Tahmini süre ve hizmet koşulları bu pakete aittir. Telafi veya iade koşullarını satın almadan önce inceleyin.</p><div class="social-legal-links"><a href="/sayfa/mesafeli-satis-sozlesmesi">Satış sözleşmesi</a><a href="/sayfa/iade-teslimat-politikasi">İade koşulları</a><a href="/iletisim">Destek</a></div></section>
+  </div>
+  <aside class="social-buy-card" aria-labelledby="social-buy-title">
+   <span class="social-eyebrow"><?= icon('shopping-bag',16) ?> SEÇTİĞİNİZ PAKET</span><h2 id="social-buy-title"><?= e($socialSale['service']) ?></h2><div class="social-selected-amount"><strong><?= number_format($socialSale['quantity'],0,',','.') ?></strong><span><?= e($socialSale['unit']) ?></span><?= icon($socialPage['icon'],31) ?></div>
+   <div class="social-buy-price"><?php if($price<(float)$package['price']): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><small>Belirtilen miktarın tamamı için toplam tutar</small></div>
+   <?php if($closed): ?><p class="social-order-warning" role="status">Bu paketin teslim miktarı kontrol ediliyor. Yapılandırma tamamlanana kadar sipariş alınamıyor.</p><?php endif; ?>
+   <form id="packageForm" method="post" action="/sepet/ekle" class="social-order-form"><?= csrfField() ?><input type="hidden" name="package_id" value="<?= (int)$package['id'] ?>"><input type="hidden" name="quantity" value="1">
+    <?php foreach($fields as $n=>$field): $fieldId='social-field-'.$n;$fieldName='field_'.(int)$package['id'].'_'.$field['field_key']; ?><div class="social-field"><label for="<?= $fieldId ?>"><?= e($field['field_label']) ?><?= $field['is_required']?' *':'' ?></label>
+     <?php if($field['field_type']==='textarea'): ?><textarea id="<?= $fieldId ?>" name="<?= e($fieldName) ?>" rows="3" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>></textarea>
+     <?php elseif($field['field_type']==='select'): ?><select id="<?= $fieldId ?>" name="<?= e($fieldName) ?>" <?= $field['is_required']?'required':'' ?>><option value="">Seçiniz</option><?php foreach(array_filter(array_map('trim',explode(',',$field['options']??'')))as $option): ?><option value="<?= e($option) ?>"><?= e($option) ?></option><?php endforeach; ?></select>
+     <?php else: ?><input id="<?= $fieldId ?>" type="<?= $field['field_type']==='url'?'url':'text' ?>" name="<?= e($fieldName) ?>" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>><?php endif; ?>
+    </div><?php endforeach; ?>
+    <p class="social-order-privacy"><?= icon('lock',14) ?> Sosyal medya şifrenizi paylaşmayın.</p><button class="social-button" type="submit" <?= $closed?'disabled':'' ?>><?= icon('shopping-cart',18) ?> Sepete ekle</button><button class="social-button social-button-dark" type="submit" name="checkout" value="1" <?= $closed?'disabled':'' ?>>Hemen satın al <?= icon('arrow-right',17) ?></button>
+   </form><div class="social-buy-footer"><?= icon('shield-check',18) ?><span>Seçilen paket, miktarı değişmeden siparişinize eklenir. İşlem durumunu hesabınızdan takip edebilirsiniz.</span></div>
+  </aside>
+ </div></div></section>
+ <?php if(count($socialAlternatives)>1): ?><section class="social-alternatives"><div class="container"><div class="social-section-heading"><div><span class="social-eyebrow">AYNI HİZMET, FARKLI MİKTARLAR</span><h2>Diğer paketleri karşılaştırın.</h2><p>Başka miktar seçmek isterseniz ilgili paketin sayfasını açabilirsiniz.</p></div></div><div class="social-alternative-grid"><?php foreach($socialAlternatives as $alternative): $alternativeInfo=\App\Services\SocialPackageService::info($alternative); ?><a href="/paket/<?= rawurlencode($alternative['slug']) ?>" <?= (int)$alternative['id']===(int)$package['id']?'aria-current="page"':'' ?>><span><?= e($alternativeInfo['label']) ?></span><strong><?= money(SocialUi::price($alternative)) ?></strong><?= icon('arrow-up-right',16) ?></a><?php endforeach; ?></div></div></section><?php endif; ?>
+ <?php require __DIR__.'/editorial.php'; ?>
+</main>

@@ -18,11 +18,6 @@
     const allButtons = [...switcher.querySelectorAll('[data-featured-all], [data-featured-parent-all]')];
     let selectedGroupAll = '';
     let userSelected = false;
-    const selectionStorageKey = 'netvera:home:featured-selection';
-    const rememberSelection = selection => {
-      if (!mobile.matches || !userSelected) return;
-      try { window.sessionStorage?.setItem(selectionStorageKey, JSON.stringify(selection)); } catch (_) { /* Storage may be unavailable. */ }
-    };
     const platformClasses = [
       'instagram','tiktok','youtube','facebook','twitter','threads','telegram',
       'spotify','discord','linkedin','twitch','google','web','seo','ecommerce',
@@ -105,9 +100,8 @@
       track.addEventListener('wheel', pauseTemporarily, {passive:true});
     });
 
-    // Hover changes only the visible filters; selecting a chip changes the featured cards.
-    // Previewing a group also selects its first REAL featured category, so the
-    // filter heading can never say Social Media while showing Google packages.
+    // Deliberate click/keyboard selection only: a restored pointer or focus
+    // after reload must not silently change the default group.
     const showGroup = (key, activateFirst = true) => {
       const panel = filterPanels.find(item => item.dataset.featuredFilterPanel === key);
       if (!panel) return;
@@ -127,10 +121,6 @@
     };
     groupButtons.forEach(button => {
       const key = button.dataset.featuredGroup;
-      button.addEventListener('pointerenter', event => {
-        if (!mobile.matches && (event.pointerType === 'mouse' || event.pointerType === 'pen')) showGroup(key);
-      });
-      button.addEventListener('focus', () => { if (!mobile.matches) showGroup(key); });
       button.addEventListener('click', () => { userSelected = true; showGroup(key); pauseTemporarily(); });
       button.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
@@ -148,7 +138,6 @@
       const name = tab.dataset.title || 'Hizmetler';
       const platformClass = tab.dataset.class || 'default';
       const isSoftware = tab.dataset.kind === 'software';
-      rememberSelection({category:id});
       showGroup(tab.dataset.featuredParentGroup, false);
 
       tabs.forEach(item => {
@@ -193,7 +182,6 @@
       showGroup(key, false);
       selectedGroupAll = key;
       switcher.classList.add('is-group-results');
-      rememberSelection({group:key});
       const roots = tabs.filter(tab => tab.dataset.featuredParentGroup === key && !tab.dataset.featuredParentId);
       const ids = new Set(roots.map(tab => tab.dataset.featuredTab));
       tabs.forEach(tab => {
@@ -402,8 +390,8 @@
     reducedMotion.addEventListener?.('change', startRotation);
     switcher.addEventListener('focusin', pauseTemporarily);
     revealChildren(tabs.find(tab=>tab.classList.contains('active')));
-    // The homepage's first database row is a fallback, not an explicit selection.
-    // Resolve existing query/hash/category state before considering the mobile default.
+    // URL deep links remain usable. Stored choices and database ordering never
+    // override the social default on a plain visit or reload.
     const requested = new URLSearchParams(window.location.search);
     const selectionKeys = ['subcategory', 'subcategory_id', 'category', 'category_id', 'group'];
     const requestedValue = selectionKeys.map(key => requested.get(key)).find(Boolean);
@@ -412,27 +400,19 @@
     const token = requestedValue || (hash && hash !== 'featured' ? hash : '');
     const requestedTab = token && tabs.find(tab => tab.dataset.featuredTab === token ||
       tab.dataset.url?.split('/').pop() === token || tab.dataset.url === token);
-    const initial = tabs.find(tab => tab.classList.contains('active'));
-    const explicit = !!token || !!switcher.dataset.featuredSelection ||
-      (initial && initial.dataset.featuredTab !== switcher.dataset.featuredDefaultCategory);
-    let remembered;
-    try { remembered = JSON.parse(window.sessionStorage?.getItem(selectionStorageKey) || 'null'); } catch (_) { /* Ignore invalid or unavailable storage. */ }
-    const rememberedTab = remembered && tabs.find(tab => tab.dataset.featuredTab === remembered.category);
-    const rememberedGroup = remembered && groupButtons.find(button => button.dataset.featuredGroup === remembered.group);
+    const explicit = !!token;
     const requestedGroup = token && groupButtons.find(button => button.dataset.featuredGroup === token);
     if (requestedTab) switchTo(requestedTab);
-    else if (requestedGroup && mobile.matches) showAll(requestedGroup.dataset.featuredGroup);
-    else if (mobile.matches && !explicit && window.location.pathname === '/') {
-      if (rememberedTab) switchTo(rememberedTab);
-      else showAll(rememberedGroup?.dataset.featuredGroup || 'social');
-    }
+    else if (requestedGroup) showGroup(requestedGroup.dataset.featuredGroup);
+    else showGroup(groupButtons.some(button => button.dataset.featuredGroup === 'social')
+      ? 'social' : groupButtons[0]?.dataset.featuredGroup);
     mobile.addEventListener('change', () => {
       if (!mobile.matches && selectedGroupAll) {
         const first = tabs.find(tab => tab.dataset.featuredParentGroup === selectedGroupAll);
         if (first) switchTo(first);
       } else if (mobile.matches && !userSelected && !explicit && window.location.pathname === '/') {
-        if (rememberedTab) switchTo(rememberedTab);
-        else showAll(rememberedGroup?.dataset.featuredGroup || 'social');
+        showGroup(groupButtons.some(button => button.dataset.featuredGroup === 'social')
+          ? 'social' : groupButtons[0]?.dataset.featuredGroup);
       }
       else if (!selectedGroupAll) revealChildren(tabs.find(tab => tab.classList.contains('active')));
     });

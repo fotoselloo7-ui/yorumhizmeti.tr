@@ -63,6 +63,7 @@
                     <div class="form-group"><label for="hero-alt">Banner Görsel Alt Metni</label><input id="hero-alt" class="form-control" name="hero_alt" maxlength="200" value="<?= e($heroOptions['alt'] ?? '') ?>" placeholder="<?= e($heroDefaults['alt']) ?>"></div>
                 </div>
             </div>
+            <?php if(!$isEdit || \App\Services\SocialPackageService::isSocialCategory((int)$category['id'])): require BASE_PATH.'/resources/views/admin/partials/social-landing.php'; endif; ?>
             <!-- Image & Status -->
             <div class="adm-card">
                 <div class="adm-card-header"><h3><?= icon('image', 18) ?> Görsel & Durum</h3></div>

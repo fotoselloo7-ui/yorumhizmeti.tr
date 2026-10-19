@@ -7,6 +7,19 @@ use App\Services\SeoScoreService;
 
 class CategoryController extends Controller
 {
+    public function socialDirectory():void
+    {
+        if(!\App\Core\AdminAuth::admin()){http_response_code(403);return;}
+        $this->renderAdmin('admin/categories/social-directory',['pageTitle'=>'Sosyal Medya Ana Sayfası','category'=>['id'=>1,'name'=>'Sosyal Medya Hizmetleri','slug'=>'sosyal-medya-hizmetleri']]);
+    }
+    public function saveSocialDirectory():void
+    {
+        if(!\App\Core\AdminAuth::admin()){http_response_code(403);return;}
+        Csrf::check();
+        try{$data=\App\Services\SocialStorefrontService::prepare($_POST,$_FILES);\App\Services\SocialStorefrontService::save('directory',1,$data);flash('success','Sosyal medya ana dizin içeriği güncellendi.');}
+        catch(\InvalidArgumentException $e){flash('error',$e->getMessage());}
+        redirect('/admin/sosyal-medya-tasarimi');
+    }
     public function index(): void
     {
         $categories = $this->db->fetchAll("SELECT c.*, (SELECT COUNT(*) FROM packages WHERE category_id = c.id) as package_count FROM categories c ORDER BY c.sort_order ASC");
@@ -42,6 +55,7 @@ class CategoryController extends Controller
     {
         Csrf::check();
         $data = $this->getCategoryData();
+        $socialContent=$this->socialLanding($data);
 
         if (!empty($_FILES['image']['name'])) {
             $data['image'] = Upload::image($_FILES['image'], 'categories');
@@ -54,6 +68,7 @@ class CategoryController extends Controller
         $data['seo_score'] = $score['score'];
 
         $newId = $this->db->insert('categories', $data);
+        \App\Services\SocialStorefrontService::save('category',(int)$newId,$socialContent);
         \App\Services\CategoryHeroService::save((int)$newId,$_POST);
         \App\Services\NetveraSeoBridge::save('category', $newId, $_POST);
         logActivity('category_create', 'Kategori oluşturuldu: ' . $data['name']);
@@ -86,6 +101,7 @@ class CategoryController extends Controller
     {
         Csrf::check();
         $data = $this->getCategoryData((int)$id);
+        $socialContent=$this->socialLanding($data,(int)$id);
 
         if (!empty($_FILES['image']['name'])) {
             $data['image'] = Upload::image($_FILES['image'], 'categories');
@@ -98,6 +114,7 @@ class CategoryController extends Controller
         $data['seo_score'] = $score['score'];
 
         $this->db->update('categories', $data, 'id = ?', [(int) $id]);
+        \App\Services\SocialStorefrontService::save('category',(int)$id,$socialContent);
         \App\Services\CategoryHeroService::save((int)$id,$_POST);
         \App\Services\NetveraSeoBridge::save('category',(int)$id,$_POST);
         logActivity('category_update', 'Kategori güncellendi: ' . $data['name']);
@@ -295,6 +312,13 @@ class CategoryController extends Controller
         $this->json(['ok'=>true,'suggestion'=>$profile]);
     }
 
+    private function socialLanding(array $data,int $id=0):?array
+    {
+        $social=!empty($data['parent_id'])?\App\Services\SocialPackageService::isSocialCategory((int)$data['parent_id']):\App\Services\CatalogMenuService::bucket($data)==='social';
+        if(!$social)return null;
+        try{return \App\Services\SocialStorefrontService::prepare($_POST,$_FILES);}
+        catch(\InvalidArgumentException $e){flash('error',$e->getMessage());redirect($id?'/admin/kategori/'.$id.'/duzenle':'/admin/kategori/ekle');return null;}
+    }
     private function getCategoryData(int $id=0): array
     {
         try { \App\Services\CategoryHeroService::validate($_POST); }

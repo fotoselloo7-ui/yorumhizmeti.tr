@@ -87,7 +87,7 @@
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
+    <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=20261019-compact-cta">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261015-wrap">
     <?php if($template==='frontend/home'): ?>
@@ -158,6 +158,10 @@
     <?php if(str_starts_with($template,'frontend/account/')||str_starts_with($template,'frontend/support/')): ?>
     <link rel="stylesheet" href="<?= asset('css/member-panel.css') ?>?v=20261018">
     <script src="<?= asset('js/member-panel.js') ?>?v=20261018" defer></script>
+    <?php endif; ?>
+    <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
+    <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261019">
+    <script src="<?= asset('js/social-storefront.js') ?>?v=20261019" defer></script>
     <?php endif; ?>
     <?php $nvGraph=\App\Services\SeoStructuredDataService::graph($schema??null,[
       'canonicalUrl'=>$canonicalUrl??'','pageTitle'=>$pageTitle??'','metaDescription'=>$metaDescription??'',
@@ -713,7 +717,7 @@
     <script src="<?= asset('js/app.js') ?>?v=20261018-member-workspace"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
-    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261016-mobile-filters"></script>
+    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261019-social-default"></script>
     <?php endif; ?>
     <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-hero-slider-v94.js') ?>?v=94.1" defer></script>

@@ -1,4 +1,5 @@
 <?php
+if(!empty($socialPage)){require __DIR__.'/social/package.php';return;}
 if (!function_exists('yvPkgDesign')) {
     function yvPkgDesign(string $name='', string $category=''): array {
         $s=mb_strtolower($name.' '.$category);

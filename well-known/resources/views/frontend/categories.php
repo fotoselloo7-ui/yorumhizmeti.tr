@@ -1,4 +1,5 @@
 <?php
+if(isset($socialDirectory)){require __DIR__.'/social/directory.php';return;}
 $allCatalogGroups = \App\Services\CatalogMenuService::groups();
 $catalogGroups = $catalogGroups ?? $allCatalogGroups;
 $activeCatalogGroup = $activeCatalogGroup ?? '';

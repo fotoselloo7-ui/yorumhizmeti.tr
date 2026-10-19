@@ -51,23 +51,31 @@ s.tabs[3].click();assert.deepEqual(s.visible(),['4']);assert.equal(s.switcher.cl
 s=boot({search:'?subcategory=google-harita'});assert.deepEqual(s.visible(),['11']);assert.equal(s.children[0].hidden,false);
 s.all[3].click();assert.deepEqual(s.visible(),['1']);assert.equal(s.all[3].attributes['aria-selected'],'true');
 s.mobileMedia.matches=false;s.mobileMedia.change();assert.deepEqual(s.visible(),['1']);
-s=boot({initial:'4'});assert.deepEqual(s.visible(),['4']);
+s=boot({initial:'4'});assert.deepEqual(s.visible(),['2','3']);
 s=boot({search:'?category_id=4'});assert.deepEqual(s.visible(),['4']);
 s=boot({hash:'#google-harita'});assert.deepEqual(s.visible(),['11']);
 s=boot({search:'?group=agency'});assert.deepEqual(s.visible(),['4']);
-s=boot({search:'?category=unknown'});assert.deepEqual(s.visible(),['1']);
-s=boot({mobile:false});assert.deepEqual(s.visible(),['1']);
+s=boot({search:'?category=unknown'});assert.deepEqual(s.visible(),['2','3']);
+s=boot({mobile:false});assert.deepEqual(s.visible(),['2']);
 s.groups[0].emit('pointerenter',{pointerType:'mouse'});assert.deepEqual(s.visible(),['2']);
+s.groups[2].emit('pointerenter',{pointerType:'mouse'});assert.deepEqual(s.visible(),['2']);
+s.groups[2].emit('focus');assert.deepEqual(s.visible(),['2']);
+s.groups[2].click();assert.deepEqual(s.visible(),['1']);
+s=boot({mobile:false,search:'?group=agency'});assert.deepEqual(s.visible(),['4']);
 s=boot();s.mobileMedia.matches=false;s.mobileMedia.change();assert.deepEqual(s.visible(),['2']);
-s=boot();s.tabs[3].click();assert.deepEqual(boot({saved:s.storage.value}).visible(),['4']);
-assert.deepEqual(boot({saved:s.storage.value,search:'?subcategory=google-harita'}).visible(),['11']);
-assert.deepEqual(boot({saved:s.storage.value,mobile:false}).visible(),['1']);
+s=boot();s.tabs[3].click();assert.deepEqual(s.visible(),['4']);
+for(const saved of ['{"group":"marketing"}','{"category":"1"}','{"category":"4"}']) {
+  assert.deepEqual(boot({saved}).visible(),['2','3']);
+  assert.deepEqual(boot({saved,mobile:false}).visible(),['2']);
+  assert.deepEqual(boot({saved,search:'?subcategory=google-harita'}).visible(),['11']);
+}
 assert.deepEqual(boot({saved:'invalid'}).visible(),['2','3']);
-assert.deepEqual(boot({hash:'#%broken'}).visible(),['1']);
+assert.deepEqual(boot({hash:'#%broken'}).visible(),['2','3']);
+assert.ok(!source.includes('sessionStorage'));
 const css=fs.readFileSync(path.join(root,'public/assets/css/featured-category-slider-v43.css'),'utf8');
 assert.ok(css.includes('@media(max-width:768px)'));
 assert.ok(css.includes('scrollbar-width:none'));
 assert.ok(css.includes('.yh26-filter-icon{width:20px;height:20px'));
 assert.ok(css.includes('.yh26-filter-icon .icon{font-size:16px!important}'));
 assert.ok(!source.includes('cloneNode(true)') || source.includes('avatar.replaceChildren')); // only the existing header icon may be cloned
-console.log('PASS: mobile defaults, explicit query/hash/server state, group/category/child/Tümü, hover isolation and desktop resize; synthetic data only.');
+console.log('PASS: deterministic social default on desktop/mobile/reload, stale storage ignored, explicit deep links, click/keyboard selection, hover/focus isolation and resize; synthetic data only.');

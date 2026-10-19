@@ -1,4 +1,5 @@
 <?php
+if(!empty($socialPage)){require __DIR__.'/social/category.php';return;}
 if (!function_exists('yvCatDesign')) {
     function yvCatDesign(array $cat): array {
         $s=mb_strtolower(($cat['slug']??'').' '.($cat['name']??''));

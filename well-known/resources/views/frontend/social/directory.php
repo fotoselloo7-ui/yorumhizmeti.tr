@@ -1,0 +1,11 @@
+<?php
+$socialPage=$socialPage??\App\Services\SocialStorefrontService::defaults(['name'=>'Sosyal Medya Hizmetleri','slug'=>'sosyal-medya-hizmetleri']);
+$socialHeroTarget='#categories';$socialHeroAction='Platformları keşfet';
+?>
+<main class="social-storefront social-brand-social"><?php require __DIR__.'/hero.php'; ?>
+ <section class="social-catalog-section" id="categories"><div class="container"><div class="social-directory-panel"><div class="social-section-heading"><div><span class="social-eyebrow">SİZİN PLATFORMUNUZ. SİZİN HEDEFİNİZ.</span><h2>Nereden başlamak istersiniz?</h2><p>Yalnızca mevcut ve yayındaki sosyal medya kategorileri listelenir.</p></div><span class="social-count"><?= count($socialDirectory) ?> platform</span></div>
+ <form class="social-search social-directory-search" method="get" role="search"><label class="social-search-input"><?= icon('search',18) ?><span class="social-visually-hidden">Platform veya hizmet ara</span><input type="search" name="q" value="<?= e($searchQuery) ?>" maxlength="100" placeholder="Platform veya hizmet ara…"></label><button type="submit" class="social-button">Ara</button></form>
+ <div class="social-platform-grid"><?php foreach($socialDirectory as $cat): $platform=\App\Services\SocialPlatformIdentity::fromCategory($cat);$brand=\App\Services\SocialPlatformIdentity::brand($platform); ?><article class="social-directory-card social-brand-<?= e($platform??'social') ?>"><a href="<?= e($cat['url']) ?>" class="social-directory-main"><span class="social-platform-symbol"><?= icon($cat['icon'],31) ?></span><h3><?= e($cat['name']) ?></h3><p><?= count($cat['children']) ?> hizmet kategorisi</p><span class="social-directory-link">Hizmetleri keşfet <?= icon('arrow-up-right',17) ?></span></a><?php if($cat['children']): ?><nav aria-label="<?= e($cat['name']) ?> öne çıkan alt hizmetler"><?php foreach(array_slice($cat['children'],0,3)as $child): ?><a href="<?= e($child['url']) ?>"><?= e($child['name']) ?> <?= icon('arrow-right',13) ?></a><?php endforeach; ?></nav><?php endif; ?></article><?php endforeach; ?></div>
+ <?php if(!$socialDirectory): ?><div class="social-empty"><h3>Aramanıza uygun platform bulunamadı.</h3><a href="/kategoriler/grup/social">Tüm sosyal medya hizmetleri</a></div><?php endif; ?></div></div></section>
+ <?php require __DIR__.'/editorial.php'; ?>
+</main>

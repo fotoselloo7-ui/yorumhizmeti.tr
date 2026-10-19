@@ -33,6 +33,14 @@ class PackageController extends Controller
 
         $fields = \App\Services\SmmOrderFields::fields($package);
         $socialSale = \App\Services\SocialPackageService::info($package);
+        $socialPage=$socialSale!==null?\App\Services\SocialStorefrontService::page($package+['_sale'=>$socialSale],'package'):null;
+        $socialAlternatives=[];
+        if($socialSale!==null){
+            foreach($db->fetchAll('SELECT * FROM packages WHERE category_id=? AND status=? ORDER BY sort_order,id',[$package['category_id'],'active'])as $candidate){
+                $candidateInfo=\App\Services\SocialPackageService::info($candidate);
+                if($candidateInfo['key']===$socialSale['key'])$socialAlternatives[]=$candidate;
+            }
+        }
         $variantPackages = $socialSale !== null ? [] : $db->fetchAll("SELECT id, name, slug, price, discount_price, seo_title, og_title FROM packages WHERE category_id = ? AND status = 'active' ORDER BY sort_order ASC LIMIT 3", [$package['category_id']]);
         $relatedPackages = $db->fetchAll("
             SELECT p.*, c.name AS category_name, c.slug AS category_slug
@@ -74,11 +82,13 @@ class PackageController extends Controller
             'ogType'=>'product',
             'ogTitle'=>$package['og_title']?:($package['seo_title']?:package_display_name($package)),
             'ogDescription'=>$package['og_description']?:($package['seo_description']?:excerpt(strip_tags($package['short_description']??''),160)),
-            'ogImage'=>!empty($package['og_image'])?upload_url($package['og_image']):(!empty($package['image'])?upload_url($package['image']):null),
+            'ogImage'=>!empty($package['og_image'])?upload_url($package['og_image']):($socialPage?url($socialPage['image']):(!empty($package['image'])?upload_url($package['image']):null)),
             'schema' => $schema,
             'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$package['id']),
             'package' => $package,
             'socialSale' => $socialSale,
+            'socialPage' => $socialPage,
+            'socialAlternatives' => $socialAlternatives,
             'fields' => $fields,
             'variantPackages' => $variantPackages,
             'relatedPackages' => $relatedPackages,

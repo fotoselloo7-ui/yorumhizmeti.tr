@@ -1367,19 +1367,16 @@ if (!empty($projectReferences)) {
 </section>
 <?php endif; ?>
 
-<section class="yh6-final" aria-labelledby="home-final-title">
+<section class="home-service-cta" aria-labelledby="home-final-title">
     <div class="container">
-        <div class="yh6-final-copy">
-            <span class="yh6-eyebrow">Daha Güçlü Bir Marka İçin</span>
-            <h2 id="home-final-title">NetVera Teknoloji Yazılım ile Dijital Varlığınızı Güçlendirin</h2>
-            <p>NetVera Teknoloji Yazılım ile web ve sektörel yazılım çözümlerini, dijital ajans hizmetlerini, SEO çalışmalarını ve sosyal medya paketlerini tek adreste inceleyin.</p>
+        <div class="home-service-cta-copy">
+            <span class="home-service-cta-label">Bir sonraki adımınız</span>
+            <h2 id="home-final-title">İşinize uygun çözümü bulun.</h2>
+            <p>Yazılım, ajans ve sosyal medya hizmetlerini karşılaştırın; ihtiyacınıza uygun olanı seçin.</p>
         </div>
-        <div class="yh6-final-actions">
-            <a href="/kategoriler" class="yh6-btn primary">Hizmetleri Keşfet <?= icon('arrow-right', 16) ?></a>
-            <div class="yh6-final-guarantees">
-                <span><?= icon('shield', 14) ?> Güvenli Ödeme</span>
-                <span><?= icon('headphones', 14) ?> 7/24 Destek</span>
-            </div>
+        <div class="home-service-cta-actions">
+            <a href="/kategoriler">Hizmetleri Keşfet <?= icon('arrow-right', 16) ?></a>
+            <span>Paketler, kapsamlar ve fiyatlar</span>
         </div>
     </div>
 </section>

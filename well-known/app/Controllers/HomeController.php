@@ -169,6 +169,18 @@ class HomeController extends Controller
         $featuredNavGroups=array_values(array_filter(
             $featuredNavGroups,static fn(array $g):bool=>!empty($g['categories'])
         ));
+        // A plain visit starts with social, independent of database sort_order.
+        foreach ($featuredNavGroups as $navGroup) {
+            if ($navGroup['key'] !== 'social') continue;
+            foreach ($navGroup['categories'] as $socialRoot) {
+                foreach ($featuredPackageGroups as $index => $packageGroup) {
+                    if ((int)$packageGroup['category']['id'] === (int)$socialRoot['id']) {
+                        array_unshift($featuredPackageGroups, ...array_splice($featuredPackageGroups, $index, 1));
+                        break 3;
+                    }
+                }
+            }
+        }
         $initialFeaturedNavGroup = $featuredNavGroups[0]['key'] ?? 'marketing';
         foreach ($featuredNavGroups as $navGroup) {
             foreach ($navGroup['categories'] as $category) {

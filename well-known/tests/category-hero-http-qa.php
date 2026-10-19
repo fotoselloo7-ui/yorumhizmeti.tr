@@ -23,9 +23,9 @@ $check=static function(string $path,string $name,?array $seo=null)use($ch,$asser
  $title=$text('//title');$assert($title!==''&&!isset($titles[$title]),'Unique rendered title: '.$path);$titles[$title]=true;
  $assert($text('//link[@rel="canonical"]/@href')==='http://127.0.0.1:8017'.$path,'Canonical preserved: '.$path);
  $assert($text('//meta[@name="description"]/@content')!=='','Description exists: '.$path);
- $img=$x->query('//div[contains(concat(" ",normalize-space(@class)," ")," nv-category-hero-media ")]/img')->item(0);
+ $img=$x->query('//div[contains(concat(" ",normalize-space(@class)," ")," nv-category-hero-media ")]/img | //div[contains(concat(" ",normalize-space(@class)," ")," social-hero-art ")]/picture/img')->item(0);
  $assert($img instanceof DOMElement&&$img->getAttribute('alt')!==''&&$img->getAttribute('width')==='1536','Honest local banner / intrinsic image: '.$path);
- $src=$img->getAttribute('src');$assert(str_starts_with($src,'/assets/img/category-heroes/')&&is_file(PUBLIC_PATH.$src),'Final category image resolves: '.$path);
+ $src=$img->getAttribute('src');$assert((str_starts_with($src,'/assets/img/category-heroes/')||str_starts_with($src,'/assets/img/social-storefront/'))&&is_file(PUBLIC_PATH.$src),'Final category image resolves: '.$path);
  $assert($text('//meta[@property="og:image"]/@content')==='http://127.0.0.1:8017'.$src,'OG follows banner: '.$path);
  $assert(!str_contains($html,'hero-woman-cutout'),'Old shared portrait absent: '.$path);
  if($seo){foreach(['meta_title'=>'//title','meta_description'=>'//meta[@name="description"]/@content']as $key=>$query)if(!empty($seo[$key]))$assert($text($query)===$seo[$key],'Authored catalogue SEO preserved: '.$path);}

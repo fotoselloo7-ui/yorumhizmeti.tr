@@ -181,10 +181,12 @@ class PackageController extends Controller
     {
         Csrf::check();
         $data = $this->getPackageData();
+        $socialContent=$this->socialLanding($data);
         if (!empty($_FILES['image']['name'])) { $data['image'] = Upload::image($_FILES['image'], 'packages'); }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $pkgId = $this->db->insert('packages', $data);
+        \App\Services\SocialStorefrontService::save('package',(int)$pkgId,$socialContent);
         \App\Services\SocialPackageService::save((int)$pkgId,$_POST);
         \App\Services\PackageHighlightsService::save((int)$pkgId,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$pkgId,$_POST);
@@ -211,10 +213,12 @@ class PackageController extends Controller
     {
         Csrf::check();
         $data = $this->getPackageData((int)$id);
+        $socialContent=$this->socialLanding($data,(int)$id);
         if (!empty($_FILES['image']['name'])) { $data['image'] = Upload::image($_FILES['image'], 'packages'); }
         $data['seo_score'] = (new SeoScoreService())->calculate($data)['score'];
 
         $this->db->update('packages', $data, 'id = ?', [(int) $id]);
+        \App\Services\SocialStorefrontService::save('package',(int)$id,$socialContent);
         \App\Services\SocialPackageService::save((int)$id,$_POST);
         \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
@@ -223,6 +227,12 @@ class PackageController extends Controller
         redirect('/admin/paketler');
     }
 
+    private function socialLanding(array $data,int $id=0):?array
+    {
+        if(!\App\Services\SocialPackageService::isSocialCategory((int)$data['category_id']))return null;
+        try{return \App\Services\SocialStorefrontService::prepare($_POST,$_FILES);}
+        catch(\InvalidArgumentException $e){flash('error',$e->getMessage());redirect($id?'/admin/paket/'.$id.'/duzenle':'/admin/paket/ekle');return null;}
+    }
     public function delete(string $id): void
     {
         Csrf::check();

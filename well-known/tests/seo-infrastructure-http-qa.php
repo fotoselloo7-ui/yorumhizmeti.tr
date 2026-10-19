@@ -42,7 +42,7 @@ foreach($paths as $path){
  foreach($graph['@graph']as $entity){
   if(($entity['@type']??'')==='Product'&&str_starts_with($path,'/paket/')){
    $offer=$entity['offers']??[];$price=number_format((float)($offer['price']??0),2,',','.');
-   $visible=$x->evaluate('string(//div[contains(@class,"yv-product-price-v5")]/strong)');
+   $visible=$x->evaluate('string(//div[contains(@class,"yv-product-price-v5") or contains(@class,"social-buy-price")]/strong)');
    $ok(str_contains($visible,$price),'Product schema price matches the actual displayed price: '.$path);
    $closed=$x->query('//form[@id="packageForm"]//button[@type="submit"][@disabled]')->length>0;
    $ok(($offer['availability']??'')===($closed?'https://schema.org/OutOfStock':'https://schema.org/InStock'),'Product availability matches the public purchase gate: '.$path);
