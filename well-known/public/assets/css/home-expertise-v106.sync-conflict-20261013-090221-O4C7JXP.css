@@ -1,0 +1,533 @@
+/* NetVera V107
+   Collision-proof layout for "Tek platform, üç güçlü uzmanlık alanı".
+   This is intentionally the final homepage override. Legacy v29/v45/v101
+   styles still provide artwork primitives and palette, but cannot reposition
+   text, artwork or chip rows after these rules. */
+
+.nv29-services{
+  position:relative;
+  overflow:clip;
+  padding:38px 0 42px;
+  background:
+    radial-gradient(ellipse at 50% -12%,rgba(112,79,238,.065),transparent 60%),
+    #fff;
+}
+
+.nv29-services .nv29-section-intro{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  margin:0 0 22px!important;
+}
+
+.nv29-services .nv29-section-intro h2{
+  margin:8px 0 0!important;
+  max-width:760px;
+  font-size:clamp(25px,2.35vw,34px)!important;
+  line-height:1.18!important;
+  letter-spacing:-.045em!important;
+}
+
+.nv29-services .nv29-view-all{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:10px 14px;
+  border-radius:11px;
+  box-shadow:0 8px 24px rgba(40,52,100,.055);
+}
+
+.nv29-services .nv29-services-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:18px!important;
+  min-width:0!important;
+}
+
+/* Every card gets the same hard geometry. Copy, illustration and chips have
+   their own grid areas, so none of them can paint over another area. */
+.nv29-services .nv29-service-card,
+.nv29-services .nv29-service-card:nth-child(3){
+  position:relative!important;
+  isolation:isolate!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,57%) minmax(0,43%)!important;
+  grid-template-rows:320px 62px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:382px!important;
+  height:382px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+  border-radius:22px!important;
+  box-shadow:0 15px 34px rgba(29,39,86,.11)!important;
+  transform:none!important;
+  filter:none!important;
+  -webkit-filter:none!important;
+  contain:layout paint;
+}
+
+.nv29-services .nv29-service-card:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:0 21px 43px rgba(29,39,86,.16)!important;
+}
+
+/* COPY LANE */
+.nv29-services .nv106-card-content,
+.nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
+  grid-column:1!important;
+  grid-row:1!important;
+  position:relative!important;
+  z-index:6!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:0!important;
+  height:320px!important;
+  margin:0!important;
+  padding:22px 8px 76px 22px!important;
+  overflow:hidden!important;
+}
+
+.nv29-services .nv106-copy-stack{
+  display:flex!important;
+  flex:0 1 auto!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  gap:0!important;
+  overflow:hidden!important;
+}
+
+.nv29-services .nv106-copy-stack .nv29-eyebrow{
+  display:inline-flex!important;
+  flex:0 0 30px!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:6px!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:30px!important;
+  min-height:30px!important;
+  margin:0!important;
+  padding:7px 10px!important;
+  border-radius:999px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:8px!important;
+  line-height:1!important;
+  transform:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+.nv29-services .nv106-card-title{
+  display:-webkit-box!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  min-height:0!important;
+  max-height:112px!important;
+  margin:14px 0 0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  font-family:Poppins,sans-serif!important;
+  font-size:clamp(22px,1.62vw,25px)!important;
+  font-weight:800!important;
+  line-height:1.1!important;
+  letter-spacing:-.038em!important;
+  text-wrap:balance!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;
+}
+
+.nv29-services .nv106-card-description{
+  display:-webkit-box!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  min-height:0!important;
+  max-height:52px!important;
+  margin:10px 0 0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  color:rgba(255,255,255,.92)!important;
+  font-family:Poppins,sans-serif!important;
+  font-size:10.25px!important;
+  font-weight:500!important;
+  line-height:1.55!important;
+  overflow-wrap:break-word!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:3!important;
+}
+
+.nv29-services .nv106-card-cta{
+  display:inline-flex!important;
+  position:absolute!important;
+  left:22px!important;
+  bottom:19px!important;
+  flex:0 0 42px!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  align-self:auto!important;
+  gap:11px!important;
+  width:auto!important;
+  max-width:calc(100% - 30px)!important;
+  min-width:0!important;
+  height:42px!important;
+  min-height:42px!important;
+  margin:0!important;
+  padding:10px 14px!important;
+  border-radius:10px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+  font-size:10px!important;
+  transform:none!important;
+}
+
+/* ILLUSTRATION LANE */
+.nv29-services .nv29-visual,
+.nv29-services .nv29-service-card:nth-child(3) .nv29-visual{
+  grid-column:2!important;
+  grid-row:1!important;
+  position:relative!important;
+  z-index:2!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:320px!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+  transform:none!important;
+  filter:none!important;
+  -webkit-filter:none!important;
+}
+
+/* A subtle boundary fade keeps busy artwork out of the copy edge without
+   hiding the artwork itself. */
+.nv29-services .nv29-visual:after{
+  content:"";
+  position:absolute;
+  z-index:9;
+  inset:0 auto 0 0;
+  width:22px;
+  background:linear-gradient(90deg,rgba(14,24,68,.18),transparent);
+  pointer-events:none;
+}
+
+/* Social artwork */
+.nv29-services .nv29-visual-social .nv29-visual-disc{
+  position:absolute!important;
+  width:154%!important;
+  aspect-ratio:1!important;
+  left:-29%!important;
+  top:-1%!important;
+}
+.nv29-services .nv29-social-person{
+  position:absolute!important;
+  left:auto!important;
+  right:-4px!important;
+  top:auto!important;
+  bottom:0!important;
+  width:108%!important;
+  height:93%!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  object-position:right bottom!important;
+  filter:none!important;
+  -webkit-filter:none!important;
+  transform:none!important;
+  image-rendering:auto!important;
+}
+.nv29-services .nv29-social-float,
+.nv29-services .nv29-visual-mini{
+  width:38px!important;
+  height:38px!important;
+  border-radius:12px!important;
+  transform:none!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.nv29-services .nv29-float-instagram{
+  left:3px!important;
+  right:auto!important;
+  top:73px!important;
+}
+.nv29-services .nv29-float-tiktok{
+  left:auto!important;
+  right:8px!important;
+  top:12px!important;
+}
+
+/* Agency artwork */
+.nv29-services .nv29-agency-window{
+  position:absolute!important;
+  left:3px!important;
+  right:7px!important;
+  top:66px!important;
+  width:auto!important;
+  height:151px!important;
+  transform:none!important;
+  filter:none!important;
+}
+.nv29-services .nv29-agency-device{
+  position:absolute!important;
+  left:5px!important;
+  right:auto!important;
+  bottom:8px!important;
+  transform:none!important;
+  filter:none!important;
+}
+.nv29-services .nv29-agency-code{
+  left:auto!important;
+  right:7px!important;
+  top:22px!important;
+  transform:none!important;
+}
+
+/* Marketing artwork */
+.nv29-services .nv29-analytics-card{
+  position:absolute!important;
+  left:3px!important;
+  right:7px!important;
+  top:64px!important;
+  width:auto!important;
+  height:163px!important;
+  transform:none!important;
+  filter:none!important;
+}
+.nv29-services .nv29-marketing-search{
+  left:3px!important;
+  right:auto!important;
+  top:27px!important;
+  transform:none!important;
+}
+.nv29-services .nv29-marketing-target{
+  left:auto!important;
+  right:8px!important;
+  bottom:12px!important;
+  transform:none!important;
+}
+
+/* CHIP FOOTER */
+.nv29-services .nv29-service-chips{
+  grid-column:1 / -1!important;
+  grid-row:2!important;
+  position:relative!important;
+  z-index:10!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:34px!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:62px!important;
+  max-height:62px!important;
+  height:62px!important;
+  margin:0!important;
+  padding:14px 13px!important;
+  overflow:hidden!important;
+  border-top:1px solid rgba(255,255,255,.16)!important;
+  background:linear-gradient(0deg,rgba(12,22,57,.14),rgba(12,22,57,.025))!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+.nv29-services .nv29-service-chip{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:34px!important;
+  margin:0!important;
+  padding:7px 6px!important;
+  border-radius:8px!important;
+  overflow:hidden!important;
+  font-size:8.25px!important;
+  line-height:1!important;
+  transform:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.nv29-services .nv29-service-chip .icon{
+  flex:0 0 auto!important;
+}
+.nv29-services .nv29-service-chip span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.nv29-services .nv29-service-chip:hover{
+  transform:none!important;
+  background:rgba(255,255,255,.24)!important;
+}
+
+.nv29-services .nv29-agency-window,
+.nv29-services .nv29-agency-device,
+.nv29-services .nv29-analytics-card,
+.nv29-services .nv29-social-float,
+.nv29-services .nv29-visual-mini{
+  will-change:auto!important;
+  backface-visibility:visible!important;
+}
+
+@media(max-width:1150px){
+  .nv29-services .nv29-services-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  .nv29-services .nv29-service-card:nth-child(3){
+    grid-column:1 / -1!important;
+  }
+  .nv29-services .nv29-service-card,
+  .nv29-services .nv29-service-card:nth-child(3){
+    grid-template-columns:minmax(0,58%) minmax(0,42%)!important;
+    grid-template-rows:314px 62px!important;
+    min-height:376px!important;
+    height:376px!important;
+  }
+  .nv29-services .nv106-card-content,
+  .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content,
+  .nv29-services .nv29-visual,
+  .nv29-services .nv29-service-card:nth-child(3) .nv29-visual{
+    height:314px!important;
+  }
+  .nv29-services .nv106-card-content,
+  .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
+    padding:20px 8px 72px 19px!important;
+  }
+  .nv29-services .nv106-card-cta{
+    left:19px!important;
+    bottom:18px!important;
+  }
+  .nv29-services .nv106-card-title{
+    font-size:22px!important;
+  }
+}
+
+@media(max-width:700px){
+  .nv29-services{
+    padding:30px 0 34px;
+  }
+  .nv29-services .nv29-section-intro{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:12px!important;
+    margin-bottom:17px!important;
+  }
+  .nv29-services .nv29-section-intro h2{
+    font-size:26px!important;
+    line-height:1.2!important;
+  }
+  .nv29-services .nv29-services-grid{
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+  }
+  .nv29-services .nv29-service-card,
+  .nv29-services .nv29-service-card:nth-child(3){
+    grid-column:auto!important;
+    grid-template-columns:minmax(0,60%) minmax(0,40%)!important;
+    grid-template-rows:300px 84px!important;
+    min-height:384px!important;
+    height:384px!important;
+    border-radius:20px!important;
+  }
+  .nv29-services .nv106-card-content,
+  .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content,
+  .nv29-services .nv29-visual,
+  .nv29-services .nv29-service-card:nth-child(3) .nv29-visual{
+    height:300px!important;
+  }
+  .nv29-services .nv106-card-content,
+  .nv29-services .nv29-service-card:nth-child(3) .nv106-card-content{
+    padding:17px 6px 68px 15px!important;
+  }
+  .nv29-services .nv106-card-cta{
+    left:15px!important;
+    bottom:14px!important;
+  }
+  .nv29-services .nv106-card-title{
+    max-height:92px!important;
+    margin-top:11px!important;
+    font-size:20px!important;
+    line-height:1.08!important;
+  }
+  .nv29-services .nv106-card-description{
+    max-height:46px!important;
+    margin-top:8px!important;
+    font-size:9.5px!important;
+    line-height:1.48!important;
+  }
+  .nv29-services .nv106-card-cta{
+    height:40px!important;
+    min-height:40px!important;
+    flex-basis:40px!important;
+    padding-inline:10px!important;
+    font-size:9px!important;
+  }
+  .nv29-services .nv29-service-chips{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,32px)!important;
+    min-height:84px!important;
+    max-height:84px!important;
+    height:84px!important;
+    padding:7px 11px!important;
+    gap:6px!important;
+  }
+  .nv29-services .nv29-service-chip{
+    justify-content:flex-start!important;
+    height:32px!important;
+    padding-inline:8px!important;
+    font-size:8px!important;
+  }
+  .nv29-services .nv29-agency-window,
+  .nv29-services .nv29-analytics-card{
+    left:2px!important;
+    right:5px!important;
+  }
+}
+
+@media(max-width:420px){
+  .nv29-services .nv29-service-card,
+  .nv29-services .nv29-service-card:nth-child(3){
+    grid-template-columns:minmax(0,62%) minmax(0,38%)!important;
+  }
+  .nv29-services .nv106-card-title{
+    font-size:19px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nv29-services .nv29-service-card{
+    transition:none!important;
+  }
+  .nv29-services .nv29-service-card:hover{
+    transform:none!important;
+  }
+}

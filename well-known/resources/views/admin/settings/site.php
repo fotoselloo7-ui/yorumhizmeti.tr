@@ -173,6 +173,7 @@
             <div class="adm-card">
                 <div class="adm-card-header">
                     <h3><?= icon('phone', 16) ?> İletişim Bilgileri</h3>
+                    <a href="/admin/iletisim-ayarlari">Sayfa tasarımı ve Google harita ayarları →</a>
                 </div>
                 <div class="adm-card-body">
                     <div class="form-group">

@@ -1,0 +1,398 @@
+/*
+ * NetVera original design-language reconciliation v89.
+ * Shared brand colors plus the explicitly scoped interior design system below.
+ * Homepage geometry, data, URLs, filters and commerce handlers are preserved.
+ * Palette inspired by the original YorumHizmeti references:
+ * deep-navy ink, luminous white/ice, blue-violet-magenta accents.
+ */
+:root{
+  --nv89-ink:#101b49;
+  --nv89-text:#38476b;
+  --nv89-muted:#62708d;
+  --nv89-border:#e4eaf5;
+  --nv89-soft:#f8faff;
+  --nv89-blue:#2868ff;
+  --nv89-purple:#703deb;
+  --nv89-pink:#e72ea3;
+  --nv89-grad:linear-gradient(105deg,#2868ff 0%,#703deb 53%,#e72ea3 100%);
+  --nv89-pinkgrad:linear-gradient(108deg,#ed3099 0%,#793bef 100%);
+  --nv89-hero:radial-gradient(ellipse at 82% 20%,rgba(234,56,164,.15),transparent 34%),radial-gradient(ellipse at 55% 38%,rgba(116,74,231,.11),transparent 37%),linear-gradient(115deg,#fff 10%,#f6f9ff 100%);
+  --nv89-shadow:0 8px 25px rgba(21,35,86,.06);
+}
+body.nv-theme-enabled{
+  --nv89-ink:var(--nv-theme-secondary,#101b49);
+  --nv89-muted:var(--nv-theme-muted,#62708d);
+  --nv89-purple:var(--nv-theme-primary,#703deb);
+  --nv89-pink:var(--nv-theme-accent,#e72ea3);
+  --nv89-grad:linear-gradient(105deg,var(--nv-theme-button,#2868ff),var(--nv89-purple) 53%,var(--nv89-pink));
+  --nv89-pinkgrad:linear-gradient(108deg,var(--nv89-pink),var(--nv89-purple));
+}
+
+/* Shared public color language. Geometry and section placement untouched. */
+body .site-header{border-bottom-color:var(--nv89-border)}
+body :is(.yh-home-v6,.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv36-marketplace,.nv40-store)
+:is(.yv-kicker,.nv40-kicker){color:var(--nv89-purple)!important}
+body :is(.yh-home-v6,.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv36-marketplace,.nv40-store)
+:is(.yv-section-head-v5 h2,.yh6-section-head h2,.nv36-results-heading h2,.nv40-store-head h2){
+  color:var(--nv89-ink)!important
+}
+body :is(.yh-home-v6,.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5)
+:is(.yv-link-button,.yh18-all-link){color:var(--nv89-blue)!important}
+body :is(.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv36-marketplace,.nv40-store)
+:is(.yv-btn-primary,.nv36-apply,.nv40-apply-filters){
+  background:var(--nv89-grad)!important;color:#fff!important;border-color:transparent!important;
+  -webkit-text-fill-color:#fff!important
+}
+body :is(.yv-blog-v8,.yv-blog-home,.yv-category-v5,.yv-product-v5,.nv36-marketplace,.nv40-store)
+:is(.yv-btn-primary,.nv36-apply,.nv40-apply-filters):hover{
+  color:#fff!important;-webkit-text-fill-color:#fff!important;filter:brightness(1.035)
+}
+body :is(.yv-category-v5,.yv-product-v5,.yv-blog-v8,.nv36-marketplace,.nv40-store) a:focus-visible{
+  outline:2px solid var(--nv89-purple);outline-offset:3px
+}
+
+/* Category detail: first-reference pastel hero + split navy / gradient title. */
+body .yv-category-v5 .yv-category-hero-v5,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-hero-v5{
+  background:var(--nv89-hero)!important
+}
+body .yv-category-v5 .yv-category-hero-v5 h1 .yv-cat-title-lead{
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:var(--nv89-ink)!important;
+  text-shadow:none!important
+}
+body .yv-category-v5 .yv-category-hero-v5 h1 .yv-cat-title-accent,
+body .yv-category-v5[class*="nv-platform-"] .yv-cat-title-accent{
+  background:var(--nv89-grad)!important;background-clip:text!important;
+  -webkit-background-clip:text!important;color:transparent!important;
+  -webkit-text-fill-color:transparent!important;text-shadow:none!important
+}
+body .yv-category-v5 .yv-category-hero-v5 p{color:var(--nv89-muted)!important}
+body .yv-category-v5 .yv-category-benefits-v5 b{color:var(--nv89-ink)!important}
+body .yv-category-v5 .yv-category-benefits-v5 small{color:var(--nv89-muted)!important}
+body .yv-category-v5 .yv-category-hero-v5 .yv-btn-primary,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-hero-v5 .yv-btn-primary{
+  background:var(--nv89-pinkgrad)!important;color:#fff!important;
+  -webkit-text-fill-color:#fff!important;border-color:transparent!important
+}
+/* The actual brand glyphs stay Instagram pink / YouTube red / TikTok black. */
+body .yv-category-v5 .yv-category-chip-row-v5 a:not(.active){
+  background:#fff!important;color:var(--nv89-ink)!important;
+  -webkit-text-fill-color:currentColor!important;border-color:var(--nv89-border)!important
+}
+body .yv-category-v5 .yv-category-chip-row-v5 a.active,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-chip-row-v5 a.active{
+  background:var(--nv89-pinkgrad)!important;color:#fff!important;
+  -webkit-text-fill-color:#fff!important;border-color:transparent!important
+}
+body .yv-category-v5 .yv-category-chip-row-v5 a:not(.active):hover{
+  background:#f7f3ff!important;color:var(--nv89-purple)!important;
+  -webkit-text-fill-color:currentColor!important;border-color:#d9d0fa!important
+}
+body .yv-category-v5 .yv-category-search-form-v5 :is(input,select){
+  background:#fff!important;color:var(--nv89-ink)!important;
+  border-color:var(--nv89-border)!important
+}
+
+/* White package cards and bright CTAs. No prices or content are changed. */
+body .yv-category-v5 .yv-category-packages-v5{background:#fff!important}
+body .yv-category-v5 .yv-category-package-card-v5,
+body .yv-category-v5[class*="nv-platform-"] .yv-category-package-card-v5{
+  background:#fff!important;border:1px solid var(--nv89-border)!important;
+  box-shadow:var(--nv89-shadow)!important
+}
+body .yv-category-v5 .yv-category-package-card-v5:hover{
+  background:#fff!important;border-color:#c8c2f7!important;
+  box-shadow:0 15px 32px rgba(27,39,91,.10)!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 h3{
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 li{
+  color:#52617e!important;font-size:var(--nv-inner-type-11,11px)!important;line-height:1.55!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 li .icon{color:var(--nv89-purple)!important}
+body .yv-category-v5 .yv-category-price-v5 strong{
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-category-v5 .yv-category-package-card-v5 em{
+  background:var(--nv89-grad)!important;color:#fff!important;
+  -webkit-text-fill-color:#fff!important;font-size:var(--nv-inner-type-10,10px)!important
+}
+body .yv-category-v5 .yv-package-ribbon-v5{
+  background:#ed2e85!important;color:#fff!important;font-size:var(--nv-inner-type-9,9px)!important
+}
+body .yv-category-v5 .yv-category-delivery-v5{
+  color:var(--nv89-blue)!important;font-size:var(--nv-inner-type-10,10px)!important
+}
+body .yv-category-v5 .yv-category-story-grid-v5{
+  background:linear-gradient(110deg,#edf5ff,#fff 47%,#f7efff)!important;
+  border-color:var(--nv89-border)!important
+}
+body .yv-category-v5 :is(.yv-category-story-copy-v5 h2,.yv-category-side-benefits-v5 h3){
+  color:var(--nv89-ink)!important
+}
+body .yv-category-v5 .yv-category-story-copy-v5 h2 span{
+  background:var(--nv89-grad)!important;
+  background-clip:text!important;-webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important
+}
+body .yv-category-v5 .yv-category-side-benefits-v5 div{color:var(--nv89-text)!important}
+body .yv-category-v5 :is(.yv-category-review-grid-v5 article,.yv-compare-table-wrap-v5){
+  background:#fff!important;border-color:var(--nv89-border)!important
+}
+body .yv-category-v5 .yv-category-compare-v5 thead th{
+  background:#eff7ff!important;color:var(--nv89-ink)!important
+}
+body .yv-category-v5 .yv-category-cta-v5{background:var(--nv89-grad)!important}
+body .yv-category-v5 .yv-category-cta-v5 :is(strong,small){color:#fff!important}
+body .yv-category-v5 .yv-category-cta-v5 .yv-btn-light{
+  background:#fff!important;color:var(--nv89-blue)!important
+}
+
+/* Product/package detail: same identity, original light cards, legible copy. */
+body .yv-product-v5 .yv-product-hero-v5,
+body .yv-product-v5[class*="nv-platform-"] .yv-product-hero-v5{
+  background:var(--nv89-hero)!important
+}
+body .yv-product-v5 .yv-product-hero-copy-v5 h1{
+  background:linear-gradient(92deg,var(--nv89-ink) 0 31%,var(--nv89-blue) 48%,var(--nv89-purple) 74%,var(--nv89-pink))!important;
+  background-clip:text!important;-webkit-background-clip:text!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+  text-shadow:none!important
+}
+body .yv-product-v5 .yv-product-hero-copy-v5>p{color:var(--nv89-muted)!important}
+body .yv-product-v5 .yv-product-proof-v5 b{color:var(--nv89-ink)!important}
+body .yv-product-v5 .yv-product-proof-v5 small{color:var(--nv89-muted)!important}
+body .yv-product-v5 :is(.yv-product-gallery-main-v5,.yv-product-buy-v5){
+  background:#fff!important;border-color:var(--nv89-border)!important;
+  box-shadow:var(--nv89-shadow)!important
+}
+body .yv-product-v5 :is(.yv-product-buy-v5 h2,.yv-product-copy-v5 h2,.yv-product-gains-v5 h3){
+  color:var(--nv89-ink)!important
+}
+body .yv-product-v5 .yv-product-price-v5 strong{
+  color:var(--nv89-purple)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-product-v5 .yv-product-add-v5{
+  background:linear-gradient(108deg,var(--nv89-blue),var(--nv89-purple))!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important
+}
+body .yv-product-v5 .yv-product-now-v5{
+  background:var(--nv89-pinkgrad)!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important
+}
+body .yv-product-v5 .yv-buy-form-v5 .form-control{
+  color:var(--nv89-ink)!important;background:#fff!important;
+  border-color:#dfe5f2!important
+}
+body .yv-product-v5 .yv-product-tabs-v5{
+  border-color:var(--nv89-border)!important;background:#f7f9ff!important
+}
+body .yv-product-v5 .yv-product-tabs-v5 span:not(.active){color:#405377!important}
+body .yv-product-v5 .yv-product-tabs-v5 span.active{
+  background:linear-gradient(110deg,var(--nv89-blue),var(--nv89-purple))!important;color:#fff!important
+}
+body .yv-product-v5 :is(.yv-product-gains-v5,.yv-product-why-v5>.container){
+  background:linear-gradient(110deg,#edf6ff,#fff 48%,#f6f0ff)!important
+}
+body .yv-product-v5 .yv-product-related-v5{background:#f8faff!important}
+/* v9 had converted ALL related products to dark cards: restore readable white. */
+body .yv-product-v5 .yv-product-related-card-v5{
+  background:#fff!important;color:var(--nv89-ink)!important;
+  border:1px solid var(--nv89-border)!important;box-shadow:var(--nv89-shadow)!important
+}
+body .yv-product-v5 .yv-product-related-card-v5 :is(h3,strong){
+  color:var(--nv89-ink)!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-product-v5 .yv-product-related-card-v5 :is(small,li){
+  color:#5b6883!important;-webkit-text-fill-color:currentColor!important
+}
+body .yv-product-v5 .yv-product-related-card-v5 em{
+  color:var(--nv89-purple)!important;border-color:var(--nv89-border)!important
+}
+body .yv-product-v5 .yv-product-related-card-v5:hover{border-color:#c8c1fa!important}
+body .yv-product-v5 :is(.yv-product-buy-v5>p,.yv-product-copy-v5 .blog-content,.yv-product-copy-v5 p){
+  color:var(--nv89-muted)!important;font-size:var(--nv-inner-type-12,12px)!important;line-height:1.75!important
+}
+body .yv-product-v5 .yv-product-badges-v5 :is(span,b){font-size:var(--nv-inner-type-9,9px)!important}
+body .yv-product-v5 :is(.yv-product-mini-trust-v5,.yv-product-info-strip-v5) :is(strong,small){font-size:var(--nv-inner-type-10,10px)!important}
+body .yv-product-v5 .yv-buy-form-v5 .form-control,
+body .yv-product-v5 :is(.yv-product-add-v5,.yv-product-now-v5){font-size:var(--nv-inner-type-12,12px)!important}
+body .yv-product-v5 .yv-product-related-card-v5 :is(small,li,em){font-size:var(--nv-inner-type-10,10px)!important}
+
+/* Blog, software, basic pages: unify only color and surface, NOT layout. */
+body :is(.yv-blog-v8 .yv-blog-hero-v8,.yv-blog-home .yv-page-hero,.yv-blog-home .yv-simple-hero,.yv-simple-hero){
+  background:var(--nv89-hero)!important
+}
+body .yv-blog-v8 .yv-blog-hero-v8 h1{color:var(--nv89-ink)!important}
+body .yv-blog-v8 .yv-blog-hero-v8 h1 :is(span,em){
+  background:var(--nv89-grad)!important;background-clip:text!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important
+}
+body :is(.yv-blog-v8 .yv-blog-post-card-v8,.yv-blog-v8 .yv-blog-side-card-v8,.yv-blog-v8 .yv-blog-featured-v8,.yv-blog-home .yv-post-card,.nv40-store .nv40-product-card,.nv36-marketplace .nv31-software-card){
+  border-color:var(--nv89-border)!important;box-shadow:var(--nv89-shadow)!important
+}
+body :is(.yv-blog-v8 .yv-blog-post-body-v8 h3,.yv-blog-v8 .yv-blog-side-title-v8,.yv-blog-home .yv-post-body h3,.nv40-store .nv40-product-copy h3,.nv36-marketplace .nv31-software-body h3){
+  color:var(--nv89-ink)!important
+}
+body .yv-blog-v8 :is(.yv-blog-search-v8 button,.yv-blog-news-v8 button){
+  background:var(--nv89-grad)!important;color:#fff!important
+}
+body :is(.nv36-marketplace .nv36-hero,.nv40-store .nv40-store-hero){
+  background:linear-gradient(120deg,#fff,#f6f8ff 64%,#faf2ff)!important
+}
+body :is(.nv36-marketplace .nv36-results-heading h2,.nv40-store .nv40-store-head h2){
+  color:var(--nv89-ink)!important
+}
+
+/* The category directory owns its geometry and brand icon accents in v88. */
+
+/* Public FAQ panels: one owner, including category and article accordions. */
+.premium-faq-item{margin:0;border:1px solid var(--nv89-border);border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 4px 16px #18294c04;transition:border-color .2s ease,box-shadow .2s ease}
+.premium-faq-question{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:56px;padding:16px 20px;border:0;background:transparent;color:var(--nv89-ink);font:600 14px/1.65 Poppins,sans-serif;text-align:left;cursor:pointer}
+.premium-faq-question>span{min-width:0;overflow-wrap:anywhere}
+.premium-faq-question .icon{flex-shrink:0;color:var(--nv89-purple);transition:transform .2s ease}
+.premium-faq-answer{display:none;padding:0 20px 20px;color:var(--nv89-text);font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.premium-faq-question[aria-expanded=true]+.premium-faq-answer{display:block}
+.premium-faq-item:has(.premium-faq-question[aria-expanded=true],.premium-faq-answer[style*="block"]){border-color:#d3c9f4;box-shadow:0 8px 24px #5940a60a}
+.premium-faq-question[aria-expanded=true]{background:#faf8ff}
+.premium-faq-question[aria-expanded=true] .icon{transform:rotate(180deg)}
+.premium-faq-question:focus-visible{outline:2px solid var(--nv89-purple);outline-offset:-4px;border-radius:12px}
+body .yv-contact .yv-contact-form{background:#fff!important;border-color:var(--nv89-border)!important}
+/* Footer remains navy. Payment logos, support widgets and flows are untouched. */
+@media(prefers-reduced-motion:reduce){
+  body .yv-category-v5 .yv-category-package-card-v5,
+body .yv-product-v5 .yv-product-related-card-v5{transition:none!important}
+}
+
+/* Interior design system. Homepage uses the unchanged legacy token fallbacks;
+   admin has its own layout and never enters this scope. */
+body.nv-inner-page{
+  --nv-inner-type-7:11px;--nv-inner-type-8:11px;--nv-inner-type-9:12px;
+  --nv-inner-type-10:13px;--nv-inner-type-11:14px;--nv-inner-type-12:14px;
+  --nv-inner-surface:var(--nv-theme-card,#fff);
+  --nv-inner-border:var(--nv-theme-border,#e2e8f1);
+  --nv-inner-shadow:0 8px 28px rgba(24,41,76,.045);
+  --nv89-shadow:var(--nv-inner-shadow);
+  background:var(--nv-theme-bg,#f7f9fd);
+}
+.nv-inner-page :is(.yv-simple-hero,.yv-page-hero,.yv-blog-hero-v8,.yv-category-hero-v5,.yv-product-hero-v5,.nv40-store-hero,.nv36-hero,.yv-checkout-hero-v5){border-bottom:1px solid var(--nv-inner-border)}
+.nv-inner-page :is(.yv-simple-hero,.yv-page-hero,.yv-blog-hero-v8,.yv-category-hero-v5,.yv-product-hero-v5) h1{font-weight:700;text-wrap:balance;letter-spacing:-.035em;line-height:1.2}
+.nv-inner-page .yv-simple-hero{text-align:left}
+.nv-inner-page .yv-simple-hero p{margin:16px 0 0}
+.nv-inner-page .nv-info-hero{--nv-info-columns:1fr;--nv-simple-hero-height:0px;--nv-simple-hero-space:40px}
+.nv-inner-page .nv-info-hero .yv-simple-hero-copy-v12{max-width:820px}
+.nv-inner-page :is(.yv-simple-hero p,.yv-page-hero p,.nv40-store-hero p,.nv36-hero p,.yv-category-hero-copy-v5>p,.yv-product-hero-copy-v5>p){max-width:640px;color:var(--nv89-muted);font-size:14px;line-height:1.85}
+.nv-inner-page :is(.yv-content-page,.yv-contact,.yv-faq-page,.panel-section,.yv-cart-main-v5,.yv-checkout-main-v5){background:#f7f9fd}
+.nv-inner-page :is(.yv-content-card,.yv-contact-info,.yv-contact-form,.premium-faq-item,.panel-card,.panel-stat-card,.panel-action-card,.panel-empty-state,.yv-cart-card-v5,.yv-cart-summary-v5,.yv-commerce-card,.yv-status-card,.yv-checkout-card-v5,.yv-checkout-summary-v5,.nv40-info-card,.nv40-categories,.nv36-filter-card){border-color:var(--nv-inner-border);border-radius:20px;box-shadow:var(--nv-inner-shadow)}
+.nv-inner-page :is(.yv-contact-info,.yv-contact-form){padding:32px}
+.nv-inner-page .yv-contact-grid{gap:24px;align-items:start}
+.nv-inner-page :is(.yv-contact-info h2,.yv-contact-form h2,.panel-card-header h2){font-size:22px;font-weight:600;letter-spacing:-.025em}
+.nv-inner-page .yv-contact-item{padding:16px 0;border-bottom:1px solid #edf0f6}
+.nv-inner-page .yv-contact-item:last-child{border-bottom:0}
+.nv-inner-page .yv-contact-item>span{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#f3f0ff;color:var(--nv89-purple)}
+.nv-inner-page :is(.yv-form-group input,.yv-form-group textarea,.yv-form-group select){padding:12px 14px;min-height:48px;border-radius:12px;background:#fbfcff;border-color:#dce3ee;transition:border-color .18s ease,box-shadow .18s ease}
+.nv-inner-page :is(.yv-form-group input,.yv-form-group textarea,.yv-form-group select):focus{border-color:var(--nv89-purple);box-shadow:0 0 0 3px #703deb12;outline:0}
+.nv-inner-page .yv-form-group{margin-bottom:20px}
+.nv-inner-page .yv-opt-in{align-items:flex-start;gap:10px;font-size:12px;line-height:1.8}
+.nv-inner-page .yv-opt-in input{margin-top:4px}
+.nv-inner-page .yv-contact-form .yv-btn{min-height:48px;padding:12px 20px;font-size:14px}
+.nv-inner-page .yv-faq-shell{gap:24px;align-items:start}
+.nv-inner-page .yv-faq-list{display:grid;gap:12px;min-width:0}
+.nv-inner-page .yv-faq-lead h2{line-height:1.35;letter-spacing:-.025em}
+.nv-inner-page .yv-faq-lead p{color:#c2cbe0}
+.nv-inner-page .yv-content-page .yv-content-card{max-width:960px;margin:0 auto;padding:40px 48px;background:var(--nv-inner-surface);border:1px solid var(--nv-inner-border);font-size:15px;line-height:1.9;color:#485771}
+.nv-inner-page .yv-content-page .yv-content-card :is(p,li){font-size:15px;line-height:1.9}
+.nv-inner-page .yv-content-page .yv-content-card :is(h2,h3){margin:28px 0 12px;color:var(--nv89-ink);font-weight:600;line-height:1.4}
+.nv-inner-page .yv-content-page .yv-content-card h2{font-size:24px}
+.nv-inner-page .yv-content-page .yv-content-card h3{font-size:20px}
+.nv-inner-page .yv-content-page .yv-content-card :is(ul,ol){padding-left:24px}
+.nv-inner-page .yv-content-page .yv-content-card li{margin:8px 0}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-card-v8{border-radius:18px;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-card-v8:focus-visible{outline:3px solid var(--nv89-purple);outline-offset:4px}
+.nv-inner-page .yv-blog-v8 :is(.yv-blog-featured-copy-v8 h2,.yv-blog-post-body-v8 h3){font-weight:600}
+.nv-inner-page .yv-blog-v8{--nv-card-title-size:16px}
+.nv-inner-page .yv-blog-v8 .yv-blog-chip-grid-v8{display:flex;flex-wrap:wrap;gap:8px}
+.nv-inner-page .yv-blog-v8 .yv-blog-chip-grid-v8 a{flex:0 1 auto;min-height:44px;padding:10px 14px;line-height:1.5}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-image-v8{height:auto;aspect-ratio:16/9}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-body-v8{display:flex;flex:1;flex-direction:column;gap:12px}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-body-v8 :is(h3,p){min-height:0;margin:0}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-body-v8>div{margin-top:auto;flex-wrap:wrap}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-card-v8{display:flex;flex-direction:column}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-image-v8 b{max-width:calc(100% - 20px);white-space:normal;line-height:1.4}
+.nv-inner-page .yv-blog-v8 .yv-blog-search-v8{min-height:48px;border-radius:12px}
+.nv-inner-page .yv-blog-v8 .yv-blog-post-body-v8{padding:24px}
+.nv-inner-page .yv-blog-v8 .yv-blog-side-card-v8{border-radius:18px;padding:24px}
+.nv-inner-page .yv-category-v5 .yv-category-search-form-v5{gap:12px;padding:16px;border:1px solid var(--nv-inner-border);border-radius:16px;background:#fff}
+.nv-inner-page .yv-category-v5 .yv-category-search-form-v5 :is(input,select){min-height:44px;border-radius:10px}
+.nv-inner-page .yv-category-v5 .yv-category-chip-row-v5{gap:8px}
+.nv-inner-page .yv-category-v5 .yv-category-chip-row-v5 a{min-height:40px;padding:10px 14px}
+.nv-inner-page .yv-category-v5 .yv-category-package-card-v5{border-radius:18px}
+.nv-inner-page .yv-category-v5{--nv-card-title-size:16px}
+.nv-inner-page .yv-product-v5 :is(.yv-product-buy-v5,.yv-product-related-card-v5){border-radius:18px}
+.nv-inner-page .nv40-store .nv40-product-card{border-radius:18px;overflow:hidden}
+.nv-inner-page .nv40-store .nv40-product-copy{padding:20px}
+.nv-inner-page .nv40-store .nv40-product-copy h3{font-size:16px;line-height:1.55;font-weight:600}
+.nv-inner-page .nv40-store .nv40-product-copy p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.8;color:#62708d}
+.nv-inner-page .nv40-store .nv40-product-bottom{gap:12px;align-items:center}
+.nv-inner-page .nv40-store .nv40-product-bottom a{min-height:44px;padding:10px 12px;border:1px solid #e5dff6;border-radius:10px;background:#f7f4ff;color:var(--nv89-purple)}
+.nv-inner-page .nv40-store .nv40-product-bottom strong{font-size:18px;letter-spacing:-.025em;white-space:nowrap}
+.nv-inner-page .nv40-store .nv40-store-head form{min-height:44px;transition:border-color .2s ease,box-shadow .2s ease}
+.nv-inner-page .nv40-store .nv40-store-head form:focus-within{border-color:var(--nv89-purple);box-shadow:0 0 0 3px #703deb12}
+.nv-inner-page .nv40-detail :is(.nv40-summary,.nv40-info-card){border-radius:20px}
+.nv-inner-page .nv40-detail .nv60-product-tabs{gap:8px}
+.nv-inner-page .nv40-detail .nv60-product-tabs [role=tab]{min-height:44px;font-size:13px;font-weight:500}
+.nv-inner-page .panel-layout{gap:24px}
+.nv-inner-page .panel-content{min-width:0}
+.nv-inner-page .panel-welcome{padding:28px;border:1px solid #dedff3;border-radius:20px;background:linear-gradient(120deg,#f4f1ff,#fff);box-shadow:var(--nv-inner-shadow)}
+.nv-inner-page :is(.panel-welcome h1,.panel-page-header h1){font-size:clamp(24px,2.2vw,30px);line-height:1.35;font-weight:600;letter-spacing:-.025em}
+.nv-inner-page .panel-stat-card{padding:24px;background:#fff}
+.nv-inner-page .panel-stat-value{font-size:28px;font-weight:600}
+.nv-inner-page .panel-card-header{padding:20px 24px;border-bottom:1px solid #edf0f6}
+.nv-inner-page .panel-card-body{padding:24px}
+.nv-inner-page .panel-nav a{min-height:44px}
+.nv-inner-page .panel-page-header{gap:16px;flex-wrap:wrap}
+.nv-inner-page .panel-content .btn{min-height:44px}
+.nv-inner-page .yv-status-card{border:1px solid var(--nv-inner-border);background:#fff}
+.nv-inner-page .yv-status-card h1{font-size:clamp(26px,3vw,36px);line-height:1.35;overflow-wrap:break-word}
+.nv-inner-page .yv-status-card p{max-width:520px;margin-inline:auto;font-size:14px;line-height:1.85}
+.nv-inner-page :is(.yv-cart-summary-v5,.yv-checkout-summary-v5){background:#fff}
+.nv-inner-page :is(.yv-cart-summary-v5,.yv-checkout-summary-v5) .yv-checkout-card-head-v5 h2{font-size:18px;font-weight:600}
+.nv-inner-page .yv-checkout-pay-v5{min-height:48px;border-radius:12px;font-size:14px}
+.nv-inner-page :is(.yv-contact,.yv-faq-page,.yv-content-page,.panel-content,.yv-cart-v5,.yv-checkout-v5) :is(a,button,input,select,textarea):focus-visible{outline:2px solid var(--nv89-purple);outline-offset:3px}
+@media(max-width:800px){
+  .nv-inner-page :is(.yv-contact-info,.yv-contact-form){padding:24px}
+  .nv-inner-page .yv-content-page .yv-content-card{padding:28px}
+  .nv-inner-page .panel-welcome{padding:24px}
+}
+@media(max-width:600px){
+  .nv-inner-page :is(.yv-simple-hero-art-v12,.yv-blog-hero-art-v8,.yv-category-hero-art-v5){--nv-decorative-art-display:none;display:none}
+  .nv-inner-page .yv-simple-hero{--nv-simple-hero-space:28px;--nv-simple-hero-height:0px}
+  .nv-inner-page .yv-simple-hero h1{font-size:30px}
+  .nv-inner-page .yv-faq-shell .yv-faq-list{order:-1}
+  .nv-inner-page .yv-blog-v8 .yv-blog-chip-grid-v8{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin;padding-bottom:4px}
+  .nv-inner-page .yv-blog-v8 .yv-blog-chip-grid-v8 a{flex-shrink:0;max-width:240px}
+  .nv-inner-page .yv-blog-v8 .yv-blog-hero-copy-v8{padding-bottom:24px}
+  .nv-inner-page .yv-blog-v8 .yv-blog-featured-copy-v8 h2{font-size:25px;line-height:1.3}
+  .nv-inner-page .yv-blog-v8 .yv-blog-post-image-v8{aspect-ratio:16/9}
+  .nv-inner-page :is(.yv-contact-form input,.yv-contact-form textarea,.nv40-store-head input){font-size:16px}
+  .nv-inner-page .yv-faq-lead-v12{--nv-faq-lead-height:0px;--nv-faq-lead-padding:24px}
+  .nv-inner-page .yv-faq-lead-v12>img{display:none}
+  .nv-inner-page .yv-product-v5 .yv-product-tabs-v5{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:4px}
+  .nv-inner-page .yv-product-v5 .yv-product-tabs-v5 span{min-width:0;display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px 8px;text-align:center;line-height:1.5}
+  .nv-inner-page :is(.yv-contact-info,.yv-contact-form){padding:20px;border-radius:16px}
+  .nv-inner-page .yv-content-page .yv-content-card{padding:24px 20px;border-radius:16px}
+  .nv-inner-page .yv-content-page .yv-content-card :is(p,li){font-size:14px}
+  .nv-inner-page .yv-content-page .yv-content-card h2{font-size:21px}
+  .premium-faq-question{padding:16px}
+  .premium-faq-answer{padding:0 16px 20px}
+  .nv-inner-page .yv-blog-v8 :is(.yv-blog-post-body-v8,.yv-blog-side-card-v8){padding:20px}
+  .nv-inner-page .yv-category-v5 .yv-category-search-form-v5{padding:12px}
+  .nv-inner-page .panel-welcome{padding:20px}
+  .nv-inner-page .panel-stats{gap:12px}
+  .nv-inner-page .panel-stat-card{padding:16px}
+  .nv-inner-page .panel-stat-value{font-size:24px}
+  .nv-inner-page .panel-card-header{padding:16px}
+  .nv-inner-page .panel-card-body{padding:20px}
+}
+@media(prefers-reduced-motion:reduce){.premium-faq-item,.premium-faq-question .icon,.nv-inner-page .yv-blog-v8 .yv-blog-post-card-v8{transition:none}.nv-inner-page .yv-blog-v8 .yv-blog-post-card-v8:hover{transform:none}}

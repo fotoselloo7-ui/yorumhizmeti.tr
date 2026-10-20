@@ -1,0 +1,65 @@
+/* Reference-led expertise cards. One shared pastel surface and transparent artwork.
+   Category destinations and custom headings remain data-driven. */
+.nv29-services{position:relative;isolation:isolate;padding:120px 0 96px;background:radial-gradient(ellipse at 3% 55%,#f4efff80,transparent 40%),radial-gradient(ellipse at 94% 58%,#effafb80,transparent 40%),#fff;color:#071b48;font-family:Poppins,sans-serif}
+.nv29-services *{box-sizing:border-box}
+.nv29-services::before,.nv29-services::after{content:"";position:absolute;z-index:-1;pointer-events:none;width:28%;height:65%;border:1px solid #a99aff38;border-radius:48% 52% 60% 40%;transform:rotate(-28deg);background:linear-gradient(140deg,#f1ebff60,#fff0)}
+.nv29-services::before{left:-22%;top:18%}
+.nv29-services::after{right:0;bottom:0;width:12%;height:36%;border-right:0;border-bottom:0;border-radius:100% 0 0 0;transform:none;background:none}
+.nv29-container{width:calc(100% - 128px);max-width:1544px;margin-inline:auto;padding:0}
+.nv29-section-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:0 32px 32px}
+.nv29-section-intro>div{min-width:0}
+.nv29-section-kicker{display:inline-flex;align-items:center;gap:12px;color:#7134ff;font-size:clamp(11px,.92vw,15px);font-weight:700;letter-spacing:.065em}
+.nv29-section-intro h2{margin:16px 0 0;color:#071b48;font-size:clamp(30px,3.3vw,56px);font-weight:750;letter-spacing:-.045em;line-height:1.16}
+.nv29-section-intro h2 span{color:#7438ef;background:linear-gradient(100deg,#5931e9,#8e36ed);background-clip:text;-webkit-text-fill-color:transparent}
+.nv29-view-all{display:inline-flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;min-height:60px;padding:16px 22px;border:1px solid #d9d5ff;border-radius:16px;background:#ffffffb8;color:#6430f7;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 8px 24px #6253b908}
+.nv29-view-all:hover{background:#f6f2ff;border-color:#b5a5fb}
+.nv29-services-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:16px}
+.nv29-service-card{--nv29-accent:#e000bb;--nv29-accent-end:#9d15e0;--nv29-soft:#fff4fe;--nv29-wash:#f9d8fb;--nv29-wave:#efb5f33d;--nv29-line:#f3cff1;container-type:inline-size;display:flex;flex-direction:column;flex:0 1 calc((100% - 32px)/3);min-width:0;border:1px solid var(--nv29-line);border-radius:28px;background:radial-gradient(ellipse at 94% 48%,var(--nv29-wash),transparent 70%),linear-gradient(145deg,#ffffffd9,var(--nv29-soft));box-shadow:0 18px 40px #5263c313,inset 0 0 0 1px #ffffffbd;transition:box-shadow .2s ease}
+.nv29-agency{--nv29-accent:#3748ff;--nv29-accent-end:#263b95;--nv29-soft:#f2f5ff;--nv29-wash:#dbe6ff;--nv29-wave:#97b9ff42;--nv29-line:#e0e7ff}
+.nv29-marketing{--nv29-accent:#00b980;--nv29-accent-end:#009a80;--nv29-soft:#effdf8;--nv29-wash:#c8f5e9;--nv29-wave:#8ae5d943;--nv29-line:#d7f3eb}
+.nv29-service-card:hover{box-shadow:0 22px 44px #5263c320,inset 0 0 0 1px #fff}
+.nv29-card-body{position:relative;isolation:isolate;display:flex;flex:1;min-height:clamp(388px,86cqi,440px);border-radius:27px 27px 0 0}
+.nv29-card-body::before,.nv29-card-body::after{content:"";position:absolute;z-index:-1;pointer-events:none;background:var(--nv29-wave);border-radius:55% 45% 60% 40%}
+.nv29-card-body::before{inset:8% 0 12% 55%;transform:skewY(-14deg)}
+.nv29-card-body::after{inset:58% 0 0 42%;border-radius:100% 0 0 0}
+.nv29-visual{position:absolute;right:0;bottom:8px;display:flex;align-items:flex-end;justify-content:flex-end;width:62%;height:calc(100% - 16px);pointer-events:none}
+.nv29-artwork{display:block;width:100%;height:100%;object-fit:contain;object-position:right bottom}
+.nv29-card-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;flex:1;min-width:0;padding:clamp(20px,5cqi,28px)}
+.nv29-eyebrow{display:inline-flex;align-items:center;gap:10px;max-width:100%;min-height:42px;padding:8px 16px;border:1px solid var(--nv29-line);border-radius:999px;background:#ffffffad;box-shadow:0 8px 20px #5263c30a,inset 0 1px #fff;color:var(--nv29-accent);font-size:clamp(9px,2.5cqi,13px);font-weight:600;line-height:1.35;white-space:nowrap}
+.nv29-eyebrow .icon{flex-shrink:0}
+.nv29-card-title{width:100%;min-block-size:2.36em;margin:28px 0 20px;color:#071b48;font-size:clamp(25px,6.7cqi,36px);font-weight:750;line-height:1.18;letter-spacing:-.035em;overflow-wrap:break-word;max-width:78%}
+.nv29-service-card .nv29-card-description{max-width:56%;margin:0 0 24px;color:#3e5182;font-size:clamp(13px,3.4cqi,18px);line-height:1.65}
+.nv29-card-cta{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:clamp(48px,11.5cqi,58px);margin-top:auto;padding:12px clamp(16px,5cqi,28px);border:1px solid #ffffff30;border-radius:14px;background:linear-gradient(115deg,var(--nv29-accent),var(--nv29-accent-end));box-shadow:0 10px 20px color-mix(in srgb,var(--nv29-accent) 15%,transparent),inset 0 1px 2px #ffffff40;color:#fff;font-size:clamp(12px,3.5cqi,18px);font-weight:600;line-height:1.4;text-decoration:none}
+.nv29-card-cta:hover{color:#fff;filter:brightness(1.06)}
+.nv29-card-cta .icon{flex-shrink:0}
+.nv29-service-chips{position:relative;flex-shrink:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(58px,auto);align-content:start;gap:12px;min-height:152px;margin:0 clamp(20px,5cqi,28px);padding:0 0 24px}
+.nv29-service-chip{display:flex;align-items:center;gap:10px;min-width:0;min-height:58px;padding:12px;border:1px solid #ffffffd9;border-radius:18px;background:#ffffffa8;box-shadow:0 8px 20px #5263c306;color:#132c62;font-size:clamp(12px,2.9cqi,16px);line-height:1.4;text-decoration:none}
+.nv29-service-chip .icon{flex-shrink:0;color:var(--nv29-accent)}
+.nv29-service-chip span{min-width:0;overflow-wrap:anywhere}
+.nv29-service-chip[href*="/instagram"] .icon{color:#ea16bc}
+.nv29-service-chip[href*="/tiktok"] .icon{color:#071b32;filter:drop-shadow(1px 0 #ff2765) drop-shadow(-1px 0 #00e4df)}
+.nv29-service-chip[href*="/youtube"] .icon{color:#ff0038}
+.nv29-service-chip[href*="/facebook"] .icon{color:#0866ff}
+.nv29-service-chip:hover{background:#fff;border-color:var(--nv29-line);color:var(--nv29-accent)}
+.nv29-services a:focus-visible{outline:3px solid #7755d4;outline-offset:4px}
+@media(max-width:1200px){.nv29-container{width:calc(100% - 48px)}.nv29-section-intro{margin-inline:0}.nv29-view-all{min-height:48px;font-size:12px;gap:12px;padding:12px 16px}.nv29-services-grid{gap:20px}.nv29-service-card{flex-basis:calc((100% - 20px)/2)}}
+@media(max-width:700px){
+ .nv29-services{padding:40px 0 48px}
+ .nv29-container{width:calc(100% - 40px)}
+ .nv29-section-intro{flex-direction:column;align-items:flex-start;gap:20px;margin-bottom:24px}
+ .nv29-section-kicker{font-size:10px;gap:8px;letter-spacing:.04em}
+ .nv29-section-intro h2{font-size:30px;line-height:1.2;margin-top:12px}
+ .nv29-services-grid{gap:20px}
+ .nv29-service-card{flex-basis:100%}
+ .nv29-card-body{min-height:400px}
+ .nv29-eyebrow{padding:8px 12px;gap:6px;min-height:36px;font-size:9px}
+ .nv29-eyebrow .icon{width:18px;height:18px}
+ .nv29-card-title{margin-top:24px;font-size:26px;max-width:100%}
+ .nv29-service-card .nv29-card-description{font-size:13px;max-width:56%}
+ .nv29-card-cta{gap:12px;padding:12px 16px;font-size:12px}
+ .nv29-service-chips{grid-auto-rows:minmax(52px,auto);gap:10px;min-height:136px;padding-bottom:20px}
+ .nv29-service-chip{min-height:52px;padding:8px 10px;gap:8px;border-radius:14px;font-size:12px}
+ .nv29-service-chip .icon{width:22px;height:22px}
+}
+@media(max-width:420px){.nv29-container{width:calc(100% - 32px)}}
+@media(prefers-reduced-motion:reduce){.nv29-service-card{transition:none}}

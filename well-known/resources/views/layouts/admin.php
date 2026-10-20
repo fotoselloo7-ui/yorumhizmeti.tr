@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261020-contact">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261018-seo-infrastructure">
     <?php if(str_starts_with($template,'admin/landing/')): ?>
     <link rel="stylesheet" href="<?= asset('css/landing-editor.css') ?>?v=20261019-regional-ready">
@@ -152,6 +152,7 @@
                 <a href="/admin/site-ayarlari" class="<?= isActive('/admin/site-ayarlari') ?>">
                     <?= icon('settings', 18) ?> Site Ayarları
                 </a>
+                <a href="/admin/iletisim-ayarlari" class="<?= isActive('/admin/iletisim-ayarlari') ?>"><?= icon('map-pin',18) ?> İletişim & Harita</a>
                 <a href="/admin/paytr-ayarlari" class="<?= isActive('/admin/paytr') ?>">
                     <?= icon('credit-card', 18) ?> PayTR Ayarları
                 </a>

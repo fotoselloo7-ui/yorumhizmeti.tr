@@ -274,6 +274,8 @@ class App
         $r->post('/admin/menu/sifirla', 'Admin\\NavigationController@reset');
 
         $r->get('/admin/site-ayarlari', 'Admin\\SettingsController@site');
+        $r->get('/admin/iletisim-ayarlari', 'Admin\\SettingsController@contact');
+        $r->post('/admin/iletisim-ayarlari/kaydet', 'Admin\\SettingsController@saveContact');
         $r->post('/admin/site-ayarlari/kaydet', 'Admin\\SettingsController@saveSite');
         $r->get('/admin/smtp-ayarlari', 'Admin\\SettingsController@smtp');
         $r->post('/admin/smtp-ayarlari/kaydet', 'Admin\\SettingsController@saveSmtp');

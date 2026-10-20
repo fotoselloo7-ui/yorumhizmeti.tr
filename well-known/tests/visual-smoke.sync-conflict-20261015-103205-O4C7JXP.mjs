@@ -1,0 +1,1862 @@
+import { chromium } from 'playwright';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8006';
+const output = process.env.QA_OUTPUT || 'qa-artifacts';
+const runs = [
+  { route:'/',slug:'anasayfa' },
+  { route:'/kategoriler',slug:'tum-hizmetler' },
+  { route:'/hazir-yazilimlar',slug:'hazir-yazilimlar' },
+  { route:'/hazir-scriptler',slug:'netvera-yazilimlar' },
+  { route:'/hazir-scriptler/haber-sitesi-scripti',slug:'netvera-haber-detay' },
+  { route:'/kategori/instagram-hizmetleri',slug:'instagram' },
+  { route:'/kategori/web-site-hizmetleri',slug:'web-site' },
+  { route:'/paket/google-harita-yorum-toplama-baslangic-paketi-10-davet',slug:'paket-detay' },
+  { route:'/blog',slug:'blog' },
+  { route:'/blog/yapay-zeka-haber-yazilimi-otomatik-haber-sitesi',slug:'netvera-blog-markdown' },
+  { route:'/iletisim',slug:'iletisim' },
+  { route:'/sss',slug:'sss' },
+  { route:'/sepet',slug:'sepet' },
+  { route:'/giris',slug:'giris' },
+  { route:'/kayit',slug:'kayit' },
+  { route:'/sayfa/hakkimizda',slug:'hakkimizda' },
+  { route:'/admin/giris',slug:'admin-giris' },
+];
+const screens=[
+  {w:390,h:844,name:'mobil'},
+  {w:768,h:1024,name:'tablet'},
+  {w:1440,h:900,name:'masaustu'},
+  {w:1920,h:1080,name:'genis'}
+];
+fs.mkdirSync(output,{recursive:true});
+const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+const results=[];
+let failed=false;
+
+for(const screen of screens){
+  const ctx=await browser.newContext({viewport:{width:screen.w,height:screen.h},deviceScaleFactor:1});
+  for(const p of runs){
+    // Run a wide range of routes on mobile/desktop; tablet/wide sanity-check key pages.
+    if ((screen.name==='tablet'||screen.name==='genis') && !['anasayfa','tum-hizmetler','hazir-yazilimlar','instagram','paket-detay','blog'].includes(p.slug)) continue;
+    const page=await ctx.newPage();
+    const errors=[];
+    page.on('pageerror',e=>errors.push('JS: '+e.message));
+    page.on('console',msg=>{if(msg.type()==='error'&&!msg.text().includes('favicon'))errors.push('CONSOLE: '+msg.text().slice(0,160));});
+    let status=0,fullUrl='';
+    try{
+      const res=await page.goto(origin+p.route,{waitUntil:'domcontentloaded',timeout:30000});
+      status=res?.status()||0;
+      await page.waitForTimeout(500);
+      fullUrl=page.url();
+      const report=await page.evaluate(()=>{
+        const vw=window.innerWidth;
+        const root=document.documentElement;
+        const main=document.querySelector('main')||document.body;
+        const failedImgs=[...document.querySelectorAll('img')].filter(i=>i.complete&&i.naturalWidth===0).map(i=>(i.currentSrc||i.src||'').slice(0,180)).slice(0,10);
+        const overflow=[...document.querySelectorAll('body *')]
+          .filter(el=>{
+            const rect=el.getBoundingClientRect();
+            const cs=getComputedStyle(el);
+            if(cs.display==='none'||cs.visibility==='hidden'||rect.width===0||rect.height===0)return false;
+            if(cs.position==='absolute'||cs.position==='fixed')return false;
+            if(el.matches('svg,svg *,script,style'))return false;
+            return rect.right>vw+12||rect.left < -12;
+          })
+          .slice(0,12)
+          .map(el=>({tag:el.tagName,cls:String(el.className).slice(0,80),r:Math.round(el.getBoundingClientRect().right)}));
+        const geom = {};
+        for (const selector of [
+          '.container','.yh6-hero','.yh6-hero-grid','.yh6-hero-art','.yh6-platform-bar','.yh6-why',
+          '.yv-category-hero-v5','.yv-category-hero-grid-v5','.yv-category-hero-art-v5','.yv-category-hero-woman-v5',
+          '.yv-blog-hero-grid-v8','.yv-blog-hero-art-v8','.yv-blog-woman-v8',
+          '.yv-product-hero-grid-v5','.yv-product-hero-visual-v5',
+          '.yh18-featured-head','.yh18-featured-tabs','.site-footer','.footer-grid-v9'
+        ]){
+          const el=document.querySelector(selector);
+          if (!el) continue;
+          const b=el.getBoundingClientRect();
+          const st=getComputedStyle(el);
+          geom[selector]={x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.width),h:Math.round(b.height),display:st.display,grid:st.gridTemplateColumns,overflow:st.overflow};
+        }
+        return {
+          geom,
+          title:document.title,
+          h1:(document.querySelector('h1')?.textContent||'').trim().slice(0,100),
+          bodyText:(main.innerText||'').slice(0,200),
+          rootScroll:root.scrollWidth,
+          viewport:vw,
+          overflow,
+          failedImgs,
+          brokenLinks:[...document.querySelectorAll('a[href]')]
+            .filter(a=>a.getAttribute('href')==='#'||a.getAttribute('href')==='javascript:void(0)')
+            .slice(0,12).map(a=>(a.textContent||a.getAttribute('aria-label')||'').trim().slice(0,50))
+        };
+      });
+      // NetVera staged heritage storefront: guard real SQL facets and mobile first fold.
+      if (p.route === '/hazir-scriptler' && ['mobil','masaustu'].includes(screen.name)) {
+        const catalogueCount = await page.locator('.nv40-product-card').count();
+        if (catalogueCount !== 3) throw new Error('Netvera QA products missing: '+catalogueCount);
+        const drawer = page.locator('.nv40-filter-disclosure');
+        if (screen.name === 'mobil') {
+          if (await drawer.getAttribute('open') !== null) {
+            errors.push('Netvera mobile sidebar did not collapse'); failed = true;
+          }
+          await drawer.locator('summary').click();
+          if (await drawer.getAttribute('open') === null)
+            throw new Error('Netvera mobile filter disclosure cannot open');
+          await drawer.locator('summary').click();
+        } else {
+          const sidebar = await page.locator('.nv40-categories').boundingBox();
+          const grid = await page.locator('.nv40-product-grid').boundingBox();
+          if (!sidebar || !grid || sidebar.x + sidebar.width > grid.x + 12)
+            throw new Error('Netvera desktop catalogue not beside compact sidebar');
+        }
+        const filtered = await ctx.newPage();
+        try {
+          await filtered.goto(origin+'/hazir-scriptler?min_price=3500&sort=price_asc',{waitUntil:'domcontentloaded'});
+          const cards = await filtered.locator('.nv40-product-card h3').allTextContents();
+          if (cards.length !== 2 || !cards[0].includes('Emlak') || !cards[1].includes('Haber'))
+            throw new Error('Netvera price SQL filter or numeric sort incorrect: '+cards.join('|'));
+          await filtered.goto(origin+'/hazir-scriptler?min_rating=5',{waitUntil:'domcontentloaded'});
+          const rated = await filtered.locator('.nv40-product-card h3').allTextContents();
+          if (rated.length !== 1 || !rated[0].includes('Haber'))
+            throw new Error('Netvera approved review filter incorrect: '+rated.join('|'));
+        } finally {
+          await filtered.close();
+        }
+      }
+      // Category palette parity: the homepage carousel cannot fall back to
+      // white generic cards while the MEGA MENU uses brand-specific pastel tiles.
+      if (p.route==='/' && screen.name==='masaustu') {
+        const categoryTheme=await page.evaluate(()=>{
+          const header=document.querySelector('.nv26-social-mega-card.nv-platform-instagram');
+          const home=document.querySelector('#featured .nv43-category-card.nv-platform-instagram');
+          if(!header||!home)return {missing:!header?'header':'homepage'};
+          function sample(el){
+            const css=getComputedStyle(el);
+            const icon=getComputedStyle(el.querySelector('.nv26-social-mega-icon,.yh26-filter-icon')||el);
+            return {
+              bg:css.backgroundColor,
+              image:css.backgroundImage,
+              soft:css.getPropertyValue('--np-soft').trim(),
+              text:css.color,
+              iconBg:icon.backgroundColor,
+            };
+          }
+          return {header:sample(header),home:sample(home)};
+        });
+        if(categoryTheme.missing){
+          errors.push('Category parity: missing '+categoryTheme.missing+' Instagram tile');
+          failed=true;
+        }else{
+          const white='rgb(255, 255, 255)';
+          if(categoryTheme.home.bg===white && categoryTheme.home.image==='none'){
+            errors.push('Homepage category still forced to white instead of matching menu pastel');
+            failed=true;
+          }
+          if(categoryTheme.header.soft!==categoryTheme.home.soft){
+            errors.push('Homepage and mega menu platform color tokens differ');
+            failed=true;
+          }
+        }
+      }
+      // Netvera blog covers include text on the artwork; no responsive crop
+      // may hide original titles in the 4-card homepage layout.
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        const artwork=await page.locator('.yh6-blog .yh6-blog-image img').evaluateAll(images=>
+          images.map(img=>{
+            const area=img.closest('.yh6-blog-image');
+            const a=area.getBoundingClientRect();
+            return {src:img.getAttribute('src'),fit:getComputedStyle(img).objectFit,
+                    ratio:a.width/Math.max(1,a.height)};
+          }));
+        if(artwork.length<4)throw new Error('Four original latest-blog cards missing');
+        if(artwork.some(x=>x.fit!=='contain'||x.ratio<1.7||x.ratio>1.85))
+          throw new Error('Original blog artwork is cropped or incorrect ratio: '+JSON.stringify(artwork));
+        if(screen.name==='masaustu'){
+          // Fast Access is a compact live-category hierarchy, not five static links.
+          const quick=page.locator('.nv56-quick');
+          if(await quick.count()!==1)throw new Error('Fast Access menu is missing');
+          await quick.locator('summary').click();
+          if(!(await quick.locator('.nv56-quick-panel').isVisible()))
+            throw new Error('Fast Access categories did not open');
+          const fastActions=await quick.locator('.nv56-quick-action').count();
+          const groupPanels=await quick.locator('.nv56-quick-group').count();
+          if(fastActions!==3 || groupPanels<2)
+            throw new Error('Fast Access actions/catalog hierarchy incomplete: '+fastActions+'/'+groupPanels);
+          const quickHref=await quick.locator('.nv56-quick-category').first().getAttribute('href');
+          if(!quickHref||!quickHref.startsWith('/kategori/'))
+            throw new Error('Fast Access category link does not use real active taxonomy');
+          await quick.locator('summary').click();
+
+          // Two carousels can be grabbed, but their original CSS animation
+          // keeps running naturally whenever the user releases the strip.
+          for(const kind of ['primary','secondary']){
+            const row=page.locator('.yh49-marquee-'+kind+'.yh56-grabbable');
+            if(await row.count()!==1)throw new Error('Grab-enabled category row missing: '+kind);
+            await row.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(100);
+            const clock=()=>row.locator('.yh49-marquee-track').evaluate(el=>{
+              const animation=el.getAnimations()[0];
+              return animation ? Number(animation.currentTime) : NaN;
+            });
+            const before=await clock();
+            await row.hover();
+            await page.waitForTimeout(120);
+            const after=await clock();
+            if(!Number.isFinite(before)||!Number.isFinite(after)||Math.abs(after-before)<30)
+              throw new Error('Category auto-scroll freezes on hover '+kind+': '+before+'/'+after);
+            const box=await row.boundingBox();
+            const y=box.y+box.height/2;
+            await page.mouse.move(box.x+box.width*.75,y);
+            await page.mouse.down();
+            await page.mouse.move(box.x+box.width*.29,y,{steps:8});
+            await page.mouse.up();
+            const dragged=await clock();
+            if(Math.abs(dragged-after)<1200)
+              throw new Error('Mouse drag did not scrub CSS animation '+kind);
+            await page.waitForTimeout(130);
+            const resumed=await clock();
+            if(Math.abs(resumed-dragged)<25)
+              throw new Error('Category animation did not resume after drag '+kind);
+          }
+          const motionTab=page.locator('#featured [data-featured-filter-panel]:not([hidden]) .nv43-root-rail .nv43-category-card[class*="nv-platform-"]:not(.active):not(.is-parent-selected)').first();
+          if(await motionTab.count()){
+            await motionTab.scrollIntoViewIfNeeded();
+            const before=await motionTab.evaluate(el=>({
+              border:getComputedStyle(el).borderColor,
+              shadow:getComputedStyle(el).boxShadow,
+              background:getComputedStyle(el).backgroundImage
+            }));
+            await motionTab.hover();
+            await page.waitForTimeout(420);
+            const after=await motionTab.evaluate(el=>({
+              border:getComputedStyle(el).borderColor,
+              shadow:getComputedStyle(el).boxShadow,
+              background:getComputedStyle(el).backgroundImage
+            }));
+            if(before.border===after.border || !after.background.includes('gradient'))
+              throw new Error('Platform card needs distinct official hover accent and clean neutral idle border: '+JSON.stringify({before,after}));
+            await page.emulateMedia({reducedMotion:'reduce'});
+            await page.waitForTimeout(80);
+            const reduced=await motionTab.evaluate(el=>({
+              transition:getComputedStyle(el).transitionDuration,
+              transform:getComputedStyle(el).transform
+            }));
+            if(reduced.transform!=='none' || !reduced.transition.split(',').every(t=>parseFloat(t)===0))
+              throw new Error('Reduced motion must disable platform card transforms and transitions: '+JSON.stringify(reduced));
+            await page.emulateMedia({reducedMotion:'no-preference'});
+          }
+          const cards=page.locator('.nv29-services-grid .nv29-service-card');
+          if(await cards.count()!==3)throw new Error('Three service cards missing from home');
+          const ctas=await cards.locator('.nv29-card-cta').evaluateAll(links=>
+            links.map(link=>Math.round(link.getBoundingClientRect().top)));
+          if(Math.max(...ctas)-Math.min(...ctas)>3)
+            throw new Error('Service category buttons do not share a horizontal baseline: '+JSON.stringify(ctas));
+          const serviceGeometry=await cards.evaluateAll(nodes=>nodes.map(card=>{
+            const rect=el=>el?.getBoundingClientRect();
+            const copy=rect(card.querySelector('.nv29-card-content'));
+            const visual=rect(card.querySelector('.nv29-visual'));
+            const chips=rect(card.querySelector('.nv29-service-chips'));
+            const title=rect(card.querySelector('.nv29-card-title'));
+            const desc=rect(card.querySelector('.nv29-card-description'));
+            const cta=rect(card.querySelector('.nv29-card-cta'));
+            return {copy,visual,chips,title,desc,cta};
+          }));
+          for(const g of serviceGeometry){
+            if(!g.copy||!g.visual||!g.chips||!g.title||!g.desc||!g.cta)
+              throw new Error('Expertise card geometry node missing: '+JSON.stringify(g));
+            // Alpha artwork shares the pastel body, not a separate top strip.
+            if(g.visual.left<g.copy.left || g.visual.right>g.copy.right+2)
+              throw new Error('Expertise artwork leaves shared body: '+JSON.stringify(g));
+            if(g.copy.bottom>g.chips.top+2||g.visual.bottom>g.chips.top+2||g.cta.bottom>g.chips.top+2)
+              throw new Error('Expertise body overlaps chip footer: '+JSON.stringify(g));
+            if(g.title.bottom>g.desc.top+2)
+              throw new Error('Expertise title overlaps description: '+JSON.stringify(g));
+            if(g.desc.bottom>g.cta.top+2)
+              throw new Error('Expertise description overlaps CTA: '+JSON.stringify(g));
+          }
+        }
+      }
+      let switcher=null;
+      if(p.route==='/' && screen.name==='masaustu'){
+        const tabs=page.locator('[data-featured-tab]');
+        const panes=page.locator('[data-featured-pane]:not([hidden])');
+        const groups=page.locator('[data-featured-group]');
+        const count=await tabs.count();
+        const groupCount=await groups.count();
+        if(!groupCount)throw new Error('Featured category groups not rendered');
+        const geometry=await page.locator('.yh24-featured-navigation').evaluate(el=>{
+          const parent=el.getBoundingClientRect();
+          return {
+            overflow:el.scrollWidth>el.clientWidth+2,
+            allInside:[...el.querySelectorAll('[data-featured-group]')].every(btn=>{
+              const b=btn.getBoundingClientRect();
+              return b.left>=parent.left-2 && b.right<=parent.right+2;
+            })
+          };
+        });
+        if(geometry.overflow||!geometry.allInside){
+          errors.push('Featured groups overflow navigation container');failed=true;
+        }
+        if(count>1){
+          const first=await panes.first().getAttribute('data-featured-pane');
+          if(groupCount>1){
+            await groups.nth(1).hover();
+            const key=await groups.nth(1).getAttribute('data-featured-group');
+            const panel=page.locator('[data-featured-filter-panel]:not([hidden])');
+            if((await panel.getAttribute('data-featured-filter-panel'))!==key){
+              throw new Error('Hover failed to reveal the group subcategory filters');
+            }
+            await panel.locator('[data-featured-tab]').first().click();
+          }else{
+            await page.locator('[data-featured-filter-panel]:not([hidden]) [data-featured-tab]').nth(1).click();
+          }
+          const second=await panes.first().getAttribute('data-featured-pane');
+          switcher={tabs:count,groupCount,changed:first!==second};
+          if(!switcher.changed){errors.push('Featured grouped filter did not switch packages');failed=true}
+        }
+      }
+      // Regression: "Ajans & Yazılım" must expose the REAL Netvera scripts
+      // as selectable panels, not just old service-package categories.
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        const agency = page.locator('[data-featured-group="agency"]');
+        if(!(await agency.count()))throw new Error('Agency featured switcher group missing');
+        await agency.click();
+        const filters = page.locator('[data-featured-filter-panel="agency"]');
+        const softwareTabs = filters.locator('[data-featured-tab][data-kind="software"]');
+        const scriptTabCount = await softwareTabs.count();
+        // CI fixture has two actual script categories plus the catalogue root;
+        // an imported source DB will have three plus the root.
+        if(scriptTabCount < 3) throw new Error('Netvera software and original categories missing from featured section: '+scriptTabCount);
+        const rootSoftwareTab = softwareTabs.first();
+        const rootId = await rootSoftwareTab.getAttribute('data-featured-tab');
+        if((await rootSoftwareTab.getAttribute('data-url'))!=='/hazir-scriptler')
+          throw new Error('Netvera tab missing original catalogue route');
+        await rootSoftwareTab.click();
+        const softwarePane = page.locator('[data-featured-pane="'+rootId+'"]:not([hidden])');
+        if(!(await softwarePane.count()))throw new Error('Netvera featured software tab did not activate its real pane');
+        if(!(await softwarePane.locator('a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+          throw new Error('Original indexed software product is missing from featured cards');
+        if(!(await page.locator('[data-featured-kind]').textContent())?.includes('Yazılımlar'))
+          throw new Error('Software tab kept the package-only heading');
+        if((await softwarePane.locator('[data-netvera-software-card]').count())<3)
+          throw new Error('Real software cards did not render from CI product records');
+        // All categories are selectable, even if one has no active products.
+        const lastSoftwareTab = softwareTabs.last();
+        const lastId=await lastSoftwareTab.getAttribute('data-featured-tab');
+        await lastSoftwareTab.click();
+        if(!(await page.locator('[data-featured-pane="'+lastId+'"]:not([hidden])').count()))
+          throw new Error('Last original Netvera software category cannot be selected');
+        const featuredOverflow=await page.locator('.yh24-featured-subfilters').evaluate(el=>el.scrollWidth>el.clientWidth+4);
+        if(featuredOverflow) throw new Error('Netvera featured filters overflow '+screen.name);
+        // Return to existing original service packages: software tabs must not
+        // overwrite package cards, headings or links.
+        const packageTab=filters.locator('[data-featured-tab][data-kind="package"]').first();
+        await packageTab.click();
+        if(!await page.locator('[data-featured-kind]').textContent().then(text=>text.includes('Paketler')))
+          throw new Error('Switching back from Netvera software to packages failed');
+      }
+      if(p.route==='/' && screen.name==='mobil'){
+        const groups=page.locator('[data-featured-group]');
+        if(await groups.count()){
+          await groups.last().click();
+          const key=await groups.last().getAttribute('data-featured-group');
+          const panel=page.locator('[data-featured-filter-panel]:not([hidden])');
+          if((await panel.getAttribute('data-featured-filter-panel'))!==key){
+            throw new Error('Mobile group tap failed to open its filter panel');
+          }
+          const overflow=await page.locator('.yh24-featured-subfilters').evaluate(el=>el.scrollWidth>el.clientWidth+3);
+          if(overflow)throw new Error('Mobile subcategory filters overflow the page');
+          if(!await panel.locator('[data-featured-tab]').count()){
+            throw new Error('Active category filter panel has no live filter choices');
+          }
+        }
+      }
+      // New featured taxonomy follows mega-menu parent->child hierarchy.
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        const categoryPanel=page.locator('[data-featured-filter-panel="agency"]');
+        const rootRail=categoryPanel.locator('.nv43-root-rail');
+        const categoryRoots=await rootRail.locator('[data-featured-tab]').count();
+        if(categoryRoots<2)throw new Error('Real service/software roots missing from featured rail');
+        const boxes=await rootRail.locator('.nv43-category-card').evaluateAll(tiles=>
+          tiles.map(el=>({y:Math.round(el.getBoundingClientRect().top),
+                         x:Math.round(el.getBoundingClientRect().left)})));
+        if(boxes.length>1 && boxes.some(box=>Math.abs(box.y-boxes[0].y)>3))
+          throw new Error('Main featured category tiles wrapped into second row');
+        const collapsed=await categoryPanel.locator('[data-featured-children-for="-100000"]').getAttribute('hidden');
+        if(collapsed===null)throw new Error('Software subcategories shown before selecting software root');
+        await page.locator('[data-featured-group="agency"]').click();
+        await categoryPanel.locator('.nv43-root-rail [data-featured-tab][data-kind="software"]').click();
+        const subMenu=categoryPanel.locator('[data-featured-children-for="-100000"]');
+        if(await subMenu.getAttribute('hidden')!==null)
+          throw new Error('Software menu nested child rail did not open');
+        const softwareChildren=await subMenu.locator('.nv43-subcategory-tab').count();
+        const softwareTypes=await subMenu.locator('a[href^="/hazir-yazilimlar?tur="]').count();
+        if(softwareChildren<2||softwareTypes<30)
+          throw new Error('Original subcategories or ready software menu items omitted: '+softwareChildren+' / '+softwareTypes);
+        const panels=await page.locator('[data-featured-pane="-100000"]').count();
+        if(panels!==1)throw new Error('Legacy software panes still duplicated inside package loop: '+panels);
+        const rootStats=await rootRail.evaluate(el=>({
+          wrap:getComputedStyle(el).flexWrap,
+          scrollWidth:el.scrollWidth,viewport:el.clientWidth
+        }));
+        if(rootStats.wrap!=='nowrap')
+          throw new Error('Main category rail unexpectedly wraps');
+        const childRail=subMenu.locator('.nv43-child-rail');
+        const childStats=await childRail.evaluate(el=>({
+          width:el.scrollWidth,viewport:el.clientWidth,
+          display:getComputedStyle(el).display,
+          parentDisplay:getComputedStyle(el.parentElement).display,
+          subMenuHidden:!!el.closest('[hidden]'),
+          childCount:el.children.length
+        }));
+        if(childStats.width<=childStats.viewport+50)
+          throw new Error('Nested software menu not scrollable: '+JSON.stringify(childStats));
+        if(screen.name==='masaustu'){
+          // The submenu may expand below the current viewport. Real users
+          // scroll it into view before dragging; pointer events outside the
+          // viewport cannot reach a rail even when its content overflows.
+          await childRail.scrollIntoViewIfNeeded();
+          await page.waitForTimeout(80);
+          await childRail.evaluate(el=>{el.scrollLeft=0;});
+          const rect=await childRail.boundingBox();
+          if(!rect||rect.y<0||rect.y+rect.height>page.viewportSize().height+5)
+            throw new Error('Nested category rail is outside the draggable viewport');
+          await page.mouse.move(rect.x+rect.width*.73,rect.y+rect.height*.6);
+          await page.mouse.down();
+          await page.mouse.move(rect.x+rect.width*.31,rect.y+rect.height*.6,{steps:9});
+          await page.mouse.up();
+          const dragged=await childRail.evaluate(el=>el.scrollLeft);
+          if(dragged<20)throw new Error('Mouse grab-and-drag did not move the nested software rail: '+dragged);
+        }else{
+          const next=categoryPanel.locator('.nv43-rail-shell').first().locator('[data-featured-rail-next]');
+          await rootRail.evaluate(el=>{
+            el.scrollLeft=0;
+            el.dispatchEvent(new Event('scroll',{bubbles:false}));
+          });
+          await page.waitForTimeout(130); // Native scroll event updates arrow state on the next frame.
+          if(await next.isDisabled())throw new Error('Mobile horizontal featured navigation disabled after scroll reset');
+          await next.click();
+          await page.waitForTimeout(350);
+          if((await rootRail.evaluate(el=>el.scrollLeft))<8)
+            throw new Error('Mobile featured category carousel next arrow failed');
+        }
+      }
+      if(p.slug==='netvera-blog-markdown'){
+        const article=page.locator('.nv42-article-body');
+        const headings=await article.locator('h2,h3').count();
+        const figures=await article.locator('figure.nv-blog-figure img').count();
+        if(headings<7||figures<1)
+          throw new Error('Real Netvera Markdown article failed heading/image conversion: '+headings+'/'+figures);
+        const raw=await article.innerText();
+        if(raw.includes('## Yapay zeka haber yazılımı')||raw.includes('**Yapay zeka haber'))
+          throw new Error('Markdown syntax still printed as raw blog text');
+        if(!(await article.locator('blockquote').count()))
+          throw new Error('Markdown quotation was not rendered');
+      }
+      // Regression: account pages must be centered, legible and truly split on desktop.
+      if((p.route==='/giris'||p.route==='/kayit') && (screen.name==='masaustu'||screen.name==='mobil')){
+        const auth=page.locator('.auth25-shell');
+        if(!(await auth.count()))throw new Error('Premium account layout missing');
+        const box=await auth.evaluate(el=>{
+          const r=el.getBoundingClientRect();
+          const left=el.querySelector('.auth25-showcase').getBoundingClientRect();
+          const right=el.querySelector('.auth25-panel').getBoundingClientRect();
+          return {x:r.x,w:r.width,right:r.right,viewport:innerWidth,leftRight:left.right,rightX:right.x,
+            panelWidth:right.width,formWidth:el.querySelector('.auth25-form').getBoundingClientRect().width};
+        });
+        if(box.x < -2||box.right > box.viewport + 2||box.formWidth<245){
+          errors.push('Account page overflows or has too narrow a form');failed=true;
+        }
+        if(screen.name==='masaustu'&&(box.rightX<box.leftRight-2||box.panelWidth<350)){
+          errors.push('Account page two-column layout collapsed on desktop');failed=true;
+        }
+        if(p.route==='/giris'){
+          const pw=page.locator('#password'),toggle=page.locator('[data-auth-toggle="password"]');
+          await pw.fill('qa-visible');
+          await toggle.click();
+          if(await pw.getAttribute('type')!=='text'){errors.push('Password show button did not reveal password');failed=true;}
+          await toggle.click();
+          if(await pw.getAttribute('type')!=='password'){errors.push('Password hide button did not conceal password');failed=true;}
+        }
+        if(p.route==='/kayit'){
+          if((await page.locator('#name').count())!==1||(await page.locator('#password_confirmation').count())!==1){
+            errors.push('Registration fields missing');failed=true;
+          }
+        }
+      }
+      // Mega menu is a separate keyboard/touch module from the category tile directory.
+      if((p.route==='/'||p.route==='/kategoriler') && ['masaustu','mobil'].includes(screen.name)){
+        const triggers=page.locator('#navMain [data-mega-trigger]');
+        if((await triggers.count())<2){
+          errors.push('Social and agency mega menu entries missing');failed=true;
+        }else if(screen.name==='masaustu'){
+          await triggers.first().hover();
+          const panel=page.locator('#navMain [data-mega-panel]:not([hidden])');
+          if((await panel.count())!==1 || !(await panel.locator('a.nv26-mega-parent[href^="/kategori/"], a.nv26-social-mega-card[href^="/kategori/"]').count())){
+            errors.push('Hover mega menu does not show real category links');failed=true;
+          }
+          await page.keyboard.press('Escape');
+          if(await page.locator('#navMain [data-mega-panel]:not([hidden])').count()){
+            errors.push('Mega menu Escape close failed');failed=true;
+          }
+        }else{
+          const btn=page.locator('#mobileMenuBtn');
+          await btn.click();
+          if(!(await page.locator('#navMain').evaluate(el=>el.classList.contains('open')))){
+            errors.push('Mobile navigation drawer did not open');failed=true;
+          }
+          await triggers.first().click();
+          if(!(await page.locator('#navMain [data-mega-panel]:not([hidden])').count())){
+            errors.push('Mobile group accordion did not expand');failed=true;
+          }
+          await btn.click();
+        }
+      }
+      if(p.route==='/kategoriler' && ['masaustu','mobil'].includes(screen.name)){
+        if(!(await page.locator('.nv26-catalog-group').count()) || !(await page.locator('.nv26-catalog-tile').count())){
+          errors.push('Live colorful category grid is missing');failed=true;
+        }
+        if(!(await page.locator('.nv26-catalog-tile a[href^="/kategori/"]').count())){
+          errors.push('Category tiles are not linked to catalog records');failed=true;
+        }
+        const dimensions=await page.locator('.nv26-catalog-tiles').first().evaluate(el=>({
+          width:el.clientWidth,scroll:el.scrollWidth
+        }));
+        if(dimensions.scroll>dimensions.width+3){
+          errors.push('Platform category tiles overflow their grid');failed=true;
+        }
+      }
+      if(p.route==='/' && screen.name==='masaustu'){
+        const invisibleQuickCards=await page.locator('.yh6-platform-bar a').evaluateAll(cards=>
+          cards.filter(card=>{
+            const style=getComputedStyle(card);
+            const backgroundMissing=style.backgroundImage==='none' &&
+              ['transparent','rgba(0, 0, 0, 0)'].includes(style.backgroundColor);
+            return backgroundMissing;
+          }).map(card=>card.className)
+        );
+        if(invisibleQuickCards.length){
+          errors.push('Homepage quick service cards have no background: '+invisibleQuickCards.join(', '));failed=true;
+        }
+      }
+      // Distinct premium agency / marketing dropdowns; social tiles are unchanged.
+      if(p.route==='/' && (screen.name==='masaustu'||screen.name==='mobil')){
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        for(const group of ['agency','marketing']){
+          const btn=page.locator('[aria-controls="nv26-panel-'+group+'"][data-mega-trigger]');
+          if(!await btn.count()) continue; // An admin can deliberately hide a group.
+          if(screen.name==='masaustu') await btn.hover();
+          else await btn.click();
+          const panel=page.locator('#nv26-panel-'+group);
+          if(await panel.isHidden()){errors.push(group+' premium dropdown did not open');failed=true;continue;}
+          const info=await panel.evaluate(root=>{
+            const cards=[...root.querySelectorAll('.nv27-service-card')];
+            const links=[...root.querySelectorAll('.nv27-subcategory-link')];
+            const grid=root.querySelector('.nv27-service-grid');
+            const cardBoxes=cards.map(el=>el.getBoundingClientRect());
+            const duplicateCard=cardBoxes.some((rect,i)=>cardBoxes.slice(i+1).some(other=>
+              Math.min(rect.right,other.right)-Math.max(rect.left,other.left)>4 &&
+              Math.min(rect.bottom,other.bottom)-Math.max(rect.top,other.top)>4));
+            return {cards:cards.length,childLinks:links.length,
+              badHref:links.some(a=>{
+                const href=a.getAttribute('href')||'';
+                // Real category child links now point directly to their own
+                // indexed SEO pages. Old ?alt= links are still supported.
+                // NetVera script filters preserve their separate legacy URLs.
+                return !(/^\/kategori\/[^/?#]+(?:\?alt=[^&#]+)?$/.test(href))
+                  && !(href.startsWith('/hazir-scriptler?category=')&&href.split('=')[1])
+                  && !(href.startsWith('/hazir-scriptler?type=')&&href.split('=')[1])
+                  && href!=='/hazir-scriptler' && href!=='/hazir-yazilimlar';
+              }),
+              overflow:!!grid && grid.scrollWidth>grid.clientWidth+3,
+              overlap:duplicateCard,
+              hasSpotlight:!!root.querySelector('.nv27-service-spotlight')};
+          });
+          if(!info.cards||!info.hasSpotlight||info.overflow||info.overlap||info.badHref){
+            errors.push(group+' premium layout or category links invalid: '+JSON.stringify(info));failed=true;
+          }
+          if(screen.name==='masaustu'){
+            await page.screenshot({path:path.join(output,'premium-menu-'+group+'-desktop.png'),animations:'disabled'});
+          }
+        }
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        else await page.keyboard.press('Escape');
+      }
+      // V28 regression: submenu glyphs must exist and be centered inside
+      // their padded backgrounds, including the known-broken north-east arrow.
+      if(p.route==='/' && (screen.name==='masaustu'||screen.name==='mobil')){
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        for(const group of ['agency','marketing']){
+          const btn=page.locator('[data-mega-trigger][aria-controls="nv26-panel-'+group+'"]');
+          if(!await btn.count()) continue;
+          if(screen.name==='masaustu') await btn.hover();
+          else await btn.click();
+          const panel=page.locator('#nv26-panel-'+group);
+          const state=await panel.evaluate(root=>{
+            const centered=(wrapper,glyph)=>{
+              const b=wrapper.getBoundingClientRect(),g=glyph.getBoundingClientRect();
+              const dx=Math.abs((b.left+b.right)/2-(g.left+g.right)/2);
+              const dy=Math.abs((b.top+b.bottom)/2-(g.top+g.bottom)/2);
+              return dx<3.5 && dy<3.5 && g.width>4 && g.height>4;
+            };
+            const targets=[...root.querySelectorAll('.nv27-service-icon,.nv27-service-parent-arrow,.nv27-subcategory-symbol')];
+            const blanks=[];
+            for(const item of targets){
+              const glyph=item.querySelector('.icon');
+              if(!glyph){blanks.push('missing '+item.className);continue;}
+              const isSvg=glyph.tagName.toLowerCase()==='svg';
+              const pseudo=isSvg?'':getComputedStyle(glyph,'::before').content;
+              if(!isSvg && (!pseudo || pseudo==='none'||pseudo==='normal')){
+                blanks.push('unresolved '+glyph.className);
+              }
+              if(!centered(item,glyph))blanks.push('off-center '+item.className);
+            }
+            const sub=[...root.querySelectorAll('.nv27-subcategory-symbol .icon')];
+            return {total:targets.length,subIcons:sub.length,blanks:blanks.slice(0,12)};
+          });
+          if(state.total===0||state.subIcons===0||state.blanks.length){
+            errors.push(group+' missing or misaligned icons: '+JSON.stringify(state));failed=true;
+          }
+        }
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        else await page.keyboard.press('Escape');
+      }
+      // V29: all three headline service families, not Instagram/TikTok/Web Site.
+      if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
+        const promos=page.locator('.nv29-service-card');
+        const keys=await promos.evaluateAll(cards=>cards.map(el=>el.getAttribute('data-promo-group')));
+        if(JSON.stringify(keys)!==JSON.stringify(['social','agency','marketing'])){
+          errors.push('Three main service groups missing or out of order: '+keys.join(','));failed=true;
+        }
+        const state=await page.locator('.nv29-services').evaluate(section=>{
+          const all=[...section.querySelectorAll('.nv29-service-card')];
+          const boxes=all.map(el=>el.getBoundingClientRect());
+          const onePerRow=innerWidth<=700;
+          const collisions=boxes.some((b,i)=>boxes.slice(i+1).some(other=>
+            Math.min(b.right,other.right)-Math.max(b.left,other.left)>5 &&
+            Math.min(b.bottom,other.bottom)-Math.max(b.top,other.top)>5));
+          return {
+            collisions,onePerRow,overflow:section.scrollWidth>section.clientWidth+3,
+            cards:all.map(card=>{
+              const key=card.getAttribute('data-promo-group');
+              const cta=card.querySelector('.nv29-card-cta');
+              const chips=[...card.querySelectorAll('.nv29-service-chip')];
+              const art=card.querySelector('.nv29-visual');
+              const area=card.getBoundingClientRect();
+              const artwork=art?.getBoundingClientRect();
+              return {
+                key,
+                title:card.querySelector('h3')?.textContent?.trim(),
+                validCta:cta?.getAttribute('href')==='/kategoriler/grup/'+key,
+                badChips:chips.filter(a=>!a.getAttribute('href')?.startsWith('/kategori/')).length,
+                tooManyChips:chips.length>4,
+                artVisible:!!artwork && artwork.width>35 && artwork.height>65,
+                narrow:area.width<270,
+                // Single-scene artwork no longer relies on clipped decoration.
+                // Content and CTA must remain inside the card/chip boundaries.
+                contentOverflow:(()=>{
+                  const content=card.querySelector('.nv29-card-content')?.getBoundingClientRect();
+                  const footer=card.querySelector('.nv29-service-chips')?.getBoundingClientRect();
+                  if(!content||!footer)return true;
+                  return content.left<area.left-2 || content.right>area.right+2 ||
+                    content.bottom>footer.top+4 || footer.bottom>area.bottom+3;
+                })(),
+              };
+            }),
+          };
+        });
+        if(state.collisions||state.overflow||state.cards.some(x=>!x.validCta||x.badChips||x.tooManyChips||!x.artVisible||x.narrow||x.contentOverflow)){
+          errors.push('Premium service cards responsive/data defect: '+JSON.stringify(state));failed=true;
+        }
+        // Regression: differently sized headlines/descriptions must NEVER
+        // stagger the three CTA buttons or their chip-footer baselines.
+        if(['masaustu','genis'].includes(screen.name)){
+          const positions=await promos.evaluateAll(cards=>cards.map(card=>{
+            const button=card.querySelector('.nv29-card-cta')?.getBoundingClientRect();
+            const foot=card.querySelector('.nv29-service-chips')?.getBoundingClientRect();
+            const header=card.querySelector('.nv29-card-content h3')?.getBoundingClientRect();
+            const root=card.getBoundingClientRect();
+            return {ctaTop:button?.top,ctaBottom:button?.bottom,footerTop:foot?.top,
+                    headerTop:header?.top,cardBottom:root.bottom};
+          }));
+          for(const property of ['ctaTop','ctaBottom','footerTop']){
+            const values=positions.map(p=>p[property]);
+            const diff=Math.max(...values)-Math.min(...values);
+            if(diff>2.5)throw new Error('Three home promo '+property+' elements are staggered by '+diff.toFixed(1)+'px: '+JSON.stringify(positions));
+          }
+          if(positions.some(p=>p.ctaBottom>p.footerTop-10))
+            throw new Error('Service CTA touches category chips footer');
+          if(positions.some(p=>p.ctaTop<=p.headerTop))
+            throw new Error('Service CTA overlaps heading');
+        }
+        if(screen.name==='masaustu'){
+          const images=page.locator('.nv29-artwork');
+          if(await images.count()!==3 || !(await images.evaluateAll(nodes=>nodes.every(el=>el.complete&&Math.min(el.naturalWidth,el.naturalHeight)>=1000&&getComputedStyle(el).objectFit==='contain')))){
+            errors.push('Single-scene expertise artwork did not load');failed=true;
+          }
+          await page.locator('.nv29-services').screenshot({path:path.join(output,'home-three-service-groups.png'),animations:'disabled'});
+        }
+      }
+      // V34: the public ready-software category is a working page on clean
+      // installs, and the agency menu always exposes its own fixed entry.
+      if(p.route==='/hazir-yazilimlar' && ['mobil','masaustu'].includes(screen.name)){
+        if(!(await page.locator('.nv36-marketplace').count()) ||
+           !(await page.locator('.nv36-sidebar').count()) ||
+           !(await page.locator('.nv36-results-bar').count()) ||
+           !(await page.locator('#nv33-products').count()) ||
+           (await page.locator('.nv36-category-choice').count())!==35){
+          errors.push('Sidebar marketplace or 34 category types missing');failed=true;
+        }
+        const link=page.locator('.nv36-category-choice[href*="tur=haber-sitesi-scripti"]');
+        if(!await link.count())errors.push('Script category filter link missing');
+        const geo=await page.evaluate(()=>{
+          const sidebar=document.querySelector('.nv36-sidebar')?.getBoundingClientRect();
+          const products=document.querySelector('.nv36-results')?.getBoundingClientRect();
+          const hero=document.querySelector('.nv36-hero')?.getBoundingClientRect();
+          return {sidebarX:sidebar?.left,sideRight:sidebar?.right,productX:products?.left,productY:products?.top,
+            heroEnd:hero?.bottom,overflow:document.documentElement.scrollWidth>innerWidth+3};
+        });
+        if(geo.overflow||!(geo.productY<520) ||
+           (screen.name==='masaustu' && !(geo.productX>geo.sideRight))){
+          errors.push('Marketplace products below oversized filters or overflow: '+JSON.stringify(geo));failed=true;
+        }
+        if(screen.name==='mobil'){
+          const toggle=page.locator('[data-software-filter-toggle]');
+          if(await toggle.getAttribute('aria-expanded')!=='false'){
+            errors.push('Mobile filters should be collapsed initially');failed=true;
+          }
+          await toggle.click();
+          if(await toggle.getAttribute('aria-expanded')!=='true'){
+            errors.push('Mobile filters did not expand');failed=true;
+          }
+        }
+        await page.locator('.nv36-marketplace').screenshot({
+          path:path.join(output,'software-marketplace-v36-'+screen.name+'.png'),
+          animations:'disabled'
+        });
+      }
+      if(p.route==='/' && ['mobil','masaustu'].includes(screen.name)){
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+        const agency=page.locator('[data-mega-trigger][aria-controls="nv26-panel-agency"]');
+        if(await agency.count()){
+          if(screen.name==='mobil') await agency.click();
+          else await agency.hover();
+          const software=page.locator('#nv26-panel-agency .nv35-software-card');
+          if((await software.count())!==1 ||
+             !(await software.locator('.nv27-service-parent[href="/hazir-scriptler"]').count()) ||
+             (await software.locator('.nv27-subcategory-link[href^="/hazir-scriptler?category="]').count()) < 2 ||
+             !(await software.locator('.nv27-subcategory-link[href="/hazir-yazilimlar"]').count()) ||
+             !(await software.locator('.nv27-category-footer[href="/hazir-scriptler"]').count())){
+            errors.push('Real Netvera scripts are not the sixth agency category, or service-page link was lost');failed=true;
+          }
+          if(await page.locator('#nv26-panel-agency .nv33-software-feature').count()){
+            errors.push('Obsolete wide software banner still occupies the menu top');failed=true;
+          }
+          if(screen.name==='masaustu'){
+            const measured=await page.locator('#nv26-panel-agency').evaluate(panel=>{
+              const grid=panel.querySelector('.nv27-service-grid');
+              const cards=[...grid?.querySelectorAll(':scope > .nv27-service-card')||[]];
+              const last=cards[cards.length-1]?.getBoundingClientRect();
+              const previous=cards[cards.length-2]?.getBoundingClientRect();
+              const firstRowThird=cards[2]?.getBoundingClientRect();
+              const columns=getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+              return {
+                cards:cards.length,columns,
+                lastChildIsSoftware:cards[cards.length-1]?.matches('.nv35-software-card'),
+                sharesLastRow:!!last&&!!previous&&Math.abs(last.top-previous.top)<4,
+                alignsThirdColumn:!!last&&!!firstRowThird&&Math.abs(last.left-firstRowThird.left)<4,
+                clipped:panel.scrollHeight>panel.clientHeight+6,
+                viewportRight:last?.right,
+              };
+            });
+            if(measured.cards!==6||measured.columns!==3||
+               !measured.lastChildIsSoftware||!measured.sharesLastRow||
+               !measured.alignsThirdColumn||measured.clipped){
+              errors.push('Agency grid/card positioning defect: '+JSON.stringify(measured));failed=true;
+            }
+            await page.locator('#nv26-panel-agency').screenshot({
+              path:path.join(output,'agency-software-as-sixth-card-v35.png'),
+              animations:'disabled'
+            });
+          }
+          if(screen.name==='masaustu') await page.keyboard.press('Escape');
+        }
+        if(screen.name==='mobil') await page.locator('#mobileMenuBtn').click();
+      }
+      // V32: service and portfolio sections exist even on a new, empty DB.
+      if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
+        const ready=await page.evaluate(()=>{
+          const software=document.querySelector('#hazir-yazilimlar');
+          const refs=document.querySelector('#referanslarimiz');
+          const containerFit=root=>{
+            const r=root.getBoundingClientRect();
+            return r.width>260 && r.left>=-3 && r.right<=innerWidth+3;
+          };
+          return {
+            softwarePresent:!!software,
+            referencesPresent:!!refs,
+            emptySoftware:!!software?.querySelector('.nv32-software-intro'),
+            // V51+ keeps category tabs visible even with no references.
+            emptyReferences:!!refs?.querySelector('.nv32-portfolio-intro') ||
+              !!refs?.querySelector('.nv51-no-results:not([hidden])'),
+            softwareProducts:software?.querySelectorAll('.nv31-software-card').length||0,
+            references:refs?.querySelectorAll('.nv31-portfolio-card').length||0,
+            badLinks:[...document.querySelectorAll('.nv32-software-intro a,.nv32-portfolio-intro a')]
+              .filter(el=>!el.getAttribute('href') || el.getAttribute('href')==='#' ||
+                (el.getAttribute('href')||'').includes('/kategori/hazir-yazilim-scriptleri') &&
+                !el.closest('.nv32-service-list') && !document.querySelector('.nv32-service-list a')).length,
+            aligned:software&&refs&&containerFit(software)&&containerFit(refs),
+            overflow:[software,refs].filter(Boolean).some(el=>el.scrollWidth>el.clientWidth+6),
+          };
+        });
+        if(!ready.softwarePresent||!ready.referencesPresent||!ready.aligned||
+          ready.overflow||ready.badLinks||
+          !(ready.softwareProducts||ready.emptySoftware)||
+          !(ready.references||ready.emptyReferences)){
+          failed=true;errors.push('V32 homepage sections missing on fresh database: '+JSON.stringify(ready));
+        }
+        if(screen.name==='masaustu'){
+          await page.locator('#hazir-yazilimlar').screenshot({path:path.join(output,'software-empty-state-v32.png'),animations:'disabled'});
+          await page.locator('#referanslarimiz').screenshot({path:path.join(output,'references-empty-state-v32.png'),animations:'disabled'});
+        }
+      }
+      // V30: reviews and four-step service journey must be visible and usable
+      // at all four viewport sizes, with no fake/inert review action.
+      if(p.route==='/' && ['mobil','tablet','masaustu','genis'].includes(screen.name)){
+        const v30=await page.evaluate(()=>{
+          const reviewSection=document.querySelector('.nv30-feedback');
+          const stepSection=document.querySelector('.nv30-process');
+          const steps=[...(stepSection?.querySelectorAll('.nv30-step')||[])];
+          const cards=[...(reviewSection?.querySelectorAll('.nv30-review-card')||[])];
+          const check=sel=>{
+            const el=document.querySelector(sel);
+            if(!el)return null;
+            const r=el.getBoundingClientRect();
+            return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};
+          };
+          const overlap=boxes=>boxes.some((r,i)=>boxes.slice(i+1).some(other=>
+            Math.min(r.right,other.right)-Math.max(r.left,other.left)>3 &&
+            Math.min(r.bottom,other.bottom)-Math.max(r.top,other.top)>3
+          ));
+          const rects=els=>els.map(el=>el.getBoundingClientRect());
+          return {
+            steps:steps.length,
+            reviews:cards.length,
+            oldModules:document.querySelectorAll('section.yh6-reviews,section.yh6-how').length,
+            badLinks:[...document.querySelectorAll('.nv30-feedback a,.nv30-process a')]
+              .filter(a=>!a.getAttribute('href') || a.getAttribute('href')==='#').length,
+            stepOverlap:overlap(rects(steps)),
+            reviewOverlap:overlap(rects(cards)),
+            oldTooSmall:[...document.querySelectorAll('.nv30-review-card blockquote,.nv30-step p')]
+              .some(el=>parseFloat(getComputedStyle(el).fontSize)<9.8),
+            sectionOverflow:[reviewSection,stepSection]
+              .filter(Boolean).some(el=>el.scrollWidth>el.clientWidth+8),
+            stepCard:check('.nv30-step'),
+          };
+        });
+        if(v30.steps!==4||v30.oldModules||v30.badLinks||v30.stepOverlap||
+           v30.reviewOverlap||v30.oldTooSmall||v30.sectionOverflow||!v30.stepCard){
+          errors.push('Premium reviews/steps failure: '+JSON.stringify(v30));failed=true;
+        }
+        if(screen.name==='masaustu'){
+          await page.locator('.nv30-process').screenshot({path:path.join(output,'premium-process-v30.png'),animations:'disabled'});
+          if(v30.reviews) await page.locator('.nv30-feedback').screenshot({path:path.join(output,'premium-reviews-v30.png'),animations:'disabled'});
+        }
+      }
+      // Regression checks for screenshot-confirmed layout failures.
+      const g=report.geom||{};
+      if(screen.w>=1180){
+        for(const key of ['.yv-category-hero-art-v5','.yv-blog-hero-art-v8','.yv-product-hero-visual-v5']){
+          if(g[key] && g[key].w<180){
+            errors.push('Collapsed hero artwork: '+key+' width='+g[key].w);
+            failed=true;
+          }
+        }
+      }
+      if(p.route==='/' && screen.w<=768 && g['.yh6-platform-bar'] && g['.yh6-why']){
+        const stripBottom=g['.yh6-platform-bar'].y+g['.yh6-platform-bar'].h;
+        if(stripBottom>g['.yh6-why'].y+3){
+          errors.push('Homepage service strip overlaps next section by '+(stripBottom-g['.yh6-why'].y)+'px');
+          failed=true;
+        }
+      }
+      const record={route:p.route,screen:screen.name,status,url:fullUrl,report,switcher,errors};
+      results.push(record);
+      const shot=path.join(output,`${p.slug}-${screen.name}.png`);
+      await page.screenshot({path:shot,fullPage:true,animations:'disabled',timeout:30000});
+      if(status>=500||report.bodyText.includes('Veritabanı bağlantı hatası')||report.rootScroll>screen.w+3){
+        failed=true;
+      }
+      console.log(`${screen.name.padEnd(9)} ${p.route.padEnd(60)} HTTP ${status} overflow=${report.overflow.length} missingImg=${report.failedImgs.length} errors=${errors.length}`);
+    }catch(e){
+      failed=true;results.push({route:p.route,screen:screen.name,status,url:fullUrl,errors:[String(e)]});
+      console.error('FAIL',screen.name,p.route,String(e).slice(0,250));
+    }finally{await page.close()}
+  }
+  await ctx.close();
+}
+
+// Verify the exact laptop/tablet widths where the customer saw the portrait
+// covering benefit pills; normal homepage smoke viewports cannot catch this.
+const authVisualContext = await browser.newContext({deviceScaleFactor:1});
+const authVisualPage = await authVisualContext.newPage();
+for (const screen of [{w:1150,h:766,name:'laptop-1150'},{w:1024,h:768,name:'laptop-1024'}]){
+  await authVisualPage.setViewportSize({width:screen.w,height:screen.h});
+  for (const route of ['/giris','/kayit']){
+    try {
+      const response = await authVisualPage.goto(origin+route,{waitUntil:'domcontentloaded'});
+      await authVisualPage.evaluate(() => document.fonts?.ready);
+      const result = await authVisualPage.evaluate(() => {
+        const showcase = document.querySelector('.auth25-showcase');
+        const artwork = showcase?.querySelector('.auth25-art');
+        const visual = artwork?.getBoundingClientRect();
+        const r = selector => showcase?.querySelector(selector)?.getBoundingClientRect();
+        const features = [...(showcase?.querySelectorAll('.auth25-benefits>span') || [])];
+        const targets = [
+          ['headline',r('.auth25-showcase-main h2')],
+          ['description',r('.auth25-showcase-main p')],
+          ...features.map((el,i) => ['benefit-'+i,el.getBoundingClientRect()]),
+          ['trust-card',r('.auth25-float')],
+        ];
+        const overlaps = (visual && getComputedStyle(artwork).display!=='none')
+          ? targets.filter(([name, box]) => {
+              if(!box)return false;
+              return Math.min(visual.right,box.right)-Math.max(visual.left,box.left)>4 &&
+                     Math.min(visual.bottom,box.bottom)-Math.max(visual.top,box.top)>4;
+            }).map(([name])=>name):[];
+        const panel = document.querySelector('.auth25-panel')?.getBoundingClientRect();
+        const left = showcase?.getBoundingClientRect();
+        const portrait = showcase?.querySelector('.auth25-art img');
+        return {overlaps,portraitLoaded:!!portrait?.naturalWidth,portraitVisible:!!visual,
+          panelAligned:!!panel&&!!left&&panel.left>=left.right-2,
+          horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
+      });
+      if(response.status()>=400 || result.overlaps.length || !result.portraitLoaded ||
+         !result.panelAligned || result.horizontalOverflow){
+        throw new Error('Auth layout defect '+JSON.stringify({status:response.status(),...result}));
+      }
+      await authVisualPage.screenshot({
+        path:path.join(output,'auth-'+screen.name+'-'+(route==='/giris'?'login':'register')+'.png'),
+        fullPage:true,animations:'disabled'
+      });
+      results.push({route,screen:screen.name,status:response.status(),errors:[]});
+      console.log('PASS auth visual composition:',screen.name,route,'portrait clear of copy and badges');
+    } catch(e){
+      failed=true;
+      results.push({route,screen:screen.name,status:0,errors:[String(e)]});
+      console.error('FAIL auth visual composition:',screen.name,route,String(e).slice(0,390));
+    }
+  }
+}
+await authVisualContext.close();
+
+// Exercise real form submissions against isolated CI MySQL (never production).
+const formsContext=await browser.newContext({viewport:{width:1440,height:900}});
+const formsPage=await formsContext.newPage();
+for(const test of ['contact','newsletter']){
+  try{
+    if(test==='contact'){
+      await formsPage.goto(origin+'/iletisim',{waitUntil:'domcontentloaded'});
+      const form=formsPage.locator('.yv-contact-form form');
+      await form.locator('[name=name]').fill('Test Kullanıcısı');
+      await form.locator('[name=email]').fill('ci-kontrol@example.test');
+      await form.locator('[name=subject]').fill('Otomatik iletişim formu testi');
+      await form.locator('[name=message]').fill('Bu mesaj CI otomatik testlerinde kayıt işleminin gerçekten çalıştığını doğrular.');
+      await form.locator('[name=privacy_consent]').check();
+      await Promise.all([formsPage.waitForURL('**/iletisim',{waitUntil:'domcontentloaded'}),form.locator('button[type=submit]').click()]);
+      const ok=await formsPage.locator('.yv-form-feedback.success').filter({hasText:'kaydedildi'}).count()>0;
+      if(!ok)throw new Error('Contact message was not persisted or success confirmation missing');
+    }else{
+      await formsPage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+      const form=formsPage.locator('.footer-newsletter-signup');
+      await form.locator('[name=email]').fill('ci-bulten@example.test');
+      await form.locator('[name=newsletter_consent]').check();
+      await Promise.all([formsPage.waitForURL('**/#newsletter',{waitUntil:'domcontentloaded'}),form.locator('button[type=submit]').click()]);
+      const ok=await formsPage.locator('.footer-subscribe-v9 .yv-form-feedback.success').count()>0;
+      if(!ok)throw new Error('Newsletter was not stored or success confirmation missing');
+    }
+    results.push({route:'POST '+test,screen:'forms',status:200,errors:[]});
+    console.log('PASS functional form:',test);
+  }catch(e){
+    failed=true;results.push({route:'POST '+test,screen:'forms',status:0,errors:[String(e)]});
+    console.error('FAIL functional form:',test,String(e).slice(0,320));
+  }
+}
+await formsContext.close();
+
+// Validate the real admin-to-front-end menu connection against the isolated CI database.
+const adminContext = await browser.newContext({viewport:{width:1440,height:900}});
+const adminPage = await adminContext.newPage();
+try {
+  await adminPage.goto(origin + '/admin/giris', {waitUntil:'domcontentloaded'});
+  await adminPage.locator('input[name=email]').fill('admin@yorumhizmeti.tr');
+  await adminPage.locator('input[name=password]').fill('qa-test-menu-only');
+  await Promise.all([
+    adminPage.waitForURL('**/admin', {waitUntil:'domcontentloaded'}),
+    adminPage.locator('form button[type=submit]').click()
+  ]);
+  // Sweep all actual admin sidebar GET destinations. This catches broken routes,
+  // PHP fatal errors and missing admin shells beyond just Catalog/Menu settings.
+  const adminAllRoutes=await adminPage.locator('.sidebar-nav a[href^="/admin"]').evaluateAll(nodes=>
+    [...new Set(nodes.map(el=>el.getAttribute('href'))
+       .filter(h=>h&&h!=='/admin/cikis'&&!h.includes('?')))]);
+  const adminFaults=[];
+  const previewRoutes=['/admin','/admin/siparisler','/admin/kategoriler','/admin/paketler',
+    '/admin/uyeler','/admin/destek','/admin/referanslar','/admin/ana-sayfa',
+    '/admin/blog','/admin/netvera-yazilimlar'];
+  for(const route of adminAllRoutes){
+    const response=await adminPage.goto(origin+route,{waitUntil:'domcontentloaded'});
+    const body=await adminPage.locator('body').innerText();
+    const hasShell=(await adminPage.locator('.admin-layout .admin-page').count())>0;
+    if(response.status()!==200||!hasShell||/Fatal error:|Uncaught (?:Error|Exception)|SQLSTATE\[[A-Z0-9]+\]/i.test(body))
+      adminFaults.push({route,status:response.status(),shell:hasShell,error:body.slice(0,140)});
+    if(previewRoutes.includes(route)){
+      const bounds=await adminPage.locator('.admin-page').boundingBox();
+      if(!bounds||bounds.width<480||bounds.height<50)
+        adminFaults.push({route,error:'Admin content missing or too narrow'});
+    }
+  }
+  if(adminFaults.length)throw new Error('Admin route and layout audit: '+JSON.stringify(adminFaults).slice(0,2300));
+  console.log('PASS admin GET routes and page shells:',adminAllRoutes.length);
+
+  await adminPage.goto(origin + '/admin/menu', {waitUntil:'domcontentloaded'});
+  if ((await adminPage.locator('.adm-nav-item').count()) < 3) throw new Error('Menu management items not rendered');
+  const toggle = adminPage.locator('input[name="enabled[]"][value="blog"]');
+  await toggle.evaluate(input => { input.checked = false; input.dispatchEvent(new Event('change',{bubbles:true})); });
+  await Promise.all([
+    adminPage.waitForURL('**/admin/menu', {waitUntil:'domcontentloaded'}),
+    adminPage.locator('#navMenuEditor button[type=submit]').click()
+  ]);
+  await adminPage.goto(origin + '/', {waitUntil:'domcontentloaded'});
+  if (await adminPage.locator('.nv26-menu-shell .nv26-simple-link[href="/blog"]').count()) throw new Error('Hidden admin menu item still visible in header');
+
+  await adminPage.goto(origin + '/admin/menu', {waitUntil:'domcontentloaded'});
+  await adminPage.locator('input[name="enabled[]"][value="blog"]').evaluate(input => {
+    input.checked = true; input.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await Promise.all([
+    adminPage.waitForURL('**/admin/menu', {waitUntil:'domcontentloaded'}),
+    adminPage.locator('#navMenuEditor button[type=submit]').click()
+  ]);
+  await adminPage.goto(origin + '/', {waitUntil:'domcontentloaded'});
+  if (!(await adminPage.locator('.nv26-menu-shell .nv26-simple-link[href="/blog"]').count())) throw new Error('Restored menu item did not return to storefront');
+  results.push({route:'Admin menu hide/restore',screen:'integration',status:200,errors:[]});
+  console.log('PASS admin menu hide/restore');
+} catch(e) {
+  failed=true;
+  results.push({route:'Admin menu hide/restore',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL admin menu hide/restore:',String(e).slice(0,350));
+} finally { await adminContext.close(); }
+
+// Regression: the admin catalog must use one valid bulk form on desktop and mobile.
+const catalogContext = await browser.newContext({viewport:{width:1440,height:900}});
+const catalogPage = await catalogContext.newPage();
+catalogPage.on('dialog', dialog => dialog.accept());
+try {
+  await catalogPage.goto(origin + '/admin/giris', {waitUntil:'domcontentloaded'});
+  await catalogPage.locator('input[name=email]').fill('admin@yorumhizmeti.tr');
+  await catalogPage.locator('input[name=password]').fill('qa-test-menu-only');
+  await Promise.all([
+    catalogPage.waitForURL('**/admin', {waitUntil:'domcontentloaded'}),
+    catalogPage.locator('form button[type=submit]').click()
+  ]);
+  await catalogPage.goto(origin + '/admin/paketler', {waitUntil:'domcontentloaded'});
+  if ((await catalogPage.locator('#bulkPkgForm .adm-pkg-desktop').count()) !== 1 ||
+      (await catalogPage.locator('#bulkPkgForm .adm-pkg-mobile').count()) !== 1) {
+    throw new Error('Desktop and mobile catalog are not inside the same valid bulk form');
+  }
+  if ((await catalogPage.locator('#bulkPkgForm button[formaction*="/sil"]').count()) < 2) {
+    throw new Error('Package delete buttons are not real POST form overrides');
+  }
+  const firstPkg = catalogPage.locator('.adm-pkg-desktop .pkg-checkbox').first();
+  const packageId = await firstPkg.getAttribute('value');
+  if (!packageId) throw new Error('No catalog package to test');
+  await firstPkg.check();
+  if ((await catalogPage.locator('#selectedPkgCount').innerText()).trim() !== '1') {
+    throw new Error('One package selected was counted more than once');
+  }
+  if (!(await catalogPage.locator('.adm-pkg-mobile .pkg-checkbox[value="' + packageId + '"]').isChecked())) {
+    throw new Error('Desktop package selection did not synchronize with mobile');
+  }
+  await catalogPage.locator('#bulkPkgActionSelect').selectOption('unfeatured');
+  await Promise.all([
+    catalogPage.waitForNavigation({waitUntil:'domcontentloaded'}),
+    catalogPage.locator('#bulkPkgActions button[type=submit]').click()
+  ]);
+  const row = () => catalogPage.locator('.adm-pkg-desktop .pkg-checkbox[value="' + packageId + '"]').locator('xpath=ancestor::tr');
+  if (await row().locator('.adm-featured-badge').count()) {
+    throw new Error('Bulk unfeature did not update saved catalog state');
+  }
+  await catalogPage.locator('.adm-pkg-desktop .pkg-checkbox[value="' + packageId + '"]').check();
+  await catalogPage.locator('#bulkPkgActionSelect').selectOption('featured');
+  await Promise.all([
+    catalogPage.waitForNavigation({waitUntil:'domcontentloaded'}),
+    catalogPage.locator('#bulkPkgActions button[type=submit]').click()
+  ]);
+  if (!(await row().locator('.adm-featured-badge').count())) {
+    throw new Error('Bulk feature did not restore featured package');
+  }
+  await catalogPage.goto(origin + '/admin/kategoriler', {waitUntil:'domcontentloaded'});
+  if ((await catalogPage.locator('#bulkCatForm .adm-cat-desktop').count()) !== 1 ||
+      (await catalogPage.locator('#bulkCatForm .adm-cat-mobile').count()) !== 1) {
+    throw new Error('Category editor has broken/nested forms');
+  }
+  const firstCat = catalogPage.locator('.adm-cat-desktop .cat-checkbox').first();
+  const catId = await firstCat.getAttribute('value');
+  if (!catId) throw new Error('No category to test');
+  await firstCat.check();
+  if ((await catalogPage.locator('#selectedCatCount').innerText()).trim() !== '1' ||
+      !(await catalogPage.locator('.adm-cat-mobile .cat-checkbox[value="' + catId + '"]').isChecked())) {
+    throw new Error('Category selection double counted or not synchronized');
+  }
+  results.push({route:'Admin catalog/package/category bridge',screen:'integration',status:200,errors:[]});
+  console.log('PASS valid admin bulk forms, featured package toggles and responsive selections');
+} catch(e) {
+  failed=true;
+  results.push({route:'Admin catalog/package/category bridge',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL admin catalog integration:',String(e).slice(0,400));
+} finally { await catalogContext.close(); }
+
+// Full integration: admin installs real script taxonomy, picks one real CI-only
+// package, orders it separately, then publishes an authentic test reference.
+// All writes are to disposable Actions MySQL; never the production site.
+const showcaseCtx=await browser.newContext({viewport:{width:1440,height:900}});
+const showcasePage=await showcaseCtx.newPage();
+showcasePage.on('dialog',dialog=>dialog.accept());
+try {
+  await showcasePage.goto(origin+'/admin/giris',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('input[name=email]').fill('admin@yorumhizmeti.tr');
+  await showcasePage.locator('input[name=password]').fill('qa-test-menu-only');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('form button[type=submit]').click()
+  ]);
+  // Main homepage only shows genuine Netvera items enabled in the existing
+  // per-product "Öne çıkan yazılım" admin switch. The normal catalog keeps all.
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  const spotlight=showcasePage.locator('.nv31-software-grid .nv31-software-card');
+  const highlightCount=await spotlight.count();
+  if(highlightCount!==2)throw new Error('Homepage promoted script count wrong: '+highlightCount);
+  if(await spotlight.locator('a[href="/hazir-scriptler/netvera-temizlik-firmasi-script-yazilimi-pro"]').count())
+    throw new Error('Disabled homepage highlight leaked into featured showcase');
+  if(!(await spotlight.locator('a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+    throw new Error('Enabled script not featured');
+  await showcasePage.goto(origin+'/hazir-scriptler',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('a[href="/hazir-scriptler/netvera-temizlik-firmasi-script-yazilimi-pro"]').count()))
+    throw new Error('Unfeatured script incorrectly hidden from full catalog');
+  await showcasePage.goto(origin+'/odeme/paytr-onizleme',{waitUntil:'domcontentloaded'});
+  // The owner explicitly removed legacy demo-warning banners. The proper
+  // preview is the branded, non-payment placeholder; no real iframe may load.
+  if(!(await showcasePage.locator('.nv45-checkout .nv45-preview-frame').count()))
+    throw new Error('Local PayTR branded payment preview frame not present');
+  if(await showcasePage.locator('#paytriframe').count())
+    throw new Error('Local preview unexpectedly opened a live card entry iframe');
+  console.log('PASS featured script toggle and separate full catalog, branded PayTR preview');
+
+  // Blog editor integration: scores update, fields survive save/reopen,
+  // and answer/source are visible on the published article.
+  await showcasePage.goto(origin+'/admin/blog/ekle',{waitUntil:'domcontentloaded'});
+  // The old editor used unloaded Remix icons and became a row of empty controls.
+  // Every toolbar action must now have a real human-readable label.
+  const toolbar=showcasePage.locator('.nv46-markdown-toolbar');
+  const editorToolbar=await toolbar.locator('button.md-btn').evaluateAll(buttons=>
+    buttons.map(el=>({
+      label:el.textContent.trim(),
+      aria:el.getAttribute('aria-label'),
+      shown:el.getBoundingClientRect().width>20&&el.getBoundingClientRect().height>24
+    })));
+  if(editorToolbar.length<10 || editorToolbar.some(x=>!x.label||!x.shown))
+    throw new Error('Admin article toolbar has missing/blank controls: '+JSON.stringify(editorToolbar));
+  const editStyles=await showcasePage.evaluate(()=>{
+    const form=document.querySelector('.nv46-blog-editor');
+    const label=form?.querySelector('.form-group label');
+    const input=form?.querySelector('input.form-control');
+    const raw=form?.querySelector('#raw_content');
+    const preview=form?.querySelector('.nv46-preview-pane');
+    return {
+      formExists:!!form,
+      labelFont:label?parseFloat(getComputedStyle(label).fontSize):0,
+      inputFont:input?parseFloat(getComputedStyle(input).fontSize):0,
+      textareaFont:raw?parseFloat(getComputedStyle(raw).fontSize):0,
+      hasPreview:!!preview,
+      editorWidth:raw?.getBoundingClientRect().width||0,
+      previewWidth:preview?.getBoundingClientRect().width||0
+    };
+  });
+  if(!editStyles.formExists || editStyles.labelFont<11 || editStyles.inputFont<11 ||
+     editStyles.textareaFont<12 || !editStyles.hasPreview ||
+     editStyles.editorWidth<180 || editStyles.previewWidth<180)
+    throw new Error('Admin article editing controls too small or broken: '+JSON.stringify(editStyles));
+  // Formatting actions must modify the actual Markdown and update live scoring.
+  await toolbar.locator('button[aria-label="Kalın metin"]').click();
+  if(!(await showcasePage.locator('#raw_content').inputValue()).includes('**metin**'))
+    throw new Error('Bold toolbar button does not modify Markdown editor');
+  if((await showcasePage.locator('[data-quality-meter]').count())!==3)
+    throw new Error('Blog SEO/GEO/AIO analysis fields missing');
+  await showcasePage.locator('#title').fill('CI Editoryal Kalite ve GEO Test Rehberi');
+  await showcasePage.locator('#slug').fill('ci-editorial-geo-qa');
+  await showcasePage.locator('#blog_category_id').selectOption({index:1});
+  await showcasePage.locator('#seo_title').fill('CI Editoryal Kalite ve GEO Kontrol Rehberi | NetVera');
+  await showcasePage.locator('#seo_description').fill('Editoryal içerik kalitesi, güvenilir kaynaklar ve yapay zekâ aramaları için doğrulanabilir özetlerin kullanıldığı örnek blog içerik kontrolüdür.');
+  await showcasePage.locator('#seo_focus_keyword').fill('editoryal kalite');
+  await showcasePage.locator('#excerpt').fill('Editoryal kalite, içerik derinliği, kaynaklar ve arama görünürlüğü hazırlığını kontrol etmek için oluşturulmuş örnek yazı.');
+  await showcasePage.locator('#raw_content').fill('Editoryal kalite için doğrulanabilir örnek metin.\n\n## Editoryal kalite rehberi\n\n### Kontrol maddeleri\n\n- Kaynakları değerlendirin\n- Güncelliği sağlayın\n\n[NetVera yazılımları](/hazir-scriptler).');
+  await showcasePage.locator('[name=nvseo_content_intent]').selectOption('bilgi');
+  await showcasePage.locator('[name=nvseo_main_question]').fill('Editoryal kalite nasıl kontrol edilir?');
+  await showcasePage.locator('[name=nvseo_direct_answer]').fill('Editoryal kalite, güvenilir kaynaklar, doğru başlık yapısı ve kullanıcı niyetinin karşılanmasıyla kontrol edilir.');
+  await showcasePage.locator('[name=nvseo_geo_summary]').fill('Bu makale, doğru kaynaklarla desteklenen bir içerik değerlendirme yaklaşımını açıklar.');
+  await showcasePage.locator('[name=nvseo_sources]').fill('https://example.org/research');
+  await showcasePage.locator('[name=nvseo_author_name]').fill('NetVera Editoryal Test');
+  await showcasePage.locator('[name=nvseo_entity_topics]').fill('SEO, GEO, NetVera');
+  await showcasePage.locator('#status').selectOption('active');
+  await showcasePage.waitForTimeout(350);
+  const editorialScores=await showcasePage.locator('[data-quality-value]').allTextContents();
+  if(editorialScores.length!==3||editorialScores.some(s=>s.trim()==='0 / 100'))
+    throw new Error('Live editorial scoring not responding: '+editorialScores.join(','));
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/blog',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('button.adm-btn-save').click()
+  ]);
+  const articleRow=showcasePage.locator('.adm-blog-desktop tr').filter({hasText:'CI Editoryal Kalite ve GEO Test Rehberi'});
+  if(!(await articleRow.count()))throw new Error('Admin GEO article not persisted');
+  await articleRow.locator('a[href$="/duzenle"]').click();
+  if((await showcasePage.locator('[name=nvseo_main_question]').inputValue())!=='Editoryal kalite nasıl kontrol edilir?'
+    || !(await showcasePage.locator('#raw_content').inputValue()).includes('## Editoryal kalite rehberi'))
+    throw new Error('Editor lost SEO/GEO metadata or original Markdown');
+  await showcasePage.goto(origin+'/blog/ci-editorial-geo-qa',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv44-answer-box').count()) ||
+     !(await showcasePage.locator('.nv44-sources a[href="https://example.org/research"]').count()) ||
+     !(await showcasePage.getByText('NetVera Editoryal Test',{exact:false}).count()))
+    throw new Error('Saved GEO answer, verified sources or author not rendered publicly');
+  console.log('PASS blog SEO/GEO/AIO live editor, persistence, verified public answer and sources');
+
+  // Netvera staging: new admin routes must load even before importing
+  // external public catalog. Live PayTR must never be requested by this test.
+  await showcasePage.goto(origin+'/admin/netvera-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.getByText('Netvera Hazır Yazılımlar',{exact:false}).count()))
+    throw new Error('Netvera admin catalog route not available');
+  await showcasePage.goto(origin+'/admin/netvera-yazilimlar/ekle',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('form[action="/admin/netvera-yazilimlar/kaydet"]').count()))
+    throw new Error('Netvera rich script editor not available');
+  await showcasePage.goto(origin+'/hazir-scriptler',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv40-store').count()))
+    throw new Error('Legacy indexed scripts route missing');
+  await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('[name="nvseo_secondary_keywords"]').count()))
+    throw new Error('Native service SEO extension missing');
+  // Netvera canonical path parity — synthetic isolated CI products only.
+  await showcasePage.goto(origin+'/hazir-scriptler/haber-sitesi-scripti',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv40-detail').count()) ||
+     !(await showcasePage.locator('link[rel=canonical][href$="/hazir-scriptler/haber-sitesi-scripti"]').count())){
+    throw new Error('Netvera indexed product URL or canonical missing');
+  }
+  if(!(await showcasePage.locator('h1').textContent()).includes('Haber Scripti')){
+    throw new Error('Indexed Netvera script route does not load its own product');
+  }
+  const oldUrls=[
+    '/haber-sitesi-scripti',
+    '/paket/netvera-haber-sitesi-script-yazilimi'
+  ];
+  for(const oldUrl of oldUrls){
+    const redirect=await showcasePage.request.get(origin+oldUrl,{maxRedirects:0});
+    if(redirect.status()!==301||
+       redirect.headers()['location']!=='/hazir-scriptler/haber-sitesi-scripti'){
+      throw new Error('Missing 301 '+oldUrl+' to original Netvera canonical product');
+    }
+  }
+  const sitemapResponse=await showcasePage.request.get(origin+'/sitemap.xml');
+  const sitemapXml=await sitemapResponse.text();
+  if(!sitemapXml.includes('/hazir-scriptler/haber-sitesi-scripti')||
+     sitemapXml.includes('/paket/netvera-haber-sitesi-script-yazilimi')){
+    throw new Error('Netvera software sitemap missing canonical or still lists redirected package alias');
+  }
+  for(const [oldUrl,target] of [
+    ['/temizlik-firmasi-scripti-web-site-yazilimi','netvera-temizlik-firmasi-script-yazilimi-pro'],
+    ['/emlak-scripti-hazir-emlak-sitesi-yazilimi','netvera-emlak-script-yazilimi-pro']
+  ]){
+    const redirect=await showcasePage.request.get(origin+oldUrl,{maxRedirects:0});
+    if(redirect.status()!==301 ||
+       redirect.headers()['location']!=='/hazir-scriptler/'+target){
+      throw new Error('Indexed legacy alias redirects to wrong software: '+oldUrl);
+    }
+  }
+  // Older scripts added under the existing Web Site category must show up
+  // automatically, WITHOUT installing the 23 new categories or selecting a
+  // special featured flag. This reproduces the user's local problem.
+  await showcasePage.goto(origin+'/admin/paket/ekle',{waitUntil:'domcontentloaded'});
+  const legacyName='CI Eski Kategori Yazılım Scripti';
+  const legacySlug='ci-eski-kategori-yazilim-scripti';
+  await showcasePage.locator('input[name=name]').fill(legacyName);
+  await showcasePage.locator('input[name=slug]').fill(legacySlug);
+  await showcasePage.locator('select[name=category_id]').selectOption({label:'Web Site Hizmetleri'});
+  await showcasePage.locator('textarea[name=short_description]').fill('Geçici test yazılımı; eski kategoriden otomatik bulunmalıdır.');
+  await showcasePage.locator('input[name=price]').fill('1800');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/paketler',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count())
+    throw new Error('Test service package incorrectly leaked into real Netvera scripts showcase');
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+    throw new Error('Authentic Netvera script missing from homepage software showcase');
+  await showcasePage.goto(origin+'/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count()))
+    throw new Error('Legacy-category ready script missing from standalone software catalog');
+
+  // On a fresh DB, the direct "Add Software" route shows a one-click setup
+  // instead of silently redirecting to the showcase (the user's reported issue).
+  await showcasePage.goto(origin+'/admin/yazilim/ekle',{waitUntil:'domcontentloaded'});
+  const firstUse=showcasePage.locator('form[action="/admin/hazir-yazilimlar/kur-ve-ekle"]');
+  if(!(await firstUse.count()) || !(await firstUse.locator('button[type=submit]').count()))
+    throw new Error('First-use software creation page does not show its setup action');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/yazilim/ekle',{waitUntil:'domcontentloaded'}),
+    firstUse.locator('button[type=submit]').click()
+  ]);
+  if(!(await showcasePage.locator('select[name=category_id]').count()))
+    throw new Error('One-click category setup did not open ready software editor');
+  await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('a[href="/admin/yazilim/ekle"]').count()))
+    throw new Error('Software showcase does not expose the create button after setup');
+  await showcasePage.goto(origin+'/kategoriler?grup=agency',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.getByText('Hazır Yazılımlar & Scriptler',{exact:true}).count()))
+    throw new Error('Installed script category not visible in agency catalog');
+
+  await showcasePage.goto(origin+'/admin/yazilim/ekle',{waitUntil:'domcontentloaded'});
+  const opts=await showcasePage.locator('select[name=category_id] option').allTextContents();
+  if(!opts.includes('Haber Sitesi Yazılımı') || opts.includes('Instagram Hizmetleri') ||
+     !opts.includes('WordPress Temaları')){
+    throw new Error('Dedicated software form leaked services or lacks software types: '+opts.slice(0,6));
+  }
+  const productName='CI Yazılım Demo Paketi';
+  const productSlug='ci-yazilim-demo-v31';
+  await showcasePage.locator('input[name=name]').fill(productName);
+  await showcasePage.locator('input[name=slug]').fill(productSlug);
+  await showcasePage.locator('select[name=category_id]').selectOption({label:'Haber Sitesi Yazılımı'});
+  await showcasePage.locator('textarea[name=short_description]').fill('CI için geçici yazılım vitrini testi, canlı satış ürünü değildir.');
+  await showcasePage.locator('input[name=price]').fill('2500');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('form button[type=submit]').filter({hasText:'Kaydet'}).first().click()
+  ]);
+  // New package-type software remains in the separate /hazir-yazilimlar
+  // store; it must not replace the authentic Netvera public script showcase.
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count())
+    throw new Error('Package-type demo incorrectly replaced authentic software');
+  if(!(await showcasePage.locator('.nv31-software-card a[href="/hazir-scriptler/haber-sitesi-scripti"]').count()))
+    throw new Error('Real Netvera product link absent from main showcase');
+  // Real functional search, filtering and price sorting on live CI catalog.
+  await showcasePage.goto(origin+'/hazir-yazilimlar?q=Yaz%C4%B1l%C4%B1m',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv36-product-grid .nv31-software-card').count()))
+    throw new Error('Catalog search failed to show the software test record');
+  await showcasePage.goto(origin+'/hazir-yazilimlar?min=2000&max=2800&siralama=ucuz',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv36-product-grid a[href="/paket/'+productSlug+'"]').count()) ||
+     await showcasePage.locator('.nv36-product-grid a[href="/paket/'+legacySlug+'"]').count()){
+    throw new Error('Price filter did not isolate matching products');
+  }
+  await showcasePage.goto(origin+'/hazir-yazilimlar?tur=wordpress-temalari',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv33-catalog-empty').count()))
+    throw new Error('Empty WordPress subcategory should show helpful empty state');
+  await showcasePage.goto(origin+'/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'});
+  const productRow=showcasePage.locator('.adm31-package-row').filter({hasText:productName});
+  if(!(await productRow.count()))throw new Error('Newly saved software package absent from showcase admin');
+  await productRow.locator('input[name="featured[]"]').check();
+  await productRow.locator('input[type=number]').fill('1');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/hazir-yazilimlar',{waitUntil:'domcontentloaded'}),
+    showcasePage.locator('.adm31-showcase-form button[type=submit]').click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(await showcasePage.locator('.nv32-software-intro').count())throw new Error('Empty script presentation remained visible after selection');
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+productSlug+'"]').count())
+    throw new Error('Legacy package showcase selection overrode authentic Netvera products');
+
+  // The package showroom can be reordered independently without touching
+  // homepage's authentic product URLs.
+  if(await showcasePage.locator('.nv31-software-card a[href="/paket/'+legacySlug+'"]').count())
+    throw new Error('Old demo package unexpectedly present in software showcase');
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const create=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
+  await create.locator('[name=title]').fill('CI Web Referans Testi');
+  await create.locator('[name=category]').fill('Haber Sitesi');
+  await create.locator('[name=description]').fill('Otomatik test sırasında oluşturulmuş örnek portföy kaydı.');
+  await create.locator('[name=url]').fill('https://example.test/');
+  await create.locator('[name=sort_order]').fill('1');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    create.locator('button[type=submit]').click()
+  ]);
+  if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Web Referans Testi'}).count()))
+    throw new Error('Reference admin did not persist the project');
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  if(!(await showcasePage.locator('.nv31-portfolio-card').filter({hasText:'CI Web Referans Testi'}).count()))
+    throw new Error('Published reference missing from storefront');
+  if(await showcasePage.locator('.nv32-portfolio-intro').count())
+    throw new Error('Empty reference presentation remained visible after publishing a project');
+
+  // Instagram-only reference keeps the cover but opens the actual Instagram
+  // post in a new tab. Same button label is used by on-site video sources.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const reelForm=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
+  await reelForm.locator('[name="title"]').fill('CI Reels Referans Testi');
+  await reelForm.locator('[name="group"]').selectOption('marketing');
+  await reelForm.locator('[name="service"]').selectOption('social-management');
+  await reelForm.locator('[name="media_type"]').selectOption('instagram_reel');
+  await reelForm.locator('[name="url"]').fill('https://www.instagram.com/reel/C9mVh6oN8d_/');
+  await reelForm.locator('[name="image"]').setInputFiles('well-known/public/assets/img/blog-woman-cutout.png');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    reelForm.locator('button[type="submit"]').click()
+  ]);
+  if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Reels Referans Testi'}).count()))
+    throw new Error('Instagram reference was not saved with custom cover');
+  await showcaseCtx.route('https://www.instagram.com/**',async route=>{
+    await route.fulfill({status:200,contentType:'text/html',
+      body:'<!doctype html><html><body><div id="ci-instagram-embed">Embedded reference player</div></body></html>'});
+  });
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const reelCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI Reels Referans Testi'});
+  if(!(await reelCard.isVisible()))throw new Error('Instagram reference hidden in SEO digital filter');
+  if(!(await reelCard.locator('.nv51-play-embed img').count()))
+    throw new Error('Custom Reels cover did not render on homepage');
+  const igCoverLink=reelCard.locator('a.nv51-play-embed[href*="instagram.com"]');
+  const igAction=reelCard.locator('a.nv52-watch-action');
+  if(await igCoverLink.count()!==1||await igAction.count()!==1)
+    throw new Error('Instagram-only cover and CTA must open Instagram');
+  if((await igAction.innerText()).trim().includes('Sitemizde') ||
+     !(await igAction.innerText()).includes('Videoyu İzle'))
+    throw new Error('Watch-video CTA label is not consistent');
+  const originBefore=showcasePage.url();
+  const [instagramTab]=await Promise.all([
+    showcaseCtx.waitForEvent('page'),
+    igCoverLink.click()
+  ]);
+  await instagramTab.waitForURL(url=>url.hostname==='www.instagram.com' && url.pathname.startsWith('/reel/C9mVh6oN8d_/'),{timeout:12000});
+  if(showcasePage.url()!==originBefore)
+    throw new Error('Instagram click navigated the storefront tab');
+  const modal=showcasePage.locator('[data-ref-player-modal]');
+  if(await modal.isVisible())throw new Error('Instagram-only content opened local player instead of Instagram');
+  if(await igAction.getAttribute('href')!=='https://www.instagram.com/reel/C9mVh6oN8d_/')
+    throw new Error('Instagram watch button lost canonical original link');
+  await instagramTab.close();
+  console.log('PASS Instagram cover and Videoyu İzle CTA open Instagram in new tab');
+
+  // Admin can add an externally hosted YouTube video for the same Instagram
+  // reference: the app stores only a URL, and the viewer stays on our site.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const existingReel=showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI Reels Referans Testi'});
+  const updateReel=existingReel.locator('form[data-reference-editor]');
+  await updateReel.locator('[name="external_video_url"]').fill('https://youtu.be/dQw4w9WgXcQ');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    updateReel.locator('button[type="submit"]').click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const streamedCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI Reels Referans Testi'});
+  if(await streamedCard.getAttribute('data-ref-external-type')!=='iframe')
+    throw new Error('External video provider was not saved into the reference');
+  const beforeStream=showcasePage.url();
+  await streamedCard.locator('.nv51-play-embed').click();
+  const streamedModal=showcasePage.locator('[data-ref-player-modal]');
+  const externalFrame=streamedModal.locator('iframe');
+  if(!(await streamedModal.isVisible()) ||
+     !(await externalFrame.getAttribute('src')).includes('youtube-nocookie.com/embed/dQw4w9WgXcQ'))
+    throw new Error('External video did not use privacy-enhanced on-site player');
+  if(showcasePage.url()!==beforeStream)throw new Error('External video left our website');
+  if(await streamedModal.locator('video').count())
+    throw new Error('Remote iframe was incorrectly routed into local MP4 player');
+  await streamedModal.locator('[data-ref-player-close]').click();
+  if(await streamedModal.locator('iframe').count())
+    throw new Error('External hosted player was not removed on close');
+  console.log('PASS external YouTube link saved in admin -> onsite modal, zero local video file');
+  // A dedicated YouTube/Shorts reference can be created without an Instagram URL.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const youtubeForm=showcasePage.locator('form[action="/admin/referanslar/ekle"]');
+  await youtubeForm.locator('[name="title"]').fill('CI YouTube Shorts Referansı');
+  await youtubeForm.locator('[name="group"]').selectOption('marketing');
+  await youtubeForm.locator('[name="service"]').selectOption('social-management');
+  await youtubeForm.locator('[name="media_type"]').selectOption('youtube_video');
+  await youtubeForm.locator('[name="url"]').fill('https://www.youtube.com/shorts/dQw4w9WgXcQ');
+  await youtubeForm.locator('[name="image"]').setInputFiles('well-known/public/assets/img/blog-woman-cutout.png');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    youtubeForm.locator('button[type="submit"]').click()
+  ]);
+  if(!(await showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI YouTube Shorts Referansı'}).count()))
+    throw new Error('Standalone YouTube reference did not save');
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const youtubeCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI YouTube Shorts Referansı'});
+  if(!(await youtubeCard.isVisible()))throw new Error('YouTube video reference is not visible');
+  const youtubeCTA=youtubeCard.locator('button.nv52-watch-action');
+  if(await youtubeCTA.count()!==1 || !(await youtubeCTA.innerText()).includes('Videoyu İzle'))
+    throw new Error('YouTube on-site watch button does not use shared caption');
+  await youtubeCTA.click();
+  const youtubeDialog=showcasePage.locator('[data-ref-player-modal]');
+  const youtubeFrame=youtubeDialog.locator('iframe');
+  if(!(await youtubeDialog.isVisible()) ||
+     !(await youtubeFrame.getAttribute('src')).includes('youtube-nocookie.com/embed/dQw4w9WgXcQ'))
+    throw new Error('Standalone YouTube Shorts video did not open on our site');
+  if(await youtubeDialog.getAttribute('data-video-orientation')!=='portrait')
+    throw new Error('YouTube Shorts did not select vertical 9:16 player');
+  const shortsGeometry=await youtubeDialog.locator('.nv52-player-stage').evaluate(node=>{
+    const b=node.getBoundingClientRect();
+    return {ratio:b.width/b.height,width:b.width,height:b.height};
+  });
+  if(Math.abs(shortsGeometry.ratio-9/16)>0.025)
+    throw new Error('YouTube Shorts player geometry is not 9:16 '+JSON.stringify(shortsGeometry));
+  await showcasePage.setViewportSize({width:390,height:844});
+  const mobileShorts=await youtubeDialog.evaluate(dialog=>{
+    const a=dialog.getBoundingClientRect();
+    const b=dialog.querySelector('.nv52-player-stage').getBoundingClientRect();
+    return {ratio:b.width/b.height,overflow:a.top<0||a.bottom>innerHeight+1||a.left<0||a.right>innerWidth+1};
+  });
+  if(mobileShorts.overflow||Math.abs(mobileShorts.ratio-9/16)>0.025)
+    throw new Error('Shorts modal fails on 390px mobile viewport '+JSON.stringify(mobileShorts));
+  await youtubeDialog.locator('[data-ref-player-close]').click();
+  if(await youtubeDialog.isVisible())throw new Error('YouTube player did not close');
+  if(await youtubeDialog.getAttribute('data-video-orientation')!==null)
+    throw new Error('Closed player retained previous orientation');
+  await showcasePage.setViewportSize({width:1440,height:900});
+  console.log('PASS YouTube Shorts uses portrait 9:16 on desktop and mobile');
+
+  // An ordinary /watch URL must instead become a widescreen player.
+  await showcasePage.goto(origin+'/admin/referanslar',{waitUntil:'domcontentloaded'});
+  const youtubeReferenceEditor=showcasePage.locator('.adm31-ref-editor').filter({hasText:'CI YouTube Shorts Referansı'})
+    .locator('form[data-reference-editor]');
+  await youtubeReferenceEditor.locator('[name="url"]').fill('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/referanslar',{waitUntil:'domcontentloaded'}),
+    youtubeReferenceEditor.locator('button[type="submit"]').click()
+  ]);
+  await showcasePage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-ref-group="marketing"]').click();
+  const longVideoCard=showcasePage.locator('[data-ref-card]').filter({hasText:'CI YouTube Shorts Referansı'});
+  if(await longVideoCard.getAttribute('data-ref-aspect')!=='landscape')
+    throw new Error('Normal YouTube watch URL was not recognized as landscape');
+  await longVideoCard.locator('button.nv52-watch-action').click();
+  const longVideoDialog=showcasePage.locator('[data-ref-player-modal]');
+  if(await longVideoDialog.getAttribute('data-video-orientation')!=='landscape')
+    throw new Error('Normal YouTube video did not select 16:9 player');
+  const longGeometry=await longVideoDialog.locator('.nv52-player-stage').evaluate(node=>{
+    const b=node.getBoundingClientRect();
+    return {ratio:b.width/b.height,width:b.width,height:b.height};
+  });
+  if(Math.abs(longGeometry.ratio-16/9)>0.04)
+    throw new Error('Normal YouTube player geometry is not 16:9 '+JSON.stringify(longGeometry));
+  await showcasePage.setViewportSize({width:844,height:390});
+  const landscapeMobile=await longVideoDialog.evaluate(dialog=>{
+    const a=dialog.getBoundingClientRect();
+    const b=dialog.querySelector('.nv52-player-stage').getBoundingClientRect();
+    return {ratio:b.width/b.height,overflow:a.top<0||a.bottom>innerHeight+1||a.left<0||a.right>innerWidth+1};
+  });
+  if(landscapeMobile.overflow||Math.abs(landscapeMobile.ratio-16/9)>0.04)
+    throw new Error('16:9 modal fails in landscape phone viewport '+JSON.stringify(landscapeMobile));
+  await longVideoDialog.locator('[data-ref-player-close]').click();
+  await showcasePage.setViewportSize({width:1440,height:900});
+  console.log('PASS standard YouTube watch uses 16:9 on desktop and landscape mobile');
+
+
+
+  // Uploaded MP4 still has the same local-player behavior, without an Instagram iframe.
+  await streamedCard.evaluate(card=>{
+    card.dataset.refExternalUrl='';
+    card.dataset.refExternalType='';
+    card.dataset.refVideo='/uploads/references/videos/ci-reference.mp4';
+  });
+  await streamedCard.locator('button.nv51-play-embed').click();
+  if(await streamedModal.locator('video[controls]').count()!==1 || await streamedModal.locator('iframe').count())
+    throw new Error('Uploaded MP4 did not select the native video player');
+  await showcasePage.keyboard.press('Escape');
+  if(await streamedModal.isVisible())throw new Error('Escape did not close first-party MP4 player');
+  console.log('PASS native MP4 player retained, close cleanup intact');
+
+  await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-desktop.png'),fullPage:true,animations:'disabled'});
+  await showcasePage.setViewportSize({width:390,height:844});
+  await showcasePage.reload({waitUntil:'domcontentloaded'});
+  const geometry=await showcasePage.evaluate(()=>{
+    const sections=['.nv31-software','.nv31-portfolio'].map(s=>document.querySelector(s));
+    return sections.map(root=>{
+      const cards=[...root.querySelectorAll('article')];
+      const boxes=cards.map(el=>el.getBoundingClientRect());
+      return {count:cards.length,width:root.clientWidth,scroll:root.scrollWidth,
+        cross:boxes.some((r,i)=>boxes.slice(i+1).some(o=>
+          Math.min(r.right,o.right)-Math.max(r.left,o.left)>4 &&
+          Math.min(r.bottom,o.bottom)-Math.max(r.top,o.top)>4))};
+    });
+  });
+  if(geometry.some(g=>!g.count||g.scroll>g.width+4||g.cross))
+    throw new Error('Mobile software/reference layout defect '+JSON.stringify(geometry));
+  await showcasePage.screenshot({path:path.join(output,'live-script-reference-showcase-mobile.png'),fullPage:true,animations:'disabled'});
+  // Business requirement: owner edits real product demo access in admin,
+  // and the exact opt-in demo-only login then appears on its indexed URL.
+  await showcasePage.goto(origin+'/admin/netvera-yazilimlar/47/duzenle',{waitUntil:'domcontentloaded'});
+  const demoEdit=showcasePage.locator('form#nvpa-product-form');
+  if(await demoEdit.count()!==1)throw new Error('Legacy NetVera product editor missing');
+  for(const field of ['demo_url','demo_admin_url','demo_user_url','demo_username',
+                       'demo_password','demo_admin_username','demo_admin_password',
+                       'demo_note','demo_accounts_json']){
+    if(await demoEdit.locator('[name="'+field+'"]').count()!==1)
+      throw new Error('NetVera demo admin configuration field missing: '+field);
+  }
+  await demoEdit.locator('[name="demo_url"]').fill('https://qa-demo.example.test');
+  await demoEdit.locator('[name="demo_admin_url"]').fill('https://qa-demo.example.test/admin');
+  await demoEdit.locator('[name="demo_username"]').fill('qa-editor-demo');
+  await demoEdit.locator('[name="demo_password"]').fill('qa-public-demo-only-no-real-account');
+  await demoEdit.locator('[name="demo_admin_username"]').fill('qa-editor-admin');
+  await demoEdit.locator('[name="demo_admin_password"]').fill('qa-public-admin-only');
+  await demoEdit.locator('[name="demo_note"]').fill('Örnek test hesabı; gerçek sistem hesabı değil.');
+  await demoEdit.locator('[name="demo_accounts_json"]').fill('[]');
+  await demoEdit.locator('[name="demo_is_active"]').check();
+  await demoEdit.locator('[name="demo_is_public"]').check();
+  await demoEdit.locator('[name="demo_credentials_public"]').check();
+  await Promise.all([
+    showcasePage.waitForURL('**/admin/netvera-yazilimlar',{timeout:15000}),
+    demoEdit.locator('button[type="submit"]').last().click()
+  ]);
+  await showcasePage.goto(origin+'/hazir-scriptler/haber-sitesi-scripti',{waitUntil:'domcontentloaded'});
+  await showcasePage.locator('[data-nv60-tab="demo"]').click();
+  const savedDemo=showcasePage.locator('[data-nv60-panel="demo"]');
+  if(!(await savedDemo.getByText('qa-editor-demo',{exact:true}).isVisible())||
+     !(await savedDemo.getByText('qa-public-admin-only',{exact:true}).isVisible())||
+     !(await savedDemo.locator('a[href="https://qa-demo.example.test/admin"]').count()))
+    throw new Error('Saved public-demo role credentials or admin URL not published from admin form');
+  console.log('PASS NetVera admin demo inputs save and publish chosen demo-only credentials');
+
+  results.push({route:'Admin install -> software featured -> reference publish',screen:'integration',status:200,errors:[]});
+  console.log('PASS real admin software and references end-to-end');
+}catch(e){
+  failed=true;
+  results.push({route:'Admin install -> software featured -> reference publish',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL software/reference integration:',String(e).slice(0,600));
+}finally{await showcaseCtx.close();}
+
+// End-to-end checkout guard: registering, selecting a live package and rejecting a forged gateway.
+const checkoutContext = await browser.newContext({viewport:{width:1440,height:900}});
+const shopper = await checkoutContext.newPage();
+try {
+  await shopper.goto(origin + '/kayit', {waitUntil:'domcontentloaded'});
+  const uniqueEmail = 'qa-catalog-' + Date.now() + '@example.test';
+  await shopper.locator('input[name=name]').fill('Katalog Test Kullanıcısı');
+  await shopper.locator('input[name=email]').fill(uniqueEmail);
+  await shopper.locator('input[name=password]').fill('qa-checkout-only');
+  await shopper.locator('input[name=password_confirmation]').fill('qa-checkout-only');
+  await Promise.all([
+    shopper.waitForURL('**/hesabim', {waitUntil:'domcontentloaded'}),
+    shopper.locator('form button[type=submit]').click()
+  ]);
+  await shopper.goto(origin + '/paket/google-harita-yorum-toplama-baslangic-paketi-10-davet', {waitUntil:'domcontentloaded'});
+  if (!(await shopper.locator('#packageForm').count())) throw new Error('Live product purchase form missing');
+  await shopper.locator('#packageForm').evaluate(async form => {
+    const response = await fetch(form.action, {method:'POST', body:new FormData(form)});
+    if (!response.ok) throw new Error('Cart add POST returned ' + response.status);
+  });
+  await shopper.goto(origin + '/sepet', {waitUntil:'domcontentloaded'});
+  if (!(await shopper.locator('.yv-cart-row-v5').count())) throw new Error('Selected live package did not reach the cart');
+  await shopper.goto(origin + '/odeme', {waitUntil:'domcontentloaded'});
+  const checkout = shopper.locator('#checkoutForm');
+  if (!(await checkout.count())) throw new Error('Cart did not reach checkout');
+  const token = await checkout.locator('input[name="_csrf_token"]').inputValue();
+  const invalid = await checkoutContext.request.post(origin + '/odeme/islem', {
+    form: {_csrf_token:token, payment_gateway:'unknown_gateway_qa', terms_accepted:'1'},
+    maxRedirects:0
+  });
+  const destination = invalid.headers()['location'] || '';
+  if (invalid.status() !== 302 || !destination.endsWith('/odeme')) {
+    throw new Error('Forged payment method was not rejected before creating an order: ' + invalid.status() + ' ' + destination);
+  }
+  results.push({route:'Storefront cart and checkout payment guard',screen:'integration',status:200,errors:[]});
+  console.log('PASS customer registration, package-to-cart route and invalid payment rejection');
+} catch (e) {
+  failed=true;
+  results.push({route:'Storefront cart and checkout payment guard',screen:'integration',status:0,errors:[String(e)]});
+  console.error('FAIL checkout integration:',String(e).slice(0,400));
+} finally { await checkoutContext.close(); }
+
+// Product detail: sections are now real in-place tabs, not page-jump anchors.
+// Run against the synthetic script product (no private NetVera credentials).
+const productTabContext=await browser.newContext({viewport:{width:1280,height:800}});
+const productTabPage=await productTabContext.newPage();
+try {
+  const response=await productTabPage.goto(origin+'/hazir-scriptler/haber-sitesi-scripti',{waitUntil:'domcontentloaded'});
+  if(response?.status()!==200)throw new Error('Test script product detail returned non-200');
+  const tabNav=productTabPage.locator('.nv40-product-body [data-nv60-tabs]');
+  if(await tabNav.count()!==1)throw new Error('In-place product tabs missing');
+  const original=productTabPage.locator('[data-nv60-panel="ozellikler"]');
+  const review=productTabPage.locator('[data-nv60-panel="yorumlar"]');
+  if(!(await original.isVisible())||(await review.isVisible()))
+    throw new Error('Default product description tab visibility incorrect');
+  await tabNav.scrollIntoViewIfNeeded();
+  const scrollBefore=await productTabPage.evaluate(()=>window.scrollY);
+  await tabNav.locator('[data-nv60-tab="yorumlar"]').click();
+  const scrollAfter=await productTabPage.evaluate(()=>window.scrollY);
+  if(!(await review.isVisible())||await original.isVisible())
+    throw new Error('Switching review tab does not replace product content in place');
+  if(Math.abs(scrollAfter-scrollBefore)>50)
+    throw new Error('Tab click unexpectedly scrolls down the page');
+  if(await tabNav.locator('[data-nv60-tab="yorumlar"]').getAttribute('aria-selected')!=='true')
+    throw new Error('Tab aria-selected state not updated');
+  await tabNav.locator('[data-nv60-tab="ozellikler"]').click();
+  if(!(await original.isVisible())||await review.isVisible())
+    throw new Error('Switching back to product description failed');
+  const readable=await original.locator('.nv40-article').evaluate(el=>{
+    const cs=getComputedStyle(el);
+    return {fontSize:parseFloat(cs.fontSize),color:cs.color,visibility:cs.visibility};
+  });
+  if(readable.fontSize<12||readable.visibility!=='visible')
+    throw new Error('Product description is too small or invisible '+JSON.stringify(readable));
+  if((await productTabPage.getByText('Netvera\'daki Ürünü Aç').count())>0)
+    throw new Error('Old NetVera external product CTA must be removed');
+  if((await productTabPage.getByText('staging görünümünden').count())>0)
+    throw new Error('Temporary staging wording leaked into product details');
+  const technicalTab=tabNav.locator('[data-nv60-tab="teknik"]');
+  if((await technicalTab.count())!==1)throw new Error('Synthetic technical spec tab missing');
+  await technicalTab.click();
+  const technicalPanel=productTabPage.locator('[data-nv60-panel="teknik"]');
+  const features=technicalPanel.locator('.nv61-spec-feature');
+  if(await features.count()!==3 || !(await features.first().getByText('PHP 8.2 ve üstü').isVisible()))
+    throw new Error('Legacy unlabelled technical values must show as full-content feature cards');
+  const technicalGeometry=await technicalPanel.evaluate(el=>{
+    const specs=[...el.querySelectorAll('.nv61-spec-feature')];
+    return specs.map(card=>({
+      left:card.getBoundingClientRect().left,
+      itemLeft:card.querySelector('span')?.getBoundingClientRect().left,
+      visible:getComputedStyle(card).display!=='none'
+    }));
+  });
+  if(technicalGeometry.some(item=>!item.visible||item.itemLeft-item.left>62))
+    throw new Error('Unlabelled technical values are misplaced to the right edge');
+  await tabNav.locator('[data-nv60-tab="demo"]').click();
+  const demoPanel=productTabPage.locator('[data-nv60-panel="demo"]');
+  if(!(await demoPanel.isVisible())||!(await demoPanel.locator('a[href="https://qa-demo.example.test"]').count()))
+    throw new Error('Demo URL missing from in-place preview tab');
+  // This check runs AFTER the admin E2E save, which replaces the fixture's
+  // original /yonetim URL and account values with new admin form inputs.
+  if(!(await demoPanel.locator('a[href="https://qa-demo.example.test/admin"]').count()))
+    throw new Error('Updated demo admin URL was not published on the product page');
+  if(!(await demoPanel.getByText('qa-editor-demo').count()) ||
+     !(await demoPanel.getByText('qa-public-admin-only').count()))
+    throw new Error('Updated opt-in public QA demo credentials missing in product detail');
+  const media=await productTabPage.locator('.nv40-product-media').boundingBox();
+  const price=await productTabPage.locator('.nv40-price-box').boundingBox();
+  const hero=await productTabPage.locator('.nv40-product-hero').boundingBox();
+  if(!media||!price||!hero)throw new Error('Product hero layouts missing');
+  if(await productTabPage.locator('.nv40-product-hero .nv-product-offer').count())
+    throw new Error('Quote form must not vertically stretch the cover/gallery hero');
+  console.log('PASS NetVera specifications, real tab demo structure, public QA credentials and compact hero');
+  console.log('PASS product detail tabs, no page jump, accessible selection and article legibility');
+} catch(e) {
+  failed=true;
+  results.push({route:'NetVera software product in-place tabs',screen:'masaustu',status:0,errors:[String(e)]});
+  console.error('FAIL product detail tabs:',String(e).slice(0,650));
+} finally {await productTabContext.close();}
+
+// End-to-end visual regression for screenshot-reported platform color conflicts.
+// Uses actual rendered parent/child category trees; no mocked styling values.
+for (const viewport of [{width:1440,height:900},{width:390,height:844}]) {
+  const ctx = await browser.newContext({viewport});
+  const page = await ctx.newPage();
+  try {
+    await page.goto(origin+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#featured').scrollIntoViewIfNeeded();
+    await page.locator('#featured [data-featured-group="social"]').click();
+    const instagram = page.locator('#featured [data-featured-filter-panel="social"] .nv43-category-card.nv-platform-instagram').first();
+    if (!(await instagram.count())) throw new Error('Instagram parent category lost its identity');
+    await instagram.click();
+    const instagramStyle = await instagram.evaluate(el => ({
+      active:el.classList.contains('active'),
+      background:getComputedStyle(el).backgroundImage,
+      label:getComputedStyle(el.querySelector('.yh26-filter-name')).color,
+      border:getComputedStyle(el).borderTopColor
+    }));
+    if (!instagramStyle.active || !instagramStyle.background.includes('gradient'))
+      throw new Error('Instagram active root must use saturated brand fill: '+JSON.stringify(instagramStyle));
+    const id = await instagram.getAttribute('data-featured-tab');
+    const rail = page.locator('#featured [data-featured-children-for="'+id+'"] .nv43-child-rail');
+    if (!(await rail.count()) || !(await rail.isVisible()))throw new Error('Instagram child rail hidden');
+    const geometry=await rail.evaluate(el=>{
+      const first=el.querySelector('.nv43-subcategory-link');
+      if(!first)return null;
+      const a=el.getBoundingClientRect(),b=first.getBoundingClientRect(),style=getComputedStyle(first);
+      return {scroll:el.scrollLeft,railLeft:a.left,firstLeft:b.left,
+        background:style.backgroundColor,leftBorder:parseFloat(style.borderLeftWidth),
+        rightBorder:parseFloat(style.borderRightWidth)};
+    });
+    if (!geometry || geometry.scroll > 3 || geometry.firstLeft < geometry.railLeft-3)
+      throw new Error('First Instagram subcategory button is clipped: '+JSON.stringify(geometry));
+    if (geometry.leftBorder <= geometry.rightBorder)
+      throw new Error('Subcategories must have crisp brand-side accent but neutral outer border: '+JSON.stringify(geometry));
+    const bg = geometry.background.replaceAll(' ','');
+    if (bg !== 'rgb(255,255,255)')
+      throw new Error('Platform subcategory buttons must be white, not pastel tinted: '+JSON.stringify(geometry));
+
+    const tiktok = page.locator('#featured [data-featured-filter-panel="social"] .nv43-category-card.nv-platform-tiktok').first();
+    if(await tiktok.count()){
+      await tiktok.click();
+      const tk=await tiktok.evaluate(el=>({active:el.classList.contains('active'),
+        fill:getComputedStyle(el).backgroundImage,
+        icon:getComputedStyle(el.querySelector('.yh26-filter-icon')).backgroundColor}));
+      if (!tk.active || !tk.fill.includes('gradient'))
+        throw new Error('TikTok parent platform identity lost: '+JSON.stringify(tk));
+      await instagram.click();
+      const reset=await rail.evaluate(el=>el.scrollLeft);
+      if(reset>3)throw new Error('Switching platform must reset subcategory rail to its first card: '+reset);
+    }
+    await page.locator('#featured [data-featured-group="marketing"]').click();
+    const google = page.locator('#featured [data-featured-filter-panel="marketing"] .nv43-category-card.nv-platform-google').first();
+    if(await google.count()){
+      await google.click();
+      const g=await google.evaluate(el=>({
+        active:el.classList.contains('active'),
+        fill:getComputedStyle(el).backgroundImage,
+        iconBackground:getComputedStyle(el.querySelector('.yh26-filter-icon')).backgroundColor
+      }));
+      if(!g.active || !g.fill.includes('gradient') || g.iconBackground.replaceAll(' ','')!=='rgb(255,255,255)')
+        throw new Error('Google needs saturated platform header and white multi-color G container: '+JSON.stringify(g));
+    }
+    const width=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,vw:innerWidth}));
+    if(width.doc>width.vw+3)throw new Error('Platform showcase overflows viewport: '+JSON.stringify(width));
+    console.log('PASS official platform palette, crisp neutral subcategory outlines and unclipped chips:',viewport.width);
+    results.push({route:'Platform category identity',screen:String(viewport.width),status:200,errors:[]});
+  }catch(error){
+    failed=true;
+    results.push({route:'Platform category identity',screen:String(viewport.width),status:0,errors:[String(error)]});
+    console.error('FAIL official platform design',viewport.width,String(error).slice(0,650));
+  }finally{await ctx.close();}
+}
+
+// Validate the visible mobile package slider (not just presence of HTML controls).
+const sliderContext=await browser.newContext({viewport:{width:390,height:844}});
+const sliderPage=await sliderContext.newPage();
+try {
+  await sliderPage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  const track=sliderPage.locator('[data-featured-pane]:not([hidden]) [data-featured-track]');
+  const count=await track.locator('.yh18-featured-card').count();
+  if(count<2)throw new Error('CI featured seed did not create a multi-card carousel');
+  await track.scrollIntoViewIfNeeded();
+  const initial=await track.evaluate(el=>({left:el.scrollLeft, max:el.scrollWidth-el.clientWidth}));
+  if(initial.max<15)throw new Error('Multi-card carousel has no horizontal overflow on mobile');
+  await sliderPage.locator('[data-featured-pane]:not([hidden]) [data-slide-next]').click();
+  await sliderPage.waitForTimeout(450);
+  const moved=await track.evaluate(el=>el.scrollLeft);
+  if(moved<10)throw new Error('Carousel next button did not scroll the cards');
+  results.push({route:'Featured package carousel',screen:'mobil',status:200,errors:[]});
+  console.log('PASS featured package slider, card count:',count,'scrolled:',Math.round(moved));
+} catch(e) {
+  failed=true;
+  results.push({route:'Featured package carousel',screen:'mobil',status:0,errors:[String(e)]});
+  console.error('FAIL featured carousel:',String(e).slice(0,350));
+} finally{await sliderContext.close();}
+
+fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({created:new Date().toISOString(),runs:results},null,2));
+const bad=results.filter(x=>x.status>=500||x.status===0||x.report?.rootScroll>x.report?.viewport+3||x.errors?.some(e=>e.includes('did not switch')));
+console.log(`\nREPORT: ${results.length} page/viewport combinations; critical failures: ${bad.length}; images and overflow details saved to report.json`);
+await browser.close();
+if(failed) process.exitCode=1;

@@ -1,0 +1,86 @@
+/* Authoritative hero layout. Keep original HD files and their proportions.
+   Composed mobile assets have a large empty upper field: frame the artwork,
+   not that field. No transform scaling or competing version override blocks. */
+.nv94-hero-slider{--nv94-art-height:clamp(260px,40vw,340px);position:relative;margin:4px 0 18px;border-radius:24px;overflow:hidden;box-shadow:0 26px 70px rgba(25,34,75,.12);background:#101b46;isolation:isolate}
+.nv94-hero-track{position:relative;display:grid;min-width:0}
+/* Stacked items reserve the tallest slide, preventing height jumps. */
+.nv94-hero-slide{grid-area:1/1;position:relative;display:grid;min-width:0;min-height:460px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .48s ease,visibility .48s ease;background:linear-gradient(120deg,var(--nv94-bg-a),var(--nv94-bg-b));color:var(--nv94-text)}
+.nv94-hero-slide.is-active{opacity:1;visibility:visible;pointer-events:auto;z-index:2}
+.nv94-hero-slide:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--nv94-bg-a) 0%,color-mix(in srgb,var(--nv94-bg-a) 82%,transparent) 30%,var(--nv94-overlay) 48%,transparent 76%);z-index:2;pointer-events:none}
+.nv94-hero-copy{position:relative;z-index:4;width:50%;min-height:460px;padding:40px 20px 80px 48px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.nv94-hero-copy>*{min-width:0;max-width:100%}
+.nv94-hero-category{display:inline-flex;align-items:center;gap:9px;width:max-content;padding:9px 13px;border-radius:999px;background:rgba(12,18,55,.38);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(5,10,35,.14);font-size:11px;font-weight:800;color:#fff;text-decoration:none}
+.nv94-hero-category span{color:inherit}
+.nv94-hero-category .icon{color:var(--nv94-accent)}
+.nv94-hero-category:hover{background:rgba(18,25,68,.52);border-color:rgba(255,255,255,.38);color:#fff}
+.nv94-hero-eyebrow{margin-top:16px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.76)}
+.nv94-hero-title{margin:12px 0 14px;max-width:555px;font-size:clamp(29px,2.55vw,43px);line-height:1.065;letter-spacing:-.045em;font-weight:800;color:#fff;text-wrap:balance;text-shadow:0 4px 28px rgba(4,8,30,.28);overflow-wrap:break-word}
+.nv94-hero-slider .nv94-hero-description{max-width:530px;margin:0;color:rgba(255,255,255,.88);font-size:13px;line-height:1.62;overflow-wrap:break-word}
+.nv94-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:19px}
+.nv94-hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 17px;border:1px solid rgba(255,255,255,.14);border-radius:11px;font-size:12px;line-height:1.4;font-weight:800;text-decoration:none;box-shadow:0 10px 24px rgba(0,0,0,.12);transition:transform .2s ease,box-shadow .2s ease}
+.nv94-hero-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
+.nv94-hero-quick{display:flex;align-items:center;gap:8px;margin-top:17px;min-width:0;flex-wrap:wrap}
+.nv94-hero-quick-item{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:rgba(255,255,255,.96);color:var(--nv94-q);text-decoration:none;box-shadow:0 8px 18px rgba(0,0,0,.13);border:1px solid rgba(255,255,255,.6);transition:transform .18s ease}
+.nv94-hero-quick-item:hover{transform:translateY(-2px)}
+.nv94-hero-quick-sep{width:14px;height:2px;border-radius:99px;background:rgba(255,255,255,.35);margin:0 4px}
+.nv94-hero-stat{font-size:10px;font-weight:800;color:rgba(255,255,255,.72)}
+.nv94-hero-media{position:absolute;inset:0;overflow:hidden;z-index:1;min-width:0}
+.nv94-hero-media picture{position:absolute;inset:0;display:block;overflow:hidden}
+.nv94-hero-media img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:cover;object-position:right center;filter:none;transform:none;scale:none;image-rendering:auto}
+.nv94-hero-media.is-cutout img{object-fit:contain}
+.nv94-hero-media-placeholder{position:absolute;inset:0;background:radial-gradient(circle at 70% 45%,color-mix(in srgb,var(--nv94-accent) 55%,white 8%),transparent 22%),radial-gradient(circle at 64% 47%,rgba(255,255,255,.18),transparent 34%)}
+.nv94-hero-controls{position:absolute;z-index:10;left:48px;bottom:16px;display:flex;align-items:center;gap:4px;width:max-content;max-width:calc(100% - 32px);padding:4px;border-radius:12px;background:rgba(8,14,39,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(16px);color:#fff}
+.nv94-hero-arrow{width:32px;height:32px;flex-shrink:0;border:0;background:transparent;color:#fff;border-radius:8px;display:grid;place-items:center;cursor:pointer}
+.nv94-hero-arrow:hover{background:rgba(255,255,255,.11)}
+.nv94-hero-dots{display:flex;align-items:center;gap:6px;padding:0 8px}
+.nv94-hero-dot{width:8px;height:4px;border:0;border-radius:99px;padding:0;background:rgba(255,255,255,.3);cursor:pointer;transition:width .2s,background .2s}
+.nv94-hero-dot.is-active{width:24px;background:#fff}
+.nv94-hero-progress{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--nv94-accent);z-index:12}
+.nv94-hero-slide.is-active .nv94-hero-progress{animation:nv94Progress var(--nv94-delay) linear forwards}
+@keyframes nv94Progress{from{width:0}to{width:100%}}
+.nv94-hero-slider.is-paused .nv94-hero-progress{animation-play-state:paused}
+.nv94-hero-controls button:focus-visible,.nv94-hero-copy a:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.yh6-hero:has(.nv94-hero-slider){padding-top:28px}
+.nv94-hero-slider+.yh49-category-marquee{margin-top:14px}
+/* Crop empty left background, preserving the desktop face/laptop/UI. */
+.nv94-hero-slide.is-composed-banner:before{background:linear-gradient(90deg,rgba(8,13,55,.90) 0%,rgba(8,13,55,.64) 29%,rgba(8,13,55,.22) 49%,rgba(8,13,55,.04) 65%,transparent 76%)}
+@media(max-width:1100px) and (min-width:901px){
+ .nv94-hero-copy{width:53%;padding-left:32px;padding-right:16px}
+ .nv94-hero-controls{left:32px}
+}
+@media(max-width:900px){
+ .nv94-hero-slide{grid-template-rows:1fr auto;min-height:0}
+ .nv94-hero-slide:before{display:none}
+ .nv94-hero-copy{width:100%;min-height:0;padding:24px 28px 12px;justify-content:flex-start;background:linear-gradient(120deg,var(--nv94-bg-a),var(--nv94-bg-b))}
+ .nv94-hero-slide.is-composed-banner,.nv94-hero-slide.is-composed-banner .nv94-hero-copy{background:#0a0e38}
+ .nv94-hero-category{padding:7px 12px}
+ .nv94-hero-eyebrow{margin-top:14px;font-size:10px;letter-spacing:.08em}
+ .nv94-hero-title{max-width:620px;font-size:clamp(29px,4.2vw,36px)}
+ .nv94-hero-slider .nv94-hero-description{max-width:620px;font-size:12px;line-height:1.6}
+ .nv94-hero-actions{margin-top:16px}
+ .nv94-hero-quick{margin-top:14px}
+ .nv94-hero-media{position:relative;inset:auto;grid-row:2;height:var(--nv94-art-height)}
+ .nv94-hero-controls{position:relative;inset:auto;margin:4px auto 8px 16px}
+ .nv94-hero-arrow{width:28px;height:28px}
+}
+@media(max-width:600px){
+ .yh6-hero:has(.nv94-hero-slider){padding-top:14px}
+ .nv94-hero-slider{--nv94-art-height:clamp(232px,66vw,280px);border-radius:18px}
+ .nv94-hero-copy{padding:16px 18px 8px}
+ .nv94-hero-category{padding:6px 10px;font-size:9.5px}
+ .nv94-hero-eyebrow{margin-top:12px;font-size:9px;letter-spacing:.04em}
+ .nv94-hero-title{margin:9px 0 10px;font-size:clamp(26px,7.5vw,31px);line-height:1.05}
+ .nv94-hero-slider .nv94-hero-description{font-size:11px;line-height:1.5;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+ .nv94-hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+ .nv94-hero-btn{padding:8px 10px;font-size:10px;min-width:0}
+ .nv94-hero-quick{margin-top:8px}
+ .nv94-hero-quick-item{width:38px;height:38px}
+ .nv94-hero-stat,.nv94-hero-quick-sep{display:none}
+ /* Shared portrait framing: the upper/left empty canvas is excluded.
+    Intrinsic auto height keeps 1080:1920; artwork sits above the controls. */
+ .nv94-hero-media.is-composed-banner img{inset:auto 0 0 auto;width:165%;height:auto;object-fit:contain;object-position:right bottom}
+}
+@media(prefers-reduced-motion:reduce){
+ .nv94-hero-slide,.nv94-hero-btn,.nv94-hero-quick-item,.nv94-hero-dot{transition:none}
+ .nv94-hero-progress{animation:none}
+}

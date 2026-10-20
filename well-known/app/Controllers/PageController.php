@@ -48,7 +48,7 @@ class PageController extends Controller
     {
         $this->render('frontend/contact', ['pageTitle' => 'İletişim - ' . setting('site_name'),
             'metaDescription'=>'NetVera Teknoloji Yazılım ile iletişime geçin. Yazılım, dijital ajans ve sosyal medya hizmetleri için soru ve proje taleplerinizi iletin.',
-            'canonicalUrl'=>url('/iletisim')]);
+            'canonicalUrl'=>url('/iletisim'),'contact'=>\App\Services\ContactPageService::content()]);
     }
 
     public function contactPost(): void

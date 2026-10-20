@@ -1,0 +1,35 @@
+<?php $nv62Owned=isset($netveraHistory['software'])&&is_array($netveraHistory['software'])?$netveraHistory['software']:[]; ?>
+<?php if($nv62Owned): ?>
+<section class="member-card nv57-legacy-history" aria-label="Satın aldığınız NetVera yazılımları">
+ <div class="member-card-heading">
+   <h2><?= icon('monitor',18) ?> Satın Aldığım Yazılımlar</h2>
+   <span class="nv57-history-pill"><?= count($nv62Owned) ?> doğrulanmış ürün</span>
+ </div>
+ <div class="member-card-body">
+   
+   <div class="nv57-purchases">
+    <?php foreach(array_slice($nv62Owned,0,30) as $script):
+      $nvSlug=(string)($script['item_slug']??'');
+      $nvValidSlug=$nvSlug!==''&&preg_match('/^[a-z0-9][a-z0-9-]{0,190}$/D',$nvSlug);
+    ?>
+    <article class="nv57-purchase">
+      <span class="nv57-purchase-icon"><?= icon('monitor',19) ?></span>
+      <div class="nv57-purchase-copy">
+        <strong><?= e((string)$script['item_name']) ?></strong>
+        <small><?= e((string)$script['order_no']) ?> · <?= e((string)$script['payment_status']) ?></small>
+        <?php if((int)$script['has_rights']===1): ?>
+        <span class="nv57-entitlement"><?= icon('shield-check',12) ?> Eski lisans / kullanım hakkı kaydedilmiş</span>
+        <?php else: ?>
+        <span class="nv57-history-note">Satın alma geçmişi kayıtlı; lisans bilgisi için destek merkezine başvurun.</span>
+        <?php endif; ?>
+      </div>
+      <?php if($nvValidSlug): ?>
+      <a class="member-btn is-soft" href="/hazir-scriptler/<?= e($nvSlug) ?>"><?= icon('external-link',13) ?> İncele</a>
+      <?php endif; ?>
+    </article>
+    <?php endforeach; ?>
+   </div>
+   
+ </div>
+</section>
+<?php endif; ?>

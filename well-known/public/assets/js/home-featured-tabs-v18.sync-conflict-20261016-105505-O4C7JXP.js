@@ -1,0 +1,452 @@
+(() => {
+  'use strict';
+
+  const switcher = document.querySelector('[data-featured-switcher]');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (switcher) {
+    const mobile = window.matchMedia('(max-width: 768px)');
+    const tabs = [...switcher.querySelectorAll('[data-featured-tab]')];
+    const groupButtons = [...switcher.querySelectorAll('[data-featured-group]')];
+    const filterPanels = [...switcher.querySelectorAll('[data-featured-filter-panel]')];
+    const panes = [...switcher.querySelectorAll('[data-featured-pane]')];
+    const childPanels = [...switcher.querySelectorAll('[data-featured-children-for]')];
+    const categoryRails = [...switcher.querySelectorAll('[data-featured-rail]')];
+    const title = switcher.querySelector('[data-featured-title]');
+    const subtitle = switcher.querySelector('[data-featured-subtitle]');
+    const kindLabel = switcher.querySelector('[data-featured-kind]');
+    const avatar = switcher.querySelector('[data-featured-avatar]');
+    const allButtons = [...switcher.querySelectorAll('[data-featured-all], [data-featured-parent-all]')];
+    let selectedGroupAll = '';
+    let userSelected = false;
+    const selectionStorageKey = 'netvera:home:featured-selection';
+    const rememberSelection = selection => {
+      if (!mobile.matches || !userSelected) return;
+      try { window.sessionStorage?.setItem(selectionStorageKey, JSON.stringify(selection)); } catch (_) { /* Storage may be unavailable. */ }
+    };
+    const platformClasses = [
+      'instagram','tiktok','youtube','facebook','twitter','threads','telegram',
+      'spotify','discord','linkedin','twitch','google','web','seo','ecommerce',
+      'mobileapp','content','graphic','local','software','default'
+    ];
+
+    let visible = false;
+    let paused = false;
+    let rotation;
+
+    const activePane = () => panes.find(pane => !pane.hidden);
+    const step = track => {
+      const card = track.querySelector('.yh18-featured-card');
+      if (!card) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
+
+    const updateControls = (pane) => {
+      const track = pane.querySelector('[data-featured-track]');
+      const prev = pane.querySelector('[data-slide-prev]');
+      const next = pane.querySelector('[data-slide-next]');
+      const status = pane.querySelector('[data-slide-count]');
+      const controls = pane.querySelector('.yh18-carousel-controls');
+      if (!track || !controls) return;
+
+      const cards = track.querySelectorAll('.yh18-featured-card');
+      const movable = cards.length > 1 && track.scrollWidth > track.clientWidth + 3;
+      controls.hidden = !movable;
+      if (!movable) return;
+
+      const current = Math.min(cards.length, 1 + Math.round(track.scrollLeft / Math.max(step(track), 1)));
+      if (status) status.textContent = current + ' / ' + cards.length;
+      const noun = pane.dataset.kind === 'software' ? 'yazılımlar' : 'paketler';
+      if (prev) prev.setAttribute('aria-label', 'Önceki ' + noun);
+      if (next) next.setAttribute('aria-label', 'Sonraki ' + noun);
+    };
+
+    const scrollTrack = (pane, direction, userInitiated = false) => {
+      const track = pane?.querySelector('[data-featured-track]');
+      if (!track) return;
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      if (maxScroll < 3) return;
+      const distance = step(track);
+      let target = track.scrollLeft + direction * distance;
+      if (direction > 0 && track.scrollLeft >= maxScroll - 3) target = 0;
+      if (direction < 0 && track.scrollLeft < 3) target = maxScroll;
+      track.scrollTo({
+        left: Math.max(0, Math.min(maxScroll, target)),
+        behavior: reducedMotion.matches ? 'auto' : 'smooth'
+      });
+      if (userInitiated) pauseTemporarily();
+    };
+
+    let resume;
+    const pauseTemporarily = () => {
+      paused = true;
+      clearTimeout(resume);
+      resume = setTimeout(() => { paused = false; }, 12000);
+    };
+
+    const startRotation = () => {
+      clearInterval(rotation);
+      if (reducedMotion.matches) return;
+      rotation = setInterval(() => {
+        const pane = activePane();
+        if (selectedGroupAll || !pane || !visible || paused || document.hidden || pane.matches(':hover') ||
+            pane.contains(document.activeElement) || switcher.matches(':hover')) return;
+        scrollTrack(pane, 1);
+      }, 6500);
+    };
+
+    panes.forEach(pane => {
+      const track = pane.querySelector('[data-featured-track]');
+      if (!track) return;
+      pane.querySelector('[data-slide-prev]')?.addEventListener('click', () => scrollTrack(pane, -1, true));
+      pane.querySelector('[data-slide-next]')?.addEventListener('click', () => scrollTrack(pane, 1, true));
+      track.addEventListener('scroll', () => updateControls(pane), {passive:true});
+      track.addEventListener('pointerdown', pauseTemporarily, {passive:true});
+      track.addEventListener('wheel', pauseTemporarily, {passive:true});
+    });
+
+    // Hover changes only the visible filters; selecting a chip changes the featured cards.
+    // Previewing a group also selects its first REAL featured category, so the
+    // filter heading can never say Social Media while showing Google packages.
+    const showGroup = (key, activateFirst = true) => {
+      const panel = filterPanels.find(item => item.dataset.featuredFilterPanel === key);
+      if (!panel) return;
+      groupButtons.forEach(button => {
+        const open = button.dataset.featuredGroup === key;
+        button.classList.toggle('is-open', open);
+        button.setAttribute('aria-expanded', String(open));
+      });
+      filterPanels.forEach(item => { item.hidden = item !== panel; });
+      const activeTab=tabs.find(tab=>tab.classList.contains('active'));
+      if (activeTab && activeTab.dataset.featuredParentGroup===key) revealChildren(activeTab);
+      if (activateFirst) {
+        if (mobile.matches) { showAll(key); return; }
+        const first = panel.querySelector('[data-featured-tab]');
+        if (first && !first.classList.contains('active')) switchTo(first);
+      }
+    };
+    groupButtons.forEach(button => {
+      const key = button.dataset.featuredGroup;
+      button.addEventListener('pointerenter', event => {
+        if (!mobile.matches && (event.pointerType === 'mouse' || event.pointerType === 'pen')) showGroup(key);
+      });
+      button.addEventListener('focus', () => { if (!mobile.matches) showGroup(key); });
+      button.addEventListener('click', () => { userSelected = true; showGroup(key); pauseTemporarily(); });
+      button.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          const selected = tabs.find(tab => tab.classList.contains('active'));
+          if (selected) showGroup(selected.dataset.featuredParentGroup, false);
+          button.blur();
+        }
+      });
+    });
+
+    const switchTo = tab => {
+      selectedGroupAll = '';
+      switcher.classList.remove('is-group-results');
+      const id = tab.dataset.featuredTab;
+      const name = tab.dataset.title || 'Hizmetler';
+      const platformClass = tab.dataset.class || 'default';
+      const isSoftware = tab.dataset.kind === 'software';
+      rememberSelection({category:id});
+      showGroup(tab.dataset.featuredParentGroup, false);
+
+      tabs.forEach(item => {
+        const active = item === tab;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', active ? 'true' : 'false');
+        item.tabIndex = active ? 0 : -1;
+      });
+      panes.forEach(pane => {
+        const active = pane.dataset.featuredPane === id;
+        pane.classList.toggle('active', active);
+        pane.hidden = !active;
+        if (active) requestAnimationFrame(() => updateControls(pane));
+      });
+      revealChildren(tab);
+      allButtons.forEach(button => {
+        const active = button.dataset.featuredParentAll === id;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+        button.tabIndex = active ? 0 : -1;
+      });
+      categoryRails.forEach(rail=>requestAnimationFrame(()=>updateRailButtons(rail)));
+      if (title) title.textContent = name;
+      if (kindLabel) kindLabel.textContent = isSoftware ? 'Öne Çıkan Yazılımlar' : 'Öne Çıkan Paketler';
+      if (subtitle) subtitle.textContent = isSoftware
+        ? (name === 'Hazır Yazılımlar & Scriptler'
+            ? 'Gerçek NetVera yazılımlarını, ekran görüntülerini ve fiyatlarını inceleyin.'
+            : name + ' kategorisindeki gerçek yazılımları inceleyin.')
+        : name + ' kategorisindeki öne çıkan paketleri inceleyin.';
+      if (avatar) {
+        platformClasses.forEach(cls => avatar.classList.remove(cls));
+        avatar.classList.add(platformClass);
+        const platformIcon = tab.querySelector('.icon, svg, i');
+        if (platformIcon) avatar.replaceChildren(platformIcon.cloneNode(true));
+      }
+      pauseTemporarily();
+    };
+
+    // Reuse the server-rendered root panes. No second product query or cloned cards.
+    const showAll = key => {
+      if (!filterPanels.some(panel => panel.dataset.featuredFilterPanel === key)) return;
+      showGroup(key, false);
+      selectedGroupAll = key;
+      switcher.classList.add('is-group-results');
+      rememberSelection({group:key});
+      const roots = tabs.filter(tab => tab.dataset.featuredParentGroup === key && !tab.dataset.featuredParentId);
+      const ids = new Set(roots.map(tab => tab.dataset.featuredTab));
+      tabs.forEach(tab => {
+        tab.classList.remove('active', 'is-parent-selected');
+        tab.setAttribute('aria-selected', 'false');
+        tab.tabIndex = -1;
+      });
+      allButtons.forEach(button => {
+        const active = button.dataset.featuredAll === key;
+        button.setAttribute('aria-selected', String(active));
+        button.tabIndex = active ? 0 : -1;
+      });
+      childPanels.forEach(panel => { panel.hidden = true; });
+      panes.forEach(pane => {
+        const show = ids.has(pane.dataset.featuredPane) && !!pane.querySelector('.yh18-featured-card');
+        pane.hidden = !show;
+        pane.classList.toggle('active', show);
+      });
+      switcher.querySelector('.yh18-featured-panes').scrollLeft = 0;
+      pauseTemporarily();
+    };
+    allButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        userSelected = true;
+        if (button.dataset.featuredAll) showAll(button.dataset.featuredAll);
+        else {
+          const parent = tabs.find(tab => tab.dataset.featuredTab === button.dataset.featuredParentAll);
+          if (parent) switchTo(parent);
+        }
+      });
+      button.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        button.parentElement.querySelector('[data-featured-tab]')?.focus();
+      });
+    });
+
+    let visibleRootId = tabs.find(tab => tab.classList.contains('active'))?.dataset.featuredRootId || '';
+    const revealChildren = tab => {
+      const id = tab?.dataset.featuredTab || '';
+      const rootId = tab?.dataset.featuredRootId || id;
+      // A newly selected platform always starts with the first FULL chip.
+      // Earlier auto-rotation left half-visible labels after switching tabs.
+      const rootChanged = visibleRootId !== rootId;
+      visibleRootId = rootId;
+      const immediateParent = tab?.dataset.featuredParentId || '';
+      const mobileParent = [id, immediateParent, rootId].find(key => childPanels.some(panel => panel.dataset.featuredChildrenFor === key));
+      childPanels.forEach(panel => {
+        const key = panel.dataset.featuredChildrenFor;
+        const group = panel.closest('[data-featured-filter-panel]');
+        const match = key === rootId || (key === id && key !== rootId)
+          || (immediateParent && key === immediateParent && key !== rootId);
+        panel.hidden = !(mobile.matches ? key === mobileParent : match) || !!group?.hidden;
+      });
+      tabs.forEach(item => {
+        const parent = item.dataset.featuredTab === rootId && rootId !== id;
+        item.classList.toggle('is-parent-selected', parent);
+      });
+      if (rootChanged) {
+        childPanels.filter(panel => panel.dataset.featuredChildrenFor === rootId).forEach(panel => {
+          const rail = panel.querySelector('[data-featured-rail-kind="child"]');
+          if (rail) rail.scrollLeft = 0;
+        });
+      }
+    };
+
+    // All parent cards and nested links share the same accessible horizontal
+    // scroll mechanics. Native touch swiping stays browser-controlled.
+    const isVisiblyOpen = rail =>
+      !rail.closest('[hidden]') && rail.clientWidth > 0 && rail.scrollWidth > rail.clientWidth + 4;
+
+    const updateRailButtons = rail => {
+      const wrapper = rail.closest('.nv43-rail-shell');
+      if (!wrapper) return;
+      const prev = wrapper.querySelector('[data-featured-rail-prev]');
+      const next = wrapper.querySelector('[data-featured-rail-next]');
+      const max = Math.max(0, rail.scrollWidth - rail.clientWidth);
+      if (prev) prev.disabled = max < 4 || rail.scrollLeft < 4;
+      if (next) next.disabled = max < 4 || rail.scrollLeft > max - 4;
+    };
+
+    const moveRail = (rail,dir) => {
+      const tile = rail.querySelector('.nv43-category-card, .nv43-subcategory-link');
+      const width = tile ? tile.getBoundingClientRect().width + 10 : Math.max(rail.clientWidth*.8,120);
+      const max = Math.max(0,rail.scrollWidth - rail.clientWidth);
+      if(max < 5)return;
+      const newLeft = dir > 0 && rail.scrollLeft >= max - 6 ? 0
+        : dir < 0 && rail.scrollLeft <= 5 ? max
+        : Math.max(0,Math.min(max,rail.scrollLeft+dir*width));
+      rail.scrollTo({left:newLeft,behavior:reducedMotion.matches?'auto':'smooth'});
+    };
+
+    categoryRails.forEach(rail => {
+      // Prevent browser-native dragging of anchor labels; it steals pointer
+      // events from the horizontal rail and makes desktop swipe unreliable.
+      rail.querySelectorAll('a').forEach(link=>{link.draggable=false;});
+      rail.addEventListener('dragstart',e=>e.preventDefault());
+      const wrapper = rail.closest('.nv43-rail-shell');
+      wrapper?.querySelector('[data-featured-rail-prev]')?.addEventListener('click',() => {
+        pauseTemporarily();moveRail(rail,-1);
+      });
+      wrapper?.querySelector('[data-featured-rail-next]')?.addEventListener('click',() => {
+        pauseTemporarily();moveRail(rail,1);
+      });
+      // Desktop: mouse events are reliable even on a rail full of buttons and
+      // anchor tags. Mobile: leave touch swiping entirely to native scrolling.
+      let mouse=null;
+      let preventClick=false;
+      rail.addEventListener('mousedown',event=>{
+        if(event.button!==0)return;
+        mouse={startX:event.clientX,startLeft:rail.scrollLeft,moved:false};
+        pauseTemporarily();
+      });
+      window.addEventListener('mousemove',event=>{
+        if(!mouse)return;
+        if(!(event.buttons&1)){
+          mouse=null;rail.classList.remove('is-dragging');return;
+        }
+        const dx=event.clientX-mouse.startX;
+        if(!mouse.moved && Math.abs(dx)<5)return;
+        mouse.moved=true;
+        if(event.cancelable)event.preventDefault();
+        rail.classList.add('is-dragging');
+        // Set scrollLeft synchronously: the manual gesture must always win
+        // against snap, animation, link dragging and hover auto-rotation.
+        rail.scrollLeft=mouse.startLeft-dx;
+        pauseTemporarily();
+      },{passive:false});
+      window.addEventListener('mouseup',()=>{
+        if(!mouse)return;
+        if(mouse.moved){
+          preventClick=true;
+          window.setTimeout(()=>{preventClick=false;},200);
+          rail.classList.add('is-drag-released');
+          window.setTimeout(()=>rail.classList.remove('is-drag-released'),300);
+        }
+        mouse=null;
+        rail.classList.remove('is-dragging');
+        updateRailButtons(rail);
+      });
+      rail.addEventListener('click',e=>{
+        if(preventClick){
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          preventClick=false;
+        }
+      },true);
+      rail.addEventListener('scroll',()=>updateRailButtons(rail),{passive:true});
+      rail.addEventListener('wheel',e=>{
+        if(!isVisiblyOpen(rail))return;
+        if(e.shiftKey && Math.abs(e.deltaY)>Math.abs(e.deltaX)){
+          e.preventDefault();
+          rail.scrollLeft+=e.deltaY;
+          pauseTemporarily();
+        }
+      },{passive:false});
+      requestAnimationFrame(()=>updateRailButtons(rail));
+    });
+
+    let nextRailRotation=0;
+    const autoSlideCategoryRails=()=>{
+      if(mobile.matches||reducedMotion.matches||document.hidden||!visible||paused||switcher.matches(':hover'))return;
+      const activePanel=filterPanels.find(panel=>!panel.hidden);
+      if(!activePanel)return;
+      // Only the root row may rotate automatically. Child subcategory labels
+      // must remain fully readable and anchored at the first item until a user
+      // deliberately swipes or clicks the navigation arrows.
+      const candidates=categoryRails.filter(rail=>
+        rail.dataset.featuredRailKind === 'root' && activePanel.contains(rail) &&
+        isVisiblyOpen(rail) && !rail.contains(document.activeElement) &&
+        !rail.matches(':hover') && !rail.classList.contains('is-dragging'));
+      if(!candidates.length)return;
+      const rail=candidates[nextRailRotation++ % candidates.length];
+      moveRail(rail,1);
+    };
+    window.setInterval(autoSlideCategoryRails,5200);
+
+    tabs.forEach((tab, index) => {
+      tab.setAttribute('role', 'tab');
+      tab.tabIndex = tab.classList.contains('active') ? 0 : -1;
+      tab.addEventListener('click', () => { userSelected = true; switchTo(tab); });
+      tab.addEventListener('keydown', e => {
+        if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(e.key)) return;
+        e.preventDefault();
+        const groupTabs = [...tab.parentElement.querySelectorAll('[role="tab"]')].filter(item => getComputedStyle(item).display !== 'none');
+        const current = groupTabs.indexOf(tab);
+        const next = e.key === 'Home' ? 0 : e.key === 'End' ? groupTabs.length - 1
+          : (current + (e.key === 'ArrowRight' ? 1 : -1) + groupTabs.length) % groupTabs.length;
+        groupTabs[next].focus();
+        userSelected = true;
+        groupTabs[next].click();
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        visible = entries.some(entry => entry.isIntersecting);
+      }, { threshold: 0.15 });
+      observer.observe(switcher);
+    } else visible = true;
+
+    const resize = () => {
+      panes.forEach(pane => updateControls(pane));
+    };
+    window.addEventListener('resize', resize, {passive:true});
+    reducedMotion.addEventListener?.('change', startRotation);
+    switcher.addEventListener('focusin', pauseTemporarily);
+    revealChildren(tabs.find(tab=>tab.classList.contains('active')));
+    // The homepage's first database row is a fallback, not an explicit selection.
+    // Resolve existing query/hash/category state before considering the mobile default.
+    const requested = new URLSearchParams(window.location.search);
+    const selectionKeys = ['subcategory', 'subcategory_id', 'category', 'category_id', 'group'];
+    const requestedValue = selectionKeys.map(key => requested.get(key)).find(Boolean);
+    let hash = window.location.hash.slice(1);
+    try { hash = decodeURIComponent(hash); } catch (_) { /* Keep malformed fragments opaque. */ }
+    const token = requestedValue || (hash && hash !== 'featured' ? hash : '');
+    const requestedTab = token && tabs.find(tab => tab.dataset.featuredTab === token ||
+      tab.dataset.url?.split('/').pop() === token || tab.dataset.url === token);
+    const initial = tabs.find(tab => tab.classList.contains('active'));
+    const explicit = !!token || !!switcher.dataset.featuredSelection ||
+      (initial && initial.dataset.featuredTab !== switcher.dataset.featuredDefaultCategory);
+    let remembered;
+    try { remembered = JSON.parse(window.sessionStorage?.getItem(selectionStorageKey) || 'null'); } catch (_) { /* Ignore invalid or unavailable storage. */ }
+    const rememberedTab = remembered && tabs.find(tab => tab.dataset.featuredTab === remembered.category);
+    const rememberedGroup = remembered && groupButtons.find(button => button.dataset.featuredGroup === remembered.group);
+    const requestedGroup = token && groupButtons.find(button => button.dataset.featuredGroup === token);
+    if (requestedTab) switchTo(requestedTab);
+    else if (requestedGroup && mobile.matches) showAll(requestedGroup.dataset.featuredGroup);
+    else if (mobile.matches && !explicit && window.location.pathname === '/') {
+      if (rememberedTab) switchTo(rememberedTab);
+      else showAll(rememberedGroup?.dataset.featuredGroup || 'social');
+    }
+    mobile.addEventListener('change', () => {
+      if (!mobile.matches && selectedGroupAll) {
+        const first = tabs.find(tab => tab.dataset.featuredParentGroup === selectedGroupAll);
+        if (first) switchTo(first);
+      } else if (mobile.matches && !userSelected && !explicit && window.location.pathname === '/') {
+        if (rememberedTab) switchTo(rememberedTab);
+        else showAll(rememberedGroup?.dataset.featuredGroup || 'social');
+      }
+      else if (!selectedGroupAll) revealChildren(tabs.find(tab => tab.classList.contains('active')));
+    });
+    requestAnimationFrame(()=>categoryRails.forEach(updateRailButtons));
+    requestAnimationFrame(resize);
+    startRotation();
+  }
+
+  // Keep existing fixed contact bubbles away from the footer.
+  const footer = document.querySelector('.site-footer');
+  if (footer && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      document.body.classList.toggle('footer-in-view', entries.some(entry => entry.isIntersecting));
+    }, { threshold: 0.08 });
+    observer.observe(footer);
+  }
+})();

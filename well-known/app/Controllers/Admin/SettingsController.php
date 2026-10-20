@@ -6,6 +6,24 @@ use App\Services\SiteConfigService;
 
 class SettingsController extends Controller
 {
+    public function contact(): void
+    {
+        $this->renderAdmin('admin/settings/contact',['pageTitle'=>'İletişim Sayfası','contact'=>\App\Services\ContactPageService::content()]);
+    }
+
+    public function saveContact(): void
+    {
+        Csrf::check();
+        try{$values=\App\Services\ContactPageService::validate($_POST);}
+        catch(\InvalidArgumentException $e){flash('error',$e->getMessage());redirect('/admin/iletisim-ayarlari');return;}
+        $pdo=$this->db->getPdo();$pdo->beginTransaction();
+        try{
+            $config=SiteConfigService::getInstance();foreach($values as $key=>$value)$config->set($key,$value,'contact');
+            $pdo->commit();logActivity('contact_settings_update','İletişim sayfası ayarları güncellendi.');flash('success','İletişim sayfası kaydedildi.');
+        }catch(\Throwable $e){if($pdo->inTransaction())$pdo->rollBack();flash('error','Ayarlar kaydedilemedi. Lütfen yeniden deneyin.');}
+        redirect('/admin/iletisim-ayarlari');
+    }
+
     public function site(): void
     {
         // Migrate only missing/retired demo defaults; existing custom settings remain intact.
@@ -21,6 +39,11 @@ class SettingsController extends Controller
     public function saveSite(): void
     {
         Csrf::check();
+        // The generic settings endpoint must not bypass the map trust boundary.
+        if(array_key_exists('contact_map_embed',$_POST)){
+            try{$_POST['contact_map_embed']=\App\Services\ContactPageService::mapUrl($_POST['contact_map_embed']);}
+            catch(\InvalidArgumentException $e){flash('error',$e->getMessage());redirect('/admin/site-ayarlari');return;}
+        }
         foreach(['seo_google_verification','seo_bing_verification']as $key){
             if(isset($_POST[$key])&&(!is_string($_POST[$key])||($_POST[$key]!==''&&!preg_match('/^[A-Za-z0-9_-]{8,200}$/D',$_POST[$key])))){
                 flash('error','Arama motoru doğrulaması için yalnızca doğrulama kodunu girin; HTML etiketi veya URL kullanmayın.');redirect('/admin/site-ayarlari');return;
