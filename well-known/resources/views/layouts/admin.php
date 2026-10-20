@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261018-seo-infrastructure">
+    <?php if(str_starts_with($template,'admin/landing/')): ?>
+    <link rel="stylesheet" href="<?= asset('css/landing-editor.css') ?>?v=20261019-regional-ready">
+    <script src="<?= asset('js/landing-editor.js') ?>?v=20261019-regional-ready" defer></script>
+    <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/admin-customers-v67.css') ?>?v=67.1">
     <link rel="stylesheet" href="<?= asset('css/admin-showcases-v31.css') ?>?v=31.1">
@@ -135,6 +139,8 @@
                 <a href="/admin/sayfalar" class="<?= isActive('/admin/sayfa') ?>">
                     <?= icon('copy', 18) ?> Sayfalar
                 </a>
+                <a href="/admin/konumsal-sayfalar" class="<?= isActive('/admin/konumsal-sayfalar') ?>"><?= icon('map-pin',18) ?> Konumsal Hizmet Sayfaları</a>
+                <a href="/admin/bilgi-alani" class="<?= isActive('/admin/bilgi-alani') ?>"><?= icon('file-text',18) ?> Ana Sayfa Bilgi Alanı</a>
                 <a href="/admin/sss" class="<?= isActive('/admin/sss') ?>">
                     <?= icon('help-circle', 18) ?> SSS
                 </a>

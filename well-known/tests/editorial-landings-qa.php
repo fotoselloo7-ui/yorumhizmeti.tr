@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+if(PHP_SAPI!=='cli')exit(2);
+define('BASE_PATH',dirname(__DIR__));define('PUBLIC_PATH',BASE_PATH.'/public');
+spl_autoload_register(static function($c){if(str_starts_with($c,'App\\'))require BASE_PATH.'/app/'.str_replace('\\','/',substr($c,4)).'.php';});
+require BASE_PATH.'/app/Core/Helpers.php';
+use App\Services\LandingContentService as Content;
+use App\Services\RegionalLandingService as Landing;
+use App\Services\HomeKnowledgeService as Home;
+$n=0;$ok=static function($condition,$why)use(&$n){if(!$condition)throw new RuntimeException($why);$n++;};
+$reject=static function($fn,$why)use($ok){try{$fn();}catch(InvalidArgumentException $e){$ok(true,$why);return;}$ok(false,$why);};
+$router=new App\Core\Router();foreach(['/admin','/blog/{slug}','/iletisim','/haber-sitesi-scripti','/hizmet-bolgeleri']as $route)$router->get($route,'Fake@index');
+$ok(str_contains(Landing::pattern(),'regional!_landing'),'SQL discriminator escapes literal underscore, not a wildcard');
+foreach(['reklam','sosyal','seo']as $kind){$d=Landing::starter($kind);$ok($d['status']==='inactive'&&$d['seo']['robots']==='noindex,follow','Starters never auto-publish');$ok(count($d['sections'])===2&&count($d['faqs'])===2,'Useful distinct starter sections');$ok(Landing::decode(['content'=>json_encode($d)])!==null,'Canonical pages payload discriminator');$ok(is_file(PUBLIC_PATH.$d['image']),'Existing local sharp artwork');}
+$d=Landing::starter('seo');$d['status']='active';$d=Landing::validate($d);$ok($d['city']==='Alanya'&&str_contains($d['seo']['service_area'],'Antalya'),'Area is explicit service coverage');
+$other=$d;$other['city']='Kaş';$other['local_context']=str_replace('Alanya','Kaş',$d['local_context']);$other['sections']=array_map(static function($r){$r['body']=str_replace('Alanya','Kaş',$r['body']);return $r;},$d['sections']);$ok(Landing::fingerprint($d)===Landing::fingerprint($other),'City-swap duplicate content detected');$other['sections'][0]['body'].=' Gerçek ve ayrı ihtiyaç analizi.';$ok(Landing::fingerprint($d)!==Landing::fingerprint($other),'Distinct editorial content is not blocked');
+foreach(['admin','blog','iletisim','haber-sitesi-scripti','hizmet-bolgeleri','assets','Foo','a/b','a..b','//evil','bad%0aheader','foo-','a--b']as $slug)$reject(static fn()=>Landing::slug($slug),'Reserved/invalid slug rejected: '.$slug);
+$ok(Landing::slug('alanya-sosyal-medya-uzmanı')==='alanya-sosyal-medya-uzmanı','Unicode slug is supported without unsafe decoding');
+foreach(['javascript:alert(1)','//evil.test','/%2f%2fevil.test','/admin/x','/odeme','/../secret','/a%0aheader','/a\\b']as $path)$reject(static fn()=>Content::localPath($path),'Unsafe local link rejected');
+$ok(Content::localPath('/kategori/instagram-takipci')==='/kategori/instagram-takipci','Valid public internal link');
+$notes=Content::diagnostics(['body'=>'[Hizmet](/seo-uzmani)','seo'=>['focus_keyword'=>'seo-uzmani']]);$ok(str_contains($notes[0],': 0.'),'Keyword analysis does not count hidden link destinations');
+$rich=Content::rich('<script>alert(1)</script> [Instagram](/kategori/instagram-takipci) [Kötü](//evil.test)');$ok(str_contains($rich,'&lt;script&gt;')&&!str_contains($rich,'<script>')&&str_contains($rich,'href="/kategori/instagram-takipci"')&&!str_contains($rich,'href="//'),'Rich text escapes HTML and links only to safe internal paths');
+foreach(['/uploads/../.env','https://remote.test/photo.png','/uploads/script.svg']as $image)$reject(static fn()=>Content::image($image),'Unsafe media rejected');
+$reject(static fn()=>Content::rows([['question'=>'Eksik']],'faqs'),'Incomplete FAQ rejected');$reject(static fn()=>Content::rows([['title'=>'Eksik']],'sections'),'Incomplete section rejected');$reject(static fn()=>Content::seo(['sources'=>'javascript:alert(1)']),'Unsafe citation rejected');$reject(static fn()=>Content::seo(['last_reviewed'=>'2099-01-01']),'Future provenance date rejected');
+$home=Home::validate(Home::defaults());$ok(count($home['cards'])===3,'Exactly three default cards');$ok(!str_contains(json_encode($home),'%100 organik'),'No fabricated organic claim');$bad=$home;$bad['cards']=[];$reject(static fn()=>Home::validate($bad),'Missing cards rejected');
+$bad=$d;$bad['local_context']='';$reject(static fn()=>Landing::validate($bad),'Publish requires real local context');$bad=$d;$bad['reference_ids']=['aabbcc001122'];$ok(Landing::validate($bad)['reference_ids']===['aabbcc001122'],'Real hexadecimal reference identities preserved');
+$css=file_get_contents(PUBLIC_PATH.'/assets/css/editorial-landings.css');$ok(!str_contains($css,'!important')&&str_contains($css,'repeat(3,minmax(0,1fr))')&&str_contains($css,'prefers-reduced-motion'),'Single responsive authoritative stylesheet');
+$form=file_get_contents(BASE_PATH.'/resources/views/admin/landing/form.php');$ok(str_contains($form,'csrfField()')&&str_contains($form,'revision')&&!str_contains($form,'<script>'),'CSRF/revision native admin form, no inline script');
+$ok(Landing::referenceImage(['image'=>'/assets/img/category-heroes/web.webp'])==='/assets/img/category-heroes/web.webp','Absolute asset reference path is not prefixed with uploads');
+$ok(Landing::referenceImage(['image'=>'javascript:alert(1)','logo'=>'/assets/img/category-heroes/ads.webp'])==='/assets/img/category-heroes/ads.webp','Unsafe reference media falls back to a safe local logo');
+foreach(['file-text','target','map-pin','sparkles','users','search','layers']as $icon)$ok(App\Services\IconService::has($icon),'Registered component icon, not fallback box');
+$source=file_get_contents(BASE_PATH.'/app/Services/RegionalLandingService.php');$ok(!str_contains($source,'CREATE TABLE')&&!str_contains($source,'database/migrations'),'Canonical existing pages schema, no runtime migration dependency');
+echo "PASS $n editorial landing content, SEO, links, draft, location, duplicate, media and isolation contracts\n";

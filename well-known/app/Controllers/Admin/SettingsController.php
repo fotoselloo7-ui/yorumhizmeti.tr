@@ -151,7 +151,7 @@ class SettingsController extends Controller
 
     public function pages(): void
     {
-        $pages = $this->db->fetchAll("SELECT * FROM pages ORDER BY id ASC");
+        $pages = array_values(array_filter($this->db->fetchAll("SELECT * FROM pages WHERE content IS NULL OR (content NOT LIKE ? ESCAPE '!' AND content NOT LIKE ? ESCAPE '!') ORDER BY id ASC",[\App\Services\RegionalLandingService::pattern(),\App\Services\RegionalLandingService::pattern(\App\Services\RegionalLandingService::REDIRECT_PREFIX)]),static fn($row)=>!\App\Services\RegionalLandingService::isManaged($row)));
         $this->renderAdmin('admin/settings/pages', ['pageTitle' => 'Sayfalar', 'pages' => $pages]);
     }
 
@@ -159,12 +159,17 @@ class SettingsController extends Controller
     {
         $page = $this->db->fetch("SELECT * FROM pages WHERE id = ?", [(int) $id]);
         if (!$page) { redirect('/admin/sayfalar'); }
+        if(\App\Services\RegionalLandingService::isLanding($page)){redirect('/admin/konumsal-sayfalar/'.(int)$id.'/duzenle');return;}
+        if($target=\App\Services\RegionalLandingService::redirectId($page)){redirect('/admin/konumsal-sayfalar/'.$target.'/duzenle');return;}
         $this->renderAdmin('admin/settings/page-form', ['pageTitle' => 'Sayfa Düzenle', 'page' => $page]);
     }
 
     public function updatePage(string $id): void
     {
         Csrf::check();
+        $existingPage=$this->db->fetch('SELECT * FROM pages WHERE id=?',[(int)$id]);
+        if($existingPage&&\App\Services\RegionalLandingService::isLanding($existingPage)){redirect('/admin/konumsal-sayfalar/'.(int)$id.'/duzenle');return;}
+        if($existingPage&&($target=\App\Services\RegionalLandingService::redirectId($existingPage))){redirect('/admin/konumsal-sayfalar/'.$target.'/duzenle');return;}
         $this->db->update('pages', [
             'title' => trim($_POST['title'] ?? ''),
             'slug' => trim($_POST['slug'] ?? ''),

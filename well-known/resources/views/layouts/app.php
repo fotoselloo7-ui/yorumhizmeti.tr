@@ -159,6 +159,9 @@
     <link rel="stylesheet" href="<?= asset('css/member-panel.css') ?>?v=20261018">
     <script src="<?= asset('js/member-panel.js') ?>?v=20261018" defer></script>
     <?php endif; ?>
+    <?php if($template==='frontend/home'||str_starts_with($template,'frontend/landing/')): ?>
+    <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261019-regional-ready">
+    <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
     <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261019">
     <script src="<?= asset('js/social-storefront.js') ?>?v=20261019" defer></script>
@@ -573,6 +576,7 @@
                 <nav class="footer-col" aria-label="Kurumsal ve destek">
                     <h4>Kurumsal & Destek</h4>
                     <a class="yh49-footer-link" href="/sayfa/hakkimizda">Hakkımızda</a>
+                    <?php if(\App\Services\RegionalLandingService::hasPublished()): ?><a class="yh49-footer-link" href="/hizmet-bolgeleri">Hizmet Bölgeleri</a><?php endif; ?>
                     <a class="yh49-footer-link" href="/blog">Blog</a>
                     <a class="yh49-footer-link" href="/sss">Sıkça Sorulan Sorular</a>
                     <a class="yh49-footer-link" href="/destek">Destek Merkezi</a>

@@ -177,10 +177,23 @@ class SitemapService
         }
 
         // Sayfalar
-        $pages = $db->fetchAll("SELECT slug, updated_at FROM pages WHERE status = 'active'");
+        // Read bounded metadata, not every full landing article into the sitemap.
+        // JSON_VALID protects ordinary HTML pages from JSON_EXTRACT errors.
+        $pages = $db->fetchAll("SELECT id,slug,updated_at,canonical_url,
+            (content LIKE ? ESCAPE '!') AS is_regional,
+            IF(JSON_VALID(content),JSON_UNQUOTE(JSON_EXTRACT(content,'$.seo.robots')),NULL) AS regional_robots
+            FROM pages WHERE status = 'active'",[RegionalLandingService::pattern()]);
+        $hasRegional=false;
         foreach ($pages as $page) {
+            if($page['is_regional']){
+                $own='/'.rawurlencode($page['slug']);$canonical=$page['canonical_url']??'';
+                if(!SeoMetadataService::indexable($page['regional_robots']??'noindex,follow'))continue;
+                if($canonical!==''&&$canonical!==$own)continue;
+                $xml.=$this->url($baseUrl.$own,'0.6','monthly',$page['updated_at'],$page['regional_robots']??'noindex,follow');$hasRegional=true;continue;
+            }
             $xml .= $this->url($baseUrl . '/sayfa/' . $page['slug'], '0.5', 'monthly', $page['updated_at']);
         }
+        if($hasRegional)$xml.=$this->url($baseUrl.'/hizmet-bolgeleri','0.6','weekly');
 
         // SSS & İletişim
         $xml .= $this->url($baseUrl . '/sss', '0.5', 'monthly');

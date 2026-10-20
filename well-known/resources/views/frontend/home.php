@@ -1367,6 +1367,7 @@ if (!empty($projectReferences)) {
 </section>
 <?php endif; ?>
 
+<?php require __DIR__.'/partials/home-knowledge.php'; ?>
 <section class="home-service-cta" aria-labelledby="home-final-title">
     <div class="container">
         <div class="home-service-cta-copy">

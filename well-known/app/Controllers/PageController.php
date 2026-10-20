@@ -11,6 +11,9 @@ class PageController extends Controller
     {
         $page = Database::getInstance()->fetch("SELECT * FROM pages WHERE slug = ? AND status = 'active'", [$slug]);
         if (!$page) { $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
+        if(\App\Services\RegionalLandingService::isLanding($page)){
+            header('Location: /'.rawurlencode($page['slug']),true,301);return;
+        }
 
         $this->render('frontend/page', [
             'pageTitle' => $page['seo_title'] ?: $page['title'],

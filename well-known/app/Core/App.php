@@ -124,6 +124,7 @@ class App
         $r->post('/iletisim', 'PageController@contactPost');
         $r->post('/bulten/kayit', 'NewsletterController@subscribe');
         $r->get('/sayfa/{slug}', 'PageController@show');
+        $r->get('/hizmet-bolgeleri', 'RegionalLandingController@index');
 
         // SEO
         $r->get('/sitemap.xml', 'SitemapController@index');
@@ -135,6 +136,13 @@ class App
         $r->get('/admin/cikis', 'Admin\\AuthController@logout');
 
         $r->get('/admin', 'Admin\\DashboardController@index');
+        $r->get('/admin/bilgi-alani', 'Admin\\LandingController@home');
+        $r->post('/admin/bilgi-alani', 'Admin\\LandingController@saveHome');
+        $r->get('/admin/konumsal-sayfalar', 'Admin\\LandingController@index');
+        $r->get('/admin/konumsal-sayfalar/yeni', 'Admin\\LandingController@create');
+        $r->post('/admin/konumsal-sayfalar/kaydet', 'Admin\\LandingController@save');
+        $r->get('/admin/konumsal-sayfalar/{id}/duzenle', 'Admin\\LandingController@edit');
+        $r->post('/admin/konumsal-sayfalar/{id}/kopyala', 'Admin\\LandingController@duplicate');
 
         // Admin Kategoriler
         $r->get('/admin/kategoriler', 'Admin\\CategoryController@index');
@@ -344,5 +352,7 @@ class App
         $r->post('/admin/lisans/kontrol', 'Admin\\LicenseController@check');
         $r->post('/admin/lisans/devre-disi', 'Admin\\LicenseController@deactivate');
         $r->post('/admin/lisans/kaydet', 'Admin\\LicenseController@saveSettings');
+        // Last and read-only: explicit/legacy routes always keep priority.
+        $r->get('/{slug}', 'RegionalLandingController@show');
     }
 }

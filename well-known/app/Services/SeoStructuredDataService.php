@@ -40,9 +40,10 @@ final class SeoStructuredDataService
             $profiles=self::links((string)($seo['same_as_urls']??''));if($profiles)$author['sameAs']=$profiles;
             $base['author']=$author;
         }
-        if($template==='frontend/blog/detail'){
+        if(in_array($template,['frontend/blog/detail','frontend/landing/show'],true)){
             $sources=self::links((string)($seo['sources']??''));if($sources)$base['citation']=$sources;
             if((!empty($seo['author_name'])||!empty($seo['reviewer_name']))&&($reviewed=SeoMetadataService::lastmod((string)($seo['last_reviewed']??''))))$base['lastReviewed']=$reviewed;
+            if($template==='frontend/landing/show'&&!empty($seo['reviewer_name']))$base['reviewedBy']=['@type'=>'Person','name'=>$seo['reviewer_name']];
         }
         if($pageIndex===null)$nodes[]=$base;
         else{$nodes[$pageIndex]=array_replace($base,$nodes[$pageIndex]);$nodes[$pageIndex]['url']=$canonical;}

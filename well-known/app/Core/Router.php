@@ -5,6 +5,12 @@ class Router
 {
     private array $routes = [];
     private array $params = [];
+    private static array $reservedRoots=['assets'=>true,'uploads'=>true,'admin'=>true,'favicon'=>true,'index'=>true];
+
+    public static function isReservedRoot(string $slug):bool
+    {
+        return isset(self::$reservedRoots[mb_strtolower($slug,'UTF-8')]);
+    }
 
     public function get(string $path, string $action): void
     {
@@ -18,6 +24,8 @@ class Router
 
     private function addRoute(string $method, string $path, string $action): void
     {
+        $root=explode('/',trim($path,'/'))[0]??'';
+        if($root!==''&&!str_contains($root,'{'))self::$reservedRoots[mb_strtolower(rawurldecode($root),'UTF-8')]=true;
         $pattern = preg_replace('/\{([a-zA-Z_]+)\}/', '(?P<$1>[^/]+)', $path);
         $pattern = '#^' . $pattern . '$#';
         $this->routes[] = [
