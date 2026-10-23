@@ -56,7 +56,7 @@ final class RegionalLandingService
         $data=['module'=>'regional_landing','version'=>1];
         foreach(['title'=>180,'city'=>100,'province'=>100,'service'=>160,'area'=>300,'summary'=>600,'local_context'=>3000,'image_alt'=>220,'cta_label'=>70,'services_title'=>180,'references_title'=>180,'faq_title'=>180,'cta_title'=>180,'cta_summary'=>500]as $key=>$max)$data[$key]=LandingContentService::text($input[$key]??'',$max);
         $data['slug']=self::slug($input['slug']??'');
-        foreach(['status'=>['inactive','active'],'layout'=>['studio','editorial'],'theme'=>['violet','blue','rose'],'working_mode'=>['remote','hybrid','onsite']]as $key=>$allowed){$data[$key]=$input[$key]??$allowed[0];if(!is_string($data[$key])||!in_array($data[$key],$allowed,true))throw new \InvalidArgumentException('Geçersiz yayın veya tasarım tercihi.');}
+        foreach(['status'=>['inactive','active'],'layout'=>['studio','editorial','spotlight','atlas','signal','canvas','prism'],'theme'=>['violet','blue','rose'],'working_mode'=>['remote','hybrid','onsite']]as $key=>$allowed){$data[$key]=$input[$key]??$allowed[0];if(!is_string($data[$key])||!in_array($data[$key],$allowed,true))throw new \InvalidArgumentException('Geçersiz yayın veya tasarım tercihi.');}
         foreach(['image','mobile_image']as $key)$data[$key]=LandingContentService::image($input[$key]??'');
         if($data['image']===''&&$data['mobile_image']!=='')$data['image']=$data['mobile_image'];
         if(($data['image']!==''||$data['mobile_image']!=='')&&$data['image_alt']==='')throw new \InvalidArgumentException('Banner görselinin alt metnini yazın.');
