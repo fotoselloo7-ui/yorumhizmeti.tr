@@ -1,0 +1,279 @@
+/* Regional Landing Design System v62
+ * Five alternative compositions, unchanged content/SEO/URL semantics.
+ * CSS only: Spotlight / Atlas / Signal / Canvas / Prism.
+ */
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism){
+ --rl-radius:20px;--rl-shadow:0 18px 45px rgba(28,38,78,.075);
+ --rl-glow:color-mix(in srgb,var(--landing-brand) 20%,transparent);
+ --rl-scale:1;
+ --landing-ink:#1b2848;--landing-muted:#62708b;
+}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism)>.landing-hero>.container,
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) section>.container{
+ max-width:1200px;width:calc(100% - 40px);margin-inline:auto;
+}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-hero h1{
+ font-size:clamp(36px,4vw,56px);line-height:1.15;letter-spacing:-.045em;
+}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-hero{padding:32px 0 66px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-breadcrumb{margin-bottom:27px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) :is(.landing-overview,.landing-editorial,.landing-services,.landing-references,.landing-faq){padding:52px 0}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-editorial-grid{gap:26px;grid-template-columns:minmax(186px,230px) minmax(0,1fr)}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-article{padding:28px 32px;scroll-margin-top:85px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-article h2{font-size:clamp(21px,2.5vw,29px)}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-articles{gap:13px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-overview-grid{gap:34px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) :is(.landing-service-grid,.landing-reference-grid){gap:16px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-section-head{margin-bottom:26px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card{padding:24px;min-height:208px;box-shadow:0 6px 22px rgba(25,39,78,.045)}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card>span{margin-bottom:12px;width:44px;height:44px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card h3{font-size:16px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card p{margin-top:8px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card strong{margin-top:auto;padding-top:16px}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card img{object-fit:contain;background:#f6f7fd}
+.regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-faq summary{font-size:12px}
+@media(hover:hover) and (pointer:fine){
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) :is(.landing-service-card,.landing-reference-card){
+  transition:transform .27s ease,box-shadow .27s ease,border-color .27s ease;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) :is(.landing-service-card,.landing-reference-card):hover{
+  transform:translateY(-4px);box-shadow:var(--rl-shadow);
+ }
+}
+
+/* 01 SPOTLIGHT — luxury dark agency landing; split hero, overlap panel, bento features */
+.regional-landing.landing-layout-spotlight{--rl-radius:22px;--landing-brand:#7552e9;--landing-soft:#f1edff;background:#fff}
+.landing-layout-spotlight .landing-hero{
+ background:radial-gradient(ellipse at 84% 13%,#42378c7d,transparent 49%),
+ linear-gradient(135deg,#111e3e 0%,#1a254d 66%,#252254 100%);
+}
+.landing-layout-spotlight .landing-hero :is(h1,.landing-eyebrow){color:#fff}
+.landing-layout-spotlight .landing-hero .landing-breadcrumb,
+.landing-layout-spotlight .landing-hero .landing-breadcrumb a{color:#c3c7e8}
+.landing-layout-spotlight .landing-hero-copy>p{color:#d2d4ec}
+.landing-layout-spotlight .landing-hero-notes li{color:#d1cdec}
+.landing-layout-spotlight .landing-hero-notes .icon{color:#aa96ff}
+.landing-layout-spotlight .landing-hero-art{
+ transform:none;padding:8px;background:#ffffff13;border:1px solid #ffffff33;
+ border-radius:26px;box-shadow:0 30px 65px #060e3080;
+}
+.landing-layout-spotlight .landing-hero-art picture{border-radius:19px}
+.landing-layout-spotlight .landing-image-note{background:#201d46ec}
+.landing-layout-spotlight .landing-button{background:#8158f3;color:white}
+.landing-layout-spotlight .landing-text-link{color:#e7dffe}
+.landing-layout-spotlight .landing-overview{
+ position:relative;padding-top:38px;border-bottom:1px solid #eef0f8;
+}
+.landing-layout-spotlight .landing-scope{background:#f8f6ff;border-color:#e7e0ff}
+.landing-layout-spotlight .landing-answer{
+ background:#f4f1ff;border-block:1px solid #eae2ff;
+}
+.landing-layout-spotlight .landing-editorial{background:#f8f9fd}
+.landing-layout-spotlight .landing-toc{top:85px}
+.landing-layout-spotlight .landing-service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.landing-layout-spotlight .landing-service-card{border-radius:19px}
+.landing-layout-spotlight .landing-service-card:first-child:nth-last-child(n+3){grid-column:span 2;min-height:220px;background:linear-gradient(120deg,#f3f0ff,#fff)}
+.landing-layout-spotlight .landing-service-card:first-child:nth-last-child(n+3) h3{font-size:23px}
+.landing-layout-spotlight .landing-contact{border-radius:26px 26px 0 0;background:linear-gradient(125deg,#181b42,#48318b)}
+
+/* 02 ATLAS — warm city editorial, green location accent and a real navigation rail */
+.regional-landing.landing-layout-atlas{
+ --landing-brand:#168878;--landing-accent:#7c9c57;--landing-soft:#eaf7f1;
+ --landing-border:#d9e8dd;--landing-ink:#253b35;--landing-muted:#5c7268;background:#f7f8f2;
+}
+.landing-layout-atlas .landing-hero{
+ background:linear-gradient(115deg,#f9f9f0 0%,#eaf5eb 100%);border-bottom:1px solid #dce8dc;
+}
+.landing-layout-atlas .landing-hero .landing-eyebrow{color:#168878}
+.landing-layout-atlas .landing-hero h1{max-width:760px;font-size:clamp(38px,4.1vw,60px);font-weight:700}
+.landing-layout-atlas .landing-hero-art{transform:none;border:7px solid #fff;background:#fff;border-radius:6px 42px 6px 42px;box-shadow:0 25px 56px #2850411c}
+.landing-layout-atlas .landing-hero-art picture{border-radius:3px 30px 3px 30px}
+.landing-layout-atlas .landing-image-note{background:#194b41eb}
+.landing-layout-atlas .landing-button{background:#137f70;color:#fff;border-radius:10px}
+.landing-layout-atlas .landing-overview{background:#fff}
+.landing-layout-atlas .landing-overview-grid{grid-template-columns:minmax(0,1.3fr) minmax(270px,.8fr)}
+.landing-layout-atlas .landing-scope{background:#f1f8f2;border-left:5px solid #42a18b;border-radius:12px}
+.landing-layout-atlas .landing-answer{background:#e7f3e9}
+.landing-layout-atlas .landing-editorial{background:#f7f8f2}
+.landing-layout-atlas .landing-editorial-grid{grid-template-columns:260px minmax(0,1fr)}
+.landing-layout-atlas .landing-toc{top:85px;background:#fff;border-radius:13px;border-color:#d5e6da}
+.landing-layout-atlas .landing-toc a{border-left:2px solid #c8dfcf;padding-left:12px}
+.landing-layout-atlas .landing-article{border-left:4px solid #42a18b;border-radius:10px;background:#fff;box-shadow:none}
+.landing-layout-atlas .landing-service-card,.landing-layout-atlas .landing-reference-card{border-radius:12px}
+.landing-layout-atlas .landing-contact{background:#16493e}
+.landing-layout-atlas .landing-contact .landing-eyebrow{color:#a5e2c8}
+
+/* 03 SIGNAL — conversion-first, warm energy, bold compact conversion cards */
+.regional-landing.landing-layout-signal{
+ --landing-brand:#dc4e47;--landing-accent:#fc945b;--landing-soft:#fff0e9;
+ --landing-border:#f3dfd8;--landing-ink:#26334d;background:#fff;
+}
+.landing-layout-signal .landing-hero{
+ background:radial-gradient(circle at 86% 20%,#ffd7bf 0,transparent 45%),
+ linear-gradient(125deg,#fff8f3,#fff2eb 58%,#faf4ff);border-bottom:1px solid #f5e2df;
+}
+.landing-layout-signal .landing-hero h1{font-size:clamp(38px,4.3vw,62px);font-weight:800;max-width:760px}
+.landing-layout-signal .landing-eyebrow{font-weight:800;color:#d64c47}
+.landing-layout-signal .landing-hero-art{transform:none;padding:8px;border-color:#f9d5c5;background:#fff;border-radius:28px}
+.landing-layout-signal .landing-button{background:#f0524b;color:#fff;border-radius:12px;box-shadow:0 12px 26px #ed6a6033}
+.landing-layout-signal .landing-hero-notes{background:#fff9;border:1px solid #f7ddd4;border-radius:12px;padding:12px 16px;width:fit-content}
+.landing-layout-signal .landing-overview{background:#fff}
+.landing-layout-signal .landing-scope{border:1px solid #f3cfbf;background:#fff6f1}
+.landing-layout-signal .landing-answer{background:#fff0e7}
+.landing-layout-signal .landing-answer>.container{border-left:5px solid #f16d53;padding-left:24px}
+.landing-layout-signal .landing-editorial{background:#fffafa}
+.landing-layout-signal .landing-toc{top:85px;border-color:#f1dfda;background:#fff}
+.landing-layout-signal .landing-article{border-radius:16px;border-color:#f1e0da}
+.landing-layout-signal .landing-section-number{background:#ffebe2;border-radius:8px;padding:5px 11px}
+.landing-layout-signal .landing-service-card{
+ border-color:#f2d8cd;background:#fffdfa;border-radius:18px;position:relative;overflow:hidden;
+}
+.landing-layout-signal .landing-service-card:before{content:"";position:absolute;inset:0 auto auto 0;height:5px;width:100%;background:linear-gradient(90deg,#f26b55,#f7a75f)}
+.landing-layout-signal .landing-service-card>span{color:#e1544c;background:#ffefea}
+.landing-layout-signal .landing-faq{background:#fff8f4}
+.landing-layout-signal .landing-contact{background:linear-gradient(125deg,#4a2746,#9d4249,#e76f50)}
+
+/* 04 CANVAS — premium editorial magazine with large readable typography */
+.regional-landing.landing-layout-canvas{
+ --landing-brand:#504aa6;--landing-accent:#9e8494;--landing-soft:#f3f1fb;
+ --landing-border:#e3e0e8;--landing-ink:#302e40;--landing-muted:#6f6a7b;
+ background:#fcfaf8;
+}
+.landing-layout-canvas .landing-hero{background:#fbf8f5;border-bottom:1px solid #e7e2df}
+.landing-layout-canvas .landing-hero-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.85fr)}
+.landing-layout-canvas .landing-hero h1,.landing-layout-canvas h2{
+ font-family:Georgia,"Times New Roman",serif;letter-spacing:-.03em;
+}
+.landing-layout-canvas .landing-hero h1{font-size:clamp(42px,4.8vw,70px);font-weight:700;line-height:1.08}
+.landing-layout-canvas .landing-hero-art{padding:0;transform:none;border:none;border-radius:0 110px 0 110px;background:#e2dfec;box-shadow:25px 25px 0 #eee8e6}
+.landing-layout-canvas .landing-hero-art picture{border-radius:0 105px 0 105px}
+.landing-layout-canvas .landing-image-note{border-radius:6px;background:#34304cef}
+.landing-layout-canvas .landing-hero-notes{border-top:1px solid #dcd6de;padding-top:18px}
+.landing-layout-canvas .landing-button{background:#373154;color:#fff;border-radius:6px}
+.landing-layout-canvas .landing-overview{background:#fff}
+.landing-layout-canvas .landing-overview h2,.landing-layout-canvas .landing-section-head h2{font-size:clamp(29px,3.3vw,41px)}
+.landing-layout-canvas .landing-scope{border-radius:0;border-left:3px solid #675ca8;background:#fcfaf8}
+.landing-layout-canvas .landing-answer{background:#f1edec}
+.landing-layout-canvas .landing-editorial{background:#fcfaf8}
+.landing-layout-canvas .landing-editorial-grid{grid-template-columns:minmax(0,1fr);max-width:1050px}
+.landing-layout-canvas .landing-toc{
+ position:static;display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;padding:16px 0;
+ border:0;border-bottom:1px solid #e1dbe0;border-radius:0;background:transparent;
+}
+.landing-layout-canvas .landing-toc a{margin-top:0;font-size:11px}
+.landing-layout-canvas .landing-article{
+ padding:30px 0;border:0;border-bottom:1px solid #e1dbe0;border-radius:0;background:transparent;box-shadow:none;
+}
+.landing-layout-canvas .landing-article h2{font-size:clamp(27px,3.2vw,38px)}
+.landing-layout-canvas .landing-section-number{font-family:Georgia,serif;font-size:15px}
+.landing-layout-canvas .landing-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.landing-layout-canvas .landing-service-card{border-radius:4px;border-color:#e4dfe4;background:#fcfaf8}
+.landing-layout-canvas .landing-reference-card{border-radius:4px}
+.landing-layout-canvas .landing-faq{background:#f7f3f0}
+.landing-layout-canvas .landing-faq details{background:#fff;border-radius:3px}
+.landing-layout-canvas .landing-contact{background:#302a49}
+
+/* 05 PRISM — futuristic deep-tech violet/cyan, luminous panels */
+.regional-landing.landing-layout-prism{
+ --landing-brand:#714aee;--landing-accent:#15b5bc;--landing-soft:#f1edff;
+ --landing-border:#dee2f4;--landing-ink:#1e294a;background:#f6f8ff;
+}
+.landing-layout-prism .landing-hero{
+ background:radial-gradient(ellipse at 78% 26%,#5b43d38c,transparent 52%),
+ radial-gradient(ellipse at 14% 92%,#04bdc04d,transparent 42%),
+ linear-gradient(125deg,#101c3c,#20235c 69%,#382b70);
+}
+.landing-layout-prism .landing-hero :is(h1,.landing-eyebrow){color:white}
+.landing-layout-prism .landing-hero-copy>p{color:#d1d9fb}
+.landing-layout-prism .landing-breadcrumb,.landing-layout-prism .landing-breadcrumb a{color:#c5c8e8}
+.landing-layout-prism .landing-hero-notes li{color:#c9d8ec}
+.landing-layout-prism .landing-hero-notes .icon{color:#57efda}
+.landing-layout-prism .landing-hero-art{
+ transform:none;padding:9px;border:1px solid #ffffff3d;border-radius:26px;
+ background:#ffffff12;box-shadow:0 25px 65px #0e0c3580;
+}
+.landing-layout-prism .landing-hero-art picture{border-radius:18px}
+.landing-layout-prism .landing-image-note{border:1px solid #ffffff50;background:#222d65e8}
+.landing-layout-prism .landing-button{background:linear-gradient(110deg,#714af0,#15b7c1);color:white;border:none;box-shadow:0 12px 27px #11bdc130}
+.landing-layout-prism .landing-text-link{color:#d6eef7}
+.landing-layout-prism .landing-overview{background:#fff}
+.landing-layout-prism .landing-scope{border-color:#dfe2ff;background:linear-gradient(135deg,#f5f2ff,#edfbfc)}
+.landing-layout-prism .landing-answer{background:#ecfaff}
+.landing-layout-prism .landing-editorial{background:#f3f5ff}
+.landing-layout-prism .landing-editorial-grid{grid-template-columns:minmax(195px,235px) minmax(0,1fr)}
+.landing-layout-prism .landing-toc{top:85px;border:1px solid #cdd6f7;border-radius:21px;background:#fff}
+.landing-layout-prism .landing-article{border-color:#dfe2f7;border-radius:20px;box-shadow:0 8px 24px #39357b0b}
+.landing-layout-prism .landing-section-number{color:#16aaa9}
+.landing-layout-prism .landing-service-card{
+ background:linear-gradient(135deg,#faf9ff,#f5feff);border-color:#dce2f7;border-radius:19px
+}
+.landing-layout-prism .landing-service-card>span{color:#fff;background:linear-gradient(135deg,#714af0,#13b7bd)}
+.landing-layout-prism .landing-reference-card{border-color:#dfe2f7;box-shadow:0 10px 23px #2d2f7509}
+.landing-layout-prism .landing-faq{background:#f2f6ff}
+.landing-layout-prism .landing-contact{background:linear-gradient(120deg,#142349,#432878 68%,#116d84)}
+.landing-layout-prism .landing-contact .landing-eyebrow{color:#7df0e3}
+
+/* Responsive: full-width accessible content, 2 cards when practical. */
+@media(max-width:900px){
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-editorial-grid,
+ .landing-layout-atlas .landing-editorial-grid,.landing-layout-prism .landing-editorial-grid{
+  grid-template-columns:1fr;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-toc{
+  position:static;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:15px 17px;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-toc a{
+  margin-top:0;
+ }
+ .landing-layout-spotlight .landing-service-card:first-child:nth-last-child(n+3){grid-column:auto}
+ .landing-layout-canvas .landing-hero-grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism)>.landing-hero>.container,
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) section>.container{
+  width:calc(100% - 40px);
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-hero{
+  padding:22px 0 35px;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-hero-grid{
+  grid-template-columns:1fr;gap:25px;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) :is(.landing-overview,.landing-editorial,.landing-services,.landing-references,.landing-faq){
+  padding:38px 0;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-overview-grid{
+  grid-template-columns:1fr;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) :is(.landing-service-grid,.landing-reference-grid){
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card{
+  padding:16px 14px;min-height:190px;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card h3{
+  font-size:14px;
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card p{font-size:10px}
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card>div{padding:15px}
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card h3{font-size:14px}
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card p{font-size:10px}
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-article{padding:20px 17px}
+ .landing-layout-canvas .landing-hero-art{border-radius:0 55px 0 55px;box-shadow:12px 12px 0 #eee8e6}
+ .landing-layout-canvas .landing-hero-art picture{border-radius:0 50px 0 50px}
+ .landing-layout-signal .landing-answer>.container{padding-left:15px}
+}
+@media(max-width:420px){
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism)>.landing-hero>.container,
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) section>.container{
+  width:calc(100% - 32px);
+ }
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card>div{padding:11px}
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card h3{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-service-card,
+ .regional-landing:is(.landing-layout-spotlight,.landing-layout-atlas,.landing-layout-signal,.landing-layout-canvas,.landing-layout-prism) .landing-reference-card{
+  transition:none!important;animation:none!important;transform:none!important;
+ }
+}
