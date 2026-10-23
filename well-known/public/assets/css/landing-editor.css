@@ -32,6 +32,7 @@
  display:block;position:relative;height:128px;overflow:hidden;
  background:var(--mini-surface);
 }
+.landing-design-thumbnail[data-design=spotlight]{--mini-bg:#142449;--mini-accent:#6847d9}
 .landing-design-thumbnail[data-design=atlas]{--mini-bg:#f4f5e9;--mini-accent:#188b74;--mini-surface:#e5f2e8;--mini-ink:#34493b}
 .landing-design-thumbnail[data-design=signal]{--mini-bg:#fff5ee;--mini-accent:#f06c4c;--mini-surface:#fce4da;--mini-ink:#3f3043}
 .landing-design-thumbnail[data-design=canvas]{--mini-bg:#faf4ee;--mini-accent:#544a9c;--mini-surface:#f3eeeb;--mini-ink:#332e40}
