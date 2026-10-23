@@ -52,7 +52,7 @@ $editorField=static function(string $label,string $name,string $value,int $max=1
       </label>
     <?php endforeach; ?>
     </div>
-    <details class="landing-design-legacy">
+    <details class="landing-design-legacy" <?= in_array(($d['layout']??'studio'),['studio','editorial'],true)?'open':'' ?>>
       <summary>Önceki tasarımları koru (Studio / Editorial)</summary>
       <div class="landing-design-legacy-options">
         <label><input type="radio" name="layout" value="studio" <?= ($d['layout']??'studio')==='studio'?'checked':'' ?>> Studio — mevcut orijinal tasarım</label>
