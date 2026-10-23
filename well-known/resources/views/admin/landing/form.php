@@ -46,7 +46,7 @@ $editorField=static function(string $label,string $name,string $value,int $max=1
           </span>
           <span class="landing-design-actions">
             <span class="landing-design-chosen"><?= icon('check-circle',15) ?> Seçili Tasarım</span>
-            <?php if($landingRow): ?><a href="/<?= rawurlencode($landingRow['slug']) ?>?onizleme=1&amp;tasarim=<?= e($nvKey) ?>" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sayfada Önizle <?= icon('external-link',12) ?></a><?php endif; ?>
+            <?php if($landingRow): ?><a href="/<?= rawurlencode($landingRow['slug']) ?>?onizleme=1&amp;tasarim=<?= e($nvKey) ?>" target="_blank" rel="noopener">Sayfada Önizle <?= icon('external-link',12) ?></a><?php endif; ?>
           </span>
         </span>
       </label>
