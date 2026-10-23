@@ -43,6 +43,27 @@ try{
   [$code]=$request($admin,'/admin/konumsal-sayfalar/kaydet',$data);$row=Landing::bySlug($data['slug']);$ok($code===302&&$row!==null,'Actual admin creates draft');$ids[]=$row['id'];$path='/'.rawurlencode($row['slug']);
   [$code]=$request($guest,$path);$ok($code===404,'Draft not public');[$code]=$request($guest,$path.'?onizleme=1');$ok($code===404,'Query cannot grant preview');
   [$code,$html]=$request($admin,$path.'?onizleme=1');$ok($code===200&&str_contains($html,'noindex')&&str_contains($html,'Taslak önizleme'),'Authenticated draft preview remains noindex');
+  if($kind==='reklam'){
+    [, $formHtml]=$request($admin,'/admin/konumsal-sayfalar/'.$row['id'].'/duzenle');
+    foreach(['spotlight','atlas','signal','canvas','prism']as $design){
+      $ok(str_contains($formHtml,'name="layout" value="'.$design.'"'),
+          'Admin offers '.$design.' regional page design');
+      [$previewStatus,$previewHtml]=$request($admin,$path.'?onizleme=1&tasarim='.$design);
+      $ok($previewStatus===200 &&
+          str_contains($previewHtml,'landing-layout-'.$design) &&
+          str_contains($previewHtml,'noindex') &&
+          str_contains($previewHtml,'regional-themes-v62.css'),
+          'Authenticated design preview: '.$design);
+      $ok(str_contains($previewHtml,'application/ld+json') &&
+          str_contains($previewHtml,'rel="canonical"') &&
+          str_contains($previewHtml,$data['title']),
+          'Preview retains content and structured data: '.$design);
+      [$guestStatus]=$request($guest,$path.'?onizleme=1&tasarim='.$design);
+      $ok($guestStatus===404,'Unauthorized design preview remains inaccessible: '.$design);
+    }
+    $ok(Landing::decode(Landing::byId((int)$row['id']))['layout']==='studio',
+        'Theme comparison never modifies saved design');
+  }
   $data['id']=$row['id'];$data['revision']=Landing::revision($row);$data['status']='active';$data['seo']['robots']='index,follow,max-image-preview:large';
   [$code]=$request($admin,'/admin/konumsal-sayfalar/kaydet',$data);$row=Landing::byId((int)$row['id']);$ok($code===302&&$row['status']==='active','Actual admin publishes');
   [$code,$html]=$request($guest,$path);$xp=$dom($html);$ok($code===200&&$xp->query('//h1')->length===1&&$xp->query('//h2')->length>=3,'Published landing has semantic hierarchy');$ok(str_contains($html,'Service')&&str_contains($html,'areaServed')&&!str_contains($html,'"@type":"LocalBusiness"'),'Truthful service area, no fake local branch schema');$ok(str_contains($html,$reference['title'])&&str_contains($html,'/kategori/'),'Selected active services/reference visible');$ok(str_contains($html,'href="/iletisim"'),'CTA inherits shared contact destination');$ok(str_contains($html,'application/ld+json')&&str_contains($html,'rel="canonical" href="http://127.0.0.1:8019'.$path.'"'),'Canonical and structured data available');
