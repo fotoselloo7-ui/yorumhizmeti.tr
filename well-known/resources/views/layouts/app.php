@@ -162,6 +162,10 @@
     <?php if($template==='frontend/home'||str_starts_with($template,'frontend/landing/')): ?>
     <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261022-builder">
     <?php endif; ?>
+    <?php if($template==='frontend/landing/show'): ?>
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261023">
+    <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
+    <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
     <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261019">
     <script src="<?= asset('js/social-storefront.js') ?>?v=20261019" defer></script>

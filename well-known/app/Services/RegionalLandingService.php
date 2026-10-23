@@ -55,6 +55,8 @@ final class RegionalLandingService
     public static function validate(array $input):array
     {
         $data=['module'=>'regional_landing','version'=>1];
+        $data['theme_key']=LandingThemeService::key($input['theme_key']??'');
+        $data['theme_switcher']=!array_key_exists('theme_switcher',$input)||in_array($input['theme_switcher'],[true,1,'1'],true);
         foreach(['title'=>180,'city'=>100,'province'=>100,'service'=>160,'area'=>300,'summary'=>600,'local_context'=>3000,'image_alt'=>220,'cta_label'=>70,'services_title'=>180,'references_title'=>180,'scripts_title'=>180,'blog_title'=>180,'faq_title'=>180,'cta_title'=>180,'cta_summary'=>500]as $key=>$max)$data[$key]=LandingContentService::text($input[$key]??'',$max);
         $data['slug']=self::slug($input['slug']??'');
         foreach(['status'=>['inactive','active'],'layout'=>['studio','editorial'],'theme'=>['violet','blue','rose'],'working_mode'=>['remote','hybrid','onsite']]as $key=>$allowed){$data[$key]=$input[$key]??$allowed[0];if(!is_string($data[$key])||!in_array($data[$key],$allowed,true))throw new \InvalidArgumentException('Geçersiz yayın veya tasarım tercihi.');}
@@ -89,6 +91,8 @@ final class RegionalLandingService
     public static function editorInput(array $input,array $base):array
     {
         $data=array_replace(self::defaults(),$base);
+        $data['theme_key']=LandingThemeService::key($input['theme_key']??$data['theme_key']??'');
+        $data['theme_switcher']=in_array($input['theme_switcher']??true,[true,1,'1'],true);
         $clip=static fn($value,int $length=6000):string=>is_scalar($value)?mb_substr(str_replace("\0",'',strip_tags((string)$value)),0,$length):'';
         foreach($data as $key=>$value)if(is_string($value)&&isset($input[$key]))$data[$key]=$clip($input[$key]);
         foreach(['sections'=>['title','body','subheading','detail','image','alt'],'faqs'=>['question','answer'],'links'=>['label','path']]as $key=>$fields){

@@ -16,7 +16,7 @@ $ok(!$db->fetch("SELECT setting_key FROM settings WHERE setting_key='smtp_host' 
 $client=static function(){$h=curl_init();curl_setopt_array($h,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_COOKIEFILE=>'',CURLOPT_FOLLOWLOCATION=>false,CURLOPT_TIMEOUT=>20]);return $h;};
 $request=static function($h,$path,$data=null){curl_setopt_array($h,[CURLOPT_URL=>'http://127.0.0.1:8019'.$path,CURLOPT_POST=>$data!==null]);if($data!==null)curl_setopt($h,CURLOPT_POSTFIELDS,http_build_query($data));$html=curl_exec($h);if($html===false)throw new RuntimeException('Local QA HTTP failed');return [(int)curl_getinfo($h,CURLINFO_HTTP_CODE),(string)$html];};
 $token=static function($html){preg_match('/name="_csrf_token" value="([^"]+)"/',$html,$m);return $m[1]??'';};
-$xpath=static function($html){$d=new DOMDocument();@$d->loadHTML('<?xml encoding="UTF-8">'.$html);return new DOMXPath($d);};
+$xpath=static function($html){$d=new DOMDocument();@$d->loadHTML('<?xml encoding="UTF-8">'.$html);$xp=new DOMXPath($d);foreach($xp->query('//template')as $inert)$inert->parentNode->removeChild($inert);return new DOMXPath($d);};
 $guest=$client();$admin=$client();$marker='SYNTHETIC_DO_NOT_RENDER_'.$run;
 try{
     foreach([1,2,3]as $i)$scripts[]=$db->insert('nv_legacy_script_products',['category_legacy_id'=>0,'slug'=>'qa-builder-script-'.$run.'-'.$i,'name'=>'QA Yazılım '.$i,'short_desc'=>'Sentetik yazılım seçkisi.','cover_image'=>'/assets/img/category-heroes/web.webp','price'=>100,'active'=>$i===3?0:1,'public_json'=>json_encode(['demo_admin_password'=>$marker,'demo_credentials_public'=>0])]);

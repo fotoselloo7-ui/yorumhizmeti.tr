@@ -13,7 +13,7 @@ final class LandingController extends Controller
         $page=filter_var($_GET['page']??1,FILTER_VALIDATE_INT)?:1;$q=is_string($_GET['q']??null)?mb_substr(trim($_GET['q']),0,100):'';
         $this->renderAdmin('admin/landing/index',['pageTitle'=>'Konumsal Hizmet Sayfaları','listing'=>Landing::listing($page,$q),'landingQuery'=>$q]);
     }
-    public function create():void{$kind=is_string($_GET['sablon']??null)?$_GET['sablon']:'';$this->form(Landing::starter($kind));}
+    public function create():void{$kind=is_string($_GET['sablon']??null)?$_GET['sablon']:'';$data=Landing::starter($kind);$data['theme_key']=\App\Services\LandingThemeService::DEFAULT_KEY;$this->form($data);}
     public function edit(string $id):void
     {$row=Landing::byId((int)$id);if(!$row){redirect('/admin/konumsal-sayfalar');return;}$this->form(Landing::decode($row),$row);}
     private function form(array $data,?array $row=null,?string $revision=null):void

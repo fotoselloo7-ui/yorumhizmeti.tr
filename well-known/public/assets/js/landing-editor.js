@@ -17,6 +17,22 @@
             if (focus) tabs[active].focus();
         };
         if (builder) {
+            const preview = form.querySelector('[data-theme-preview-dialog]');
+            let previewOpener;
+            if (preview) {
+                const frame = preview.querySelector('iframe');
+                form.querySelectorAll('[data-theme-preview]').forEach(button => button.addEventListener('click', () => {
+                    if (!button.dataset.previewUrl) return;
+                    previewOpener = button;
+                    preview.dataset.device = button.dataset.themePreview;
+                    frame.src = button.dataset.previewUrl;
+                    preview.showModal();
+                    preview.querySelector('[data-preview-close]').focus();
+                }));
+                preview.querySelector('[data-preview-close]').addEventListener('click', () => preview.close());
+                preview.addEventListener('close', () => { frame.removeAttribute('src'); previewOpener?.focus(); });
+                preview.addEventListener('click', event => { if (event.target === preview) preview.close(); });
+            }
             form.classList.add('region-builder-ready');
             const nav = form.querySelector('[data-builder-tabs]');
             nav.setAttribute('role', 'tablist');

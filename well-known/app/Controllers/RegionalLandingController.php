@@ -28,6 +28,9 @@ final class RegionalLandingController extends Controller
         if($slug!==$row['slug']){header('Location: /'.rawurlencode($row['slug']).($preview?'?onizleme=1':''),true,301);return;}
         try{$data=Landing::validate(Landing::decode($row));}catch(\InvalidArgumentException $ignored){PublicSeoUrls::notFound();return;}
         $seo=$data['seo'];$own='/'.rawurlencode($row['slug']);
+        // Admin-only visual preview. Never persist it or alter canonical/metadata.
+        $landingThemePreview=$preview?\App\Services\LandingThemeService::key($_GET['tema']??''):'';
+        if($landingThemePreview!=='')$data['theme_key']=$landingThemePreview;
         $this->render('frontend/landing/show',['pageTitle'=>$seo['title']?:$data['title'].' | NetVera','metaDescription'=>$seo['description']?:$data['summary'],'canonicalUrl'=>url($seo['canonical']?:$own),'ogTitle'=>$seo['og_title']?:$seo['title'],'ogDescription'=>$seo['og_description']?:$seo['description'],'ogImage'=>($seo['og_image']?:$data['image'])!==''?url($seo['og_image']?:$data['image']):null,'ogImageAlt'=>$data['image_alt'],'noindex'=>(bool)$preview,'schema'=>Landing::schema($row,$data),'nvSeoData'=>$seo,'landing'=>$data,'landingRow'=>$row,'landingPreview'=>(bool)$preview,'landingServices'=>Landing::selectedServices($data['service_ids']),'landingReferences'=>Landing::selectedReferences($data['reference_ids']),'landingScripts'=>$data['script_ids']?\App\Services\LandingCatalogService::selected(\App\Services\LandingCatalogService::scripts(),$data['script_ids']):[],'landingBlogs'=>$data['blog_ids']?\App\Services\LandingCatalogService::selected(\App\Services\LandingCatalogService::blogs(),$data['blog_ids']):[],'landingContacts'=>Landing::contacts()]);
     }
 }
