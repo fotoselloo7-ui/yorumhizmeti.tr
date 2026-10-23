@@ -16,14 +16,15 @@ final class LandingController extends Controller
     public function create():void{$kind=is_string($_GET['sablon']??null)?$_GET['sablon']:'';$this->form(Landing::starter($kind));}
     public function edit(string $id):void
     {$row=Landing::byId((int)$id);if(!$row){redirect('/admin/konumsal-sayfalar');return;}$this->form(Landing::decode($row),$row);}
-    private function form(array $data,?array $row=null):void
+    private function form(array $data,?array $row=null,?string $revision=null):void
     {
-        $this->renderAdmin('admin/landing/form',['pageTitle'=>$row?'Konumsal Sayfayı Düzenle':'Konumsal Sayfa Oluştur','landing'=>$data,'landingRow'=>$row,'landingCategories'=>$this->db->fetchAll("SELECT id,name FROM categories WHERE status='active' ORDER BY name"),'landingReferences'=>\App\Services\ReferencesService::all(true),'landingNotes'=>Content::diagnostics($data)]);
+        $data=array_replace(Landing::defaults(),$data);
+        $this->renderAdmin('admin/landing/form',['pageTitle'=>$row?'Konumsal Sayfayı Düzenle':'Konumsal Sayfa Oluştur','landing'=>$data,'landingRow'=>$row,'landingRevision'=>$revision??($row?Landing::revision($row):''),'landingCategories'=>\App\Services\LandingCatalogService::services(),'landingReferences'=>\App\Services\ReferencesService::all(true),'landingScripts'=>\App\Services\LandingCatalogService::scripts(),'landingBlogs'=>\App\Services\LandingCatalogService::blogs(),'landingNotes'=>Content::diagnostics($data)]);
     }
     public function save():void
     {
-        Csrf::check();$id=filter_var($_POST['id']??0,FILTER_VALIDATE_INT)?:0;$back=$id?'/admin/konumsal-sayfalar/'.$id.'/duzenle':'/admin/konumsal-sayfalar/yeni';
-        $newUploads=[];
+        Csrf::check();$id=filter_var($_POST['id']??0,FILTER_VALIDATE_INT)?:0;
+        $newUploads=[];$revision=is_string($_POST['revision']??null)?mb_substr($_POST['revision'],0,64):'';
         try{
             $data=Landing::validate($_POST);
             foreach(['image','mobile_image']as $key)if(($_FILES[$key.'_upload']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE){$data[$key]=Content::upload($_FILES[$key.'_upload']);$newUploads[]=$data[$key];}
@@ -31,7 +32,9 @@ final class LandingController extends Controller
         }catch(\InvalidArgumentException $e){flash('error',$e->getMessage());}
         catch(\Throwable $e){flash('error','Sayfa kaydedilemedi. Tekrar deneyin; slug çakışmasını ve veritabanı erişimini kontrol edin.');}
         Content::discardNewUploads($newUploads);
-        redirect($back);
+        $row=$id?Landing::byId($id):null;
+        http_response_code(422);
+        $this->form(Landing::editorInput($_POST,$row?Landing::decode($row):Landing::defaults()),$row,$revision);
     }
     public function duplicate(string $id):void
     {

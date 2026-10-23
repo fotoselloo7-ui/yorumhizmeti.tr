@@ -160,7 +160,7 @@
     <script src="<?= asset('js/member-panel.js') ?>?v=20261018" defer></script>
     <?php endif; ?>
     <?php if($template==='frontend/home'||str_starts_with($template,'frontend/landing/')): ?>
-    <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261019-regional-ready">
+    <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261022-builder">
     <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
     <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261019">
