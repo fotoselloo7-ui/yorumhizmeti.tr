@@ -103,6 +103,8 @@ $blockBaseline = null;
 foreach (Theme::all() as $key => $profile) {
     $html = $render($d, $key, $sources);
     $xp = $parse($html);
+    $ok(!preg_match('/class="nvl-(?:scene|board|hero-art|place-card|search-card|dimension-target)/', $html), 'No foreground advertising art or floating panels: ' . $key);
+    $ok($xp->query('//*[contains(@class,"nvl-city-backdrop")]/img')->length === 1, 'One managed background image: ' . $key);
     $ok($xp->query('//h1')->length === 1 && $normal($xp->query('//h1')->item(0)->textContent) === $d['title'], 'Exact single H1: ' . $key);
     $accent = $xp->query('//h1//*[contains(concat(" ",normalize-space(@class)," ")," nvl-hero-title-accent ")]');
     $ok($accent->length === 1 && $normal($accent->item(0)->textContent) === $d['service'], 'Service accent preserves title copy: ' . $key);

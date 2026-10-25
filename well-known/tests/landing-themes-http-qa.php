@@ -78,9 +78,9 @@ try{
         $schema=$snapshot['//script[@type="application/ld+json"]'];array_walk_recursive($schema,static function(&$value,$key){if($key==='dateModified')$value='SAVE_TIME';});$snapshot['//script[@type="application/ld+json"]']=$schema;
         if($baseline===null)$baseline=$snapshot;else $ok($snapshot===$baseline,'SEO and heading data invariant '.$key);
         $ok(Page::byId($ids['b'])['content']===$unchangedB,'Other page untouched '.$key);
-        $variants[]=$profile['hero'];$ok(str_contains($html,'nvl-stage'.($key==='landing-08'?'-saas':' ')),'Theme owns real hero structure '.$key);
+        $variants[]=$profile['hero'];$ok(str_contains($html,'class="nvl-stage"')&&!str_contains($html,'class="nvl-scene'),'Text/background hero without right-side art '.$key);
     }
-    $ok(count(array_unique($variants))===10,'Ten distinct hero compositions');
+    $ok(count(array_unique($variants))===10,'Ten theme presentation keys retained');
     $data=Page::decode($a);$data['theme_key']='landing-02';$aId=Page::save($data,$ids['a'],Page::revision($a));$a=Page::byId($aId);
     [,$html]=$request($guest,$path.'?onizleme=1&tema=landing-04');$xp=$dom($html);$ok($xp->query('//main[@data-theme="landing-02"]')->length===1,'Guest query cannot override published theme');
     [,$html]=$request($admin,$path.'?onizleme=1&tema=landing-04');$xp=$dom($html);$ok($xp->query('//main[@data-theme="landing-04"]')->length===1&&str_contains($html,'noindex'),'Authorized preview is private/noindex');
