@@ -27,7 +27,7 @@ final class LandingController extends Controller
         $newUploads=[];$revision=is_string($_POST['revision']??null)?mb_substr($_POST['revision'],0,64):'';
         try{
             $data=Landing::validate($_POST);
-            foreach(['image','mobile_image']as $key)if(($_FILES[$key.'_upload']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE){$data[$key]=Content::upload($_FILES[$key.'_upload']);$newUploads[]=$data[$key];}
+            foreach(['image','mobile_image','location_image']as $key)if(($_FILES[$key.'_upload']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE){$data[$key]=Content::upload($_FILES[$key.'_upload']);$newUploads[]=$data[$key];}
             $id=Landing::save($data,$id,Content::text($_POST['revision']??'',64));logActivity('regional_page_save','Konumsal sayfa #'.$id);flash('success','Sayfa kaydedildi. Slug değiştiyse eski adres 301 ile korunur.');redirect('/admin/konumsal-sayfalar/'.$id.'/duzenle');
         }catch(\InvalidArgumentException $e){flash('error',$e->getMessage());}
         catch(\Throwable $e){flash('error','Sayfa kaydedilemedi. Tekrar deneyin; slug çakışmasını ve veritabanı erişimini kontrol edin.');}

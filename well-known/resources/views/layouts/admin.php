@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261020-contact">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261018-seo-infrastructure">
     <?php if(str_starts_with($template,'admin/landing/')): ?>
-    <link rel="stylesheet" href="<?= asset('css/landing-editor.css') ?>?v=20261023-themes">
-    <script src="<?= asset('js/landing-editor.js') ?>?v=20261023-themes" defer></script>
+    <link rel="stylesheet" href="<?= asset('css/landing-editor.css') ?>?v=20261024-reference">
+    <script src="<?= asset('js/landing-editor.js') ?>?v=20261024-reference" defer></script>
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/admin-customers-v67.css') ?>?v=67.1">

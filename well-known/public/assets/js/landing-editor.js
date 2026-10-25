@@ -17,6 +17,46 @@
             if (focus) tabs[active].focus();
         };
         if (builder) {
+            const cityScenes = form.querySelector('[data-city-scenes]');
+            if (cityScenes) {
+                const cityImage = form.querySelector('[name="location_image"]');
+                const cityAlt = form.querySelector('[name="location_image_alt"]');
+                const cityUpload = form.querySelector('[name="location_image_upload"]');
+                const cityChoices = [...cityScenes.querySelectorAll('[data-city-scene]')];
+                const cityClear = cityScenes.querySelector('[data-city-scene-clear]');
+                const cityStatus = cityScenes.querySelector('[data-city-scene-status]');
+                if (cityImage && cityAlt) {
+                    const refreshCityScene = () => cityChoices.forEach(button => {
+                        button.setAttribute('aria-pressed', String(!cityUpload?.files?.length && cityImage.value.trim() === button.dataset.cityScene));
+                    });
+                    const setCityScene = (path, alt, message) => {
+                        // A pending native upload otherwise takes precedence over the chosen path.
+                        if (cityUpload) cityUpload.value = '';
+                        cityImage.value = path;
+                        cityAlt.value = alt;
+                        [cityImage, cityAlt].forEach(input => {
+                            input.dispatchEvent(new Event('input', {bubbles: true}));
+                            input.dispatchEvent(new Event('change', {bubbles: true}));
+                        });
+                        refreshCityScene();
+                        cityStatus.textContent = message;
+                    };
+                    cityChoices.forEach(button => {
+                        button.disabled = false;
+                        button.addEventListener('click', () => setCityScene(button.dataset.cityScene, button.dataset.citySceneAlt, button.dataset.citySceneName + ' temsili görseli seçildi. Yayına uygulamak için değişiklikleri kaydedin.'));
+                    });
+                    if (cityClear) {
+                        cityClear.disabled = false;
+                        cityClear.addEventListener('click', () => setCityScene('', '', 'Şehir görseli kaldırıldı. Kaydettikten sonra görselsiz düzen kullanılır.'));
+                    }
+                    cityImage.addEventListener('input', refreshCityScene);
+                    cityUpload?.addEventListener('change', () => {
+                        refreshCityScene();
+                        if (cityUpload.files.length) cityStatus.textContent = 'Yüklediğiniz dosya, kaydettikten sonra şehir görseli olarak kullanılacak. Açıklayıcı alt metni kontrol edin.';
+                    });
+                    refreshCityScene();
+                }
+            }
             const preview = form.querySelector('[data-theme-preview-dialog]');
             let previewOpener;
             if (preview) {

@@ -163,7 +163,7 @@
     <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261022-builder">
     <?php endif; ?>
     <?php if($template==='frontend/landing/show'): ?>
-    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261023">
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261024-reference">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
     <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
