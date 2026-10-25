@@ -74,7 +74,14 @@
 .nv-landing .nvl-contact{padding-top:12px;padding-bottom:40px}.nv-landing .nvl-contact-shell{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:40px;align-items:center;padding:32px 40px;border-radius:16px;background:linear-gradient(120deg,var(--nvl-ink),var(--nvl-brand));color:#fff}.nv-landing .nvl-contact-shell>div:not(.nvl-contact-art),.nv-landing .nvl-contact-shell>nav{position:relative;z-index:1}
 .nv-landing .nvl-contact-art{position:absolute;inset:0;width:100%;height:100%;opacity:.34;pointer-events:none;mask-image:linear-gradient(90deg,transparent 20%,#000)}.nv-landing .nvl-contact-art img{display:block;width:100%;height:100%;object-fit:cover}
 .nv-landing .nvl-contact h2{font-size:28px;margin:10px 0}.nv-landing .nvl-contact .nvl-eyebrow{color:#dce4ff}.nv-landing .nvl-contact .nvl-prose{color:#e0e7f6;font-size:12px}.nv-landing .nvl-contact nav{display:grid;gap:12px;min-width:0}.nv-landing .nvl-contact .nvl-button{background:#fff;color:#10203d;border-color:#fff}.nv-landing .nvl-contact-link{display:flex;align-items:center;gap:9px;font-size:11px;color:#e5eafa}
+.nv-landing .nvl-contact nav a{width:100%;min-width:0;min-height:44px;justify-content:flex-start;overflow-wrap:anywhere;font-weight:600}
+.nv-landing .nvl-contact .nvl-button{justify-content:center}
+.nv-landing .nvl-contact-link{padding:10px 14px;border:1px solid #ffffff70;border-radius:9px;background:#ffffff20;color:#fff;line-height:1.5;backdrop-filter:blur(8px);transition:background .2s,border-color .2s,transform .2s,box-shadow .2s}
+.nv-landing .nvl-contact-link:hover{color:#fff;background:#ffffff38;border-color:#fff;transform:translateY(-2px);box-shadow:0 8px 18px #06142b26}
+.nv-landing .nvl-contact-link:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .nv-landing [data-component=cta][data-variant=minimal] .nvl-contact-shell{border-radius:0;border-block:1px solid var(--nvl-border);background:transparent;color:var(--nvl-ink);padding-inline:0}.nv-landing [data-component=cta][data-variant=minimal] :is(.nvl-prose,.nvl-contact-link){color:var(--nvl-muted)}.nv-landing [data-component=cta][data-variant=minimal] .nvl-eyebrow{color:var(--nvl-brand)}.nv-landing [data-component=cta][data-variant=minimal] .nvl-button{background:var(--nvl-brand);border-color:var(--nvl-brand);color:#fff}.nv-landing [data-component=cta][data-variant=minimal] .nvl-contact-art{opacity:.12}
+.nv-landing [data-component=cta][data-variant=minimal] .nvl-contact-link{color:var(--nvl-ink);background:var(--nvl-soft);border-color:var(--nvl-border);backdrop-filter:none}
+.nv-landing [data-component=cta][data-variant=minimal] .nvl-contact-link:hover{color:var(--nvl-brand);background:#fff;border-color:var(--nvl-brand)}
 .nv-landing [data-component=cta][data-variant=ribbon] .nvl-contact-shell{border-radius:10px;background:var(--nvl-brand)}.nv-landing [data-component=cta][data-variant=wide]{max-width:none;width:100%;padding-bottom:0}.nv-landing [data-component=cta][data-variant=wide] .nvl-contact-shell{border-radius:0;padding-inline:max(20px,calc((100% - 1200px)/2));padding-block:40px}
 .nv-landing .nvl-provenance{padding-top:16px;padding-bottom:28px;color:var(--nvl-muted);font-size:10px}.nv-landing .nvl-provenance nav{display:flex;flex-wrap:wrap;gap:12px 24px;margin-bottom:16px}.nv-landing .nvl-provenance nav a{display:inline-flex;align-items:center;gap:8px;color:var(--nvl-brand)}.nv-landing .nvl-provenance p{margin-bottom:16px}.nv-landing .nvl-preview{padding:16px;background:#fff4d7;color:#6d5321;font-size:11px}
 
@@ -149,6 +156,13 @@
 }
 @media(max-width:420px){
 .nv-landing .nvl-container{width:calc(100% - 32px)}.nv-landing h1{font-size:34px}.nv-landing .nvl-service-card,.nv-landing [data-component=services][data-variant=compact] .nvl-service-card{padding:14px}.nv-landing .nvl-service-card>strong .icon{font-size:12px}.nv-landing[data-theme=landing-09] .nvl-section-overview>.nvl-container{padding:20px}
+}
+@keyframes nvl-hero-arrive{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){.nv-landing .nvl-hero-copy{animation:nvl-hero-arrive .65s cubic-bezier(.2,.7,.2,1) both}}
+@media(pointer:fine) and (prefers-reduced-motion:no-preference){
+.nv-landing .nvl-hero::after,.nv-landing .nvl-contact-shell::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle 300px at var(--landing-pointer-x,70%) var(--landing-pointer-y,45%),color-mix(in srgb,var(--nvl-accent) 22%,transparent),transparent 72%)}
+.nv-landing .nvl-contact-shell::after{background:radial-gradient(circle 220px at var(--landing-pointer-x,70%) var(--landing-pointer-y,45%),#ffffff32,transparent 75%)}
+.nv-landing .nvl-hero.landing-pointer-active::after,.nv-landing .nvl-contact-shell.landing-pointer-active::after{opacity:1}
 }
 @media(prefers-reduced-motion:reduce){
 .nv-landing *{scroll-behavior:auto}.nv-landing :is(a,img,.icon,.nvl-card){transition:none;animation:none}.nv-landing :is(.nvl-card,.nvl-service-card,.nvl-button):hover{transform:none}
