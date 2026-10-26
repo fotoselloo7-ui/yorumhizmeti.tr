@@ -83,7 +83,7 @@
       // Width comes from CSS clamp, never from viewport/card count.
       const measured=state.grid.scrollWidth-state.viewport.clientWidth;
       const colWidth=visible[0].getBoundingClientRect().width;
-      state.step=colWidth+GAP;
+      state.step=colWidth+(parseFloat(getComputedStyle(state.grid).columnGap)||GAP);
       if(reduceMotion.matches || measured<state.step-3 || visible.length<6) return;
       // Two original cards per column; moving whole columns after leaving view
       // preserves the visual sequence without ever repeating records.
@@ -94,9 +94,10 @@
         column.append(...visible.slice(i,i+2));
         columns.push(column);
       }
-      state.grid.append(...columns);
+      // Hidden filtered records remain in state.original but not in the moving track.
+      state.grid.replaceChildren(...columns);
       state.section.classList.add('is-nvl-loop');
-      state.step=columns[0].getBoundingClientRect().width+GAP;
+      state.step=columns[0].getBoundingClientRect().width+(parseFloat(getComputedStyle(state.grid).columnGap)||GAP);
       state.loop=true;
       if(!state.manualPause){
         const button=document.createElement('button');
