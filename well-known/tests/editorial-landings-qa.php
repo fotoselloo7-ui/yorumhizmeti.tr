@@ -45,9 +45,14 @@ foreach($designNames as $design){
 $ok(str_contains($themeCss,'max-width:760px')&&str_contains($themeCss,'prefers-reduced-motion:reduce'),
     'Theme responsive and reduced-motion contracts');
 $designForm=file_get_contents(BASE_PATH.'/resources/views/admin/landing/form.php');
+$themePicker=file_get_contents(BASE_PATH.'/resources/views/admin/landing/theme-picker.php');
+$ok(str_contains($designForm,"theme-picker.php")&&
+    str_contains($themePicker,"theme_key")&&
+    count(\App\Services\LandingThemeService::all())===10,
+    'Current ten-theme selector replaces the retired five-layout admin dropdown');
 foreach($designNames as $design)
-    $ok(str_contains($designForm,"'".$design."'")&&str_contains($designForm,'tasarim='),
-        'Theme selection and private preview offered: '.$design);
+    $ok(str_contains($themeCss,'landing-layout-'.$design),
+        'Legacy design variant remains supported for existing saved pages: '.$design);
 $regionalController=file_get_contents(BASE_PATH.'/app/Controllers/RegionalLandingController.php');
 $ok(str_contains($regionalController,'$preview && is_string($requestedDesign)'),
     'Public visitors cannot override landing design via URL parameter');
