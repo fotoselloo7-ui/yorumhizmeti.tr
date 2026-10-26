@@ -164,4 +164,22 @@ $form = file_get_contents(BASE_PATH . '/resources/views/admin/landing/form.php')
 $admin = file_get_contents(BASE_PATH . '/app/Controllers/Admin/LandingController.php');
 $ok(str_contains($form, 'location_image') && str_contains($form, 'location_image_alt'), 'Admin exposes editable city photo and alt');
 $ok(str_contains($admin, "'location_image'") && str_contains($admin, 'Content::upload'), 'City photo uses existing validated upload pipeline');
+
+/* Regression: missing closing comments previously swallowed entire theme layouts.
+   Keep real per-theme compositions and a legible user-uploaded mobile hero. */
+$themeCss = file_get_contents(PUBLIC_PATH . '/assets/css/landing-themes.css');
+$ok($themeCss !== false && substr_count($themeCss, '/*') === substr_count($themeCss, '*/'),
+    'Theme stylesheet comments are balanced');
+foreach (array_keys(Theme::all()) as $key) {
+    $ok(str_contains($themeCss, 'data-theme=' . $key),
+        'Theme has independent body-scoped composition: ' . $key);
+}
+$ok(str_contains($themeCss, '@media(min-width:801px)') && str_contains($themeCss, '@media(max-width:800px)'),
+    'Reference layouts have desktop and tablet/mobile variants');
+$ok(str_contains($themeCss, '.nvl-hero.nvl-has-location .nvl-stage{padding-bottom:'),
+    'Uploaded hero photo has reserved space below mobile text and CTA');
+$ok(str_contains($themeCss, '[data-component=services][data-variant=bento]') &&
+    str_contains($themeCss, '[data-component=services][data-variant=rows]') &&
+    str_contains($themeCss, '[data-component=scripts][data-variant=wide-covers]'),
+    'Services and software use layout variations rather than only color changes');
 echo "PASS $checks location-image/reference-semantic/sparse-data/no-fabricated-proof checks\n";
