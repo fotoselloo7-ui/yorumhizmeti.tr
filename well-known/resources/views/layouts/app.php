@@ -164,7 +164,7 @@
     <?php endif; ?>
     <?php if($template==='frontend/landing/show'): ?>
     <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
-    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-mobile-grid">
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-regional-polish2">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
     <?php endif; ?>
@@ -557,13 +557,27 @@
                         </a>
                     </h3>
                     <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
-                    <p class="nv-footer-about">NetVera Teknoloji Yazılım; web tasarım, özel yazılım geliştirme, hazır yazılım çözümleri, SEO, dijital reklam ve sosyal medya yönetimi hizmetlerini bir arada sunar. Türkiye’deki işletmeler için hizmet kapsamlarını, hazır yazılımları ve dijital rehberleri inceleyebilir, projeniz için ekibimizle iletişime geçebilirsiniz.</p>
-                    <div class="footer-social footer-social-v9">
-                        <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_youtube')): ?><a href="<?= e(setting('social_youtube')) ?>" target="_blank" rel="noopener" aria-label="YouTube"><?= icon('youtube', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_facebook')): ?><a href="<?= e(setting('social_facebook')) ?>" target="_blank" rel="noopener" aria-label="Facebook"><?= icon('facebook', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_tiktok')): ?><a href="<?= e(setting('social_tiktok')) ?>" target="_blank" rel="noopener" aria-label="TikTok"><?= icon('tiktok', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_twitter')): ?><a href="<?= e(setting('social_twitter')) ?>" target="_blank" rel="noopener" aria-label="X"><?= icon('twitter', 15) ?></a><?php endif; ?>
+                    <p class="nv-footer-about">NetVera; web tasarım, özel yazılım, hazır script, SEO, dijital reklam ve sosyal medya hizmetleriyle işletmelere dijital çözümler sunar.</p>
+                    <div class="footer-social footer-social-v9" aria-label="NetVera sosyal medya hesapları">
+                        <?php
+                        // Existing Site Settings fields supply up to four genuine footer buttons.
+                        // Do not invent accounts or write a separate landing-page setting.
+                        $nvFooterSocial = [
+                            ['social_instagram','Instagram','instagram'],
+                            ['social_youtube','YouTube','youtube'],
+                            ['social_facebook','Facebook','facebook'],
+                            ['social_tiktok','TikTok','tiktok'],
+                            ['social_twitter','X','twitter'],
+                        ];
+                        $nvFooterSocialVisible = 0;
+                        foreach ($nvFooterSocial as [$nvSetting,$nvLabel,$nvIcon]):
+                            $nvSocialUrl = \App\Services\NetveraBridgeService::publicUrl((string)setting($nvSetting));
+                            if (!$nvSocialUrl) continue;
+                            if ($nvFooterSocialVisible >= 4) break;
+                            $nvFooterSocialVisible++;
+                        ?>
+                        <a href="<?= e($nvSocialUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($nvLabel) ?>"><?= icon($nvIcon,15) ?></a>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
