@@ -26,62 +26,105 @@ function section(kind,num){
 }
 function assert(p,msg){if(!p)throw new Error(msg);}
 try{
-  for(const [width,height] of [[1280,900],[390,844]]){
+  for (const [width,height] of [[1280,900],[390,844]]) {
     const context=await browser.newContext({viewport:{width,height}});
     const page=await context.newPage();
     const errors=[];
     page.on('pageerror',e=>errors.push(e.message));
-    await page.setContent(`<!doctype html><html><head><meta charset="utf-8">
-    <style>body{margin:0;font-family:Arial,sans-serif}.nv-landing{--nvl-ink:#192646;--nvl-brand:#f47708;--nvl-soft:#fff2e7;--nvl-surface:#fff;--nvl-border:#d9dfea;--nvl-muted:#73809b;background:#fff7f0;color:#192646}.nvl-container{max-width:1200px;margin:0 auto;padding:0 20px}</style>
-    </head><body><div data-landing-theme-host><main class="nv-landing" data-theme="landing-01">
-    ${section('references',3)}${section('scripts',6)}${section('blog',7)}
-    </main></div></body></html>`);
+    await page.setContent('<!doctype html><html><head><meta charset="utf-8">'+
+      '<style>body{margin:0;font-family:Arial,sans-serif}.nv-landing{--nvl-ink:#192646;--nvl-brand:#f47708;--nvl-soft:#fff2e7;--nvl-surface:#fff;--nvl-border:#d9dfea;--nvl-muted:#73809b;background:#fff7f0;color:#192646}.nvl-container{max-width:1200px;margin:0 auto;padding:0 20px}</style>'+
+      '</head><body><div data-landing-theme-host><main class="nv-landing" data-theme="landing-01">'+
+      section('references',3)+section('scripts',14)+section('blog',14)+'</main></div></body></html>');
     await page.addStyleTag({path:styleBase});
     await page.addStyleTag({path:styleRail});
     await page.addScriptTag({path:script});
-    const reference=page.locator('[data-component="references"]');
-    const references=reference.locator(':scope > .nvl-container > .nvl-showcase-viewport [data-nvl-grid] > .nvl-card');
-    assert(await references.count()===3,'Three ORIGINAL references only');
-    assert(await page.locator('[data-nvl-rail-clone],[data-nvl-rail-spacer]').count()===0,'Unexpected repeated references or blank placeholders');
-    const stats=await page.evaluate(()=>{
-      const sections=[...document.querySelectorAll('section.is-nvl-rail')];
-      return sections.map(section=>{
-        const view=section.querySelector('[data-nvl-rail-viewport]');
-        const grid=section.querySelector('[data-nvl-grid]');
-        const titles=[...section.querySelectorAll('.nvl-card-copy h3')];
-        return {kind:section.dataset.component,count:grid.querySelectorAll(':scope > .nvl-card').length,
-          overflow:view.scrollWidth-view.clientWidth,
-          rows:getComputedStyle(grid).gridTemplateRows,
-          clipped:titles.filter(el=>el.scrollHeight>el.clientHeight+2||el.scrollWidth>el.clientWidth+2).length,
-          clippedDetails:titles.filter(el=>el.scrollHeight>el.clientHeight+2||el.scrollWidth>el.clientWidth+2).slice(0,2).map(el=>({text:el.textContent,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,scrollHeight:el.scrollHeight,clientHeight:el.clientHeight,display:getComputedStyle(el).display,whiteSpace:getComputedStyle(el).whiteSpace,overflow:getComputedStyle(el).overflow,clamp:getComputedStyle(el).webkitLineClamp})),
-          hiddenOriginals:[...grid.children].filter(el=>el.hasAttribute('data-nvl-rail-clone')).length};
-      });
+
+    const ref=page.locator('section[data-component="references"]');
+    const software=page.locator('section[data-component="scripts"]');
+    const blog=page.locator('section[data-component="blog"]');
+    const refCards=ref.locator('.nvl-card');
+    assert(await refCards.count()===3,'Exactly 3 real reference records');
+    assert(await ref.evaluate(el=>el.classList.contains('is-nvl-static')&&!el.classList.contains('is-nvl-loop')),
+      'Small portfolio should remain completely static '+width);
+    const small=await ref.evaluate(section=>{
+      const cards=[...section.querySelectorAll('.nvl-card')];
+      const viewport=section.querySelector('[data-nvl-rail-viewport]');
+      return {widths:cards.map(c=>c.getBoundingClientRect().width),
+        overflow:viewport.scrollWidth-viewport.clientWidth,
+        unique:new Set(cards.map(c=>c.querySelector('h3 a').getAttribute('href'))).size};
     });
-    for(const group of stats){
-      assert(group.clipped===0,'Card title clipped '+width+'/'+group.kind+': '+JSON.stringify(group.clippedDetails));
-      assert(group.hiddenOriginals===0,'Duplicate nodes '+width+'/'+group.kind);
-      assert(group.rows.split(' ').filter(Boolean).length>=2,'Two real grid rows missing: '+width+'/'+group.kind+':'+group.rows);
-      assert(group.overflow>40,'Autoplay cannot move, no horizontal overflow: '+width+'/'+group.kind+':'+group.overflow);
+    assert(small.unique===3,'Static references duplicated');
+    assert(small.widths.every(n=>n>=140&&n<=275),'Cards stretched beyond compact width '+width+' '+small.widths);
+    assert(small.overflow<3,'3 reference items incorrectly scroll '+width+' '+small.overflow);
+    const staticBefore=await ref.locator('[data-nvl-rail-viewport]').evaluate(el=>el.scrollLeft);
+    await page.waitForTimeout(700);
+    const staticAfter=await ref.locator('[data-nvl-rail-viewport]').evaluate(el=>el.scrollLeft);
+    assert(Math.abs(staticAfter-staticBefore)<2,'Small reference collection moves unexpectedly');
+
+    for(const section of [software,blog]){
+      await section.locator('[data-nvl-rail-viewport]').scrollIntoViewIfNeeded();
+      await page.mouse.move(0,0);
+      await page.waitForTimeout(300);
+      const stat=await section.evaluate(sec=>{
+        const grid=sec.querySelector('[data-nvl-grid]');
+        const cards=[...grid.querySelectorAll('.nvl-card')];
+        const unique=new Set(cards.map(c=>c.querySelector('h3 a')?.getAttribute('href')));
+        const titles=cards.map(c=>c.querySelector('h3'));
+        return {
+          active:sec.classList.contains('is-nvl-loop'),
+          columns:grid.querySelectorAll(':scope > .nvl-rail-column').length,
+          count:cards.length,unique:unique.size,
+          oversized:cards.some(c=>c.getBoundingClientRect().width>275),
+          clipped:titles.filter(t=>t.scrollHeight>t.clientHeight+2||t.scrollWidth>t.clientWidth+2).length
+        };
+      });
+      assert(stat.active,'Genuine overflow should auto-loop '+width+'/'+await section.getAttribute('data-component'));
+      assert(stat.columns===7,'Expected seven authentic two-row columns, not duplicate cards');
+      assert(stat.count===14&&stat.unique===14,'Duplicate product/blog cards found');
+      assert(!stat.oversized,'Product/blog cards enlarged to viewport');
+      assert(stat.clipped===0,'Product/blog headlines clipped');
     }
-    const viewport=reference.locator('[data-nvl-rail-viewport]');
-    await viewport.scrollIntoViewIfNeeded();
-    const before=await viewport.evaluate(el=>el.scrollLeft);
-    await page.waitForTimeout(2550);
-    const after=await viewport.evaluate(el=>el.scrollLeft);
-    assert(after>before+20,'Autoplay does not move on its own '+width+': '+before+' -> '+after);
-    await reference.locator('[data-nvl-reference-filter="marketing"]').click();
-    const filtered=await reference.locator('[data-nvl-grid] > .nvl-card:visible').count();
-    assert(filtered===1,'Filtered portfolio should show only its original matching cards '+width+':'+filtered);
-    await reference.locator('[data-nvl-reference-filter="all"]').click();
-    assert(await reference.locator('[data-nvl-grid] > .nvl-card:visible').count()===3,'Filter reset lost original cards');
-    await reference.locator('[data-nvl-rail-viewport]').scrollIntoViewIfNeeded();
-    const box=await viewport.boundingBox();
-    const y=box.y+Math.min(70,box.height/3);
-    await page.mouse.move(box.x+box.width*.8,y);
+
+    const slider=software.locator('[data-nvl-rail-viewport]');
+    await slider.scrollIntoViewIfNeeded();
+    await page.mouse.move(0,0);
+    const before=await slider.evaluate(el=>el.scrollLeft);
+    await page.waitForTimeout(1700);
+    const after=await slider.evaluate(el=>el.scrollLeft);
+    assert(after>before+16,'Continuous one-way auto-scroll did not move '+width+': '+before+'/'+after);
+
+    const first=await software.locator('.nvl-rail-column').first().locator('h3 a').first().getAttribute('href');
+    const step=await software.evaluate(sec=>{
+      const grid=sec.querySelector('[data-nvl-grid]');
+      const col=grid.querySelector('.nvl-rail-column');
+      return col.getBoundingClientRect().width + parseFloat(getComputedStyle(grid).columnGap);
+    });
+    await slider.evaluate((el,step)=>{el.scrollLeft=step-1;},step);
+    await page.waitForTimeout(400);
+    const firstAfter=await software.locator('.nvl-rail-column').first().locator('h3 a').first().getAttribute('href');
+    assert(firstAfter!==first,'Original first column was not moved to the end for continuous looping');
+    assert(await software.locator('.nvl-card').count()===14,'Rotation cloned source cards');
+
+    // Filter buttons preserve the source collection without adding new cards.
+    await ref.locator('[data-nvl-reference-filter="marketing"]').click();
+    assert(await ref.locator('.nvl-card:visible').count()===1,'Filtered reference count incorrect');
+    await ref.locator('[data-nvl-reference-filter="all"]').click();
+    assert(await ref.locator('.nvl-card:visible').count()===3,'Original references lost after resetting filter');
+
+    // Mouse dragging is real interaction, not an inert grab cursor.
+    await slider.scrollIntoViewIfNeeded();
+    const box=await slider.boundingBox();
+    const y=box.y+Math.min(55,box.height/3);
+    const dragBefore=await slider.evaluate(el=>el.scrollLeft);
+    await page.mouse.move(box.x+box.width*.78,y);
     await page.mouse.down();
-    await page.mouse.move(box.x+box.width*.3,y,{steps:8});
+    await page.mouse.move(box.x+box.width*.3,y,{steps:12});
     await page.mouse.up();
-    assert(await references.count()===3,'Mouse drag created duplicate reference cards');
+    const dragAfter=await slider.evaluate(el=>el.scrollLeft);
+    assert(Math.abs(dragAfter-dragBefore)>25,'Mouse dragging did not change real scroll position');
+    await page.mouse.move(0,0);
+
+    // Theme switching must not add cards or carry the prior page's movement state.
     for(let i=1;i<=10;i++){
       await page.evaluate(i=>{
         const main=document.querySelector('main.nv-landing');
@@ -89,11 +132,12 @@ try{
         document.querySelector('[data-landing-theme-host]').dispatchEvent(
           new CustomEvent('landing:themechange',{detail:{theme:main.dataset.theme}}));
       },i);
-      await page.waitForTimeout(45);
-      assert(await references.count()===3,'Switching to theme '+i+' duplicates references');
+      await page.waitForTimeout(55);
+      assert(await refCards.count()===3,'Theme switching added reference duplicates: '+i);
+      assert(await software.locator('.nvl-card').count()===14,'Theme switching damaged software cards: '+i);
     }
-    assert(errors.length===0,'Browser JS error '+width+':'+errors.join('; '));
-    console.log('PASS regional carousel '+width+'px: unique cards, 2 rows, autoplay, no clipping, filters and 10 themes');
+    assert(errors.length===0,'JavaScript errors '+width+': '+errors.join('; '));
+    console.log('PASS '+width+'px compact 3-card static grid, 14-card two-row continuous looping, drag, filters, 10 themes, no cloning or clipped headings');
     await context.close();
   }
 }finally{await browser.close();}
