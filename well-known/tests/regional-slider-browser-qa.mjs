@@ -37,6 +37,7 @@ try{
       section('references',3)+section('scripts',14)+section('blog',14)+'</main></div></body></html>');
     await page.addStyleTag({path:styleBase});
     await page.addStyleTag({path:styleRail});
+    await page.evaluate(()=>window.__nvRegionalTestMode=true);
     await page.addScriptTag({path:script});
 
     const ref=page.locator('section[data-component="references"]');
@@ -91,7 +92,8 @@ try{
     const before=await slider.evaluate(el=>el.scrollLeft);
     await page.waitForTimeout(1700);
     const after=await slider.evaluate(el=>el.scrollLeft);
-    assert(after>before+16,'Continuous one-way auto-scroll did not move '+width+': '+before+'/'+after);
+    const debug=await software.getAttribute('data-nvl-debug');
+    assert(after>before+16,'Continuous one-way auto-scroll did not move '+width+': '+before+'/'+after+'; '+debug);
 
     const first=await software.locator('.nvl-rail-column').first().locator('h3 a').first().getAttribute('href');
     const step=await software.evaluate(sec=>{
