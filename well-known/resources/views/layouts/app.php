@@ -160,17 +160,13 @@
     <script src="<?= asset('js/member-panel.js') ?>?v=20261018" defer></script>
     <?php endif; ?>
     <?php if($template==='frontend/home'||str_starts_with($template,'frontend/landing/')): ?>
-<<<<<<< HEAD
     <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261025-interaction">
     <?php endif; ?>
     <?php if($template==='frontend/landing/show'): ?>
+    <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
     <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-layout-repair">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
-=======
-    <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261019-regional-ready">
-    <?php if($template==='frontend/landing/show'): ?><link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1"><?php endif; ?>
->>>>>>> 86dd065c21d47d2ea4cee063f64c44621d01ac69
     <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
     <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261019">
