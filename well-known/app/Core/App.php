@@ -354,6 +354,11 @@ class App
         $r->post('/admin/lisans/kontrol', 'Admin\\LicenseController@check');
         $r->post('/admin/lisans/devre-disi', 'Admin\\LicenseController@deactivate');
         $r->post('/admin/lisans/kaydet', 'Admin\\LicenseController@saveSettings');
+        // Exact compatibility routes from preserved NetVera blog articles.
+        // Never rewrite the imported articles, products, category slugs or links.
+        foreach (array_keys(\App\Controllers\LegacyEditorialLinkController::REDIRECTS) as $legacyEditorialPath) {
+            $r->get($legacyEditorialPath, 'LegacyEditorialLinkController@go');
+        }
         // Last and read-only: explicit/legacy routes always keep priority.
         $r->get('/{slug}', 'RegionalLandingController@show');
     }
