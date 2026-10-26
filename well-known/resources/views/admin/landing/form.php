@@ -10,7 +10,7 @@ $editorField=static function(string $label,string $name,string $value,int $max=1
     else echo '<input class="form-control" id="'.$id.'" name="'.e($name).'" maxlength="'.$max.'" value="'.e($value).'">';
     echo '</div>';
 };
-$builderTabs=['basic'=>['file-text','Genel bilgiler'],'visual'=>['image','Görünüm & düzen'],'body'=>['file-text','Sayfa içeriği'],'services'=>['layers','Hizmetler'],'scripts'=>['code','Hazır yazılımlar'],'blog'=>['file-text','Blog yazıları'],'references'=>['image','Referanslar'],'seo'=>['search','SEO & yayın']];
+$builderTabs=['basic'=>['file-text','Genel bilgiler'],'visual'=>['image','Görünüm & düzen'],'body'=>['file-text','Sayfa içeriği'],'services'=>['layers','Hizmetler'],'scripts'=>['code','Hazır yazılımlar'],'blog'=>['file-text','Blog yazıları'],'references'=>['image','Referanslar'],'faq'=>['help-circle','SSS'],'seo'=>['search','SEO & yayın']];
 ?>
 <div class="landing-editor regional-editor">
 <form method="post" action="/admin/konumsal-sayfalar/kaydet" enctype="multipart/form-data" data-landing-editor data-region-builder>
@@ -46,11 +46,28 @@ $builderTabs=['basic'=>['file-text','Genel bilgiler'],'visual'=>['image','Görü
         <?php foreach(['title'=>['Bölüm başlığı (H2)',220,1],'body'=>['İçerik',6000,6],'subheading'=>['Ara başlık (H3, isteğe bağlı)',220,1],'detail'=>['Ara başlık açıklaması',3000,3],'image'=>['Bölüm görsel yolu (isteğe bağlı)',500,1],'alt'=>['Bölüm görsel alt metni',220,1]]as $key=>[$label,$max,$rows])$editorField($label,'sections['.$i.']['.$key.']',$block[$key]??'',$max,$rows); ?>
         </div></details><?php endfor; ?></div><button type="button" class="btn btn-outline region-add-row" data-add-content-row>+ İçerik bölümü ekle</button>
         <?php $contentHome=false;$contentData=$d;$contentPrefix='';$contentId='landing';require __DIR__.'/content-fields.php'; ?>
-        <?php $editorField('Sık sorulan sorular başlığı','faq_title',$d['faq_title']); ?>
     </div></div></section>
     <?php foreach(['services'=>['Hizmetler','Hizmet/kategori sayfalarını seçin. Hazır yazılım ürünleri ayrı sekmededir.','service_ids','services_title',$landingCategories],'scripts'=>['Hazır yazılımlar','Gerçek yazılım kataloğundan ürün seçin. Kartlar ilgili yazılım detayına yönlenir.','script_ids','scripts_title',$landingScripts],'blog'=>['Blog yazıları','Yayınlanmış yazıları bu sayfaya özel bir okuma seçkisine ekleyin.','blog_ids','blog_title',$landingBlogs],'references'=>['Referanslar','Aktif portföy kayıtlarından çalışmalar ekleyin.','reference_ids','references_title',$landingReferences]]as $type=>[$label,$help,$field,$titleField,$rows]): ?>
     <section class="region-editor-panel" id="landing-<?= $type ?>" data-builder-panel="<?= $type ?>" aria-labelledby="builder-tab-<?= $type ?>"><header><span>İÇERİK SEÇKİSİ / <?= e(mb_strtoupper($label,'UTF-8')) ?></span><h2><?= e($label) ?></h2><p><?= e($help) ?> Seçim sırası sitedeki kart sırasıdır.</p></header><div class="adm-card"><div class="adm-card-body"><?php $editorField('Sitede görünecek bölüm başlığı',$titleField,$d[$titleField]??'');$pickerType=$type;$pickerField=$field;$pickerRows=$rows;$pickerSelected=$d[$field];require __DIR__.'/picker.php'; ?></div></div></section>
     <?php endforeach; ?>
+    <section class="region-editor-panel" id="landing-faq" data-builder-panel="faq" aria-labelledby="builder-tab-faq">
+        <header><span>İÇERİK SEÇKİSİ / SSS</span><h2>Bu landing sayfasının sorularını yönetin.</h2><p>Her sayfada kendi soru ve cevapları kullanılır. Seçilen tema aynı bilgileri kendi SSS tasarımıyla gösterir.</p></header>
+        <div class="adm-card"><div class="adm-card-body">
+            <?php $editorField('SSS bölümünün başlığı','faq_title',$d['faq_title']); ?>
+            <p class="landing-editor-help">En fazla 12 gerçek soru-cevap çifti ekleyin. Boş çiftler yayınlanmaz. Görünürlüğü Görünüm &amp; Düzen → Bölüm sırası ve görünürlüğü alanından değiştirebilirsiniz.</p>
+            <div class="region-faq-editor">
+                <?php for($i=0;$i<12;$i++): $faq=$d['faqs'][$i]??[]; ?>
+                <details class="landing-editor-details" <?= $i===0?'open':'' ?>>
+                    <summary><?= icon('help-circle',16) ?> Soru <?= $i+1 ?><?= !empty($faq['question'])?' — '.e($faq['question']):'' ?></summary>
+                    <div class="landing-editor-fields">
+                        <div class="form-group"><label for="region-faq-question-<?= $i ?>">Soru <?= $i+1 ?></label><input id="region-faq-question-<?= $i ?>" name="faqs[<?= $i ?>][question]" class="form-control" maxlength="240" value="<?= e($faq['question']??'') ?>" placeholder="Örn. Proje süresi nasıl belirlenir?"></div>
+                        <div class="form-group"><label for="region-faq-answer-<?= $i ?>">Yanıt <?= $i+1 ?></label><textarea id="region-faq-answer-<?= $i ?>" name="faqs[<?= $i ?>][answer]" class="form-control" maxlength="1800" rows="3" placeholder="Hizmet kapsamınıza uygun açıklayıcı yanıt yazın."><?= e($faq['answer']??'') ?></textarea></div>
+                    </div>
+                </details>
+                <?php endfor; ?>
+            </div>
+        </div></div>
+    </section>
     <section class="region-editor-panel" id="landing-seo" data-builder-panel="seo" aria-labelledby="builder-tab-seo"><header><span>SON ADIM / YAYIN</span><h2>Kontrol edin, sonra yayınlayın.</h2><p>SEO alanları, indeksleme ve yayın durumu birbirinden bağımsızdır.</p></header><div class="adm-card"><div class="adm-card-body"><div class="landing-editor-grid"><?php foreach(['status'=>['Sayfa durumu',['inactive'=>'Taslak / yayında değil','active'=>'Yayında']],'working_mode'=>['Çalışma biçimi',['remote'=>'Uzaktan / çevrim içi','hybrid'=>'Uzaktan ve planlı görüşme','onsite'=>'Planlı yerinde çalışma']]]as $key=>[$label,$options]): ?><div class="form-group"><label for="landing-<?= $key ?>"><?= $label ?></label><select id="landing-<?= $key ?>" class="form-control" name="<?= $key ?>"><?php foreach($options as $value=>$text): ?><option value="<?= $value ?>" <?= $d[$key]===$value?'selected':'' ?>><?= $text ?></option><?php endforeach; ?></select></div><?php endforeach; ?></div>
         <?php $editorField('İletişim butonu','cta_label',$d['cta_label'],70);$editorField('Alt iletişim başlığı','cta_title',$d['cta_title']);$editorField('Alt iletişim açıklaması','cta_summary',$d['cta_summary'],500,3); ?>
         <?php $seoForHome=false;$seoPrefix='seo';$seoData=$d['seo'];require __DIR__.'/seo-fields.php'; ?><details class="landing-editor-details"><summary>Yayın kontrol notları</summary><ul><?php foreach($landingNotes as $note): ?><li><?= e($note) ?></li><?php endforeach; ?><li>Sitemap yalnızca yayında, indekslemeye açık ve kendi canonical adresini kullanan sayfaları içerir.</li><li>Otomatik kayıt yoktur. Çıkmadan önce değişiklikleri kaydedin.</li></ul></details>
