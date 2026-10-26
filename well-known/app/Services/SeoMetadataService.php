@@ -64,7 +64,7 @@ final class SeoMetadataService
         $error=$template==='frontend/404'||$status>=400;
         $query=[];parse_str((string)(parse_url($request,PHP_URL_QUERY)??''),$query);
         $filtered=false;
-        foreach(['q','sort','alt','grup','category','type','hizmet','min_price','max_price','min_rating','tag','tur','siralama','min','max','indirim','one_cikan']as $key){
+        foreach(['q','sort','alt','grup','category','type','hizmet','min_price','max_price','min_rating','tag','tur','siralama','min','max','indirim','one_cikan','onizleme','tema','tasarim','preview']as $key){
             if(isset($query[$key])&&$query[$key]!==''&&!($key==='sort'&&$query[$key]==='recommended'))$filtered=true;
         }
         $seo=is_array($data['nvSeoData']??null)?$data['nvSeoData']:[];
