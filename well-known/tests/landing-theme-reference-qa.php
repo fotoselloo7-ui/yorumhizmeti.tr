@@ -234,6 +234,6 @@ $ok(str_contains($themeCss, 'Mobile two-column landing card collections') &&
     'All regional service, script, reference and blog grids use the two-column mobile layout');
 $layout = file_get_contents(BASE_PATH . '/resources/views/layouts/app.php');
 $ok(str_contains($layout, 'class="nv-footer-about"') &&
-    str_contains($layout, 'NetVera Teknoloji Yazılım; web tasarım'),
+    str_contains($layout, 'NetVera; web tasarım'),
     'Shared NetVera footer contains the visible brand and services description');
 echo "PASS $checks location-image/reference-semantic/sparse-data/no-fabricated-proof checks\n";
