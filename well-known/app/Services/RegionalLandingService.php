@@ -27,7 +27,7 @@ final class RegionalLandingService
     public static function isManaged(array $row):bool{return self::isLanding($row)||self::redirectId($row)!==null;}
     public static function defaults():array
     {
-        return ['module'=>'regional_landing','version'=>1,'title'=>'','slug'=>'','status'=>'inactive','city'=>'','province'=>'','service'=>'','area'=>'','working_mode'=>'remote','layout'=>'studio','theme'=>'violet','summary'=>'','local_context'=>'','image'=>'/assets/img/category-heroes/ads.webp','mobile_image'=>'','image_alt'=>'Dijital hizmetler için tanıtım görseli','location_image'=>'','location_image_alt'=>'','cta_label'=>'Projenizi konuşalım','services_title'=>'İhtiyacınıza uygun hizmetler','references_title'=>'Seçili çalışmalarımız','faq_title'=>'Merak ettikleriniz','cta_title'=>'Bir sonraki adımı birlikte planlayalım.','cta_summary'=>'İhtiyacınızı paylaşın; kapsamı ve çalışma biçimini birlikte değerlendirelim.','scripts_title'=>'Hazır yazılım çözümleri','blog_title'=>'Rehberler ve içgörüler','script_ids'=>[],'blog_ids'=>[],'section_order'=>array_keys(self::SECTIONS),'enabled_sections'=>array_keys(self::SECTIONS),'sections'=>[],'links'=>[],'faqs'=>[],'service_ids'=>[],'reference_ids'=>[],'seo'=>['robots'=>'noindex,follow']];
+        return ['module'=>'regional_landing','version'=>1,'title'=>'','slug'=>'','status'=>'inactive','city'=>'','province'=>'','service'=>'','area'=>'','working_mode'=>'remote','layout'=>'studio','theme'=>'violet','summary'=>'','local_context'=>'','editorial_title'=>'','editorial_lead'=>'','editorial_body'=>'','editorial_qa'=>[],'image'=>'/assets/img/category-heroes/ads.webp','mobile_image'=>'','image_alt'=>'Dijital hizmetler için tanıtım görseli','location_image'=>'','location_image_alt'=>'','cta_label'=>'Projenizi konuşalım','services_title'=>'İhtiyacınıza uygun hizmetler','references_title'=>'Seçili çalışmalarımız','faq_title'=>'Merak ettikleriniz','cta_title'=>'Bir sonraki adımı birlikte planlayalım.','cta_summary'=>'İhtiyacınızı paylaşın; kapsamı ve çalışma biçimini birlikte değerlendirelim.','scripts_title'=>'Hazır yazılım çözümleri','blog_title'=>'Rehberler ve içgörüler','script_ids'=>[],'blog_ids'=>[],'section_order'=>array_keys(self::SECTIONS),'enabled_sections'=>array_keys(self::SECTIONS),'sections'=>[],'links'=>[],'faqs'=>[],'service_ids'=>[],'reference_ids'=>[],'seo'=>['robots'=>'noindex,follow']];
     }
     public static function slug(mixed $value):string
     {
@@ -57,7 +57,7 @@ final class RegionalLandingService
         $data=['module'=>'regional_landing','version'=>1];
         $data['theme_key']=LandingThemeService::key($input['theme_key']??'');
         $data['theme_switcher']=!array_key_exists('theme_switcher',$input)||in_array($input['theme_switcher'],[true,1,'1'],true);
-        foreach(['title'=>180,'city'=>100,'province'=>100,'service'=>160,'area'=>300,'summary'=>600,'local_context'=>3000,'image_alt'=>220,'location_image_alt'=>220,'cta_label'=>70,'services_title'=>180,'references_title'=>180,'scripts_title'=>180,'blog_title'=>180,'faq_title'=>180,'cta_title'=>180,'cta_summary'=>500]as $key=>$max)$data[$key]=LandingContentService::text($input[$key]??'',$max);
+        foreach(['title'=>180,'city'=>100,'province'=>100,'service'=>160,'area'=>300,'summary'=>600,'local_context'=>3000,'editorial_title'=>200,'editorial_lead'=>650,'editorial_body'=>16000,'image_alt'=>220,'location_image_alt'=>220,'cta_label'=>70,'services_title'=>180,'references_title'=>180,'scripts_title'=>180,'blog_title'=>180,'faq_title'=>180,'cta_title'=>180,'cta_summary'=>500]as $key=>$max)$data[$key]=LandingContentService::text($input[$key]??'',$max);
         $data['slug']=self::slug($input['slug']??'');
         foreach(['status'=>['inactive','active'],'layout'=>['studio','editorial','spotlight','atlas','signal','canvas','prism'],'theme'=>['violet','blue','rose'],'working_mode'=>['remote','hybrid','onsite']]as $key=>$allowed){$data[$key]=$input[$key]??$allowed[0];if(!is_string($data[$key])||!in_array($data[$key],$allowed,true))throw new \InvalidArgumentException('Geçersiz yayın veya tasarım tercihi.');}
         foreach(['image','mobile_image','location_image']as $key)$data[$key]=LandingContentService::image($input[$key]??'');
@@ -65,10 +65,11 @@ final class RegionalLandingService
         if(($data['image']!==''||$data['mobile_image']!=='')&&$data['image_alt']==='')throw new \InvalidArgumentException('Banner görselinin alt metnini yazın.');
         if($data['location_image']!==''&&$data['location_image_alt']==='')throw new \InvalidArgumentException('Şehir / bölge görselinin alt metnini yazın.');
         foreach(['sections','links','faqs']as $kind)$data[$kind]=LandingContentService::rows($input[$kind]??[],$kind,$kind==='links'?12:12);
-        foreach(['service_ids','reference_ids']as $key){$ids=$input[$key]??[];if(!is_array($ids)||count($ids)>24)throw new \InvalidArgumentException('En fazla 24 hizmet veya referans seçebilirsiniz.');$data[$key]=array_values(array_unique(array_map(static function($v)use($key){if(!is_scalar($v)||!preg_match('/^[a-zA-Z0-9_-]{1,64}$/D',(string)$v)||($key==='service_ids'&&(!ctype_digit((string)$v)||(int)$v<1)))throw new \InvalidArgumentException('Geçersiz hizmet/referans seçimi.');return $key==='service_ids'?(int)$v:(string)$v;},$ids)));}
+        $data['editorial_qa']=LandingContentService::rows($input['editorial_qa']??[],'faqs',10);
+        foreach(['service_ids','reference_ids']as $key){$ids=$input[$key]??[];if(!is_array($ids)||count($ids)>($key==='reference_ids'?120:24))throw new \InvalidArgumentException('En fazla 24 hizmet veya referans seçebilirsiniz.');$data[$key]=array_values(array_unique(array_map(static function($v)use($key){if(!is_scalar($v)||!preg_match('/^[a-zA-Z0-9_-]{1,64}$/D',(string)$v)||($key==='service_ids'&&(!ctype_digit((string)$v)||(int)$v<1)))throw new \InvalidArgumentException('Geçersiz hizmet/referans seçimi.');return $key==='service_ids'?(int)$v:(string)$v;},$ids)));}
         foreach(['script_ids','blog_ids']as $key){
             $ids=$input[$key]??[];
-            if(!is_array($ids)||count($ids)>24)throw new \InvalidArgumentException('Her içerik türünde en fazla 24 kayıt seçebilirsiniz.');
+            if(!is_array($ids)||count($ids)>120)throw new \InvalidArgumentException('Bu içerik türünde en fazla 120 kayıt seçebilirsiniz.');
             $data[$key]=array_values(array_unique(array_map(static function($id)use($key){
                 if((!is_int($id)&&!is_string($id))||!preg_match($key==='blog_ids'?'/^-?[1-9][0-9]{0,9}$/D':'/^[1-9][0-9]{0,9}$/D',(string)$id))throw new \InvalidArgumentException('Geçersiz yazılım/blog seçimi.');
                 return (int)$id;
@@ -94,15 +95,15 @@ final class RegionalLandingService
         $data=array_replace(self::defaults(),$base);
         $data['theme_key']=LandingThemeService::key($input['theme_key']??$data['theme_key']??'');
         $data['theme_switcher']=in_array($input['theme_switcher']??true,[true,1,'1'],true);
-        $clip=static fn($value,int $length=6000):string=>is_scalar($value)?mb_substr(str_replace("\0",'',strip_tags((string)$value)),0,$length):'';
+        $clip=static fn($value,int $length=18000):string=>is_scalar($value)?mb_substr(str_replace("\0",'',strip_tags((string)$value)),0,$length):'';
         foreach($data as $key=>$value)if(is_string($value)&&isset($input[$key]))$data[$key]=$clip($input[$key]);
-        foreach(['sections'=>['title','body','subheading','detail','image','alt'],'faqs'=>['question','answer'],'links'=>['label','path']]as $key=>$fields){
+        foreach(['sections'=>['title','body','subheading','detail','image','alt'],'faqs'=>['question','answer'],'editorial_qa'=>['question','answer'],'links'=>['label','path']]as $key=>$fields){
             if(!is_array($input[$key]??null))continue;$data[$key]=[];
-            foreach(array_slice($input[$key],0,12)as $row){if(!is_array($row))continue;$clean=[];foreach($fields as $field)$clean[$field]=$clip($row[$field]??'');$data[$key][]=$clean;}
+            foreach(array_slice($input[$key],0,$key==='editorial_qa'?10:12)as $row){if(!is_array($row))continue;$clean=[];foreach($fields as $field)$clean[$field]=$clip($row[$field]??'');$data[$key][]=$clean;}
         }
         foreach(['service_ids','script_ids','blog_ids','reference_ids']as $key){
             if(!is_array($input[$key]??null)){$data[$key]=[];continue;}
-            $ids=array_filter(array_slice($input[$key],0,24),static fn($id)=>is_scalar($id)&&preg_match($key==='reference_ids'?'/^[a-zA-Z0-9_-]{1,64}$/D':($key==='blog_ids'?'/^-?[1-9][0-9]{0,9}$/D':'/^[1-9][0-9]{0,9}$/D'),(string)$id));
+            $ids=array_filter(array_slice($input[$key],0,$key==='service_ids'?24:120),static fn($id)=>is_scalar($id)&&preg_match($key==='reference_ids'?'/^[a-zA-Z0-9_-]{1,64}$/D':($key==='blog_ids'?'/^-?[1-9][0-9]{0,9}$/D':'/^[1-9][0-9]{0,9}$/D'),(string)$id));
             $data[$key]=array_values(array_map($key==='reference_ids'?'strval':'intval',$ids));
         }
         foreach(['section_order','enabled_sections']as $key)if(is_array($input[$key]??null))$data[$key]=array_values(array_unique(array_filter($input[$key],static fn($v)=>is_string($v)&&isset(self::SECTIONS[$v]))));
@@ -136,7 +137,7 @@ final class RegionalLandingService
     {return Database::getInstance()->fetch("SELECT id FROM pages WHERE status='active' AND content LIKE ? ESCAPE '!' LIMIT 1",[self::pattern()])!==null;}
     public static function fingerprint(array $data):string
     {
-        $text=($data['local_context']??'').' '.implode(' ',array_column($data['sections']??[],'body'));
+        $text=($data['local_context']??'').' '.($data['editorial_body']??'').' '.implode(' ',array_column($data['sections']??[],'body'));
         $places=array_filter([$data['city']??'',$data['province']??'']);usort($places,static fn($a,$b)=>mb_strlen($b)<=>mb_strlen($a));
         foreach($places as $place)$text=preg_replace('~'.preg_quote($place,'~').'~iu','[yer]',$text)??$text;
         return hash('sha256',preg_replace('/\s+/u',' ',mb_strtolower(trim($text))));
