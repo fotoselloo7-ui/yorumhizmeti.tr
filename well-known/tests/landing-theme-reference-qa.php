@@ -196,4 +196,23 @@ $ok(str_contains($themeCss, '[data-component=services][data-variant=bento]') &&
     str_contains($themeCss, '[data-component=services][data-variant=rows]') &&
     str_contains($themeCss, '[data-component=scripts][data-variant=wide-covers]'),
     'Services and software use layout variations rather than only color changes');
+// Regression: the regional builder manages SSS per page in its own tab.
+$ok(str_contains($form, "'faq'=>['help-circle','SSS']") &&
+    str_contains($form, 'data-builder-panel="faq"') &&
+    str_contains($form, 'name="faqs[<?= $i ?>][question]"') &&
+    str_contains($form, 'name="faqs[<?= $i ?>][answer]"'),
+    'Each landing editor exposes an independent FAQ tab with persisted question and answer controls');
+$sharedFields = file_get_contents(BASE_PATH . '/resources/views/admin/landing/content-fields.php');
+$ok(str_contains($sharedFields, 'if($contentHome):') &&
+    str_contains($sharedFields, 'Soru / cevap'),
+    'Home FAQ editing remains available without duplicate regional FAQ inputs');
+$ok(str_contains($themeCss, 'Mobile two-column landing card collections') &&
+    str_contains($themeCss, '[data-component="services"] .nvl-service-grid') &&
+    str_contains($themeCss, '[data-component="scripts"],[data-component="blog"],[data-component="references"]') &&
+    str_contains($themeCss, 'repeat(2, minmax(0,1fr))'),
+    'All regional service, script, reference and blog grids use the two-column mobile layout');
+$layout = file_get_contents(BASE_PATH . '/resources/views/layouts/app.php');
+$ok(str_contains($layout, 'class="nv-footer-about"') &&
+    str_contains($layout, 'NetVera Teknoloji Yazılım; web tasarım'),
+    'Shared NetVera footer contains the visible brand and services description');
 echo "PASS $checks location-image/reference-semantic/sparse-data/no-fabricated-proof checks\n";
