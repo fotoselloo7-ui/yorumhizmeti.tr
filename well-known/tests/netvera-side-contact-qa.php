@@ -14,7 +14,7 @@ $assert(str_contains($layout,'nv-contact-dock__link--whatsapp')&&str_contains($l
 $assert(str_contains($layout,"setting('whatsapp_number')")&&str_contains($layout,"setting('site_phone')"),'Existing contact settings retained');
 $assert(str_contains($layout,"icon('phone',19)")&&!str_contains($layout,"icon('phone-call',19)"),'Phone action renders the registered phone glyph, not a fallback store icon');
 $assert(str_contains($layout,"'social_threads'")&&str_contains($layout,"'social_instagram'")&&str_contains($layout,"'social_youtube'"),'Configured social profile channels included');
-$assert(str_contains($layout,"NetveraBridgeService::publicUrl")&&str_contains($layout,"foreach($nvDockSocial as $nvDockProfile)"),'Only valid nonblank profile links are rendered');
+$assert(str_contains($layout,"NetveraBridgeService::publicUrl")&&str_contains($layout,'foreach($nvDockSocial as $nvDockProfile)'),'Only valid nonblank profile links are rendered');
 $settings=file_get_contents($root.'/resources/views/admin/settings/site.php');
 $assert(str_contains($settings,'name="social_threads"')&&str_contains($settings,'_group_social_threads'),'Threads profile editable from existing admin social settings');
 $assert(str_contains($layout,'data-nv-contact-rail')&&str_contains($js,"nvSideRail.appendChild(nvLandingThemeTools)"),'Landing selector joins contact drawer rail without duplicated controls');
