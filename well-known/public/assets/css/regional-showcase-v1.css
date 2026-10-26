@@ -44,8 +44,8 @@
 }
 .nv-landing .nvl-section.is-nvl-rail .nvl-card-grid{
   display:grid!important;grid-template-columns:none!important;
-  grid-template-rows:repeat(2,minmax(0,300px))!important;
-  grid-auto-columns:clamp(220px,25vw,260px)!important;
+  grid-template-rows:repeat(2,minmax(360px,max-content))!important;
+  grid-auto-columns:var(--nvl-rail-column-width,260px)!important;
   grid-auto-flow:column!important;gap:14px!important;
   align-items:stretch!important;width:max-content;min-width:100%;height:auto;
   padding:0;overflow:visible;
@@ -57,18 +57,18 @@
 }
 .nv-landing .nvl-section.is-nvl-rail .nvl-card-media{
   display:block;flex:0 0 auto;width:100%!important;max-width:100%;
-  height:auto!important;min-height:0!important;aspect-ratio:16/9!important;overflow:hidden;
+  height:clamp(138px,14vw,190px)!important;min-height:0!important;aspect-ratio:auto!important;overflow:hidden;order:0!important;
 }
 .nv-landing .nvl-section.is-nvl-rail .nvl-card-media img{
   display:block;width:100%;height:100%;object-fit:contain!important;object-position:center;transform:none!important;
 }
 .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy{
   display:flex!important;flex-direction:column!important;flex:1;order:1;
-  padding:13px!important;min-width:0;gap:6px;overflow:hidden;
+  padding:13px!important;min-width:0;gap:6px;overflow:visible;
 }
 .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy h3{
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
-  line-height:1.48;font-size:12px;overflow-wrap:anywhere;
+  display:block;overflow:visible;-webkit-line-clamp:unset;
+  line-height:1.52;font-size:12px;overflow-wrap:anywhere;
 }
 .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy p{
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
@@ -136,8 +136,8 @@
   }
   .nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport{width:100%}
   .nv-landing .nvl-section.is-nvl-rail .nvl-card-grid{
-    grid-template-rows:repeat(2,minmax(0,264px))!important;
-    grid-auto-columns:clamp(150px,45vw,230px)!important;gap:10px!important;
+    grid-template-rows:repeat(2,minmax(320px,max-content))!important;
+    grid-auto-columns:var(--nvl-rail-column-width,170px)!important;gap:10px!important;
   }
   .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy{padding:10px!important}
   .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy h3{font-size:11px;line-height:1.45}
@@ -167,5 +167,43 @@
 @media(max-width:800px){
   .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading{
     align-items:flex-start!important;text-align:left!important;
+  }
+}
+
+
+/* v2: NEVER mask a long heading or show duplicated cards. Each real item is unique. */
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card[hidden]{display:none!important}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-copy h3,
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-copy h3 a{
+  display:block!important;white-space:normal!important;
+  overflow:visible!important;max-height:none!important;
+  text-overflow:clip!important;-webkit-line-clamp:unset!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card{
+  min-height:0!important;max-height:none!important;
+  grid-template-columns:none!important;align-items:stretch!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-copy{
+  max-height:none!important;min-height:170px;overflow:visible!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-media{
+  max-height:190px;grid-column:auto!important;grid-row:auto!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-footer{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid{
+  align-content:start!important;
+}
+@media(max-width:800px){
+  .nv-landing .nvl-section.is-nvl-rail .nvl-card-media{
+    height:clamp(108px,25vw,156px)!important;
+    max-height:156px!important;
+  }
+  .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy{
+    min-height:170px;
+  }
+  .nv-landing .nvl-section.is-nvl-rail .nvl-card-copy p{
+    -webkit-line-clamp:3;
   }
 }
