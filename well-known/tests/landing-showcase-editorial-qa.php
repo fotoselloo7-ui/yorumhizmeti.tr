@@ -82,7 +82,7 @@ $css=file_get_contents(PUBLIC_PATH.'/assets/css/regional-showcase-v1.css');
 $js=file_get_contents(PUBLIC_PATH.'/assets/js/regional-showcase-v1.js');
 $editor=file_get_contents(BASE_PATH.'/resources/views/admin/landing/form.php');
 $ok(str_contains($css,'grid-template-rows:repeat(2')&&str_contains($css,'grid-auto-flow:column'),'CSS uses exactly two horizontal rows');
-$ok(str_contains($css,'nvl-section.is-nvl-rail .nvl-section-heading')&&str_contains($css,'align-items:center'),'Side heading is vertically aligned to both rows');
+$ok(str_contains($css,'nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading')&&str_contains($css,'align-items:center'),'Side heading is vertically aligned to both rows');
 $ok(str_contains($js,'landing:themechange')&&str_contains($js,'data-nvl-reference-filter'),'Theme updates and portfolio filters connected');
 $ok(str_contains($js,'prefers-reduced-motion')&&str_contains($js,"'mouseenter'"),'Auto-scrolling respects reduced motion and interaction pause');
 $ok(str_contains($editor,'name="editorial_qa[<?= $i ?>][question]"')&&str_contains($editor,'editorial_body'),'Admin has per-page long story and editable Q&A');
