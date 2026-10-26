@@ -117,7 +117,7 @@
     <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=20261016-mobile-filters">
     <?php if($template==='frontend/categories'): ?>
-    <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261026-service-editorial">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261017-category-heroes">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
@@ -165,9 +165,9 @@
     <?php if($template==='frontend/landing/show'): ?>
     <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
     <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-unified-script-ctas">
-    <link rel="stylesheet" href="<?= asset('css/regional-showcase-v1.css') ?>?v=20261026-two-row-rail">
+    <link rel="stylesheet" href="<?= asset('css/regional-showcase-v1.css') ?>?v=20261026-auto-rail-v2">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
-    <script src="<?= asset('js/regional-showcase-v1.js') ?>?v=20261026-two-row-rail" defer></script>
+    <script src="<?= asset('js/regional-showcase-v1.js') ?>?v=20261026-auto-rail-v2" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
     <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
