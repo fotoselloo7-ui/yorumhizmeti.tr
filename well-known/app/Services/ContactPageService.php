@@ -4,6 +4,9 @@ namespace App\Services;
 /** Contact content and a strict Google-only embed boundary; never render pasted HTML. */
 final class ContactPageService
 {
+    // NetVera's supplied Alanya business embed. Existing saved settings always override.
+    public const DEFAULT_MAP_EMBED = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3207.397587139795!2d32.1572397!3d36.4962636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa8dc4c4e36f0eff1%3A0x32f6fb3719151b2f!2zTmV0dmVyYSBUZWtub2xvamkgWWF6xLFsxLFtIC0gQWxhbnlhIFlhesSxbMSxbSBGaXJtYXPEsQ!5e0!3m2!1str!2str!4v1793039322076!5m2!1str!2str';
+
     public static function defaults(): array
     {
         return [
@@ -12,7 +15,7 @@ final class ContactPageService
             'contact_support_hours'=>'Mesajlarınızı ekibimiz inceler ve uygun iletişim kanalı üzerinden yanıtlar.',
             'contact_map_title'=>'Konum ve ulaşım',
             'contact_map_description'=>'Ziyaret öncesinde bizimle iletişime geçerek görüşmenizi planlayabilirsiniz.',
-            'contact_map_embed'=>'','contact_map_enabled'=>'0',
+            'contact_map_embed'=>self::DEFAULT_MAP_EMBED,'contact_map_enabled'=>'1',
         ];
     }
 
