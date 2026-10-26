@@ -26,7 +26,7 @@ $base['editorial_qa']=[
 $clean=Regional::validate($base);
 $ok($clean['editorial_title']===$base['editorial_title']&&$clean['editorial_body']===$base['editorial_body'],'Per-page guide is preserved in JSON validation');
 $ok(count($clean['editorial_qa'])===2,'Guide Q&A preserved');
-$ok(Regional::validate(Regional::defaults()+$base)['editorial_title']===$base['editorial_title'],'Existing defaults accept authored guide');
+$ok(Regional::validate(array_replace(Regional::defaults(),$base))['editorial_title']===$base['editorial_title'],'Existing defaults accept authored guide');
 $recovered=Regional::editorInput([
     'editorial_title'=>'Test taslak','editorial_body'=>'Kaydedilmemiş uzun metin',
     'editorial_qa'=>[['question'=>'Düzenlenecek?','answer'=>'Evet.']]
