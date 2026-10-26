@@ -148,6 +148,9 @@ jobs:
           QA_ORIGIN: http://127.0.0.1:8006
           QA_LINK_REPORT: qa-artifacts/public-link-integrity.json
 
+      - name: Regional 10-theme carousel real browser interaction and typography QA
+        run: node well-known/tests/regional-slider-browser-qa.mjs
+
       - name: Browser audit and screenshots
         id: audit
         run: node well-known/tests/visual-smoke.mjs
