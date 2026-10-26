@@ -1,186 +1,234 @@
-/* Regional landing vitrines: ONLY original server-rendered cards, no clones or gaps.
-   Slow ping-pong drift, direct manipulation on desktop/touch, and theme-local state. */
+/* Regional-only vitrines.
+   1–4 items: normal compact cards, no animation.
+   5+ items: two rows; auto-loop ONLY when a full column is offscreen.
+   An active loop MOVES original columns: NO card cloning and NO ping-pong. */
 (() => {
   'use strict';
   const host = document.querySelector('[data-landing-theme-host]');
   if (!host) return;
-  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const instances = new Map();
-  const SCROLL_PX_PER_SECOND = 39;
-  const now = () => performance.now();
+  const SPEED = 25; // pixels per second
+  const GAP = 14;
+
   function isSideHeading(section, theme) {
-    return (section.dataset.component === 'scripts' && theme === 'landing-01') ||
-      (section.dataset.component === 'blog' && section.dataset.variant === 'editorial') ||
-      (section.dataset.component === 'references' && theme === 'landing-01');
+    return (section.dataset.component === 'scripts' && theme === 'landing-01')
+      || (section.dataset.component === 'blog' && section.dataset.variant === 'editorial')
+      || (section.dataset.component === 'references' && theme === 'landing-01');
   }
-  function teardown(section) {
-    const s = instances.get(section);
-    if (!s) return;
-    s.destroyed = true;
-    cancelAnimationFrame(s.raf);
-    clearTimeout(s.resizeTimer);
-    s.visibility?.disconnect();
-    s.resize?.disconnect();
-    for (const [element, type, cb, options] of s.listeners) {
-      element.removeEventListener(type, cb, options);
-    }
-    s.viewport.style.removeProperty('scrollSnapType');
-    s.grid.style.removeProperty('--nvl-rail-column-width');
-    s.viewport.classList.remove('is-dragging');
-    s.viewport.removeAttribute('tabindex');
-    s.viewport.removeAttribute('aria-label');
-    section.classList.remove('is-nvl-rail', 'nvl-is-side');
+  function sourceCards(grid) {
+    return [...grid.querySelectorAll('.nvl-card')];
+  }
+  function destroy(section) {
+    const state = instances.get(section);
+    if (!state) return;
+    state.destroyed = true;
+    cancelAnimationFrame(state.frame);
+    clearTimeout(state.resizeTimer);
+    state.resize?.disconnect();
+    state.observer?.disconnect();
+    state.listeners.forEach(([node, type, handler, options]) =>
+      node.removeEventListener(type, handler, options));
+    if (state.pauseButton) state.pauseButton.remove();
+    // Restore exact original document order, including hidden filtered cards.
+    state.grid.replaceChildren(...state.original);
+    state.grid.style.removeProperty('--nvl-rail-card-width');
+    state.viewport.removeAttribute('aria-label');
+    state.viewport.removeAttribute('tabindex');
+    state.viewport.scrollLeft = 0;
+    section.classList.remove('is-nvl-rail','is-nvl-static','is-nvl-loop','nvl-is-side');
     instances.delete(section);
   }
   function init(section, theme) {
-    teardown(section);
-    if (!['references', 'scripts', 'blog'].includes(section.dataset.component)) return;
-    const viewport = section.querySelector('[data-nvl-rail-viewport]');
-    const grid = section.querySelector('[data-nvl-grid]');
-    if (!viewport || !grid) return;
-    // Remove the obsolete duplicate cards if an older script left them behind.
-    grid.querySelectorAll('[data-nvl-rail-clone],[data-nvl-rail-spacer]').forEach(el => el.remove());
-    const cards = [...grid.children].filter(el => el.classList.contains('nvl-card') && !el.hidden);
-    if (!cards.length) return;
-    section.classList.add('is-nvl-rail');
-    section.classList.toggle('nvl-is-side', isSideHeading(section, theme));
-    viewport.tabIndex = 0;
-    viewport.setAttribute('aria-label', 'Kayan kartlar. Masaüstünde fareyle sürükleyin veya ok tuşlarını kullanın; telefonda parmakla kaydırın.');
-    viewport.style.scrollSnapType = 'none';
-    const s = {
-      viewport, grid, section, destroyed:false, listeners:[], raf:0,
-      resizeTimer:0, dragging:false, moved:false, pointer:null,
-      startX:0, startScroll:0, lastTime:0, dir:1,
-      holdUntil:now()+1200, focused:false, visible:true, max:0
+    destroy(section);
+    const type=section.dataset.component;
+    if (!['scripts','blog','references'].includes(type)) return;
+    const viewport=section.querySelector('[data-nvl-rail-viewport]');
+    const grid=section.querySelector('[data-nvl-grid]');
+    if (!viewport||!grid) return;
+    grid.querySelectorAll('[data-nvl-rail-clone],[data-nvl-rail-spacer]').forEach(n=>n.remove());
+    const original=sourceCards(grid);
+    const shown=original.filter(n=>!n.hidden);
+    if (!shown.length) return;
+    const state={
+      section,viewport,grid,original,shown,destroyed:false,frame:0,
+      listeners:[],resizeTimer:0,resize:null,observer:null,visible:true,
+      manualPause:false,hover:false,focus:false,dragging:false,
+      dragged:false,suppressClick:false,startX:0,startScroll:0,
+      pointerId:null,pauseUntil:performance.now()+450,last:0,
+      loop:false,step:0,button:null
     };
-    instances.set(section,s);
-    const listen=(element,type,cb,options)=>{
-      element.addEventListener(type,cb,options);
-      s.listeners.push([element,type,cb,options]);
+    instances.set(section,state);
+    const on=(element,event,fn,options)=>{
+      element.addEventListener(event,fn,options);
+      state.listeners.push([element,event,fn,options]);
     };
-    function measure() {
-      if (s.destroyed) return;
-      const count=[...grid.children].filter(card=>card.classList.contains('nvl-card')&&!card.hidden).length;
-      if(!count)return;
-      const columns=Math.ceil(count/2);
-      // For short selections keep two real rows, but make them slightly wider
-      // than their viewport so automatic scrolling remains meaningful.
-      const visibleWidth=viewport.clientWidth||section.clientWidth||300;
-      const share=columns===1?1:columns===2?.63:(columns===3?.44:columns===4?.39:.34);
-      const cell=Math.round(Math.max(visibleWidth<=600?165:235, visibleWidth*share));
-      grid.style.setProperty('--nvl-rail-column-width',cell+'px');
-      s.max=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
-      if(viewport.scrollLeft>s.max)viewport.scrollLeft=s.max;
-      if(s.max===0)s.dir=1;
+    section.classList.toggle('nvl-is-side',isSideHeading(section,theme));
+    const compact=shown.length<=4;
+    section.classList.add(compact?'is-nvl-static':'is-nvl-rail');
+    viewport.tabIndex=0;
+    viewport.setAttribute('aria-label','Kartları yatay kaydırın. Masaüstünde fareyle sürükleyebilir, telefonda parmağınızla gezebilirsiniz.');
+
+    function resetLayout() {
+      if(state.destroyed || state.dragging) return;
+      state.grid.replaceChildren(...state.original);
+      state.grid.style.removeProperty('--nvl-rail-card-width');
+      state.section.classList.remove('is-nvl-loop');
+      state.loop=false;
+      state.step=0;
+      state.viewport.scrollLeft=0;
+      const visible=state.original.filter(n=>!n.hidden);
+      if(state.pauseButton){state.pauseButton.remove();state.pauseButton=null;}
+      if(visible.length<=4) return;
+      // Width comes from CSS clamp, never from viewport/card count.
+      const measured=state.grid.scrollWidth-state.viewport.clientWidth;
+      const colWidth=visible[0].getBoundingClientRect().width;
+      state.step=colWidth+GAP;
+      if(reduceMotion.matches || measured<state.step-3 || visible.length<6) return;
+      // Two original cards per column; moving whole columns after leaving view
+      // preserves the visual sequence without ever repeating records.
+      const columns=[];
+      for(let i=0;i<visible.length;i+=2){
+        const column=document.createElement('div');
+        column.className='nvl-rail-column';
+        column.append(...visible.slice(i,i+2));
+        columns.push(column);
+      }
+      state.grid.append(...columns);
+      state.section.classList.add('is-nvl-loop');
+      state.step=columns[0].getBoundingClientRect().width+GAP;
+      state.loop=true;
+      if(!state.manualPause){
+        const button=document.createElement('button');
+        button.type='button';
+        button.className='nvl-rail-pause';
+        button.textContent='Durdur';
+        button.setAttribute('aria-label','Otomatik kart akışını durdur');
+        button.setAttribute('aria-pressed','false');
+        state.pauseButton=button;
+        viewport.insertAdjacentElement('afterend',button);
+        on(button,'click',()=>{
+          state.manualPause=!state.manualPause;
+          button.textContent=state.manualPause?'Oynat':'Durdur';
+          button.setAttribute('aria-label',state.manualPause?'Otomatik kart akışını başlat':'Otomatik kart akışını durdur');
+          button.setAttribute('aria-pressed',String(state.manualPause));
+          state.pauseUntil=performance.now()+500;
+        });
+      }
     }
-    const postpone=ms=>{s.holdUntil=now()+ms;s.lastTime=0;};
-    function releasePointer(event) {
-      if(!s.dragging)return;
-      if(s.pointer!==null && event.pointerId!==s.pointer)return;
-      s.dragging=false;
-      s.pointer=null;
-      viewport.classList.remove('is-dragging');
-      if(s.moved){
-        postpone(1700);
-        // A post-drag click on a link must not navigate accidentally.
-        s.suppressClick=true;
-        setTimeout(()=>{if(!s.destroyed)s.suppressClick=false;},180);
-      } else postpone(600);
-    }
-    listen(viewport,'pointerdown',event=>{
+
+    on(viewport,'mouseenter',()=>state.hover=true);
+    on(viewport,'mouseleave',()=>state.hover=false);
+    on(viewport,'focusin',()=>{state.focus=true;state.manualPause=true;if(state.pauseButton){state.pauseButton.textContent='Oynat';state.pauseButton.setAttribute('aria-pressed','true');}});
+    on(viewport,'focusout',event=>{if(!viewport.contains(event.relatedTarget))state.focus=false;});
+    on(viewport,'touchstart',()=>state.pauseUntil=Infinity,{passive:true});
+    on(viewport,'touchend',()=>state.pauseUntil=performance.now()+1600,{passive:true});
+    on(viewport,'touchcancel',()=>state.pauseUntil=performance.now()+500,{passive:true});
+    on(viewport,'wheel',()=>state.pauseUntil=performance.now()+1300,{passive:true});
+    on(viewport,'pointerdown',event=>{
       if(event.pointerType==='touch'||event.button!==0||event.target.closest('button'))return;
-      s.dragging=true;s.moved=false;s.pointer=event.pointerId;
-      s.startX=event.clientX;s.startScroll=viewport.scrollLeft;
-      s.holdUntil=Infinity;
+      state.dragging=true;state.dragged=false;state.startX=event.clientX;
+      state.startScroll=viewport.scrollLeft;state.pointerId=event.pointerId;
+      state.pauseUntil=Infinity;
     });
-    listen(viewport,'pointermove',event=>{
-      if(!s.dragging||event.pointerId!==s.pointer)return;
-      const dx=event.clientX-s.startX;
-      if(Math.abs(dx)>5&&!s.moved){
-        s.moved=true;viewport.classList.add('is-dragging');
+    on(viewport,'pointermove',event=>{
+      if(!state.dragging||event.pointerId!==state.pointerId)return;
+      const dx=event.clientX-state.startX;
+      if(Math.abs(dx)>5&&!state.dragged){
+        state.dragged=true;
+        viewport.classList.add('is-dragging');
         try{viewport.setPointerCapture(event.pointerId);}catch(_){}
       }
-      if(s.moved){
+      if(state.dragged){
         event.preventDefault();
-        viewport.scrollLeft=Math.max(0,Math.min(s.max,s.startScroll-dx));
-        s.dir=dx>0?-1:1;
+        viewport.scrollLeft=Math.max(0,state.startScroll-dx);
       }
     });
-    listen(viewport,'pointerup',releasePointer);
-    listen(viewport,'pointercancel',releasePointer);
-    listen(viewport,'lostpointercapture',releasePointer);
-    listen(viewport,'click',event=>{
-      if(!s.suppressClick)return;
+    const endDrag=event=>{
+      if(!state.dragging||event.pointerId!==state.pointerId)return;
+      state.dragging=false;state.pointerId=null;
+      viewport.classList.remove('is-dragging');
+      state.pauseUntil=performance.now()+1500;
+      if(state.dragged){
+        state.suppressClick=true;
+        setTimeout(()=>{if(!state.destroyed)state.suppressClick=false;},180);
+      }
+    };
+    on(viewport,'pointerup',endDrag);
+    on(viewport,'pointercancel',endDrag);
+    on(viewport,'lostpointercapture',endDrag);
+    on(viewport,'click',event=>{
+      if(!state.suppressClick)return;
       event.preventDefault();event.stopImmediatePropagation();
-      s.suppressClick=false;
+      state.suppressClick=false;
     },true);
-    listen(viewport,'touchstart',()=>{s.holdUntil=Infinity;},{passive:true});
-    listen(viewport,'touchend',()=>postpone(1600),{passive:true});
-    listen(viewport,'touchcancel',()=>postpone(800),{passive:true});
-    listen(viewport,'wheel',()=>postpone(1100),{passive:true});
-    listen(viewport,'focusin',()=>{s.focused=true;});
-    listen(viewport,'focusout',event=>{
-      if(!viewport.contains(event.relatedTarget)){s.focused=false;postpone(700);}
-    });
-    listen(viewport,'keydown',event=>{
-      if(event.key==='ArrowRight'||event.key==='ArrowLeft')postpone(1400);
-    });
-    listen(motion,'change',()=>{postpone(500);s.lastTime=0;});
-    s.visibility=new IntersectionObserver(entries=>{
-      s.visible=!!entries[0]?.isIntersecting;s.lastTime=0;
+    on(reduceMotion,'change',()=>{state.manualPause=reduceMotion.matches;resetLayout();});
+    state.observer=new IntersectionObserver(entries=>{
+      state.visible=!!entries[0]?.isIntersecting;state.last=0;
     },{threshold:0.01});
-    s.visibility.observe(viewport);
-    s.resize=new ResizeObserver(()=>{
-      clearTimeout(s.resizeTimer);
-      s.resizeTimer=setTimeout(()=>{if(!s.destroyed){measure();s.lastTime=0;}},200);
+    state.observer.observe(viewport);
+    state.resize=new ResizeObserver(()=>{
+      clearTimeout(state.resizeTimer);
+      state.resizeTimer=setTimeout(()=>{resetLayout();state.last=0;},250);
     });
-    s.resize.observe(viewport);
-    measure();
-    function tick(t) {
-      if(s.destroyed)return;
-      const dt=s.lastTime?Math.min(64,t-s.lastTime):0;
-      s.lastTime=t;
-      if(s.max>1&&!motion.matches&&!s.dragging&&!s.focused&&s.visible&&!document.hidden&&t>s.holdUntil){
-        let next=viewport.scrollLeft+s.dir*dt*SCROLL_PX_PER_SECOND/1000;
-        if(next>=s.max){next=s.max;s.dir=-1;s.holdUntil=t+500;}
-        else if(next<=0){next=0;s.dir=1;s.holdUntil=t+500;}
-        viewport.scrollLeft=next;
+    state.resize.observe(viewport);
+    resetLayout();
+
+    function tick(time){
+      if(state.destroyed)return;
+      const elapsed=state.last?Math.min(70,time-state.last):0;
+      state.last=time;
+      if(state.loop && !reduceMotion.matches && !state.manualPause &&
+         !state.hover && !state.focus && !state.dragging &&
+         state.visible && !document.hidden && time>state.pauseUntil){
+        viewport.scrollLeft+=elapsed*SPEED/1000;
+        // Entire leading column has left the screen; rotate ORIGINAL nodes.
+        if(viewport.scrollLeft>=state.step){
+          const front=grid.firstElementChild;
+          if(front){
+            grid.appendChild(front);
+            viewport.scrollLeft-=state.step;
+          }
+        }
       }
-      s.raf=requestAnimationFrame(tick);
+      state.frame=requestAnimationFrame(tick);
     }
-    s.raf=requestAnimationFrame(tick);
+    state.frame=requestAnimationFrame(tick);
   }
-  function filter(section, group) {
+  function filter(section,value){
+    // First restore original card elements from an existing loop.
+    destroy(section);
     const grid=section.querySelector('[data-nvl-grid]');
     if(!grid)return;
-    let total=0;
+    let count=0;
     grid.querySelectorAll(':scope > .nvl-card').forEach(card=>{
-      const groups=(card.dataset.nvlGroups||'').trim().split(/\s+/);
-      card.hidden=group!=='all'&&!groups.includes(group);
-      if(!card.hidden)total++;
+      const included=value==='all'||(card.dataset.nvlGroups||'').trim().split(/\s+/).includes(value);
+      card.hidden=!included;if(included)count++;
     });
-    section.querySelectorAll('[data-nvl-reference-filter]').forEach(btn=>{
-      const selected=btn.dataset.nvlReferenceFilter===group;
-      btn.classList.toggle('is-active',selected);
-      btn.setAttribute('aria-pressed',String(selected));
+    section.querySelectorAll('[data-nvl-reference-filter]').forEach(button=>{
+      const selected=button.dataset.nvlReferenceFilter===value;
+      button.classList.toggle('is-active',selected);
+      button.setAttribute('aria-pressed',String(selected));
     });
-    const result=section.querySelector('[data-nvl-reference-count]');
-    if(result)result.textContent=total+' çalışma';
+    const label=section.querySelector('[data-nvl-reference-count]');
+    if(label)label.textContent=count+' çalışma';
     init(section,host.querySelector('main.nv-landing')?.dataset.theme||'');
   }
-  function refresh() {
+  function refresh(){
     const main=host.querySelector('main.nv-landing');
-    for(const section of instances.keys())if(!main?.contains(section))teardown(section);
+    for(const node of instances.keys())if(!main?.contains(node))destroy(node);
     if(!main)return;
     main.querySelectorAll('section[data-component]').forEach(section=>{
-      if(['references','scripts','blog'].includes(section.dataset.component))init(section,main.dataset.theme);
+      if(['scripts','blog','references'].includes(section.dataset.component)){
+        init(section,main.dataset.theme);
+      }
     });
   }
   host.addEventListener('click',event=>{
-    const btn=event.target.closest('[data-nvl-reference-filter]');
-    if(!btn||!host.contains(btn))return;
-    const section=btn.closest('section[data-component="references"]');
-    if(section)filter(section,btn.dataset.nvlReferenceFilter);
+    const button=event.target.closest('[data-nvl-reference-filter]');
+    if(!button||!host.contains(button))return;
+    const section=button.closest('section[data-component="references"]');
+    if(section)filter(section,button.dataset.nvlReferenceFilter);
   });
   host.addEventListener('landing:themechange',()=>requestAnimationFrame(refresh));
   refresh();
