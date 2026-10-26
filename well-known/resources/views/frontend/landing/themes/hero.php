@@ -11,5 +11,5 @@ $heroCopy=static function()use($d,$heroTitle):void{ ?><div class="nvl-hero-copy"
 <?php if(!empty($d['location_image'])): ?><div class="nvl-city-backdrop" aria-hidden="true"><img src="<?= e($d['location_image']) ?>" alt="" width="1600" height="900" fetchpriority="high"></div><?php endif; ?>
 <div class="nvl-container"><nav class="nvl-breadcrumb" aria-label="Konum"><a href="/">Ana Sayfa</a><span>/</span><a href="/hizmet-bolgeleri">Hizmet Bölgeleri</a><span>/</span><span><?= e($d['city']) ?></span></nav>
 <div class="nvl-stage"><?php $heroCopy(); ?></div>
-<dl class="nvl-facts"><div><dt><?= icon('map-pin',17) ?> Hizmet bölgesi</dt><dd><?= e($d['area']?:trim($d['city'].', '.$d['province'],', ')) ?></dd></div><div><dt><?= icon('monitor',17) ?> Çalışma biçimi</dt><dd><?= e($mode) ?></dd></div><div><dt><?= icon('message-circle',17) ?> İlk adım</dt><dd>İhtiyaç ve kapsam görüşmesi</dd></div></dl>
+
 </div></section>
