@@ -7,6 +7,7 @@ use App\Services\ContactPageService as Contact;
 $n=0;$ok=static function($value,$why)use(&$n){if(!$value)throw new RuntimeException($why);$n++;};
 $url='https://www.google.com/maps/embed?pb=!1m2!1m1!1sSynthetic';
 $ok(Contact::mapUrl($url)===$url,'Shared embed URL');
+$ok(Contact::defaults()['contact_map_enabled']==='1' && Contact::mapUrl(Contact::defaults()['contact_map_embed'])===Contact::DEFAULT_MAP_EMBED, 'User-supplied NetVera Alanya map is a valid enabled default');
 $ok(Contact::mapUrl('<iframe src="'.$url.'" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>')===$url,'Real Google copied iframe');
 $ok(Contact::mapUrl('<iframe onload="alert(1)" src="'.$url.'"></iframe>')===$url,'Only src is retained, event stripped');
 $ok(Contact::mapUrl('https://maps.google.com/maps?q=Alanya&output=embed')!=='','Legacy embedded map');
@@ -23,7 +24,7 @@ foreach(['contact_heading'=>'','site_email'=>'invalid','whatsapp_number'=>'https
     try{Contact::validate(array_replace($data,[$key=>$value]));throw new RuntimeException('Bad setting accepted');}catch(InvalidArgumentException $e){$n++;}
 }
 $view=file_get_contents(BASE_PATH.'/resources/views/frontend/contact.php');
-foreach(['csrfField()','privacy_consent','website_url','contact-name','contact-message','data-load-contact-map','referrerpolicy="strict-origin-when-cross-origin"','allowfullscreen hidden']as $token)$ok(str_contains($view,$token),'Contact behavior '.$token);
+foreach(['csrfField()','privacy_consent','website_url','contact-name','contact-message','data-contact-map','id="contact-map-frame"','src="<?= e($contact[\'map_url\']) ?>"','loading="lazy"','referrerpolicy="strict-origin-when-cross-origin"','allowfullscreen']as $token)$ok(str_contains($view,$token),'Contact behavior '.$token);
 $ok(!str_contains($view,'yv-contact-grid')&&!str_contains($view,'support-woman-cutout'),'Retired layout no longer owns contact');
 $css=file_get_contents(BASE_PATH.'/public/assets/css/contact-page.css');$ok(!str_contains($css,'!important'),'No override pile');
 $ok(str_contains($css,'prefers-reduced-motion')&&str_contains($css,'font-size:16px'),'Motion and mobile input support');
