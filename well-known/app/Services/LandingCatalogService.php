@@ -46,10 +46,20 @@ final class LandingCatalogService
         if($items!==null)return $items;
         $items=[];
         foreach(NetveraBridgeService::all() as $row){
+            // Reuse the product detail page's strict public/active demo gate.
+            // Never expose draft demos, administrative credentials or private access URLs.
+            $publicData=NetveraBridgeService::jsonFields($row);
+            $demoUrl=null;
+            if ((int)($publicData['demo_is_active']??0)===1 &&
+                (int)($publicData['demo_is_public']??0)===1) {
+                $demoUrl=NetveraBridgeService::publicUrl($publicData['demo_url']??null);
+            }
             $items[]=['id'=>(int)$row['legacy_id'],'title'=>(string)$row['name'],
                 'slug'=>(string)$row['slug'],'description'=>(string)($row['short_desc']??''),
                 'image'=>self::image((string)($row['cover_image']??'')),
-                'category'=>(string)($row['category_name']??''),'url'=>'/hazir-scriptler/'.rawurlencode($row['slug'])];
+                'category'=>(string)($row['category_name']??''),
+                'url'=>'/hazir-scriptler/'.rawurlencode($row['slug']),
+                'demo_url'=>$demoUrl];
         }
         return $items;
     }
