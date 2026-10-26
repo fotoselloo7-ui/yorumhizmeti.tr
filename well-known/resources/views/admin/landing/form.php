@@ -10,7 +10,7 @@ $editorField=static function(string $label,string $name,string $value,int $max=1
     else echo '<input class="form-control" id="'.$id.'" name="'.e($name).'" maxlength="'.$max.'" value="'.e($value).'">';
     echo '</div>';
 };
-$builderTabs=['basic'=>['file-text','Genel bilgiler'],'visual'=>['image','Görünüm & düzen'],'body'=>['file-text','Sayfa içeriği'],'services'=>['layers','Hizmetler'],'scripts'=>['code','Hazır yazılımlar'],'blog'=>['file-text','Blog yazıları'],'references'=>['image','Referanslar'],'faq'=>['help-circle','SSS'],'seo'=>['search','SEO & yayın']];
+$builderTabs=['basic'=>['file-text','Genel bilgiler'],'visual'=>['image','Görünüm & düzen'],'body'=>['file-text','Sayfa içeriği'],'services'=>['layers','Hizmetler'],'scripts'=>['code','Hazır yazılımlar'],'blog'=>['file-text','Blog yazıları'],'references'=>['image','Referanslar'],'faq'=>['help-circle','SSS'],'editorial'=>['book-open','Yerel rehber / AIO'],'seo'=>['search','SEO & yayın']];
 ?>
 <div class="landing-editor regional-editor">
 <form method="post" action="/admin/konumsal-sayfalar/kaydet" enctype="multipart/form-data" data-landing-editor data-region-builder>
@@ -66,6 +66,31 @@ $builderTabs=['basic'=>['file-text','Genel bilgiler'],'visual'=>['image','Görü
                 </details>
                 <?php endfor; ?>
             </div>
+        </div></div>
+    </section>
+    <section class="region-editor-panel" id="landing-editorial" data-builder-panel="editorial" aria-labelledby="builder-tab-editorial">
+        <header><span>ŞEHRE VE HİZMETE ÖZEL UZUN İÇERİK</span>
+            <h2>Yerel uzmanlık rehberi ve anlaşılır yanıtlar</h2>
+            <p>Yalnız bu landing sayfasında görünür. NetVera'nın gerçek hizmet yaklaşımını, kapsamını, kullanım senaryolarını, çalışma sürecini ve özgün bölgesel ayrıntıları anlatın.
+            Sadece şehir adını değiştirerek sayfa çoğaltmayın; doğrulanmamış istatistik veya ofis iddiaları kullanmayın.</p>
+        </header>
+        <div class="adm-card"><div class="adm-card-body">
+            <?php $editorField('Uzun içerik başlığı (H2)','editorial_title',$d['editorial_title']??'',200); ?>
+            <?php $editorField('Kısa giriş / doğrudan yanıt','editorial_lead',$d['editorial_lead']??'',650,4); ?>
+            <?php $editorField('Detaylı şehir ve hizmet anlatımı (paragraflar, 16.000 karakter)','editorial_body',$d['editorial_body']??'',16000,15); ?>
+            <p class="landing-editor-help">İki boş satırla yeni paragraf açın; [hizmetlerimizi keşfedin](/kategoriler) şeklinde güvenli site içi bağlantılar ekleyebilirsiniz.
+                İçerik tüm tema seçeneklerinde aynı kalır, tasarımı seçilen tema belirler. Yalnız dolu alanlar gösterilir.</p>
+            <h3>Soru–cevap anlatımı</h3>
+            <p class="landing-editor-help">İsteğe bağlı en fazla 10 gerçek soru/yanıt ekleyin. Sayfanın ana SSS modülü ayrı çalışmaya devam eder; burada girilen sorular uzun rehberin içinde gösterilir.</p>
+            <?php for($i=0;$i<10;$i++): $faq=$d['editorial_qa'][$i]??[]; ?>
+            <details class="landing-editor-details" <?= $i===0?'open':'' ?>>
+                <summary><?= icon('help-circle',16) ?> Rehber sorusu <?= $i+1 ?><?= !empty($faq['question'])?' — '.e($faq['question']):'' ?></summary>
+                <div class="landing-editor-fields">
+                    <div class="form-group"><label for="editorial-question-<?= $i ?>">Soru</label><input id="editorial-question-<?= $i ?>" name="editorial_qa[<?= $i ?>][question]" class="form-control" maxlength="240" value="<?= e($faq['question']??'') ?>"></div>
+                    <div class="form-group"><label for="editorial-answer-<?= $i ?>">Yanıt</label><textarea id="editorial-answer-<?= $i ?>" name="editorial_qa[<?= $i ?>][answer]" class="form-control" maxlength="1800" rows="4"><?= e($faq['answer']??'') ?></textarea></div>
+                </div>
+            </details>
+            <?php endfor; ?>
         </div></div>
     </section>
     <section class="region-editor-panel" id="landing-seo" data-builder-panel="seo" aria-labelledby="builder-tab-seo"><header><span>SON ADIM / YAYIN</span><h2>Kontrol edin, sonra yayınlayın.</h2><p>SEO alanları, indeksleme ve yayın durumu birbirinden bağımsızdır.</p></header><div class="adm-card"><div class="adm-card-body"><div class="landing-editor-grid"><?php foreach(['status'=>['Sayfa durumu',['inactive'=>'Taslak / yayında değil','active'=>'Yayında']],'working_mode'=>['Çalışma biçimi',['remote'=>'Uzaktan / çevrim içi','hybrid'=>'Uzaktan ve planlı görüşme','onsite'=>'Planlı yerinde çalışma']]]as $key=>[$label,$options]): ?><div class="form-group"><label for="landing-<?= $key ?>"><?= $label ?></label><select id="landing-<?= $key ?>" class="form-control" name="<?= $key ?>"><?php foreach($options as $value=>$text): ?><option value="<?= $value ?>" <?= $d[$key]===$value?'selected':'' ?>><?= $text ?></option><?php endforeach; ?></select></div><?php endforeach; ?></div>
