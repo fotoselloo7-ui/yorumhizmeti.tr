@@ -179,6 +179,15 @@
       if(state.destroyed)return;
       const elapsed=state.last?Math.min(70,time-state.last):0;
       state.last=time;
+      if(window.__nvRegionalTestMode){
+        section.dataset.nvlDebug=JSON.stringify({
+          loop:state.loop,reduce:reduceMotion.matches,manual:state.manualPause,
+          hover:state.hover,focus:state.focus,drag:state.dragging,
+          visible:state.visible,hidden:document.hidden,
+          pauseRemaining:Math.round(state.pauseUntil-time),
+          step:state.step,left:Math.round(viewport.scrollLeft),elapsed:Math.round(elapsed)
+        });
+      }
       if(state.loop && !reduceMotion.matches && !state.manualPause &&
          !state.hover && !state.focus && !state.dragging &&
          state.visible && !document.hidden && time>state.pauseUntil){
