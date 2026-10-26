@@ -93,11 +93,14 @@
 .nv-landing[data-theme=landing-04] .nvl-hero{background:radial-gradient(ellipse at 85% 30%,#6542bf99,transparent 65%),linear-gradient(120deg,#091b36,#15245c)}.nv-landing[data-theme=landing-04] .nvl-city-backdrop{opacity:.52}
 .nv-landing[data-theme=landing-04] :is(.nvl-section-overview,.nvl-section-services,.nvl-section-scripts){background:#0d1c38;color:#fff}.nv-landing[data-theme=landing-04] .nvl-section-overview :is(.nvl-prose,.nvl-disclosure),.nv-landing[data-theme=landing-04] .nvl-section-services .nvl-section-heading p{color:#bfcce5}.nv-landing [data-component=services][data-variant=glass] .nvl-service-card{background:linear-gradient(135deg,#172b4b,#292456);border-color:#56639d70}.nv-landing [data-component=services][data-variant=glass] .nvl-service-card p{color:#c8d5ed}.nv-landing [data-component=services][data-variant=glass] .nvl-service-card>strong{color:#c4b1ff}
 .nv-landing[data-theme=landing-04] .nvl-section-scripts .nvl-card{background:#17294a;border-color:#4c5e8c}.nv-landing[data-theme=landing-04] .nvl-section-scripts .nvl-card-copy p{color:#c6d3ea}.nv-landing[data-theme=landing-04] .nvl-section-scripts :is(.nvl-card-tags>small,.nvl-card-link){color:#bfaaff}
-/* 05: sage/cream editorial, precise dividers{display:flex;justify-content:space-between;gap:20px;padding:4px 0 12px;border-bottom:1px solid var(--nvl-border);font-size:9px;letter-spacing:.7px;color:var(--nvl-muted)}.nv-landing[data-theme=landing-05] .nvl-button{border-radius:5px}.nv-landing[data-theme=landing-05] .nvl-section-services{background:var(--nvl-surface)}
-/* 06: reversed local-service image{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}.nv-landing[data-theme=landing-06] .nvl-section-overview{background:linear-gradient(120deg,#f0f8f3,#fff)}
+/* 05: sage/cream editorial with precise dividers. */
+.nv-landing[data-theme=landing-05] .nvl-section-heading{display:flex;justify-content:space-between;gap:20px;padding:4px 0 12px;border-bottom:1px solid var(--nvl-border);font-size:9px;letter-spacing:.7px;color:var(--nvl-muted)}.nv-landing[data-theme=landing-05] .nvl-button{border-radius:5px}.nv-landing[data-theme=landing-05] .nvl-section-services{background:var(--nvl-surface)}
+/* 06: reversed local-service image. */
+.nv-landing[data-theme=landing-06] .nvl-overview{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}.nv-landing[data-theme=landing-06] .nvl-section-overview{background:linear-gradient(120deg,#f0f8f3,#fff)}
 /* 07: navy/orange conversion; the source illustration is not rotated or clipped. */
 .nv-landing[data-theme=landing-07] .nvl-hero{background:radial-gradient(ellipse at 100% 15%,#f06b0633,transparent 55%),#0b223b;border-bottom:4px solid var(--nvl-brand)}.nv-landing[data-theme=landing-07] .nvl-city-backdrop{opacity:.58}.nv-landing[data-theme=landing-07] .nvl-section-scripts{background:linear-gradient(175deg,#f1f7ff 88%,#112945 88.2%)}.nv-landing[data-theme=landing-07] .nvl-section-scripts .nvl-card{border-radius:15px}
-/* 08: compact split SaaS window{min-width:0;border:1px solid #d9e0eb;border-radius:12px;overflow:hidden;box-shadow:0 22px 52px #1e2c4c18}.nv-landing[data-theme=landing-08] .nvl-navigation{justify-content:center}
+/* 08: compact split SaaS window. */
+.nv-landing[data-theme=landing-08] .nvl-overview-media{min-width:0;border:1px solid #d9e0eb;border-radius:12px;overflow:hidden;box-shadow:0 22px 52px #1e2c4c18}.nv-landing[data-theme=landing-08] .nvl-navigation{justify-content:center}
 /* 09: blue/prism, luminous artwork, inset bento and translucent facts. */
 .nv-landing[data-theme=landing-09] .nvl-hero{background:radial-gradient(ellipse at 100% 100%,#672de4,transparent 62%),linear-gradient(135deg,#123a93,#24205f)}.nv-landing[data-theme=landing-09] .nvl-city-backdrop{opacity:.4}.nv-landing[data-theme=landing-09] .nvl-facts{padding:20px 24px;border-radius:14px;background:#ffffff12;border:1px solid #ffffff2e;margin-bottom:20px}.nv-landing[data-theme=landing-09] .nvl-section-overview>.nvl-container{background:linear-gradient(120deg,#f0edff,#f8fbff);padding:32px;border-radius:20px}
 /* 10: dimensional navy/white with uncropped art and restrained layered accents. */
@@ -125,6 +128,157 @@
 .nv-landing[data-theme=landing-03] .nvl-overview-illustrated{grid-template-columns:minmax(0,1fr)}
 .nv-landing[data-theme=landing-03] .nvl-overview-media{order:0}
 }
+
+/* Reference-matched layout geometry. Intentionally NO invented data, partner badges,
+   preset hero illustration, layout-global overrides or hardcoded city images.
+   An image uploaded for this page owns the visual side of every hero. */
+.nv-landing .nvl-hero-copy{max-width:640px}
+.nv-landing .nvl-hero-description{max-width:520px}
+.nv-landing .nvl-city-backdrop img{object-position:center center}
+.nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop{background:var(--nvl-soft)}
+.nv-landing .nvl-card-visual-link:focus-visible,.nv-landing .nvl-service-card:focus-visible{outline:3px solid var(--nvl-brand);outline-offset:3px}
+.nv-landing .nvl-service-card,.nv-landing .nvl-card{min-height:0}
+.nv-landing [data-component=services][data-variant=glass] .nvl-service-card{color:#f8f9ff}
+.nv-landing [data-component=services][data-variant=glass] .nvl-service-card h3{color:#f8f9ff}
+.nv-landing [data-component=services][data-variant=glass] .nvl-service-icon{background:#ffffff1c;color:#c4b7ff}
+.nv-landing [data-component=services][data-variant=glass] .nvl-service-card:hover{background:#283d68}
+
+/* 01 — bright corporate / photo framed independently from the headline. */
+.nv-landing[data-theme=landing-01] .nvl-section-services{background:#f7faff}
+.nv-landing[data-theme=landing-01] .nvl-service-card{border-radius:15px;box-shadow:0 10px 28px #1b5ac50b}
+.nv-landing[data-theme=landing-01] .nvl-section-scripts .nvl-card{border-radius:14px}
+
+/* 02 — cinematic night / floating sheet, dark editorial process. */
+.nv-landing[data-theme=landing-02] .nvl-section-services{background:#f5f3ff}
+.nv-landing[data-theme=landing-02] [data-component=services] .nvl-service-card{border-top:3px solid #8660ff;border-radius:12px}
+.nv-landing[data-theme=landing-02] .nvl-section-scripts{background:#fff}
+.nv-landing[data-theme=landing-02] .nvl-section-blog{background:#f7f7fe}
+
+/* 03 — green route / photo-led green overview and white services. */
+.nv-landing[data-theme=landing-03] .nvl-section-services{background:#fff}
+.nv-landing[data-theme=landing-03] .nvl-overview-media{border:3px solid #ffffffa0;box-shadow:0 20px 48px #002a1e36}
+.nv-landing[data-theme=landing-03] [data-component=services] .nvl-service-icon{background:#e5f7ec}
+.nv-landing[data-theme=landing-03] .nvl-section-blog{background:#f1f9f4}
+
+/* 04 — glass studio / dark upper body with transparent, readable cards. */
+.nv-landing[data-theme=landing-04] .nvl-section-overview .nvl-eyebrow{color:#aebdff}
+.nv-landing[data-theme=landing-04] .nvl-section-services .nvl-section-heading>a,
+.nv-landing[data-theme=landing-04] .nvl-section-scripts .nvl-section-heading>a{color:#cdc3ff}
+.nv-landing[data-theme=landing-04] .nvl-overview-media{border:1px solid #8498e266;box-shadow:0 18px 42px #0005}
+.nv-landing[data-theme=landing-04] .nvl-section-scripts .nvl-card-copy h3{color:#fff}
+.nv-landing[data-theme=landing-04] .nvl-section-scripts .nvl-card-tags{color:#c2b8ff}
+
+/* 05 — editorial: muted ivory, clear dividers, less ornamental cards. */
+.nv-landing[data-theme=landing-05] .nvl-hero{background:#f5f7f1}
+.nv-landing[data-theme=landing-05] .nvl-service-card{box-shadow:none;border-radius:6px}
+.nv-landing[data-theme=landing-05] .nvl-card{border-radius:6px}
+.nv-landing[data-theme=landing-05] .nvl-section-content{background:#fffefb}
+.nv-landing[data-theme=landing-05] .nvl-step-number{background:#e8efe5}
+.nv-landing[data-theme=landing-05] .nvl-contact-shell{border-radius:9px}
+
+/* 06 — local focus: reversed editorial hero, horizontal service rows. */
+.nv-landing[data-theme=landing-06] .nvl-section-services{background:#f6fcf8}
+.nv-landing[data-theme=landing-06] [data-component=services][data-variant=rows] .nvl-service-card{border-left:4px solid #0e8b65}
+.nv-landing[data-theme=landing-06] .nvl-section-scripts{background:#fff}
+.nv-landing[data-theme=landing-06] .nvl-section-blog{background:#eef7f2}
+
+/* 07 — navy/orange conversion: strong sales band and wide actual product covers. */
+.nv-landing[data-theme=landing-07] .nvl-section-services{background:#fff}
+.nv-landing[data-theme=landing-07] .nvl-service-icon{background:#fff1e1}
+.nv-landing[data-theme=landing-07] .nvl-section-scripts .nvl-card{box-shadow:0 18px 35px #0b25401a}
+.nv-landing[data-theme=landing-07] .nvl-section-content{background:#f8fafc}
+.nv-landing[data-theme=landing-07] .nvl-contact-shell{background:linear-gradient(105deg,#09213d,#123b61 72%,#f06b06)}
+
+/* 08 — SaaS minimal: aligned headings, rules instead of decorative cards. */
+.nv-landing[data-theme=landing-08] .nvl-section-services{background:#fff}
+.nv-landing[data-theme=landing-08] .nvl-section-heading{border-bottom:1px solid #e1e8f1;padding-bottom:18px}
+.nv-landing[data-theme=landing-08] [data-component=services][data-variant=list] .nvl-service-card{border-bottom:1px solid #d9e3ef}
+.nv-landing[data-theme=landing-08] .nvl-section-scripts .nvl-card{border-radius:7px;box-shadow:none}
+.nv-landing[data-theme=landing-08] .nvl-contact-shell{border-radius:0}
+
+/* 09 — prism: bentobox grid and a real data-only overview feature. */
+.nv-landing[data-theme=landing-09] .nvl-section-services{background:#f5f4ff}
+.nv-landing[data-theme=landing-09] [data-component=services][data-variant=bento] .nvl-service-card{border:1px solid #d9d2ff}
+.nv-landing[data-theme=landing-09] .nvl-section-overview>.nvl-container{box-shadow:0 16px 35px #253e8a15}
+.nv-landing[data-theme=landing-09] .nvl-section-scripts{background:#fff}
+
+/* 10 — dimension: expansive photo stage, large but uncropped software covers. */
+.nv-landing[data-theme=landing-10] .nvl-section-services{background:#f6f8ff}
+.nv-landing[data-theme=landing-10] .nvl-service-card{border-radius:18px}
+.nv-landing[data-theme=landing-10] .nvl-section-scripts .nvl-card{border-radius:16px}
+.nv-landing[data-theme=landing-10] .nvl-section-content{background:#fff}
+.nv-landing[data-theme=landing-10] .nvl-contact-shell{border-radius:20px}
+
+@media(min-width:801px){
+  /* Reserve a true image stage on the right without hiding headline/buttons. */
+  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{min-height:390px}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-hero-copy{max-width:53%}
+  .nv-landing[data-theme=landing-01] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-03] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-05] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-08] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-10] .nvl-hero.nvl-has-location .nvl-city-backdrop{
+    inset:50px max(20px,calc((100vw - 1200px)/2)) 48px 52%;opacity:.98;
+    border-radius:24px;mask-image:none;box-shadow:0 24px 48px #162f4c24;
+  }
+  .nv-landing[data-theme=landing-01] .nvl-hero.nvl-has-location .nvl-city-backdrop{clip-path:polygon(5% 0,100% 0,100% 100%,0 100%)}
+  .nv-landing[data-theme=landing-03] .nvl-hero.nvl-has-location .nvl-city-backdrop{border-radius:44% 8% 8% 36% / 40% 10% 10% 38%}
+  .nv-landing[data-theme=landing-05] .nvl-hero.nvl-has-location .nvl-city-backdrop{border-radius:6px;box-shadow:0 14px 30px #2b4b3324}
+  .nv-landing[data-theme=landing-08] .nvl-hero.nvl-has-location .nvl-city-backdrop{border-radius:13px;border:8px solid #fff;box-shadow:0 22px 50px #152b451f}
+  .nv-landing[data-theme=landing-10] .nvl-hero.nvl-has-location .nvl-city-backdrop{border:1px solid #ffffff70;transform:perspective(1500px) rotateY(-4deg);transform-origin:center right;border-radius:20px}
+  .nv-landing[data-theme=landing-01] .nvl-hero.nvl-has-location .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-03] .nvl-hero.nvl-has-location .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-05] .nvl-hero.nvl-has-location .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-08] .nvl-hero.nvl-has-location .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-10] .nvl-hero.nvl-has-location .nvl-city-backdrop::after{display:none}
+  .nv-landing[data-theme=landing-02] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-04] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-07] .nvl-hero.nvl-has-location .nvl-city-backdrop,
+  .nv-landing[data-theme=landing-09] .nvl-hero.nvl-has-location .nvl-city-backdrop{
+    inset:0 0 0 34%;mask-image:linear-gradient(90deg,transparent,#000 42%);opacity:.82;
+  }
+  .nv-landing[data-theme=landing-02] .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-04] .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-07] .nvl-city-backdrop::after,
+  .nv-landing[data-theme=landing-09] .nvl-city-backdrop::after{background:linear-gradient(0deg,var(--nvl-hero),transparent 50%)}
+  .nv-landing[data-theme=landing-04] .nvl-hero.nvl-has-location .nvl-city-backdrop{inset:30px 0 20px 45%;border-radius:24px 0 0 24px;mask-image:linear-gradient(90deg,transparent,#000 18%);opacity:.85}
+  .nv-landing[data-theme=landing-06] .nvl-hero.nvl-has-location .nvl-city-backdrop{
+    inset:50px 54% 48px max(20px,calc((100vw - 1200px)/2));mask-image:none;
+    opacity:.95;border-radius:20px;box-shadow:0 16px 36px #0b47302b;
+  }
+  .nv-landing[data-theme=landing-06] .nvl-hero.nvl-has-location .nvl-city-backdrop::after{display:none}
+  .nv-landing[data-theme=landing-06] .nvl-hero.nvl-has-location .nvl-hero-copy{max-width:51%;margin-left:auto}
+  .nv-landing[data-theme=landing-06] .nvl-hero.nvl-has-location .nvl-breadcrumb{margin-left:50%}
+  .nv-landing[data-theme=landing-08] .nvl-hero:not(.nvl-has-location) .nvl-stage{justify-content:center;text-align:center}
+  .nv-landing[data-theme=landing-08] .nvl-hero:not(.nvl-has-location) .nvl-actions,
+  .nv-landing[data-theme=landing-08] .nvl-hero:not(.nvl-has-location) .nvl-hero-benefits{justify-content:center}
+  .nv-landing[data-theme=landing-09] [data-component=services][data-variant=bento] .nvl-service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .nv-landing[data-theme=landing-09] [data-component=services][data-variant=bento] .nvl-service-card:first-child:not(:only-child){grid-column:span 2}
+  .nv-landing[data-theme=landing-09] [data-component=services][data-variant=bento] .nvl-service-grid:has(>.nvl-service-card:only-child){grid-template-columns:minmax(0,min(100%,580px))}
+}
+@media(max-width:800px){
+  /* On mobile the uploaded image gets its own real visual slot below hero text.
+     No fake analytics art and no image competing with controls. */
+  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{padding-bottom:222px}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop{
+    inset:auto 20px 90px;opacity:1;height:188px;border-radius:16px;
+    mask-image:none;box-shadow:0 12px 28px #0b284b1c;transform:none;clip-path:none;
+  }
+  .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop::after{display:none}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-hero-copy{max-width:100%;margin:0}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-breadcrumb{margin:0 0 14px}
+  .nv-landing[data-theme=landing-09] [data-component=services][data-variant=bento] .nvl-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nv-landing[data-theme=landing-09] [data-component=services][data-variant=bento] .nvl-service-card:first-child{grid-column:auto}
+  .nv-landing[data-theme=landing-03] .nvl-section-overview .nvl-prose,
+  .nv-landing[data-theme=landing-03] .nvl-section-overview .nvl-disclosure{color:#d1e8db}
+  .nv-landing[data-theme=landing-09] .nvl-section-overview>.nvl-container{border-radius:14px}
+}
+@media(max-width:420px){
+  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{padding-bottom:185px}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop{inset:auto 16px 87px;height:148px;border-radius:12px}
+  .nv-landing[data-theme=landing-06] [data-component=services][data-variant=rows] .nvl-service-card{border-left-width:3px}
+}
+
 /* Isolated visitor preview panel: keyboard-friendly and mobile-scrollable. */
 .landing-theme-tools{font-family:Poppins,sans-serif;color:#192642}.landing-theme-tools .nvl-theme-toggle{position:fixed;z-index:70;left:0;top:48%;display:flex;align-items:center;gap:6px;padding:10px 12px;min-height:36px;border:1px solid #dcdff2;border-left:0;border-radius:0 10px 10px 0;background:#fff;color:#5946c9;font:600 9px/1.5 Poppins,sans-serif;box-shadow:0 8px 24px #14213d18;cursor:pointer}
 .landing-theme-tools .nvl-theme-dialog{position:fixed;inset:16px auto 16px 16px;width:min(460px,calc(100% - 32px));max-width:none;max-height:calc(100dvh - 32px);height:max-content;margin:auto 0;padding:24px;border:1px solid #e0e3f2;border-radius:18px;background:#fff;box-shadow:0 24px 80px #121c4230;overflow-y:auto;color:#192642}.landing-theme-tools .nvl-theme-dialog::backdrop{background:#0a173a65;backdrop-filter:blur(3px)}.landing-theme-tools .nvl-theme-dialog>header{position:sticky;top:0;z-index:2;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px}.landing-theme-tools .nvl-theme-dialog h2{font-size:20px;line-height:1.4;margin:6px 0}.landing-theme-tools .nvl-theme-dialog header small{font-size:8px;letter-spacing:1px;color:#897caf}.landing-theme-tools [data-theme-close]{display:grid;place-items:center;width:36px;height:36px;border:1px solid #e2e5f0;border-radius:9px;background:#fff;color:#576581;font-size:23px;cursor:pointer;flex-shrink:0}
