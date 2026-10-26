@@ -229,6 +229,17 @@
                         <input type="url" name="social_youtube" class="form-control" value="<?= e(setting('social_youtube')) ?>">
                         <input type="hidden" name="_group_social_youtube" value="social">
                     </div>
+                    <div class="form-group">
+                        <label>Threads URL</label>
+                        <input type="url" name="social_threads" class="form-control"
+                            value="<?= e(setting('social_threads')) ?>" placeholder="https://www.threads.net/@hesap">
+                        <input type="hidden" name="_group_social_threads" value="social">
+                    </div>
+                    <p class="form-hint" style="font-size:12px;line-height:1.7">
+                        <strong>Sol Kenar Hızlı İletişim Paneli:</strong> WhatsApp ve telefon bilgileri yukarıdaki İletişim alanından,
+                        Instagram, Threads, YouTube ve diğer sosyal bağlantılar bu bölümden otomatik alınır.
+                        Bağlantısı boş olan kanal panelde görünmez. Mevcut site bağlantıları ve footer ayarları değiştirilmez.
+                    </p>
                     <div class="form-group mb-0">
                         <label>Footer Metni (Copyright vs.)</label>
                         <textarea name="footer_text" class="form-control" rows="2"><?= e(setting('footer_text')) ?></textarea>
