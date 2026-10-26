@@ -6,6 +6,30 @@ use App\Core\Database;
 /** Thin public projections only: no demo JSON, credentials or private article bodies. */
 final class LandingCatalogService
 {
+    /**
+     * Product-only software taxonomy is never offered as an agency service.
+     * Keep category rows, URLs, products and saved page IDs unchanged.
+     * The distinction is scoped solely to regional landing service pickers/cards.
+     */
+    public static function isSoftwareOnlyCategory(array $category): bool
+    {
+        static $productSlugs = null;
+        if ($productSlugs === null) {
+            $productSlugs = [
+                SoftwareCatalogService::ROOT_SLUG => true,
+                ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT => true,
+            ];
+            foreach (SoftwareCatalogService::definitions() as $definition) {
+                if (is_string($definition[1] ?? null)) {
+                    $productSlugs[$definition[1]] = true;
+                }
+            }
+        }
+        $slug = (string)($category['slug'] ?? '');
+        $parent = (string)($category['parent_category_slug'] ?? '');
+        return isset($productSlugs[$slug]) || ($parent !== '' && isset($productSlugs[$parent]));
+    }
+
     public static function services():array
     {
         $ids=array_map('intval',array_column(Database::getInstance()->fetchAll("SELECT id FROM categories WHERE status='active' ORDER BY name"),'id'));
