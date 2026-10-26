@@ -164,7 +164,7 @@
     <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261025-interaction">
     <?php endif; ?>
     <?php if($template==='frontend/landing/show'): ?>
-    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261025-interaction">
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-layout-repair">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
 =======
