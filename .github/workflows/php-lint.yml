@@ -21,6 +21,11 @@ jobs:
       - name: Contact page and real NetVera Google Maps embed QA
         run: php well-known/tests/contact-page-qa.php
 
+      - name: Global left contact drawer and all landing minimal-layout QA
+        run: |
+          php well-known/tests/netvera-side-contact-qa.php
+          node --check well-known/public/assets/js/netvera-side-contact-v1.js
+
       - name: Editable site logo, upload and responsive display QA
         run: php well-known/tests/site-logo-v90-qa.php
 
