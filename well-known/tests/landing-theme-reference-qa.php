@@ -222,6 +222,11 @@ $ok(str_contains(file_get_contents(BASE_PATH . '/resources/views/layouts/app.php
     str_contains(file_get_contents(PUBLIC_PATH . '/assets/css/home-footer-motion-v49.css'), 'footer-social') &&
     str_contains(file_get_contents(BASE_PATH . '/resources/views/layouts/app.php'), 'NetVera; web tasarım'),
     'Shared footer description shortened and existing social controls limited to four');
+$ok(str_contains($themeCss, 'Final all-theme blog media containment') &&
+    str_contains($themeCss, '[data-component="blog"] .nvl-card-grid .nvl-card-media img') &&
+    str_contains($themeCss, 'object-fit:contain!important') &&
+    str_contains($themeCss, 'aspect-ratio:16/10!important'),
+    'All ten themes keep real blog cover images bounded without cropping or overflow');
 $ok(str_contains($themeCss, 'Mobile two-column landing card collections') &&
     str_contains($themeCss, '[data-component="services"] .nvl-service-grid') &&
     str_contains($themeCss, '[data-component="scripts"],[data-component="blog"],[data-component="references"]') &&
