@@ -47,7 +47,7 @@ foreach(['/alanya-reklam-ajansi?onizleme=1','/alanya-reklam-ajansi?tema=landing-
 $quality=new App\Services\SeoScoreService();
 $turkishContent=implode(' ',array_fill(0,120,'İşletmelerimizin büyümesine odaklanıyoruz'));
 $qualityResult=$quality->calculate(['title'=>'Türkçe örnek','content'=>$turkishContent]);
-$ok(count(array_filter($qualityResult['checks'],static fn($item)=>str_contains($item['message'],'240 kelime')))>0,
+$ok(count(array_filter($qualityResult['checks'],static fn($item)=>str_contains($item['message'],'360 kelime')))>0,
     'Turkish-language content scores by actual Unicode words, not byte fragments');
 $page=['canonicalUrl'=>url('/example'),'pageTitle'=>'Synthetic </script> title','metaDescription'=>'Public description'];
 $existing=['@context'=>'https://schema.org','@graph'=>[['@type'=>'CollectionPage','@id'=>url('/example').'#page','name'=>'Existing collection'],['@type'=>'Product','offers'=>['price'=>99,'priceCurrency'=>'TRY']]]];
