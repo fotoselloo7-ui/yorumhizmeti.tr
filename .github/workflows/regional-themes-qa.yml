@@ -1,0 +1,63 @@
+name: Regional Landing Five Themes QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/app/Services/RegionalLandingService.php'
+      - 'well-known/app/Controllers/RegionalLandingController.php'
+      - 'well-known/resources/views/frontend/landing/show.php'
+      - 'well-known/resources/views/admin/landing/form.php'
+      - 'well-known/public/assets/css/editorial-landings.css'
+      - 'well-known/public/assets/css/regional-themes-v62.css'
+      - 'well-known/public/assets/css/landing-editor.css'
+      - 'well-known/resources/views/layouts/app.php'
+      - 'well-known/resources/views/layouts/admin.php'
+      - 'well-known/tests/editorial-landings-qa.php'
+      - 'well-known/tests/editorial-landings-http-qa.php'
+      - '.github/workflows/regional-themes-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  regional-design-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, dom, fileinfo
+          tools: none
+      - name: Lint only actual regional PHP files, not abandoned sync-conflict snapshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          for php in \
+            well-known/app/Services/RegionalLandingService.php \
+            well-known/app/Controllers/RegionalLandingController.php \
+            well-known/resources/views/frontend/landing/show.php \
+            well-known/resources/views/admin/landing/form.php \
+            well-known/tests/editorial-landings-qa.php \
+            well-known/tests/editorial-landings-http-qa.php; do
+            php -l "$php"
+          done
+      - name: Test all five selectable themes and preserved SEO/editorial contracts
+        run: php well-known/tests/editorial-landings-qa.php
+      - name: Validate theme CSS and viewport/reduced-motion safeguards
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          css=Path('well-known/public/assets/css/regional-themes-v62.css').read_text()
+          editor=Path('well-known/public/assets/css/landing-editor.css').read_text()
+          assert css.count('{')==css.count('}'), 'unbalanced CSS braces'
+          for design in ['spotlight','atlas','signal','canvas','prism']:
+              assert '.landing-layout-'+design in css, design
+              assert 'data-design='+design in editor, design
+          assert 'max-width:420px' in css and 'prefers-reduced-motion:reduce' in css
+          print('PASS five visual themes and mobile safeguards')
+          PY

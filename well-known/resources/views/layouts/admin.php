@@ -14,8 +14,13 @@
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>?v=20261020-contact">
     <link rel="stylesheet" href="<?= asset('css/admin-v4.css') ?>?v=20261018-seo-infrastructure">
     <?php if(str_starts_with($template,'admin/landing/')): ?>
+<<<<<<< HEAD
     <link rel="stylesheet" href="<?= asset('css/landing-editor.css') ?>?v=20261024-reference">
     <script src="<?= asset('js/landing-editor.js') ?>?v=20261024-reference" defer></script>
+=======
+    <link rel="stylesheet" href="<?= asset('css/landing-editor.css') ?>?v=62.1">
+    <script src="<?= asset('js/landing-editor.js') ?>?v=20261019-regional-ready" defer></script>
+>>>>>>> 86dd065c21d47d2ea4cee063f64c44621d01ac69
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/admin-smm.css') ?>?v=1">
     <link rel="stylesheet" href="<?= asset('css/admin-customers-v67.css') ?>?v=67.1">

@@ -24,6 +24,33 @@ foreach(['/uploads/../.env','https://remote.test/photo.png','/uploads/script.svg
 $reject(static fn()=>Content::rows([['question'=>'Eksik']],'faqs'),'Incomplete FAQ rejected');$reject(static fn()=>Content::rows([['title'=>'Eksik']],'sections'),'Incomplete section rejected');$reject(static fn()=>Content::seo(['sources'=>'javascript:alert(1)']),'Unsafe citation rejected');$reject(static fn()=>Content::seo(['last_reviewed'=>'2099-01-01']),'Future provenance date rejected');
 $home=Home::validate(Home::defaults());$ok(count($home['cards'])===3,'Exactly three default cards');$ok(!str_contains(json_encode($home),'%100 organik'),'No fabricated organic claim');$bad=$home;$bad['cards']=[];$reject(static fn()=>Home::validate($bad),'Missing cards rejected');
 $bad=$d;$bad['local_context']='';$reject(static fn()=>Landing::validate($bad),'Publish requires real local context');$bad=$d;$bad['reference_ids']=['aabbcc001122'];$ok(Landing::validate($bad)['reference_ids']===['aabbcc001122'],'Real hexadecimal reference identities preserved');
+// Five new layout designs share the canonical landing content and SEO schema.
+$original=Landing::starter('reklam');
+$designNames=['spotlight','atlas','signal','canvas','prism'];
+foreach($designNames as $design){
+    $variant=$original;$variant['layout']=$design;
+    $validated=Landing::validate($variant);
+    $ok($validated['layout']===$design,'Design saved unchanged: '.$design);
+    $ok($validated['seo']===$original['seo'] &&
+        $validated['sections']===$original['sections'] &&
+        $validated['slug']===$original['slug'],
+        'SEO, content and slug unaffected by design: '.$design);
+}
+$badDesign=$original;$badDesign['layout']='../../stolen';
+$reject(static fn()=>Landing::validate($badDesign),'Reject unsafe design class');
+$themeCss=file_get_contents(PUBLIC_PATH.'/assets/css/regional-themes-v62.css');
+foreach($designNames as $design){
+    $ok(str_contains($themeCss,'landing-layout-'.$design),'Theme CSS present: '.$design);
+}
+$ok(str_contains($themeCss,'max-width:760px')&&str_contains($themeCss,'prefers-reduced-motion:reduce'),
+    'Theme responsive and reduced-motion contracts');
+$designForm=file_get_contents(BASE_PATH.'/resources/views/admin/landing/form.php');
+foreach($designNames as $design)
+    $ok(str_contains($designForm,"'".$design."'")&&str_contains($designForm,'tasarim='),
+        'Theme selection and private preview offered: '.$design);
+$regionalController=file_get_contents(BASE_PATH.'/app/Controllers/RegionalLandingController.php');
+$ok(str_contains($regionalController,'$preview && is_string($requestedDesign)'),
+    'Public visitors cannot override landing design via URL parameter');
 $css=file_get_contents(PUBLIC_PATH.'/assets/css/editorial-landings.css');$ok(!str_contains($css,'!important')&&str_contains($css,'repeat(3,minmax(0,1fr))')&&str_contains($css,'prefers-reduced-motion'),'Single responsive authoritative stylesheet');
 $form=file_get_contents(BASE_PATH.'/resources/views/admin/landing/form.php');$ok(str_contains($form,'csrfField()')&&str_contains($form,'revision')&&!str_contains($form,'<script>'),'CSRF/revision native admin form, no inline script');
 $ok(Landing::referenceImage(['image'=>'/assets/img/category-heroes/web.webp'])==='/assets/img/category-heroes/web.webp','Absolute asset reference path is not prefixed with uploads');

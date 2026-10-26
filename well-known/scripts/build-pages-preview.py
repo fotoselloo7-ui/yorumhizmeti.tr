@@ -27,7 +27,9 @@ def mysql_column(sql):
     return [row.strip() for row in res.stdout.splitlines() if row.strip()]
 
 def safe_slug(value):
-    return bool(re.fullmatch(r"[a-zA-Z0-9_-]{1,128}", value))
+    # The canonical PHP router supports Turkish/Unicode slugs for city SEO pages.
+    # Never permit slashes, dots or separators from a URL path here.
+    return isinstance(value, str) and bool(re.fullmatch(r"[\w-]{1,128}", value, re.UNICODE))
 
 def route_catalog():
     routes = {"", "kategoriler", "hazir-scriptler", "hazir-yazilimlar",
@@ -42,6 +44,7 @@ def route_catalog():
       ("SELECT slug FROM blog_posts WHERE status='active' LIMIT 90", "blog/"),
       ("SELECT slug FROM blog_categories WHERE status='active' LIMIT 60", "blog/kategori/"),
       ("SELECT slug FROM pages WHERE status='active' LIMIT 60", "sayfa/"),
+      ("SELECT slug FROM pages WHERE status='active' AND content LIKE '{\"module\":\"regional_landing\",%' LIMIT 100", ""),
       ("SELECT slug FROM nv_legacy_script_products WHERE active=1 LIMIT 60", "hazir-scriptler/"),
     ]
     for sql, prefix in sources:

@@ -27,6 +27,13 @@ final class RegionalLandingController extends Controller
         // match is not necessarily the exact canonical URL requested.
         if($slug!==$row['slug']){header('Location: /'.rawurlencode($row['slug']).($preview?'?onizleme=1':''),true,301);return;}
         try{$data=Landing::validate(Landing::decode($row));}catch(\InvalidArgumentException $ignored){PublicSeoUrls::notFound();return;}
+        // Design comparison is a private, noindex admin preview. Never alter
+        // public rendering, database values, canonical URLs, or SEO content.
+        $requestedDesign=$_GET['tasarim']??null;
+        if($preview && is_string($requestedDesign)
+            && in_array($requestedDesign,['studio','editorial','spotlight','atlas','signal','canvas','prism'],true)){
+            $data['layout']=$requestedDesign;
+        }
         $seo=$data['seo'];$own='/'.rawurlencode($row['slug']);
         // Admin-only visual preview. Never persist it or alter canonical/metadata.
         $landingThemePreview=$preview?\App\Services\LandingThemeService::key($_GET['tema']??''):'';
