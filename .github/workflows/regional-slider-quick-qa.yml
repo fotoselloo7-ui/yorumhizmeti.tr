@@ -1,0 +1,26 @@
+name: Regional Slider Quick Browser QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/public/assets/js/regional-showcase-v1.js'
+      - 'well-known/public/assets/css/regional-showcase-v1.css'
+      - 'well-known/tests/regional-slider-browser-qa.mjs'
+      - '.github/workflows/regional-slider-quick-qa.yml'
+  workflow_dispatch:
+jobs:
+  slider:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless browser
+        run: |
+          npm --prefix well-known install --no-save --no-package-lock playwright
+          cd well-known
+          npx playwright install --with-deps chromium
+      - name: Verify compact cards and conditional one-way carousel in a real browser
+        run: node well-known/tests/regional-slider-browser-qa.mjs
