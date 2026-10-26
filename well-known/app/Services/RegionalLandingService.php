@@ -178,6 +178,13 @@ final class RegionalLandingService
     {
         if(!$ids)return [];$rows=Database::getInstance()->fetchAll('SELECT c.*,p.status parent_status FROM categories c LEFT JOIN categories p ON p.id=c.parent_id WHERE c.id IN ('.implode(',',array_fill(0,count($ids),'?')).") AND c.status='active' AND (c.parent_id IS NULL OR p.status='active')",$ids);
         $rows=array_values(array_filter($rows,static fn($r)=>ServiceCategoryVisibility::show($r) && !LandingCatalogService::isSoftwareOnlyCategory($r)));
+        foreach($rows as &$r){
+            if(trim((string)($r['description']??''))==='' ||
+                preg_match('/YorumHizmeti(?:\\.tr)?|Yorum Hizmeti/iu',(string)$r['description'])){
+                $r['description']=CategoryEditorialCopyService::description($r);
+            }
+        }
+        unset($r);
         return LandingCatalogService::selected($rows,$ids);
     }
     public static function selectedReferences(array $ids):array
