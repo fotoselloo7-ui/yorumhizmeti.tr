@@ -654,3 +654,85 @@
   .nv-landing[data-theme] [data-component="blog"] .nvl-card-grid{gap:10px}
   .nv-landing[data-theme] [data-component="blog"] .nvl-card-grid .nvl-card-copy{padding:10px}
 }
+
+/* Final CTA parity: every regional landing theme uses two equal-height,
+   clearly clickable actions. Other catalog/product/blog layouts are untouched. */
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer{
+  display:flex;
+  align-items:stretch;
+  flex-wrap:nowrap;
+  justify-content:stretch;
+  gap:7px;
+  width:100%;
+  min-width:0;
+  margin-top:auto;
+  padding-top:12px;
+}
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+  min-height:36px;
+  box-sizing:border-box;
+  margin:0;
+  padding:7px 9px;
+  border:1px solid var(--nvl-brand);
+  border-radius:8px;
+  font-size:10px;
+  line-height:1.3;
+  font-weight:650;
+  text-align:center;
+  white-space:nowrap;
+  text-decoration:none;
+  transition:background-color .2s ease,color .2s ease,box-shadow .2s ease;
+}
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link:first-child{
+  flex:1 1 auto;
+  background:var(--nvl-brand);
+  color:#fff;
+}
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link:first-child:hover{
+  background:color-mix(in srgb,var(--nvl-brand) 84%,#000);
+  color:#fff;
+  box-shadow:0 3px 12px #12213b1f;
+}
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-demo-link{
+  flex:0 0 auto;
+  min-height:36px;
+  padding:7px 10px;
+  background:var(--nvl-soft);
+  color:var(--nvl-brand);
+  border-color:color-mix(in srgb,var(--nvl-brand) 25%,var(--nvl-border));
+}
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-demo-link:hover{
+  background:var(--nvl-brand);
+  color:#fff;
+}
+.nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link:focus-visible{
+  outline:2px solid var(--nvl-brand);
+  outline-offset:2px;
+}
+@media(max-width:600px){
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer{gap:5px;padding-top:10px}
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link{
+    min-height:34px;
+    padding:6px 7px;
+    font-size:9px;
+    letter-spacing:-.1px;
+    gap:4px;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-demo-link{padding:6px 7px}
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link .icon{
+    width:12px;height:12px;
+  }
+}
+@media(max-width:360px){
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer{flex-direction:column}
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link{
+    width:100%;
+    min-height:32px;
+    font-size:9px;
+  }
+}
