@@ -88,3 +88,16 @@
 @media(max-width:800px){.nv26-catalog-hero-inner{align-items:flex-start;flex-direction:column;gap:20px}.nv26-catalog-hero{padding:32px 0}.nv26-catalog-toolbar{align-items:stretch;flex-direction:column;gap:16px}.nv26-catalog-search{width:100%}.nv26-catalog-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.nv26-banner-icons{display:none}.nv26-catalog-controls{padding:20px}}
 @media(max-width:600px){.nv26-catalog-hero h1{font-size:30px}.nv26-catalog-body{padding:24px 0 48px}.nv26-catalog-controls{padding:16px;margin-bottom:28px;border-radius:16px}.nv26-catalog-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-top:16px;margin-top:16px}.nv26-catalog-tabs a{padding:10px 8px;font-size:11px;text-align:center}.nv26-catalog-tiles{grid-template-columns:1fr;gap:10px}.nv26-tile-top{min-height:92px;padding:16px;grid-template-columns:44px minmax(0,1fr) 24px}.nv26-tile-top strong{font-size:14px}.nv26-tile-top small{font-size:12px}.nv26-catalog-group-head{align-items:flex-start}.nv26-catalog-group-heading h2{font-size:20px}.nv26-catalog-group-heading p{font-size:12px}.nv26-catalog-count{padding:6px 8px;font-size:10px}.nv26-catalog-group-heading>.nv26-section-icon{display:none}.nv26-catalog-banner{padding:24px}.nv26-catalog-banner h2{font-size:23px}.nv26-catalog-toolbar-title strong{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.nv26-catalog-tile,.nv88-tile-arrow{transition:none}.nv26-catalog-tile:is(:hover,:focus-within){transform:none}}
+
+/* Researched human-readable service summary on existing category cards. */
+.nv26-catalog .nv26-tile-top{grid-template-rows:auto auto auto;align-content:start}
+.nv26-catalog .nv26-tile-editorial{
+  grid-column:2 / 4;grid-row:3;align-self:start;
+  margin:7px 0 0;color:var(--directory-muted,#62718b);
+  font-size:10px;line-height:1.65;font-weight:400;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;overflow-wrap:anywhere;
+}
+@media(max-width:600px){
+  .nv26-catalog .nv26-tile-editorial{font-size:11px;line-height:1.6;-webkit-line-clamp:3}
+}
