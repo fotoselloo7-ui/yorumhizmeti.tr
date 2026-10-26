@@ -8,6 +8,7 @@ require_once $root.'/app/Core/Helpers.php';
 require_once $root.'/app/Services/SocialPlatformIdentity.php';
 require_once $root.'/app/Services/CategoryHeroService.php';
 require_once $root.'/app/Services/CategorySearchBlueprint.php';
+require_once $root.'/app/Services/CategoryEditorialCopyService.php';
 require_once $root.'/app/Services/CategorySeoCompleteService.php';
 
 use App\Services\CategorySearchBlueprint as Blueprint;
