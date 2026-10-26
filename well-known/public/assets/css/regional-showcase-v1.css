@@ -207,3 +207,34 @@
     -webkit-line-clamp:3;
   }
 }
+
+
+/* v3 mobile editorial fix: variant-specific grid rules must never collapse
+   a nested blog card's intrinsic inline size to zero. */
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card{
+  box-sizing:border-box!important;
+  width:var(--nvl-rail-column-width,260px)!important;
+  min-width:var(--nvl-rail-column-width,260px)!important;
+  max-width:var(--nvl-rail-column-width,260px)!important;
+  height:auto!important;
+  min-height:360px!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card-copy{
+  box-sizing:border-box!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  flex:1 0 auto!important;
+  overflow:visible!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card-copy h3{
+  width:100%!important;min-width:0!important;height:auto!important;
+  flex:0 0 auto!important;
+  overflow-wrap:anywhere!important;word-break:normal!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card-copy h3 a{
+  overflow-wrap:anywhere!important;white-space:normal!important;
+}
+@media(max-width:800px){
+  .nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card{
+    min-height:320px!important;
+  }
+}
