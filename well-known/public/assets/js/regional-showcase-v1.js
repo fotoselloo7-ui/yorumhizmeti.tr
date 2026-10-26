@@ -56,7 +56,7 @@
       manualPause:false,hover:false,focus:false,dragging:false,
       dragged:false,suppressClick:false,startX:0,startScroll:0,
       pointerId:null,pauseUntil:performance.now()+450,last:0,
-      loop:false,step:0,button:null
+      loop:false,step:0,button:null,pixelRemainder:0
     };
     instances.set(section,state);
     const on=(element,event,fn,options)=>{
@@ -76,6 +76,7 @@
       state.section.classList.remove('is-nvl-loop');
       state.loop=false;
       state.step=0;
+      state.pixelRemainder=0;
       state.viewport.scrollLeft=0;
       const visible=state.original.filter(n=>!n.hidden);
       if(state.pauseButton){state.pauseButton.remove();state.pauseButton=null;}
@@ -191,7 +192,14 @@
       if(state.loop && !reduceMotion.matches && !state.manualPause &&
          !state.hover && !state.focus && !state.dragging &&
          state.visible && !document.hidden && time>state.pauseUntil){
-        viewport.scrollLeft+=elapsed*SPEED/1000;
+        // Chromium's scrollLeft may quantize subpixel assignments to integers.
+        // Accumulate fractional frames so slow motion does not round to zero forever.
+        state.pixelRemainder+=elapsed*SPEED/1000;
+        const wholePixels=Math.floor(state.pixelRemainder);
+        if(wholePixels>0){
+          state.pixelRemainder-=wholePixels;
+          viewport.scrollLeft+=wholePixels;
+        }
         // Entire leading column has left the screen; rotate ORIGINAL nodes.
         if(viewport.scrollLeft>=state.step){
           const front=grid.firstElementChild;
