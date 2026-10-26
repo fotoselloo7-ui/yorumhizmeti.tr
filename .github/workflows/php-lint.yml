@@ -21,6 +21,11 @@ jobs:
       - name: Contact page and real NetVera Google Maps embed QA
         run: php well-known/tests/contact-page-qa.php
 
+      - name: Regional two-row showcase, portfolio filter and per-city editorial QA
+        run: |
+          php well-known/tests/landing-showcase-editorial-qa.php
+          node --check well-known/public/assets/js/regional-showcase-v1.js
+
       - name: Global left contact drawer and all landing minimal-layout QA
         run: |
           php well-known/tests/netvera-side-contact-qa.php
