@@ -6,7 +6,7 @@ final class SeoStructuredDataService
 {
     public static function graph(?string $existing,array $page,array $seo=[],string $template=''): ?string
     {
-        if(!empty($page['seoPrivate'])||!empty($page['seoError']))return null;
+        if(!empty($page['seoPrivate'])||!empty($page['seoError'])||!empty($page['seoNoindex']))return null;
         $canonical=SeoMetadataService::webUrl((string)($page['canonicalUrl']??''));
         if(!$canonical)return null;
         $decoded=json_decode((string)$existing,true);
