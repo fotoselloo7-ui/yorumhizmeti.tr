@@ -183,7 +183,7 @@
     <?php if($nvGraph): ?><script type="application/ld+json"><?= $nvGraph ?></script><?php endif; ?>
 
     <?= setting('header_script') ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-premium-left-dock">
+    <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-social-theme-rail">
 </head>
 <body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
 
@@ -686,8 +686,26 @@
     </footer>
 
     <!-- NetVera global left-edge contact drawer (native, keyboard accessible). -->
-    <?php $nvDockWhatsapp=preg_replace('/[^0-9]/','',(string)setting('whatsapp_number')); $nvDockPhone=trim((string)setting('site_phone')); ?>
-    <?php if($nvDockWhatsapp!=='' || $nvDockPhone!==''): ?>
+    <?php
+    $nvDockWhatsapp=preg_replace('/[^0-9]/','',(string)setting('whatsapp_number'));
+    $nvDockPhone=trim((string)setting('site_phone'));
+    // Read the existing Site Settings fields. Missing/invalid links stay invisible.
+    $nvDockSocial=[];
+    foreach ([
+        ['social_instagram','Instagram','instagram'],
+        ['social_threads','Threads','threads'],
+        ['social_youtube','YouTube','youtube'],
+        ['social_facebook','Facebook','facebook'],
+        ['social_tiktok','TikTok','tiktok'],
+        ['social_twitter','X','twitter'],
+    ] as [$nvSocialSetting,$nvSocialLabel,$nvSocialIcon]) {
+        $nvSocialLink=\App\Services\NetveraBridgeService::publicUrl((string)setting($nvSocialSetting));
+        if($nvSocialLink!==null)$nvDockSocial[]=[
+            'label'=>$nvSocialLabel,'icon'=>$nvSocialIcon,'url'=>$nvSocialLink
+        ];
+    }
+    ?>
+    <?php if($nvDockWhatsapp!=='' || $nvDockPhone!=='' || $nvDockSocial!==[]): ?>
     <details class="nv-contact-dock" data-nv-side-contact aria-label="NetVera hızlı iletişim">
         <summary class="nv-contact-dock__trigger" aria-label="Hızlı iletişim panelini aç">
             <span class="nv-contact-dock__trigger-icon"><?= icon('message-circle',23) ?></span>
@@ -709,11 +727,19 @@
                 <?php endif; ?>
                 <?php if($nvDockPhone!==''): ?>
                 <a class="nv-contact-dock__link nv-contact-dock__link--phone" href="tel:<?= e($nvDockPhone) ?>">
-                    <span class="nv-contact-dock__action-icon"><?= icon('phone-call',19) ?></span>
+                    <span class="nv-contact-dock__action-icon"><?= icon('phone',19) ?></span>
                     <span class="nv-contact-dock__link-text"><strong>Telefonla Ara</strong><small><?= e($nvDockPhone) ?></small></span>
                     <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
                 </a>
                 <?php endif; ?>
+                <?php foreach($nvDockSocial as $nvDockProfile): ?>
+                <a class="nv-contact-dock__link nv-contact-dock__link--social nv-contact-dock__link--<?= e($nvDockProfile['icon']) ?>"
+                   href="<?= e($nvDockProfile['url']) ?>" target="_blank" rel="noopener noreferrer">
+                    <span class="nv-contact-dock__action-icon"><?= icon($nvDockProfile['icon'],19) ?></span>
+                    <span class="nv-contact-dock__link-text"><strong><?= e($nvDockProfile['label']) ?></strong><small>Profilimizi ziyaret edin</small></span>
+                    <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
+                </a>
+                <?php endforeach; ?>
             </nav>
         </div>
     </details>
