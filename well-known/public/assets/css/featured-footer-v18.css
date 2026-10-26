@@ -450,3 +450,19 @@ body:has(.nv-chat-panel:not([hidden])) .floating-contact{visibility:hidden}
   .footer-brand,.footer-subscribe-v9{grid-column:auto!important}
   .footer-newsletter-form{max-width:none!important}
 }
+
+
+/* Corporate brand description under the shared NetVera footer logo.
+   Content is visible text, never hidden keyword stuffing. */
+.site-footer .footer-brand .nv-footer-about{
+    max-width:31ch;
+    margin:12px 0 0;
+    line-height:1.75;
+    overflow-wrap:break-word;
+}
+@media(max-width:850px){
+    .site-footer .footer-brand .nv-footer-about{max-width:48ch}
+}
+@media(max-width:480px){
+    .site-footer .footer-brand .nv-footer-about{max-width:100%;margin-top:10px}
+}
