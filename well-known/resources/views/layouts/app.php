@@ -89,7 +89,7 @@
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=20261019-compact-cta">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261015-wrap">
+    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261026-social-align">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-portfolio-v51.css') ?>?v=51.3">
     <?php endif; ?>
