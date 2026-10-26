@@ -1,0 +1,67 @@
+name: NetVera SEO GEO AIO Sitewide QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/app/Services/SeoMetadataService.php'
+      - 'well-known/app/Services/SeoStructuredDataService.php'
+      - 'well-known/app/Services/SeoScoreService.php'
+      - 'well-known/app/Services/SeoHealthService.php'
+      - 'well-known/app/Services/SitemapService.php'
+      - 'well-known/resources/views/layouts/app.php'
+      - 'well-known/public/assets/css/landing-themes.css'
+      - 'well-known/resources/views/frontend/landing/themes/block.php'
+      - 'well-known/tests/seo-infrastructure-qa.php'
+      - 'well-known/tests/landing-theme-reference-qa.php'
+      - '.github/workflows/seo-geo-aio-sitewide-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  seo-and-landing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, pdo_mysql, fileinfo
+          tools: none
+      - name: Lint sitewide SEO and theme PHP
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            well-known/app/Services/SeoMetadataService.php \
+            well-known/app/Services/SeoStructuredDataService.php \
+            well-known/app/Services/SeoScoreService.php \
+            well-known/app/Services/SeoHealthService.php \
+            well-known/app/Services/SitemapService.php \
+            well-known/resources/views/layouts/app.php \
+            well-known/resources/views/frontend/landing/themes/block.php \
+            well-known/tests/seo-infrastructure-qa.php \
+            well-known/tests/landing-theme-reference-qa.php; do
+            php -l "$file"
+          done
+      - name: Sitewide SEO GEO AIO canonical structured data and privacy contracts
+        run: php well-known/tests/seo-infrastructure-qa.php
+      - name: All ten landing theme content and image contracts
+        run: php well-known/tests/landing-theme-reference-qa.php
+      - name: CSS syntax and image containment guard
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          css=Path('well-known/public/assets/css/landing-themes.css').read_text()
+          css=re.sub(r'/\*.*?\*/','',css,flags=re.S)
+          assert css.count('{')==css.count('}'), 'Invalid CSS braces'
+          assert 'object-fit:contain!important' in css
+          for n in range(1,11):
+              assert f'landing-{n:02d}' in css, f'Landing theme {n} missing'
+          print('PASS: 10 theme CSS and blog media containment')
+          PY
