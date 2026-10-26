@@ -20,20 +20,20 @@
 /* Only configurations whose actual heading is placed beside card contents.
    The existing layout still works without JS; JS adds .is-nvl-rail. */
 @media (min-width:801px) {
-  .nv-landing .nvl-section.is-nvl-rail > .nvl-container{
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side > .nvl-container{
     display:grid!important;grid-template-columns:minmax(210px,.65fr) minmax(0,2.35fr);
     gap:18px 32px;align-items:center;
   }
-  .nv-landing .nvl-section.is-nvl-rail .nvl-section-heading{
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading{
     grid-column:1;grid-row:1 / span 2;display:flex;flex-direction:column;
     align-items:flex-start;justify-content:center;margin:0!important;gap:14px;
     border:0;padding:0;
   }
-  .nv-landing .nvl-section.is-nvl-rail .nvl-section-heading>div{min-width:0;max-width:100%}
-  .nv-landing .nvl-section.is-nvl-rail .nvl-section-heading>a{margin:0!important}
-  .nv-landing .nvl-section.is-nvl-rail .nvl-reference-filters{grid-column:2;grid-row:1;margin:0}
-  .nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport{grid-column:2;grid-row:1}
-  .nv-landing .nvl-section.is-nvl-rail:has(.nvl-reference-filters) .nvl-showcase-viewport{grid-row:2}
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading>div{min-width:0;max-width:100%}
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading>a{margin:0!important}
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-reference-filters{grid-column:2;grid-row:1;margin:0}
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-showcase-viewport{grid-column:2;grid-row:1}
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side:has(.nvl-reference-filters) .nvl-showcase-viewport{grid-row:2}
 }
 
 /* A stable TWO-ROW column-flowing rail, never an endlessly growing vertical grid. */
@@ -129,8 +129,8 @@
 
 /* Side-heading layouts: center headings vertically alongside both moving card rows. */
 @media (max-width:800px){
-  .nv-landing .nvl-section.is-nvl-rail > .nvl-container{display:block!important}
-  .nv-landing .nvl-section.is-nvl-rail .nvl-section-heading{
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side > .nvl-container{display:block!important}
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading{
     display:flex!important;flex-direction:column;align-items:flex-start!important;
     gap:10px;margin:0 0 20px!important;text-align:left;
   }
@@ -151,4 +151,21 @@
 }
 @media (prefers-reduced-motion:reduce){
   .nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport{scroll-behavior:auto}
+}
+
+
+/* The pointer interaction belongs to the viewport, not the links. */
+.nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport{
+  cursor:grab;scroll-snap-type:none!important;
+  touch-action:pan-x pan-y;
+  -webkit-overflow-scrolling:touch;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport.is-dragging{cursor:grabbing;user-select:none}
+.nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport.is-dragging a{pointer-events:none}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid .nvl-card{scroll-snap-align:none}
+.nv-landing .nvl-section.is-nvl-rail .nvl-reference-filters{margin-bottom:14px}
+@media(max-width:800px){
+  .nv-landing .nvl-section.is-nvl-rail.nvl-is-side .nvl-section-heading{
+    align-items:flex-start!important;text-align:left!important;
+  }
 }
