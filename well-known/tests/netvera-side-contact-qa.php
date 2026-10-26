@@ -1,0 +1,23 @@
+<?php
+declare(strict_types=1);
+if(PHP_SAPI!=='cli')exit(2);
+$root=dirname(__DIR__);
+$layout=file_get_contents($root.'/resources/views/layouts/app.php');
+$landing=file_get_contents($root.'/resources/views/frontend/landing/themes/page.php');
+$css=file_get_contents($root.'/public/assets/css/netvera-side-contact-v1.css');
+$js=file_get_contents($root.'/public/assets/js/netvera-side-contact-v1.js');
+$assert=static function(bool $ok,string $label):void{if(!$ok)throw new RuntimeException($label);};
+$assert(str_contains($layout,'data-nv-side-contact'),'Global dock is mounted once in common frontend layout');
+$assert(substr_count($layout,'data-nv-side-contact')===1,'Global dock must not be duplicated');
+$assert(str_contains($layout,'<details class="nv-contact-dock"')&&str_contains($layout,'<summary class="nv-contact-dock__trigger"'),'Native keyboard-toggle markup');
+$assert(str_contains($layout,'nv-contact-dock__link--whatsapp')&&str_contains($layout,'nv-contact-dock__link--phone'),'Configured WhatsApp and telephone actions preserved');
+$assert(str_contains($layout,"setting('whatsapp_number')")&&str_contains($layout,"setting('site_phone')"),'Existing contact settings retained');
+$assert(!str_contains($layout,'class="floating-contact"'),'Retired floating actions removed');
+$assert(str_contains($layout,'netvera-side-contact-v1.css')&&str_contains($layout,'netvera-side-contact-v1.js'),'Responsive dock assets loaded sitewide');
+$assert(str_contains($css,'position:fixed;left:0;top:50%')&&str_contains($css,'@media(max-width:640px)'),'Dock centered along left edge on desktop and mobile');
+$assert(str_contains($css,'prefers-reduced-motion:reduce')&&str_contains($css,'focus-visible'),'Reduced-motion and focus access');
+$assert(str_contains($js,"event.key === 'Escape'")&&str_contains($js,"!dock.contains(event.target)"),'Escape and outside click close panel');
+$assert(!str_contains($landing,'nvl-navigation')&&!str_contains($landing,'nvl-provenance'),'All ten data-driven landing themes omit extra white link bars');
+$assert(str_contains($landing,'foreach($blocks as $block)')&&str_contains($landing,'data-component="cta"'),'Editable content blocks and CTA kept');
+$assert(!str_contains($css,'display:none!important'),'No global hide rules');
+echo "PASS 14 global left-side contact dock and regional white-strip preservation checks\n";
