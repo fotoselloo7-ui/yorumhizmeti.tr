@@ -53,7 +53,7 @@
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261026-brand-description">
     <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/forms-functional-v20.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
