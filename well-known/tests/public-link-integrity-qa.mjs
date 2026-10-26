@@ -4,6 +4,7 @@
  * or rewrites any imported NetVera route/slug/canonical.
  */
 import fs from 'node:fs';
+import pathModule from 'node:path';
 import { request } from 'playwright';
 
 const origin=(process.env.QA_ORIGIN || 'http://127.0.0.1:8006').replace(/\/$/,'');
@@ -108,7 +109,7 @@ try {
    }
  }
  const report=errorsToReport();
- fs.mkdirSync(new URL('file://'+out).pathname.split('/').slice(0,-1).join('/')||'/tmp',{recursive:true});
+ fs.mkdirSync(pathModule.dirname(out),{recursive:true});
  fs.writeFileSync(out,JSON.stringify(report,null,2));
  console.log('NetVera public internal links: '+examined.length+' inspected, '+failures.length+' failures, '+warnings.length+' notes; report '+out);
  for(const problem of failures.slice(0,30))console.error('BROKEN '+JSON.stringify(problem));
