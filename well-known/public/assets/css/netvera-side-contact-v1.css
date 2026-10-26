@@ -95,3 +95,73 @@
   .nv-contact-dock__trigger,.nv-contact-dock__trigger-chevron,.nv-contact-dock__link{transition:none}
   .nv-contact-dock__panel{animation:none}
 }
+
+
+/* Joined left rail — global contact and page-scoped theme tools move as ONE
+   centered stack, with no overlap on desktop or mobile. */
+.nv-contact-rail{
+  position:fixed;top:50%;left:0;z-index:319;
+  display:flex;flex-direction:column;align-items:stretch;
+  width:48px;max-height:calc(100dvh - 24px);
+  transform:translateY(-50%);
+  font-family:Poppins,system-ui,sans-serif;
+}
+.nv-contact-rail .nv-contact-dock{
+  position:relative;left:auto;top:auto;
+  transform:none;width:48px;flex:0 0 auto;
+  z-index:auto;
+}
+.nv-contact-rail .nv-contact-dock__trigger{border-radius:0 17px 17px 0}
+.nv-contact-rail--themed .nv-contact-dock__trigger{border-radius:0 17px 0 0}
+.nv-contact-rail .landing-theme-tools{position:relative;display:block;width:48px;margin-top:-1px}
+.nv-contact-rail .landing-theme-tools .nvl-theme-toggle{
+  position:static!important;top:auto!important;bottom:auto!important;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:48px;min-width:48px;min-height:86px;
+  box-sizing:border-box;padding:10px 5px;
+  gap:7px;
+  border:1px solid #a8bbff85;border-left:0;
+  border-radius:0 0 17px 0;
+  background:linear-gradient(160deg,#603cdf 0%,#3958d5 100%);
+  color:#fff;
+  box-shadow:5px 10px 27px #152b6a37,inset -1px 0 0 #ffffff3b;
+  font:700 10px/1.2 Poppins,system-ui,sans-serif;
+  cursor:pointer;
+}
+.nv-contact-rail .landing-theme-tools .nvl-theme-toggle span{
+  writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.4px;
+}
+.nv-contact-rail .landing-theme-tools .nvl-theme-toggle:hover{filter:brightness(1.1)}
+.nv-contact-rail .landing-theme-tools .nvl-theme-toggle:focus-visible{
+  outline:3px solid #97b4ff;outline-offset:3px;
+}
+/* The dialog uses native showModal top layer and stays viewport-centered. */
+.nv-contact-rail .landing-theme-tools .nvl-theme-dialog{
+  max-height:calc(100dvh - 32px);
+}
+.nv-contact-rail .nv-contact-dock__panel{
+  max-height:min(76dvh,640px);overflow-y:auto;scrollbar-width:thin;
+}
+.nv-contact-dock__link--instagram .nv-contact-dock__action-icon{
+  background:linear-gradient(135deg,#ef5a52,#cc2fa1 60%,#7253e7);
+}
+.nv-contact-dock__link--threads .nv-contact-dock__action-icon{background:#191b26}
+.nv-contact-dock__link--youtube .nv-contact-dock__action-icon{background:#e42736}
+.nv-contact-dock__link--facebook .nv-contact-dock__action-icon{background:#2160d2}
+.nv-contact-dock__link--tiktok .nv-contact-dock__action-icon{background:linear-gradient(135deg,#121b2f,#202c41)}
+.nv-contact-dock__link--twitter .nv-contact-dock__action-icon{background:#161c2d}
+@media(max-width:640px){
+  .nv-contact-rail{width:43px}
+  .nv-contact-rail .nv-contact-dock{width:43px}
+  .nv-contact-rail .landing-theme-tools{width:43px}
+  .nv-contact-rail .landing-theme-tools .nvl-theme-toggle{
+    width:43px;min-width:43px;min-height:78px;
+    padding:8px 4px;font-size:9px;border-radius:0 0 15px 0;
+  }
+  .nv-contact-rail .nv-contact-dock__panel{max-height:72dvh}
+}
+@media(max-width:360px){
+  .nv-contact-rail,.nv-contact-rail .nv-contact-dock,
+  .nv-contact-rail .landing-theme-tools{width:38px}
+  .nv-contact-rail .landing-theme-tools .nvl-theme-toggle{width:38px;min-width:38px}
+}
