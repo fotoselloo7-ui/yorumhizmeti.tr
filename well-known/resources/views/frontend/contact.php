@@ -22,7 +22,9 @@
         </div>
     </div>
     <?php if($contact['map_url']!==''): ?><section class="nv-contact-map" aria-labelledby="contact-map-title"><div class="nv-contact-map-heading"><div><span class="nv-contact-eyebrow"><?= icon('map-pin',16) ?> KONUM</span><h2 id="contact-map-title"><?= e($contact['contact_map_title']?:'Konum ve ulaşım') ?></h2><p><?= e($contact['contact_map_description']) ?></p></div><?php if($contact['site_address']!==''): ?><address><?= nl2br(e($contact['site_address'])) ?></address><?php endif; ?></div>
-        <div class="nv-contact-map-stage" data-contact-map data-map-src="<?= e($contact['map_url']) ?>"><div class="nv-contact-map-placeholder"><span><?= icon('map-pin',32) ?></span><h3>Konumumuzu haritada inceleyin</h3><p>Haritayı açtığınızda Google Haritalar yüklenir ve tarayıcınız Google ile bağlantı kurar.</p><button type="button" class="nv-contact-button" data-load-contact-map aria-controls="contact-map-frame">Google haritasını göster <?= icon('arrow-up-right',16) ?></button><noscript><a href="<?= e($contact['map_url']) ?>" target="_blank" rel="noopener noreferrer">Haritayı Google'da açın</a></noscript></div><iframe id="contact-map-frame" title="<?= e($contact['contact_map_title']?:'NetVera konum haritası') ?>" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen hidden></iframe></div>
+        <div class="nv-contact-map-stage" data-contact-map>
+            <iframe id="contact-map-frame" src="<?= e($contact['map_url']) ?>" title="<?= e($contact['contact_map_title']?:'NetVera Alanya konum haritası') ?>" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
         <div class="nv-contact-map-fallback"><span>Harita yüklenmiyorsa ayrı sekmede görüntüleyebilirsiniz.</span><a href="<?= e($contact['map_url']) ?>" target="_blank" rel="noopener noreferrer">Google Haritalar'da aç <?= icon('arrow-up-right',14) ?></a></div>
     </section><?php endif; ?>
 </div></section>
