@@ -164,7 +164,7 @@
     <?php endif; ?>
     <?php if($template==='frontend/landing/show'): ?>
     <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
-    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-layout-repair">
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-mobile-grid">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
     <?php endif; ?>
@@ -557,6 +557,7 @@
                         </a>
                     </h3>
                     <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
+                    <p class="nv-footer-about">NetVera Teknoloji Yazılım; web tasarım, özel yazılım geliştirme, hazır yazılım çözümleri, SEO, dijital reklam ve sosyal medya yönetimi hizmetlerini bir arada sunar. Türkiye’deki işletmeler için hizmet kapsamlarını, hazır yazılımları ve dijital rehberleri inceleyebilir, projeniz için ekibimizle iletişime geçebilirsiniz.</p>
                     <div class="footer-social footer-social-v9">
                         <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
                         <?php if (setting('social_youtube')): ?><a href="<?= e(setting('social_youtube')) ?>" target="_blank" rel="noopener" aria-label="YouTube"><?= icon('youtube', 15) ?></a><?php endif; ?>
