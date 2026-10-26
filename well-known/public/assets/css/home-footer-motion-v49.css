@@ -234,3 +234,43 @@
 .yh-home-v6 .yh49-marquee-primary .yh49-marquee-track,
  .yh-home-v6 .yh49-marquee-secondary .yh49-marquee-track{animation:none!important}
 }
+
+
+/* NetVera footer: four configured social actions, same bottom edge as the
+   neighboring category column at desktop and mobile widths. */
+.site-footer .footer-grid-v9.yh49-footer-grid{
+  align-items:stretch!important;
+}
+.site-footer .yh49-footer-grid .footer-brand{
+  display:flex;flex-direction:column;align-items:flex-start;
+  align-self:stretch;min-width:0;min-height:100%;
+}
+.site-footer .yh49-footer-grid .footer-brand .nv-footer-about{
+  max-width:29ch;margin:10px 0 0;
+  font-size:11px;line-height:1.7;overflow-wrap:anywhere;
+}
+.site-footer .yh49-footer-grid .footer-brand .footer-social{
+  display:flex;flex-wrap:wrap;align-items:center;
+  align-self:flex-start;gap:7px;
+  margin-top:auto!important;padding-top:14px;
+}
+.site-footer .yh49-footer-grid .footer-brand .footer-social a{
+  flex:0 0 auto;
+}
+@media(max-width:700px){
+  /* Brand and services share the first grid row; social icons rest at its foot. */
+  .site-footer .footer-grid-v9.yh49-footer-grid .footer-brand{
+    grid-column:auto!important;
+  }
+  .site-footer .yh49-footer-grid .footer-brand .nv-footer-about{
+    max-width:100%;font-size:10px;line-height:1.65;
+  }
+  .site-footer .yh49-footer-grid .footer-brand .footer-social{
+    gap:6px;padding-top:12px;
+  }
+}
+@media(max-width:400px){
+  .site-footer .yh49-footer-grid .footer-brand .footer-social a{
+    width:30px;height:30px;padding:6px;
+  }
+}
