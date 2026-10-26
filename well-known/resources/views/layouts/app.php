@@ -164,7 +164,7 @@
     <?php endif; ?>
     <?php if($template==='frontend/landing/show'): ?>
     <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
-    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-blog-overflow-final">
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-unified-script-ctas">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
     <?php endif; ?>
