@@ -62,7 +62,10 @@ use App\Services\SeoMetadataService as BlockSeo;
                 $cardTitle = $card['title'];
                 $cardImage = $blockType === 'references' ? BlockLanding::referenceImage($card) : $card['image'];
                 $cardUrl = $blockType === 'references' ? BlockSeo::webUrl($card['url'] ?? '') : $card['url'];
-                $cardDescription = $blockType === 'references' ? ($card['description'] ?? '') : $card['description'];
+                // This landing displays compact equal-height software/blog cards.
+                // Reference project summaries remain visible; source records are untouched.
+                $cardDescription = $blockType === 'references' ? ($card['description'] ?? '') : '';
+                $demoUrl = $blockType === 'scripts' ? ($card['demo_url'] ?? null) : null;
                 $externalCard = $blockType === 'references';
                 $cardCategory = trim((string)($card['category'] ?? ''));
                 if ($cardCategory === '') $cardCategory = ['scripts' => 'HAZIR YAZILIM', 'blog' => 'BİLGİ VE REHBER', 'references' => 'NETVERA PORTFÖYÜ'][$blockType];
@@ -80,7 +83,14 @@ use App\Services\SeoMetadataService as BlockSeo;
                         <div class="nvl-card-tags"><small><?= e($cardCategory) ?></small></div>
                         <h3><?php if ($cardUrl): ?><a href="<?= e($cardUrl) ?>" <?= $externalCard ? 'target="_blank" rel="noopener noreferrer"' : '' ?>><?= e($cardTitle) ?></a><?php else: ?><?= e($cardTitle) ?><?php endif; ?></h3>
                         <?php if (trim(strip_tags($cardDescription)) !== ''): ?><p><?= e(excerpt(strip_tags($cardDescription), 150)) ?></p><?php endif; ?>
-                        <?php if ($cardUrl): ?><div class="nvl-card-footer"><a class="nvl-card-link" href="<?= e($cardUrl) ?>" <?= $externalCard ? 'target="_blank" rel="noopener noreferrer"' : '' ?>><?= ['scripts' => 'Yazılımı incele', 'blog' => 'Yazıyı oku', 'references' => 'Projeyi görüntüle'][$blockType] ?> <?= icon('arrow-up-right', 16) ?></a></div><?php endif; ?>
+                        <?php if ($cardUrl): ?>
+                        <div class="nvl-card-footer">
+                            <a class="nvl-card-link" href="<?= e($cardUrl) ?>" <?= $externalCard ? 'target="_blank" rel="noopener noreferrer"' : '' ?>><?= ['scripts' => 'Yazılımı incele', 'blog' => 'Yazıyı oku', 'references' => 'Projeyi görüntüle'][$blockType] ?> <?= icon('arrow-up-right', 14) ?></a>
+                            <?php if ($blockType === 'scripts' && $demoUrl): ?>
+                            <a class="nvl-card-link nvl-demo-link" href="<?= e($demoUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($cardTitle) ?> canlı demosunu incele"><?= icon('external-link', 13) ?> Demo</a>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </article>
             <?php endforeach; ?>
