@@ -53,11 +53,12 @@ try{
           overflow:view.scrollWidth-view.clientWidth,
           rows:getComputedStyle(grid).gridTemplateRows,
           clipped:titles.filter(el=>el.scrollHeight>el.clientHeight+2||el.scrollWidth>el.clientWidth+2).length,
+          clippedDetails:titles.filter(el=>el.scrollHeight>el.clientHeight+2||el.scrollWidth>el.clientWidth+2).slice(0,2).map(el=>({text:el.textContent,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,scrollHeight:el.scrollHeight,clientHeight:el.clientHeight,display:getComputedStyle(el).display,whiteSpace:getComputedStyle(el).whiteSpace,overflow:getComputedStyle(el).overflow,clamp:getComputedStyle(el).webkitLineClamp})),
           hiddenOriginals:[...grid.children].filter(el=>el.hasAttribute('data-nvl-rail-clone')).length};
       });
     });
     for(const group of stats){
-      assert(group.clipped===0,'Card title clipped '+width+'/'+group.kind);
+      assert(group.clipped===0,'Card title clipped '+width+'/'+group.kind+': '+JSON.stringify(group.clippedDetails));
       assert(group.hiddenOriginals===0,'Duplicate nodes '+width+'/'+group.kind);
       assert(group.rows.split(' ').filter(Boolean).length>=2,'Two real grid rows missing: '+width+'/'+group.kind+':'+group.rows);
       assert(group.overflow>40,'Autoplay cannot move, no horizontal overflow: '+width+'/'+group.kind+':'+group.overflow);
