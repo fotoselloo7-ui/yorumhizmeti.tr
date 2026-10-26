@@ -32,6 +32,9 @@ jobs:
       - name: Public SEO slug, redirects and canonical URL QA
         run: php well-known/tests/public-slug-url-qa.php
 
+      - name: Imported NetVera original product and blog URL parity
+        run: php well-known/tests/netvera-link-parity.php well-known/database/netvera-public-catalog.json
+
       - name: Public demo publication and initial mask QA
         run: |
           php well-known/tests/public-demo-render-qa.php
