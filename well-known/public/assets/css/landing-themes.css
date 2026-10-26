@@ -259,9 +259,9 @@
 @media(max-width:800px){
   /* On mobile the uploaded image gets its own real visual slot below hero text.
      No fake analytics art and no image competing with controls. */
-  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{padding-bottom:222px}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{padding-bottom:252px}
   .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop{
-    inset:auto 20px 90px;opacity:1;height:188px;border-radius:16px;
+    inset:auto 20px 136px;opacity:1;height:188px;border-radius:16px;
     mask-image:none;box-shadow:0 12px 28px #0b284b1c;transform:none;clip-path:none;
   }
   .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop::after{display:none}
@@ -274,8 +274,8 @@
   .nv-landing[data-theme=landing-09] .nvl-section-overview>.nvl-container{border-radius:14px}
 }
 @media(max-width:420px){
-  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{padding-bottom:185px}
-  .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop{inset:auto 16px 87px;height:148px;border-radius:12px}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-stage{padding-bottom:205px}
+  .nv-landing .nvl-hero.nvl-has-location .nvl-city-backdrop{inset:auto 16px 132px;height:148px;border-radius:12px}
   .nv-landing[data-theme=landing-06] [data-component=services][data-variant=rows] .nvl-service-card{border-left-width:3px}
 }
 
