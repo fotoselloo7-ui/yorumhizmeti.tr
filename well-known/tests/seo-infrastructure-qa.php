@@ -35,6 +35,20 @@ foreach(['/kategori/test?sort=price_asc','/blog?q=test','/hazir-yazilimlar?indir
 $d=Meta::prepare(['ogImage'=>'/assets/img/synthetic.webp'],'frontend/page','app','/iletisim?utm_source=test');
 $ok($d['canonicalUrl']==='https://netvera.example/iletisim'&&$d['ogImage']==='https://netvera.example/assets/img/synthetic.webp','Static fallback canonical / OG use absolute safe origin');
 $settings['seo_default_robots']='noindex,follow';$d=Meta::prepare(['nvSeoData'=>['robots'=>'index,follow']],'frontend/page','app','/sayfa/test');$ok(Meta::indexable($d['nvRobots']),'Global default does not erase an explicit editorial choice');$settings['seo_default_robots']='index,follow,max-image-preview:large';
+// Visual previews and alternate landing design URLs are not separate documents.
+foreach(['/alanya-reklam-ajansi?onizleme=1','/alanya-reklam-ajansi?tema=landing-06',
+    '/alanya-reklam-ajansi?tasarim=atlas','/blog?preview=1'] as $previewPath){
+    $prepared=Meta::prepare([],'frontend/landing/show','app',$previewPath);
+    $ok(!Meta::indexable($prepared['nvRobots']) &&
+        $prepared['canonicalUrl']==='https://netvera.example'.strtok($previewPath,'?'),
+        'Visual preview/query variant is noindex with the clean canonical');
+}
+// Unicode-aware sitewide editorial quality checks must recognize Turkish content.
+$quality=new App\Services\SeoScoreService();
+$turkishContent=implode(' ',array_fill(0,120,'İşletmelerimizin büyümesine odaklanıyoruz'));
+$qualityResult=$quality->calculate(['title'=>'Türkçe örnek','content'=>$turkishContent]);
+$ok(count(array_filter($qualityResult['checks'],static fn($item)=>str_contains($item['message'],'240 kelime')))>0,
+    'Turkish-language content scores by actual Unicode words, not byte fragments');
 $page=['canonicalUrl'=>url('/example'),'pageTitle'=>'Synthetic </script> title','metaDescription'=>'Public description'];
 $existing=['@context'=>'https://schema.org','@graph'=>[['@type'=>'CollectionPage','@id'=>url('/example').'#page','name'=>'Existing collection'],['@type'=>'Product','offers'=>['price'=>99,'priceCurrency'=>'TRY']]]];
 $json=Graph::graph(json_encode($existing),$page,['author_name'=>'QA Editor','author_type'=>'Person','author_url'=>'https://example.test/editor','same_as_urls'=>"https://example.test/profile\njavascript:x",'sources'=>"https://example.test/source\ndata:x",'last_reviewed'=>'2024-02-29'],'frontend/blog/detail');
@@ -48,6 +62,7 @@ $ok($geo[0]['description']==='Editor-managed public service summary'&&count($geo
 $ok($graph[1]['offers']['price']===99&&!isset($graph[1]['aggregateRating']),'Existing offer preserved; no fabricated review');
 $ok(!str_contains($json,'</script>'),'JSON-LD is safe in an HTML script element');
 $ok(Graph::graph('',array_merge($page,['seoPrivate'=>true]))===null,'Private data has no discovery graph');
+$ok(Graph::graph('',array_merge($page,['seoNoindex'=>true]))===null,'All noindex pages omit rich-result JSON-LD');
 foreach(['invalid','{"@graph":"bad"}','[]']as $raw){$g=json_decode(Graph::graph($raw,$page),true);$ok(count($g['@graph'])===1&&$g['@graph'][0]['@type']==='WebPage','Malformed old JSON cannot break rendering');}
 $g=json_decode(Graph::graph('', $page,['sources'=>'https://example.test/private-note','last_reviewed'=>'2099-01-01'],'frontend/category-detail'),true)['@graph'][0];
 $ok(!isset($g['citation'])&&!isset($g['lastReviewed'])&&!isset($g['mainEntity']),'Hidden category notes do not become fake citations, dates or FAQ claims');
