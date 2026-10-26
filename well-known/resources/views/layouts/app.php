@@ -173,8 +173,7 @@
     <script src="<?= asset('js/social-storefront.js') ?>?v=20261019" defer></script>
     <?php endif; ?>
     <?php if($template==='frontend/contact'): ?>
-    <link rel="stylesheet" href="<?= asset('css/contact-page.css') ?>?v=20261020">
-    <script src="<?= asset('js/contact-map.js') ?>?v=20261020" defer></script>
+    <link rel="stylesheet" href="<?= asset('css/contact-page.css') ?>?v=20261026-visible-google-map">
     <?php endif; ?>
     <?php $nvGraph=\App\Services\SeoStructuredDataService::graph($schema??null,[
       'canonicalUrl'=>$canonicalUrl??'','pageTitle'=>$pageTitle??'','metaDescription'=>$metaDescription??'',
