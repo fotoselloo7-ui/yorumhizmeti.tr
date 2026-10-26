@@ -160,6 +160,20 @@ foreach (Theme::all() as $key => $profile) {
     $ok(!str_contains($emptyHtml, 'src=""') && !str_contains($emptyHtml, 'srcset=""') && !str_contains($emptyHtml, $d['location_image_alt']), 'No broken empty image or stale city visual: ' . $key);
 }
 
+// Software-product category definitions must never leak into the services showcase.
+foreach (['nakliye-lojistik-scripti', 'mobil-uygulama-sablonlari',
+    'teknik-servis-scripti', 'wordpress-temalari'] as $productSlug) {
+    $ok(\App\Services\LandingCatalogService::isSoftwareOnlyCategory(['slug' => $productSlug]),
+        'Ready software category excluded from service picker: ' . $productSlug);
+}
+foreach (['seo-hizmetleri', 'web-tasarim', 'mobil-uygulama-hizmetleri'] as $serviceSlug) {
+    $ok(!\App\Services\LandingCatalogService::isSoftwareOnlyCategory(['slug' => $serviceSlug]),
+        'Agency service preserved in service picker: ' . $serviceSlug);
+}
+$ok(\App\Services\LandingCatalogService::isSoftwareOnlyCategory([
+    'slug' => 'child-entry', 'parent_category_slug' => 'hazir-yazilim-scriptleri'
+]), 'Children of software catalog cannot appear as agency services');
+
 $form = file_get_contents(BASE_PATH . '/resources/views/admin/landing/form.php');
 $admin = file_get_contents(BASE_PATH . '/app/Controllers/Admin/LandingController.php');
 $ok(str_contains($form, 'location_image') && str_contains($form, 'location_image_alt'), 'Admin exposes editable city photo and alt');
