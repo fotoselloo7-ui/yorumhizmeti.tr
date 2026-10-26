@@ -236,4 +236,10 @@ $layout = file_get_contents(BASE_PATH . '/resources/views/layouts/app.php');
 $ok(str_contains($layout, 'class="nv-footer-about"') &&
     str_contains($layout, 'NetVera; web tasarım'),
     'Shared NetVera footer contains the visible brand and services description');
+$ok(str_contains($themeCss, 'Final CTA parity: every regional landing theme') &&
+    str_contains($themeCss, '[data-component="scripts"] .nvl-card-footer .nvl-card-link:first-child') &&
+    str_contains($themeCss, '[data-component="scripts"] .nvl-card-footer .nvl-demo-link') &&
+    str_contains($themeCss, 'min-height:36px') &&
+    str_contains($themeCss, '@media(max-width:360px)'),
+    'Across ten themes the Inspect Software and Demo buttons have equal height with narrow-screen fallback');
 echo "PASS $checks location-image/reference-semantic/sparse-data/no-fabricated-proof checks\n";
