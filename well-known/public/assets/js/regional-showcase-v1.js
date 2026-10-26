@@ -96,13 +96,16 @@
       if(event.pointerType==='touch' || event.button!==0)return; // native touch swipe stays enabled
       state.dragging=true;state.dragged=false;state.startX=event.clientX;
       state.startScroll=viewport.scrollLeft;state.pauseUntil=Infinity;
-      viewport.classList.add('is-dragging');
-      viewport.setPointerCapture(event.pointerId);
+      // Capture only after an actual drag; ordinary product/blog clicks must work.
     });
     listen(viewport,'pointermove',event=>{
       if(!state.dragging)return;
       const shift=event.clientX-state.startX;
-      if(Math.abs(shift)>4)state.dragged=true;
+      if(Math.abs(shift)>4 && !state.dragged) {
+        state.dragged=true;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+      }
       if(state.dragged){
         event.preventDefault();
         viewport.scrollLeft=state.startScroll-shift;
