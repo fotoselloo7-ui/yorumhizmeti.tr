@@ -57,7 +57,16 @@ use App\Services\SeoMetadataService as BlockSeo;
             </div>
             <?php if ($blockType !== 'references'): ?><a href="<?= $blockType === 'scripts' ? '/hazir-scriptler' : '/blog' ?>"><?= $blockType === 'scripts' ? 'Yazılım kataloğu' : 'Tüm yazılar' ?> <?= icon('arrow-up-right', 15) ?></a><?php endif; ?>
         </header>
-        <div class="nvl-card-grid nvl-card-grid-<?= e($blockType) ?>">
+        <?php if($blockType==='references'): ?>
+        <div class="nvl-reference-filters" data-nvl-reference-filters role="group" aria-label="Referansları kategoriye göre filtrele">
+            <button type="button" class="is-active" data-nvl-reference-filter="all" aria-pressed="true">Tüm çalışmalar</button>
+            <button type="button" data-nvl-reference-filter="agency" aria-pressed="false"><?= icon('layers',14) ?> Ajans &amp; Yazılım</button>
+            <button type="button" data-nvl-reference-filter="marketing" aria-pressed="false"><?= icon('trending-up',14) ?> SEO &amp; Dijital</button>
+            <small data-nvl-reference-count aria-live="polite"><?= count($cards) ?> çalışma</small>
+        </div>
+        <?php endif; ?>
+        <div class="nvl-showcase-viewport" data-nvl-rail-viewport>
+          <div class="nvl-card-grid nvl-card-grid-<?= e($blockType) ?>" data-nvl-grid>
             <?php foreach ($cards as $card):
                 $cardTitle = $card['title'];
                 $cardImage = $blockType === 'references' ? BlockLanding::referenceImage($card) : $card['image'];
@@ -70,7 +79,15 @@ use App\Services\SeoMetadataService as BlockSeo;
                 $cardCategory = trim((string)($card['category'] ?? ''));
                 if ($cardCategory === '') $cardCategory = ['scripts' => 'HAZIR YAZILIM', 'blog' => 'BİLGİ VE REHBER', 'references' => 'NETVERA PORTFÖYÜ'][$blockType];
             ?>
-                <article class="nvl-card nvl-card-<?= e($cardKind) ?>">
+                <?php
+                $nvFilterGroups='';
+                if($blockType==='references') {
+                    $nvFilterGroups=' '.implode(' ',array_unique(array_column(
+                        \App\Services\ReferencesService::normalizedPlacements($card),'group'
+                    ))).' ';
+                }
+                ?>
+                <article class="nvl-card nvl-card-<?= e($cardKind) ?>" <?= $blockType==='references'?'data-nvl-groups="'.e($nvFilterGroups).'"':'' ?>>
                     <div class="nvl-card-media<?= $cardImage === '' ? ' nvl-card-media-empty' : '' ?>">
                         <?php if ($cardUrl): ?><a class="nvl-card-visual-link" href="<?= e($cardUrl) ?>" aria-label="<?= e($cardTitle) ?>" <?= $externalCard ? 'target="_blank" rel="noopener noreferrer"' : '' ?>><?php endif; ?>
                         <?php if ($cardImage !== ''): ?>
@@ -94,6 +111,7 @@ use App\Services\SeoMetadataService as BlockSeo;
                     </div>
                 </article>
             <?php endforeach; ?>
+          </div>
         </div>
     <?php break; case 'content':
         $processFlow = in_array($blockVariant, ['steps', 'timeline', 'dark-flow'], true);
