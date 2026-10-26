@@ -56,6 +56,9 @@ $liveScriptCount = count(\App\Services\NetveraBridgeService::all());
             <span class="nv26-tile-icon"><?= icon($cat['icon'],27) ?></span>
             <strong><?= e($cat['name']) ?></strong>
             <small><?= count($cat['children']) ? count($cat['children']).' alt hizmet' : 'Paketleri incele' ?></small>
+            <?php if(trim((string)($cat['description']??''))!==''): ?>
+            <p class="nv26-tile-editorial"><?= e(excerpt(strip_tags((string)$cat['description']),145)) ?></p>
+            <?php endif; ?>
             <span class="nv88-tile-arrow" aria-hidden="true"><?= icon('arrow-right',15) ?></span>
           </a>
         </article>
