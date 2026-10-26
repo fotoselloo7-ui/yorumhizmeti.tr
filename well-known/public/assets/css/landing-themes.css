@@ -435,3 +435,164 @@
   .nv-landing [data-component="services"] .nvl-service-card,
   .nv-landing :is([data-component="scripts"],[data-component="blog"],[data-component="references"]) .nvl-card-copy { padding: 10px; }
 }
+
+/* Regional landing refinement: layouts only, independent of the global store. */
+.nv-landing [data-component="scripts"] .nvl-card-footer{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  gap:8px 10px;margin-top:auto;padding-top:12px;
+}
+.nv-landing [data-component="scripts"] .nvl-card-footer .nvl-card-link{
+  margin:0;font-size:10px;white-space:normal;line-height:1.4;
+}
+.nv-landing [data-component="scripts"] .nvl-card-footer .nvl-demo-link{
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  flex:0 0 auto;padding:7px 9px;border:1px solid var(--nvl-border);
+  border-radius:7px;background:var(--nvl-soft);color:var(--nvl-brand);
+  font-weight:650;transition:background .2s,color .2s;
+}
+.nv-landing [data-component="scripts"] .nvl-card-footer .nvl-demo-link:hover{
+  background:var(--nvl-brand);color:#fff;
+}
+.nv-landing [data-component="scripts"] .nvl-card-media{
+  background:var(--nvl-soft);overflow:hidden;
+}
+.nv-landing [data-component="scripts"] .nvl-card-media img{
+  display:block;width:100%;height:100%;object-fit:contain!important;
+  object-position:center center;transform:none!important;
+}
+.nv-landing [data-component="scripts"] .nvl-card-copy{
+  justify-content:flex-start;
+}
+.nv-landing [data-component="blog"] .nvl-card-copy>p{display:none}
+
+/* Bring the section directory into a clean, compact single-line mobile rail. */
+@media (max-width:900px){
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated{
+    display:flex;flex-direction:column;align-items:stretch;gap:22px;
+    grid-template-columns:none;min-width:0;
+  }
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated .nvl-overview-media{
+    display:block;order:0;width:100%;max-width:100%;margin:0;
+    min-width:0;align-self:stretch;border-radius:16px;
+  }
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated .nvl-overview-media img{
+    display:block;width:100%;height:auto;max-height:320px;
+    aspect-ratio:16/9;object-fit:cover;
+  }
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated .nvl-overview-copy{
+    display:block;order:1;width:100%;min-width:0;max-width:none;
+    margin:0;padding:0;grid-column:auto;
+  }
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated .nvl-overview-copy h2{
+    font-size:clamp(23px,5.2vw,30px);line-height:1.28;max-width:none;
+  }
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated .nvl-prose{
+    margin-top:12px;max-width:100%;
+  }
+  .nv-landing[data-theme] .nvl-section-overview .nvl-overview-illustrated .nvl-disclosure{
+    margin-top:16px;max-width:100%;
+  }
+}
+@media (max-width:767px){
+  .nv-landing[data-theme] .nvl-navigation{
+    display:flex;flex-wrap:nowrap;align-items:center;gap:8px;
+    width:calc(100% - 32px);padding:12px 0;
+    overflow-x:auto;overflow-y:hidden;overscroll-behavior-inline:contain;
+    scrollbar-width:thin;scroll-snap-type:x proximity;
+  }
+  .nv-landing[data-theme] .nvl-navigation a{
+    display:inline-flex;flex:0 0 auto;align-items:center;
+    border:1px solid var(--nvl-border);background:var(--nvl-soft);
+    border-radius:999px;padding:6px 11px;font-size:10px;
+    line-height:1.5;white-space:nowrap;scroll-snap-align:start;
+  }
+  /* All ten themes, including gallery, wide covers and horizontal variants,
+     get consistent two-column script cards on phones and narrow tablets. */
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid,
+  .nv-landing[data-theme] [data-component="scripts"][data-variant="horizontal"] .nvl-card-grid,
+  .nv-landing[data-theme] [data-component="scripts"][data-variant="wide-covers"] .nvl-card-grid{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    align-items:stretch;gap:12px;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid:has(>.nvl-card:only-child){
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid .nvl-card{
+    display:flex!important;flex-direction:column!important;
+    width:100%;min-width:0;height:100%;overflow:hidden;
+    border-radius:12px;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid .nvl-card-media{
+    display:block;order:0;width:100%;height:auto!important;
+    min-height:0!important;aspect-ratio:16/10!important;
+    padding:0;border-radius:0;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid .nvl-card-visual-link{
+    display:block;width:100%;height:100%;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid .nvl-card-media img{
+    width:100%;height:100%;max-width:100%;object-fit:contain!important;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid .nvl-card-copy{
+    display:flex;flex:1 1 auto;order:1;flex-direction:column;min-width:0;
+    padding:12px;gap:6px;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-copy h3{
+    font-size:12px;line-height:1.5;overflow-wrap:anywhere;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer{
+    margin-top:auto;flex-wrap:wrap;gap:7px;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-card-link{
+    font-size:9px;min-width:0;
+  }
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer .nvl-demo-link{
+    padding:6px 8px;font-size:9px;
+  }
+  /* Real authored process copy remains complete, but cards no longer form
+     a narrow text strip beside oversized vertical icons. */
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles{
+    display:grid;grid-template-columns:minmax(0,1fr);gap:12px;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-article{
+    display:flex;flex-direction:column;align-items:stretch;
+    gap:12px;min-width:0;width:100%;height:auto;
+    padding:17px;border:1px solid var(--nvl-border);
+    border-radius:14px;background:var(--nvl-surface);
+    box-shadow:0 6px 20px #14233b08;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-step-marker{
+    display:flex;align-items:center;justify-content:flex-start;gap:12px;
+    padding:0;margin:0;min-width:0;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-step-number{
+    font-size:11px;width:31px;height:31px;flex:0 0 31px;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-step-symbol{
+    display:grid;place-items:center;width:33px;height:33px;
+    border-radius:10px;background:var(--nvl-soft);box-shadow:none;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-article-copy{
+    display:block;min-width:0;width:100%;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-article h2{
+    font-size:17px;line-height:1.4;margin:0 0 10px;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-prose{
+    font-size:12px;line-height:1.8;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-article h3{
+    margin:13px 0 7px;font-size:13px;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-article>img{
+    max-width:100%;width:100%;height:auto;grid-column:auto;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles .nvl-article:after{
+    display:none!important;
+  }
+}
+@media (max-width:420px){
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid{gap:10px}
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-grid .nvl-card-copy{padding:10px}
+  .nv-landing[data-theme] [data-component="scripts"] .nvl-card-footer{align-items:flex-start}
+}
