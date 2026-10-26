@@ -103,6 +103,9 @@ $blockBaseline = null;
 foreach (Theme::all() as $key => $profile) {
     $html = $render($d, $key, $sources);
     $xp = $parse($html);
+    $ok($xp->query('//*[contains(concat(" ",normalize-space(@class)," ")," nvl-navigation ")]')->length === 0 &&
+        $xp->query('//*[contains(concat(" ",normalize-space(@class)," ")," nvl-provenance ")]')->length === 0,
+        'White link and provenance strips are absent in theme: ' . $key);
     $ok(!preg_match('/class="nvl-(?:scene|board|hero-art|place-card|search-card|dimension-target)/', $html), 'No foreground advertising art or floating panels: ' . $key);
     $ok($xp->query('//*[contains(@class,"nvl-city-backdrop")]/img')->length === 1, 'One managed background image: ' . $key);
     $ok($xp->query('//h1')->length === 1 && $normal($xp->query('//h1')->item(0)->textContent) === $d['title'], 'Exact single H1: ' . $key);
