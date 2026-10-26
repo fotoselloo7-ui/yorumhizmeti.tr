@@ -19,7 +19,14 @@ const roots=new Set(['/','/sitemap.xml','/kategoriler','/hazir-yazilimlar','/haz
 const importedAliases=new Map([
  ['/haber-sitesi-scripti','/hazir-scriptler/haber-sitesi-scripti'],
  ['/temizlik-firmasi-scripti-web-site-yazilimi','/hazir-scriptler/netvera-temizlik-firmasi-script-yazilimi-pro'],
- ['/emlak-scripti-hazir-emlak-sitesi-yazilimi','/hazir-scriptler/netvera-emlak-script-yazilimi-pro']
+ ['/emlak-scripti-hazir-emlak-sitesi-yazilimi','/hazir-scriptler/netvera-emlak-script-yazilimi-pro'],
+ ['/yapay-zeka-haber-yazilimi','/hazir-scriptler/haber-sitesi-scripti'],
+ ['/dijital-hizmetler/sosyal-medya-yonetimi','/kategoriler/grup/social'],
+ ['/dijital-hizmetler/modern-web-tasarim','/kategori/web-tasarim'],
+ ['/dijital-hizmetler/seo-hizmetleri','/kategori/seo-hizmetleri'],
+ ['/dijital-hizmetler/google-meta-ads','/kategori/dijital-reklam'],
+ ['/dijital-hizmetler','/kategoriler'],
+ ['/teklif-al','/iletisim']
 ]);
 const unescapeHtml=(v)=>v.replace(/&amp;/gi,'&').replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'")
  .replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n)))
