@@ -93,7 +93,7 @@ $d['seo']['service_area'] = 'Bursa';
 $d['links'] = [['label' => 'Gerçek hizmetler', 'path' => '/kategoriler']];
 $sources = [
     'services' => [['name' => 'Sentetik hizmet', 'slug' => 'sentetik-hizmet', 'description' => 'Veri kaynağındaki hizmet açıklaması.']],
-    'scripts' => [['title' => 'Sentetik yazılım', 'url' => '/hazir-scriptler/sentetik-yazilim', 'description' => 'Veri kaynağındaki yazılım açıklaması.', 'image' => '/assets/img/category-heroes/web.webp', 'category' => 'Yazılım']],
+    'scripts' => [['title' => 'Sentetik yazılım', 'url' => '/hazir-scriptler/sentetik-yazilim', 'demo_url' => 'https://demo.example.test/', 'description' => 'Veri kaynağındaki yazılım açıklaması.', 'image' => '/assets/img/category-heroes/web.webp', 'category' => 'Yazılım']],
     'blog' => [['title' => 'Sentetik rehber', 'url' => '/blog/sentetik-rehber', 'description' => 'Veri kaynağındaki rehber açıklaması.', 'image' => '', 'image_alt' => '', 'category' => 'Rehber']],
     'references' => [['title' => 'Sentetik portföy', 'description' => 'Veri kaynağındaki portföy açıklaması.', 'image' => '/assets/img/category-heroes/web.webp', 'url' => 'https://example.test/portfolio']],
 ];
@@ -127,6 +127,12 @@ foreach (Theme::all() as $key => $profile) {
     foreach (['scripts', 'blog', 'references'] as $kind) {
         $ok($xp->query('//*[@data-component="' . $kind . '"]//*[contains(concat(" ",normalize-space(@class)," ")," nvl-card ")]')->length === 1, 'Sparse catalog does not fabricate cards: ' . $key . ' ' . $kind);
     }
+    $ok($xp->query('//*[@data-component="scripts"]//a[contains(concat(" ",normalize-space(@class)," ")," nvl-demo-link ")][@href="https://demo.example.test/"]')->length === 1,
+        'An eligible public demo gets a direct second action: ' . $key);
+    $ok(!str_contains($html, 'Veri kaynağındaki yazılım açıklaması.') &&
+        !str_contains($html, 'Veri kaynağındaki rehber açıklaması.') &&
+        str_contains($html, 'Veri kaynağındaki portföy açıklaması.'),
+        'Software and blog excerpts omitted without altering reference descriptions: ' . $key);
     $ok($xp->query('//details/summary')->length === 1, 'Native FAQ count retained: ' . $key);
     foreach ($d['sections'] as $section) $ok(str_contains($html, e($section['body'])), 'Full step body retained: ' . $key);
     $ok(str_contains($html, e($d['sections'][0]['detail'])) && str_contains($html, e($d['sections'][0]['subheading'])), 'Step subheading and detail not truncated: ' . $key);
@@ -206,6 +212,16 @@ $sharedFields = file_get_contents(BASE_PATH . '/resources/views/admin/landing/co
 $ok(str_contains($sharedFields, 'if($contentHome):') &&
     str_contains($sharedFields, 'Soru / cevap'),
     'Home FAQ editing remains available without duplicate regional FAQ inputs');
+$ok(str_contains($themeCss, 'Regional landing refinement: layouts only') &&
+    str_contains($themeCss, 'grid-template-columns:repeat(2,minmax(0,1fr))!important') &&
+    str_contains($themeCss, 'object-fit:contain!important') &&
+    str_contains($themeCss, '.nvl-section-overview .nvl-overview-illustrated') &&
+    str_contains($themeCss, '[data-component="content"] .nvl-articles'),
+    'All theme variants get responsive full-cover software grid and readable overview/process');
+$ok(str_contains(file_get_contents(BASE_PATH . '/resources/views/layouts/app.php'), 'nvFooterSocialVisible >= 4') &&
+    str_contains(file_get_contents(PUBLIC_PATH . '/assets/css/home-footer-motion-v49.css'), 'footer-social') &&
+    str_contains(file_get_contents(BASE_PATH . '/resources/views/layouts/app.php'), 'NetVera; web tasarım'),
+    'Shared footer description shortened and existing social controls limited to four');
 $ok(str_contains($themeCss, 'Mobile two-column landing card collections') &&
     str_contains($themeCss, '[data-component="services"] .nvl-service-grid') &&
     str_contains($themeCss, '[data-component="scripts"],[data-component="blog"],[data-component="references"]') &&
