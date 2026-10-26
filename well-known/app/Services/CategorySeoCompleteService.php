@@ -33,7 +33,7 @@ final class CategorySeoCompleteService
         // it is based on the actual category, NEVER creates a new thin SEO URL.
         $commercial=(bool)preg_match('/takipçi|takipci|beğeni|begeni|izlenme|görüntülenme|goruntulenme|abone|satın al|satin al/iu',$name.' '.$slug);
         $title=$profile['title']??($name.' | NetVera Teknoloji Yazılım');
-        $defaultDescription=$name.' için NetVera Teknoloji Yazılım hizmet seçeneklerini, paket kapsamlarını, teslimat ve sipariş koşullarını karşılaştırın. Size uygun çözümü inceleyin.';
+        $defaultDescription=CategoryEditorialCopyService::description($category);
         $description=$profile['desc']??$defaultDescription;
         $focus=$profile['focus']??mb_strtolower($name,'UTF-8');
         $secondary=$profile['secondary']??($focus.' paketleri, '.$focus.' hizmetleri');
@@ -64,7 +64,7 @@ final class CategorySeoCompleteService
             'name'=>$name,'slug'=>$slug,
             'description'=> $profile
                ? mb_substr($profile['desc'],0,300,'UTF-8')
-               : ($category['description']??$defaultDescription),
+               : mb_substr($defaultDescription,0,400,'UTF-8'),
             'image_alt'=>$imageExists?($name.' kategorisi hizmet görseli | NetVera'):'',
             'seo_title'=>$title,
             'seo_description'=>$description,
@@ -103,7 +103,7 @@ final class CategorySeoCompleteService
             $current=(string)($category[$key]??'');
             // Existing category prose is meaningful, so retain it unless completely blank.
             $replace=$key==='description'
-                ?(trim($current)==='' || mb_strlen($current,'UTF-8')<55)
+                ?(trim($current)==='' || mb_strlen($current,'UTF-8')<55 || self::isGeneric('description',$current,$category))
                 :(in_array($key,['image_alt','canonical_url'],true)
                   ?trim($current)===''
                   :self::isGeneric($key,$current,$category));
