@@ -116,6 +116,7 @@
             const selected = picker.querySelector('[data-picker-selected]');
             const available = picker.querySelector('[data-picker-available]');
             const search = picker.querySelector('[data-picker-search]');
+            const maxCards = picker.dataset.contentPicker === 'services' ? 24 : 120;
             const normalize = value => value.toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             const refresh = () => {
                 const count = selected.children.length;
@@ -133,9 +134,9 @@
                 const input = event.target;
                 if (!input.matches('input[type="checkbox"]')) return;
                 const item = input.closest('[data-picker-item]');
-                if (input.checked && selected.children.length >= 24) {
+                if (input.checked && selected.children.length >= maxCards) {
                     input.checked = false;
-                    picker.querySelector('[data-picker-status]').textContent = 'Bu bölümde en fazla 24 kayıt seçebilirsiniz.';
+                    picker.querySelector('[data-picker-status]').textContent = 'Bu bölümde en fazla ' + maxCards + ' kayıt seçebilirsiniz.';
                 } else {
                     (input.checked ? selected : available).append(item);
                     item.hidden = false;
