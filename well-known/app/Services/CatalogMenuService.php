@@ -20,6 +20,11 @@ final class CatalogMenuService
             foreach ($rows as $cat) {
                 $cat['id']=(int)$cat['id'];
                 $cat['parent_id']=$cat['parent_id']===null?null:(int)$cat['parent_id'];
+                // Frontend-only editorial fallback; no slug, ID or stored content changed.
+                if (trim((string)($cat['description']??''))==='' ||
+                    preg_match('/YorumHizmeti(?:\\.tr)?|Yorum Hizmeti/iu',(string)$cat['description'])) {
+                    $cat['description']=CategoryEditorialCopyService::description($cat);
+                }
                 if ($cat['parent_id']===null) $roots[$cat['id']]=$cat;
                 else $children[$cat['parent_id']][]=$cat;
             }
