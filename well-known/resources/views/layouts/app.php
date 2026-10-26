@@ -706,6 +706,7 @@
     }
     ?>
     <?php if($nvDockWhatsapp!=='' || $nvDockPhone!=='' || $nvDockSocial!==[]): ?>
+    <div class="nv-contact-rail" data-nv-contact-rail>
     <details class="nv-contact-dock" data-nv-side-contact aria-label="NetVera hızlı iletişim">
         <summary class="nv-contact-dock__trigger" aria-label="Hızlı iletişim panelini aç">
             <span class="nv-contact-dock__trigger-icon"><?= icon('message-circle',23) ?></span>
@@ -743,6 +744,7 @@
             </nav>
         </div>
     </details>
+    </div>
     <?php endif; ?>
 
     <?php $nvLiveChatReady=\App\Services\NetveraInquiryService::ready(); ?>
@@ -790,7 +792,7 @@
     <?php if($nvLiveChatReady): ?>
     <script src="<?= asset('js/netvera-live-chat.js') ?>?v=20261016-mobile-dock" defer></script>
     <?php endif; ?>
-    <script src="<?= asset('js/netvera-side-contact-v1.js') ?>?v=20261026-premium-left-dock" defer></script>
+    <script src="<?= asset('js/netvera-side-contact-v1.js') ?>?v=20261026-social-theme-rail" defer></script>
     <script src="<?= asset('js/app.js') ?>?v=20261018-member-workspace"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
