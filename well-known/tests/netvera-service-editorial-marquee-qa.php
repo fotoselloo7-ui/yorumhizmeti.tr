@@ -54,13 +54,13 @@ $ok(str_contains($frontend,'nv26-tile-editorial')&&str_contains($catalog,'Catego
 $ok(str_contains($landing,'CategoryEditorialCopyService::description'),'Every landing theme shares non-destructive service explanations');
 $js=file_get_contents(PUBLIC_PATH.'/assets/js/regional-showcase-v1.js');
 $css=file_get_contents(PUBLIC_PATH.'/assets/css/regional-showcase-v1.css');
-$ok(str_contains($js,"['references', 'scripts', 'blog'].includes(section.dataset.component)"),'All landing themes activate dynamic showcases');
-$ok(str_contains($js,'requestAnimationFrame(tick)')&&str_contains($js,'viewport.scrollLeft=next')&&str_contains($js,'s.dir=-1'),'Visible auto-scrolling actually advances by time');
+$ok(str_contains($js,"['scripts','blog','references'].includes(type)"),'All landing themes activate dynamic showcases');
+$ok(str_contains($js,'requestAnimationFrame(tick)')&&str_contains($js,'grid.appendChild(front)')&&str_contains($js,'viewport.scrollLeft-=state.step'),'Visible auto-scrolling actually advances by time');
 $ok(str_contains($js,'setPointerCapture')&&str_contains($js,"'pointermove'"),'Desktop drag with pointer capture');
 $ok(str_contains($js,"'touchstart'")&&str_contains($css,'touch-action:pan-x pan-y'),'Native touch swipe available');
-$ok(str_contains($js,'prefers-reduced-motion')&&str_contains($js,'s.focused'),'Accessible reduced-motion and focus pause');
+$ok(str_contains($js,'prefers-reduced-motion')&&str_contains($js,'state.focus'),'Accessible reduced-motion and focus pause');
 $ok(str_contains($js,'landing:themechange'),'Changing only one regional theme reinitializes its showcases');
 $ok(!str_contains($js,'cloneNode(')&&!str_contains($js,'appendCycle('),'Never clone or repeat a portfolio card');
-$ok(str_contains($css,'minmax(360px,max-content)')&&str_contains($css,'-webkit-line-clamp:unset!important'),'Headings are not clipped by fixed card height');
+$ok(str_contains($css,'minmax(355px,max-content)')&&str_contains($css,'-webkit-line-clamp:unset!important'),'Headings are not clipped by fixed card height');
 $ok(str_contains($css,'.nvl-card[hidden]{display:none!important}'),'Reference category filters really hide unselected cards');
 echo "PASS $checks service category descriptions and accessible automatic two-row marquees across 10 themes\n";
