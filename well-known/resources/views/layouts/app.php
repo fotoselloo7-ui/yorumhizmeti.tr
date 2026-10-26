@@ -183,6 +183,7 @@
     <?php if($nvGraph): ?><script type="application/ld+json"><?= $nvGraph ?></script><?php endif; ?>
 
     <?= setting('header_script') ?>
+    <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-premium-left-dock">
 </head>
 <body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
 
@@ -684,19 +685,39 @@
         </div>
     </footer>
 
-    <!-- Floating Contact (Desktop) -->
-    <div class="floating-contact">
-        <?php if (setting('whatsapp_number')): ?>
-        <a href="https://wa.me/<?= e(ltrim(str_replace(['+', ' '], '', setting('whatsapp_number')), '0')) ?>" class="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp">
-            <?= icon('whatsapp', 22) ?>
-        </a>
-        <?php endif; ?>
-        <?php if (setting('site_phone')): ?>
-        <a href="tel:<?= e(setting('site_phone')) ?>" class="phone-btn" aria-label="Telefon">
-            <?= icon('phone', 20) ?>
-        </a>
-        <?php endif; ?>
-    </div>
+    <!-- NetVera global left-edge contact drawer (native, keyboard accessible). -->
+    <?php $nvDockWhatsapp=preg_replace('/[^0-9]/','',(string)setting('whatsapp_number')); $nvDockPhone=trim((string)setting('site_phone')); ?>
+    <?php if($nvDockWhatsapp!=='' || $nvDockPhone!==''): ?>
+    <details class="nv-contact-dock" data-nv-side-contact aria-label="NetVera hızlı iletişim">
+        <summary class="nv-contact-dock__trigger" aria-label="Hızlı iletişim panelini aç">
+            <span class="nv-contact-dock__trigger-icon"><?= icon('message-circle',23) ?></span>
+            <span class="nv-contact-dock__trigger-label">İletişim</span>
+            <span class="nv-contact-dock__trigger-chevron" aria-hidden="true"><?= icon('chevron-right',14) ?></span>
+        </summary>
+        <div class="nv-contact-dock__panel" role="group" aria-label="İletişim kanalları">
+            <div class="nv-contact-dock__heading">
+                <span class="nv-contact-dock__brand"><?= icon('headphones',19) ?></span>
+                <span><strong>NetVera İletişim</strong><small>Size nasıl yardımcı olabiliriz?</small></span>
+            </div>
+            <nav class="nv-contact-dock__actions" aria-label="Hızlı iletişim seçenekleri">
+                <?php if($nvDockWhatsapp!==''): ?>
+                <a class="nv-contact-dock__link nv-contact-dock__link--whatsapp" href="https://wa.me/<?= e($nvDockWhatsapp) ?>" target="_blank" rel="noopener noreferrer">
+                    <span class="nv-contact-dock__action-icon"><?= icon('whatsapp',21) ?></span>
+                    <span class="nv-contact-dock__link-text"><strong>WhatsApp</strong><small>Mesaj gönderin</small></span>
+                    <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
+                </a>
+                <?php endif; ?>
+                <?php if($nvDockPhone!==''): ?>
+                <a class="nv-contact-dock__link nv-contact-dock__link--phone" href="tel:<?= e($nvDockPhone) ?>">
+                    <span class="nv-contact-dock__action-icon"><?= icon('phone-call',19) ?></span>
+                    <span class="nv-contact-dock__link-text"><strong>Telefonla Ara</strong><small><?= e($nvDockPhone) ?></small></span>
+                    <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
+                </a>
+                <?php endif; ?>
+            </nav>
+        </div>
+    </details>
+    <?php endif; ?>
 
     <?php $nvLiveChatReady=\App\Services\NetveraInquiryService::ready(); ?>
     <!-- Mobile Bottom Nav -->
@@ -743,6 +764,7 @@
     <?php if($nvLiveChatReady): ?>
     <script src="<?= asset('js/netvera-live-chat.js') ?>?v=20261016-mobile-dock" defer></script>
     <?php endif; ?>
+    <script src="<?= asset('js/netvera-side-contact-v1.js') ?>?v=20261026-premium-left-dock" defer></script>
     <script src="<?= asset('js/app.js') ?>?v=20261018-member-workspace"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
