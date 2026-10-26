@@ -16,5 +16,6 @@ $mode=['remote'=>'Uzaktan / çevrim içi','hybrid'=>'Uzaktan ve planlı görüş
 </div></section>
 <span id="landing-content" class="nvl-sr-anchor" aria-hidden="true"></span>
 <?php foreach($visible as $landingSection)require __DIR__.'/sections.php'; ?>
+<?php require __DIR__.'/editorial-deep.php'; ?>
 <section class="landing-contact"><div class="container"><div class="landing-contact-shell"><div><span class="landing-eyebrow">BİRLİKTE BİR SONRAKİ ADIMA</span><h2><?= e($d['cta_title']?:'Bir sonraki adımı birlikte planlayalım.') ?></h2><div class="landing-prose"><?= Editorial::rich($d['cta_summary']) ?></div></div><nav aria-label="İletişim seçenekleri"><?php foreach($landingContacts as $n=>$contact): ?><a class="<?= $n===0?'landing-button':'landing-contact-link' ?>" href="<?= e($contact['url']) ?>" <?= str_starts_with($contact['url'],'https:')?'target="_blank" rel="noopener noreferrer"':'' ?>><?= icon($contact['icon'],17) ?><?= e($n===0?($d['cta_label']?:$contact['label']):$contact['label']) ?></a><?php endforeach; ?></nav></div></div></section>
 </main>
