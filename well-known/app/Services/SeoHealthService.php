@@ -22,6 +22,19 @@ final class SeoHealthService
             $previous=libxml_use_internal_errors(true);$loaded=$doc->loadXML($xml);libxml_clear_errors();libxml_use_internal_errors($previous);
             $locs=[];foreach($doc->getElementsByTagName('loc')as $loc)$locs[]=$loc->textContent;
             $add('Sitemap doğruluğu',$loaded&&count($locs)>0&&count($locs)===count(array_unique($locs)),count($locs).' benzersiz tercih edilen URL; noindex ve yayın durumu kuralları uygulanır.');
+            // No external crawl or arbitrary requests: inspect our generated XML only.
+            $expectedOrigin=$site?strtolower((string)parse_url($site,PHP_URL_SCHEME)).'://'.strtolower((string)parse_url($site,PHP_URL_HOST)):'';
+            $wrongOrigin=0;$fragmentUrls=0;$insecureUrls=0;
+            foreach($locs as $loc){
+                $origin=strtolower((string)parse_url($loc,PHP_URL_SCHEME)).'://'.strtolower((string)parse_url($loc,PHP_URL_HOST));
+                if($expectedOrigin!==''&&$origin!==$expectedOrigin)$wrongOrigin++;
+                if(parse_url($loc,PHP_URL_FRAGMENT)!==null)$fragmentUrls++;
+                if(strtolower((string)parse_url($loc,PHP_URL_SCHEME))!=='https')$insecureUrls++;
+            }
+            $add('Sitemap kanonik alan adı',$wrongOrigin===0&&$fragmentUrls===0,
+                $wrongOrigin.' farklı alan adı; '.$fragmentUrls.' URL parçası. Sitemap kanonik sayfa adresleriyle tutarlı olmalı.');
+            $add('HTTPS sitemap adresleri',$insecureUrls===0,
+                $insecureUrls.' HTTP adresi. Canlı yayında SSL ve kalıcı HTTPS yönlendirmesi kontrol edilmelidir.');
             $add('Sitemap kapasitesi',count($locs)<=50000&&strlen($xml)<=52428800,number_format(strlen($xml)).' bayt; protokol sınırı 50.000 URL / 50 MB. Sınıra yaklaşırsa sitemap index bölümlendirmesi gerekir.');
         }catch(\Throwable $e){$add('Sitemap üretimi',false,'Sitemap üretilemedi; public katalog / şema kurulumunu kontrol edin. Özel hata veya bağlantı bilgileri burada gösterilmez.');}
         try{
@@ -32,7 +45,19 @@ final class SeoHealthService
             }
             $add('Editoryal metadata',$invalid===0,count($rows).' kayıt; '.$invalid.' geçersiz JSON. '.$restricted.' içerikte bilinçli indeksleme / önizleme kısıtı var.');
         }catch(\Throwable $e){$add('Editoryal metadata',false,'Gelişmiş SEO tablosu okunamadı. Temiz kurulum için kanonik database.sql kullanılmalıdır.');}
-        $add('GEO / AIO veri modeli',true,'Mevcut yazı, kaynak, yazar ve son kontrol alanları kullanılmaktadır. Schema / AI dosyası tek başına görünürlük veya alıntı garantisi vermez.');
+        // Validate our shared, sitewide graph builder without relying on a live crawler.
+        try{
+            $public=['canonicalUrl'=>$site?:'https://netvera.tr/','pageTitle'=>'NetVera','metaDescription'=>'Kurumsal dijital hizmetler'];
+            $graph=SeoStructuredDataService::graph(null,$public);
+            $decoded=json_decode((string)$graph,true);
+            $nodes=$decoded['@graph']??[];
+            $valid=is_array($nodes)&&count($nodes)===1&&($nodes[0]['@type']??null)==='WebPage'&&
+                ($nodes[0]['publisher']['@id']??'')!=='';
+            $add('Site geneli JSON-LD',$valid,'Ortak şema üretimi ve kurumsal publisher referansı denetlendi; yalnız doğrulanabilir sayfa bilgileri kullanılmalı.');
+            $blocked=SeoStructuredDataService::graph(null,$public+['seoNoindex'=>true])===null;
+            $add('Noindex şema koruması',$blocked,'Özel, arama filtresi ve yönetici önizleme adreslerinde keşif grafiği yayınlanmaz.');
+        }catch(\Throwable $e){$add('Site geneli JSON-LD',false,'Ortak yapılandırılmış veri servisi kontrol edilemedi.');}
+        $add('GEO / AIO editoryal hazırlık',true,'Yazar, kaynak, özgün yanıt ve son kontrol alanları desteklenir; Google AI için ek dosya ya da sıralama garantisi yoktur. Şehir sayfalarının birbirinden anlamlı biçimde farklı olması editörün sorumluluğundadır.');
         return $checks;
     }
 }
