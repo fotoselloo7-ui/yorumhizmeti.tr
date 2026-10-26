@@ -113,7 +113,11 @@ class SeoScoreService
         // 9. İçerik yeterli uzunlukta mı? (10 puan)
         $totalPoints += 10;
         $content = strip_tags($data['content'] ?? $data['description'] ?? '');
-        $wordCount = str_word_count($content);
+        // UTF-8 aware count: standard word_count drops many Turkish letters.
+        // Keep the existing score thresholds while counting authored words accurately.
+        $words = [];
+        $wordCount = preg_match_all('/[\\p{L}\\p{N}]+/u', $content, $words);
+        $wordCount = $wordCount === false ? 0 : $wordCount;
         if ($wordCount >= 100) {
             $earnedPoints += 10;
             $this->checks[] = ['pass' => true, 'message' => "İçerik yeterli uzunlukta ({$wordCount} kelime)."];
@@ -141,7 +145,7 @@ class SeoScoreService
         // 11. H1 başlık var mı? (5 puan)
         $totalPoints += 5;
         $rawContent = $data['content'] ?? $data['description'] ?? '';
-        if (!empty($data['name']) || !empty($data['title']) || str_contains($rawContent, '<h1') || str_contains($rawContent, '<h2')) {
+        if (!empty($data['name']) || !empty($data['title']) || str_contains($rawContent, '<h1')) {
             $earnedPoints += 5;
             $this->checks[] = ['pass' => true, 'message' => 'Başlık yapısı mevcut.'];
         } else {
