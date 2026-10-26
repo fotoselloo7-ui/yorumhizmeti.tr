@@ -10,7 +10,7 @@ class PageController extends Controller
     public function show(string $slug): void
     {
         $page = Database::getInstance()->fetch("SELECT * FROM pages WHERE slug = ? AND status = 'active'", [$slug]);
-        if (!$page) { $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
+        if (!$page) { http_response_code(404); $this->render('frontend/404', ['pageTitle' => 'Sayfa Bulunamadı']); return; }
         if(\App\Services\RegionalLandingService::isLanding($page)){
             header('Location: /'.rawurlencode($page['slug']),true,301);return;
         }
