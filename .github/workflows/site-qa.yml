@@ -142,6 +142,12 @@ jobs:
           cd well-known
           npx playwright install --with-deps chromium
 
+      - name: Audit all sitemap pages and public internal links without writes
+        run: node well-known/tests/public-link-integrity-qa.mjs
+        env:
+          QA_ORIGIN: http://127.0.0.1:8006
+          QA_LINK_REPORT: qa-artifacts/public-link-integrity.json
+
       - name: Browser audit and screenshots
         id: audit
         run: node well-known/tests/visual-smoke.mjs
