@@ -28,9 +28,9 @@ try{
     [$code]=$request($admin,'/admin/iletisim-ayarlari/kaydet',$data);$ok($code===403,'CSRF enforced');
     $data['_csrf_token']=$csrf;[$code]=$request($admin,'/admin/iletisim-ayarlari/kaydet',$data);$ok($code===302,'Native settings save');
     $stored=$db->fetch('SELECT setting_value FROM settings WHERE setting_key=?',['contact_map_embed'])['setting_value'];$ok($stored===$url,'Only normalized Google src persisted');
-    [,$html]=$request($guest,'/iletisim');$ok(str_contains($html,'data-contact-map')&&str_contains($html,'contact-map.js'),'Map component and scoped behavior');
+    [,$html]=$request($guest,'/iletisim');$ok(str_contains($html,'data-contact-map')&&str_contains($html,'id="contact-map-frame"')&&str_contains($html,'loading="lazy"'),'Visible map component and scoped lazy behavior');
     $ok(!str_contains($html,'onload="alert(1)"'),'Iframe event never rendered');
-    $ok(!preg_match('~<iframe[^>]+\ssrc=~i',$html),'No remote map loaded before explicit action');
+    $ok((bool)preg_match('~<iframe[^>]+\ssrc="https://maps\.google\.com/maps\?q=Alanya&amp;output=embed"~i',$html),'Public Google map iframe src is present without another click');
     $ok(str_contains($html,'Sentetik QA adresi')&&str_contains($html,'contact-qa@example.test'),'Shared address/email parity');
     $ok(substr_count($html,'<h1 ')===1,'Single H1');
     $ok(str_contains($html,'name="privacy_consent"')&&str_contains($html,'name="website_url"'),'Contact protections preserved');
