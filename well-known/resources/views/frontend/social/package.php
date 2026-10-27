@@ -1,6 +1,6 @@
 <?php
 use App\Services\SocialStorefrontService as SocialUi;
-$socialParent=['name'=>$package['category_name'],'url'=>'/kategori/'.rawurlencode($package['category_slug'])];
+$socialParent=['name'=>$package['category_name'],'url'=>\App\Services\PublicSeoUrls::category($package)];
 $socialCrumb=$socialSale['label'];$socialHeroTarget='#social-order';$socialHeroAction='Paketi incele';
 $price=SocialUi::price($package);$closed=$socialSale['quantity']<1||$socialSale['unit']===''||!$socialSale['mapping_matches'];
 ?>
