@@ -301,9 +301,27 @@ final class HeroSliderService
             ? "WHERE status='active' AND (starts_at IS NULL OR starts_at<=NOW()) AND (ends_at IS NULL OR ends_at>=NOW())"
             : "";
         $rows = Database::getInstance()->fetchAll("SELECT * FROM hero_slides {$where} ORDER BY sort_order ASC, id ASC");
+        // Existing admin slides may still store old prelaunch group targets.
+        // Normalize only these known retired routes at render time; custom
+        // administrator URLs remain unchanged and there is no DB mutation.
+        $canon=[
+            '/kategoriler/grup/social'=>'/sosyal-medya-hizmetleri',
+            '/kategoriler/grup/agency'=>'/ajans-yazilim-hizmetleri',
+            '/kategoriler/grup/marketing'=>'/seo-dijital-pazarlama-hizmetleri'
+        ];
         foreach ($rows as &$row) {
-            $decoded = json_decode((string)($row['quick_links'] ?? '[]'), true);
-            $row['quick_links'] = is_array($decoded) ? $decoded : [];
+            foreach(['category_url','primary_button_url','secondary_button_url'] as $field){
+                $value=(string)($row[$field]??'');
+                if(isset($canon[$value]))$row[$field]=$canon[$value];
+            }
+            $decoded=json_decode((string)($row['quick_links']??'[]'),true);
+            $row['quick_links']=is_array($decoded)?$decoded:[];
+            foreach($row['quick_links'] as &$item){
+                if(!is_array($item))continue;
+                $value=(string)($item['url']??'');
+                if(isset($canon[$value]))$item['url']=$canon[$value];
+            }
+            unset($item);
         }
         unset($row);
         return $rows;
