@@ -125,7 +125,7 @@ foreach (Theme::all() as $key => $profile) {
     $blockBaseline ??= $types;
     $ok($headings === $headingBaseline, 'All editorial heading levels/copy match across themes: ' . $key);
     $ok($links === $linkBaseline, 'All real links and order match across themes: ' . $key);
-    $ok($types === $blockBaseline && count($types) === 9, 'Eight data blocks plus CTA retained in order: ' . $key);
+    $ok($types === $blockBaseline && count($types) === 10 && end($types)==='editorial-guide', 'Eight data blocks, CTA then bottom editorial guide retained across themes: ' . $key);
     $ok($xp->query('//*[@data-component="services"]//*[contains(concat(" ",normalize-space(@class)," ")," nvl-service-card ")]')->length === 1, 'One service remains one card: ' . $key);
     foreach (['scripts', 'blog', 'references'] as $kind) {
         $ok($xp->query('//*[@data-component="' . $kind . '"]//*[contains(concat(" ",normalize-space(@class)," ")," nvl-card ")]')->length === 1, 'Sparse catalog does not fabricate cards: ' . $key . ' ' . $kind);
