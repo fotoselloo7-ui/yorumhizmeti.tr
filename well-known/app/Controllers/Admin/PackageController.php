@@ -417,6 +417,13 @@ class PackageController extends Controller
             'og_title' => trim($_POST['og_title'] ?? ''),
             'og_description' => trim($_POST['og_description'] ?? ''),
         ];
+        // Admin's fixed-price switch must never create a zero-value order.
+        $selectedPriceMode=\App\Services\ServicePriceMode::normalize((string)($_POST['price_mode']??'auto'));
+        if($selectedPriceMode==='fixed' && $data['price']<1){
+            flash('error','Sabit fiyatlı paket için en az 1 TL fiyat girin.');
+            redirect($packageId > 0 ? '/admin/paket/'.$packageId.'/duzenle' : '/admin/paket/ekle');
+            throw new \InvalidArgumentException('Invalid fixed product price.');
+        }
         if (\App\Services\SocialPackageService::isSocialCategory((int)$data['category_id'])) {
             try {
                 $options = \App\Services\SocialPackageService::validateOptions($_POST);
