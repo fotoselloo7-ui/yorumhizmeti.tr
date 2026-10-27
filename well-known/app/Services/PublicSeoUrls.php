@@ -22,16 +22,40 @@ final class PublicSeoUrls
     }
 
     /**
-     * Standalone, indexable service selection URL. Category slugs are retained
-     * and service names are normalized once with the existing slugify helper.
-     * Quantity packages keep their own /paket/{slug} canonical URLs.
+     * All ordinary public categories have one explicit SEO URL. Choose the
+     * BUCKET FROM THE ROOT, so "sosyal medya içerik" under an agency parent
+     * does not suddenly jump into the social-media section.
+     * Imported ready-made software and original blog URLs do not use this.
+     */
+    public static function category(array $category, ?array $parent=null): string
+    {
+        $slug=trim((string)($category['slug']??''));
+        $parent=$parent??(
+            !empty($category['parent_category_slug'])
+                ? ['slug'=>$category['parent_category_slug'],
+                   'name'=>$category['parent_category_name']??'']
+                : null
+        );
+        $bucket=CatalogMenuService::bucket($parent??$category);
+        return self::path(self::group($bucket), $slug);
+    }
+
+    /**
+     * The default service is THE category page; never repeat its name.
+     * Variants use a minimal disambiguating third segment:
+     * /sosyal-medya-hizmetleri/tiktok-takipci/kurumsal-takipci.
      */
     public static function socialService(string $categorySlug, string $serviceName): string
     {
-        return self::path(
-            self::path('/sosyal-medya-hizmetleri', $categorySlug),
-            slugify($serviceName)
-        );
+        $base=self::path(self::group('social'),$categorySlug);
+        $slug=slugify($serviceName);
+        if ($slug==='' || $slug===$categorySlug) return $base;
+        $platform=strtok($categorySlug,'-');
+        if ($platform && str_starts_with($slug,$platform.'-')) {
+            $short=substr($slug,strlen($platform)+1);
+            if($short!=='' && $short!==$categorySlug) $slug=$short;
+        }
+        return self::path($base, $slug);
     }
 
     public static function path(string $prefix, string $slug): string
