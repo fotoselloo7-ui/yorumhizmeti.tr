@@ -1,6 +1,6 @@
 <div class="nv-social-flow" aria-label="Hizmet seçim adımları"><span <?= $socialCatalog['show_services']?'aria-current="step"':'' ?>>1. Hizmet türü</span><span><?= icon('chevron-right',14) ?></span><span <?= !$socialCatalog['show_services']?'aria-current="step"':'' ?>>2. Paket miktarı</span><span><?= icon('chevron-right',14) ?></span><span>3. Kullanıcı adı / bağlantı</span></div>
 <nav class="nv-social-service-filters" aria-label="Sosyal medya hizmet türleri">
- <a href="/kategori/<?= rawurlencode((string)$category['slug']) ?>" <?= empty($socialCatalog['requested'])?'aria-current="page"':'' ?>>Tüm Hizmetler</a>
+ <a href="<?= e(\App\Services\PublicSeoUrls::category($category)) ?>" <?= empty($socialCatalog['requested'])?'aria-current="page"':'' ?>>Tüm Hizmetler</a>
  <?php foreach($socialCatalog['groups'] as $service): ?>
  <a href="<?= e($service['url']) ?>" <?= $socialCatalog['requested']===$service['key']?'aria-current="page"':'' ?>><?= e($service['name']) ?></a>
  <?php endforeach; ?>
