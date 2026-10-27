@@ -108,3 +108,30 @@ body.nv-theme-enabled #featured .nv43-subcategory-link[class*="nv-sector-"]{
 #featured .nv43-subcategory-link{transition:none!important}
 }
 }
+
+
+/* Keep a clear, narrow platform accent on desktop child filters.
+   The outer chip remains neutral white with accessible dark text. */
+@media (min-width:769px){
+  #featured .nv43-child-rail>.nv43-subcategory-link[class*="nv-platform-"],
+  body.nv-theme-enabled #featured .nv43-child-rail>.nv43-subcategory-link[class*="nv-platform-"]{
+    border-left:3px solid var(--np,#6554df)!important;
+  }
+}
+/* The mobile root platform selection should be unmistakably active, not a
+   plain link. Child chips remain neutral, as requested. */
+@media (max-width:768px){
+  #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected),
+  body.nv-theme-enabled #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected){
+    background:linear-gradient(135deg,var(--np,#6b4de8),var(--np-2,#4937bd))!important;
+    border-color:var(--np,#6b4de8)!important;
+    color:var(--np-on,#fff)!important;
+    box-shadow:0 5px 14px color-mix(in srgb,var(--np,#6b4de8) 21%,transparent)!important;
+  }
+  #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected) .yh26-filter-name{
+    color:var(--np-on,#fff)!important;
+  }
+  #featured .nv43-category-card.yh18-featured-tab[class*="nv-platform-"]:is(.active,.is-parent-selected) .yh26-filter-icon{
+    color:var(--np-on,#fff)!important;
+  }
+}
