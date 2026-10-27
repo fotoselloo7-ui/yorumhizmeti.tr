@@ -27,7 +27,7 @@ class CheckoutController extends Controller
                  LEFT JOIN categories parent ON parent.id = c.parent_id
                  WHERE p.id = ? AND p.status = 'active'
                    AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
-            if ($pkg) {
+            if ($pkg && !\App\Services\ServiceQuotePolicy::package($pkg)) {
                 $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
                 $qty = \App\Services\SocialPackageService::cartQuantity($pkg,(int)($item['quantity'] ?? 1));
                 $fields = \App\Services\SmmOrderFields::fields($pkg);
@@ -116,6 +116,11 @@ class CheckoutController extends Controller
                  WHERE p.id = ? AND p.status = 'active'
                    AND (c.parent_id IS NULL OR parent.status = 'active')", [$item['id']]);
             if (!$pkg) continue;
+            if(\App\Services\ServiceQuotePolicy::package($pkg)){
+                flash('error','Bu hizmetin fiyatı teklif üzerine belirlenir. Lütfen iletişime geçin.');
+                redirect('/sepet');
+                return;
+            }
             $price = ($pkg['discount_price'] && $pkg['discount_price'] < $pkg['price']) ? $pkg['discount_price'] : $pkg['price'];
 
             $orderItem = $pkg;
