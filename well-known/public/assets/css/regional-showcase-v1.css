@@ -229,3 +229,12 @@
 .nv-landing[data-theme="landing-07"] .nvl-deep-guide{--nvl-deep-brand:#ec690c}
 .nv-landing[data-theme="landing-09"] .nvl-deep-guide{background:linear-gradient(135deg,#f3f5ff,#fff);--nvl-deep-brand:#5b41d9}
 
+
+
+/* Native [hidden] must win over theme card display declarations.
+   Otherwise portfolio category filters appear to leave all cards visible. */
+.nv-landing .nvl-section.is-nvl-static .nvl-card-grid > .nvl-card[hidden],
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid > .nvl-card[hidden],
+.nv-landing .nvl-section .nvl-rail-column > .nvl-card[hidden]{
+  display:none!important;
+}
