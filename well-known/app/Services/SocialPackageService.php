@@ -133,7 +133,7 @@ final class SocialPackageService
         }
         $chosen = $groups[$selected] ?? null;
         return ['groups'=>array_values($groups),'selected'=>$chosen,'requested'=>$selected,
-            'show_services'=>$selected === '' && (empty($category['parent_id']) || count($groups)>1),
+            'show_services'=>$selected === '' && empty($category['parent_id']),
             'packages'=>$selected !== '' ? ($chosen['packages'] ?? []) : $packages];
     }
 
