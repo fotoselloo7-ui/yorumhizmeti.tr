@@ -93,9 +93,12 @@ $reviews=$testimonialSection['extra']??[];
     <div class="yv-product-badges-v5"><span><?= e($package['badge'] ?: 'En Çok Tercih Edilen Paket') ?></span><?php if($discount): ?><b>%<?= $discount ?> İndirim</b><?php endif; ?></div>
     <h2><?= e(package_display_name($package)) ?></h2>
     <div class="yv-product-rating-v5"><b><?= icon('shield-check',14) ?> Güvenli Sipariş</b><span>İşlem durumunu hesabınızdan takip edin</span></div>
-    <div class="yv-product-price-v5"><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
+    <div class="yv-product-price-v5"><?php if(!empty($quoteMode)): ?><strong>Projenize Özel Teklif</strong><?php else: ?><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?><?php endif; ?></div>
     <p><?= e((string)($package['short_description'] ?: 'Seçtiğiniz dijital hizmet paketinin ayrıntılarını aşağıda inceleyebilirsiniz.')) ?></p>
 
+    <?php if(!empty($quoteMode)): ?>
+      <div class="nv-quote-product"><p>Hizmet kapsamı, teslimler, süre ve ihtiyaç duyulan entegrasyonlar değerlendirilerek size özel teklif hazırlanır.</p><a class="yv-product-add-v5" href="<?= e(\App\Services\ServiceQuotePolicy::url($package)) ?>"><?= icon('message-circle',16) ?> Teklif Al / Bizimle İletişime Geçin</a></div>
+    <?php else: ?>
     <?php if(!empty($socialSale)): ?>
     <div class="nv-social-order-summary" aria-label="Seçilen sosyal medya paketi">
       <span>Seçtiğiniz paket</span><strong><?= e($socialSale['label']) ?></strong>
@@ -127,6 +130,7 @@ $reviews=$testimonialSection['extra']??[];
      <button class="yv-product-now-v5" type="submit" name="checkout" value="1" <?= $saleClosed?'disabled':'' ?>><?= icon('zap',15) ?> Hemen Satın Al</button>
      <?php else: ?><button class="yv-product-now-v5" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button><?php endif; ?>
     </form>
+    <?php endif; ?>
     <div class="yv-product-mini-trust-v5"><div><?= icon('shield',14) ?><span><strong>Güvenli Ödeme</strong><small>256 Bit SSL</small></span></div><div><?= icon('zap',14) ?><span><strong>Hızlı Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Hızlı') ?></small></span></div><div><?= icon('headphones',14) ?><span><strong>7/24 Destek</strong><small>Her zaman yanınızda</small></span></div></div>
    </aside>
   </div>
