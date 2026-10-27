@@ -112,6 +112,11 @@ final class ServicePackageSeoCompleteService
             if(!$candidate['fields']&&$extra===$old)continue;
             $backup=[];
             foreach($candidate['fields']as $field=>$value)$backup[$field]=$row[$field]??null;
+            if($candidate['fields']){
+                $merged=array_merge($row,$candidate['fields']);
+                $candidate['fields']['seo_score']=(new SeoScoreService())->calculate($merged)['score'];
+                $backup['seo_score']=$row['seo_score']??null;
+            }
             $changes[]=['id'=>(int)$row['id'],'fields'=>$candidate['fields'],'extra'=>$extra,'oldExtra'=>$old];
             $backups[]=['id'=>(int)$row['id'],'slug'=>$row['slug'],'previousFields'=>$backup,'previousExtra'=>$old];
         }
