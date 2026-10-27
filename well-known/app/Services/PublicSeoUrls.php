@@ -21,6 +21,19 @@ final class PublicSeoUrls
         };
     }
 
+    /**
+     * Standalone, indexable service selection URL. Category slugs are retained
+     * and service names are normalized once with the existing slugify helper.
+     * Quantity packages keep their own /paket/{slug} canonical URLs.
+     */
+    public static function socialService(string $categorySlug, string $serviceName): string
+    {
+        return self::path(
+            self::path('/sosyal-medya-hizmetleri', $categorySlug),
+            slugify($serviceName)
+        );
+    }
+
     public static function path(string $prefix, string $slug): string
     {
         return rtrim($prefix, '/') . '/' . rawurlencode($slug);
