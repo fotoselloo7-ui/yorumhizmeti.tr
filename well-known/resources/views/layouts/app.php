@@ -115,7 +115,7 @@
     <link rel="stylesheet" href="<?= asset('css/header-reputation-parity-v83.css') ?>?v=83.1">
     <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=20261016-mobile-filters">
-    <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=20261027-service-ux">
     <?php if($template==='frontend/categories'): ?>
     <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261026-service-editorial">
     <?php endif; ?>
