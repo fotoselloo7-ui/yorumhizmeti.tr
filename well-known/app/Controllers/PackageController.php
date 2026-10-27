@@ -71,6 +71,11 @@ class PackageController extends Controller
             $testimonialSection = null;
         }
 
+        // Draft market listings may be discoverable from category pages, but
+        // a tentative supplier/price is NOT an indexable standalone product.
+        $nvDraft=\App\Services\MarketProposalGuard::origin((int)$package['id']);
+        $nvSeoData=\App\Services\NetveraSeoBridge::get('package',(int)$package['id']);
+        if($nvDraft!==null)$nvSeoData['robots']='noindex,follow';
         $schema=$quoteMode ? json_encode([
             '@context'=>'https://schema.org',
             '@type'=>'Service',
@@ -101,7 +106,7 @@ class PackageController extends Controller
             'ogDescription'=>$package['og_description']?:($package['seo_description']?:excerpt(strip_tags($package['short_description']??''),160)),
             'ogImage'=>!empty($package['og_image'])?upload_url($package['og_image']):($socialPage?url($socialPage['image']):(!empty($package['image'])?upload_url($package['image']):null)),
             'schema' => $schema,
-            'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$package['id']),
+            'nvSeoData' => $nvSeoData,
             'package' => $package,
             'quoteMode' => $quoteMode,
             'socialSale' => $socialSale,
