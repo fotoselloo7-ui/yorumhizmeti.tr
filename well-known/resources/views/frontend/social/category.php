@@ -2,7 +2,7 @@
 use App\Services\SocialStorefrontService as SocialUi;
 $socialGroups=SocialUi::directory($socialCatalog['groups']);
 $socialParent=!empty($category['parent_category_slug'])?['name'=>$category['parent_category_name'],'url'=>'/kategori/'.rawurlencode($category['parent_category_slug'])]:null;
-$socialCrumb=$category['name'];
+$socialCrumb=$serviceLanding['name']??$category['name'];
 $socialHeroAction=$socialCatalog['show_services']?'Hizmetleri keşfet':'Paketleri karşılaştır';
 ?>
 <main class="social-storefront social-brand-<?= e($socialPage['platform']) ?>">
@@ -19,15 +19,15 @@ $socialHeroAction=$socialCatalog['show_services']?'Hizmetleri keşfet':'Paketler
     <?php if($socialCatalog['show_services']): ?>
     <div class="social-intent-tabs" role="group" aria-label="Hizmet türlerini filtrele" data-social-filter><button type="button" class="is-active" aria-pressed="true" data-intent="all">Tümü</button><?php $intents=[];foreach($socialGroups as $g)$intents[$g['intent']['key']]=$g['intent']['label'];foreach($intents as $key=>$label): ?><button type="button" aria-pressed="false" data-intent="<?= e($key) ?>"><?= e($label) ?></button><?php endforeach; ?></div>
     <?php else: ?>
-    <nav class="social-service-nav" aria-label="Hizmet seçimi"><a href="/kategori/<?= rawurlencode($category['slug']) ?>#packages">Tüm hizmetler</a><?php foreach($socialGroups as $g): ?><a href="<?= e($g['url']) ?>" <?= ($socialCatalog['selected']['key']??'')===$g['key']?'aria-current="page"':'' ?>><?= e($g['name']) ?></a><?php endforeach; ?></nav>
+    <nav class="social-service-nav" aria-label="Hizmet seçimi"><a href="/kategori/<?= rawurlencode($category['slug']) ?>">Tüm hizmetler</a><?php foreach($socialGroups as $g): ?><a href="<?= e($g['url']) ?>" <?= ($socialCatalog['selected']['key']??'')===$g['key']?'aria-current="page"':'' ?>><?= e($g['name']) ?></a><?php endforeach; ?></nav>
     <?php endif; ?>
-    <form class="social-search" method="get" role="search" aria-label="Sosyal medya paket araması"><label class="social-search-input"><?= icon('search',17) ?><span class="social-visually-hidden">Hizmet veya paket ara</span><input name="q" type="search" value="<?= e($searchQuery) ?>" maxlength="100" placeholder="Hizmet veya paket ara…"></label><?php if(!empty($socialCatalog['requested'])): ?><input type="hidden" name="hizmet" value="<?= e($socialCatalog['requested']) ?>"><?php endif; ?><label><span class="social-visually-hidden">Paket sıralaması</span><select name="sort"><option value="recommended">Önerilen sıralama</option><?php foreach(['price_asc'=>'Fiyat: Artan','price_desc'=>'Fiyat: Azalan','featured'=>'Öne çıkanlar']as $value=>$text): ?><option value="<?= $value ?>" <?= $currentSort===$value?'selected':'' ?>><?= $text ?></option><?php endforeach; ?></select></label><button class="social-button" type="submit">Uygula</button></form>
+    <form class="social-search" method="get" role="search" aria-label="Sosyal medya paket araması"><label class="social-search-input"><?= icon('search',17) ?><span class="social-visually-hidden">Hizmet veya paket ara</span><input name="q" type="search" value="<?= e($searchQuery) ?>" maxlength="100" placeholder="Hizmet veya paket ara…"></label><label><span class="social-visually-hidden">Paket sıralaması</span><select name="sort"><option value="recommended">Önerilen sıralama</option><?php foreach(['price_asc'=>'Fiyat: Artan','price_desc'=>'Fiyat: Azalan','featured'=>'Öne çıkanlar']as $value=>$text): ?><option value="<?= $value ?>" <?= $currentSort===$value?'selected':'' ?>><?= $text ?></option><?php endforeach; ?></select></label><button class="social-button" type="submit">Uygula</button></form>
     <?php if($socialCatalog['show_services']): ?>
     <div class="social-service-grid"><?php foreach($socialGroups as $g): ?><a class="social-service-card" href="<?= e($g['url']) ?>" data-social-intent="<?= e($g['intent']['key']) ?>"><span class="social-service-icon"><?= icon($g['intent']['icon'],25) ?></span><div class="social-service-copy"><h3><?= e($g['name']) ?></h3><small><strong><?= money($g['price']) ?></strong> başlangıç fiyatı <span>· <?= count($g['packages']) ?> paket</span></small></div><span class="social-card-arrow" aria-hidden="true"><?= icon('arrow-right',17) ?></span></a><?php endforeach; ?></div>
     <p class="social-filter-feedback" role="status" aria-live="polite"></p>
     <?php elseif($packages): ?>
     <div class="social-package-grid"><?php foreach($packages as $pkg): require __DIR__.'/package-card.php'; endforeach; ?></div>
-    <?php else: ?><div class="social-empty"><?= icon('search',32) ?><h3>Uygun paket bulunamadı.</h3><p>Aramanızı değiştirin veya tüm hizmetleri görüntüleyin.</p><a href="/kategori/<?= rawurlencode($category['slug']) ?>#packages" class="social-button">Filtreleri temizle</a></div><?php endif; ?>
+    <?php else: ?><div class="social-empty"><?= icon('search',32) ?><h3>Uygun paket bulunamadı.</h3><p>Aramanızı değiştirin veya tüm hizmetleri görüntüleyin.</p><a href="/kategori/<?= rawurlencode($category['slug']) ?>" class="social-button">Filtreleri temizle</a></div><?php endif; ?>
     <div class="social-selection-note"><?= icon('shield-check',22) ?><div><strong>Ne satın aldığınızı bilin.</strong><p>Miktar, toplam fiyat, tahmini süre ve hizmet koşulları paket detayında birlikte gösterilir.</p></div><a href="#social-guide" aria-label="Satın alma rehberini incele"><?= icon('arrow-down',19) ?></a></div>
    </div>
   </div>
