@@ -23,7 +23,7 @@ class CartController extends Controller
                  LEFT JOIN categories parent ON parent.id = c.parent_id
                  WHERE p.id = ? AND p.status = 'active'
                    AND (c.parent_id IS NULL OR parent.status = 'active')", [(int)($item['id'] ?? 0)]);
-                if ($pkg) {
+                if ($pkg && !\App\Services\ServiceQuotePolicy::package($pkg)) {
                     $price = $pkg['discount_price'] && $pkg['discount_price'] < $pkg['price'] ? $pkg['discount_price'] : $pkg['price'];
                     $qty = \App\Services\SocialPackageService::cartQuantity($pkg,(int)($item['quantity'] ?? 1));
                     $cartKey = count($validCart);
