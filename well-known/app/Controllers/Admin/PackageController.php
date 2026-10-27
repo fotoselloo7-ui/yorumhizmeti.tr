@@ -37,6 +37,29 @@ class PackageController extends Controller
      * Yalnızca mevcut paket/kategori ilişkilerini görünür hale getirir.
      * Yönetici POST + CSRF onayı gerekir; GitHub pull otomatik DB değiştirmez.
      */
+    /** Fill only missing service metadata; ready scripts and commerce data are untouched. */
+    public function completeServiceSeo(): void
+    {
+        Csrf::check();
+        $admin=\App\Core\AdminAuth::admin();
+        if(!$admin||($admin['role']??'')!=='super_admin'){
+            http_response_code(403);
+            exit('Bu işlem için süper yönetici yetkisi gerekiyor.');
+        }
+        try {
+            $cat=\App\Services\CategorySeoCompleteService::apply();
+            $pkg=\App\Services\ServicePackageSeoCompleteService::apply();
+            logActivity('services_seo_complete','Hizmet kategorileri ve paketlerindeki eksik SEO/GEO/AIO alanları tamamlandı.');
+            flash('success', 'SEO tamamlandı: '.$cat['categories'].' kategoride '.$cat['fields'].
+                ' alan; '.$pkg['updated'].' pakette '.$pkg['fields'].' alan, '.$pkg['extras'].
+                ' GEO/AIO profili. Önceden düzenlenmiş metinler ve fiyatlar korundu.');
+        }catch(\Throwable $e){
+            error_log('Service SEO completion: '.get_class($e).' '.$e->getMessage());
+            flash('error','SEO alanları tamamlanamadı; hata kaydını kontrol edin. Paket yedekleri storage/backups içindedir.');
+        }
+        redirect('/admin/paketler');
+    }
+
     public function publishCatalog(): void
     {
         Csrf::check();
