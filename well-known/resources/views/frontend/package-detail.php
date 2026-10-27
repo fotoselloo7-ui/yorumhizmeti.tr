@@ -97,7 +97,7 @@ $reviews=$testimonialSection['extra']??[];
     <p><?= e((string)($package['short_description'] ?: 'Seçtiğiniz dijital hizmet paketinin ayrıntılarını aşağıda inceleyebilirsiniz.')) ?></p>
 
     <?php if(!empty($quoteMode)): ?>
-      <div class="nv-quote-product"><p>Hizmet kapsamı, teslimler, süre ve ihtiyaç duyulan entegrasyonlar değerlendirilerek size özel teklif hazırlanır.</p><a class="yv-product-add-v5" href="<?= e(\App\Services\ServiceQuotePolicy::url($package)) ?>"><?= icon('message-circle',16) ?> Teklif Al / Bizimle İletişime Geçin</a></div>
+      <div class="nv-quote-product"><p>Hizmet kapsamı, teslimler, süre ve ihtiyaç duyulan entegrasyonlar değerlendirilerek size özel teklif hazırlanır.</p><a class="yv-product-add-v5" href="<?= e(\App\Services\ServiceQuotePolicy::url($package)) ?>"><?= icon('message-circle',16) ?> <?= e(\App\Services\ServicePriceMode::cta($package)) ?></a></div>
     <?php else: ?>
     <?php if(!empty($socialSale)): ?>
     <div class="nv-social-order-summary" aria-label="Seçilen sosyal medya paketi">
