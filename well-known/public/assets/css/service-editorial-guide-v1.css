@@ -170,3 +170,43 @@
   .nv-service-guide-faq summary{font-size:12px!important}
   .yv-category-v5 .yv-category-review-grid-v5{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
 }
+
+
+/* One clear AIO answer callout, not an unstyled orphan sentence between cards. */
+.yv-category-v5 .nv71-category-answer{
+  padding:29px 0 16px!important;
+  background:#f7f9ff!important;
+  border-top:1px solid #e7ecf6;
+}
+.yv-category-v5 .nv71-category-answer>.container{
+  box-sizing:border-box;
+  width:min(1200px,calc(100% - 40px))!important;
+  max-width:1200px!important;
+  margin-inline:auto!important;
+  padding:22px clamp(20px,3vw,32px)!important;
+  border:1px solid #e0e6f4;
+  border-left:4px solid #6b50e1;
+  border-radius:17px;
+  background:#fff;
+  box-shadow:0 9px 30px #20385b0a;
+}
+.yv-category-v5 .nv71-category-answer h2{
+  color:#1e2e51!important;
+  font:750 clamp(17px,1.5vw,22px)/1.4 Poppins,sans-serif!important;
+  margin:0 0 10px!important;
+}
+.yv-category-v5 .nv71-category-answer p{
+  color:#566580!important;
+  font:400 13px/1.85 Poppins,sans-serif!important;
+  margin:0!important;
+}
+.yv-category-v5 .yv-category-reviews-v5 .yv-section-head-v5 h2,
+.yv-category-v5 .yv-category-faq-v5 .yv-section-head-v5 h2{
+  color:#1b2b4d!important;
+  font-size:clamp(22px,2vw,29px)!important;
+  line-height:1.35!important;
+}
+@media(max-width:600px){
+  .yv-category-v5 .nv71-category-answer>.container{padding:20px!important}
+  .yv-category-v5 .nv71-category-answer p{font-size:12px!important}
+}
