@@ -32,7 +32,7 @@ final class CatalogMenuService
                 if(!ServiceCategoryVisibility::show($cat))continue;
                 $cat['style']=self::style($cat);
                 $cat['icon']=self::icon($cat);
-                $cat['url']='/kategori/'.rawurlencode($cat['slug']);
+                $cat['url']=PublicSeoUrls::category($cat);
                 $cat['children']=array_values(array_filter($children[$cat['id']]??[],
                     static fn(array $child):bool=>ServiceCategoryVisibility::show($child,$cat)));
                 foreach ($cat['children'] as &$child) {
@@ -42,7 +42,7 @@ final class CatalogMenuService
                     // page with its own title, canonical and visible products.
                     $softwareParent=(bool)preg_match('/yaz[ıi]l[ıi]m|yazilim|script|web.?site|cms|software|wordpress/iu',
                         (string)$cat['name'].' '.(string)$cat['slug']);
-                    $child['url']='/kategori/'.rawurlencode($child['slug']);
+                    $child['url']=PublicSeoUrls::category($child,$cat);
                 }
                 unset($child);
                 $groups[self::bucket($cat)]['categories'][]=$cat;
