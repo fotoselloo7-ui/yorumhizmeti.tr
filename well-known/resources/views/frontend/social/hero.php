@@ -1,7 +1,7 @@
 <?php $socialHeroTarget=$socialHeroTarget??'#packages'; ?>
 <section class="social-hero" aria-labelledby="social-page-title">
  <div class="container">
-  <nav class="social-breadcrumb" aria-label="İçerik yolu"><a href="/">Ana Sayfa</a><span>/</span><a href="/kategoriler/grup/social">Sosyal Medya</a><?php if(!empty($socialParent)): ?><span>/</span><a href="<?= e($socialParent['url']) ?>"><?= e($socialParent['name']) ?></a><?php endif; ?><span>/</span><span><?= e($socialCrumb??$socialPage['title']) ?></span></nav>
+  <nav class="social-breadcrumb" aria-label="İçerik yolu"><a href="/">Ana Sayfa</a><span>/</span><a href="<?= e(\App\Services\PublicSeoUrls::group('social')) ?>">Sosyal Medya</a><?php if(!empty($socialParent)): ?><span>/</span><a href="<?= e($socialParent['url']) ?>"><?= e($socialParent['name']) ?></a><?php endif; ?><span>/</span><span><?= e($socialCrumb??$socialPage['title']) ?></span></nav>
   <div class="social-hero-grid">
    <div class="social-hero-copy">
     <span class="social-eyebrow"><?= icon($socialPage['icon'],18) ?> NETVERA SOSYAL MEDYA</span>
