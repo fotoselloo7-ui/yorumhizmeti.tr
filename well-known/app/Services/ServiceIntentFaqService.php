@@ -12,7 +12,7 @@ final class ServiceIntentFaqService
     {
         $name=trim((string)($category['name']??'Dijital hizmet'));
         $slug=(string)($category['slug']??'');
-        $key=slugify($name.' '.$slug);
+        $key=mb_strtolower($slug.' '.$name,'UTF-8');
         $platform='sosyal medya';
         foreach(['instagram'=>'Instagram','tiktok'=>'TikTok','youtube'=>'YouTube',
                  'facebook'=>'Facebook','telegram'=>'Telegram','spotify'=>'Spotify',
