@@ -1,0 +1,139 @@
+/* NetVera blog visual polish, 27 Oct 2026.
+   Keeps existing blog URLs, content and media intact; only the listing view changes. */
+.yv-blog-v8 .yv-blog-hero-art-v8{
+  isolation:isolate;
+  display:grid;
+  place-items:center;
+  min-width:0;
+  min-height:340px;
+}
+.yv-blog-v8 .yv-blog-hero-art-v8::before{
+  inset:24px 4% 10px 7%;
+  z-index:-1;
+  border-radius:45% 55% 52% 48% / 56% 48% 52% 44%;
+  background:radial-gradient(circle at 26% 22%,#ffeff9,transparent 50%),
+             linear-gradient(135deg,#e8edff 0%,#f4e9ff 55%,#eaf7ff 100%);
+  transform:rotate(-5deg);
+}
+.yv-blog-v8 .yv-blog-hero-art-v8::after{
+  content:"";
+  position:absolute;
+  inset:20px 20px 15px;
+  z-index:-1;
+  pointer-events:none;
+  background-image:radial-gradient(#7355d633 1px,transparent 1px);
+  background-size:19px 19px;
+  mask-image:linear-gradient(90deg,transparent 60%,#000 100%);
+}
+.yv-blog-hero-core-v8{
+  box-sizing:border-box;
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  width:min(74%,385px);
+  min-height:235px;
+  padding:32px 36px;
+  transform:rotate(-4deg);
+  border:1px solid rgba(255,255,255,.85);
+  border-radius:27px;
+  color:#fff;
+  background:linear-gradient(135deg,#284bd3 0%,#7544e9 58%,#d63baa 100%);
+  box-shadow:0 22px 54px #5847c92c,0 5px 12px #4a339b22;
+}
+.yv-blog-hero-core-icon-v8{
+  display:grid;
+  place-items:center;
+  width:60px;
+  height:60px;
+  margin-bottom:17px;
+  border-radius:18px;
+  background:#ffffff28;
+  border:1px solid #ffffff4a;
+  color:#fff;
+}
+.yv-blog-hero-core-overline-v8{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.15em;
+  color:#ece4ff;
+}
+.yv-blog-hero-core-v8 strong{
+  display:block;
+  margin-top:6px;
+  font-size:clamp(24px,3vw,35px);
+  line-height:1.12;
+  letter-spacing:-.04em;
+  color:#fff;
+}
+.yv-blog-hero-core-accent-v8{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:18px;
+}
+.yv-blog-hero-core-accent-v8 i{
+  width:29px;
+  height:5px;
+  border-radius:10px;
+  background:#fff9;
+}
+.yv-blog-hero-core-accent-v8 i:nth-child(2){width:17px;background:#fff6}
+.yv-blog-hero-core-accent-v8 i:nth-child(3){width:8px;background:#fff5}
+.yv-blog-v8 .yv-blog-featured-v8{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);
+  min-height:320px;
+}
+.yv-blog-v8 .yv-blog-featured-copy-v8{
+  min-width:0;
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+}
+.yv-blog-v8 .yv-blog-featured-media-v8{
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  min-width:0;
+  min-height:300px;
+  padding:clamp(14px,2vw,24px);
+  background:linear-gradient(145deg,#f4f1ff 0%,#f8faff 56%,#e9f0ff 100%);
+}
+.yv-blog-v8 .yv-blog-featured-media-v8::after{display:none!important;content:none!important}
+.yv-blog-v8 .yv-blog-featured-media-v8 img.yv-blog-featured-photo-v12{
+  display:block;
+  box-sizing:border-box;
+  flex:none;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%;
+  max-height:350px;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:12px;
+  box-shadow:0 12px 30px #20325b14;
+}
+@media(max-width:900px){
+  .yv-blog-v8 .yv-blog-featured-v8{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+@media(max-width:650px){
+  .yv-blog-v8 .yv-blog-hero-art-v8{min-height:280px!important}
+  .yv-blog-hero-core-v8{width:min(78%,330px);min-height:196px;padding:22px 27px;border-radius:20px}
+  .yv-blog-hero-core-icon-v8{height:43px;width:43px;margin-bottom:10px;border-radius:11px}
+  .yv-blog-hero-core-icon-v8 svg{width:25px;height:25px}
+  .yv-blog-hero-core-overline-v8{font-size:8px}
+  .yv-blog-hero-core-v8 strong{font-size:26px}
+  .yv-blog-v8 .yv-blog-featured-v8{grid-template-columns:minmax(0,1fr);min-height:0}
+  .yv-blog-v8 .yv-blog-featured-media-v8{min-height:205px;padding:15px}
+  .yv-blog-v8 .yv-blog-featured-media-v8 img.yv-blog-featured-photo-v12{max-height:280px}
+}
+@media(prefers-reduced-motion:reduce){
+  .yv-blog-hero-core-v8{transition:none;animation:none}
+}
