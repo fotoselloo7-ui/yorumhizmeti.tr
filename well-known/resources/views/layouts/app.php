@@ -45,9 +45,6 @@
     <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>?v=20261018-member-workspace">
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261016-premium-polish">
-    <?php if($template==='frontend/blog/index'): ?>
-    <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261027-premium-blog">
-    <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>?v=20261014">
@@ -190,6 +187,9 @@
 
     <?= setting('header_script') ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-social-theme-rail">
+    <?php if($template==='frontend/blog/index'): ?>
+    <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261027-premium-blog">
+    <?php endif; ?>
 </head>
 <body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
 
