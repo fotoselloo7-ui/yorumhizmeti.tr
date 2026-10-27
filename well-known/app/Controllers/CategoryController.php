@@ -159,7 +159,10 @@ class CategoryController extends Controller
         $isSocialSale = \App\Services\SocialPackageService::isSocialCategory((int)$category['id']);
         $socialPage=$isSocialSale?\App\Services\SocialStorefrontService::page($category):null;
 
-        $subCategories = $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]);
+        $subCategories = array_values(array_filter(
+            $db->fetchAll("SELECT * FROM categories WHERE parent_id = ? AND status = 'active' ORDER BY sort_order ASC", [$category['id']]),
+            static fn(array $sub):bool => \App\Services\ServiceCategoryVisibility::show($sub,$category)
+        ));
         // Filters
         $altSlug = is_string($_GET['alt']??null)?mb_substr($_GET['alt'],0,160):'';
         $q = is_string($_GET['q']??null)?mb_substr(trim($_GET['q']),0,100):'';
