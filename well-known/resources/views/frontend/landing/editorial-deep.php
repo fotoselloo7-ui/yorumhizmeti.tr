@@ -4,15 +4,14 @@ $nvLongTitle=trim((string)($d['editorial_title']??''));
 $nvLongLead=trim((string)($d['editorial_lead']??''));
 $nvLongBody=trim((string)($d['editorial_body']??''));
 $nvLongQuestions=$d['editorial_qa']??[];
-if($nvLongTitle===''&&$nvLongLead===''&&$nvLongBody===''&&!$nvLongQuestions) {
-    // Page-specific authored fields win. Existing pages with empty fields still
-    // show a real, readable long guide immediately above the shared footer.
-    $defaultGuide=\App\Services\RegionalEditorialGuideService::fallback($d);
-    $nvLongTitle=$defaultGuide['title'];
-    $nvLongLead=$defaultGuide['lead'];
-    $nvLongBody=implode("\n\n",$defaultGuide['paragraphs']);
-    $nvLongQuestions=$defaultGuide['questions'];
-}
+// Complete each missing editorial field independently. An editor may have
+// entered only a title: that must not suppress the long guide or its FAQ.
+// Real, authored fields always win and nothing is written back to the DB.
+$defaultGuide=\App\Services\RegionalEditorialGuideService::fallback($d);
+if($nvLongTitle==='')$nvLongTitle=$defaultGuide['title'];
+if($nvLongLead==='')$nvLongLead=$defaultGuide['lead'];
+if($nvLongBody==='')$nvLongBody=implode("\n\n",$defaultGuide['paragraphs']);
+if(!$nvLongQuestions)$nvLongQuestions=$defaultGuide['questions'];
 if($nvLongTitle!==''||$nvLongLead!==''||$nvLongBody!==''||$nvLongQuestions):
     // No fabricated location facts, hidden copy, offsite scripts or second H1.
     $nvLongParagraphs=preg_split('/\R\s*\R/u',$nvLongBody)?:[];
