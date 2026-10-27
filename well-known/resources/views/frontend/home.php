@@ -568,7 +568,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                                 data-title="<?= e($filterCategory['name']) ?>"
                                 data-class="<?= e($gcls) ?>"
                                 data-kind="<?= $isSoftware ? 'software' : 'package' ?>"
-                                data-url="<?= e($filterCategory['url'] ?? '/kategori/'.$filterCategory['slug']) ?>"
+                                data-url="<?= e($filterCategory['url'] ?? \App\Services\PublicSeoUrls::category($filterCategory)) ?>"
                                 aria-selected="<?= $selected?'true':'false' ?>"
                                 title="<?= e($filterCategory['name']) ?>">
                             <span class="yh26-filter-icon"><?= icon($gico, 24) ?></span>
@@ -609,7 +609,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                         <?php foreach($children as $child):
                             $childType=$child['kind']??'package';
                             $childRoot=$childType==='software'?-100000:(int)($child['parent_featured_id']??0);
-                            $childUrl=$child['url']??'/kategori/'.rawurlencode((string)$child['slug']);
+                            $childUrl=$child['url']??\App\Services\PublicSeoUrls::category($child);
                             $childPlatform=\App\Services\SocialPlatformIdentity::fromCategory($child)
                                 ?? $nvChildParentPlatform;
                             $childIcon=$childType==='software'?($child['icon']??'folder'):
@@ -666,7 +666,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                             <span><?= icon('layers',22) ?></span>
                             <strong><?= e($group['category']['name']) ?></strong>
                             <p>Bu kategorinin hizmet seçeneklerini ve alt kategorilerini inceleyin.</p>
-                            <a href="/kategori/<?= e($group['category']['slug']) ?>">Hizmetleri İncele <?= icon('arrow-right',14) ?></a>
+                            <a href="<?= e(\App\Services\PublicSeoUrls::category($group['category'])) ?>">Hizmetleri İncele <?= icon('arrow-right',14) ?></a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -678,7 +678,7 @@ $reviews = ($testimonials && !empty($testimonials['extra'])) ? \App\Services\Tes
                     </div>
                 </div>
                 <div class="yh18-featured-footer">
-                    <a href="/kategori/<?= e($group['category']['slug']) ?>" class="yh18-all-link">
+                    <a href="<?= e(\App\Services\PublicSeoUrls::category($group['category'])) ?>" class="yh18-all-link">
                         <?= e($group['category']['name']) ?> kategorisindeki tüm paketleri gör <?= icon('arrow-right', 11) ?>
                     </a>
                 </div>
