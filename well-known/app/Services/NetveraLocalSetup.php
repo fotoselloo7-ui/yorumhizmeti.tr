@@ -52,6 +52,15 @@ final class NetveraLocalSetup
             'nv_legacy_blog_meta','nv_public_inquiries',
             'nv_public_inquiry_replies','nv_editorial_seo'
         ];
+        // The shipped single database.sql already includes all protected NetVera
+        // tables. No migration files are needed in a fully imported local DB.
+        $lookup=$pdo->prepare('SELECT 1 FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=? LIMIT 1');
+        $missing=[];
+        foreach($allow as $table){
+            $lookup->execute([$table]);
+            if(!$lookup->fetchColumn())$missing[]=$table;
+        }
+        if(!$missing)return;
         foreach(['netvera-legacy-bridge-v1.sql','netvera-inquiries-v1.sql','netvera-editorial-seo-v1.sql'] as $name){
             $sql=file_get_contents(BASE_PATH.'/database/migrations/'.$name);
             if($sql===false)throw new \RuntimeException('Local Netvera migration missing');
