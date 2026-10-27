@@ -75,7 +75,8 @@ class PackageController extends Controller
         // a tentative supplier/price is NOT an indexable standalone product.
         $nvDraft=\App\Services\MarketProposalGuard::origin((int)$package['id']);
         $nvSeoData=\App\Services\NetveraSeoBridge::get('package',(int)$package['id']);
-        if($nvDraft!==null)$nvSeoData['robots']='noindex,follow';
+        if($nvDraft!==null && (($nvDraft['kind']??'')!=='social' || !\App\Services\MarketProposalGuard::ready($package)))
+            $nvSeoData['robots']='noindex,follow';
         $schema=$quoteMode ? json_encode([
             '@context'=>'https://schema.org',
             '@type'=>'Service',
