@@ -1,0 +1,91 @@
+name: NetVera Market Activation and SEO QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/bin/netvera-market-publish.php'
+      - 'well-known/bin/netvera-market-catalog-expand.php'
+      - 'well-known/app/Services/ServiceIntentFaqService.php'
+      - 'well-known/app/Services/SocialStorefrontService.php'
+      - 'well-known/app/Services/CategorySeoCompleteService.php'
+      - 'well-known/app/Services/ServicePackageSeoCompleteService.php'
+      - 'well-known/database/netvera-market-competitor-samples-2026-10-27.json'
+      - 'well-known/database/netvera-social-package-baseline.json'
+      - '.github/workflows/netvera-market-activation-qa.yml'
+  workflow_dispatch:
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: market_ci_only
+          MYSQL_DATABASE: netvera_market_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent -pmarket_ci_only"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, fileinfo, curl, gd
+          tools: none
+      - name: Prepare isolated disposable MySQL data
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq default-mysql-client
+          mysql -h127.0.0.1 -uroot -pmarket_ci_only netvera_market_ci < well-known/database/database.sql
+          cat > well-known/.env <<'EOF'
+          APP_ENV=staging
+          APP_DEBUG=false
+          APP_URL=http://127.0.0.1:8006
+          DB_HOST=127.0.0.1
+          DB_NAME=netvera_market_ci
+          DB_USER=root
+          DB_PASS=market_ci_only
+          DB_CHARSET=utf8mb4
+          LICENSE_ENABLED=false
+          LICENSE_LOCAL_BYPASS=true
+          EOF
+          mysql -h127.0.0.1 -uroot -pmarket_ci_only netvera_market_ci -N             -e "SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM users),(SELECT COUNT(*) FROM payment_gateways)" > /tmp/market-before
+      - name: Add 278 draft packages without altering original products
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd well-known
+          php bin/netvera-market-catalog-expand.php
+          php bin/netvera-market-catalog-expand.php --apply-drafts --ack=NETVERA-MARKET-DRAFTS-REVIEWED
+          php bin/netvera-market-catalog-expand.php --apply-drafts --ack=NETVERA-MARKET-DRAFTS-REVIEWED
+          [ "$(mysql -h127.0.0.1 -uroot -pmarket_ci_only netvera_market_ci -N -e "SELECT COUNT(*) FROM packages WHERE status='inactive' AND slug LIKE 'nv-%'")" = 278 ]
+      - name: Publish offers safely and complete category SEO/FAQ twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd well-known
+          php bin/netvera-market-publish.php
+          php bin/netvera-market-publish.php --apply --ack=MARKET-PUBLIC-CATALOG
+          php bin/netvera-market-publish.php --apply --ack=MARKET-PUBLIC-CATALOG
+          php tests/netvera-market-publication-seo-qa.php
+      - name: Verify 278 visible, enquiry-only and genuine scripts/orders intact
+        shell: bash
+        run: |
+          set -euo pipefail
+          db() { mysql -h127.0.0.1 -uroot -pmarket_ci_only netvera_market_ci -N -e "$1"; }
+          [ "$(db "SELECT COUNT(*) FROM packages WHERE status='active' AND slug LIKE 'nv-%'")" = 278 ]
+          [ "$(db "SELECT COUNT(*) FROM packages p JOIN settings s ON s.setting_key=CONCAT('package_price_mode_',p.id) WHERE p.slug LIKE 'nv-%' AND s.setting_value='quote'")" = 278 ]
+          [ "$(db "SELECT COUNT(*) FROM settings WHERE setting_key LIKE 'social_landing_category_%'")" -ge 49 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_legacy_script_products")" = 16 ]
+          db "SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM users),(SELECT COUNT(*) FROM payment_gateways)" > /tmp/market-after
+          diff -u /tmp/market-before /tmp/market-after
+          echo 'PASS: 278 active enquiry-only offers; 49+ social category FAQ records; original customers, payments and 16 scripts untouched'
