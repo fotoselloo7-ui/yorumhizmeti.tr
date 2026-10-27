@@ -7,6 +7,10 @@
             <?= csrfField() ?>
             <button type="submit" class="btn btn-primary btn-sm"><?= icon('check-circle',14) ?> Kataloğu Yayına Al</button>
         </form>
+        <form method="POST" action="/admin/paketler/seo-tamamla" style="margin:0" onsubmit="return confirm('Hazır yazılımlar, URL yapıları, mevcut özgün içerikler ve fiyatlar korunarak yalnızca boş/eski SEO alanları tamamlansın mı?')">
+            <?= csrfField() ?>
+            <button type="submit" class="btn btn-outline btn-sm"><?= icon('search',14) ?> Hizmet SEO / GEO / AIO Tamamla</button>
+        </form>
         <a href="/admin/import" class="btn btn-outline btn-sm"><?= icon('upload', 14) ?> Excel/CSV İçe Aktar</a>
         <a href="/admin/paket/ekle" class="btn btn-primary btn-sm"><?= icon('plus', 16) ?> Paket Ekle</a>
     </div>
