@@ -31,6 +31,7 @@ class PackageController extends Controller
         ", [$slug]);
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
+        $quoteMode=\App\Services\ServiceQuotePolicy::package($package);
         $fields = \App\Services\SmmOrderFields::fields($package);
         $socialSale = \App\Services\SocialPackageService::info($package);
         $socialPage=$socialSale!==null?\App\Services\SocialStorefrontService::page($package+['_sale'=>$socialSale],'package'):null;
@@ -62,7 +63,15 @@ class PackageController extends Controller
             $testimonialSection = null;
         }
 
-        $schema = json_encode([
+        $schema=$quoteMode ? json_encode([
+            '@context'=>'https://schema.org',
+            '@type'=>'Service',
+            'name'=>package_display_name($package),
+            'description'=>strip_tags((string)($package['short_description']??'')),
+            'serviceType'=>(string)$package['category_name'],
+            'provider'=>['@type'=>'Organization','name'=>'NetVera Teknoloji Yazılım','url'=>url('/')],
+            'url'=>url('/paket/'.$package['slug'])
+        ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) : json_encode([
             '@context' => 'https://schema.org',
             '@type' => 'Product',
             'name' => package_display_name($package),
@@ -86,6 +95,7 @@ class PackageController extends Controller
             'schema' => $schema,
             'nvSeoData' => \App\Services\NetveraSeoBridge::get('package',(int)$package['id']),
             'package' => $package,
+            'quoteMode' => $quoteMode,
             'socialSale' => $socialSale,
             'socialPage' => $socialPage,
             'socialAlternatives' => $socialAlternatives,
