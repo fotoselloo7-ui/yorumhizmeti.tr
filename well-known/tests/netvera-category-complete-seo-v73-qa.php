@@ -9,6 +9,8 @@ require_once $root.'/app/Services/SocialPlatformIdentity.php';
 require_once $root.'/app/Services/CategoryHeroService.php';
 require_once $root.'/app/Services/CategorySearchBlueprint.php';
 require_once $root.'/app/Services/CategoryEditorialCopyService.php';
+require_once $root.'/app/Services/PublicSeoUrls.php';
+require_once $root.'/app/Services/CatalogMenuService.php';
 require_once $root.'/app/Services/CategorySeoCompleteService.php';
 
 use App\Services\CategorySearchBlueprint as Blueprint;
@@ -31,7 +33,7 @@ foreach($profiles as $slug=>$profile){
     $suggestion=Complete::recommendations($sample);
     if(!$suggestion)throw new RuntimeException('Missing SEO data: '.$slug);
     if($suggestion['slug']!==$slug)throw new RuntimeException('Never rewrite indexed category slugs.');
-    if($suggestion['canonical_url']!=='https://netvera.tr/kategori/'.$slug)
+    if($suggestion['canonical_url']!=='https://netvera.tr'.\App\Services\PublicSeoUrls::category($sample))
        throw new RuntimeException('Noncanonical service URL '.$slug);
     foreach(['description','seo_title','seo_description','seo_focus_keyword',
              'canonical_url','og_title','og_description'] as $field){
@@ -64,7 +66,7 @@ $custom=[
  'slug'=>'instagram-takipci','name'=>'Instagram Takipçi',
  'seo_title'=>'Özgün SEO Başlığı','seo_description'=>'Benzersiz kategori açıklaması müşterinin özel hizmetini anlatır ve ayrıntılı olarak sipariş koşullarını açıklar.',
  'seo_focus_keyword'=>'instagram takipçi al','description'=>'Müşteri tarafından eklenen özgün açıklama.',
- 'og_title'=>'Özgün OG Başlığı','canonical_url'=>'https://netvera.tr/kategori/instagram-takipci',
+ 'og_title'=>'Özgün OG Başlığı','canonical_url'=>'https://netvera.tr/sosyal-medya-hizmetleri/instagram-takipci',
 ];
 $preserved=Complete::fillForForm($custom);
 if($preserved['category']['seo_title']!=='Özgün SEO Başlığı')throw new RuntimeException('Hand-authored SEO title lost.');
