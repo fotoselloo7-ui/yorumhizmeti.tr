@@ -53,7 +53,7 @@ $packageView=file_get_contents(BASE_PATH.'/resources/views/frontend/package-deta
 $cart=file_get_contents(BASE_PATH.'/app/Controllers/CartController.php');
 $checkout=file_get_contents(BASE_PATH.'/app/Controllers/CheckoutController.php');
 verify(str_contains($app,"'/kategoriler/grup/{slug}'")&&str_contains($app,"'/sosyal-medya-hizmetleri'"),'legacy route and friendly route coexist');
-verify(str_contains($category,"true,301")&&str_contains($category,'PublicSeoUrls::group'),'old service group URLs redirect to canonical');
+verify(!str_contains($category,"header('Location:")&&str_contains($category,'PublicSeoUrls::notFound'),'unindexed old category URL must not redirect');
 verify(str_contains($sitemap,'PublicSeoUrls::group'),'sitemap lists new group URLs');
 verify(str_contains($nav,'PublicSeoUrls::group'),'menu uses friendly group URLs');
 verify(str_contains($view,'RegionalEditorialGuideService::fallback'),'existing regional guides render even with empty editor');
@@ -66,4 +66,4 @@ verify(str_contains($app,"'/sosyal-medya-hizmetleri/{categorySlug}/{serviceSlug}
 verify(str_contains($packageView,'quoteMode')&&str_contains($packageView,'Teklif Al'),'quote-only product cannot show a fake fixed retail price');
 verify(str_contains($cart,'ServiceQuotePolicy::package')&&str_contains($checkout,'ServiceQuotePolicy::package'),'cart and checkout independently guard scope-quoted purchases');
 verify(str_contains($app,"'/admin/paketler/seo-tamamla'"),'admin bulk SEO fill registered');
-echo "PASS: three descriptive URLs with legacy 301, ready-script protection, guarded quotes, verified margin, service/purchase SEO and regional editorial guide\n";
+echo "PASS: descriptive category URLs without redirects, script/blog protection, quote policies and regional editorial guide\n";
