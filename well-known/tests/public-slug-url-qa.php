@@ -106,4 +106,29 @@ $assert(str_contains($load('app/Controllers/CategoryController.php'),'$categoryC
 $assert(str_contains($load('app/Services/SitemapService.php'),'PublicSeoUrls::socialService'), 'Sitemap missing social service permalinks');
 $assert(str_contains($load('resources/views/frontend/social/category.php'),"service-guide.php"), 'Service landing editorial FAQs missing');
 
+// Original social service data is complete. This is a structure/source audit,
+// not an assertion about somebody's separate localhost database.
+$baseline=json_decode($load('database/netvera-social-package-baseline.json'),true,512,JSON_THROW_ON_ERROR);
+$assert(count($baseline['categories'])===60, 'Social platform/category seed incomplete');
+$assert(count($baseline['packages'])===185, 'Original social packages missing from baseline');
+$parents=[];$children=[];
+foreach($baseline['categories'] as $category){
+    $id=(int)$category['legacy_id'];
+    if($category['parent_legacy_id']===null)$parents[$id]=true;
+    else $children[$id]=true;
+}
+$assert(count($parents)===11 && count($children)===49, 'Missing active social service taxonomy');
+$coverage=array_fill_keys(array_keys($children),0);
+foreach($baseline['packages'] as $pkg){
+    $id=(int)$pkg['category_legacy_id'];
+    $assert(isset($children[$id]), 'Unmapped social package: '.$pkg['slug']);
+    $assert((float)$pkg['price']>0, 'Package lacks a real source price: '.$pkg['slug']);
+    $coverage[$id]++;
+}
+$assert(!in_array(0,$coverage,true), 'A social subcategory has no baseline packages');
+$restore=$load('bin/netvera-social-catalog-restore.php');
+$assert(str_contains($restore,'--ack=RESTORE-MISSING-SOCIAL-PACKAGES') &&
+        str_contains($restore,'SELECT id FROM packages WHERE slug=? LIMIT 1'),
+        'Missing-only restoration must preserve existing product rows');
+
 echo "PASS: direct category SEO URLs without redirects, original NetVera script and blog paths retained\n";
