@@ -453,7 +453,8 @@
               $nv56Actions = [
                  ['url' => '/siparislerim', 'label' => 'Siparişlerim', 'icon' => 'package'],
                  ['url' => '/destek', 'label' => 'Destek Merkezi', 'icon' => 'headphones'],
-                 ['url' => '/hazir-scriptler', 'label' => 'Hazır Yazılımlar', 'icon' => 'monitor']
+                 ['url' => '/hazir-scriptler', 'label' => 'Hazır Yazılımlar', 'icon' => 'monitor'],
+                 ['url' => '/iletisim', 'label' => 'İletişim', 'icon' => 'mail']
               ];
             ?>
             <details class="nv26-quick nv56-quick">
@@ -603,6 +604,7 @@
 
                 <nav class="footer-col" aria-label="Kurumsal ve destek">
                     <h4>Kurumsal & Destek</h4>
+                    <a class="yh49-footer-link" href="/iletisim">İletişim Sayfası</a>
                     <a class="yh49-footer-link" href="/sayfa/hakkimizda">Hakkımızda</a>
                     <?php if(\App\Services\RegionalLandingService::hasPublished()): ?><a class="yh49-footer-link" href="/hizmet-bolgeleri">Hizmet Bölgeleri</a><?php endif; ?>
                     <a class="yh49-footer-link" href="/blog">Blog</a>
