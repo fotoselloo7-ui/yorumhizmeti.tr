@@ -63,7 +63,7 @@ verify(str_contains($regionalCss,'.nvl-deep-guide')&&str_contains($regionalCss,'
 verify(str_contains($view, 'if($nvLongBody'),'partial editorial edits must not hide the long guide');
 verify(str_contains($app,"'/sosyal-medya-hizmetleri/{categorySlug}/{serviceSlug}'"),'indexable social-service route missing');
 
-verify(str_contains($packageView,'quoteMode')&&str_contains($packageView,'Teklif Al'),'quote-only product cannot show a fake fixed retail price');
+verify(str_contains($packageView,'quoteMode')&&str_contains($packageView,'ServicePriceMode::cta'),'quote-only product cannot show a fake fixed retail price');
 verify(str_contains($cart,'ServiceQuotePolicy::package')&&str_contains($checkout,'ServiceQuotePolicy::package'),'cart and checkout independently guard scope-quoted purchases');
 verify(str_contains($app,"'/admin/paketler/seo-tamamla'"),'admin bulk SEO fill registered');
 echo "PASS: descriptive category URLs without redirects, script/blog protection, quote policies and regional editorial guide\n";
