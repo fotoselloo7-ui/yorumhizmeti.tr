@@ -104,7 +104,8 @@ $assert(str_contains($load('app/Services/SocialPackageService.php'), 'PublicSeoU
 $assert(!str_contains($load('app/Services/SocialPackageService.php'), "'?hizmet='"), 'Service navigation must not emit filter URLs');
 $assert(str_contains($load('app/Controllers/CategoryController.php'),'$categoryCanonical'), 'Clean canonical path must be rendered directly');
 $assert(str_contains($load('app/Services/SitemapService.php'),'PublicSeoUrls::socialService'), 'Sitemap missing social service permalinks');
-$assert(str_contains($load('resources/views/frontend/social/category.php'),"service-guide.php"), 'Service landing editorial FAQs missing');
+$assert(!str_contains($load('resources/views/frontend/social/category.php'),"service-guide.php"), 'Duplicated social product SEO guide must not be rendered');
+$assert(str_contains($load('resources/views/frontend/social/category.php'),"editorial.php"), 'Keep original admin-editable social SEO content and FAQs');
 
 // Original social service data is complete. This is a structure/source audit,
 // not an assertion about somebody's separate localhost database.
