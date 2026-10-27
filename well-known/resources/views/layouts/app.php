@@ -174,8 +174,10 @@
     <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261027-card-header-badge">
     <script src="<?= asset('js/social-storefront.js') ?>?v=20261019" defer></script>
     <?php endif; ?>
+    <?php if(in_array($template,['frontend/contact','frontend/category-detail','frontend/package-detail'],true)): ?>
+    <link rel="stylesheet" href="<?= asset('css/service-editorial-guide-v1.css') ?>?v=20261027-service-layout-fix">
+    <?php endif; ?>
     <?php if($template==='frontend/contact'): ?>
-    <link rel="stylesheet" href="<?= asset('css/service-editorial-guide-v1.css') ?>?v=20261027">
     <link rel="stylesheet" href="<?= asset('css/contact-page.css') ?>?v=20261026-visible-google-map">
     <?php endif; ?>
     <?php $nvGraph=\App\Services\SeoStructuredDataService::graph($schema??null,[
