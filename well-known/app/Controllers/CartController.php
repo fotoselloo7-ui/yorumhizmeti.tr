@@ -71,6 +71,12 @@ class CartController extends Controller
             return;
         }
 
+        if(\App\Services\ServiceQuotePolicy::package($pkg)){
+            flash('info','Bu hizmet proje kapsamına göre fiyatlandırılır. Lütfen teklif talep edin.');
+            redirect(\App\Services\ServiceQuotePolicy::url($pkg));
+            return;
+        }
+
         $smmLink = \App\Services\SmmCatalogService::mapping($packageId);
         if ($smmLink && (!$smmLink['enabled'] || !$smmLink['is_available'] || !$smmLink['provider_active'])) {
             flash('error', 'Bu hizmet şu anda siparişe kapalı.');
