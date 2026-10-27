@@ -33,10 +33,12 @@ $db=\App\Core\Database::getInstance();$pdo=$db->getPdo();
 $rows=$db->fetchAll(
     "SELECT p.id,p.slug,p.status,p.category_id,p.price,p.discount_price,
             c.name category_name,c.slug category_slug,
-            s.setting_key,s.setting_value
+            s.setting_key,s.setting_value,
+            sm.setting_value AS price_mode_before
      FROM settings s
      JOIN packages p ON s.setting_key=CONCAT('netvera_market_proposal_',p.id)
      JOIN categories c ON c.id=p.category_id AND c.status='active'
+     LEFT JOIN settings sm ON sm.setting_key=CONCAT('package_price_mode_',p.id)
      WHERE s.setting_key LIKE 'netvera_market_proposal_%'
      ORDER BY p.id"
 );
@@ -54,7 +56,7 @@ foreach($rows as $row){
     $planned[]=['id'=>$id,'slug'=>$slug,'status'=>$row['status'],
         'kind'=>$record['kind'],'price'=>(float)$row['price'],
         'setting_key'=>$row['setting_key'],
-        'price_mode_before'=>\App\Services\ServicePriceMode::forPackage($row)
+        'price_mode_before'=>$row['price_mode_before']??'auto'
     ];
 }
 if($invalid)throw new RuntimeException('Some product markers failed validation: '.implode(', ',array_slice($invalid,0,10)));
@@ -91,6 +93,23 @@ try{
 }
 
 echo "Published $changed market alternatives in storefront as ENQUIRY ONLY. Existing products unchanged.\n";
+// Save editable, category-specific social long descriptions and FAQs for
+// categories with no existing admin content. Existing custom/hidden modes win.
+$savedSocial=0;$customSocial=0;
+$allSocial=$db->fetchAll("SELECT c.*,p.name AS parent_category_name,
+      p.slug AS parent_category_slug
+      FROM categories c LEFT JOIN categories p ON p.id=c.parent_id
+      WHERE c.status='active' ORDER BY c.id");
+foreach($allSocial as $category){
+    if(!\App\Services\SocialPackageService::isSocialCategory((int)$category['id']))continue;
+    $stored=\App\Services\SocialStorefrontService::stored('category',(int)$category['id']);
+    if($stored){$customSocial++;continue;}
+    $content=\App\Services\SocialStorefrontService::defaults($category);
+    $content['mode']='custom';
+    \App\Services\SocialStorefrontService::save('category',(int)$category['id'],$content);
+    $savedSocial++;
+}
+echo "Social category editorial/FAQs saved: $savedSocial | admin-authored/hidden preserved: $customSocial\n";
 // Persist canonical category/offer SEO defaults, but preserve all editor-owned
 // fields, original ready software and blog routes. Category snapshot is
 // separate from the individual package backup created by the SEO service.
