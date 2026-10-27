@@ -25,7 +25,7 @@ final class ServiceQuotePolicy
             if(!$next)break;
             $root=$next;
         }
-        return self::needsQuote($root);
+        return ServicePriceMode::quote($package,self::needsQuote($root));
     }
 
     public static function url(array $package):string
