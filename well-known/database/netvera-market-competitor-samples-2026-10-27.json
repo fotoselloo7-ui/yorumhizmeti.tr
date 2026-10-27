@@ -1,0 +1,165 @@
+{
+  "checked_at": "2026-10-27",
+  "discount_rate": 0.1,
+  "currency": "TRY",
+  "notice": "These are posted competitor examples, not wholesale cost or identical-quality guarantees. Prices are draft suggestions only until provider cost, eligibility and delivery capacity are reviewed.",
+  "social": [
+    {
+      "category": "instagram-takipci",
+      "variant": "turk",
+      "name": "Instagram Türk Takipçi",
+      "unit": "takipçi",
+      "url": "https://bayigram.com/instagram-turk-takipci-satin-al/",
+      "quantity_price": {
+        "50": 54.99,
+        "100": 105.95,
+        "250": 254.79,
+        "500": 489.41,
+        "1000": 938.5,
+        "2500": 2245,
+        "5000": 4289,
+        "7500": 6131
+      }
+    },
+    {
+      "category": "instagram-takipci",
+      "variant": "bayan",
+      "name": "Instagram Bayan Takipçi",
+      "unit": "takipçi",
+      "url": "https://bayigram.com/instagram-bayan-takipci-satin-al/",
+      "quantity_price": {
+        "50": 62,
+        "100": 119.45,
+        "250": 287.27,
+        "500": 551.8,
+        "750": 793.6,
+        "1000": 1013,
+        "2500": 2418,
+        "5000": 4609
+      }
+    },
+    {
+      "category": "instagram-begeni",
+      "variant": "turk",
+      "name": "Instagram Türk Beğeni",
+      "unit": "beğeni",
+      "url": "https://bayigram.com/instagram-begeni-satin-al/",
+      "quantity_price": {
+        "10": 1.89,
+        "25": 4.58,
+        "50": 8.87,
+        "75": 12.88,
+        "100": 16.59,
+        "250": 40.04,
+        "500": 77.19,
+        "750": 111.46
+      }
+    },
+    {
+      "category": "instagram-reels-izlenme",
+      "variant": "standart",
+      "name": "Instagram Reels İzlenme",
+      "unit": "izlenme",
+      "url": "https://bayigram.com/instagram-reels-izlenme-satin-al/",
+      "quantity_price": {
+        "250": 2.75,
+        "500": 5.18,
+        "750": 7.29,
+        "1000": 9.09,
+        "2500": 21.12,
+        "5000": 39.05,
+        "10000": 71.72,
+        "25000": 163.35
+      }
+    },
+    {
+      "category": "tiktok-takipci",
+      "variant": "standart",
+      "name": "TikTok Takipçi",
+      "unit": "takipçi",
+      "url": "https://bayigram.com/tiktok-takipci-satin-al/",
+      "quantity_price": {
+        "10": 7.5,
+        "25": 17.99,
+        "50": 34.25,
+        "75": 49,
+        "100": 62,
+        "250": 147.5,
+        "500": 279,
+        "750": 394.5
+      }
+    },
+    {
+      "category": "tiktok-begeni",
+      "variant": "standart",
+      "name": "TikTok Beğeni",
+      "unit": "beğeni",
+      "url": "https://bayigram.com/tiktok-begeni-satin-al/",
+      "quantity_price": {
+        "10": 1.25,
+        "25": 3,
+        "50": 5.75,
+        "75": 8.25,
+        "100": 10.5,
+        "250": 25,
+        "500": 47.5,
+        "750": 67.5
+      }
+    },
+    {
+      "category": "tiktok-izlenme",
+      "variant": "standart",
+      "name": "TikTok İzlenme",
+      "unit": "izlenme",
+      "url": "https://bayigram.com/tiktok-izlenme-satin-al/",
+      "quantity_price": {
+        "250": 1.99,
+        "500": 3.99,
+        "1000": 7.75,
+        "2500": 17.75,
+        "5000": 34,
+        "7500": 48.99,
+        "10000": 62.45,
+        "25000": 149
+      }
+    }
+  ],
+  "professional": [
+    {
+      "category": "yerel-seo",
+      "name": "Yerel SEO — 4 Anahtar Kelime / Aylık",
+      "peer_try": 5900,
+      "term": "ay",
+      "source": "https://siteajansi.com/seo-fiyatlari/",
+      "scope": "Tek şehir veya ilçe; 4 anahtar kelime takibi, Google İşletme Profili haftalık yönetimi ve aylık harita raporu.",
+      "vat": "KDV hariç"
+    },
+    {
+      "category": "seo-analizi",
+      "name": "SEO Teknik Denetim Raporu — Tek Seferlik",
+      "peer_try": 4900,
+      "term": "tek sefer",
+      "source": "https://siteajansi.com/seo-fiyatlari/",
+      "scope": "Tek web sitesi; teknik tarama, indeks sorunları analizi ve öncelikli öneri raporu; uygulama dahil değil.",
+      "vat": "KDV hariç"
+    },
+    {
+      "category": "seo-hizmetleri",
+      "name": "Kurumsal SEO — 10 Anahtar Kelime / Aylık",
+      "peer_try": 11900,
+      "term": "ay",
+      "source": "https://siteajansi.com/seo-fiyatlari/",
+      "scope": "10 anahtar kelime, teknik denetim ve düzeltme, aylık 4 içerik ve iç link mimarisi.",
+      "vat": "KDV hariç"
+    },
+    {
+      "category": "seo-hizmetleri",
+      "name": "Rekabetçi SEO — 25 Anahtar Kelime / Aylık",
+      "peer_try": 19900,
+      "term": "ay",
+      "source": "https://siteajansi.com/seo-fiyatlari/",
+      "scope": "25 kelime, aylık 8 içerik, teknik SEO, backlink stratejisi ve aylık rapor.",
+      "vat": "KDV hariç"
+    }
+  ]
+}
