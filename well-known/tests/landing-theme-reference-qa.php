@@ -165,7 +165,7 @@ foreach (Theme::all() as $key => $profile) {
     $emptySources = array_fill_keys(array_keys($sources), []);
     $emptyHtml = $render($empty, $key, $emptySources);
     $emptyXp = $parse($emptyHtml);
-    $ok($emptyXp->query('//h1')->length === 1 && $emptyXp->query('//*[@data-component]')->length === 1, 'Missing image/data stays safe and omits empty blocks: ' . $key);
+    $ok($emptyXp->query('//h1')->length === 1 && $emptyXp->query('//*[@data-component]')->length === 2 && $emptyXp->query('//*[@data-component="editorial-guide"]')->length === 1, 'Empty visual components omitted while bottom long guide stays visible: ' . $key);
     $ok(!str_contains($emptyHtml, 'src=""') && !str_contains($emptyHtml, 'srcset=""') && !str_contains($emptyHtml, $d['location_image_alt']), 'No broken empty image or stale city visual: ' . $key);
 }
 
