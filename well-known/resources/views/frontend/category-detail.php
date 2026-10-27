@@ -66,6 +66,7 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
   <?php if(!empty($socialCatalog['selected'])): ?><div class="nv-social-section-heading"><h2><?= e($socialCatalog['selected']['name']) ?></h2><p>Miktarı belli paketinizi seçin. Gösterilen fiyat, paketteki miktarın tamamı içindir.</p></div><?php endif; ?>
   <div class="yv-category-package-grid-v5">
    <?php foreach($packages as $index=>$pkg):
+    $nvItemQuote=\App\Services\ServiceQuotePolicy::package($pkg);
     $price=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price'];
     $discount=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price']&&$pkg['price']>0)?round((1-$pkg['discount_price']/$pkg['price'])*100):0;
    ?>
@@ -82,8 +83,8 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
      <?php endforeach; ?>
     </ul>
     <div class="yv-category-delivery-v5"><?= icon('truck',12) ?> Teslimat: <?= e($pkg['delivery_time'] ?: 'Hızlı') ?></div>
-    <div class="yv-category-price-v5"><?php if(!empty($quoteMode)): ?><strong>Fiyat ve kapsam için teklif alın</strong><?php else: ?><div><?php if($discount): ?><del><?= money($pkg['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong></div><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?><?php endif; ?></div>
-    <em><?= !empty($quoteMode)?'Teklif Al':($socialInfo?'Paketi Satın Al':'Paketleri İncele') ?> <?= icon('arrow-right',11) ?></em>
+    <div class="yv-category-price-v5"><?php if($nvItemQuote): ?><strong><?= e(\App\Services\ServicePriceMode::cta($pkg)) ?></strong><?php else: ?><div><?php if($discount): ?><del><?= money($pkg['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong></div><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?><?php endif; ?></div>
+    <em><?= $nvItemQuote?e(\App\Services\ServicePriceMode::cta($pkg)):($socialInfo?'Paketi Satın Al':'Paketleri İncele') ?> <?= icon('arrow-right',11) ?></em>
    </a>
    <?php endforeach; ?>
   </div>
