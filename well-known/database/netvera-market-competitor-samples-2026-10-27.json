@@ -122,6 +122,23 @@
         "10000": 62.45,
         "25000": 149
       }
+    },
+    {
+      "category": "x-goruntulenme",
+      "variant": "standart",
+      "name": "X Tweet Görüntülenme",
+      "unit": "görüntülenme",
+      "url": "https://bayigram.com/twitter-tweet-goruntulenme-satin-al/",
+      "quantity_price": {
+        "100": 1,
+        "250": 2.38,
+        "500": 4.54,
+        "750": 6.46,
+        "1000": 8.16,
+        "2500": 19.25,
+        "5000": 36.2,
+        "7500": 50.85
+      }
     }
   ],
   "professional": [
