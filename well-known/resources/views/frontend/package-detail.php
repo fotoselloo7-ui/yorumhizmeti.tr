@@ -37,11 +37,25 @@ $nvPlatformClass=\App\Services\SocialPlatformIdentity::classFor($nvPlatformKey);
 $price=(!empty($package['discount_price'])&&$package['discount_price']<$package['price'])?$package['discount_price']:$package['price'];
 $discount=(!empty($package['discount_price'])&&$package['discount_price']<$package['price']&&$package['price']>0)?round((1-$package['discount_price']/$package['price'])*100):0;
 $reviews=$testimonialSection['extra']??[];
+$nvParentData=(!empty($package['parent_category_slug']))
+    ?['slug'=>$package['parent_category_slug'],'name'=>$package['parent_category_name']??'']
+    :null;
+$nvChildData=['slug'=>$package['category_slug']??'','name'=>$package['category_name']??''];
+$nvShowChild=\App\Services\ServiceCategoryVisibility::show($nvChildData,$nvParentData);
+$nvBreadcrumbTarget=\App\Services\ServiceCategoryVisibility::isLegacySoftware($package)
+    ?'/hazir-scriptler'
+    :\App\Services\PublicSeoUrls::category(
+        !$nvShowChild && $nvParentData ? $nvParentData : $nvChildData,
+        $nvShowChild?$nvParentData:null
+    );
+$nvBreadcrumbName=!$nvShowChild && $nvParentData
+    ?($nvParentData['name']??'Hizmetler')
+    :($package['category_name']??'Hizmetler');
 ?>
 <div class="yv-product-v5 <?= e($nvPlatformClass) ?>">
 <section class="yv-product-hero-v5 <?= e($pclass) ?> <?= e($nvPlatformClass) ?>">
  <div class="container">
-  <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a><span class="sep">/</span><a href="<?= e(\App\Services\ServiceCategoryVisibility::isLegacySoftware($package) ? '/hazir-scriptler' : \App\Services\PublicSeoUrls::category(['slug'=>$package['category_slug']??'','name'=>$package['category_name']??'', 'parent_category_slug'=>$package['parent_category_slug']??'', 'parent_category_name'=>$package['parent_category_name']??''])) ?>"><?= e($package['category_name']??'Hizmetler') ?></a><span class="sep">/</span><span><?= e(package_display_name($package)) ?></span></div>
+  <div class="pkg-breadcrumb"><a href="/"><?= icon('home',11) ?> Ana Sayfa</a><span class="sep">/</span><a href="<?= e($nvBreadcrumbTarget) ?>"><?= e($nvBreadcrumbName) ?></a><span class="sep">/</span><span><?= e(package_display_name($package)) ?></span></div>
   <div class="yv-product-hero-grid-v5">
    <div class="yv-product-hero-copy-v5">
     <div class="yv-product-brand-v5"><span><?= icon($platform,30) ?></span><small><?= e($package['category_name']??'Premium Hizmet') ?></small></div>
