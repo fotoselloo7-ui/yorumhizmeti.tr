@@ -33,7 +33,7 @@ foreach($matches as $record){
  $suggest=Complete::recommendations($sample);
  if(!$suggest)continue; // Imported software taxonomy is explicitly protected.
  $ok($suggest['slug']===$slug,'SEO recommendation keeps indexed slug: '.$slug);
- $ok(str_contains($suggest['canonical_url'],'/kategori/'.$slug),'Canonical preserves exact category route: '.$slug);
+ $ok($suggest['canonical_url']==='https://netvera.tr'.\App\Services\PublicSeoUrls::category($sample),'New non-indexed category uses canonical SEO path: '.$slug);
  $filled=Complete::fillForForm($sample);
  $ok(trim((string)$filled['category']['description'])!==''&&trim((string)$filled['category']['seo_description'])!=='','Blank service category gets full presentation and meta: '.$slug);
 }
@@ -42,11 +42,14 @@ $custom=['name'=>'Web Tasarım','slug'=>'web-tasarim',
  'description'=>'Bu kategorinin yıllardır yayımlanan tamamen özgün ve elle düzenlenmiş hizmet açıklaması; gereksinimleri detaylı olarak açıklar.',
  'seo_title'=>'Elle Düzenlenen Web Tasarım Başlığı',
  'seo_description'=>'Web tasarım kategorisinin kullanıcı tarafından özel olarak yazılmış, detaylı bir meta açıklamasıdır; korunması gerekir.',
- 'og_title'=>'Özgün Açık Grafik Başlığı','canonical_url'=>'https://netvera.tr/kategori/web-tasarim'];
+ 'og_title'=>'Özgün Açık Grafik Başlığı','canonical_url'=>'https://netvera.tr/ajans-yazilim-hizmetleri/web-tasarim'];
 $verified=Complete::fillForForm($custom);
 $ok($verified['category']['description']===$custom['description'],'Authored content never overwritten');
 $ok($verified['category']['seo_title']===$custom['seo_title'],'Custom SEO title preserved');
 $ok($verified['category']['canonical_url']===$custom['canonical_url'],'Existing canonical preserved');
+$legacy=$custom;$legacy['canonical_url']='https://netvera.tr/kategori/web-tasarim';
+$updated=Complete::fillForForm($legacy);
+$ok($updated['category']['canonical_url']===$custom['canonical_url'],'Unindexed legacy service canonical upgraded without redirect');
 $frontend=file_get_contents(BASE_PATH.'/resources/views/frontend/categories.php');
 $catalog=file_get_contents(BASE_PATH.'/app/Services/CatalogMenuService.php');
 $landing=file_get_contents(BASE_PATH.'/app/Services/RegionalLandingService.php');
