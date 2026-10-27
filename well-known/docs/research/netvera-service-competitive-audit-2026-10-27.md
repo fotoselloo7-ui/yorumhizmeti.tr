@@ -27,6 +27,14 @@ Fiyat örnekleri aynı kalite veya gerçek teslimat garantisini kanıtlamaz; gü
 
 Bu fiyatlar NetVera teklifi değildir. SEO, Google Ads, web tasarım, içerik üretimi, özel yazılım, markalaşma ve benzeri profesyonel hizmetlerin kapsamı iş bazında değişir. Kurumsal hizmetlerde site üzerinde **“Teklif Al / Bizimle İletişime Geçin”** gösterilir; sabit `packages.price` ödeme toplamı veya `Offer.price` gibi yayımlanmaz. Eski sepetlerde fiyat güvenliği kontrolü yapılır. Sabit miktarlı, sağlayıcıya bağlı sosyal paketlerin satın alma ve fiyat akışı korunur.
 
+## Canlı sunucuda veri tabanı uygulaması — güvenli son adımlar
+- Kod güncellemeleri otomatik olarak `packages` fiyatlarını veya admin tarafından düzenlenmiş SEO alanlarını değiştirmez; bu, canlı siparişleri korumak içindir.
+- Admin > Paketler > **Hizmet SEO / GEO / AIO Tamamla**: süper yöneticinin tek tıklamasıyla yalnızca boş/legacy marka taşıyan hizmet paketi ve kategori meta alanları doldurulur. Paket metadata değişikliklerinden önce özel yedek `storage/backups/` içine yazılır. Hazır scriptlerin isimleri, fiyatları, SEO URL'leri ve orijinal blog kayıtları korunur.
+- `php bin/netvera-follower-market-audit.php`: rakip karşılaştırmasını, aktif TRY tedarikçi maliyetini ve en az %30 brüt marj koşulunu kontrol eden **salt okunur** rapor üretir.
+- `php bin/netvera-follower-market-audit.php --apply-safe`: yalnızca tam hizmet tipi+miktar karşılaştırması ve aktif eşleştirilmiş TRY maliyeti doğrulanırsa, rakibin görünür fiyatından yaklaşık %2 düşük hedefe çekilebilen mevcut *takipçi* paketlerini günceller. Önce özel yedek alır; işlemi transaction ile yürütür. Maliyeti doğrulanmayan/uyumsuz başka hiçbir ürün fiyatı güncellenmez.
+- GitHub üzerinde koda ekleme, cPanel'in kendi SQL verisini otomatik doldurmaz. Admin POST'u veya CLI uygulaması canlı ortama dağıtıldıktan sonra çalıştırılmalıdır.
+- `sitemap.xml`, yeni grup URL'lerini ve eski bağlantıların kalıcı yönlendirmelerini canlı ortamda denetle. Search Console'a güncel sitemap'i sun. 
+
 ## SEO ve yapay zekâ arama görünürlüğü
 - Google URL ilkeleri: https://developers.google.com/search/docs/crawling-indexing/url-structure
 - İnsan için faydalı içerik: https://developers.google.com/search/docs/fundamentals/creating-helpful-content
