@@ -71,6 +71,30 @@ class SitemapService
             $xml .= $this->url($baseUrl . '/kategori/' . $cat['slug'], '0.8', 'weekly', $cat['updated_at'],$this->directives['category'][(int)$cat['id']]??null);
         }
 
+        // Human-readable service selections are independent indexable pages,
+        // whereas sorting/searching query variants are intentionally absent.
+        // Only published social service groups are emitted; imported ready
+        // software and the original /kategori + /paket contracts stay intact.
+        $serviceRows = $db->fetchAll("SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            FROM packages p JOIN categories c ON c.id=p.category_id AND c.status='active'
+            LEFT JOIN categories parent ON parent.id=c.parent_id
+            WHERE p.status='active' AND (c.parent_id IS NULL OR parent.status='active')");
+        $serviceSeen = [];
+        foreach ($serviceRows as $serviceRow) {
+            $categoryId = (int)$serviceRow['category_id'];
+            if (!SocialPackageService::isSocialCategory($categoryId) ||
+                isset($this->excluded['category'][$categoryId])) continue;
+            $info = SocialPackageService::info($serviceRow);
+            if (!$info || trim((string)$info['service']) === '') continue;
+            $servicePath = PublicSeoUrls::socialService(
+                (string)$serviceRow['category_slug'], (string)$info['service']
+            );
+            if (isset($serviceSeen[$servicePath])) continue;
+            $serviceSeen[$servicePath] = true;
+            $xml .= $this->url($baseUrl.$servicePath, '0.7', 'weekly', $serviceRow['updated_at'],
+                $this->directives['category'][$categoryId]??null);
+        }
+        
         // Paketler
         $packages = $db->fetchAll("SELECT p.id,p.slug,p.updated_at FROM packages p
             JOIN categories c ON c.id=p.category_id AND c.status='active'
