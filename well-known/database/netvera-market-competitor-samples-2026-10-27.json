@@ -160,6 +160,60 @@
       "source": "https://siteajansi.com/seo-fiyatlari/",
       "scope": "25 kelime, aylık 8 içerik, teknik SEO, backlink stratejisi ve aylık rapor.",
       "vat": "KDV hariç"
+    },
+    {
+      "category": "google-ads",
+      "name": "Google Ads Başlangıç — 2 Kampanya / Aylık",
+      "peer_try": 9900,
+      "term": "ay",
+      "source": "https://www.nettescil.com.tr/kategori/reklam-yonetimi",
+      "scope": "Tek reklam hesabı, en çok 2 aktif kampanya, 4 reklam grubu, temel dönüşüm kontrolü, haftalık optimizasyon ve aylık rapor; medya bütçesi hariç.",
+      "vat": "KDV durumu müşteri sipariş ekranında ayrıca belirtilir"
+    },
+    {
+      "category": "meta-reklam",
+      "name": "Meta Ads Başlangıç — 2 Kampanya / Aylık",
+      "peer_try": 9900,
+      "term": "ay",
+      "source": "https://www.nettescil.com.tr/kategori/reklam-yonetimi",
+      "scope": "Tek Meta reklam hesabı, en çok 2 aktif kampanya, 4 reklam seti, pixel kontrolü, haftalık optimizasyon ve aylık rapor; medya bütçesi hariç.",
+      "vat": "KDV durumu müşteri sipariş ekranında ayrıca belirtilir"
+    },
+    {
+      "category": "google-ads",
+      "name": "Google Ads Büyüme — 4 Kampanya / Aylık",
+      "peer_try": 17900,
+      "term": "ay",
+      "source": "https://www.nettescil.com.tr/kategori/reklam-yonetimi",
+      "scope": "Tek reklam hesabı, 4 kampanya ve 10 reklam grubu, dönüşüm takibi, remarketing, A/B test planı, haftalık optimizasyon, aylık strateji toplantısı; medya bütçesi hariç.",
+      "vat": "KDV durumu müşteri sipariş ekranında ayrıca belirtilir"
+    },
+    {
+      "category": "meta-reklam",
+      "name": "Meta Ads Büyüme — 4 Kampanya / Aylık",
+      "peer_try": 17900,
+      "term": "ay",
+      "source": "https://www.nettescil.com.tr/kategori/reklam-yonetimi",
+      "scope": "Tek Meta hesabı, 4 aktif kampanya ve 10 reklam seti, remarketing, dönüşüm kontrolü, haftalık optimizasyon ve aylık strateji toplantısı; medya bütçesi hariç.",
+      "vat": "KDV durumu müşteri sipariş ekranında ayrıca belirtilir"
+    },
+    {
+      "category": "logo-tasarim",
+      "name": "Logo ve Başlangıç Kimliği — 2 Revizyon",
+      "peer_try": 10000,
+      "term": "tek sefer",
+      "source": "https://web-vista.com/hizmetler/grafik-tasarim/",
+      "scope": "Logo, 2 revizyon, kartvizit, sosyal medya profil/kapak seti ve kaynak dosyaların teslimi.",
+      "vat": "KDV hariç"
+    },
+    {
+      "category": "reklam-banner",
+      "name": "10 Adet Web veya Sosyal Medya Banner Tasarımı",
+      "peer_try": 9000,
+      "term": "tek sefer",
+      "source": "https://ademcakir.com.tr/index.php/fiyat-listesi/",
+      "scope": "10 adet statik sosyal medya/web banner tasarımı, tasarım brifi ve dosya teslimi. Revizyon sayısı teklif öncesi netleştirilir.",
+      "vat": "KDV durumu müşteri sipariş ekranında ayrıca belirtilir"
     }
   ]
 }
