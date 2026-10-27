@@ -82,8 +82,8 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
      <?php endforeach; ?>
     </ul>
     <div class="yv-category-delivery-v5"><?= icon('truck',12) ?> Teslimat: <?= e($pkg['delivery_time'] ?: 'Hızlı') ?></div>
-    <div class="yv-category-price-v5"><div><?php if($discount): ?><del><?= money($pkg['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong></div><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?></div>
-    <em><?= $socialInfo?'Paketi Satın Al':'Paketleri İncele' ?> <?= icon('arrow-right',11) ?></em>
+    <div class="yv-category-price-v5"><?php if(!empty($quoteMode)): ?><strong>Fiyat ve kapsam için teklif alın</strong><?php else: ?><div><?php if($discount): ?><del><?= money($pkg['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong></div><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?><?php endif; ?></div>
+    <em><?= !empty($quoteMode)?'Teklif Al':($socialInfo?'Paketi Satın Al':'Paketleri İncele') ?> <?= icon('arrow-right',11) ?></em>
    </a>
    <?php endforeach; ?>
   </div>
@@ -119,11 +119,11 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
     <h2 id="yh23-story-heading"><?= e($category['name']) ?> ile markanızı <span>güvenle büyütün.</span></h2>
 
     <ul>
-     <li><?= icon('check-circle',15) ?> Gerçek ve aktif hesaplar</li>
+     <li><?= icon('check-circle',15) ?> İhtiyaca özel hizmet kapsamı</li>
      <li><?= icon('check-circle',15) ?> Hızlı teslimat</li>
      <li><?= icon('check-circle',15) ?> Güvenli sipariş süreci</li>
-     <li><?= icon('check-circle',15) ?> Düşüş garantisi</li>
-     <li><?= icon('check-circle',15) ?> 7/24 canlı destek</li>
+     <li><?= icon('check-circle',15) ?> Kapsama göre netleşen koşullar</li>
+     <li><?= icon('check-circle',15) ?> İletişim ve destek</li>
     </ul>
    </div>
    <aside class="yv-category-side-benefits-v5" aria-label="<?= e($category['name']) ?> avantajları">
@@ -138,7 +138,7 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
  </div>
 </section>
 
-<?php if(count($packages)>=3): ?>
+<?php if(count($packages)>=3 && empty($quoteMode)): ?>
 <section class="yv-category-compare-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Paket karşılaştırması</div><h2>İhtiyacınıza uygun paketi seçin.</h2></div></div><div class="yv-compare-table-wrap-v5"><table><thead><tr><th>Özellikler</th><?php foreach(array_slice($packages,0,6) as $pkg): ?><th><?= e(excerpt(package_display_name($pkg),28)) ?></th><?php endforeach; ?></tr></thead><tbody><tr><td>Gerçek Kullanıcılar</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>Hızlı Teslimat</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= e($pkg['delivery_time'] ?: 'Hızlı') ?></td><?php endforeach; ?></tr><tr><td>Şifre Gerektirmez</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>7/24 Destek</td><?php foreach(array_slice($packages,0,6) as $pkg): ?><td><?= icon('check',12) ?></td><?php endforeach; ?></tr><tr><td>Başlangıç Fiyatı</td><?php foreach(array_slice($packages,0,6) as $pkg): $p=(!empty($pkg['discount_price'])&&$pkg['discount_price']<$pkg['price'])?$pkg['discount_price']:$pkg['price']; ?><td><strong><?= money($p) ?></strong></td><?php endforeach; ?></tr></tbody></table></div></div></section>
 <?php endif; ?>
 
