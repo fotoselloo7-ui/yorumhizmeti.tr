@@ -296,7 +296,7 @@ class HomeController extends Controller
                 'eyebrow' => $config['eyebrow'],
                 'description' => $config['description'],
                 'cta' => $config['cta'],
-                'url' => '/kategoriler/grup/' . rawurlencode($key),
+                'url' => \App\Services\PublicSeoUrls::group($key),
                 'chips' => array_slice($chips, 0, 4),
             ];
         }
