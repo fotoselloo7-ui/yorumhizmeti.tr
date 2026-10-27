@@ -97,7 +97,7 @@
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261016-premium-polish">
-    <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
+    <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.2-contact">
     <?php if(str_starts_with($template,'frontend/account/')): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-account-history-v57.css') ?>?v=57.1">
     <?php endif; ?>
