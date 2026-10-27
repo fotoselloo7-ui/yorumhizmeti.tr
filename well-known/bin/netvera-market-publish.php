@@ -13,6 +13,7 @@
 declare(strict_types=1);
 if(PHP_SAPI!=='cli'){http_response_code(403);exit(1);}
 define('BASE_PATH',dirname(__DIR__));
+define('PUBLIC_PATH',BASE_PATH.'/public');
 foreach(@file(BASE_PATH.'/.env',FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES)?:[] as $line){
     $line=trim($line);
     if($line===''||$line[0]==='#'||!str_contains($line,'='))continue;
@@ -88,4 +89,24 @@ try{
     if($pdo->inTransaction())$pdo->rollBack();
     throw $e;
 }
+
 echo "Published $changed market alternatives in storefront as ENQUIRY ONLY. Existing products unchanged.\n";
+// Persist canonical category/offer SEO defaults, but preserve all editor-owned
+// fields, original ready software and blog routes. Category snapshot is
+// separate from the individual package backup created by the SEO service.
+$categories=$db->fetchAll("SELECT c.* FROM categories c ORDER BY c.id");
+$seoBefore=[];
+foreach($categories as $category){
+    if(\App\Services\CategorySeoCompleteService::recommendations($category)===[])continue;
+    $seoBefore[]=['category'=>$category,'extra'=>\App\Services\NetveraSeoBridge::get('category',(int)$category['id'])];
+}
+$seoBackup=$backupDir.'/market-category-seo-before-'.gmdate('Ymd-His').'-'.getmypid().'.json';
+if(file_put_contents($seoBackup,json_encode($seoBefore,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR),LOCK_EX)===false)
+    throw new RuntimeException('Category SEO backup failed; SEO not applied.');
+@chmod($seoBackup,0600);
+$categoryReport=\App\Services\CategorySeoCompleteService::apply();
+$packageReport=\App\Services\ServicePackageSeoCompleteService::apply();
+echo 'Category SEO normalized: '.json_encode($categoryReport,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR).PHP_EOL;
+echo 'Package SEO normalized: '.json_encode($packageReport,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR).PHP_EOL;
+echo "Admin-authored copy, ready software, blogs and existing customer records preserved.\n";
+
