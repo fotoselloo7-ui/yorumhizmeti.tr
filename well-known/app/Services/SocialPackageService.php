@@ -103,6 +103,7 @@ final class SocialPackageService
         if ($info === null) return;
         if ($info['quantity'] < 1 || $info['unit'] === '') throw new \RuntimeException('Bu paketin teslim miktarı henüz tanımlanmamış. Lütfen destek ekibine ulaşın.');
         if (!$info['mapping_matches']) throw new \RuntimeException('Paketin teslim miktarı ile sağlayıcı eşlemesi uyuşmuyor. Bu paket geçici olarak siparişe kapalı.');
+        if (!MarketProposalGuard::ready($package)) throw new \RuntimeException('Bu yeni alternatif için tedarikçi eşlemesi veya maliyet doğrulaması bekleniyor. Lütfen teklif alın.');
     }
 
     /** Server-owned snapshot, never sourced from customer POST fields. */
