@@ -40,7 +40,7 @@ final class CategorySeoCompleteService
         $question=$profile['question']??($name.' seçerken nelere dikkat etmeliyim?');
         $answer=$profile['answer']??('Bu kategoride yer alan '.mb_strtolower($name,'UTF-8').' hizmetlerini kapsam, ihtiyaç duyulan hedef bilgileri, teslimat ve satın alma koşullarına göre karşılaştırabilirsiniz. Paket detaylarını sipariş vermeden önce kontrol edin.');
         $topics=array_filter(array_unique([$name,$focus,'NetVera Teknoloji Yazılım']));
-        $canonical=$slug!==''?'https://netvera.tr/kategori/'.rawurlencode($slug):'';
+        $canonical=$slug!==''?rtrim((string)setting('site_url','https://netvera.tr'),'/').PublicSeoUrls::category($category):'';
         $imageExists=trim((string)($category['image']??''))!=='';
         $extras=[
             'secondary_keywords'=>$secondary,
@@ -104,9 +104,11 @@ final class CategorySeoCompleteService
             // Existing category prose is meaningful, so retain it unless completely blank.
             $replace=$key==='description'
                 ?(trim($current)==='' || mb_strlen($current,'UTF-8')<55 || self::isGeneric('description',$current,$category))
-                :(in_array($key,['image_alt','canonical_url'],true)
-                  ?trim($current)===''
-                  :self::isGeneric($key,$current,$category));
+                 :($key==='canonical_url'
+                  ?trim($current)==='' || (bool)preg_match('~^https?://[^/]+/kategori/'.preg_quote(rawurlencode((string)$category['slug']),'~').'/?$~i',$current)
+                  :($key==='image_alt'
+                    ?trim($current)===''
+                    :self::isGeneric($key,$current,$category)));
             if($replace && $suggest[$key]!=='')$category[$key]=$suggest[$key];
         }
         foreach($suggest['extra'] as $key=>$value){
@@ -119,7 +121,10 @@ final class CategorySeoCompleteService
     public static function apply():array
     {
         $db=Database::getInstance();
-        $rows=$db->fetchAll("SELECT * FROM categories ORDER BY id ASC");
+        $rows=$db->fetchAll("SELECT c.*,parent.slug AS parent_category_slug,
+                parent.name AS parent_category_name
+                FROM categories c LEFT JOIN categories parent ON c.parent_id=parent.id
+                ORDER BY c.id ASC");
         $counts=['examined'=>0,'categories'=>0,'fields'=>0,'seo_profiles'=>0,'skipped_software'=>0];
         foreach($rows as $row){
             $proposal=self::recommendations($row);
