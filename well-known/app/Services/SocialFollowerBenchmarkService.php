@@ -6,8 +6,9 @@ namespace App\Services;
  * Comparability is intentionally narrow: platform + follower type + exact qty.
  * Never directly modifies live product pricing, cart or provider rate.
  *
- * Etkisepeti (Instagram Standard/Türk): https://etkisepeti.com/fiyat-listesi
- * SosyalTaktik (TikTok general): https://sosyaltaktik.com/tiktok-takipci
+ * Takipevi (Instagram Standard): https://www.takipevi.com.tr/instagram-takipci-satin-al
+ * TurkInstagram (Instagram Türk): https://www.turkinstagram.com/paketler/
+ * SosyalTaktik (TikTok Standard): https://www.sosyaltaktik.com/tiktok-takipci
  * 2026-10-27 audit snapshot. Retail prices change without notice.
  */
 final class SocialFollowerBenchmarkService
