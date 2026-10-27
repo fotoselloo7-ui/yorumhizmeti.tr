@@ -7,6 +7,20 @@ namespace App\Services;
  */
 final class PublicSeoUrls
 {
+    /**
+     * Friendly indexable service directory roots. Existing category, package,
+     * blog, checkout and imported NetVera software URL contracts are unchanged.
+     */
+    public static function group(string $key): string
+    {
+        return match ($key) {
+            'social' => '/sosyal-medya-hizmetleri',
+            'agency' => '/ajans-yazilim-hizmetleri',
+            'marketing' => '/seo-dijital-pazarlama-hizmetleri',
+            default => self::path('/kategoriler/grup', $key),
+        };
+    }
+
     public static function path(string $prefix, string $slug): string
     {
         return rtrim($prefix, '/') . '/' . rawurlencode($slug);
