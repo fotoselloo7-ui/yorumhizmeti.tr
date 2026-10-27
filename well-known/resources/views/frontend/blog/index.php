@@ -30,8 +30,13 @@ if (!function_exists('yvBlogPlatform')) {
         </form>
         <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Hazır Yazılım</span><span>Instagram Takipçi</span><span>Dijital Ajans</span><span>Teknik SEO</span></div>
       </div>
-      <div class="yv-blog-hero-art-v8">
-        <img class="yv-blog-woman-v8" src="<?= e(asset('img/blog-woman-cutout.png')) ?>" alt="NetVera bilgi merkezi" loading="eager">
+      <div class="yv-blog-hero-art-v8" aria-label="NetVera dijital bilgi merkezi illüstrasyonu">
+        <div class="yv-blog-hero-core-v8" aria-hidden="true">
+          <span class="yv-blog-hero-core-icon-v8"><?= icon('book-open',38) ?></span>
+          <span class="yv-blog-hero-core-overline-v8">NETVERA / BİLGİ MERKEZİ</span>
+          <strong>Fikirden<br>bilgiye.</strong>
+          <span class="yv-blog-hero-core-accent-v8"><i></i><i></i><i></i></span>
+        </div>
         <span class="yv-blog-float-v8 google"><?= icon('google',25) ?></span>
         <span class="yv-blog-float-v8 instagram"><?= icon('instagram',24) ?></span>
         <span class="yv-blog-float-v8 tiktok"><?= icon('tiktok',23) ?></span>
