@@ -74,6 +74,19 @@
             <div class="adm-card">
                 <div class="adm-card-header"><h3><?= icon('dollar-sign', 18) ?> Fiyatlandırma</h3></div>
                 <div class="adm-card-body">
+                    <?php if(!$softwareOnly): ?>
+                    <div class="form-group">
+                        <label for="nv-price-mode">Satış ve Fiyat Gösterimi</label>
+                        <?php $nvPricingMode=$isEdit?\App\Services\ServicePriceMode::forPackage($package):'auto'; ?>
+                        <select id="nv-price-mode" name="price_mode" class="form-control" aria-describedby="nv-price-help">
+                            <option value="auto" <?= $nvPricingMode==='auto'?'selected':'' ?>>Otomatik (kategori varsayılanı)</option>
+                            <option value="fixed" <?= $nvPricingMode==='fixed'?'selected':'' ?>>Sabit fiyat / Sepete ekle</option>
+                            <option value="quote" <?= $nvPricingMode==='quote'?'selected':'' ?>>Fiyat Al (özel teklif)</option>
+                            <option value="discuss" <?= $nvPricingMode==='discuss'?'selected':'' ?>>Projenizi Konuşalım (özel teklif)</option>
+                        </select>
+                        <small id="nv-price-help">Teklif seçenekleri fiyatı gizler ve ödeme adımını kapatır. Web tasarım, özel yazılım ve mobil uygulama geliştirme yalnızca teklif usulündedir. Hazır yazılım fiyatlandırması değiştirilmez.</small>
+                    </div>
+                    <?php endif; ?>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Fiyat (₺)</label>
