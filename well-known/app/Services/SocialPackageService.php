@@ -127,7 +127,7 @@ final class SocialPackageService
             $price = !empty($package['discount_price']) && $package['discount_price'] < $package['price'] ? (float)$package['discount_price'] : (float)$package['price'];
             $cat = self::category((int)$package['category_id']);
             if (!isset($groups[$key])) $groups[$key] = ['key'=>$key,'name'=>$info['service'],'price'=>$price,'packages'=>[],
-                'url'=>'/kategori/'.rawurlencode($cat['slug']).'?hizmet='.rawurlencode($key).'#packages'];
+                'url'=>PublicSeoUrls::socialService((string)$cat['slug'], $info['service'])];
             $groups[$key]['price'] = min($price,$groups[$key]['price']);
             $groups[$key]['packages'][] = $package;
         }
