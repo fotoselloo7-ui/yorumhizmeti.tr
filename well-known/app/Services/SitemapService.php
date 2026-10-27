@@ -60,21 +60,26 @@ class SitemapService
 
         // Kategoriler
         $categories = $db->fetchAll(
-            "SELECT c.id, c.slug, c.updated_at, parent.slug AS parent_category_slug
+            "SELECT c.id,c.name,c.slug,c.updated_at,
+                    parent.slug AS parent_category_slug,parent.name AS parent_category_name
              FROM categories c
              LEFT JOIN categories parent ON parent.id = c.parent_id
              WHERE c.status = 'active' AND (c.parent_id IS NULL OR parent.status='active')"
         );
         foreach ($categories as $cat) {
-            if (ServiceCategoryVisibility::isLegacySoftware($cat)) continue;
+            $parent=!empty($cat['parent_category_slug'])
+                ? ['slug'=>$cat['parent_category_slug'],'name'=>$cat['parent_category_name']]
+                : null;
+            if (!ServiceCategoryVisibility::show($cat,$parent)) continue;
             if(isset($this->excluded['category'][(int)$cat['id']]))continue;
-            $xml .= $this->url($baseUrl . '/kategori/' . $cat['slug'], '0.8', 'weekly', $cat['updated_at'],$this->directives['category'][(int)$cat['id']]??null);
+            $xml .= $this->url($baseUrl . PublicSeoUrls::category($cat,$parent),
+                '0.8','weekly',$cat['updated_at'],$this->directives['category'][(int)$cat['id']]??null);
         }
 
         // Human-readable service selections are independent indexable pages,
         // whereas sorting/searching query variants are intentionally absent.
         // Only published social service groups are emitted; imported ready
-        // software and the original /kategori + /paket contracts stay intact.
+        // software/blog and the existing /paket contract stay intact.
         $serviceRows = $db->fetchAll("SELECT p.*, c.name AS category_name, c.slug AS category_slug
             FROM packages p JOIN categories c ON c.id=p.category_id AND c.status='active'
             LEFT JOIN categories parent ON parent.id=c.parent_id
