@@ -228,6 +228,7 @@ class CategoryController extends Controller
             'packages' => $packages,
             'socialCatalog' => $socialCatalog,
             'socialPage' => $socialPage,
+            'quoteMode' => \App\Services\ServiceQuotePolicy::needsQuote($category),
             'noindex' => $socialFilter,
             'subCategories' => $subCategories,
             'selectedSubCategory' => $selectedSubCategory,
