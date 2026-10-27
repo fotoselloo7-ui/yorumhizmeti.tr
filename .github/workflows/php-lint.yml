@@ -100,6 +100,8 @@ jobs:
 
       - name: NetVera market price research and admin quote modes QA
         run: php well-known/tests/netvera-market-catalog-pricing-qa.php
+      - name: Complete active market catalogue and 49-category SEO/AIO FAQ QA
+        run: php well-known/tests/netvera-market-publication-seo-qa.php
 
       - name: NetVera brand, theme, chat and category SEO QA
         run: |
