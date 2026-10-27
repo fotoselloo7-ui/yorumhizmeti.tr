@@ -42,7 +42,7 @@ class SitemapService
         $xml .= $this->url($baseUrl . '/kategoriler', '0.8', 'weekly');
         foreach (CatalogMenuService::groups() as $group) {
             $xml .= $this->url(
-                $baseUrl . PublicSeoUrls::path('/kategoriler/grup', (string)$group['key']),
+                $baseUrl . PublicSeoUrls::group((string)$group['key']),
                 '0.7', 'weekly'
             );
         }
