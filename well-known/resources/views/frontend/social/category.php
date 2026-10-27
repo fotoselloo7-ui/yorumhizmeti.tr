@@ -1,7 +1,7 @@
 <?php
 use App\Services\SocialStorefrontService as SocialUi;
 $socialGroups=SocialUi::directory($socialCatalog['groups']);
-$socialParent=!empty($category['parent_category_slug'])?['name'=>$category['parent_category_name'],'url'=>'/kategori/'.rawurlencode($category['parent_category_slug'])]:null;
+$socialParent=!empty($serviceLanding)?['name'=>$category['name'],'url'=>'/kategori/'.rawurlencode((string)$category['slug'])]:(!empty($category['parent_category_slug'])?['name'=>$category['parent_category_name'],'url'=>'/kategori/'.rawurlencode($category['parent_category_slug'])]:null);
 $socialCrumb=$serviceLanding['name']??$category['name'];
 $socialHeroAction=$socialCatalog['show_services']?'Hizmetleri keşfet':'Paketleri karşılaştır';
 ?>
