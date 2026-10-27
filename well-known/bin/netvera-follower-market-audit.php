@@ -1,6 +1,6 @@
 <?php
 /**
- * Usage: php bin/netvera-follower-market-audit.php
+ * Usage: php bin/netvera-follower-market-audit.php [--apply-safe]
  *
  * 2026-10-27 retail peer benchmarks. DO NOT auto-apply prices.
  * Without a live SMM supplier in TRY and a verified cost, price suggestions
@@ -61,4 +61,57 @@ $dest=$dir.'/social-follower-market-'.gmdate('Ymd-His').'.json';
 file_put_contents($dest,json_encode(['date'=>Bench::REVIEW_DATE,'notice'=>'PROPOSAL ONLY. NEVER changes prices or API/provider mappings.','candidates'=>$audit],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR),LOCK_EX);
 @chmod($dest,0600);
 fwrite(STDOUT,"Compared $count exact quantity and product-type matches. Report: $dest\n");
-fwrite(STDOUT,"No prices, package names, payment systems or provider mappings changed.\n");
+$apply=in_array('--apply-safe',$argv??[],true);
+if(!$apply){
+    fwrite(STDOUT,"Audit only. No prices or provider mappings changed.\n");
+    fwrite(STDOUT,"Use --apply-safe only with verified TRY supplier costs; unmatched services remain untouched.\n");
+    exit(0);
+}
+$eligible=array_values(array_filter($audit,static fn(array $item):bool =>
+    !empty($item['detail']['safe_to_apply']) &&
+    !empty($item['detail']['recommended_new_price_try']) &&
+    $item['detail']['recommended_new_price_try']>0
+));
+if(!$eligible){
+    fwrite(STDOUT,"No matching follower prices can be safely lowered while protecting the gross margin. No change.\n");
+    exit(0);
+}
+$backupFile=$dir.'/social-follower-prices-before-'.gmdate('Ymd-His').'.json';
+$backup=array_map(static fn(array $item):array => [
+    'id'=>$item['id'],'slug'=>$item['slug'],
+    'old_price_try'=>$item['detail']['current_price_try'],
+    'proposed_price_try'=>$item['detail']['recommended_new_price_try']
+],$eligible);
+if(file_put_contents($backupFile,json_encode($backup,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR),LOCK_EX)===false){
+    throw new RuntimeException('Private backup could not be created; aborting.');
+}
+@chmod($backupFile,0600);
+
+$pdo=$db->getPdo();$pdo->beginTransaction();$changed=0;
+try{
+    foreach($eligible as $candidateRow){
+        $id=(int)$candidateRow['id'];
+        $actual=$db->fetch("SELECT p.*,c.name AS category_name,c.slug AS category_slug
+            FROM packages p JOIN categories c ON c.id=p.category_id WHERE p.id=? FOR UPDATE",[$id]);
+        if(!$actual||$actual['status']!=='active'||!Social::isSocialCategory((int)$actual['category_id']))continue;
+        $info=Social::info($actual);
+        $mapping=Supplier::mapping($id);
+        if(!$info||!$mapping||!$info['mapping_matches']||!(int)$mapping['enabled']||
+            !(int)$mapping['is_available']||!(int)$mapping['provider_active'])continue;
+        $newCandidate=Bench::recommend($actual,$info,$supplierCosts[$id]??null);
+        if(empty($newCandidate['safe_to_apply']))continue;
+        $target=(float)$newCandidate['recommended_new_price_try'];
+        if($target<=0||$target>=(float)$newCandidate['current_price_try'])continue;
+        // Preserve the existing published list price / discount convention.
+        $column=!empty($actual['discount_price']) && $actual['discount_price']<$actual['price']
+            ?'discount_price':'price';
+        $db->update('packages',[$column=>$target],'id=?',[$id]);
+        $changed++;
+    }
+    $pdo->commit();
+}catch(Throwable $e){
+    if($pdo->inTransaction())$pdo->rollBack();
+    throw $e;
+}
+fwrite(STDOUT,"Safely updated $changed comparable follower packages. Private backup: $backupFile\n");
+fwrite(STDOUT,"Ready software, provider mappings, all non-follower services and slugs remain untouched.\n");
