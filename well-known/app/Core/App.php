@@ -53,6 +53,10 @@ class App
         $r->get('/hazir-yazilimlar', 'SoftwareController@index');
         $r->get('/hazir-yazilimlar/tur/{slug}', 'SoftwareController@typePage');
         $r->get('/kategoriler', 'CategoryController@index');
+        // Descriptive canonical hub URLs; old /kategoriler/grup/* remains as permanent redirect.
+        $r->get('/sosyal-medya-hizmetleri', 'CategoryController@social');
+        $r->get('/ajans-yazilim-hizmetleri', 'CategoryController@agency');
+        $r->get('/seo-dijital-pazarlama-hizmetleri', 'CategoryController@marketing');
         $r->get('/kategoriler/grup/{slug}', 'CategoryController@group');
         $r->get('/kategori/{slug}', 'CategoryController@show');
         $r->get('/paket/{slug}', 'PackageController@show');
