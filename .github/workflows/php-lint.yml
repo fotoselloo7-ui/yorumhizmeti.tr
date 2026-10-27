@@ -98,6 +98,9 @@ jobs:
       - name: NetVera prelaunch service URLs, quote-pricing and contextual SEO QA
         run: php well-known/tests/netvera-prelaunch-service-catalog-qa.php
 
+      - name: NetVera market price research and admin quote modes QA
+        run: php well-known/tests/netvera-market-catalog-pricing-qa.php
+
       - name: NetVera brand, theme, chat and category SEO QA
         run: |
           php well-known/tests/netvera-brand-theme-seo-chat-qa.php
