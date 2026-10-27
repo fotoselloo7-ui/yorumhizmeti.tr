@@ -1,0 +1,2510 @@
+{
+    "date": "2026-10-27T13:09:51+00:00",
+    "mode": "apply",
+    "already_public": 0,
+    "publish_count": 278,
+    "records": [
+        {
+            "id": 687,
+            "slug": "nv-alt-instagram-takipci-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 34.06,
+            "setting_key": "netvera_market_proposal_687",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 688,
+            "slug": "nv-alt-instagram-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 49.67,
+            "setting_key": "netvera_market_proposal_688",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 689,
+            "slug": "nv-alt-instagram-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 151.68,
+            "setting_key": "netvera_market_proposal_689",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 690,
+            "slug": "nv-alt-instagram-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 586.05,
+            "setting_key": "netvera_market_proposal_690",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 691,
+            "slug": "nv-alt-instagram-begeni-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 15.69,
+            "setting_key": "netvera_market_proposal_691",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 692,
+            "slug": "nv-alt-instagram-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 22.88,
+            "setting_key": "netvera_market_proposal_692",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 693,
+            "slug": "nv-alt-instagram-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 62.46,
+            "setting_key": "netvera_market_proposal_693",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 694,
+            "slug": "nv-alt-instagram-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 206.79,
+            "setting_key": "netvera_market_proposal_694",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 695,
+            "slug": "nv-alt-instagram-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 633.58,
+            "setting_key": "netvera_market_proposal_695",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 696,
+            "slug": "nv-alt-instagram-yorum-5",
+            "status": "inactive",
+            "kind": "social",
+            "price": 88.7,
+            "setting_key": "netvera_market_proposal_696",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 697,
+            "slug": "nv-alt-instagram-yorum-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1202.61,
+            "setting_key": "netvera_market_proposal_697",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 698,
+            "slug": "nv-alt-instagram-yorum-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1571.51,
+            "setting_key": "netvera_market_proposal_698",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 699,
+            "slug": "nv-alt-instagram-yorum-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3684.69,
+            "setting_key": "netvera_market_proposal_699",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 700,
+            "slug": "nv-alt-instagram-yorum-begeni-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 99.2,
+            "setting_key": "netvera_market_proposal_700",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 701,
+            "slug": "nv-alt-instagram-yorum-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 275.57,
+            "setting_key": "netvera_market_proposal_701",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 702,
+            "slug": "nv-alt-instagram-yorum-begeni-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 360.1,
+            "setting_key": "netvera_market_proposal_702",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 703,
+            "slug": "nv-alt-instagram-yorum-begeni-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1522.32,
+            "setting_key": "netvera_market_proposal_703",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 704,
+            "slug": "nv-alt-instagram-yorum-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2219.57,
+            "setting_key": "netvera_market_proposal_704",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 705,
+            "slug": "nv-alt-instagram-yorum-begeni-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2900.43,
+            "setting_key": "netvera_market_proposal_705",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 706,
+            "slug": "nv-alt-instagram-reels-izlenme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 30.53,
+            "setting_key": "netvera_market_proposal_706",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 707,
+            "slug": "nv-alt-instagram-reels-izlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 93.55,
+            "setting_key": "netvera_market_proposal_707",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 708,
+            "slug": "nv-alt-instagram-reels-izlenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 130.69,
+            "setting_key": "netvera_market_proposal_708",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 709,
+            "slug": "nv-alt-instagram-reels-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 190.55,
+            "setting_key": "netvera_market_proposal_709",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 710,
+            "slug": "nv-alt-instagram-reels-izlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 618.71,
+            "setting_key": "netvera_market_proposal_710",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 711,
+            "slug": "nv-alt-instagram-hikaye-izlenme-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 20.47,
+            "setting_key": "netvera_market_proposal_711",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 712,
+            "slug": "nv-alt-instagram-hikaye-izlenme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 56.86,
+            "setting_key": "netvera_market_proposal_712",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 713,
+            "slug": "nv-alt-instagram-hikaye-izlenme-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 74.31,
+            "setting_key": "netvera_market_proposal_713",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 714,
+            "slug": "nv-alt-instagram-hikaye-izlenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 321.99,
+            "setting_key": "netvera_market_proposal_714",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 715,
+            "slug": "nv-alt-instagram-hikaye-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 469.47,
+            "setting_key": "netvera_market_proposal_715",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 716,
+            "slug": "nv-alt-instagram-hikaye-izlenme-10000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 613.48,
+            "setting_key": "netvera_market_proposal_716",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 717,
+            "slug": "nv-alt-instagram-kaydetme-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 13.5,
+            "setting_key": "netvera_market_proposal_717",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 718,
+            "slug": "nv-alt-instagram-kaydetme-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 25.72,
+            "setting_key": "netvera_market_proposal_718",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 719,
+            "slug": "nv-alt-instagram-kaydetme-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 37.5,
+            "setting_key": "netvera_market_proposal_719",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 720,
+            "slug": "nv-alt-instagram-kaydetme-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_720",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 721,
+            "slug": "nv-alt-instagram-kaydetme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 290.15,
+            "setting_key": "netvera_market_proposal_721",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 722,
+            "slug": "nv-alt-instagram-kaydetme-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 379.15,
+            "setting_key": "netvera_market_proposal_722",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 723,
+            "slug": "nv-alt-instagram-profil-ziyareti-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 67.71,
+            "setting_key": "netvera_market_proposal_723",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 724,
+            "slug": "nv-alt-instagram-profil-ziyareti-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 98.72,
+            "setting_key": "netvera_market_proposal_724",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 725,
+            "slug": "nv-alt-instagram-profil-ziyareti-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 302.46,
+            "setting_key": "netvera_market_proposal_725",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 726,
+            "slug": "nv-alt-instagram-profil-ziyareti-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 494.85,
+            "setting_key": "netvera_market_proposal_726",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 727,
+            "slug": "nv-alt-instagram-profil-ziyareti-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 721.5,
+            "setting_key": "netvera_market_proposal_727",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 728,
+            "slug": "nv-alt-instagram-profil-ziyareti-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2210.61,
+            "setting_key": "netvera_market_proposal_728",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 729,
+            "slug": "nv-alt-tiktok-takipci-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 25.72,
+            "setting_key": "netvera_market_proposal_729",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 730,
+            "slug": "nv-alt-tiktok-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 37.5,
+            "setting_key": "netvera_market_proposal_730",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 731,
+            "slug": "nv-alt-tiktok-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_731",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 732,
+            "slug": "nv-alt-tiktok-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 342.24,
+            "setting_key": "netvera_market_proposal_732",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 733,
+            "slug": "nv-alt-tiktok-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 19.05,
+            "setting_key": "netvera_market_proposal_733",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 734,
+            "slug": "nv-alt-tiktok-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 51.96,
+            "setting_key": "netvera_market_proposal_734",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 735,
+            "slug": "nv-alt-tiktok-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 161.64,
+            "setting_key": "netvera_market_proposal_735",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 736,
+            "slug": "nv-alt-tiktok-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 494.85,
+            "setting_key": "netvera_market_proposal_736",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 737,
+            "slug": "nv-alt-tiktok-izlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 68,
+            "setting_key": "netvera_market_proposal_737",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 738,
+            "slug": "nv-alt-tiktok-izlenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_738",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 739,
+            "slug": "nv-alt-tiktok-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 152.29,
+            "setting_key": "netvera_market_proposal_739",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 740,
+            "slug": "nv-alt-tiktok-izlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 494.85,
+            "setting_key": "netvera_market_proposal_740",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 741,
+            "slug": "nv-alt-tiktok-yorum-5",
+            "status": "inactive",
+            "kind": "social",
+            "price": 67.71,
+            "setting_key": "netvera_market_proposal_741",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 742,
+            "slug": "nv-alt-tiktok-yorum-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 902.1,
+            "setting_key": "netvera_market_proposal_742",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 743,
+            "slug": "nv-alt-tiktok-yorum-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2763.96,
+            "setting_key": "netvera_market_proposal_743",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 744,
+            "slug": "nv-alt-tiktok-yorum-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5266.11,
+            "setting_key": "netvera_market_proposal_744",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 745,
+            "slug": "nv-alt-tiktok-canli-yayin-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_745",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 746,
+            "slug": "nv-alt-tiktok-canli-yayin-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 267.07,
+            "setting_key": "netvera_market_proposal_746",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 747,
+            "slug": "nv-alt-tiktok-canli-yayin-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2406.94,
+            "setting_key": "netvera_market_proposal_747",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 748,
+            "slug": "nv-alt-tiktok-canli-yayin-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3145.27,
+            "setting_key": "netvera_market_proposal_748",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 749,
+            "slug": "nv-alt-youtube-abone-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 78.2,
+            "setting_key": "netvera_market_proposal_749",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 750,
+            "slug": "nv-alt-youtube-abone-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 114.02,
+            "setting_key": "netvera_market_proposal_750",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 751,
+            "slug": "nv-alt-youtube-abone-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 340.63,
+            "setting_key": "netvera_market_proposal_751",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 752,
+            "slug": "nv-alt-youtube-abone-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1082.7,
+            "setting_key": "netvera_market_proposal_752",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 753,
+            "slug": "nv-alt-youtube-izlenme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_753",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 754,
+            "slug": "nv-alt-youtube-izlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 209.42,
+            "setting_key": "netvera_market_proposal_754",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 755,
+            "slug": "nv-alt-youtube-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 631.2,
+            "setting_key": "netvera_market_proposal_755",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 756,
+            "slug": "nv-alt-youtube-izlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1857.38,
+            "setting_key": "netvera_market_proposal_756",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 757,
+            "slug": "nv-alt-youtube-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 60.46,
+            "setting_key": "netvera_market_proposal_757",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 758,
+            "slug": "nv-alt-youtube-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 156.93,
+            "setting_key": "netvera_market_proposal_758",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 759,
+            "slug": "nv-alt-youtube-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 495.75,
+            "setting_key": "netvera_market_proposal_759",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 760,
+            "slug": "nv-alt-youtube-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1423.85,
+            "setting_key": "netvera_market_proposal_760",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 761,
+            "slug": "nv-alt-youtube-yorum-5",
+            "status": "inactive",
+            "kind": "social",
+            "price": 83.45,
+            "setting_key": "netvera_market_proposal_761",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 762,
+            "slug": "nv-alt-youtube-yorum-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1082.7,
+            "setting_key": "netvera_market_proposal_762",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 763,
+            "slug": "nv-alt-youtube-yorum-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3317.3,
+            "setting_key": "netvera_market_proposal_763",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 764,
+            "slug": "nv-alt-youtube-yorum-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 6320.38,
+            "setting_key": "netvera_market_proposal_764",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 765,
+            "slug": "nv-alt-youtube-shorts-izlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 185.23,
+            "setting_key": "netvera_market_proposal_765",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 766,
+            "slug": "nv-alt-youtube-shorts-izlenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 261.9,
+            "setting_key": "netvera_market_proposal_766",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 767,
+            "slug": "nv-alt-youtube-shorts-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 381.86,
+            "setting_key": "netvera_market_proposal_767",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 768,
+            "slug": "nv-alt-youtube-shorts-izlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1176.11,
+            "setting_key": "netvera_market_proposal_768",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 769,
+            "slug": "nv-alt-facebook-sayfa-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_769",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 770,
+            "slug": "nv-alt-facebook-sayfa-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 209.42,
+            "setting_key": "netvera_market_proposal_770",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 771,
+            "slug": "nv-alt-facebook-sayfa-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 631.2,
+            "setting_key": "netvera_market_proposal_771",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 772,
+            "slug": "nv-alt-facebook-sayfa-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1857.38,
+            "setting_key": "netvera_market_proposal_772",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 773,
+            "slug": "nv-alt-facebook-gonderi-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 45.15,
+            "setting_key": "netvera_market_proposal_773",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 774,
+            "slug": "nv-alt-facebook-gonderi-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 120.19,
+            "setting_key": "netvera_market_proposal_774",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 775,
+            "slug": "nv-alt-facebook-gonderi-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 360.3,
+            "setting_key": "netvera_market_proposal_775",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 776,
+            "slug": "nv-alt-facebook-gonderi-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1114.18,
+            "setting_key": "netvera_market_proposal_776",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 777,
+            "slug": "nv-alt-facebook-yorum-5",
+            "status": "inactive",
+            "kind": "social",
+            "price": 72.96,
+            "setting_key": "netvera_market_proposal_777",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 778,
+            "slug": "nv-alt-facebook-yorum-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 992.4,
+            "setting_key": "netvera_market_proposal_778",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 779,
+            "slug": "nv-alt-facebook-yorum-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3040.63,
+            "setting_key": "netvera_market_proposal_779",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 780,
+            "slug": "nv-alt-facebook-yorum-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5793.24,
+            "setting_key": "netvera_market_proposal_780",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 781,
+            "slug": "nv-alt-facebook-video-izlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 185.23,
+            "setting_key": "netvera_market_proposal_781",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 782,
+            "slug": "nv-alt-facebook-video-izlenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 235.66,
+            "setting_key": "netvera_market_proposal_782",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 783,
+            "slug": "nv-alt-facebook-video-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 343.6,
+            "setting_key": "netvera_market_proposal_783",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 784,
+            "slug": "nv-alt-facebook-video-izlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1052.25,
+            "setting_key": "netvera_market_proposal_784",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 785,
+            "slug": "nv-alt-x-takipci-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 62.46,
+            "setting_key": "netvera_market_proposal_785",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 786,
+            "slug": "nv-alt-x-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 91.07,
+            "setting_key": "netvera_market_proposal_786",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 787,
+            "slug": "nv-alt-x-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 261.9,
+            "setting_key": "netvera_market_proposal_787",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 788,
+            "slug": "nv-alt-x-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 811.8,
+            "setting_key": "netvera_market_proposal_788",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 789,
+            "slug": "nv-alt-x-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 52.8,
+            "setting_key": "netvera_market_proposal_789",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 790,
+            "slug": "nv-alt-x-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 146.44,
+            "setting_key": "netvera_market_proposal_790",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 791,
+            "slug": "nv-alt-x-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 450.6,
+            "setting_key": "netvera_market_proposal_791",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 792,
+            "slug": "nv-alt-x-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1361.91,
+            "setting_key": "netvera_market_proposal_792",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 793,
+            "slug": "nv-alt-x-retweet-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 46.71,
+            "setting_key": "netvera_market_proposal_793",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 794,
+            "slug": "nv-alt-x-retweet-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 129.76,
+            "setting_key": "netvera_market_proposal_794",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 795,
+            "slug": "nv-alt-x-retweet-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 169.57,
+            "setting_key": "netvera_market_proposal_795",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 796,
+            "slug": "nv-alt-x-retweet-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1082.7,
+            "setting_key": "netvera_market_proposal_796",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 797,
+            "slug": "nv-alt-x-goruntulenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 161.78,
+            "setting_key": "netvera_market_proposal_797",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 798,
+            "slug": "nv-alt-x-goruntulenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 209.42,
+            "setting_key": "netvera_market_proposal_798",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 799,
+            "slug": "nv-alt-x-goruntulenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 305.34,
+            "setting_key": "netvera_market_proposal_799",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 800,
+            "slug": "nv-alt-x-goruntulenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 928.38,
+            "setting_key": "netvera_market_proposal_800",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 801,
+            "slug": "nv-alt-x-yorum-5",
+            "status": "inactive",
+            "kind": "social",
+            "price": 72.96,
+            "setting_key": "netvera_market_proposal_801",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 802,
+            "slug": "nv-alt-x-yorum-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 992.4,
+            "setting_key": "netvera_market_proposal_802",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 803,
+            "slug": "nv-alt-x-yorum-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3040.63,
+            "setting_key": "netvera_market_proposal_803",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 804,
+            "slug": "nv-alt-x-yorum-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5793.24,
+            "setting_key": "netvera_market_proposal_804",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 805,
+            "slug": "nv-alt-threads-takipci-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 51.96,
+            "setting_key": "netvera_market_proposal_805",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 806,
+            "slug": "nv-alt-threads-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_806",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 807,
+            "slug": "nv-alt-threads-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 209.42,
+            "setting_key": "netvera_market_proposal_807",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 808,
+            "slug": "nv-alt-threads-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 676.35,
+            "setting_key": "netvera_market_proposal_808",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 809,
+            "slug": "nv-alt-threads-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 37.5,
+            "setting_key": "netvera_market_proposal_809",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 810,
+            "slug": "nv-alt-threads-begeni-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_810",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 811,
+            "slug": "nv-alt-threads-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 315.15,
+            "setting_key": "netvera_market_proposal_811",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 812,
+            "slug": "nv-alt-threads-begeni-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 928.38,
+            "setting_key": "netvera_market_proposal_812",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 813,
+            "slug": "nv-alt-threads-yorum-5",
+            "status": "inactive",
+            "kind": "social",
+            "price": 67.71,
+            "setting_key": "netvera_market_proposal_813",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 814,
+            "slug": "nv-alt-threads-yorum-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 902.1,
+            "setting_key": "netvera_market_proposal_814",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 815,
+            "slug": "nv-alt-threads-yorum-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2763.96,
+            "setting_key": "netvera_market_proposal_815",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 816,
+            "slug": "nv-alt-threads-yorum-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5266.11,
+            "setting_key": "netvera_market_proposal_816",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 817,
+            "slug": "nv-alt-telegram-uye-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 68.11,
+            "setting_key": "netvera_market_proposal_817",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 818,
+            "slug": "nv-alt-telegram-uye-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 183.18,
+            "setting_key": "netvera_market_proposal_818",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 819,
+            "slug": "nv-alt-telegram-uye-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 586.05,
+            "setting_key": "netvera_market_proposal_819",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 820,
+            "slug": "nv-alt-telegram-uye-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1795.45,
+            "setting_key": "netvera_market_proposal_820",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 821,
+            "slug": "nv-alt-telegram-kanal-uyesi-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_821",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 822,
+            "slug": "nv-alt-telegram-kanal-uyesi-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 198.92,
+            "setting_key": "netvera_market_proposal_822",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 823,
+            "slug": "nv-alt-telegram-kanal-uyesi-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 631.2,
+            "setting_key": "netvera_market_proposal_823",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 824,
+            "slug": "nv-alt-telegram-kanal-uyesi-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1857.38,
+            "setting_key": "netvera_market_proposal_824",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 825,
+            "slug": "nv-alt-telegram-grup-uyesi-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_825",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 826,
+            "slug": "nv-alt-telegram-grup-uyesi-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 198.92,
+            "setting_key": "netvera_market_proposal_826",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 827,
+            "slug": "nv-alt-telegram-grup-uyesi-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 631.2,
+            "setting_key": "netvera_market_proposal_827",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 828,
+            "slug": "nv-alt-telegram-grup-uyesi-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1857.38,
+            "setting_key": "netvera_market_proposal_828",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 829,
+            "slug": "nv-alt-telegram-goruntulenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 138.34,
+            "setting_key": "netvera_market_proposal_829",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 830,
+            "slug": "nv-alt-telegram-goruntulenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 156.93,
+            "setting_key": "netvera_market_proposal_830",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 831,
+            "slug": "nv-alt-telegram-goruntulenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 228.81,
+            "setting_key": "netvera_market_proposal_831",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 832,
+            "slug": "nv-alt-telegram-goruntulenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 618.71,
+            "setting_key": "netvera_market_proposal_832",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 833,
+            "slug": "nv-alt-telegram-reaksiyon-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 52.8,
+            "setting_key": "netvera_market_proposal_833",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 834,
+            "slug": "nv-alt-telegram-reaksiyon-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 146.44,
+            "setting_key": "netvera_market_proposal_834",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 835,
+            "slug": "nv-alt-telegram-reaksiyon-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 450.6,
+            "setting_key": "netvera_market_proposal_835",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 836,
+            "slug": "nv-alt-telegram-reaksiyon-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1238.05,
+            "setting_key": "netvera_market_proposal_836",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 837,
+            "slug": "nv-alt-spotify-dinlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 232.12,
+            "setting_key": "netvera_market_proposal_837",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 838,
+            "slug": "nv-alt-spotify-dinlenme-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 314.39,
+            "setting_key": "netvera_market_proposal_838",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 839,
+            "slug": "nv-alt-spotify-dinlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 458.39,
+            "setting_key": "netvera_market_proposal_839",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 840,
+            "slug": "nv-alt-spotify-dinlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1547.71,
+            "setting_key": "netvera_market_proposal_840",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 841,
+            "slug": "nv-alt-spotify-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 91.07,
+            "setting_key": "netvera_market_proposal_841",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 842,
+            "slug": "nv-alt-spotify-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 261.9,
+            "setting_key": "netvera_market_proposal_842",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 843,
+            "slug": "nv-alt-spotify-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 811.8,
+            "setting_key": "netvera_market_proposal_843",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 844,
+            "slug": "nv-alt-spotify-takipci-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2476.71,
+            "setting_key": "netvera_market_proposal_844",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 845,
+            "slug": "nv-alt-spotify-playlist-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 9680.78,
+            "setting_key": "netvera_market_proposal_845",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 846,
+            "slug": "nv-alt-spotify-playlist-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 18444.55,
+            "setting_key": "netvera_market_proposal_846",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 847,
+            "slug": "nv-alt-spotify-kaydetme-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_847",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 848,
+            "slug": "nv-alt-spotify-kaydetme-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 209.42,
+            "setting_key": "netvera_market_proposal_848",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 849,
+            "slug": "nv-alt-spotify-kaydetme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 676.35,
+            "setting_key": "netvera_market_proposal_849",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 850,
+            "slug": "nv-alt-spotify-kaydetme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1981.25,
+            "setting_key": "netvera_market_proposal_850",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 851,
+            "slug": "nv-alt-discord-uye-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 67.71,
+            "setting_key": "netvera_market_proposal_851",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 852,
+            "slug": "nv-alt-discord-uye-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 98.72,
+            "setting_key": "netvera_market_proposal_852",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 853,
+            "slug": "nv-alt-discord-uye-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 288.15,
+            "setting_key": "netvera_market_proposal_853",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 854,
+            "slug": "nv-alt-discord-uye-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 902.1,
+            "setting_key": "netvera_market_proposal_854",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 855,
+            "slug": "nv-alt-discord-online-uye-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 283.89,
+            "setting_key": "netvera_market_proposal_855",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 856,
+            "slug": "nv-alt-discord-online-uye-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 381.86,
+            "setting_key": "netvera_market_proposal_856",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 857,
+            "slug": "nv-alt-discord-online-uye-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3095.12,
+            "setting_key": "netvera_market_proposal_857",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 858,
+            "slug": "nv-alt-discord-online-uye-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 4044.56,
+            "setting_key": "netvera_market_proposal_858",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 859,
+            "slug": "nv-alt-discord-sunucu-boost-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3483.68,
+            "setting_key": "netvera_market_proposal_859",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 860,
+            "slug": "nv-alt-discord-sunucu-boost-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 6637.38,
+            "setting_key": "netvera_market_proposal_860",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 861,
+            "slug": "nv-alt-discord-sunucu-boost-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 9677.46,
+            "setting_key": "netvera_market_proposal_861",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 862,
+            "slug": "nv-alt-discord-sunucu-boost-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 12646.03,
+            "setting_key": "netvera_market_proposal_862",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 863,
+            "slug": "nv-alt-linkedin-takipci-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_863",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 864,
+            "slug": "nv-alt-linkedin-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 152.29,
+            "setting_key": "netvera_market_proposal_864",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 865,
+            "slug": "nv-alt-linkedin-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 419.36,
+            "setting_key": "netvera_market_proposal_865",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 866,
+            "slug": "nv-alt-linkedin-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1353.6,
+            "setting_key": "netvera_market_proposal_866",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 867,
+            "slug": "nv-alt-linkedin-begeni-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 78.2,
+            "setting_key": "netvera_market_proposal_867",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 868,
+            "slug": "nv-alt-linkedin-begeni-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 217.25,
+            "setting_key": "netvera_market_proposal_868",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 869,
+            "slug": "nv-alt-linkedin-begeni-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 283.89,
+            "setting_key": "netvera_market_proposal_869",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 870,
+            "slug": "nv-alt-linkedin-begeni-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1805.1,
+            "setting_key": "netvera_market_proposal_870",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 871,
+            "slug": "nv-alt-linkedin-baglanti-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 104.45,
+            "setting_key": "netvera_market_proposal_871",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 872,
+            "slug": "nv-alt-linkedin-baglanti-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 267.07,
+            "setting_key": "netvera_market_proposal_872",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 873,
+            "slug": "nv-alt-linkedin-baglanti-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2578.98,
+            "setting_key": "netvera_market_proposal_873",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 874,
+            "slug": "nv-alt-linkedin-baglanti-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3370.09,
+            "setting_key": "netvera_market_proposal_874",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 875,
+            "slug": "nv-alt-linkedin-goruntulenme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 114.02,
+            "setting_key": "netvera_market_proposal_875",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 876,
+            "slug": "nv-alt-linkedin-goruntulenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 314.39,
+            "setting_key": "netvera_market_proposal_876",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 877,
+            "slug": "nv-alt-linkedin-goruntulenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 902.1,
+            "setting_key": "netvera_market_proposal_877",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 878,
+            "slug": "nv-alt-linkedin-goruntulenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2476.71,
+            "setting_key": "netvera_market_proposal_878",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 879,
+            "slug": "nv-alt-twitch-takipci-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 78.2,
+            "setting_key": "netvera_market_proposal_879",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 880,
+            "slug": "nv-alt-twitch-takipci-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 114.02,
+            "setting_key": "netvera_market_proposal_880",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 881,
+            "slug": "nv-alt-twitch-takipci-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 314.39,
+            "setting_key": "netvera_market_proposal_881",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 882,
+            "slug": "nv-alt-twitch-takipci-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 992.4,
+            "setting_key": "netvera_market_proposal_882",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 883,
+            "slug": "nv-alt-twitch-izlenme-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 75.76,
+            "setting_key": "netvera_market_proposal_883",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 884,
+            "slug": "nv-alt-twitch-izlenme-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 209.42,
+            "setting_key": "netvera_market_proposal_884",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 885,
+            "slug": "nv-alt-twitch-izlenme-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 676.35,
+            "setting_key": "netvera_market_proposal_885",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 886,
+            "slug": "nv-alt-twitch-izlenme-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1857.38,
+            "setting_key": "netvera_market_proposal_886",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 887,
+            "slug": "nv-alt-twitch-canli-izleyici-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 379.15,
+            "setting_key": "netvera_market_proposal_887",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 888,
+            "slug": "nv-alt-twitch-canli-izleyici-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 496.65,
+            "setting_key": "netvera_market_proposal_888",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 889,
+            "slug": "nv-alt-twitch-canli-izleyici-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 4127.41,
+            "setting_key": "netvera_market_proposal_889",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 890,
+            "slug": "nv-alt-twitch-canli-izleyici-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5393.49,
+            "setting_key": "netvera_market_proposal_890",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 891,
+            "slug": "nv-pazar-instagram-takipci-turk-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 49.49,
+            "setting_key": "netvera_market_proposal_891",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 892,
+            "slug": "nv-pazar-instagram-takipci-turk-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 95.36,
+            "setting_key": "netvera_market_proposal_892",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 893,
+            "slug": "nv-pazar-instagram-takipci-turk-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 229.31,
+            "setting_key": "netvera_market_proposal_893",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 894,
+            "slug": "nv-pazar-instagram-takipci-turk-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 440.47,
+            "setting_key": "netvera_market_proposal_894",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 895,
+            "slug": "nv-pazar-instagram-takipci-turk-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 844.65,
+            "setting_key": "netvera_market_proposal_895",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 896,
+            "slug": "nv-pazar-instagram-takipci-turk-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2020.5,
+            "setting_key": "netvera_market_proposal_896",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 897,
+            "slug": "nv-pazar-instagram-takipci-turk-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3860.1,
+            "setting_key": "netvera_market_proposal_897",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 898,
+            "slug": "nv-pazar-instagram-takipci-turk-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5517.9,
+            "setting_key": "netvera_market_proposal_898",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 899,
+            "slug": "nv-pazar-instagram-takipci-bayan-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 55.8,
+            "setting_key": "netvera_market_proposal_899",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 900,
+            "slug": "nv-pazar-instagram-takipci-bayan-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 107.51,
+            "setting_key": "netvera_market_proposal_900",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 901,
+            "slug": "nv-pazar-instagram-takipci-bayan-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 258.54,
+            "setting_key": "netvera_market_proposal_901",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 902,
+            "slug": "nv-pazar-instagram-takipci-bayan-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 496.62,
+            "setting_key": "netvera_market_proposal_902",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 903,
+            "slug": "nv-pazar-instagram-takipci-bayan-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 714.24,
+            "setting_key": "netvera_market_proposal_903",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 904,
+            "slug": "nv-pazar-instagram-takipci-bayan-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 911.7,
+            "setting_key": "netvera_market_proposal_904",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 905,
+            "slug": "nv-pazar-instagram-takipci-bayan-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2176.2,
+            "setting_key": "netvera_market_proposal_905",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 906,
+            "slug": "nv-pazar-instagram-takipci-bayan-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 4148.1,
+            "setting_key": "netvera_market_proposal_906",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 907,
+            "slug": "nv-pazar-instagram-begeni-turk-10",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1.7,
+            "setting_key": "netvera_market_proposal_907",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 908,
+            "slug": "nv-pazar-instagram-begeni-turk-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 4.12,
+            "setting_key": "netvera_market_proposal_908",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 909,
+            "slug": "nv-pazar-instagram-begeni-turk-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 7.98,
+            "setting_key": "netvera_market_proposal_909",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 910,
+            "slug": "nv-pazar-instagram-begeni-turk-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 11.59,
+            "setting_key": "netvera_market_proposal_910",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 911,
+            "slug": "nv-pazar-instagram-begeni-turk-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 14.93,
+            "setting_key": "netvera_market_proposal_911",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 912,
+            "slug": "nv-pazar-instagram-begeni-turk-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 36.04,
+            "setting_key": "netvera_market_proposal_912",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 913,
+            "slug": "nv-pazar-instagram-begeni-turk-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 69.47,
+            "setting_key": "netvera_market_proposal_913",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 914,
+            "slug": "nv-pazar-instagram-begeni-turk-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 100.31,
+            "setting_key": "netvera_market_proposal_914",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 915,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2.48,
+            "setting_key": "netvera_market_proposal_915",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 916,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 4.66,
+            "setting_key": "netvera_market_proposal_916",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 917,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 6.56,
+            "setting_key": "netvera_market_proposal_917",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 918,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 8.18,
+            "setting_key": "netvera_market_proposal_918",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 919,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 19.01,
+            "setting_key": "netvera_market_proposal_919",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 920,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 35.15,
+            "setting_key": "netvera_market_proposal_920",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 921,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-10000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 64.55,
+            "setting_key": "netvera_market_proposal_921",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 922,
+            "slug": "nv-pazar-instagram-reels-izlenme-standart-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 147.02,
+            "setting_key": "netvera_market_proposal_922",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 923,
+            "slug": "nv-pazar-tiktok-takipci-standart-10",
+            "status": "inactive",
+            "kind": "social",
+            "price": 6.75,
+            "setting_key": "netvera_market_proposal_923",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 924,
+            "slug": "nv-pazar-tiktok-takipci-standart-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 16.19,
+            "setting_key": "netvera_market_proposal_924",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 925,
+            "slug": "nv-pazar-tiktok-takipci-standart-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 30.83,
+            "setting_key": "netvera_market_proposal_925",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 926,
+            "slug": "nv-pazar-tiktok-takipci-standart-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 44.1,
+            "setting_key": "netvera_market_proposal_926",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 927,
+            "slug": "nv-pazar-tiktok-takipci-standart-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 55.8,
+            "setting_key": "netvera_market_proposal_927",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 928,
+            "slug": "nv-pazar-tiktok-takipci-standart-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 132.75,
+            "setting_key": "netvera_market_proposal_928",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 929,
+            "slug": "nv-pazar-tiktok-takipci-standart-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 251.1,
+            "setting_key": "netvera_market_proposal_929",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 930,
+            "slug": "nv-pazar-tiktok-takipci-standart-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 355.05,
+            "setting_key": "netvera_market_proposal_930",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 931,
+            "slug": "nv-pazar-tiktok-begeni-standart-10",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1.13,
+            "setting_key": "netvera_market_proposal_931",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 932,
+            "slug": "nv-pazar-tiktok-begeni-standart-25",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2.7,
+            "setting_key": "netvera_market_proposal_932",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 933,
+            "slug": "nv-pazar-tiktok-begeni-standart-50",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5.18,
+            "setting_key": "netvera_market_proposal_933",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 934,
+            "slug": "nv-pazar-tiktok-begeni-standart-75",
+            "status": "inactive",
+            "kind": "social",
+            "price": 7.43,
+            "setting_key": "netvera_market_proposal_934",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 935,
+            "slug": "nv-pazar-tiktok-begeni-standart-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 9.45,
+            "setting_key": "netvera_market_proposal_935",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 936,
+            "slug": "nv-pazar-tiktok-begeni-standart-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 22.5,
+            "setting_key": "netvera_market_proposal_936",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 937,
+            "slug": "nv-pazar-tiktok-begeni-standart-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 42.75,
+            "setting_key": "netvera_market_proposal_937",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 938,
+            "slug": "nv-pazar-tiktok-begeni-standart-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 60.75,
+            "setting_key": "netvera_market_proposal_938",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 939,
+            "slug": "nv-pazar-tiktok-izlenme-standart-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 1.79,
+            "setting_key": "netvera_market_proposal_939",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 940,
+            "slug": "nv-pazar-tiktok-izlenme-standart-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 3.59,
+            "setting_key": "netvera_market_proposal_940",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 941,
+            "slug": "nv-pazar-tiktok-izlenme-standart-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 6.98,
+            "setting_key": "netvera_market_proposal_941",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 942,
+            "slug": "nv-pazar-tiktok-izlenme-standart-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 15.98,
+            "setting_key": "netvera_market_proposal_942",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 943,
+            "slug": "nv-pazar-tiktok-izlenme-standart-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 30.6,
+            "setting_key": "netvera_market_proposal_943",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 944,
+            "slug": "nv-pazar-tiktok-izlenme-standart-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 44.09,
+            "setting_key": "netvera_market_proposal_944",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 945,
+            "slug": "nv-pazar-tiktok-izlenme-standart-10000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 56.21,
+            "setting_key": "netvera_market_proposal_945",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 946,
+            "slug": "nv-pazar-tiktok-izlenme-standart-25000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 134.1,
+            "setting_key": "netvera_market_proposal_946",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 947,
+            "slug": "nv-pazar-x-goruntulenme-standart-100",
+            "status": "inactive",
+            "kind": "social",
+            "price": 0.9,
+            "setting_key": "netvera_market_proposal_947",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 948,
+            "slug": "nv-pazar-x-goruntulenme-standart-250",
+            "status": "inactive",
+            "kind": "social",
+            "price": 2.14,
+            "setting_key": "netvera_market_proposal_948",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 949,
+            "slug": "nv-pazar-x-goruntulenme-standart-500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 4.09,
+            "setting_key": "netvera_market_proposal_949",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 950,
+            "slug": "nv-pazar-x-goruntulenme-standart-750",
+            "status": "inactive",
+            "kind": "social",
+            "price": 5.81,
+            "setting_key": "netvera_market_proposal_950",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 951,
+            "slug": "nv-pazar-x-goruntulenme-standart-1000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 7.34,
+            "setting_key": "netvera_market_proposal_951",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 952,
+            "slug": "nv-pazar-x-goruntulenme-standart-2500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 17.33,
+            "setting_key": "netvera_market_proposal_952",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 953,
+            "slug": "nv-pazar-x-goruntulenme-standart-5000",
+            "status": "inactive",
+            "kind": "social",
+            "price": 32.58,
+            "setting_key": "netvera_market_proposal_953",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 954,
+            "slug": "nv-pazar-x-goruntulenme-standart-7500",
+            "status": "inactive",
+            "kind": "social",
+            "price": 45.77,
+            "setting_key": "netvera_market_proposal_954",
+            "price_mode_before": "auto"
+        },
+        {
+            "id": 955,
+            "slug": "nv-pazar-yerel-seo-4-anahtar-kelime-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 5310,
+            "setting_key": "netvera_market_proposal_955",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 956,
+            "slug": "nv-pazar-seo-teknik-denetim-raporu-tek-seferlik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 4410,
+            "setting_key": "netvera_market_proposal_956",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 957,
+            "slug": "nv-pazar-kurumsal-seo-10-anahtar-kelime-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 10710,
+            "setting_key": "netvera_market_proposal_957",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 958,
+            "slug": "nv-pazar-rekabetci-seo-25-anahtar-kelime-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 17910,
+            "setting_key": "netvera_market_proposal_958",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 959,
+            "slug": "nv-pazar-google-ads-baslangic-2-kampanya-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 8910,
+            "setting_key": "netvera_market_proposal_959",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 960,
+            "slug": "nv-pazar-meta-ads-baslangic-2-kampanya-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 8910,
+            "setting_key": "netvera_market_proposal_960",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 961,
+            "slug": "nv-pazar-google-ads-buyume-4-kampanya-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 16110,
+            "setting_key": "netvera_market_proposal_961",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 962,
+            "slug": "nv-pazar-meta-ads-buyume-4-kampanya-aylik",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 16110,
+            "setting_key": "netvera_market_proposal_962",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 963,
+            "slug": "nv-pazar-logo-ve-baslangic-kimligi-2-revizyon",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 9000,
+            "setting_key": "netvera_market_proposal_963",
+            "price_mode_before": "fixed"
+        },
+        {
+            "id": 964,
+            "slug": "nv-pazar-10-adet-web-veya-sosyal-medya-banner-tasarimi",
+            "status": "inactive",
+            "kind": "professional",
+            "price": 8100,
+            "setting_key": "netvera_market_proposal_964",
+            "price_mode_before": "fixed"
+        }
+    ]
+}
