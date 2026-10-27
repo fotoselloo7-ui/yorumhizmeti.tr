@@ -2,7 +2,11 @@
 use App\Services\SocialStorefrontService as SocialUi;
 $socialParent=['name'=>$package['category_name'],'url'=>\App\Services\PublicSeoUrls::category(['slug'=>$package['category_slug'],'name'=>$package['category_name'],'parent_category_slug'=>$package['parent_category_slug']??'','parent_category_name'=>$package['parent_category_name']??''])];
 $socialCrumb=$socialSale['label'];$socialHeroTarget='#social-order';$socialHeroAction='Paketi incele';
-$price=SocialUi::price($package);$closed=$socialSale['quantity']<1||$socialSale['unit']===''||!$socialSale['mapping_matches'];
+$price=SocialUi::price($package);
+$nvProposal=\App\Services\MarketProposalGuard::origin((int)$package['id']);
+$nvReady=\App\Services\MarketProposalGuard::ready($package);
+$nvQuote=\App\Services\ServiceQuotePolicy::package($package) || !$nvReady;
+$closed=$socialSale['quantity']<1||$socialSale['unit']===''||!$socialSale['mapping_matches']||!$nvReady;
 ?>
 <main class="social-storefront social-brand-<?= e($socialPage['platform']) ?>">
  <?php require __DIR__.'/hero.php'; ?>
@@ -13,8 +17,16 @@ $price=SocialUi::price($package);$closed=$socialSale['quantity']<1||$socialSale[
   </div>
   <aside class="social-buy-card" aria-labelledby="social-buy-title">
    <span class="social-eyebrow"><?= icon('shopping-bag',16) ?> SEÇTİĞİNİZ PAKET</span><h2 id="social-buy-title"><?= e($socialSale['service']) ?></h2><div class="social-selected-amount"><strong><?= number_format($socialSale['quantity'],0,',','.') ?></strong><span><?= e($socialSale['unit']) ?></span><?= icon($socialPage['icon'],31) ?></div>
-   <div class="social-buy-price"><?php if($price<(float)$package['price']): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><small>Belirtilen miktarın tamamı için toplam tutar</small></div>
-   <?php if($closed): ?><p class="social-order-warning" role="status">Bu paketin teslim miktarı kontrol ediliyor. Yapılandırma tamamlanana kadar sipariş alınamıyor.</p><?php endif; ?>
+   <div class="social-buy-price"><?php if($nvProposal!==null): ?>
+     <?php if(!empty($nvProposal['peer_price'])): ?><strong><?= money($price) ?></strong><small>Rakip karşılaştırmasına göre hesaplanan ön fiyat — bağlayıcı değildir.</small>
+     <?php else: ?><strong>Fiyat Al</strong><small>Bu alternatifin fiyatı ve teslim edilebilirliği teklif sırasında doğrulanır.</small><?php endif; ?>
+   <?php elseif($nvQuote): ?><strong>Fiyat Al</strong><small>Fiyat ve kapsam için teklif isteyin.</small>
+   <?php else: ?><?php if($price<(float)$package['price']): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><small>Belirtilen miktarın tamamı için toplam tutar</small><?php endif; ?></div>
+   <?php if($closed): ?><p class="social-order-warning" role="status">Bu alternatifin sağlayıcı eşlemesi, teslim koşulları veya maliyeti henüz onaylanmadı. Sipariş alınmıyor; uygunluk ve teklif bilgisi için iletişime geçebilirsiniz.</p><?php endif; ?>
+   <?php if($nvQuote||$closed): ?>
+   <a href="<?= e(\App\Services\ServiceQuotePolicy::url($package)) ?>" class="social-button"><?= icon('message-circle',17) ?> Fiyat ve Uygunluk Sor</a>
+   <p class="social-order-privacy">NetVera tarafından hizmet, miktar ve teslimat koşulları doğrulanmadan ödeme alınmaz.</p>
+   <?php else: ?>
    <form id="packageForm" method="post" action="/sepet/ekle" class="social-order-form"><?= csrfField() ?><input type="hidden" name="package_id" value="<?= (int)$package['id'] ?>"><input type="hidden" name="quantity" value="1">
     <?php foreach($fields as $n=>$field): $fieldId='social-field-'.$n;$fieldName='field_'.(int)$package['id'].'_'.$field['field_key']; ?><div class="social-field"><label for="<?= $fieldId ?>"><?= e($field['field_label']) ?><?= $field['is_required']?' *':'' ?></label>
      <?php if($field['field_type']==='textarea'): ?><textarea id="<?= $fieldId ?>" name="<?= e($fieldName) ?>" rows="3" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>></textarea>
@@ -22,7 +34,7 @@ $price=SocialUi::price($package);$closed=$socialSale['quantity']<1||$socialSale[
      <?php else: ?><input id="<?= $fieldId ?>" type="<?= $field['field_type']==='url'?'url':'text' ?>" name="<?= e($fieldName) ?>" placeholder="<?= e($field['placeholder']??'') ?>" <?= $field['is_required']?'required':'' ?>><?php endif; ?>
     </div><?php endforeach; ?>
     <p class="social-order-privacy"><?= icon('lock',14) ?> Sosyal medya şifrenizi paylaşmayın.</p><button class="social-button" type="submit" <?= $closed?'disabled':'' ?>><?= icon('shopping-cart',18) ?> Sepete ekle</button><button class="social-button social-button-dark" type="submit" name="checkout" value="1" <?= $closed?'disabled':'' ?>>Hemen satın al <?= icon('arrow-right',17) ?></button>
-   </form><div class="social-buy-footer"><?= icon('shield-check',18) ?><span>Seçilen paket, miktarı değişmeden siparişinize eklenir. İşlem durumunu hesabınızdan takip edebilirsiniz.</span></div>
+   </form><?php endif; ?><div class="social-buy-footer"><?= icon('shield-check',18) ?><span>Seçilen paket, miktarı değişmeden siparişinize eklenir. İşlem durumunu hesabınızdan takip edebilirsiniz.</span></div>
   </aside>
  </div></div></section>
  <?php if(count($socialAlternatives)>1): ?><section class="social-alternatives"><div class="container"><div class="social-section-heading"><div><span class="social-eyebrow">AYNI HİZMET, FARKLI MİKTARLAR</span><h2>Diğer paketleri karşılaştırın.</h2><p>Başka miktar seçmek isterseniz ilgili paketin sayfasını açabilirsiniz.</p></div></div><div class="social-alternative-grid"><?php foreach($socialAlternatives as $alternative): $alternativeInfo=\App\Services\SocialPackageService::info($alternative); ?><a href="/paket/<?= rawurlencode($alternative['slug']) ?>" <?= (int)$alternative['id']===(int)$package['id']?'aria-current="page"':'' ?>><span><?= e($alternativeInfo['label']) ?></span><strong><?= money(SocialUi::price($alternative)) ?></strong><?= icon('arrow-up-right',16) ?></a><?php endforeach; ?></div></div></section><?php endif; ?>
