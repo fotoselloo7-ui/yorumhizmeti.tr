@@ -85,6 +85,20 @@
                             <option value="discuss" <?= $nvPricingMode==='discuss'?'selected':'' ?>>Projenizi Konuşalım (özel teklif)</option>
                         </select>
                         <small id="nv-price-help">Teklif seçenekleri fiyatı gizler ve ödeme adımını kapatır. Web tasarım, özel yazılım ve mobil uygulama geliştirme yalnızca teklif usulündedir. Hazır yazılım fiyatlandırması değiştirilmez.</small>
+                        <?php $nvMarketOrigin=$isEdit ? \App\Services\MarketProposalGuard::origin((int)$package['id']) : null; ?>
+                        <?php if(is_array($nvMarketOrigin)): ?>
+                        <div class="adm-alert adm-alert-warning" style="margin-top:12px;padding:12px;border:1px solid #e8d6a8;border-radius:9px;">
+                            <strong>Rakip araştırması / Taslak paket</strong>
+                            <p style="margin:6px 0;">Paket yayımlanmadan önce hizmet eşdeğerliğini, sağlayıcı maliyetini ve teslim koşullarını kontrol edin.</p>
+                            <?php if(!empty($nvMarketOrigin['peer_price'])): ?>
+                            <p style="margin:6px 0;">Referans fiyat: <strong><?= money((float)$nvMarketOrigin['peer_price']) ?></strong> · %10 düşük öneri: <strong><?= money(round((float)$nvMarketOrigin['peer_price']*.9,2)) ?></strong></p>
+                            <?php else: ?><p style="margin:6px 0;">Kaynak: NetVera miktar tahmini — henüz rakip fiyatı doğrulanmadı.</p><?php endif; ?>
+                            <?php if(!empty($nvMarketOrigin['source']) && filter_var($nvMarketOrigin['source'],FILTER_VALIDATE_URL)): ?>
+                            <p style="margin:6px 0;">Kaynak: <a href="<?= e($nvMarketOrigin['source']) ?>" target="_blank" rel="noopener noreferrer">Rakip fiyat sayfasını aç</a></p>
+                            <?php endif; ?>
+                            <small>Araştırma tarihi: <?= e((string)($nvMarketOrigin['reviewed_on']??'')) ?>. Bu kayıt otomatik olarak satışa açılmaz.</small>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <?php endif; ?>
                     <div class="form-row">
