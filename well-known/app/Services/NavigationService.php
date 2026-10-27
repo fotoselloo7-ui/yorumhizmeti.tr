@@ -49,7 +49,7 @@ final class NavigationService
                     'label' => $priority[1] ?? $cat['name'],
                     'url' => $cat['slug'] === \App\Services\ServiceCategoryVisibility::LEGACY_SOFTWARE_ROOT
                         ? '/hazir-scriptler'
-                        : '/kategori/' . $cat['slug'],
+                        : PublicSeoUrls::category($cat),
                     'default_enabled' => $priority !== null,
                     'sort' => $priority[0] ?? (70 + (int)$cat['sort_order']),
                     'available' => $cat['status'] === 'active',
