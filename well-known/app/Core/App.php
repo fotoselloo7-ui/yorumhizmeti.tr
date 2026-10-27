@@ -53,11 +53,16 @@ class App
         $r->get('/hazir-yazilimlar', 'SoftwareController@index');
         $r->get('/hazir-yazilimlar/tur/{slug}', 'SoftwareController@typePage');
         $r->get('/kategoriler', 'CategoryController@index');
-        // Descriptive canonical hub URLs; old /kategoriler/grup/* remains as permanent redirect.
+        // New-project canonical category URLs; no HTTP redirects or duplicate
+        // social service-name segments. Imported scripts and blogs stay intact.
         $r->get('/sosyal-medya-hizmetleri', 'CategoryController@social');
         $r->get('/sosyal-medya-hizmetleri/{categorySlug}/{serviceSlug}', 'CategoryController@service');
+        $r->get('/sosyal-medya-hizmetleri/{slug}', 'CategoryController@socialCategory');
         $r->get('/ajans-yazilim-hizmetleri', 'CategoryController@agency');
+        $r->get('/ajans-yazilim-hizmetleri/{slug}', 'CategoryController@agencyCategory');
         $r->get('/seo-dijital-pazarlama-hizmetleri', 'CategoryController@marketing');
+        $r->get('/seo-dijital-pazarlama-hizmetleri/{slug}', 'CategoryController@marketingCategory');
+        // Prelaunch aliases are deliberately not redirected or re-indexed.
         $r->get('/kategoriler/grup/{slug}', 'CategoryController@group');
         $r->get('/kategori/{slug}', 'CategoryController@show');
         $r->get('/paket/{slug}', 'PackageController@show');
