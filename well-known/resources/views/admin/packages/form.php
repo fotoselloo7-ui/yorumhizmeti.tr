@@ -90,7 +90,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Fiyat (₺)</label>
-                            <input type="number" name="price" step="0.01" class="form-control" value="<?= $package['price'] ?? '' ?>" required>
+                            <input type="number" name="price" step="0.01" min="0" class="form-control" value="<?= $package['price'] ?? '0' ?>" required>
+                            <small>Fiyat Al / Projenizi Konuşalım seçildiğinde 0 TL bırakılabilir; tutar halka gösterilmez. Sabit fiyatta gerçek tutarı girin.</small>
                         </div>
                         <div class="form-group">
                             <label>İndirimli Fiyat (₺)</label>
