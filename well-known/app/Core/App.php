@@ -55,6 +55,7 @@ class App
         $r->get('/kategoriler', 'CategoryController@index');
         // Descriptive canonical hub URLs; old /kategoriler/grup/* remains as permanent redirect.
         $r->get('/sosyal-medya-hizmetleri', 'CategoryController@social');
+        $r->get('/sosyal-medya-hizmetleri/{categorySlug}/{serviceSlug}', 'CategoryController@service');
         $r->get('/ajans-yazilim-hizmetleri', 'CategoryController@agency');
         $r->get('/seo-dijital-pazarlama-hizmetleri', 'CategoryController@marketing');
         $r->get('/kategoriler/grup/{slug}', 'CategoryController@group');
