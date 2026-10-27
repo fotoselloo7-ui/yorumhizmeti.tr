@@ -16,8 +16,8 @@ class CategoryController extends Controller
         if (!in_array($slug, $keys, true)) {
             \App\Services\PublicSeoUrls::notFound('Hizmet Grubu Bulunamadı'); return;
         }
-        // Permanent redirect preserves old external links and consolidates signals.
-        header('Location: '.\App\Services\PublicSeoUrls::group($slug),true,301);
+        // This project has no indexed old group pages; do not redirect.
+        \App\Services\PublicSeoUrls::notFound('Eski Kategori Adresi');
         return;
     }
 
@@ -71,16 +71,61 @@ class CategoryController extends Controller
         ]);
     }
 
+    /** Canonical native routes, not Location/301 aliases. */
+    public function socialCategory(string $slug): void { $this->categoryInGroup($slug,'social'); }
+    public function agencyCategory(string $slug): void { $this->categoryInGroup($slug,'agency'); }
+    public function marketingCategory(string $slug): void { $this->categoryInGroup($slug,'marketing'); }
+
+    private function categoryInGroup(string $slug, string $group): void
+    {
+        $slug=rawurldecode($slug);
+        if (!\App\Services\PublicSeoUrls::isSlug($slug)) {
+            \App\Services\PublicSeoUrls::notFound('Kategori Bulunamadı'); return;
+        }
+        $category=Database::getInstance()->fetch(
+            "SELECT c.name,c.slug,p.name AS parent_category_name,p.slug AS parent_category_slug
+             FROM categories c LEFT JOIN categories p ON p.id=c.parent_id
+             WHERE c.slug=? AND c.status='active' AND (c.parent_id IS NULL OR p.status='active')",
+            [$slug]
+        );
+        if (!$category || \App\Services\CatalogMenuService::bucket(
+                !empty($category['parent_category_slug'])
+                    ? ['name'=>$category['parent_category_name'],'slug'=>$category['parent_category_slug']]
+                    : $category
+            ) !== $group || !\App\Services\ServiceCategoryVisibility::show(
+                $category,
+                !empty($category['parent_category_slug'])
+                    ? ['name'=>$category['parent_category_name'],'slug'=>$category['parent_category_slug']]
+                    : null
+            )) {
+            \App\Services\PublicSeoUrls::notFound('Kategori Bulunamadı'); return;
+        }
+        $this->show($slug);
+    }
+
     public function service(string $categorySlug, string $serviceSlug): void
     {
-        $categorySlug = rawurldecode($categorySlug);
-        $serviceSlug = rawurldecode($serviceSlug);
+        $categorySlug=rawurldecode($categorySlug);
+        $serviceSlug=rawurldecode($serviceSlug);
         if (!\App\Services\PublicSeoUrls::isSlug($categorySlug) ||
             !\App\Services\PublicSeoUrls::isSlug($serviceSlug)) {
-            \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı');
-            return;
+            \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı');return;
         }
-        $this->show($categorySlug, $serviceSlug);
+        // Avoid serving SEO duplicates from an unrelated category/group.
+        $category=Database::getInstance()->fetch(
+            "SELECT c.name,c.slug,p.name AS parent_category_name,p.slug AS parent_category_slug
+             FROM categories c LEFT JOIN categories p ON p.id=c.parent_id
+             WHERE c.slug=? AND c.status='active' AND (c.parent_id IS NULL OR p.status='active')",
+            [$categorySlug]
+        );
+        if(!$category || \App\Services\CatalogMenuService::bucket(
+            !empty($category['parent_category_slug'])
+                ? ['name'=>$category['parent_category_name'],'slug'=>$category['parent_category_slug']]
+                : $category
+        )!=='social'){
+            \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı');return;
+        }
+        $this->show($categorySlug,$serviceSlug);
     }
 
     public function show(string $slug, string $serviceSlug = ''): void
@@ -157,24 +202,20 @@ class CategoryController extends Controller
 
         $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
         $legacyService = is_string($_GET['hizmet']??null) ? mb_substr($_GET['hizmet'],0,160) : '';
+        $categoryCanonical=\App\Services\PublicSeoUrls::category($category);
         $socialCatalog = $isSocialSale ? \App\Services\SocialPackageService::catalog($packages,$category,$legacyService) : null;
         $serviceLanding = null;
         if ($serviceSlug !== '') {
             if (!$isSocialSale) { \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı'); return; }
             foreach ($socialCatalog['groups'] as $group) {
-                if (slugify($group['name']) === $serviceSlug) { $serviceLanding = $group; break; }
+                if ($group['url'] === $categoryCanonical.'/'.$serviceSlug) { $serviceLanding = $group; break; }
             }
             if ($serviceLanding === null) { \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı'); return; }
             // The service name, not an unstable database ID, owns the public URL.
             $socialCatalog = \App\Services\SocialPackageService::catalog($packages,$category,$serviceLanding['key']);
-            if ($legacyService !== '') {
-                header('Location: '.$serviceLanding['url'], true, 301); return;
-            }
-        } elseif ($legacyService !== '' && $isSocialSale) {
-            $target = $socialCatalog['selected']['url'] ?? '/kategori/'.rawurlencode((string)$category['slug']);
-            header('Location: '.$target, true, 301);
-            return;
         }
+        // Old ?hizmet= filters are served without redirect, but noindexed.
+        // All new internal links point directly at the final permalink.
         if ($socialCatalog !== null) $packages = $socialCatalog['packages'];
         if ($serviceLanding !== null && $socialPage !== null) {
             $socialPage['title'] = $serviceLanding['name'].' Paketleri ve Fiyatları';
@@ -212,7 +253,7 @@ class CategoryController extends Controller
         $schema=null;
         if(!preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|script|tema|eklenti)/iu',
              (string)$category['slug'].' '.(string)$category['name'])){
-            $canonical=url($serviceLanding['url']??('/kategori/'.$category['slug']));
+            $canonical=url($serviceLanding['url']??$categoryCanonical);
             $items=[];
             if (!empty($socialCatalog['show_services'])) {
                 foreach (array_slice($socialCatalog['groups'],0,35) as $n=>$service) {
@@ -230,8 +271,10 @@ class CategoryController extends Controller
                  ['@type'=>'ListItem','position'=>2,'name'=>$isSocialSale?'Sosyal Medya':'Hizmetler','item'=>url($isSocialSale?\App\Services\PublicSeoUrls::group('social'):'/kategoriler')]
             ];
             if (!empty($category['parent_category_slug'])) $breadcrumbs[]=['@type'=>'ListItem','position'=>3,
-                'name'=>$category['parent_category_name'],'item'=>url(\App\Services\PublicSeoUrls::path('/kategori',$category['parent_category_slug']))];
-            $breadcrumbs[]=['@type'=>'ListItem','position'=>count($breadcrumbs)+1,'name'=>$category['name'],'item'=>$canonical];
+                'name'=>$category['parent_category_name'],'item'=>url(\App\Services\PublicSeoUrls::category(['slug'=>$category['parent_category_slug'],'name'=>$category['parent_category_name']]))];
+            $breadcrumbs[]=['@type'=>'ListItem','position'=>count($breadcrumbs)+1,'name'=>$category['name'],'item'=>url($categoryCanonical)];
+            if($serviceLanding!==null)$breadcrumbs[]=['@type'=>'ListItem','position'=>count($breadcrumbs)+1,
+                'name'=>$serviceLanding['name'],'item'=>$canonical];
             $graph=[
               ['@type'=>'BreadcrumbList','@id'=>$canonical.'#breadcrumbs','itemListElement'=>$breadcrumbs],
               ['@type'=>'CollectionPage','@id'=>$canonical.'#page',
@@ -244,14 +287,15 @@ class CategoryController extends Controller
                 JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
         }
 
-        $socialFilter = $isSocialSale && ($q !== '' || ($serviceLanding === null && $legacyService !== ''));
+        $legacyPath=str_starts_with((string)(parse_url($_SERVER['REQUEST_URI']??'',PHP_URL_PATH)?:''),'/kategori/');
+        $socialFilter = ($isSocialSale && ($q !== '' || $legacyService !== '')) || $legacyPath;
         // Filter variants must not inherit an admin-managed index directive.
         if ($socialFilter) $categorySeo['robots'] = 'noindex,follow';
 
         $this->render('frontend/category-detail', [
             'pageTitle' => $serviceLanding !== null ? $socialPage['title'].' | NetVera' : ($category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name')),
             'metaDescription' => $serviceLanding !== null ? $socialPage['summary'] : ($category['seo_description'] ?: $category['description']),
-            'canonicalUrl' => url($serviceLanding['url'] ?? ('/kategori/' . $category['slug'])),
+            'canonicalUrl' => url($serviceLanding['url'] ?? $categoryCanonical),
             'ogTitle' => $serviceLanding !== null ? $socialPage['title'] : ($category['og_title'] ?: $category['name']),
             'ogDescription' => $serviceLanding !== null ? $socialPage['summary'] : ($category['og_description'] ?: $category['seo_description']),
             'category' => $category,
