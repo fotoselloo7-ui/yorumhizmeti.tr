@@ -34,7 +34,7 @@ $assert(str_contains($read('app/Services/CatalogMenuService.php'), 'ServiceCateg
 $assert(str_contains($read('app/Controllers/HomeController.php'), 'ServiceCategoryVisibility::show($category)'), 'Homepage category discovery shows old software');
 $assert(str_contains($read('app/Controllers/HomeController.php'), 'ServiceCategoryVisibility::showPackage($p)'), 'Homepage featured package block includes old software');
 $assert(str_contains($read('app/Services/NavigationService.php'), "'/hazir-scriptler'"), 'Menu links not mapped to canonical software catalogue');
-$assert(str_contains($read('app/Services/SitemapService.php'), 'ServiceCategoryVisibility::isLegacySoftware($cat)'), 'Retired category still in sitemap');
+$assert(str_contains($read('app/Services/SitemapService.php'), 'ServiceCategoryVisibility::show($cat,$parent)'), 'Retired category still in sitemap');
 $directory = $read('resources/views/frontend/categories.php');
 $assert(str_contains($directory, 'href="/hazir-scriptler"'), 'Ready software tile not linked to imported catalogue');
 $assert(str_contains($directory, '$liveScriptCount'), 'Ready software tile does not use the real imported catalogue');
