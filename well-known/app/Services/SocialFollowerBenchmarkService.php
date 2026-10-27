@@ -16,18 +16,23 @@ final class SocialFollowerBenchmarkService
     public const DISCOUNT=0.02; // modestly below like-for-like displayed peer.
     public const MIN_GROSS_MARGIN=0.30; // 30% BEFORE taxes, overhead and support.
 
+    /**
+     * Source listings checked 27 October 2026. Prices include only the posted
+     * packages, not unverified provider wholesale rates or inferred bonuses.
+     * These are independent retail products, not a guarantee of equivalent quality.
+     */
     private const PRICES=[
-        'instagram_standard'=>[100=>65,250=>125,500=>230,1000=>450,2500=>1050,5000=>2050],
-        'instagram_turk'=>[100=>125,250=>300,500=>575,1000=>1125,2500=>2725,5000=>5350],
+        'instagram_standard'=>[100=>149.90,250=>249.90,500=>449.90,1000=>849.90,
+                                2500=>1249.90,5000=>1899.90,10000=>2399.90],
+        'instagram_turk'=>[250=>364.78,500=>501.58,1000=>866.38,2000=>1504.78,
+                           3000=>2097.58,5000=>3191.98,7500=>4377.58,10000=>6019.18],
         'tiktok_standard'=>[100=>44.90,250=>109,500=>219,1000=>399,1500=>727.90,
                             2000=>970.90,2500=>989,3000=>1455.90,5000=>1899,10000=>5232.90],
-        'x_standard'=>[1000=>800,2500=>1925,5000=>3700,7500=>5425,10000=>7100],
     ];
     private const SOURCES=[
-        'instagram_standard'=>'https://etkisepeti.com/fiyat-listesi',
-        'instagram_turk'=>'https://etkisepeti.com/fiyat-listesi',
-        'tiktok_standard'=>'https://sosyaltaktik.com/tiktok-takipci',
-        'x_standard'=>'https://etkisepeti.com/',
+        'instagram_standard'=>'https://www.takipevi.com.tr/instagram-takipci-satin-al',
+        'instagram_turk'=>'https://www.turkinstagram.com/paketler/',
+        'tiktok_standard'=>'https://www.sosyaltaktik.com/tiktok-takipci',
     ];
 
     public static function type(array $package,array $info):?string
@@ -43,7 +48,6 @@ final class SocialFollowerBenchmarkService
         if(str_contains($lower,'instagram'))return $turkish?'instagram_turk':'instagram_standard';
         if($turkish)return null; // unbenchmarked local variants
         if(str_contains($lower,'tiktok'))return 'tiktok_standard';
-        if(preg_match('/twitter|(^|\W)x[ -]takip[çc]i/u',$lower))return 'x_standard';
         return null;
     }
 
