@@ -14,7 +14,7 @@
 .nv56-quick-top strong{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#192951}
 .nv56-quick-top strong .icon{color:#6644dd}
 .nv56-quick-top small{font-size:10px;color:#7f8aa7;line-height:1.5}
-.nv56-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding-bottom:15px;border-bottom:1px solid #edf0f7}
+.nv56-quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding-bottom:15px;border-bottom:1px solid #edf0f7}
 .nv26-quick .nv56-quick-action{
  display:flex!important;align-items:center!important;gap:8px!important;min-height:46px;
  min-width:0;padding:9px 10px!important;background:#f5f3ff!important;
