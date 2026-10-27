@@ -5,6 +5,10 @@ use App\Core\Database;
 
 class CategoryController extends Controller
 {
+    public function social(): void { $_GET['grup']='social'; $this->index(); }
+    public function agency(): void { $_GET['grup']='agency'; $this->index(); }
+    public function marketing(): void { $_GET['grup']='marketing'; $this->index(); }
+
     public function group(string $slug): void
     {
         $slug = rawurldecode($slug);
@@ -12,8 +16,9 @@ class CategoryController extends Controller
         if (!in_array($slug, $keys, true)) {
             \App\Services\PublicSeoUrls::notFound('Hizmet Grubu Bulunamadı'); return;
         }
-        $_GET['grup'] = $slug;
-        $this->index();
+        // Permanent redirect preserves old external links and consolidates signals.
+        header('Location: '.\App\Services\PublicSeoUrls::group($slug),true,301);
+        return;
     }
 
     public function index(): void
@@ -47,7 +52,7 @@ class CategoryController extends Controller
         $socialDirectorySchema=null;
         if($socialDirectoryPage){
             $items=[];foreach($groups[0]['categories']??[]as $n=>$cat)$items[]=['@type'=>'ListItem','position'=>$n+1,'name'=>$cat['name'],'url'=>url($cat['url'])];
-            $socialDirectorySchema=json_encode(['@context'=>'https://schema.org','@type'=>'CollectionPage','name'=>$socialDirectoryPage['title'],'url'=>url('/kategoriler/grup/social'),'mainEntity'=>['@type'=>'ItemList','numberOfItems'=>count($items),'itemListElement'=>$items]],JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_AMP);
+            $socialDirectorySchema=json_encode(['@context'=>'https://schema.org','@type'=>'CollectionPage','name'=>$socialDirectoryPage['title'],'url'=>url(\App\Services\PublicSeoUrls::group('social')),'mainEntity'=>['@type'=>'ItemList','numberOfItems'=>count($items),'itemListElement'=>$items]],JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_AMP);
         }
         $this->render('frontend/categories', [
             'pageTitle' => $socialDirectoryPage?$socialDirectoryPage['title'].' | NetVera':($activeGroup!==''&&!empty($groups[0]['label'])?$groups[0]['label'].' | NetVera':'Yazılım, Sosyal Medya ve Dijital Ajans Hizmetleri | NetVera'),
@@ -55,7 +60,7 @@ class CategoryController extends Controller
             'ogImage'=>$socialDirectoryPage?url($socialDirectoryPage['image']):null,
             'schema'=>$socialDirectorySchema,
             'canonicalUrl' => url($activeGroup !== ''
-                ? \App\Services\PublicSeoUrls::path('/kategoriler/grup', $activeGroup)
+                ? \App\Services\PublicSeoUrls::group($activeGroup)
                 : '/kategoriler'),
             'noindex' => $q!=='',
             'catalogGroups' => $groups,
@@ -188,7 +193,7 @@ class CategoryController extends Controller
             }
             $breadcrumbs=[
                  ['@type'=>'ListItem','position'=>1,'name'=>'Ana Sayfa','item'=>url('/')],
-                 ['@type'=>'ListItem','position'=>2,'name'=>$isSocialSale?'Sosyal Medya':'Hizmetler','item'=>url($isSocialSale?'/kategoriler/grup/social':'/kategoriler')]
+                 ['@type'=>'ListItem','position'=>2,'name'=>$isSocialSale?'Sosyal Medya':'Hizmetler','item'=>url($isSocialSale?\App\Services\PublicSeoUrls::group('social'):'/kategoriler')]
             ];
             if (!empty($category['parent_category_slug'])) $breadcrumbs[]=['@type'=>'ListItem','position'=>3,
                 'name'=>$category['parent_category_name'],'item'=>url(\App\Services\PublicSeoUrls::path('/kategori',$category['parent_category_slug']))];
