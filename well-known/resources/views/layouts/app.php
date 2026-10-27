@@ -300,7 +300,7 @@
               <section class="nv26-mega-panel <?= $nv26Group['key']==='social'?'':'nv27-pro-panel nv27-pro-panel--'.e($nv26Group['key']) ?>" id="nv26-panel-<?= e($nv26Group['key']) ?>" data-mega-panel hidden aria-label="<?= e($nv26Label) ?>">
                 <div class="nv26-mega-top">
                   <div><strong><?= e($nv26Label) ?></strong><p><?= e($nv26Group['description']) ?></p></div>
-                  <a href="/kategoriler/grup/<?= rawurlencode((string)$nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
+                  <a href="<?= e(\App\Services\PublicSeoUrls::group((string)$nv26Group['key'])) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
                 </div>
                 <?php if ($nv26Group['key'] === 'social'): ?>
                 <div class="nv26-social-mega-grid" aria-label="Sosyal medya platformları">
@@ -324,7 +324,7 @@
                       <strong><?= $nv27Agency?'Fikrinizden dijital ürüne.':'Dijitalde daha görünür olun.' ?></strong>
                       <p><?= $nv27Agency?'Web sitesi, uygulama, tasarım ve içerik hizmetlerini ihtiyacınıza göre keşfedin.':'SEO, reklam ve yerel işletme hizmetlerini tek noktadan inceleyin.' ?></p>
                     </div>
-                    <a href="/kategoriler/grup/<?= rawurlencode((string)$nv26Group['key']) ?>" class="nv27-spotlight-cta">
+                    <a href="<?= e(\App\Services\PublicSeoUrls::group((string)$nv26Group['key'])) ?>" class="nv27-spotlight-cta">
                       Tüm kategorileri gör <?= icon('arrow-right', 14) ?>
                     </a>
                   </aside>
