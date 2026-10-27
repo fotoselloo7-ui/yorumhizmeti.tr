@@ -168,6 +168,7 @@ class App
         $r->get('/admin/paketler', 'Admin\\PackageController@index');
         $r->post('/admin/paketler/toplu-islem', 'Admin\\PackageController@bulkAction');
         $r->post('/admin/paketler/yayinla', 'Admin\\PackageController@publishCatalog');
+        $r->post('/admin/paketler/seo-tamamla', 'Admin\\PackageController@completeServiceSeo');
         $r->get('/admin/yazilim/ekle', 'Admin\\PackageController@createSoftware');
         $r->post('/admin/yazilim/kaydet', 'Admin\\PackageController@storeSoftware');
         $r->get('/admin/yazilim/{id}/duzenle', 'Admin\\PackageController@editSoftware');
