@@ -4,6 +4,15 @@ $nvLongTitle=trim((string)($d['editorial_title']??''));
 $nvLongLead=trim((string)($d['editorial_lead']??''));
 $nvLongBody=trim((string)($d['editorial_body']??''));
 $nvLongQuestions=$d['editorial_qa']??[];
+if($nvLongTitle===''&&$nvLongLead===''&&$nvLongBody===''&&!$nvLongQuestions) {
+    // Page-specific authored fields win. Existing pages with empty fields still
+    // show a real, readable long guide immediately above the shared footer.
+    $defaultGuide=\App\Services\RegionalEditorialGuideService::fallback($d);
+    $nvLongTitle=$defaultGuide['title'];
+    $nvLongLead=$defaultGuide['lead'];
+    $nvLongBody=implode("\n\n",$defaultGuide['paragraphs']);
+    $nvLongQuestions=$defaultGuide['questions'];
+}
 if($nvLongTitle!==''||$nvLongLead!==''||$nvLongBody!==''||$nvLongQuestions):
     // No fabricated location facts, hidden copy, offsite scripts or second H1.
     $nvLongParagraphs=preg_split('/\R\s*\R/u',$nvLongBody)?:[];
