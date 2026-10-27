@@ -32,7 +32,7 @@ if (!empty($serviceLanding)):
      <p>Bu sayfada <?= (int)$packageCount ?> yayımlanmış paket listeleniyor. Paketlerde <?= e($quantityMessage) ?> aralığındaki miktarlar bulunabilir. Her seçeneğin teslim edilecek birimi, tutarı, tahmini süresi ve varsa telafi koşulu kendi ürün detayında belirtilir.</p>
      <p>En düşük fiyatlı seçenek her kullanım senaryosu için aynı sonucu sağlamaz. Hizmet tipi, ülke hedeflemesi, teslimat koşulları ve üçüncü taraf platform kuralları sipariş vermeden önce karşılaştırılmalıdır. Organik etkileşim, sıralama veya hesap büyümesi garanti edilmez.</p>
      <p>Görünen paket ücreti, seçilen miktarın tamamı içindir. Ödeme adımına geçmeden önce ürün sayfasında belirtilen teslimat bilgisini ve toplam tutarı kontrol edin. Bu sayfadaki bilgiler tüm diğer <?= e($category['name']) ?> hizmetlerine otomatik olarak uygulanmaz.</p>
-     <p><a href="/kategori/<?= rawurlencode((string)$category['slug']) ?>">Diğer <?= e($category['name']) ?> hizmetlerini karşılaştırın</a></p>
+     <p><a href="<?= e(\App\Services\PublicSeoUrls::category($category)) ?>">Diğer <?= e($category['name']) ?> hizmetlerini karşılaştırın</a></p>
     </div>
    </section>
   </div>
