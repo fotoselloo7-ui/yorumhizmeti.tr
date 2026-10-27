@@ -34,7 +34,7 @@ use App\Services\SeoMetadataService as BlockSeo;
                 $serviceIcon = BlockCatalog::icon($service);
                 if (!BlockIcons::has($serviceIcon)) $serviceIcon = 'layers';
             ?>
-                <a class="nvl-service-card" href="/kategori/<?= rawurlencode($service['slug']) ?>">
+                <a class="nvl-service-card" href="<?= e(\App\Services\PublicSeoUrls::category($service)) ?>">
                     <span class="nvl-service-icon"><?= icon($serviceIcon, 24) ?></span>
                     <small class="nvl-service-index" aria-hidden="true"><?= sprintf('%02d', $n + 1) ?></small>
                     <h3><?= e($service['name']) ?></h3>
