@@ -43,11 +43,11 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
  <div class="container">
   <?php if(!empty($socialCatalog)): require __DIR__.'/partials/social-category-filters.php'; else: ?>
   <div class="yv-category-chip-row-v5">
-   <a class="<?= empty($altSlug)?'active':'' ?>" href="/kategori/<?= rawurlencode((string)$category['slug']) ?>"><?= icon('grid',12) ?> Tümü</a>
+   <a class="<?= empty($altSlug)?'active':'' ?>" href="<?= e(\App\Services\PublicSeoUrls::category($category)) ?>"><?= icon('grid',12) ?> Tümü</a>
    <?php foreach($subCategories as $sub):
      $subPlatform=\App\Services\SocialPlatformIdentity::fromCategory($sub,$category);
      $subIcon=\App\Services\SocialPlatformIdentity::iconFor($subPlatform,$sub['icon_key']??'package');
-   ?><a class="<?= $altSlug===$sub['slug']?'active':'' ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($subPlatform)) ?>" href="/kategori/<?= rawurlencode((string)$sub['slug']) ?>"><?= icon($subIcon,12) ?> <?= e($sub['name']) ?></a><?php endforeach; ?>
+   ?><a class="<?= $altSlug===$sub['slug']?'active':'' ?> <?= e(\App\Services\SocialPlatformIdentity::classFor($subPlatform)) ?>" href="<?= e(\App\Services\PublicSeoUrls::category($sub,$category)) ?>"><?= icon($subIcon,12) ?> <?= e($sub['name']) ?></a><?php endforeach; ?>
   </div>
   <div class="yv-category-filter-tools-v5">
    <form method="GET" class="yv-category-search-form-v5">
@@ -91,7 +91,7 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
   <?php if(!empty($quoteMode)): ?>
   <div class="yv-empty"><div class="yv-empty-icon"><?= icon('message-circle',30) ?></div><h2><?= e($category['name']) ?> için teklif alın</h2><p>Bu hizmet için sabit fiyatlı paket yayımlanmıyor. İhtiyaçlarınızı ve beklediğiniz teslimleri paylaşın; kapsamı ve fiyatı birlikte netleştirelim.</p><a class="yv-btn yv-btn-primary" href="/iletisim?konu=<?= rawurlencode($category['name'].' için fiyat teklifi') ?>">Teklif Al <?= icon('arrow-right',14) ?></a></div>
   <?php else: ?>
-  <div class="yv-empty"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>Paket bulunamadı</h2><p>Seçtiğiniz filtrelere uygun paket yok. Filtreleri temizleyip tekrar deneyin.</p><a class="yv-btn yv-btn-primary" href="/kategori/<?= e($category['slug']) ?>">Tüm paketleri göster</a></div>
+  <div class="yv-empty"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>Paket bulunamadı</h2><p>Seçtiğiniz filtrelere uygun paket yok. Filtreleri temizleyip tekrar deneyin.</p><a class="yv-btn yv-btn-primary" href="<?= e(\App\Services\PublicSeoUrls::category($category)) ?>">Tüm paketleri göster</a></div>
   <?php endif; ?>
   <?php endif; ?>
  </div>
