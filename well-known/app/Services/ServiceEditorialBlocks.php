@@ -73,14 +73,14 @@ final class ServiceEditorialBlocks
                 ...self::checkpoints($name),
                 'NetVera Teknoloji Yazılım üzerinden iletişim ve teklif bilgilerine ulaşabilirsiniz. Hizmet açıklamaları güncellenebilir; kesin kapsam ilgili ürünün detayında ve onaylanan teklif veya sipariş koşullarında açıklanır.'
             ],
-            'faq'=>[
+            'faq'=>array_merge([
                 ['question'=>$name.' hizmeti neleri kapsar?','answer'=>$focus],
                 ['question'=>$name.' için fiyat nasıl belirlenir?','answer'=>$quote
                     ? 'İş kapsamı, adet veya entegrasyon gereksinimleri ve teslim takvimi belirlendikten sonra size özel fiyat teklifi hazırlanır.'
                     : 'Satış fiyatı seçilen paket ve miktar üzerinden belirlenir. İlgili tutar ve satın alma şartları paket detay sayfasında gösterilir.'],
                 ['question'=>'Çalışma sonuçları garanti edilir mi?','answer'=>'Belirli bir Google sıralaması, satış miktarı ya da üçüncü taraf platform metriklerinin kalıcılığı garanti edilemez. Teslim ve destek koşulları, hizmetin gerçek kapsamına göre belirlenir.'],
                 ['question'=>'Başlamadan önce hangi bilgiler gerekir?','answer'=>'Hizmet veya hesap bağlantısı, hedefler ve gerekli teknik erişimler seçilen hizmete göre değişebilir. Şifre veya hassas erişim gerekiyorsa yalnızca yetkili ve güvenli kanallarla ilerlenmelidir.']
-            ]
+            ], ServiceIntentFaqService::category($cat))
         ];
     }
 
