@@ -58,6 +58,11 @@ verify(str_contains($sitemap,'PublicSeoUrls::group'),'sitemap lists new group UR
 verify(str_contains($nav,'PublicSeoUrls::group'),'menu uses friendly group URLs');
 verify(str_contains($view,'RegionalEditorialGuideService::fallback'),'existing regional guides render even with empty editor');
 verify(str_contains($theme,'editorial-deep.php'),'landing thematic page includes its long guide');
+$regionalCss=file_get_contents(BASE_PATH.'/public/assets/css/editorial-landings.css');
+verify(str_contains($regionalCss,'.nvl-deep-guide')&&str_contains($regionalCss,'.nvl-deep-layout'),'regional long-form guide needs a visible responsive style');
+verify(str_contains($view,"if($nvLongBody==='')"),'partial editorial edits must not hide the long guide');
+verify(str_contains($app,"'/sosyal-medya-hizmetleri/{categorySlug}/{serviceSlug}'"),'indexable social-service route missing');
+
 verify(str_contains($packageView,'quoteMode')&&str_contains($packageView,'Teklif Al'),'quote-only product cannot show a fake fixed retail price');
 verify(str_contains($cart,'ServiceQuotePolicy::package')&&str_contains($checkout,'ServiceQuotePolicy::package'),'cart and checkout independently guard scope-quoted purchases');
 verify(str_contains($app,"'/admin/paketler/seo-tamamla'"),'admin bulk SEO fill registered');
