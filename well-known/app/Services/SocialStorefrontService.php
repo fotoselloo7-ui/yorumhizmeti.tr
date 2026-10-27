@@ -158,6 +158,25 @@ final class SocialStorefrontService
             'other'=>$label.' hizmetlerinde önce hedefinizi belirleyin: profil/kanal için takipçi veya abone, içerik için beğeni, yorum, izlenme ya da diğer etkileşim seçenekleri farklıdır. Aşağıdaki hizmet grupları sizi ilgili miktar ve koşulların bulunduğu sayfaya götürür.',
         ];
         $sections[0]['body']=($context[$intent['key']]??$context['other'])."\n\n".$sections[0]['body'];
+        // Five visible intent-specific H2 sections make the page helpful beyond
+        // a thin product listing; no fictional claims or copied competitor copy.
+        $sections[]=[
+            'title'=>$subject.' için doğru hedef ve ölçüm seçimi',
+            'body'=>($context[$intent['key']]??$context['other'])."\n\n".
+                'Doğru seçimi yapmak için paket miktarının hangi profil, gönderi, kanal, canlı yayın veya parçaya uygulanacağını belirleyin. Metrik adları farklı platformlarda aynı görünse de teknik anlamları ve ölçüm yöntemleri değişebilir. Seçilen hizmetin resmi uygulama veya içerik bağlantısıyla eşleşmesi gerekir.',
+            'subheading'=>'Hedef bağlantısı ve hizmet birimi',
+            'detail'=>'Hizmet adının yanında belirtilen adet, başlangıç ve bitiş koşulları ile hesabın herkese açık olması gerekip gerekmediği kontrol edilmelidir. Hedefleme niteliği yalnızca ürün açıklamasında belirtilmişse teklifin parçasıdır.',
+            'list'=>"Paket türünü karşılaştırın.\nTeslim birimini kontrol edin.\nİstenen URL biçimini doğrulayın.\nKullanım koşullarını inceleyin.",
+            'image'=>'','alt'=>''
+        ];
+        $sections[]=[
+            'title'=>$subject.' hizmetinde risk, destek ve şeffaflık',
+            'body'=>'Sosyal medya platformlarının otomatik denetimi, hesap güvenliği ve topluluk kuralları her zaman geçerlidir. Dışarıdan sağlanan etkileşim türleri gerçek topluluk bağı, organik büyüme, gelir veya içerik kalitesi anlamına gelmez. Özellikle izlenme, beğeni veya takipçi artışı nedeniyle platformdan ödül, para kazanma ya da keşfet sıralaması garantisi verilmez.',
+            'subheading'=>'Satın alma yerine teklif aşamasında kalabilen alternatifler',
+            'detail'=>'Yeni eklenen bir alternatifin tedarikçisi veya teslim kapasitesi henüz doğrulanmadıysa fiyat ve uygulanabilirlik önce teyit edilir. Böyle seçenekler için ödeme butonu açılmaz; açıklamada yer alan tahmini fiyat varsa bağlayıcı teklif kabul edilmez. Mevcut doğrulanmış paketlerde ödeme ve teslimat şartları ürün sayfasında gösterilir.',
+            'list'=>'',
+            'image'=>'','alt'=>''
+        ];
         $sections[0]['image']='/assets/img/social-storefront/'.$visual.'.webp';
         $sections[0]['alt']=$subject.' seçimi ve sipariş rehberine eşlik eden tanıtım görseli';
         $faqs=[
