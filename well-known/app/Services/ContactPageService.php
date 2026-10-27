@@ -59,6 +59,12 @@ final class ContactPageService
     {
         $out=[];foreach(self::defaults()as $key=>$default)$out[$key]=setting($key,$default);
         foreach(['site_address','site_phone','site_email','whatsapp_number']as $key)$out[$key]=setting($key);
+        // Older demo seed saved Istanbul as the business address. Do not publish
+        // that demonstrably wrong placeholder; admins can set an exact verified address.
+        $oldAddress=trim(preg_replace('/\s+/u',' ',(string)$out['site_address']));
+        if (in_array(mb_strtolower($oldAddress,'UTF-8'),['istanbul, türkiye','istanbul, turkey','i̇stanbul, türkiye'],true)) {
+            $out['site_address']='Alanya, Antalya, Türkiye';
+        }
         try{$out['map_url']=$out['contact_map_enabled']==='1'?self::mapUrl($out['contact_map_embed']):'';}
         catch(\InvalidArgumentException $e){$out['map_url']='';}
         $out['channels']=array_values(array_filter(RegionalLandingService::contacts(),static fn($channel)=>$channel['url']!=='/iletisim'));
