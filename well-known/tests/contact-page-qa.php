@@ -28,4 +28,11 @@ foreach(['csrfField()','privacy_consent','website_url','contact-name','contact-m
 $ok(!str_contains($view,'yv-contact-grid')&&!str_contains($view,'support-woman-cutout'),'Retired layout no longer owns contact');
 $css=file_get_contents(BASE_PATH.'/public/assets/css/contact-page.css');$ok(!str_contains($css,'!important'),'No override pile');
 $ok(str_contains($css,'prefers-reduced-motion')&&str_contains($css,'font-size:16px'),'Motion and mobile input support');
+$layout=file_get_contents(BASE_PATH.'/resources/views/layouts/app.php');
+$nav=file_get_contents(BASE_PATH.'/app/Services/NavigationService.php');
+$quickCss=file_get_contents(BASE_PATH.'/public/assets/css/nav-quick-marquee-v56.css');
+$ok(str_contains($layout,"['url' => '/iletisim', 'label' => 'İletişim', 'icon' => 'mail']"),'Quick Access has explicit contact page item even if header nav is disabled');
+$ok(str_contains($layout,'<a class="yh49-footer-link" href="/iletisim">İletişim Sayfası</a>'),'Global footer has real direct contact page link');
+$ok(str_contains($nav,"'key' => 'contact'")&&str_contains($nav,"'url' => '/iletisim'"),'Existing header navigation remains admin-controlled');
+$ok(str_contains($quickCss,'grid-template-columns:repeat(2,minmax(0,1fr))')&&str_contains($quickCss,'@media(max-width:620px)'),'Four quick links fit two desktop columns and collapse on mobile');
 echo "PASS $n contact embed validation, content, form and layout contracts\n";
