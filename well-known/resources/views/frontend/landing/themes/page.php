@@ -4,7 +4,7 @@
 <div data-theme-hero><?php $heroVariant=$profile['hero'];require __DIR__.'/hero.php'; ?></div>
 <span id="landing-content" class="nvl-sr-anchor" aria-hidden="true"></span>
 <?php foreach($blocks as $block): $blockType=$block['type'];$blockVariant=\App\Services\LandingThemeService::variant($profile,$blockType);require __DIR__.'/'.\App\Services\LandingThemeService::component($blockType);endforeach; ?>
-<?php require dirname(__DIR__).'/editorial-deep.php'; ?>
 <section class="nvl-contact nvl-container" data-component="cta" data-variant="<?= e($profile['cta']) ?>"><div class="nvl-contact-shell"><?php if(!empty($d['location_image'])): ?><div class="nvl-contact-art" aria-hidden="true"><img src="<?= e($d['location_image']) ?>" alt="" width="1600" height="900" loading="lazy"></div><?php endif; ?><div><span class="nvl-eyebrow"><?= e($d['city']) ?> / <?= e($d['service']) ?></span><h2><?= e($d['cta_title']?:'Bir sonraki adımı birlikte planlayalım.') ?></h2><div class="nvl-prose"><?= CopyText::rich($d['cta_summary']) ?></div></div><nav aria-label="İletişim seçenekleri"><?php foreach($landingContacts as $n=>$contact): ?><a class="<?= $n===0?'nvl-button':'nvl-contact-link' ?>" href="<?= e($contact['url']) ?>" <?= str_starts_with($contact['url'],'https:')?'target="_blank" rel="noopener noreferrer"':'' ?>><?= icon($contact['icon'],17) ?><?= e($n===0?($d['cta_label']?:$contact['label']):$contact['label']) ?></a><?php endforeach; ?></nav></div></section>
 <?php // Editor-managed sources, linked content and review metadata stay in storage/SEO; the retired white strip is not rendered. ?>
+<?php require dirname(__DIR__).'/editorial-deep.php'; ?>
 </main>
