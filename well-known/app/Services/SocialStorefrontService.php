@@ -166,6 +166,13 @@ final class SocialStorefrontService
             ['question'=>'Siparişimi nereden takip ederim?','answer'=>'Üye panelindeki Siparişlerim bölümünden sipariş durumunu görebilirsiniz. Sağlayıcıya bağlı bir teslimat kaydı varsa son bildirilen miktar ve durum da sipariş detayında gösterilir.'],
             ['question'=>'Teslimat veya telafi koşulları her pakette aynı mı?','answer'=>'Hayır. Tahmini süre, hizmet kapsamı ve varsa telafi koşulları pakete göre değişir. Satın almadan önce ilgili paketin açıklamasını ve kullanım/iade koşullarını okuyun.'],
         ];
+        // 49 service subcategories receive extra intent-specific questions, not
+        // the same copied four FAQs. Preserve manually authored custom FAQs.
+        $faqs=array_merge($faqs,ServiceIntentFaqService::category(
+            $type==='package'
+                ?['name'=>$entity['category_name']??$subject,'slug'=>$entity['category_slug']??$entity['slug']??'']
+                :$entity
+        ));
         return ['mode'=>'default','title'=>$title,'summary'=>$summary,'image'=>'/assets/img/social-storefront/'.$visual.'.webp','mobile_image'=>'','image_alt'=>$label.' içerik üretimi ve sosyal medya hizmetlerini temsil eden tanıtım görseli','sections'=>$sections,'faqs'=>$faqs,'platform'=>$platform??'social','platform_label'=>$label,'icon'=>SocialPlatformIdentity::iconFor($platform,'layers'),'intent'=>$intent];
     }
     public static function page(array $entity,string $type='category',?array $options=null):array
