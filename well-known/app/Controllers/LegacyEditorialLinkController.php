@@ -10,10 +10,10 @@ final class LegacyEditorialLinkController
 {
     public const REDIRECTS = [
         '/yapay-zeka-haber-yazilimi' => '/hazir-scriptler/haber-sitesi-scripti',
-        '/dijital-hizmetler/sosyal-medya-yonetimi' => '/kategoriler/grup/social',
-        '/dijital-hizmetler/modern-web-tasarim' => '/kategori/web-tasarim',
-        '/dijital-hizmetler/seo-hizmetleri' => '/kategori/seo-hizmetleri',
-        '/dijital-hizmetler/google-meta-ads' => '/kategori/dijital-reklam',
+        '/dijital-hizmetler/sosyal-medya-yonetimi' => '/sosyal-medya-hizmetleri',
+        '/dijital-hizmetler/modern-web-tasarim' => '/ajans-yazilim-hizmetleri/web-tasarim',
+        '/dijital-hizmetler/seo-hizmetleri' => '/seo-dijital-pazarlama-hizmetleri/seo-hizmetleri',
+        '/dijital-hizmetler/google-meta-ads' => '/seo-dijital-pazarlama-hizmetleri/dijital-reklam',
         '/dijital-hizmetler' => '/kategoriler',
         '/teklif-al' => '/iletisim',
     ];
