@@ -294,3 +294,55 @@
  .footer-payment-brands-v23{gap:8px!important}
  .footer-payments-v4.footer-payment-logos .footer-payment-brands-v23>.footer-payment-bank{min-width:118px!important}
 }
+
+
+/* Phone mockup icon centering (all service categories).
+   Font Awesome <i class="icon"> must NEVER inherit chart-bar sizing.
+   The six tiny bars live solely inside .yh23-mini-graph. */
+.yh-story-premium-v23 .yv-category-phone-art-v5 .phone .screen > span{
+  box-sizing:border-box!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  text-align:center!important;
+  overflow:visible!important;
+  line-height:1!important;
+}
+.yh-story-premium-v23 .yv-category-phone-art-v5 .phone .screen > span > .icon{
+  display:block!important;
+  box-sizing:content-box!important;
+  flex:none!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1!important;
+  text-align:center!important;
+  vertical-align:middle!important;
+  transform:none!important;
+  border:0!important;
+  border-radius:0!important;
+  background:none!important;
+  box-shadow:none!important;
+  color:#fff!important;
+}
+.yh-story-premium-v23 .yv-category-phone-art-v5 .yh23-mini-graph > i{
+  flex:0 1 13px!important;
+  min-width:0!important;
+}
+.yh-story-premium-v23 .yv-category-phone-art-v5 .stat .yh23-stat-icon > .icon{
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1!important;
+  background:none!important;
+  color:#2c79ec!important;
+}
+@media(max-width:480px){
+  .yh-story-premium-v23 .yv-category-phone-art-v5 .phone{left:clamp(17px,10%,35px)!important}
+  .yh-story-premium-v23 .yv-category-phone-art-v5 .stat{max-width:155px!important;min-width:0!important}
+}
