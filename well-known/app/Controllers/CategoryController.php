@@ -71,7 +71,19 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function show(string $slug): void
+    public function service(string $categorySlug, string $serviceSlug): void
+    {
+        $categorySlug = rawurldecode($categorySlug);
+        $serviceSlug = rawurldecode($serviceSlug);
+        if (!\App\Services\PublicSeoUrls::isSlug($categorySlug) ||
+            !\App\Services\PublicSeoUrls::isSlug($serviceSlug)) {
+            \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı');
+            return;
+        }
+        $this->show($categorySlug, $serviceSlug);
+    }
+
+    public function show(string $slug, string $serviceSlug = ''): void
     {
         // This is an unused, never-indexed page in the new project, not
         // a migrated NetVera address. There must be NO redirect or duplicate
@@ -144,8 +156,30 @@ class CategoryController extends Controller
         }
 
         $packages = $db->fetchAll("SELECT p.*, c.name as category_name, c.slug as category_slug, c.icon_key FROM packages p LEFT JOIN categories c ON p.category_id = c.id $where $orderBy", $params);
-        $socialCatalog = $isSocialSale ? \App\Services\SocialPackageService::catalog($packages,$category,is_string($_GET['hizmet']??null)?mb_substr($_GET['hizmet'],0,160):'') : null;
+        $legacyService = is_string($_GET['hizmet']??null) ? mb_substr($_GET['hizmet'],0,160) : '';
+        $socialCatalog = $isSocialSale ? \App\Services\SocialPackageService::catalog($packages,$category,$legacyService) : null;
+        $serviceLanding = null;
+        if ($serviceSlug !== '') {
+            if (!$isSocialSale) { \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı'); return; }
+            foreach ($socialCatalog['groups'] as $group) {
+                if (slugify($group['name']) === $serviceSlug) { $serviceLanding = $group; break; }
+            }
+            if ($serviceLanding === null) { \App\Services\PublicSeoUrls::notFound('Hizmet Bulunamadı'); return; }
+            // The service name, not an unstable database ID, owns the public URL.
+            $socialCatalog = \App\Services\SocialPackageService::catalog($packages,$category,$serviceLanding['key']);
+            if ($legacyService !== '') {
+                header('Location: '.$serviceLanding['url'], true, 301); return;
+            }
+        } elseif ($legacyService !== '' && $isSocialSale) {
+            $target = $socialCatalog['selected']['url'] ?? '/kategori/'.rawurlencode((string)$category['slug']);
+            header('Location: '.$target, true, 301);
+            return;
+        }
         if ($socialCatalog !== null) $packages = $socialCatalog['packages'];
+        if ($serviceLanding !== null && $socialPage !== null) {
+            $socialPage['title'] = $serviceLanding['name'].' Paketleri ve Fiyatları';
+            $socialPage['summary'] = $serviceLanding['name'].' seçeneklerini miktar, kapsam ve toplam fiyat açısından karşılaştırın. Sipariş koşullarını paket detayında inceleyin.';
+        }
 
         $faqs = $db->fetchAll("SELECT * FROM faqs WHERE status = 'active' ORDER BY sort_order ASC LIMIT 6");
         $testimonialSection = null;
@@ -178,7 +212,7 @@ class CategoryController extends Controller
         $schema=null;
         if(!preg_match('/(yaz[iı]l[iı]m|haz[iı]r.script|software|cms|script|tema|eklenti)/iu',
              (string)$category['slug'].' '.(string)$category['name'])){
-            $canonical=url('/kategori/'.$category['slug']);
+            $canonical=url($serviceLanding['url']??('/kategori/'.$category['slug']));
             $items=[];
             if (!empty($socialCatalog['show_services'])) {
                 foreach (array_slice($socialCatalog['groups'],0,35) as $n=>$service) {
@@ -201,8 +235,8 @@ class CategoryController extends Controller
             $graph=[
               ['@type'=>'BreadcrumbList','@id'=>$canonical.'#breadcrumbs','itemListElement'=>$breadcrumbs],
               ['@type'=>'CollectionPage','@id'=>$canonical.'#page',
-                 'name'=>$category['seo_title']?:$category['name'],
-                 'description'=>$category['seo_description']?:$category['description'],
+                 'name'=>$serviceLanding !== null ? $socialPage['title'] : ($category['seo_title']?:$category['name']),
+                 'description'=>$serviceLanding !== null ? $socialPage['summary'] : ($category['seo_description']?:$category['description']),
                  'url'=>$canonical,'inLanguage'=>'tr-TR',
                  'mainEntity'=>['@type'=>'ItemList','numberOfItems'=>count($items),'itemListElement'=>$items]]
             ];
@@ -210,16 +244,16 @@ class CategoryController extends Controller
                 JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);
         }
 
-        $socialFilter = $isSocialSale && (!empty($_GET['hizmet']) || $q !== '');
+        $socialFilter = $isSocialSale && ($q !== '' || ($serviceLanding === null && $legacyService !== ''));
         // Filter variants must not inherit an admin-managed index directive.
         if ($socialFilter) $categorySeo['robots'] = 'noindex,follow';
 
         $this->render('frontend/category-detail', [
-            'pageTitle' => $category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name'),
-            'metaDescription' => $category['seo_description'] ?: $category['description'],
-            'canonicalUrl' => url('/kategori/' . $category['slug']),
-            'ogTitle' => $category['og_title'] ?: $category['name'],
-            'ogDescription' => $category['og_description'] ?: $category['seo_description'],
+            'pageTitle' => $serviceLanding !== null ? $socialPage['title'].' | NetVera' : ($category['seo_title'] ?: $category['name'] . ' - ' . setting('site_name')),
+            'metaDescription' => $serviceLanding !== null ? $socialPage['summary'] : ($category['seo_description'] ?: $category['description']),
+            'canonicalUrl' => url($serviceLanding['url'] ?? ('/kategori/' . $category['slug'])),
+            'ogTitle' => $serviceLanding !== null ? $socialPage['title'] : ($category['og_title'] ?: $category['name']),
+            'ogDescription' => $serviceLanding !== null ? $socialPage['summary'] : ($category['og_description'] ?: $category['seo_description']),
             'category' => $category,
             'categoryHero' => $categoryHero,
             'ogImage' => url($socialPage['image']??$categoryHero['src']),
@@ -227,6 +261,7 @@ class CategoryController extends Controller
             'nvSeoData' => $categorySeo,
             'packages' => $packages,
             'socialCatalog' => $socialCatalog,
+            'serviceLanding' => $serviceLanding,
             'socialPage' => $socialPage,
             'quoteMode' => \App\Services\ServiceQuotePolicy::needsQuote($category),
             'noindex' => $socialFilter,
