@@ -95,6 +95,9 @@ jobs:
       - name: All category SEO, GEO and AIO modules QA
         run: php well-known/tests/netvera-category-complete-seo-v73-qa.php
 
+      - name: NetVera prelaunch service URLs, quote-pricing and contextual SEO QA
+        run: php well-known/tests/netvera-prelaunch-service-catalog-qa.php
+
       - name: NetVera brand, theme, chat and category SEO QA
         run: |
           php well-known/tests/netvera-brand-theme-seo-chat-qa.php
