@@ -88,7 +88,11 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
    <?php endforeach; ?>
   </div>
   <?php else: ?>
+  <?php if(!empty($quoteMode)): ?>
+  <div class="yv-empty"><div class="yv-empty-icon"><?= icon('message-circle',30) ?></div><h2><?= e($category['name']) ?> için teklif alın</h2><p>Bu hizmet için sabit fiyatlı paket yayımlanmıyor. İhtiyaçlarınızı ve beklediğiniz teslimleri paylaşın; kapsamı ve fiyatı birlikte netleştirelim.</p><a class="yv-btn yv-btn-primary" href="/iletisim?konu=<?= rawurlencode($category['name'].' için fiyat teklifi') ?>">Teklif Al <?= icon('arrow-right',14) ?></a></div>
+  <?php else: ?>
   <div class="yv-empty"><div class="yv-empty-icon"><?= icon('search',30) ?></div><h2>Paket bulunamadı</h2><p>Seçtiğiniz filtrelere uygun paket yok. Filtreleri temizleyip tekrar deneyin.</p><a class="yv-btn yv-btn-primary" href="/kategori/<?= e($category['slug']) ?>">Tüm paketleri göster</a></div>
+  <?php endif; ?>
   <?php endif; ?>
  </div>
 </section>
