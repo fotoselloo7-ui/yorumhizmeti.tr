@@ -211,6 +211,7 @@ class PackageController extends Controller
         $pkgId = $this->db->insert('packages', $data);
         \App\Services\SocialStorefrontService::save('package',(int)$pkgId,$socialContent);
         \App\Services\SocialPackageService::save((int)$pkgId,$_POST);
+        \App\Services\ServicePriceMode::save((int)$pkgId,(string)($_POST['price_mode']??'auto'));
         \App\Services\PackageHighlightsService::save((int)$pkgId,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$pkgId,$_POST);
         logActivity('package_create', 'Paket oluşturuldu: ' . $data['name']);
@@ -243,6 +244,7 @@ class PackageController extends Controller
         $this->db->update('packages', $data, 'id = ?', [(int) $id]);
         \App\Services\SocialStorefrontService::save('package',(int)$id,$socialContent);
         \App\Services\SocialPackageService::save((int)$id,$_POST);
+        \App\Services\ServicePriceMode::save((int)$id,(string)($_POST['price_mode']??'auto'));
         \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('package_update', 'Paket güncellendi: ' . $data['name']);
