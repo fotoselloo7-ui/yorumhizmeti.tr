@@ -40,7 +40,7 @@ final class CategorySeoCompleteService
         $question=$profile['question']??($name.' seçerken nelere dikkat etmeliyim?');
         $answer=$profile['answer']??('Bu kategoride yer alan '.mb_strtolower($name,'UTF-8').' hizmetlerini kapsam, ihtiyaç duyulan hedef bilgileri, teslimat ve satın alma koşullarına göre karşılaştırabilirsiniz. Paket detaylarını sipariş vermeden önce kontrol edin.');
         $topics=array_filter(array_unique([$name,$focus,'NetVera Teknoloji Yazılım']));
-        $canonical=$slug!==''?rtrim((string)setting('site_url','https://netvera.tr'),'/').PublicSeoUrls::category($category):'';
+        $canonical=$slug!==''?rtrim((string)($_ENV['APP_URL']??'https://netvera.tr'),'/').PublicSeoUrls::category($category):'';
         $imageExists=trim((string)($category['image']??''))!=='';
         $extras=[
             'secondary_keywords'=>$secondary,
