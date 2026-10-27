@@ -75,3 +75,59 @@
 .regional-landing .landing-hero.landing-pointer-active::after,.regional-landing .landing-contact-shell.landing-pointer-active::after{opacity:1}
 }
 @media(prefers-reduced-motion:reduce){.home-knowledge *,.regional-landing *{scroll-behavior:auto}.home-knowledge :is(a,.icon),.regional-landing :is(a,.icon,img){transition:none;animation:none}.regional-landing .landing-service-card:hover,.regional-landing .landing-button:hover,.regional-landing .landing-showcase-card:hover img{transform:none}}
+
+
+/* Visible, premium long-form regional SEO editorial, in both current 10-theme
+   landing designs and the retained legacy theme. Placed before shared footer. */
+.nvl-deep-guide{
+  position:relative;isolation:isolate;clear:both;
+  padding:clamp(56px,7vw,100px) 0;
+  background:linear-gradient(180deg,#f8faff 0%,#f0f4fb 100%);
+  border-top:1px solid #e5e9f2;color:#182743
+}
+.nvl-deep-guide .nvl-container{
+  width:min(1160px,calc(100% - 40px));max-width:1160px;
+  margin-inline:auto;box-sizing:border-box
+}
+.nvl-deep-heading{max-width:850px;margin:0 0 34px}
+.nvl-deep-heading .nvl-eyebrow{
+  display:inline-block;color:#6453dc;letter-spacing:.12em;
+  font:700 11px/1.5 Poppins,sans-serif
+}
+.nvl-deep-heading h2{
+  font:700 clamp(27px,3vw,44px)/1.2 Poppins,sans-serif;
+  color:#172543;letter-spacing:-.035em;margin:14px 0 16px
+}
+.nvl-deep-lead{font-size:15px;line-height:1.85;color:#55627b}
+.nvl-deep-layout{
+  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(270px,.9fr);
+  gap:25px;align-items:start
+}
+.nvl-deep-prose,.nvl-deep-questions{
+  min-width:0;box-sizing:border-box;background:#fff;
+  border:1px solid #e4e9f3;border-radius:22px;
+  padding:clamp(24px,3vw,42px);
+  box-shadow:0 15px 56px rgba(16,37,70,.05)
+}
+.nvl-deep-prose p{margin:0;color:#3d4c65;font:400 14px/1.95 Poppins,sans-serif}
+.nvl-deep-prose p+p{margin-top:20px}
+.nvl-deep-prose a,.nvl-deep-answer a{color:#5946c8;text-decoration:underline;text-underline-offset:3px}
+.nvl-deep-questions h3{font:700 21px/1.4 Poppins,sans-serif;color:#172543;margin:0 0 15px}
+.nvl-deep-qa{padding:20px 0;border-top:1px solid #e7eaf3}
+.nvl-deep-qa:first-of-type{border-top:0;padding-top:0}
+.nvl-deep-qa:last-child{padding-bottom:0}
+.nvl-deep-qa h4{font:650 13px/1.6 Poppins,sans-serif;color:#1c2b49;margin:0 0 9px}
+.nvl-deep-answer{font:400 12px/1.9 Poppins,sans-serif;color:#65728a}
+.nvl-deep-guide :is(a,button):focus-visible{outline:3px solid #9483e4;outline-offset:3px}
+@media(max-width:780px){
+  .nvl-deep-guide{padding:50px 0}
+  .nvl-deep-layout{grid-template-columns:minmax(0,1fr);gap:16px}
+  .nvl-deep-prose,.nvl-deep-questions{padding:24px;border-radius:17px}
+  .nvl-deep-heading{margin-bottom:24px}
+}
+@media(max-width:420px){
+  .nvl-deep-guide .nvl-container{width:calc(100% - 40px)}
+  .nvl-deep-heading h2{font-size:27px}
+  .nvl-deep-lead{font-size:13px}
+  .nvl-deep-prose p{font-size:12px}
+}
