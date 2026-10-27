@@ -32,6 +32,14 @@ class PackageController extends Controller
         if (!$package) { $this->render('frontend/404', ['pageTitle' => 'Paket Bulunamadı']); return; }
 
         $quoteMode=\App\Services\ServiceQuotePolicy::package($package);
+        // Fix old YorumHizmeti metadata immediately even before an optional
+        // database normalization. Preserve manually authored NetVera metadata.
+        $seoSuggestions=\App\Services\PackageSeoLaunchService::recommend($package,$quoteMode);
+        foreach(['seo_title','seo_description','og_title','og_description'] as $field){
+            if(\App\Services\PackageSeoLaunchService::stale($field,$package[$field]??null)){
+                $package[$field]=$seoSuggestions[$field];
+            }
+        }
         $fields = \App\Services\SmmOrderFields::fields($package);
         $socialSale = \App\Services\SocialPackageService::info($package);
         $socialPage=$socialSale!==null?\App\Services\SocialStorefrontService::page($package+['_sale'=>$socialSale],'package'):null;
