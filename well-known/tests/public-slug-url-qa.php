@@ -4,6 +4,7 @@ declare(strict_types=1);
 // Offline regression guard: route precedence, internal links and sitemap URLs.
 // No database, network or PHP server required.
 $root = dirname(__DIR__);
+require_once $root.'/app/Core/Helpers.php';
 require_once $root.'/app/Services/PublicSeoUrls.php';
 use App\Services\PublicSeoUrls as Seo;
 
@@ -25,6 +26,8 @@ $assert(Seo::scriptCategory($scriptCategories[0], $scriptCategories)==='/hazir-s
 $assert(Seo::scriptCategory($scriptCategories[1], $scriptCategories)==='/hazir-scriptler/web-scriptleri/haber-scriptleri', 'Indexed child path changed');
 $assert(!Seo::isSlug('test/../../admin'), 'Unsafe slug accepted');
 $assert(Seo::group('social')==='/sosyal-medya-hizmetleri','Social hub SEO slug incorrect');
+$assert(Seo::socialService('tiktok-takipci', 'TikTok Kurumsal Takipçi')==='/sosyal-medya-hizmetleri/tiktok-takipci/tiktok-kurumsal-takipci', 'Social service permalink incorrect');
+$assert(Seo::socialService('instagram-takipci','Instagram Türk Takipçi')==='/sosyal-medya-hizmetleri/instagram-takipci/instagram-turk-takipci', 'Turkish service permalink incorrect');
 $assert(Seo::group('agency')==='/ajans-yazilim-hizmetleri','Agency hub SEO slug incorrect');
 $assert(Seo::group('marketing')==='/seo-dijital-pazarlama-hizmetleri','SEO marketing hub SEO slug incorrect');
 
@@ -34,7 +37,8 @@ $required = [
     '/blog/kategori/{slug}', '/blog/etiket/{slug}',
     '/kategori/{slug}', '/paket/{slug}',
     '/hazir-scriptler/kategori/{slug}', '/hazir-scriptler/tur/{slug}',
-    '/hazir-yazilimlar/tur/{slug}', '/kategoriler/grup/{slug}'
+    '/hazir-yazilimlar/tur/{slug}', '/kategoriler/grup/{slug}',
+    '/sosyal-medya-hizmetleri/{categorySlug}/{serviceSlug}'
 ];
 foreach ($required as $route) {
     $assert(str_contains($routes, "'".$route."'"), 'Missing route: '.$route);
@@ -90,4 +94,10 @@ $assert(str_contains($scriptController, 'function legacyRedirect'), 'Imported Ne
 $assert(!str_contains($load('app/Services/PublicSeoUrls.php'), 'redirectLegacyFacet'), 'Old 301 helper remains');
 $assert(str_contains($load('app/Controllers/CategoryController.php'),'301'),'Old group URLs must have 301 redirects');
 $assert(str_contains($load('app/Services/SitemapService.php'),'PublicSeoUrls::group'),'Sitemap must use new canonical service group paths');
+$assert(str_contains($load('app/Services/SocialPackageService.php'), 'PublicSeoUrls::socialService'), 'Social catalog must link clean service pages');
+$assert(!str_contains($load('app/Services/SocialPackageService.php'), "'?hizmet='"), 'Service navigation must not emit filter URLs');
+$assert(str_contains($load('app/Controllers/CategoryController.php'),'true, 301'), 'Old service filter links must redirect permanently');
+$assert(str_contains($load('app/Services/SitemapService.php'),'PublicSeoUrls::socialService'), 'Sitemap missing social service permalinks');
+$assert(str_contains($load('resources/views/frontend/social/category.php'),"service-guide.php"), 'Service landing editorial FAQs missing');
+
 echo "PASS: friendly hub URLs with direct 301, original NetVera paths preserved\n";
