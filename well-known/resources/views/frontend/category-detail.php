@@ -156,5 +156,5 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
 <?php endif; ?>
 
 <?php $nvSeoGuide=\App\Services\ServiceEditorialBlocks::category($category,!empty($quoteMode));require __DIR__.'/partials/service-seo-guide.php'; ?>
-<section class="yv-category-cta-v5"><div class="container"><div><span><?= icon('zap',20) ?></span><strong><?= e($category['name']) ?>'da Bugün Fark Yaratın!</strong><small><?= !empty($quoteMode)?'Hizmet kapsamınızı paylaşın; projenize özel teklif hazırlayalım.':'Mevcut paketleri ve hizmet kapsamlarını karşılaştırın.' ?></small></div><a class="yv-btn yv-btn-light" href="#packages">Paketleri İncele <?= icon('arrow-right',11) ?></a></div></section>
+<section class="yv-category-cta-v5"><div class="container"><div><span><?= icon('zap',20) ?></span><strong><?= e($category['name']) ?>'da Bugün Fark Yaratın!</strong><small><?= !empty($quoteMode)?'Hizmet kapsamınızı paylaşın; projenize özel teklif hazırlayalım.':'Mevcut paketleri ve hizmet kapsamlarını karşılaştırın.' ?></small></div><a class="yv-btn yv-btn-light" href="<?= !empty($quoteMode)?'/iletisim':'#packages' ?>"><?= !empty($quoteMode)?'Teklif Al':'Paketleri İncele' ?> <?= icon('arrow-right',11) ?></a></div></section>
 </div>
