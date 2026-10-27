@@ -24,6 +24,10 @@ $scriptCategories = [
 $assert(Seo::scriptCategory($scriptCategories[0], $scriptCategories)==='/hazir-scriptler/kategori/web-scriptleri', 'New parent path invalid');
 $assert(Seo::scriptCategory($scriptCategories[1], $scriptCategories)==='/hazir-scriptler/web-scriptleri/haber-scriptleri', 'Indexed child path changed');
 $assert(!Seo::isSlug('test/../../admin'), 'Unsafe slug accepted');
+$assert(Seo::group('social')==='/sosyal-medya-hizmetleri','Social hub SEO slug incorrect');
+$assert(Seo::group('agency')==='/ajans-yazilim-hizmetleri','Agency hub SEO slug incorrect');
+$assert(Seo::group('marketing')==='/seo-dijital-pazarlama-hizmetleri','SEO marketing hub SEO slug incorrect');
+
 
 $routes = $load('app/Core/App.php');
 $required = [
@@ -44,11 +48,11 @@ foreach (['/hazir-scriptler/{slug}', '/blog/{slug}', '/paket/{slug}'] as $produc
 $checks = [
     'resources/views/frontend/blog/index.php' => ['/blog/kategori/', 'blogPaginationBase'],
     'resources/views/frontend/blog/detail.php' => ['/blog/kategori/', '/blog/etiket/'],
-    'resources/views/frontend/categories.php' => ['/kategoriler/grup/'],
+    'resources/views/frontend/categories.php' => ['PublicSeoUrls::group'],
     'resources/views/frontend/category-detail.php' => ['/kategori/'],
     'resources/views/frontend/netvera-scripts.php' => ['PublicSeoUrls::scriptCategory', '/hazir-scriptler/tur'],
     'resources/views/frontend/software.php' => ['/hazir-yazilimlar/tur'],
-    'resources/views/layouts/app.php' => ['/kategoriler/grup/', 'PublicSeoUrls::scriptCategory'],
+    'resources/views/layouts/app.php' => ['PublicSeoUrls::scriptCategory'],
     'app/Services/SitemapService.php' => ['/blog/kategori', '/hazir-scriptler/kategori'],
 ];
 foreach ($checks as $file=>$needles) {
@@ -84,4 +88,6 @@ $scriptController = $load('app/Controllers/NetveraScriptController.php');
 $assert(!str_contains($scriptController, 'redirectLegacyFacet'), 'New-project script filter redirect remains');
 $assert(str_contains($scriptController, 'function legacyRedirect'), 'Imported NetVera alias handling changed');
 $assert(!str_contains($load('app/Services/PublicSeoUrls.php'), 'redirectLegacyFacet'), 'Old 301 helper remains');
-echo "PASS: clean internal routes without migration redirects, original imported NetVera paths preserved\n";
+$assert(str_contains($load('app/Controllers/CategoryController.php'),'301'),'Old group URLs must have 301 redirects');
+$assert(str_contains($load('app/Services/SitemapService.php'),'PublicSeoUrls::group'),'Sitemap must use new canonical service group paths');
+echo "PASS: friendly hub URLs with direct 301, original NetVera paths preserved\n";
