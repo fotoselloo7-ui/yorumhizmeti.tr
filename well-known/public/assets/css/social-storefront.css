@@ -111,6 +111,12 @@
 .social-package-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--social-border); border-radius: 15px; overflow: hidden; background: #fff; box-shadow: 0 8px 24px #1c27470a; }
 .social-package-card>header { position: relative; padding: 20px 16px 18px; background: linear-gradient(130deg,var(--social-brand),var(--social-accent)); color: #fff; }
 .social-package-brand { display: flex; align-items: center; gap: 8px; font-size: 10px; }
+.social-package-topline { display:flex; align-items:center; justify-content:space-between; gap:10px; min-width:0; min-height:24px; }
+.social-package-topline .social-package-brand { min-width:0; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+.social-package-topline .social-package-brand svg { flex:none; }
+.social-package-topline .social-package-badge { display:inline-flex; flex:none; align-items:center; justify-content:center; margin:0; padding:4px 8px; max-width:58%; border-radius:7px; font-size:9px; line-height:1.15; font-weight:700; overflow-wrap:normal; white-space:nowrap; }
+@media (max-width:370px) { .social-package-topline { gap:5px; } .social-package-topline .social-package-badge { font-size:8px; padding:4px 5px; } }
+
 .social-package-card h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; margin-top: 12px; color: #fff; font-size: 14px; font-weight: 500; }
 .social-package-card h3>strong { font-size: 29px; font-weight: 700; line-height: 1.2; }
 .social-package-card header>p { margin-top: 6px; font-size: 10px; color: #fff; opacity: .9; }
