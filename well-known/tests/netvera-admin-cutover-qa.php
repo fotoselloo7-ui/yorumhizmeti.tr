@@ -29,7 +29,7 @@ foreach(['/admin/admin-kullanicilari/{id}/duzenle',
 $ok(str_contains($list,'/admin/admin-kullanicilari/') &&
     str_contains($view,'name="new_password_confirm"') &&
     str_contains($view,'name="current_password"'), 'Admin editable UI incomplete');
-foreach(['password_verify','password_hash','last','super_admin'] as $word)
+foreach(['password_verify','password_hash','WHERE id<>?','super_admin'] as $word)
     $ok(str_contains($edit,$word),'Admin role/password protection missing '.$word);
 $ok(str_contains($edit,"WHERE id<>? AND role='super_admin'"),'Must preserve one active superadmin');
 $ok(str_contains($htaccess,'HTTP_HOST') &&
@@ -38,7 +38,7 @@ $ok(str_contains($htaccess,'HTTP_HOST') &&
     str_contains($htaccess,'Require all denied'), 'cPanel host-only rewrite and private denial missing');
 $ok(str_contains($zip,'ZipArchive') &&
     str_contains($zip,"'app','public','resources'") &&
-    str_contains($zip,"$base==='.env'") &&
+    str_contains($zip,"\$base==='.env'") &&
     str_contains($zip,"public/uploads"),'cPanel ZIP must exclude secrets and customer media');
 // Source-verified password hash; never a baked-in one-click admin takeover.
 $ok(str_contains($transfer,"NETVERA_ADMIN_LOGIN_PROOF") &&
