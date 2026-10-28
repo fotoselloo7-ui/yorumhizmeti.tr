@@ -861,6 +861,27 @@ CREATE TABLE `nv_private_support_tickets` (
 
 /*!40000 ALTER TABLE `nv_private_support_tickets` DISABLE KEYS */;
 /*!40000 ALTER TABLE `nv_private_support_tickets` ENABLE KEYS */;
+-- Preserve actual original NetVera review identities, moderation state,
+-- product references and mapped customer ownership. No fabricated reviews.
+DROP TABLE IF EXISTS `nv_private_content_reviews`;
+CREATE TABLE `nv_private_content_reviews` (
+  `old_review_id` bigint unsigned NOT NULL,
+  `old_user_id` int unsigned NOT NULL,
+  `new_user_id` int unsigned NOT NULL,
+  `target_type` varchar(25) NOT NULL,
+  `product_legacy_id` int unsigned DEFAULT NULL,
+  `rating` tinyint unsigned NOT NULL,
+  `comment` mediumtext NOT NULL,
+  `status` varchar(25) NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `imported_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`old_review_id`),
+  KEY `idx_nv_review_product` (`target_type`,`product_legacy_id`,`status`),
+  KEY `idx_nv_review_customer` (`new_user_id`,`old_review_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS `nv_private_user_map`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
