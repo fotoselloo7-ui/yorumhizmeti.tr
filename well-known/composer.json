@@ -1,6 +1,6 @@
 {
-    "name": "yorumhizmeti/yorumpanel-pro",
-    "description": "YorumPanel Pro - Paket Satis Yonetim Sistemi",
+    "name": "netvera/teknoloji-yazilim",
+    "description": "NetVera Teknoloji Yazilim - Hazir Yazilim, Dijital Ajans ve Paket Satis Sistemi",
     "type": "project",
     "require": {
         "php": ">=8.0",
