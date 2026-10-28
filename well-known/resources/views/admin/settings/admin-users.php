@@ -1,7 +1,9 @@
 <div class="adm-page-top">
     <div>
          <h2><?= icon('shield', 24) ?> Admin Kullanıcıları</h2>
+         <p style="color:#64748b;font-size:12px">Mevcut kullanıcıyı ve süper admin yetkilerini güvenle düzenleyin; kayıtlar silinmez.</p>
     </div>
+    <a href="/admin/admin-kullanicilari/<?= (int)$currentAdmin['id'] ?>/duzenle" class="btn btn-primary"><?= icon('settings',16) ?> Hesap Bilgilerimi Düzenle</a>
 </div>
 
 <div class="adm-card">
@@ -14,6 +16,7 @@
                         <th>E-posta</th>
                         <th>Rol</th>
                         <th>Durum</th>
+                        <th>İşlem</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,6 +26,7 @@
                         <td class="text-sm"><?= e($a['email']) ?></td>
                         <td><span class="badge badge-primary"><?= e($a['role'] ?? 'admin') ?></span></td>
                         <td><span class="status-badge <?= $a['status'] === 'active' ? 'success' : 'default' ?>"><?= $a['status'] === 'active' ? 'Aktif' : 'Pasif' ?></span></td>
+                        <td><?php if($currentAdmin['role']==='super_admin' || (int)$currentAdmin['id']===(int)$a['id']): ?><a class="btn btn-light btn-sm" href="/admin/admin-kullanicilari/<?= (int)$a['id'] ?>/duzenle"><?= icon('edit-2',14) ?> Düzenle</a><?php endif; ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -47,6 +51,7 @@
                         <span class="badge badge-primary"><?= e($a['role'] ?? 'admin') ?></span>
                     </div>
                 </div>
+                <?php if($currentAdmin['role']==='super_admin'||(int)$currentAdmin['id']===(int)$a['id']): ?><a href="/admin/admin-kullanicilari/<?= (int)$a['id'] ?>/duzenle" class="btn btn-light btn-sm" style="margin-top:12px"><?= icon('edit-2',14) ?> Düzenle</a><?php endif; ?>
             </div>
             <?php endforeach; ?>
         </div>
