@@ -34,7 +34,7 @@ $skip=function(string $relative):bool{
     return false;
 };
 $included=[];
-foreach(['app','public','resources','vendor','bin','scripts'] as $folder){
+foreach(['app','public','resources','database','vendor','bin','scripts'] as $folder){
     if(!is_dir($root.'/'.$folder))continue;
     $zip->addEmptyDir($folder);
     $di=new RecursiveIteratorIterator(
