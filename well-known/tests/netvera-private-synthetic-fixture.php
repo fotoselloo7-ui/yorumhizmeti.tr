@@ -65,6 +65,13 @@ $ddl=[
  order_id BIGINT UNSIGNED PRIMARY KEY, affiliate_id BIGINT UNSIGNED,
  visitor_token CHAR(64), attributed_at DATETIME
 )",
+"CREATE TABLE content_reviews (
+ id BIGINT UNSIGNED PRIMARY KEY, user_id INT UNSIGNED NOT NULL,
+ target_type VARCHAR(20) NOT NULL,target_id INT UNSIGNED NOT NULL,
+ rating TINYINT UNSIGNED NOT NULL, comment MEDIUMTEXT NOT NULL,
+ status VARCHAR(20) NOT NULL, sort_order INT NOT NULL DEFAULT 0,
+ created_at DATETIME,updated_at DATETIME
+)",
 ];
 foreach($ddl as $sql)$pdo->exec($sql);
 
@@ -84,4 +91,7 @@ $pdo->exec("INSERT INTO support_tickets VALUES (20,10,'QA Support','Please test 
 $pdo->exec("INSERT INTO support_ticket_replies VALUES (21,20,'admin','QA Response','2026-01-04 00:00:00')");
 $pdo->exec("INSERT INTO affiliate_clicks VALUES (22,6,REPEAT('a',64),'/qa','2026-01-01 00:00:00')");
 $pdo->exec("INSERT INTO order_referrals VALUES (70,6,REPEAT('b',64),'2026-01-02 00:00:00')");
+$pdo->exec("INSERT INTO content_reviews VALUES
+(801,10,'script',11,5,'Verified synthetic QA feedback','approved',0,'2026-01-06 00:00:00','2026-01-06 00:00:00'),
+(802,10,'script',11,2,'Pending synthetic QA feedback','pending',1,'2026-01-07 00:00:00','2026-01-07 00:00:00')");
 echo "PASS synthetic private source fixture\n";
