@@ -159,6 +159,12 @@ class NetveraScriptController extends Controller
             return;
         }
         $data=Catalog::jsonFields($p);
+        if ((string)($_GET['type']??'')==='purchase' && Catalog::purchaseEnabled($p,$data)) {
+            // Preserve legacy query URL, but route to genuine PayTR checkout.
+            // GET only: do not create orders or attempt payment on a page visit.
+            redirect('/yazilim-satin-al/'.rawurlencode((string)$p['slug']));
+            return;
+        }
         $reviews=Catalog::reviews((int)$p['legacy_id']);
         $ogImage=Catalog::publicUrl($data['og_image']??null);
         if(!$ogImage && str_starts_with((string)($data['og_image']??''),'/uploads/')){
@@ -178,8 +184,7 @@ class NetveraScriptController extends Controller
             'applicationCategory'=>'BusinessApplication',
         ];
         // Schema mirrors the existing public CTA; never advertise quote-only software as a free/in-stock purchase.
-        $schemaPurchaseEnabled=Catalog::purchaseEnabled($p,$data)
-            && \App\Services\NetveraInquiryService::ready();
+        $schemaPurchaseEnabled=Catalog::purchaseEnabled($p,$data);
         if(!$schemaPurchaseEnabled){
             unset($schema['offers']);
         }else{
