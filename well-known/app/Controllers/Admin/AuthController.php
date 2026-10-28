@@ -25,6 +25,7 @@ class AuthController extends Controller
 
     public function logout(): void
     {
+        Csrf::check();
         logActivity('admin_logout', 'Admin çıkış yaptı.');
         AdminAuth::logout();
         redirect('/admin/giris');
