@@ -1,0 +1,52 @@
+name: NetVera cPanel Root Release ZIP
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/bin/build-netvera-root-zip.php'
+      - 'well-known/.htaccess'
+      - 'well-known/resources/views/layouts/admin.php'
+      - 'well-known/app/Controllers/Admin/AdminAccountController.php'
+      - 'well-known/app/Controllers/Admin/AuthController.php'
+      - 'well-known/app/Core/AdminAuth.php'
+      - '.github/workflows/netvera-cpanel-root-release.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: zip, mbstring, pdo_mysql
+          tools: none
+      - name: Build one-level NetVera document-root ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          php well-known/bin/build-netvera-root-zip.php
+          file="$(find . -maxdepth 1 -name 'netvera-tr-cpanel-root-*.zip' -type f | head -n 1)"
+          test -n "$file"
+          unzip -t "$file" >/dev/null
+          unzip -Z1 "$file" | grep -qx 'app/Core/AdminAuth.php'
+          unzip -Z1 "$file" | grep -qx 'public/index.php'
+          unzip -Z1 "$file" | grep -qx '.htaccess'
+          unzip -Z1 "$file" | grep -qx 'resources/views/admin/settings/admin-user-edit.php'
+          if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env($|\.)|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/)|\.sql$'; then
+            echo 'Unsafe release archive: secret, subdomain, uploads, SQL, or extra nesting'
+            exit 1
+          fi
+          echo "Release archive validated: $file"
+      - name: Upload cPanel-ready archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: NetVera-cPanel-Root-Release
+          path: netvera-tr-cpanel-root-*.zip
+          retention-days: 14
+          if-no-files-found: error
