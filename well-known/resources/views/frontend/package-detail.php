@@ -182,7 +182,7 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
 </section>
 
 <section class="yv-product-content-v5"><div class="container">
- <nav class="yv-product-tabs-v5 nv-service-section-nav" aria-label="Paket sayfası bölümleri"><a class="active" href="#nv-product-description">Açıklama</a><a href="#nv-product-features">Özellikler</a><a href="#hizmet-referanslari">Referanslar</a><a href="#nv-product-faq">Sık Sorulan Sorular</a></nav>
+ <nav class="yv-product-tabs-v5 nv-service-section-nav" aria-label="Paket sayfası bölümleri"><a class="active" href="#nv-product-description">Açıklama</a><a href="#nv-product-features">Özellikler</a><?php if(!empty($serviceReferences)): ?><a href="#hizmet-referanslari">Referanslar</a><?php endif; ?><a href="#nv-product-faq">Sık Sorulan Sorular</a></nav>
  <article class="yv-product-copy-v5" id="nv-product-description"><h2><?= e(package_display_name($package)) ?> Nedir?</h2><div class="blog-content"><?php if(!empty($package['description'])): ?><?= $package['description'] ?><?php else: ?><p>Bu paket, ihtiyacınız olan dijital hizmeti güvenli, hızlı ve kolay bir sipariş deneyimiyle sunar. Ödeme ve gerekli bilgiler tamamlandıktan sonra siparişiniz işleme alınır ve hesabınızdan takip edilebilir.</p><?php endif; ?></div></article>
  <div class="yv-product-gains-v5" id="nv-product-features"><h3>Paket Özellikleri</h3><div>
  <?php foreach(\App\Services\PackageHighlightsService::get((int)$package['id'],$package) as $highlight): ?>
