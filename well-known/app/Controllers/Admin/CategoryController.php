@@ -117,6 +117,7 @@ class CategoryController extends Controller
         $this->db->update('categories', $data, 'id = ?', [(int) $id]);
         \App\Services\SocialStorefrontService::save('category',(int)$id,$socialContent);
         \App\Services\CategoryHeroService::save((int)$id,$_POST);
+        \App\Services\ServiceReferenceSelectionService::save('category',(int)$id,$_POST['service_reference_ids']??[]);
         \App\Services\NetveraSeoBridge::save('category',(int)$id,$_POST);
         logActivity('category_update', 'Kategori güncellendi: ' . $data['name']);
         flash('success', 'Kategori güncellendi.');
