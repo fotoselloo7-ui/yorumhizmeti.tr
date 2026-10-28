@@ -104,6 +104,8 @@ jobs:
         run: php well-known/tests/netvera-brand-release-qa.php
       - name: Category SEO guide layout, duplicate removal and phone icon QA
         run: php well-known/tests/netvera-category-guide-ui-qa.php
+      - name: Root cPanel ZIP, secure logout and original admin transfer QA
+        run: php well-known/tests/netvera-admin-cutover-qa.php
       - name: Short service hero headline flow and responsive typography QA
         run: php well-known/tests/netvera-hero-headline-qa.php
 
