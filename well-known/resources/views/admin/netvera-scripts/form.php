@@ -56,10 +56,13 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
               <?php endforeach; ?>
             </div>
             <div class="nvpa-checks">
-              <?php foreach(['demo_is_active'=>'Demo bağlantısı aktif','demo_is_public'=>'Demo herkese açık gösterilsin','demo_credentials_public'=>'Demo kullanıcı adı ve şifreleri ürün detayında yayınlansın'] as $key=>$label): ?>
+              <?php foreach(['demo_is_active'=>'Demo bağlantısı aktif','demo_is_public'=>'Demo herkese açık gösterilsin','demo_credentials_public'=>'Herkese açık DEMO hesap bilgilerini ürün detayında göster (Kopyala / Yapıştır)'] as $key=>$label): ?>
                 <label><input type="checkbox" name="<?= e($key) ?>" value="1" <?= !empty($d[$key])?'checked':'' ?>> <?= e($label) ?></label>
               <?php endforeach; ?>
             </div>
+            <p class="nvpa-demo-disclosure-help" style="padding:12px 14px;margin:10px 0 16px;border:1px solid #d8dff2;border-radius:11px;background:#f7f9ff;color:#41526e;font-size:12px;line-height:1.7">
+              <strong>Demo hesaplarının görünmesi için:</strong> Yukarıdaki üç kutuyu işaretleyin, yalnızca tanıtım amacıyla oluşturduğunuz test kullanıcı adını ve test şifresini aşağıya girin, ardından kaydedin. Gerçek müşteri veya site yönetici hesabını burada paylaşmayın. Yayınlanan bilgiler herkes tarafından görüntülenebilir ve kopyalanabilir.
+            </p>
             <div class="nvpa-two">
               <?php foreach([
                 'demo_username'=>'Kullanıcı Demo Kullanıcı Adı',
