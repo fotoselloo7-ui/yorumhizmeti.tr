@@ -1,6 +1,6 @@
-# YorumPanel Pro
+# NetVera Teknoloji Yazılım
 
-**yorumhizmeti.tr** için geliştirilen, API kullanmadan çalışan, manuel sipariş yönetimli, SEO güçlü, modern paket satış yazılımı.
+**netvera.tr** için geliştirilen; hazır yazılım, dijital ajans, SEO/GEO/AIO ve sosyal medya hizmetlerini birleştiren NetVera paket satış platformu.
 
 ## Gereksinimler
 
@@ -8,12 +8,14 @@
 - MySQL 5.7+
 - Laragon (önerilen)
 
+**Önemli:** `database/database.sql`, mevcut verileri koruyan bir güncelleme betiği değil, yalnızca **boş veritabanı** içindir. Çalışan netvera.tr veritabanına import etmeyin. Gerçek hosting kökü `public` olmalı, `.env` ve `database` web kökü dışında kalmalıdır.
+
 ## Kurulum
 
 ### 1. Veritabanı Oluştur
 
 ```sql
-CREATE DATABASE yorumpanel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE netvera_site CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 2. Veritabanı Kurulumu
@@ -21,7 +23,7 @@ CREATE DATABASE yorumpanel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 Proje artık **tek ve kanonik SQL dosyası** kullanır. Boş MySQL/MariaDB veritabanına yalnızca aşağıdaki dosyayı içe aktarın:
 
 ```bash
-mysql -u root yorumpanel < database/database.sql
+mysql -u root netvera_site < database/database.sql
 ```
 
 `database/database.sql`; güncel tablo şemalarını, gerekli başlangıç verilerini, NetVera katalog verilerini ve uygulanmış tüm eski migration sonuçlarını tek dosyada içerir. Eski `install.sql`, `seeds.sql` ve ayrı migration dosyaları kullanılmaz.
@@ -51,7 +53,7 @@ Site adresi: [http://127.0.0.1:8006](http://127.0.0.1:8006)
 ## Admin Panel
 
 - URL: `/admin/giris`
-- Varsayılan giriş: `admin@yorumhizmeti.tr` / `Admin123!`
+- Örnek kurulumdaki yönetici e-postası: `admin@netvera.tr`. İlk kurulumda parolayı derhal güçlü ve benzersiz bir parolayla değiştirin; mevcut canlı yönetici hesabını değiştirmeyin.
 
 ## Proje Yapısı
 
@@ -136,7 +138,7 @@ Aşağıdaki klasörler yazılabilir olmalıdır (chmod 755):
 
 ### 3. Görseller Görünmüyorsa Kontrol Edilecekler
 Eğer yüklediğiniz logolar veya makale içi resimler kırık/boş görünüyorsa:
-1. **APP_URL Yapılandırması**: `.env` dosyasındaki `APP_URL` değerinin sitenizin tam URL'si (ör: `https://yorumhizmeti.tr`) olduğundan ve sonunda `/` karakteri olmadığından emin olun.
+1. **APP_URL Yapılandırması**: `.env` dosyasındaki `APP_URL` değerinin sitenizin tam URL'si (ör: `https://netvera.tr`) olduğundan ve sonunda `/` karakteri olmadığından emin olun.
 2. **Double Path Kontrolü**: Görsel yollarının veritabanında `/uploads/blog/...` veya benzeri formatta kaydedildiğini ve şablonlarda `/uploads/` + `/uploads/blog/...` şeklinde çakışmadığını (`upload_url` helper'ı kullanıldığını) teyit edin.
 3. **Htaccess Kontrolü**: Root dizindeki veya `public/` dizindeki `.htaccess` dosyalarının görsel formatlarını (`.jpg`, `.png`, `.webp`, vb.) engellemediğinden emin olun.
 4. **Resim Dosyası Kontrolü**: Dosyanın `public/uploads/` altındaki ilgili klasörde fiziksel olarak var olduğunu ve izinlerinin `644` olduğunu kontrol edin.
