@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="nvpa-checks nvpa-checks-stack">
               <label><input type="checkbox" name="purchase_enabled" value="1" <?= (array_key_exists('purchase_enabled',$d)?!empty($d['purchase_enabled']):!empty($d['buy_url']))?'checked':'' ?>> Satışa Aç / ürün detayında “Satın Al” butonunu göster</label>
-              <small>Satış butonu için fiyat girin ve bu seçeneği işaretleyin. Link otomatik oluşur; kapalıyken ürün ve demo yayında kalabilir.</small>
+              <small>Satış butonu için fiyat girin ve bu seçeneği işaretleyin. Link otomatik oluşur; müşteri PayTR ödeme ekranına gider. Kapalıyken ürün ve demo yayında kalabilir.</small>
             </div>
             
           </div>
