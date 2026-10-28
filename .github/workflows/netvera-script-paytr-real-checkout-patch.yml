@@ -1,0 +1,110 @@
+name: NetVera Hazir Yazilim Gercek PayTR Satis ZIP
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/netvera-script-paytr-real-checkout-patch.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql
+          tools: none
+      - name: Lint all patched PHP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            well-known/app/Controllers/ScriptCheckoutController.php \
+            well-known/app/Controllers/NetveraScriptController.php \
+            well-known/app/Controllers/AuthController.php \
+            well-known/app/Controllers/Admin/NetveraScriptController.php \
+            well-known/app/Core/App.php \
+            well-known/app/Services/MemberPanelService.php \
+            well-known/app/Services/NetveraBridgeService.php \
+            well-known/resources/views/frontend/script-checkout.php \
+            well-known/resources/views/frontend/netvera-script-detail.php \
+            well-known/resources/views/admin/netvera-scripts/form.php \
+            well-known/resources/views/layouts/app.php; do
+            php -l "$file"
+          done
+          node --check well-known/public/assets/js/netvera-product-tabs-v60.js
+      - name: Check integration paths and order safety invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Fq "ScriptCheckoutController@index" well-known/app/Core/App.php
+          grep -Fq "ScriptCheckoutController@pay" well-known/app/Core/App.php
+          grep -Fq "initiatePayment" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "FOR UPDATE" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "terms_accepted" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "purchase_nonce" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "nv_legacy_script_products" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "payment_gateway" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "payment_status" well-known/app/Controllers/ScriptCheckoutController.php
+          grep -Fq "handleCallback" well-known/app/Controllers/CheckoutController.php
+          grep -Fq "netvera_script_id" well-known/app/Services/MemberPanelService.php
+          grep -Fq "type']??'')==='purchase'" well-known/app/Controllers/NetveraScriptController.php
+      - name: Prepare cPanel extract-here patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          staging="$RUNNER_TEMP/nv-paytr-script"
+          mkdir -p "$staging"
+          for source in \
+            well-known/app/Controllers/ScriptCheckoutController.php \
+            well-known/app/Controllers/NetveraScriptController.php \
+            well-known/app/Controllers/AuthController.php \
+            well-known/app/Controllers/Admin/NetveraScriptController.php \
+            well-known/app/Core/App.php \
+            well-known/app/Services/MemberPanelService.php \
+            well-known/app/Services/NetveraBridgeService.php \
+            well-known/resources/views/frontend/script-checkout.php \
+            well-known/resources/views/frontend/netvera-script-detail.php \
+            well-known/resources/views/admin/netvera-scripts/form.php \
+            well-known/resources/views/layouts/app.php \
+            well-known/public/assets/js/netvera-product-tabs-v60.js; do
+            target="$(echo "$source" | sed 's|^well-known/||')"
+            mkdir -p "$staging/$(dirname "$target")"
+            cp "$source" "$staging/$target"
+          done
+          cat > "$staging/NETVERA-PAYTR-ILK-OKU.txt" <<'TEXT'
+          NetVera Hazir Yazilim PayTR Satin Alma
+          Bu ZIP'i netvera.tr belge kokunde acin (app/ resources/ public/ ayni seviyeye).
+          Dosya/SQL tam yedegini alin. Bu paket .env, SQL, alt alan adlari ve yuklemeleri degistirmez.
+          Admin > Odeme Modulleri > PayTR etkin ve gercek merchant bilgileri dogru olmali.
+          Satin Al -> hesap girisi -> sozlesme onayi -> PayTR kart iframe -> imzali callback.
+          Callback: /payment/paytr/callback (PayTR panelinde dogru ayarlanmis olmali).
+          Sepet, fiyat, musteri, lisans ve siparis gecmisi korunur.
+          Odeme olmadan lisans anahtari otomatik olusturulmaz.
+          Gercek/kontrollu sandbox testi olmadan canli tahsilat garantisi verilemez.
+          TEXT
+          (
+            cd "$staging"
+            zip -qr "$GITHUB_WORKSPACE/NETVERA-HAZIR-YAZILIM-PAYTR-SATIS-YAMASI.zip" app resources public NETVERA-PAYTR-ILK-OKU.txt
+          )
+          target="$GITHUB_WORKSPACE/NETVERA-HAZIR-YAZILIM-PAYTR-SATIS-YAMASI.zip"
+          unzip -t "$target" >/dev/null
+          unzip -Z1 "$target" | grep -qx 'app/Controllers/ScriptCheckoutController.php'
+          unzip -Z1 "$target" | grep -qx 'resources/views/frontend/script-checkout.php'
+          unzip -Z1 "$target" | grep -qx 'app/Core/App.php'
+          unzip -Z1 "$target" | grep -qx 'NETVERA-PAYTR-ILK-OKU.txt'
+          if unzip -Z1 "$target" | grep -Eq '(^well-known/|^\.env|\.sql$|sync-conflict|^public/uploads/)'; then
+            echo "Unexpected/unsafe file in patch"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NETVERA-HAZIR-YAZILIM-PAYTR-SATIS-YAMASI
+          path: NETVERA-HAZIR-YAZILIM-PAYTR-SATIS-YAMASI.zip
+          retention-days: 14
+          if-no-files-found: error
