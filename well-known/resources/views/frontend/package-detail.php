@@ -55,7 +55,7 @@ $nvBreadcrumbName=!$nvShowChild && $nvParentData
 $nvRealGallery=[];
 if(!empty($package['image']))$nvRealGallery[]=[
     'src'=>upload_url($package['image']),
-    'alt'=>$package['image_alt']?:package_display_name($package)
+    'alt'=>($package['image_alt']??'')?:package_display_name($package)
 ];
 foreach(\App\Services\ServicePackageGalleryService::images((int)$package['id']) as $nvPhoto){
     $nvRealGallery[]=['src'=>upload_url($nvPhoto),'alt'=>package_display_name($package).' çalışma görseli'];
@@ -79,7 +79,7 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
     <div class="yv-product-proof-v5">
      <div><?= icon('clipboard-list',15) ?><span><b>İhtiyaç Analizi</b><small>Hizmete özel kapsam</small></span></div>
      <div><?= icon('calendar-check',15) ?><span><b>Planlı Süreç</b><small><?= e($package['delivery_time'] ?: 'Teklifte netleşir') ?></small></span></div>
-     <div><?= icon('shield',15) ?><span><b>Güvenli Ödeme</b><small>256 Bit SSL</small></span></div>
+     <div><?= icon('shield',15) ?><span><b>Şeffaf Kapsam</b><small>Koşullar önceden netleşir</small></span></div>
      <div><?= icon('headphones',15) ?><span><b>İletişim</b><small>Çalışma boyunca destek</small></span></div>
     </div>
    </div>
@@ -115,8 +115,6 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
       </button>
       <?php endforeach; ?>
     </div>
-    <?php elseif(!$nvHasRealGallery): ?>
-    <div class="nv-service-gallery-note">Hizmet kapak görseli yönetici panelinden eklenebilir.</div>
     <?php endif; ?>
     <div class="yv-product-info-strip-v5">
      <div><?= icon('file-text',18) ?><span><strong>Hizmet Kapsamı</strong><small>Paket detayında</small></span></div>
