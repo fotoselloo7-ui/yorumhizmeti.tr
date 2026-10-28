@@ -30,19 +30,27 @@ if (!function_exists('yvBlogPlatform')) {
         </form>
         <div class="yv-blog-hot-v8"><small>En çok aranan konular:</small><span>Hazır Yazılım</span><span>Instagram Takipçi</span><span>Dijital Ajans</span><span>Teknik SEO</span></div>
       </div>
-      <div class="yv-blog-hero-art-v8" aria-label="NetVera dijital bilgi merkezi illüstrasyonu">
-        <div class="yv-blog-hero-core-v8" aria-hidden="true">
-          <span class="yv-blog-hero-core-icon-v8"><?= icon('book-open',38) ?></span>
-          <span class="yv-blog-hero-core-overline-v8">NETVERA / BİLGİ MERKEZİ</span>
-          <strong>Fikirden<br>bilgiye.</strong>
-          <span class="yv-blog-hero-core-accent-v8"><i></i><i></i><i></i></span>
+      <div class="yv-blog-hero-art-v8" aria-label="NetVera bilgi merkezi içerik önizlemesi">
+        <div class="nv-blog-preview-v2" aria-hidden="true">
+          <div class="nv-blog-preview-toolbar-v2">
+            <span class="nv-blog-preview-brand-v2"><?= icon('file-text',15) ?> NetVera Bilgi Merkezi</span>
+            <span class="nv-blog-preview-window-v2"><i></i><i></i><i></i></span>
+          </div>
+          <div class="nv-blog-preview-body-v2">
+            <div class="nv-blog-preview-lead-v2">
+              <span class="nv-blog-preview-eyebrow-v2">DİJİTAL REHBERLER</span>
+              <strong>Bilgiyle büyüyen<br>fikirler.</strong>
+              <p>İşinizi geliştiren içerikler, bir arada.</p>
+              <div class="nv-blog-preview-tags-v2"><span>SEO</span><span>Yapay Zekâ</span><span>Sosyal Medya</span></div>
+            </div>
+            <div class="nv-blog-preview-articles-v2">
+              <div><span><?= icon('search',17) ?></span><p><strong>Arama görünürlüğü</strong><small>SEO ve GEO rehberleri</small></p></div>
+              <div><span><?= icon('robot',17) ?></span><p><strong>Yapay zekâ</strong><small>Otomasyon ve araçlar</small></p></div>
+              <div><span><?= icon('trending-up',17) ?></span><p><strong>Dijital strateji</strong><small>Güncel ipuçları</small></p></div>
+            </div>
+          </div>
+          <div class="nv-blog-preview-bottom-v2"><span><i></i> Yeni fikirler, güvenilir rehberler</span><?= icon('arrow-up-right',16) ?></div>
         </div>
-        <span class="yv-blog-float-v8 google"><?= icon('google',25) ?></span>
-        <span class="yv-blog-float-v8 instagram"><?= icon('instagram',24) ?></span>
-        <span class="yv-blog-float-v8 tiktok"><?= icon('tiktok',23) ?></span>
-        <span class="yv-blog-float-v8 youtube"><?= icon('youtube',23) ?></span>
-        <span class="yv-blog-float-v8 chart"><?= icon('bar-chart',22) ?></span>
-        <span class="yv-blog-float-v8 bulb"><?= icon('zap',20) ?></span>
       </div>
     </div>
   </div>
@@ -73,6 +81,7 @@ if (!function_exists('yvBlogPlatform')) {
             <a href="/blog/<?= e($featured['slug']) ?>">Yazıyı Oku <?= icon('arrow-right',11) ?></a>
           </div>
           <div class="yv-blog-featured-media-v8">
+            <img class="yv-blog-featured-backdrop-v2" src="<?= e(!empty($featured['image']) ? upload_url($featured['image']) : demo_visual_url($featured['title'].' '.($featured['category_name']??''),'featured blog')) ?>" alt="" aria-hidden="true" loading="lazy">
             <img class="yv-blog-featured-photo-v12" src="<?= e(!empty($featured['image']) ? upload_url($featured['image']) : demo_visual_url($featured['title'].' '.($featured['category_name']??''),'featured blog')) ?>" alt="<?= e($featured['image_alt']??$featured['title']) ?>">
           </div>
         </article>
