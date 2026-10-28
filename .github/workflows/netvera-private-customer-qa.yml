@@ -118,7 +118,7 @@ jobs:
           [ "$(db "SELECT COUNT(*) FROM nv_dealer_accounts WHERE status='pending' AND commission_rate=0 AND legacy_affiliate_id=6")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM nv_dealer_audit WHERE action='legacy_import'")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM admins WHERE email='qa-admin@example.test' AND role='super_admin'")" = 1 ]
-          [ "$(db "SELECT COUNT(*) FROM admins WHERE email='admin@yorumhizmeti.tr'")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM admins WHERE email='admin@netvera.tr'")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE payment_status='paid' AND license_key_encrypted IS NOT NULL AND license_key_encrypted<>'QA-LICENSE-NOT-REAL'")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE payment_status='failed' AND entitlement_json IS NOT NULL")" = 1 ]
           [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE customer_email='qa-guest@example.test' AND new_user_id IS NULL")" = 1 ]
