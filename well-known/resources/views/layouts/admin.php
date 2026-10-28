@@ -172,10 +172,13 @@
                     <?= icon('shield', 18) ?> Lisans Yönetimi
                 </a>
 
-                <div style="padding: var(--space-4) var(--space-5);">
-                    <a href="/admin/cikis" class="btn btn-light btn-sm btn-block" style="justify-content: center;">
-                        <?= icon('log-out', 16) ?> Çıkış Yap
-                    </a>
+                <div class="nv-admin-logout-wrap">
+                    <form method="post" action="/admin/cikis" class="nv-admin-logout-form">
+                        <?= \App\Core\Csrf::field() ?>
+                        <button type="submit" class="nv-admin-logout-button">
+                            <?= icon('log-out', 17) ?><span>Çıkış Yap</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
         </aside>
