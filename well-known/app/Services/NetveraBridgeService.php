@@ -321,6 +321,21 @@ final class NetveraBridgeService
         return is_array($value) ? $value : [];
     }
 
+    /** A single, canonical purchase-intent URL derived from the original indexed slug. */
+    public static function purchasePath(string $slug): string
+    {
+        return '/hazir-scriptler/'.rawurlencode($slug).'?type=purchase';
+    }
+
+    /** Publishing is explicit: no sale button for zero-price or disabled software. */
+    public static function purchaseEnabled(array $product, array $data): bool
+    {
+        $enabled = array_key_exists('purchase_enabled', $data)
+            ? !empty($data['purchase_enabled'])
+            : (bool)self::publicUrl($data['buy_url'] ?? null);
+        return (float)($product['price'] ?? 0) > 0 && $enabled;
+    }
+
     public static function publicUrl(?string $url): ?string
     {
         $url=trim((string)$url);
