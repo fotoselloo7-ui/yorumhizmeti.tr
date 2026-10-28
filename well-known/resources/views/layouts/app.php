@@ -189,6 +189,9 @@
 
     <?= setting('header_script') ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-social-theme-rail">
+    <?php if(in_array($template,['frontend/package-detail','frontend/category-detail'],true)): ?>
+    <link rel="stylesheet" href="<?= asset('css/netvera-service-detail-v1.css') ?>?v=20261028-real-gallery-references">
+    <?php endif; ?>
     <?php if($template==='frontend/blog/index'): ?>
     <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261028-editorial-preview-v2">
     <?php endif; ?>
@@ -818,5 +821,8 @@
     <?php endif; ?>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
     <?= setting('footer_script') ?>
+<?php if(in_array($template,['frontend/package-detail','frontend/category-detail'],true)): ?>
+<script defer src="<?= asset('js/netvera-service-detail-v1.js') ?>?v=20261028-gallery"></script>
+<?php endif; ?>
 </body>
 </html>
