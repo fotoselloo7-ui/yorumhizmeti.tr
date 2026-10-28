@@ -20,6 +20,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($email, $password)) {
             flash('success', 'Başarıyla giriş yaptınız.');
+            if (!empty($_SESSION['nv_script_checkout_return'])) {
+                $slug = (string)$_SESSION['nv_script_checkout_return'];
+                unset($_SESSION['nv_script_checkout_return']);
+                if (preg_match('/^[a-z0-9-]{1,250}$/D', $slug)) {
+                    redirect('/yazilim-satin-al/'.rawurlencode($slug)); return;
+                }
+            }
             redirect('/hesabim');
         }
 
@@ -60,6 +67,13 @@ class AuthController extends Controller
         ]);
 
         flash('success', 'Hesabınız oluşturuldu. Hoş geldiniz!');
+        if (!empty($_SESSION['nv_script_checkout_return'])) {
+            $slug = (string)$_SESSION['nv_script_checkout_return'];
+            unset($_SESSION['nv_script_checkout_return']);
+            if (preg_match('/^[a-z0-9-]{1,250}$/D', $slug)) {
+                redirect('/yazilim-satin-al/'.rawurlencode($slug)); return;
+            }
+        }
         redirect('/hesabim');
     }
 
