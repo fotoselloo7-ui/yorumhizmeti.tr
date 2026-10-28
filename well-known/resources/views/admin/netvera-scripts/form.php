@@ -57,8 +57,24 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
             </div>
             <div class="nvpa-checks">
               <?php foreach(['demo_is_active'=>'Demo bağlantısı aktif','demo_is_public'=>'Demo herkese açık gösterilsin','demo_credentials_public'=>'Herkese açık DEMO hesap bilgilerini ürün detayında göster (Kopyala / Yapıştır)'] as $key=>$label): ?>
-                <label><input type="checkbox" name="<?= e($key) ?>" value="1" <?= !empty($d[$key])?'checked':'' ?>> <?= e($label) ?></label>
+                <label><input type="checkbox" id="nvpa-<?= e($key) ?>" name="<?= e($key) ?>" value="1" data-nvpa-demo-gate <?= !empty($d[$key])?'checked':'' ?>> <?= e($label) ?></label>
               <?php endforeach; ?>
+            </div>
+            <?php
+              $nvpaHasSavedDemo=trim((string)($d['demo_admin_username']??$d['demo_username']??''))!=='' ||
+                  trim((string)($d['demo_username']??''))!=='' ||
+                  !empty(json_decode((string)($d['demo_accounts_json']??'[]'),true));
+              $nvpaDemoReady=!empty($d['demo_is_active'])&&!empty($d['demo_is_public'])&&
+                  !empty($d['demo_credentials_public'])&&!empty($d['demo_url'])&&$nvpaHasSavedDemo;
+            ?>
+            <div id="nvpa-demo-publication-status" role="status" aria-live="polite" style="margin:9px 0 12px;padding:12px 14px;border-radius:10px;border:1px solid <?= $nvpaDemoReady?'#c6e8d2':'#f0dbac' ?>;background:<?= $nvpaDemoReady?'#f0fff5':'#fff9ec' ?>;font-size:13px;line-height:1.6">
+              <strong id="nvpa-demo-publication-title"><?= $nvpaDemoReady?'DEMO girişleri yayında':'DEMO girişleri ziyaretçilere kapalı' ?></strong>
+              <span id="nvpa-demo-publication-detail" style="display:block;margin-top:4px">
+                <?= $nvpaDemoReady
+                    ? 'Ayrıntı sayfasının Canlı Demo sekmesinde kullanıcı adı ve şifreyi Kopyala / Yapıştır şeklinde görebilirsiniz.'
+                    : 'Hesap alanlarını doldurmak tek başına yayınlamaz. Üç kutuyu da işaretleyip kaydetmelisiniz. Gerçek yönetici şifresini burada kullanmayın.' ?>
+              </span>
+              <?php if($nvLiveUrl): ?><a href="<?= e($nvLiveUrl.'#demo') ?>" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:7px;font-weight:700">Ürün detayını aç / Canlı Demo</a><?php endif; ?>
             </div>
             <p class="nvpa-demo-disclosure-help" style="padding:12px 14px;margin:10px 0 16px;border:1px solid #d8dff2;border-radius:11px;background:#f7f9ff;color:#41526e;font-size:12px;line-height:1.7">
               <strong>Demo hesaplarının görünmesi için:</strong> Yukarıdaki üç kutuyu işaretleyin, yalnızca tanıtım amacıyla oluşturduğunuz test kullanıcı adını ve test şifresini aşağıya girin, ardından kaydedin. Gerçek müşteri veya site yönetici hesabını burada paylaşmayın. Yayınlanan bilgiler herkes tarafından görüntülenebilir ve kopyalanabilir.
@@ -232,6 +248,39 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
 (function(){
   var form=document.getElementById('nvpa-product-form');
   if(!form)return;
+  var status=document.getElementById('nvpa-demo-publication-status');
+  var title=document.getElementById('nvpa-demo-publication-title');
+  var detail=document.getElementById('nvpa-demo-publication-detail');
+  var gateActive=form.querySelector('[name="demo_is_active"]');
+  var gatePublic=form.querySelector('[name="demo_is_public"]');
+  var gateCredentials=form.querySelector('[name="demo_credentials_public"]');
+  function refreshDemoStatus(){
+    if(!status || !title || !detail)return;
+    var hasAccount=['demo_admin_username','demo_username'].some(function(name){
+      var field=form.querySelector('[name="'+name+'"]');
+      return field && field.value.trim()!=='';
+    });
+    var extras=form.querySelector('[name="demo_accounts_json"]');
+    if(!hasAccount && extras)try{
+      var list=JSON.parse(extras.value||'[]');
+      hasAccount=Array.isArray(list)&&list.some(function(x){return x&&typeof x.username==='string'&&x.username.trim();});
+    }catch(e){}
+    var demoUrl=form.querySelector('[name="demo_url"]');
+    var ready=gateActive&&gateActive.checked&&gatePublic&&gatePublic.checked&&
+      gateCredentials&&gateCredentials.checked&&demoUrl&&demoUrl.value.trim()!==''&&hasAccount;
+    var selected=gateCredentials&&gateCredentials.checked;
+    title.textContent=ready?'DEMO girişleri yayına hazır':selected?'DEMO yayın koşulları eksik':'DEMO girişleri ziyaretçilere kapalı';
+    detail.textContent=ready
+      ?'Kaydettiğinizde yalnızca bu yazılımın herkese açık DEMO test hesabı Canlı Demo sekmesinde gösterilir.'
+      :selected
+        ?'Yayın için demo bağlantısı, diğer iki kutu ve en az bir TEST kullanıcı adı gerekir. Gerçek yönetici hesabını paylaşmayın.'
+        :'Giriş bilgileri saklanır ancak gösterilmez. Üçüncü kutuyu özellikle işaretleyip kaydetmeden ziyaretçiler şifreyi göremez.';
+    status.style.background=ready?'#f0fff5':'#fff9ec';
+    status.style.borderColor=ready?'#c6e8d2':'#f0dbac';
+  }
+  form.querySelectorAll('[data-nvpa-demo-gate], [name="demo_url"], [name="demo_admin_username"], [name="demo_username"], [name="demo_accounts_json"]')
+    .forEach(function(el){el.addEventListener('change',refreshDemoStatus);el.addEventListener('input',refreshDemoStatus);});
+  refreshDemoStatus();
   form.addEventListener('submit',function(event){
     var fields=form.querySelectorAll('[data-nvpa-json]');
     var error=document.getElementById('nvpa-json-error');
