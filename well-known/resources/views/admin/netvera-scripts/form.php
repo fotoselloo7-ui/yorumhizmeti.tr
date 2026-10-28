@@ -18,6 +18,24 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
     </div>
   </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const slugField = document.getElementById('nvpa-slug');
+  const purchasePreview = document.getElementById('nvpa-purchase-preview');
+  if (!slugField || !purchasePreview) return;
+  const transliterate = value => value.toLocaleLowerCase('tr-TR')
+    .replace(/[ığüşöç]/g, c => ({'ı':'i','ğ':'g','ü':'u','ş':'s','ö':'o','ç':'c'}[c]))
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const origin = <?= json_encode(rtrim((string)($_ENV['APP_URL'] ?? 'https://netvera.tr'), '/'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+  const update = () => {
+    const slug = transliterate(slugField.value);
+    purchasePreview.value = slug ? origin + '/hazir-scriptler/' + encodeURIComponent(slug) + '?type=purchase' : '';
+  };
+  slugField.addEventListener('input', update);
+  update();
+});
+</script>
+
   <form id="nvpa-product-form" method="post" enctype="multipart/form-data" action="/admin/netvera-yazilimlar/kaydet">
     <?= csrfField() ?><input type="hidden" name="id" value="<?= (int)($product['legacy_id']??0) ?>">
     <div class="nvpa-layout">
@@ -110,13 +128,20 @@ $nvOriginalSlug=$edit?(string)$product['slug']:'';
           <div class="adm-card-header"><h3><?= icon('shield-check',18) ?> Lisans, Destek ve Güncellemeler</h3><span>03 / Teslimat</span></div>
           <div class="adm-card-body">
             <div class="nvpa-two">
-              <?php foreach(['support_duration_type'=>'Destek Süresi Türü','support_duration_months'=>'Destek Süresi (ay)','update_duration_type'=>'Güncelleme Süresi Türü','update_duration_months'=>'Güncelleme Süresi (ay)','buy_url'=>'Satın Alma Linki','tags'=>'Ürün Etiketleri'] as $key=>$label): ?>
+              <?php foreach(['support_duration_type'=>'Destek Süresi Türü','support_duration_months'=>'Destek Süresi (ay)','update_duration_type'=>'Güncelleme Süresi Türü','update_duration_months'=>'Güncelleme Süresi (ay)','tags'=>'Ürün Etiketleri'] as $key=>$label): ?>
               <div class="nvpa-field"><label for="nvpa-<?= e($key) ?>"><?= e($label) ?></label><input id="nvpa-<?= e($key) ?>" class="form-control" name="<?= e($key) ?>" value="<?= e($d[$key]??'') ?>"></div>
               <?php endforeach; ?>
             </div>
+            <div class="nvpa-field">
+              <label for="nvpa-purchase-preview">Satın Alma Bağlantısı (Otomatik)</label>
+              <input id="nvpa-purchase-preview" class="form-control" type="text" readonly
+                  value="<?= e($edit ? url(\App\Services\NetveraBridgeService::purchasePath($nvOriginalSlug)) : '') ?>"
+                  placeholder="Yazılımın SEO adresine göre kendiliğinden oluşturulur">
+              <small>Link girmenize gerek yok. Ürün URL'sine <code>?type=purchase</code> eklenir. SEO adresi değişmez.</small>
+            </div>
             <div class="nvpa-checks nvpa-checks-stack">
               <label><input type="checkbox" name="purchase_enabled" value="1" <?= (array_key_exists('purchase_enabled',$d)?!empty($d['purchase_enabled']):!empty($d['buy_url']))?'checked':'' ?>> Satışa Aç / ürün detayında “Satın Al” butonunu göster</label>
-              <small>Satışa açmak için fiyat ve geçerli bir satın alma linki girin. Kapalıyken ürün yayında ve demo aktif kalabilir.</small>
+              <small>Satış butonu için fiyat girin ve bu seçeneği işaretleyin. Link otomatik oluşur; kapalıyken ürün ve demo yayında kalabilir.</small>
             </div>
             
           </div>
