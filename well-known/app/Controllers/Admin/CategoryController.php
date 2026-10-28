@@ -70,6 +70,7 @@ class CategoryController extends Controller
         $newId = $this->db->insert('categories', $data);
         \App\Services\SocialStorefrontService::save('category',(int)$newId,$socialContent);
         \App\Services\CategoryHeroService::save((int)$newId,$_POST);
+        \App\Services\ServiceReferenceSelectionService::save('category',(int)$newId,$_POST['service_reference_ids']??[]);
         \App\Services\NetveraSeoBridge::save('category', $newId, $_POST);
         logActivity('category_create', 'Kategori oluşturuldu: ' . $data['name']);
         flash('success', 'Kategori oluşturuldu.');
