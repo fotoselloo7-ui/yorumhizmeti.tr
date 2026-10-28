@@ -51,6 +51,21 @@ $nvBreadcrumbTarget=\App\Services\ServiceCategoryVisibility::isLegacySoftware($p
 $nvBreadcrumbName=!$nvShowChild && $nvParentData
     ?($nvParentData['name']??'Hizmetler')
     :($package['category_name']??'Hizmetler');
+
+$nvRealGallery=[];
+if(!empty($package['image']))$nvRealGallery[]=[
+    'src'=>upload_url($package['image']),
+    'alt'=>$package['image_alt']?:package_display_name($package)
+];
+foreach(\App\Services\ServicePackageGalleryService::images((int)$package['id']) as $nvPhoto){
+    $nvRealGallery[]=['src'=>upload_url($nvPhoto),'alt'=>package_display_name($package).' çalışma görseli'];
+}
+$nvHasRealGallery=count($nvRealGallery)>0;
+if(!$nvRealGallery)$nvRealGallery[]=[
+    'src'=>demo_visual_url(package_display_name($package).' '.($package['category_name']??''),'product'),
+    'alt'=>package_display_name($package).' hizmet görseli'
+];
+$nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
 ?>
 <div class="yv-product-v5 <?= e($nvPlatformClass) ?>">
 <section class="yv-product-hero-v5 <?= e($pclass) ?> <?= e($nvPlatformClass) ?>">
@@ -62,18 +77,20 @@ $nvBreadcrumbName=!$nvShowChild && $nvParentData
     <h1><?= e(package_display_name($package)) ?></h1>
     <p><?= e($package['short_description'] ?: 'Markanız için güvenli, hızlı ve profesyonel dijital hizmet paketi.') ?></p>
     <div class="yv-product-proof-v5">
-     <div><?= icon('users',15) ?><span><b>Gerçek Kullanıcılar</b><small>%100 organik</small></span></div>
-     <div><?= icon('zap',15) ?><span><b>Hızlı Teslimat</b><small><?= e($package['delivery_time'] ?: 'Hızlı başlangıç') ?></small></span></div>
+     <div><?= icon('clipboard-list',15) ?><span><b>İhtiyaç Analizi</b><small>Hizmete özel kapsam</small></span></div>
+     <div><?= icon('calendar-check',15) ?><span><b>Planlı Süreç</b><small><?= e($package['delivery_time'] ?: 'Teklifte netleşir') ?></small></span></div>
      <div><?= icon('shield',15) ?><span><b>Güvenli Ödeme</b><small>256 Bit SSL</small></span></div>
-     <div><?= icon('headphones',15) ?><span><b>Müşteri Desteği</b><small>7/24 canlı destek</small></span></div>
+     <div><?= icon('headphones',15) ?><span><b>İletişim</b><small>Çalışma boyunca destek</small></span></div>
     </div>
    </div>
-   <div class="yv-product-hero-visual-v5">
-    <div class="yv-product-device-v5"><div class="screen"><span><?= icon($platform,40) ?></span><div class="rating">4.9 <b>★★★★★</b><small>1.324 değerlendirme</small></div></div></div>
-    <span class="yv-product-orbit-v5 brand"><?= icon($platform,28) ?></span>
-    <span class="yv-product-float-v5 a"><?= icon('check-circle',12) ?> +500 gerçek etkileşim</span>
-    <span class="yv-product-float-v5 b"><?= icon('shield',12) ?> Güvenilirliğinizi artırın</span>
-    <span class="yv-product-float-v5 c"><?= icon('trending-up',12) ?> Daha fazla müşteriye ulaşın</span>
+   <div class="yv-product-hero-visual-v5 nv-product-hero-graphic" aria-label="<?= e($package['category_name']??'Dijital hizmet') ?> sunumu">
+      <div class="nv-product-hero-graphic-inner">
+        <div class="nv-product-hero-icon"><?= icon($platform,46) ?></div>
+        <span class="nv-product-hero-kicker">NETVERA / DİJİTAL HİZMETLER</span>
+        <strong><?= e($package['category_name']??'Profesyonel Hizmet') ?></strong>
+        <p><?= e(excerpt((string)($package['short_description']??'Projenize uygun çözüm'),110)) ?></p>
+        <div class="nv-product-hero-steps"><span><?= icon('clipboard-list',14) ?> Planlama</span><span><?= icon('layers',14) ?> Kapsam</span><span><?= icon('check-circle',14) ?> Teslim</span></div>
+      </div>
    </div>
   </div>
  </div>
@@ -83,22 +100,28 @@ $nvBreadcrumbName=!$nvShowChild && $nvParentData
  <div class="container">
   <div class="yv-product-stage-grid-v5">
    <div class="yv-product-gallery-v5">
-    <div class="yv-product-gallery-main-v5">
-     <?php if(!empty($package['image'])): ?><img src="<?= e(upload_url($package['image'])) ?>" alt="<?= e($package['image_alt']??$package['name']) ?>">
-     <?php else: ?><div class="yv-product-gallery-demo-v12"><img class="yv-product-demo-photo-v12" src="<?= e(demo_visual_url(package_display_name($package).' '.($package['category_name']??''),'product')) ?>" alt="<?= e(package_display_name($package)) ?>"><div class="yv-product-demo-gradient-v12"></div><span class="logo"><?= icon($platform,38) ?></span><div class="review">★★★★★<b>Harika hizmet!</b><small>Kesinlikle tavsiye ederim.</small></div><div class="business"><strong><?= e($package['category_name']??'Dijital Hizmet') ?></strong><span>4.9 ★★★★★</span><small>Gerçek sosyal kanıt</small></div></div><?php endif; ?>
+    <div class="yv-product-gallery-main-v5 nv-real-product-gallery" data-nv-service-gallery>
+       <img class="nv-service-gallery-main-image" src="<?= e($nvRealGallery[0]['src']) ?>" alt="<?= e($nvRealGallery[0]['alt']) ?>" decoding="async">
+       <span class="nv-service-gallery-label"><?= icon('image',14) ?> <?= e($package['category_name']??'Hizmet görseli') ?></span>
     </div>
-    <div class="yv-product-thumbs-v5 yv-product-thumbs-v12">
-     <?php $demoThumb=demo_visual_url(package_display_name($package).' '.($package['category_name']??''),'product'); ?>
-     <span class="active"><img src="<?= e(!empty($package['image']) ? upload_url($package['image']) : $demoThumb) ?>" alt=""></span>
-     <span><img src="<?= e(demo_visual_url(($package['category_name']??''). ' analiz','analysis')) ?>" alt=""></span>
-     <span><img src="<?= e(demo_visual_url(($package['category_name']??''). ' sosyal medya','social')) ?>" alt=""></span>
-     <span><img src="<?= e(asset('img/hero-woman-cutout.png')) ?>" alt=""></span>
-     <span><img src="<?= e(asset('img/support-woman-cutout.png')) ?>" alt=""></span>
+    <?php if(count($nvRealGallery)>1): ?>
+    <div class="nv-real-product-gallery-thumbs" role="group" aria-label="Hizmet galerisindeki diğer fotoğraflar">
+      <?php foreach($nvRealGallery as $i=>$img): ?>
+      <button type="button" data-nv-gallery-thumb
+              data-nv-gallery-src="<?= e($img['src']) ?>"
+              data-nv-gallery-alt="<?= e($img['alt']) ?>"
+              aria-label="Galeri görseli <?= $i+1 ?>" aria-pressed="<?= $i===0?'true':'false' ?>">
+        <img src="<?= e($img['src']) ?>" alt="" loading="lazy">
+      </button>
+      <?php endforeach; ?>
     </div>
+    <?php elseif(!$nvHasRealGallery): ?>
+    <div class="nv-service-gallery-note">Hizmet kapak görseli yönetici panelinden eklenebilir.</div>
+    <?php endif; ?>
     <div class="yv-product-info-strip-v5">
-     <div><?= icon('users',18) ?><span><strong>Hizmet Bilgisi</strong><small>Paket içeriğine göre</small></span></div>
-     <div><?= icon('shield',18) ?><span><strong>Şifresiz İşlem</strong><small>Parola talep edilmez</small></span></div>
-     <div><?= icon('zap',18) ?><span><strong>Tahmini Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Sipariş sonrası') ?></small></span></div>
+     <div><?= icon('file-text',18) ?><span><strong>Hizmet Kapsamı</strong><small>Paket detayında</small></span></div>
+     <div><?= icon('shield',18) ?><span><strong>Güvenli Süreç</strong><small>Kontrollü iletişim</small></span></div>
+     <div><?= icon('calendar',18) ?><span><strong>Teslim Planı</strong><small><?= e($package['delivery_time'] ?: 'Teklifte belirlenir') ?></small></span></div>
      <div><?= icon('target',18) ?><span><strong>Sipariş Takibi</strong><small>Hesabınız üzerinden</small></span></div>
     </div>
    </div>
@@ -106,7 +129,10 @@ $nvBreadcrumbName=!$nvShowChild && $nvParentData
    <aside class="yv-product-buy-v5">
     <div class="yv-product-badges-v5"><span><?= e($package['badge'] ?: 'En Çok Tercih Edilen Paket') ?></span><?php if($discount): ?><b>%<?= $discount ?> İndirim</b><?php endif; ?></div>
     <h2><?= e(package_display_name($package)) ?></h2>
-    <div class="yv-product-rating-v5"><b><?= icon('shield-check',14) ?> Güvenli Sipariş</b><span>İşlem durumunu hesabınızdan takip edin</span></div>
+    <div class="yv-product-rating-v5 nv-product-process">
+      <b><?= icon('shield-check',14) ?> <?= !empty($quoteMode)?'Güvenli Teklif Süreci':'Güvenli Sipariş' ?></b>
+      <span><?= !empty($quoteMode)?'Kapsam ve teslimleri birlikte netleştirelim.':'İşlem durumunu hesabınızdan takip edin.' ?></span>
+    </div>
     <div class="yv-product-price-v5"><?php if(!empty($quoteMode)): ?><strong>Projenize Özel Teklif</strong><?php else: ?><?php if($discount): ?><del><?= money($package['price']) ?></del><?php endif; ?><strong><?= money($price) ?></strong><?php if($discount): ?><span>%<?= $discount ?> indirim</span><?php endif; ?><?php endif; ?></div>
     <p><?= e((string)($package['short_description'] ?: 'Seçtiğiniz dijital hizmet paketinin ayrıntılarını aşağıda inceleyebilirsiniz.')) ?></p>
 
@@ -145,7 +171,11 @@ $nvBreadcrumbName=!$nvShowChild && $nvParentData
      <?php else: ?><button class="yv-product-now-v5" type="button" onclick="buyNow()"><?= icon('zap',15) ?> Hemen Satın Al</button><?php endif; ?>
     </form>
     <?php endif; ?>
-    <div class="yv-product-mini-trust-v5"><div><?= icon('shield',14) ?><span><strong>Güvenli Ödeme</strong><small>256 Bit SSL</small></span></div><div><?= icon('zap',14) ?><span><strong>Hızlı Teslimat</strong><small><?= e($package['delivery_time'] ?: 'Hızlı') ?></small></span></div><div><?= icon('headphones',14) ?><span><strong>7/24 Destek</strong><small>Her zaman yanınızda</small></span></div></div>
+    <div class="yv-product-mini-trust-v5">
+       <div><?= icon('shield-check',14) ?><span><strong><?= !empty($quoteMode)?'Teklif Süreci':'Güvenli Ödeme' ?></strong><small><?= !empty($quoteMode)?'Ödeme öncesi kapsam':'Korunan ödeme adımı' ?></small></span></div>
+       <div><?= icon('calendar-check',14) ?><span><strong>İş Planı</strong><small><?= e($package['delivery_time'] ?: 'Kapsama göre') ?></small></span></div>
+       <div><?= icon('headphones',14) ?><span><strong>İletişim</strong><small>Destek kanalları</small></span></div>
+    </div>
    </aside>
   </div>
  </div>
