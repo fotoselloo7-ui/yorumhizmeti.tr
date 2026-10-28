@@ -102,7 +102,7 @@ final class NetveraBridgeService
             return $enabled=(bool)Database::getInstance()->fetch(
                 'SELECT old_review_id FROM nv_private_content_reviews LIMIT 1'
             );
-        }catch(\\Throwable $e){return $enabled=false;}
+        }catch(\Throwable $e){return $enabled=false;}
     }
 
     /**
