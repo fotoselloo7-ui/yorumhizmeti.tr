@@ -99,6 +99,12 @@ Site adresi: [http://127.0.0.1:8006](http://127.0.0.1:8006)
 
 Bu proje özel kullanım için geliştirilmiştir.
 
+## Güncel netvera.tr canlı sürüm dağıtımı (28 Ekim 2026)
+
+**Önce [cPanel ana dizin, SQL ve süper admin geçiş yönergesini](docs/netvera-cpanel-root-cutover.md) okuyun.** Bu depo artık GitHub Actions ile ZIP paketler. İndirilen artifact ZIP'i önce bilgisayarda açın ve içindeki gerçek `netvera-tr-cpanel-root-*.zip` dosyasını cPanel `netvera.tr` belge köküne çıkarın. Yapı `app/`, `public/`, `resources/`, kök `.htaccess` olur; ekstra `well-known/` katmanı oluşmaz. Ana domain yönlendirmesi alt alan adı klasörlerini yeniden yazmaz.
+
+Bu paket müşterileri/SQL'i/.env dosyasını otomatik taşımaz. **Mevcut `database/database.sql` yalnızca boş kurulum içindir; canlı veritabanına import edilmeyecek.** Eski NetVera yöneticisi şifresini otomatik tahmin etmek veya demo admini doğrulanmadan değiştirmek mümkün değildir; doğrulanmış aktarma komutu yukarıdaki yönergede açıklanır.
+
 ## cPanel / Paylaşımlı Hosting Kurulumu
 
 Eğer projeyi cPanel veya paylaşımlı bir sunucuda yayınlayacaksanız aşağıdaki adımları izleyin:
