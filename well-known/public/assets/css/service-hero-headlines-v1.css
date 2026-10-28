@@ -1,0 +1,67 @@
+/*
+ * Shared public service hero headline rule.
+ * Existing lead/accent colors remain; short headings never split at the
+ * forced lead/accent span boundary. Longer titles have a semantic line break
+ * after word three. No change to H1 text, slugs, canonical or ready scripts.
+ */
+.nv-category-hero .nv-managed-headline,
+.social-hero .nv-managed-headline{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin-block:8px 16px!important;
+  font-size:clamp(24px,3.35vw,51px)!important;
+  line-height:1.13!important;
+  letter-spacing:-.045em!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  text-wrap:initial!important;
+}
+.nv-category-hero .nv-managed-headline > .nv-headline-line,
+.social-hero .nv-managed-headline > .nv-headline-line{
+  display:block!important;
+  width:max-content;
+  max-width:100%;
+  white-space:nowrap!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.nv-category-hero .nv-managed-headline > .nv-headline-line .nv-category-hero-accent{
+  display:inline!important;
+  white-space:nowrap!important;
+  vertical-align:baseline!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+}
+.nv-category-hero .nv-managed-headline > .nv-headline-line + .nv-headline-line,
+.social-hero .nv-managed-headline > .nv-headline-line + .nv-headline-line{
+  margin-top:3px!important;
+}
+/* A typical three-word heading needs a little more horizontal room than
+   a standalone one-word billboard; keep line width within the copy column. */
+@media(max-width:950px){
+  .nv-category-hero .nv-managed-headline,
+  .social-hero .nv-managed-headline{
+    font-size:clamp(23px,3.75vw,39px)!important;
+    letter-spacing:-.047em!important;
+  }
+}
+@media(max-width:520px){
+  .nv-category-hero .nv-managed-headline,
+  .social-hero .nv-managed-headline{
+    font-size:clamp(20px,5.5vw,29px)!important;
+    line-height:1.19!important;
+    letter-spacing:-.052em!important;
+  }
+}
+@media(max-width:350px){
+  .nv-category-hero .nv-managed-headline,
+  .social-hero .nv-managed-headline{
+    font-size:20px!important;
+    letter-spacing:-.057em!important;
+  }
+}
