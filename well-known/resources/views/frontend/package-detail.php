@@ -170,8 +170,8 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
     </form>
     <?php endif; ?>
     <div class="yv-product-mini-trust-v5">
-       <div><?= icon('shield-check',14) ?><span><strong><?= !empty($quoteMode)?'Teklif Süreci':'Güvenli Ödeme' ?></strong><small><?= !empty($quoteMode)?'Ödeme öncesi kapsam':'Korunan ödeme adımı' ?></small></span></div>
-       <div><?= icon('calendar-check',14) ?><span><strong>İş Planı</strong><small><?= e($package['delivery_time'] ?: 'Kapsama göre') ?></small></span></div>
+       <div><?= icon('shield-check',14) ?><span><strong><?= !empty($quoteMode)?'Teklif Süreci':'Güvenli Ödeme' ?></strong><small><?= !empty($quoteMode)?'Önce kapsam onayı':'Korunan ödeme adımı' ?></small></span></div>
+       <div><?= icon('calendar-check',14) ?><span><strong>Teslim Planı</strong><small><?= e($package['delivery_time'] ?: 'Kapsama göre') ?></small></span></div>
        <div><?= icon('headphones',14) ?><span><strong>İletişim</strong><small>Destek kanalları</small></span></div>
     </div>
    </aside>
