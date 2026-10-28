@@ -100,6 +100,8 @@ jobs:
 
       - name: NetVera prelaunch service URLs, quote-pricing and contextual SEO QA
         run: php well-known/tests/netvera-prelaunch-service-catalog-qa.php
+      - name: Final NetVera brand and SQL release regression
+        run: php well-known/tests/netvera-brand-release-qa.php
       - name: Category SEO guide layout, duplicate removal and phone icon QA
         run: php well-known/tests/netvera-category-guide-ui-qa.php
       - name: Short service hero headline flow and responsive typography QA
