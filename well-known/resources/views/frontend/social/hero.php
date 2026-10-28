@@ -5,7 +5,7 @@
   <div class="social-hero-grid">
    <div class="social-hero-copy">
     <span class="social-eyebrow"><?= icon($socialPage['icon'],18) ?> NETVERA SOSYAL MEDYA</span>
-    <h1 id="social-page-title"><?= e($socialPage['title']) ?></h1>
+    <h1 id="social-page-title" class="nv-managed-headline"><?= \App\Services\HeroHeadline::render((string)$socialPage['title']) ?></h1>
     <p><?= e($socialPage['summary']) ?></p>
     <div class="social-hero-actions"><a href="<?= e($socialHeroTarget) ?>" class="social-button social-button-light"><?= e($socialHeroAction??'Hizmetleri keşfet') ?> <?= icon('arrow-right',17) ?></a><a href="#social-guide" class="social-hero-help">Nasıl çalışır? <?= icon('arrow-up-right',14) ?></a></div>
     <ul class="social-hero-trust"><li><?= icon('lock',14) ?> Şifre paylaşmadan</li><li><?= icon('clipboard',14) ?> Net miktar ve fiyat</li><li><?= icon('headphones',14) ?> Sipariş desteği</li></ul>
