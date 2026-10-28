@@ -190,7 +190,7 @@
     <?= setting('header_script') ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-social-theme-rail">
     <?php if($template==='frontend/blog/index'): ?>
-    <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261027-premium-blog">
+    <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261028-editorial-preview-v2">
     <?php endif; ?>
 </head>
 <body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
