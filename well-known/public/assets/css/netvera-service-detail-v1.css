@@ -157,3 +157,23 @@
   .nv-service-references-grid{grid-template-columns:minmax(0,1fr)}
   .yv-product-v5 .yv-product-mini-trust-v5{grid-template-columns:minmax(0,1fr)!important}
 }
+
+
+/* Real anchor navigation rather than decorative unclickable tab labels. */
+.yv-product-v5 .yv-product-tabs-v5.nv-service-section-nav{
+  display:flex!important;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:15px;
+}
+.yv-product-v5 .nv-service-section-nav > a{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:38px;padding:9px 13px;border:1px solid #dfe4f0;
+  border-radius:9px;background:#fff;color:#4e5873!important;
+  font-size:12px;line-height:1.4;font-weight:750;text-decoration:none;
+  transition:background .18s,color .18s,border-color .18s;
+}
+.yv-product-v5 .nv-service-section-nav > a:hover,
+.yv-product-v5 .nv-service-section-nav > a.active{
+  background:#eeeaff;color:#5640c6!important;border-color:#d0c7fa;
+}
+.yv-product-v5 .nv-service-section-nav > a:focus-visible{outline:3px solid #987ce6;outline-offset:2px}
+.yv-product-v5 :is(#nv-product-description,#nv-product-features,#nv-product-faq){scroll-margin-top:110px}
+.nv-service-references{scroll-margin-top:110px}
