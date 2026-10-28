@@ -36,7 +36,15 @@ jobs:
           (cd "$dir" && zip -qr "$GITHUB_WORKSPACE/NETVERA-ODEME-OZETI-STICKY-DUZELTME.zip" resources)
           file="$GITHUB_WORKSPACE/NETVERA-ODEME-OZETI-STICKY-DUZELTME.zip"
           unzip -t "$file" >/dev/null
-          test "$(unzip -Z1 "$file" | grep -c '\\.php$')" -eq 1
+          test "$(unzip -Z1 "$file" | grep -Ec '[.]php)" -eq 1
+          unzip -Z1 "$file" | grep -qx 'resources/views/frontend/script-checkout.php'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NETVERA-ODEME-OZETI-STICKY-DUZELTME
+          path: NETVERA-ODEME-OZETI-STICKY-DUZELTME.zip
+          retention-days: 14
+          if-no-files-found: error
+)" -eq 1
           unzip -Z1 "$file" | grep -qx 'resources/views/frontend/script-checkout.php'
       - uses: actions/upload-artifact@v4
         with:
