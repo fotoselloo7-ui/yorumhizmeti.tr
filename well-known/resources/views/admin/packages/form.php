@@ -142,6 +142,25 @@
                     <div class="form-group">
                         <label>Görsel</label>
                         <input type="file" name="image" class="form-control" accept="image/*">
+                        <?php if(!$softwareOnly): ?>
+                        <div style="margin-top:16px;padding:15px;border:1px solid #e1e6f1;border-radius:12px;background:#f9faff">
+                          <label for="nv-service-gallery-files">Gerçek Paket Galerisi (isteğe bağlı)</label>
+                          <p class="text-sm" style="margin:5px 0 10px">Ana kapak yukarıdaki görseldir. Aşağıya aynı hizmete ait en fazla 6 gerçek çalışma görseli yükleyebilirsiniz. Tıklanmayacak örnek görseller kullanılmaz.</p>
+                          <?php $nvGalleryPics=$isEdit?\App\Services\ServicePackageGalleryService::images((int)$package['id']):[]; ?>
+                          <?php if($nvGalleryPics): ?>
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px;margin-bottom:12px">
+                            <?php foreach($nvGalleryPics as $nvImage): ?>
+                              <label style="display:flex;flex-direction:column;gap:5px;cursor:pointer;border:1px solid #dfe4ee;padding:7px;border-radius:9px">
+                                <img src="<?= e(upload_url($nvImage)) ?>" alt="Kayıtlı paket görseli" loading="lazy" style="max-width:100%;height:75px;object-fit:contain">
+                                <span style="display:flex;align-items:center;gap:5px;font-size:11px"><input type="checkbox" name="gallery_keep[]" value="<?= e($nvImage) ?>" checked> Koru</span>
+                              </label>
+                            <?php endforeach; ?>
+                            </div>
+                          <?php endif; ?>
+                          <input id="nv-service-gallery-files" type="file" name="gallery_images[]" accept="image/jpeg,image/png,image/webp,image/gif" multiple class="form-control">
+                          <small>JPG, PNG, WebP · dosya başına en fazla 5 MB. Kaldırmak istediğiniz görselde “Koru” seçimini kapatın.</small>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label>Görsel Alt Metni</label>
