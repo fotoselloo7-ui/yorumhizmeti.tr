@@ -72,13 +72,24 @@ final class MemberPanelService
     {
         // Native paid software orders are separate from imported entitlements.
         // Use the existing software taxonomy, never guess ownership from a title.
-        return Database::getInstance()->fetchAll("SELECT i.id,i.package_name,o.id order_id,o.order_number,o.created_at,o.order_status
+        $db=Database::getInstance();
+        $native=$db->fetchAll("SELECT i.id,i.package_name,o.id order_id,o.order_number,o.created_at,o.order_status
             FROM order_items i JOIN orders o ON o.id=i.order_id
             JOIN packages p ON p.id=i.package_id JOIN categories c ON c.id=p.category_id
             LEFT JOIN categories parent ON parent.id=c.parent_id
             WHERE o.user_id=? AND o.payment_status='paid' AND o.order_status NOT IN ('cancelled','refunded')
               AND (c.slug=? OR parent.slug=?) ORDER BY o.created_at DESC,i.id DESC LIMIT 100",
             [$userId,SoftwareCatalogService::ROOT_SLUG,SoftwareCatalogService::ROOT_SLUG]);
+        // Imported ready-script purchases are represented by a real, signed PayTR
+        // payment on an order item with a stable product ID. No license is forged.
+        $readyScripts=$db->fetchAll("SELECT i.id,i.package_name,o.id order_id,o.order_number,o.created_at,o.order_status
+            FROM order_items i JOIN orders o ON o.id=i.order_id
+            JOIN order_fields f ON f.order_item_id=i.id AND f.field_key='netvera_script_id'
+            JOIN nv_legacy_script_products p ON p.legacy_id=CAST(f.field_value AS UNSIGNED)
+            WHERE o.user_id=? AND o.payment_status='paid' AND o.payment_gateway='paytr'
+              AND o.order_status NOT IN ('cancelled','refunded') AND i.package_id IS NULL
+            ORDER BY o.created_at DESC,i.id DESC LIMIT 100",[$userId]);
+        return array_slice(array_merge($readyScripts,$native),0,100);
     }
     public static function progress(array $j):?int
     {
