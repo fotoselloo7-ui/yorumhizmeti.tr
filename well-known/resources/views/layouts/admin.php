@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($pageTitle ?? 'Admin Panel') ?> - <?= e(setting('site_name', 'YorumPanel')) ?></title>
+    <title><?= e($pageTitle ?? 'Admin Panel') ?> - <?= e(setting('site_name', 'NetVera Teknoloji Yazılım')) ?></title>
     <meta name="robots" content="noindex, nofollow">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?= e(upload_url(setting('site_favicon', '/assets/img/favicon.ico'))) ?>">
@@ -37,7 +37,7 @@
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-brand">
                 <a href="/admin" style="color:#fff; text-decoration:none;">
-                    <h2><?= e(setting('site_name', 'YorumPanel')) ?></h2>
+                    <h2><?= e(setting('site_name', 'NetVera Teknoloji Yazılım')) ?></h2>
                 </a>
                 <span class="badge">PRO</span>
             </div>
