@@ -1,0 +1,25 @@
+/* Real visible service-oriented SEO/GEO guides; not hidden keyword stuffing. */
+.nv-service-guide{padding:72px 0;background:linear-gradient(135deg,#f8faff,#fff);border-top:1px solid #edf1f7;color:#152849}
+.nv-service-guide>.container{max-width:1200px;margin:0 auto;padding:0 20px}
+.nv-service-guide-head{max-width:880px;margin-bottom:28px}
+.nv-service-guide-kicker{display:block;color:#4d59eb;font-size:11px;letter-spacing:.1em;font-weight:750;margin-bottom:12px}
+.nv-service-guide-head h2{margin:0 0 14px;font-size:clamp(24px,2.5vw,36px);line-height:1.22;font-weight:800;overflow-wrap:anywhere}
+.nv-service-guide-head p{color:#50627e;font-size:14px;line-height:1.9}
+.nv-service-guide-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:28px;align-items:start}
+.nv-service-guide-copy{font-size:13px;line-height:1.95;color:#425674;display:grid;gap:15px}
+.nv-service-guide-copy p{margin:0}
+.nv-service-guide-copy a{display:inline-flex;align-items:center;gap:6px;color:#3257de;font-weight:700}
+.nv-service-guide-faq{background:#fff;border:1px solid #dbe4f3;box-shadow:0 14px 35px rgba(25,39,72,.045);border-radius:18px;padding:23px;min-width:0}
+.nv-service-guide-faq h3{font-size:18px;margin:0 0 12px}
+.nv-service-guide-faq details{border-bottom:1px solid #e7ecf6;padding:12px 0}
+.nv-service-guide-faq details:last-child{border:0}
+.nv-service-guide-faq summary{cursor:pointer;display:flex;justify-content:space-between;gap:12px;font-size:12px;line-height:1.6;font-weight:750;list-style:none}
+.nv-service-guide-faq summary::-webkit-details-marker{display:none}
+.nv-service-guide-faq summary:focus-visible{outline:2px solid #4864ed;outline-offset:4px}
+.nv-service-guide-faq details[open] summary{color:#3154d1}
+.nv-service-guide-faq details p{margin:10px 0 0;color:#50627e;font-size:12px;line-height:1.85}
+.nv-quote-product{padding:18px;border:1px solid #d8e1f9;border-radius:14px;background:#f7f9ff;display:grid;gap:14px}
+.nv-quote-product p{font-size:13px;line-height:1.8}
+.nv-quote-product .yv-product-add-v5{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+@media(max-width:760px){.nv-service-guide{padding:48px 0}.nv-service-guide>.container{padding:0 18px}.nv-service-guide-layout{grid-template-columns:minmax(0,1fr)}.nv-service-guide-faq{padding:18px}.nv-service-guide-head h2{font-size:clamp(23px,6vw,29px)}}
+@media(prefers-reduced-motion:reduce){.nv-service-guide *{scroll-behavior:auto!important}}

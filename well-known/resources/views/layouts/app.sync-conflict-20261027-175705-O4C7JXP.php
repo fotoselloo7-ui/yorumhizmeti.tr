@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($pageTitle ?? setting('default_seo_title', 'NetVera Teknoloji Yazılım')) ?></title>
     <meta name="description" content="<?= e($metaDescription ?? setting('default_seo_description')) ?>">
-    <?php
-      $nvRobots = (string)($nvSeoData['robots'] ?? '');
-      if ($nvRobots === '' && !empty($noindex)) $nvRobots = 'noindex,follow';
-    ?>
+    <?php foreach(['seo_google_verification'=>'google-site-verification','seo_bing_verification'=>'msvalidate.01']as $key=>$metaName): $verification=setting($key);if(preg_match('/^[A-Za-z0-9_-]{8,200}$/D',$verification)): ?><meta name="<?= e($metaName) ?>" content="<?= e($verification) ?>"><?php endif;endforeach; ?>
+    <?php $nvRobots=$nvRobots??\App\Services\SeoMetadataService::robots((string)($nvSeoData['robots']??''),!empty($noindex),$nvSeoData??[]); ?>
     <?php if ($nvRobots !== ''): ?><meta name="robots" content="<?= e($nvRobots) ?>"><?php endif; ?>
     <?php if (!empty($nvSeoData['author_name'])): ?><meta name="author" content="<?= e($nvSeoData['author_name']) ?>"><?php endif; ?>
     <?php if (!empty($canonicalUrl)): ?>
@@ -24,13 +22,15 @@
     <?php if (!empty($ogImage)): ?>
     <meta property="og:image" content="<?= e($ogImage) ?>">
     <?php endif; ?>
-    <meta property="og:url" content="<?= e($canonicalUrl ?? url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
+    <?php if(!empty($canonicalUrl)): ?><meta property="og:url" content="<?= e($canonicalUrl) ?>"><?php endif; ?>
     <meta property="og:site_name" content="<?= e(setting('site_name', 'NetVera Teknoloji Yazılım')) ?>">
+    <meta property="og:locale" content="tr_TR">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= e($ogTitle ?? $pageTitle ?? '') ?>">
     <meta name="twitter:description" content="<?= e($ogDescription ?? $metaDescription ?? '') ?>">
+    <?php if(!empty($ogImage)): ?><meta property="og:image:alt" content="<?= e($ogImageAlt??$pageTitle??'') ?>"><meta name="twitter:image" content="<?= e($ogImage) ?>"><meta name="twitter:image:alt" content="<?= e($ogImageAlt??$pageTitle??'') ?>"><?php endif; ?>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,25 +39,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" referrerpolicy="no-referrer">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>?v=20261018-member-workspace">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/premium.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/premium.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/storefront-v4.css') ?>?v=20261018-member-workspace">
     <link rel="stylesheet" href="<?= asset('css/home-v6.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261013">
-    <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/approved-v9.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/visual-consistency-v10.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/visual-fidelity-v11.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/visual-demo-v12.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/responsive-fluid-v13.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/responsive-balanced-v14.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/category-brand-v15.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/typography-readability-v16.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/section-rhythm-v17.css') ?>?v=20261014">
-    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261016-mobile-overflow">
-    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>?v=20261016-mobile-overflow">
+    <link rel="stylesheet" href="<?= asset('css/featured-footer-v18.css') ?>?v=20261026-brand-description">
+    <link rel="stylesheet" href="<?= asset('css/responsive-repair-v19.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/forms-functional-v20.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/catalog-bridge-v21.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>?v=20261016-mobile-overflow">
+    <link rel="stylesheet" href="<?= asset('css/motion-v22.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/premium-section-footer-v23.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/featured-groups-v24.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/featured-software-v41.css') ?>?v=41.1">
@@ -75,29 +75,29 @@
     <link rel="stylesheet" href="<?= asset('css/software-navigation-v33.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/software-marketplace-v36.css') ?>?v=36.1">
     <?php if(in_array($template,['frontend/netvera-scripts','frontend/netvera-script-detail'],true)): ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=20261016-premium-polish">
     <?php endif; ?>
     <?php if($template==='frontend/netvera-script-detail'): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=20261013">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261016-mobile-overflow">
-    <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=42.1">
+    <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=20261016-premium-polish">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/featured-category-slider-v43.css') ?>?v=20261016-mobile-overflow">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/home-blog-covers-v45.css') ?>?v=45.1">
     <?php if($template==='frontend/home'): ?>
-    <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=47.1">
+    <link rel="stylesheet" href="<?= asset('css/home-faq-final-v47.css') ?>?v=20261019-compact-cta">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261015-wrap">
+    <link rel="stylesheet" href="<?= asset('css/home-footer-motion-v49.css') ?>?v=20261026-social-align">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-portfolio-v51.css') ?>?v=51.3">
     <?php endif; ?>
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/reference-player-v52.css') ?>?v=54.1">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261016-mobile-filters">
-    <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.1">
+    <link rel="stylesheet" href="<?= asset('css/premium-hover-v55.css') ?>?v=20261016-premium-polish">
+    <link rel="stylesheet" href="<?= asset('css/nav-quick-marquee-v56.css') ?>?v=56.2-contact">
     <?php if(str_starts_with($template,'frontend/account/')): ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-account-history-v57.css') ?>?v=57.1">
     <?php endif; ?>
@@ -115,16 +115,15 @@
     <link rel="stylesheet" href="<?= asset('css/header-reputation-parity-v83.css') ?>?v=83.1">
     <link rel="stylesheet" href="<?= asset('css/catalog-visual-parity-v84.css') ?>?v=20261016-mobile-filters">
     <link rel="stylesheet" href="<?= asset('css/category-pastel-palette-v85.css') ?>?v=20261016-mobile-filters">
-    <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=20261016-mobile-filters">
+    <link rel="stylesheet" href="<?= asset('css/subcategory-neutral-v86.css') ?>?v=20261027-service-ux">
     <?php if($template==='frontend/categories'): ?>
-    <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/category-directory-v88.css') ?>?v=20261026-service-editorial">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261014">
+    <link rel="stylesheet" href="<?= asset('css/storefront-design-language-v89.css') ?>?v=20261017-category-heroes">
     <link rel="stylesheet" href="<?= asset('css/site-logo-v90.css') ?>?v=93.1">
     <?php if($template==='frontend/home'): ?>
     <link rel="stylesheet" href="<?= asset('css/home-hero-slider-v94.css') ?>?v=20261014">
     <?php endif; ?>
-    <link rel="stylesheet" href="<?= asset('css/auth-brand-logo-v94.css') ?>?v=94.1">
     <link rel="stylesheet" href="<?= asset('css/marketing-popup-v97.css') ?>?v=20261013">
     <link rel="stylesheet" href="<?= asset('css/coupon-checkout-v98.css') ?>?v=98.2">
     <?php
@@ -156,37 +155,38 @@
     ?>
     <?php if($nvPaletteVars): ?><style>:root{<?= implode(';',$nvPaletteVars) ?>}</style><?php endif; ?>
 
-    <?php
-      $nvSemantic = null;
-      if (!empty($nvSeoData['geo_summary']) || !empty($nvSeoData['entity_topics']) ||
-          !empty($nvSeoData['service_area'])) {
-        $nvSemantic = [
-          '@context'=>'https://schema.org',
-          '@type'=>'WebPage',
-          'name'=>$pageTitle ?? '',
-          'url'=>$canonicalUrl ?? url($_SERVER['REQUEST_URI'] ?? '/')
-        ];
-        if (!empty($nvSeoData['geo_summary'])) $nvSemantic['description'] = $nvSeoData['geo_summary'];
-        $topics = array_filter(array_map('trim', explode(',', (string)($nvSeoData['entity_topics']??''))));
-        if ($topics) $nvSemantic['about'] = array_map(static fn($t)=>['@type'=>'Thing','name'=>$t],array_slice(array_values($topics),0,15));
-        if (!empty($nvSeoData['service_area'])) $nvSemantic['spatialCoverage'] = $nvSeoData['service_area'];
-        if (!empty($nvSeoData['author_name']))
-          $nvSemantic['author'] = [
-            '@type'=>($nvSeoData['author_type']??'')==='Person'?'Person':'Organization',
-            'name'=>$nvSeoData['author_name']
-          ];
-        $sameAs = array_filter(array_map('trim', preg_split('/\R/', (string)($nvSeoData['same_as_urls']??''))?:[]));
-        if($sameAs) $nvSemantic['sameAs']=array_values($sameAs);
-      }
-    ?>
-    <?php if ($nvSemantic): ?>
-    <script type="application/ld+json"><?= json_encode($nvSemantic, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) ?></script>
+    <?php if(str_starts_with($template,'frontend/account/')||str_starts_with($template,'frontend/support/')): ?>
+    <link rel="stylesheet" href="<?= asset('css/member-panel.css') ?>?v=20261018">
+    <script src="<?= asset('js/member-panel.js') ?>?v=20261018" defer></script>
     <?php endif; ?>
-    <?php if (!empty($schema)): ?>
-    <script type="application/ld+json"><?= $schema ?></script>
+    <?php if($template==='frontend/home'||str_starts_with($template,'frontend/landing/')): ?>
+    <link rel="stylesheet" href="<?= asset('css/editorial-landings.css') ?>?v=20261027-regional-long-guide">
     <?php endif; ?>
+    <?php if($template==='frontend/landing/show'): ?>
+    <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
+    <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261026-unified-script-ctas">
+    <link rel="stylesheet" href="<?= asset('css/regional-showcase-v1.css') ?>?v=20261027-compact-overflow-carousel-v6-filter">
+    <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
+    <script src="<?= asset('js/regional-showcase-v1.js') ?>?v=20261027-compact-overflow-carousel-v5" defer></script>
+    <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
+    <?php endif; ?>
+    <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
+    <link rel="stylesheet" href="<?= asset('css/social-storefront.css') ?>?v=20261019">
+    <script src="<?= asset('js/social-storefront.js') ?>?v=20261019" defer></script>
+    <?php endif; ?>
+    <?php if($template==='frontend/contact'): ?>
+    <link rel="stylesheet" href="<?= asset('css/service-editorial-guide-v1.css') ?>?v=20261027">
+    <link rel="stylesheet" href="<?= asset('css/contact-page.css') ?>?v=20261026-visible-google-map">
+    <?php endif; ?>
+    <?php $nvGraph=\App\Services\SeoStructuredDataService::graph($schema??null,[
+      'canonicalUrl'=>$canonicalUrl??'','pageTitle'=>$pageTitle??'','metaDescription'=>$metaDescription??'',
+      'ogImage'=>$ogImage??null,'seoPrivate'=>$seoPrivate??false,'seoError'=>$seoError??false,
+      'seoNoindex'=>!\App\Services\SeoMetadataService::indexable((string)($nvRobots??''))
+    ],$nvSeoData??[],$template); ?>
+    <?php if($nvGraph): ?><script type="application/ld+json"><?= $nvGraph ?></script><?php endif; ?>
 
     <?= setting('header_script') ?>
+    <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-social-theme-rail">
 </head>
 <body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
 
@@ -300,7 +300,7 @@
               <section class="nv26-mega-panel <?= $nv26Group['key']==='social'?'':'nv27-pro-panel nv27-pro-panel--'.e($nv26Group['key']) ?>" id="nv26-panel-<?= e($nv26Group['key']) ?>" data-mega-panel hidden aria-label="<?= e($nv26Label) ?>">
                 <div class="nv26-mega-top">
                   <div><strong><?= e($nv26Label) ?></strong><p><?= e($nv26Group['description']) ?></p></div>
-                  <a href="/kategoriler/grup/<?= rawurlencode((string)$nv26Group['key']) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
+                  <a href="<?= e(\App\Services\PublicSeoUrls::group((string)$nv26Group['key'])) ?>"><?= e($nv26Group['short']) ?> kategorilerini keşfet <?= icon('arrow-right', 13) ?></a>
                 </div>
                 <?php if ($nv26Group['key'] === 'social'): ?>
                 <div class="nv26-social-mega-grid" aria-label="Sosyal medya platformları">
@@ -324,7 +324,7 @@
                       <strong><?= $nv27Agency?'Fikrinizden dijital ürüne.':'Dijitalde daha görünür olun.' ?></strong>
                       <p><?= $nv27Agency?'Web sitesi, uygulama, tasarım ve içerik hizmetlerini ihtiyacınıza göre keşfedin.':'SEO, reklam ve yerel işletme hizmetlerini tek noktadan inceleyin.' ?></p>
                     </div>
-                    <a href="/kategoriler/grup/<?= rawurlencode((string)$nv26Group['key']) ?>" class="nv27-spotlight-cta">
+                    <a href="<?= e(\App\Services\PublicSeoUrls::group((string)$nv26Group['key'])) ?>" class="nv27-spotlight-cta">
                       Tüm kategorileri gör <?= icon('arrow-right', 14) ?>
                     </a>
                   </aside>
@@ -454,7 +454,8 @@
               $nv56Actions = [
                  ['url' => '/siparislerim', 'label' => 'Siparişlerim', 'icon' => 'package'],
                  ['url' => '/destek', 'label' => 'Destek Merkezi', 'icon' => 'headphones'],
-                 ['url' => '/hazir-scriptler', 'label' => 'Hazır Yazılımlar', 'icon' => 'monitor']
+                 ['url' => '/hazir-scriptler', 'label' => 'Hazır Yazılımlar', 'icon' => 'monitor'],
+                 ['url' => '/iletisim', 'label' => 'İletişim', 'icon' => 'mail']
               ];
             ?>
             <details class="nv26-quick nv56-quick">
@@ -561,12 +562,27 @@
                         </a>
                     </h3>
                     <p><?= e(setting('site_slogan', 'Yazılım, Dijital Ajans ve Sosyal Medya Hizmetleri')) ?></p>
-                    <div class="footer-social footer-social-v9">
-                        <?php if (setting('social_instagram')): ?><a href="<?= e(setting('social_instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_youtube')): ?><a href="<?= e(setting('social_youtube')) ?>" target="_blank" rel="noopener" aria-label="YouTube"><?= icon('youtube', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_facebook')): ?><a href="<?= e(setting('social_facebook')) ?>" target="_blank" rel="noopener" aria-label="Facebook"><?= icon('facebook', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_tiktok')): ?><a href="<?= e(setting('social_tiktok')) ?>" target="_blank" rel="noopener" aria-label="TikTok"><?= icon('tiktok', 15) ?></a><?php endif; ?>
-                        <?php if (setting('social_twitter')): ?><a href="<?= e(setting('social_twitter')) ?>" target="_blank" rel="noopener" aria-label="X"><?= icon('twitter', 15) ?></a><?php endif; ?>
+                    <p class="nv-footer-about">NetVera; web tasarım, özel yazılım, hazır script, SEO, dijital reklam ve sosyal medya hizmetleriyle işletmelere dijital çözümler sunar.</p>
+                    <div class="footer-social footer-social-v9" aria-label="NetVera sosyal medya hesapları">
+                        <?php
+                        // Existing Site Settings fields supply up to four genuine footer buttons.
+                        // Do not invent accounts or write a separate landing-page setting.
+                        $nvFooterSocial = [
+                            ['social_instagram','Instagram','instagram'],
+                            ['social_youtube','YouTube','youtube'],
+                            ['social_facebook','Facebook','facebook'],
+                            ['social_tiktok','TikTok','tiktok'],
+                            ['social_twitter','X','twitter'],
+                        ];
+                        $nvFooterSocialVisible = 0;
+                        foreach ($nvFooterSocial as [$nvSetting,$nvLabel,$nvIcon]):
+                            $nvSocialUrl = \App\Services\NetveraBridgeService::publicUrl((string)setting($nvSetting));
+                            if (!$nvSocialUrl) continue;
+                            if ($nvFooterSocialVisible >= 4) break;
+                            $nvFooterSocialVisible++;
+                        ?>
+                        <a href="<?= e($nvSocialUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($nvLabel) ?>"><?= icon($nvIcon,15) ?></a>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
@@ -589,7 +605,9 @@
 
                 <nav class="footer-col" aria-label="Kurumsal ve destek">
                     <h4>Kurumsal & Destek</h4>
+                    <a class="yh49-footer-link" href="/iletisim">İletişim Sayfası</a>
                     <a class="yh49-footer-link" href="/sayfa/hakkimizda">Hakkımızda</a>
+                    <?php if(\App\Services\RegionalLandingService::hasPublished()): ?><a class="yh49-footer-link" href="/hizmet-bolgeleri">Hizmet Bölgeleri</a><?php endif; ?>
                     <a class="yh49-footer-link" href="/blog">Blog</a>
                     <a class="yh49-footer-link" href="/sss">Sıkça Sorulan Sorular</a>
                     <a class="yh49-footer-link" href="/destek">Destek Merkezi</a>
@@ -672,19 +690,67 @@
         </div>
     </footer>
 
-    <!-- Floating Contact (Desktop) -->
-    <div class="floating-contact">
-        <?php if (setting('whatsapp_number')): ?>
-        <a href="https://wa.me/<?= e(ltrim(str_replace(['+', ' '], '', setting('whatsapp_number')), '0')) ?>" class="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp">
-            <?= icon('whatsapp', 22) ?>
-        </a>
-        <?php endif; ?>
-        <?php if (setting('site_phone')): ?>
-        <a href="tel:<?= e(setting('site_phone')) ?>" class="phone-btn" aria-label="Telefon">
-            <?= icon('phone', 20) ?>
-        </a>
-        <?php endif; ?>
+    <!-- NetVera global left-edge contact drawer (native, keyboard accessible). -->
+    <?php
+    $nvDockWhatsapp=preg_replace('/[^0-9]/','',(string)setting('whatsapp_number'));
+    $nvDockPhone=trim((string)setting('site_phone'));
+    // Read the existing Site Settings fields. Missing/invalid links stay invisible.
+    $nvDockSocial=[];
+    foreach ([
+        ['social_instagram','Instagram','instagram'],
+        ['social_threads','Threads','threads'],
+        ['social_youtube','YouTube','youtube'],
+        ['social_facebook','Facebook','facebook'],
+        ['social_tiktok','TikTok','tiktok'],
+        ['social_twitter','X','twitter'],
+    ] as [$nvSocialSetting,$nvSocialLabel,$nvSocialIcon]) {
+        $nvSocialLink=\App\Services\NetveraBridgeService::publicUrl((string)setting($nvSocialSetting));
+        if($nvSocialLink!==null)$nvDockSocial[]=[
+            'label'=>$nvSocialLabel,'icon'=>$nvSocialIcon,'url'=>$nvSocialLink
+        ];
+    }
+    ?>
+    <?php if($nvDockWhatsapp!=='' || $nvDockPhone!=='' || $nvDockSocial!==[]): ?>
+    <div class="nv-contact-rail" data-nv-contact-rail>
+    <details class="nv-contact-dock" data-nv-side-contact aria-label="NetVera hızlı iletişim">
+        <summary class="nv-contact-dock__trigger" aria-label="Hızlı iletişim panelini aç">
+            <span class="nv-contact-dock__trigger-icon"><?= icon('message-circle',23) ?></span>
+            <span class="nv-contact-dock__trigger-label">İletişim</span>
+            <span class="nv-contact-dock__trigger-chevron" aria-hidden="true"><?= icon('chevron-right',14) ?></span>
+        </summary>
+        <div class="nv-contact-dock__panel" role="group" aria-label="İletişim kanalları">
+            <div class="nv-contact-dock__heading">
+                <span class="nv-contact-dock__brand"><?= icon('headphones',19) ?></span>
+                <span><strong>NetVera İletişim</strong><small>Size nasıl yardımcı olabiliriz?</small></span>
+            </div>
+            <nav class="nv-contact-dock__actions" aria-label="Hızlı iletişim seçenekleri">
+                <?php if($nvDockWhatsapp!==''): ?>
+                <a class="nv-contact-dock__link nv-contact-dock__link--whatsapp" href="https://wa.me/<?= e($nvDockWhatsapp) ?>" target="_blank" rel="noopener noreferrer">
+                    <span class="nv-contact-dock__action-icon"><?= icon('whatsapp',21) ?></span>
+                    <span class="nv-contact-dock__link-text"><strong>WhatsApp</strong><small>Mesaj gönderin</small></span>
+                    <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
+                </a>
+                <?php endif; ?>
+                <?php if($nvDockPhone!==''): ?>
+                <a class="nv-contact-dock__link nv-contact-dock__link--phone" href="tel:<?= e($nvDockPhone) ?>">
+                    <span class="nv-contact-dock__action-icon"><?= icon('phone',19) ?></span>
+                    <span class="nv-contact-dock__link-text"><strong>Telefonla Ara</strong><small><?= e($nvDockPhone) ?></small></span>
+                    <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
+                </a>
+                <?php endif; ?>
+                <?php foreach($nvDockSocial as $nvDockProfile): ?>
+                <a class="nv-contact-dock__link nv-contact-dock__link--social nv-contact-dock__link--<?= e($nvDockProfile['icon']) ?>"
+                   href="<?= e($nvDockProfile['url']) ?>" target="_blank" rel="noopener noreferrer">
+                    <span class="nv-contact-dock__action-icon"><?= icon($nvDockProfile['icon'],19) ?></span>
+                    <span class="nv-contact-dock__link-text"><strong><?= e($nvDockProfile['label']) ?></strong><small>Profilimizi ziyaret edin</small></span>
+                    <span class="nv-contact-dock__link-arrow" aria-hidden="true"><?= icon('arrow-up-right',15) ?></span>
+                </a>
+                <?php endforeach; ?>
+            </nav>
+        </div>
+    </details>
     </div>
+    <?php endif; ?>
 
     <?php $nvLiveChatReady=\App\Services\NetveraInquiryService::ready(); ?>
     <!-- Mobile Bottom Nav -->
@@ -731,10 +797,11 @@
     <?php if($nvLiveChatReady): ?>
     <script src="<?= asset('js/netvera-live-chat.js') ?>?v=20261016-mobile-dock" defer></script>
     <?php endif; ?>
-    <script src="<?= asset('js/app.js') ?>?v=20261014"></script>
+    <script src="<?= asset('js/netvera-side-contact-v1.js') ?>?v=20261026-social-theme-rail" defer></script>
+    <script src="<?= asset('js/app.js') ?>?v=20261018-member-workspace"></script>
     <script src="<?= asset('js/icon-bridge.js') ?>"></script>
     <?php if($template==='frontend/home'): ?>
-    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261016-mobile-filters"></script>
+    <script src="<?= asset('js/home-featured-tabs-v18.js') ?>?v=20261019-social-default"></script>
     <?php endif; ?>
     <?php if($template==='frontend/home'): ?>
     <script src="<?= asset('js/home-hero-slider-v94.js') ?>?v=94.1" defer></script>
@@ -745,7 +812,6 @@
     <script src="<?= asset('js/reviews-v68.js') ?>?v=68.1" defer></script>
     <?php endif; ?>
     <script src="<?= asset('js/agency-navigation-v26.js') ?>?v=26.2"></script>
-    <style>.nv68-chat-person{display:flex;align-items:center;gap:10px}.nv68-chat-person>img,.nv68-chat-avatar{width:39px;height:39px;flex-shrink:0;border-radius:12px;object-fit:cover;background:rgba(255,255,255,.18);display:grid;place-items:center}.nv68-chat-person strong,.nv68-chat-person small{display:block}.nv68-chat-person small{opacity:.8;font-size:10px}</style>
     <?= setting('footer_script') ?>
 </body>
 </html>
