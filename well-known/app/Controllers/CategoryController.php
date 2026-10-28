@@ -318,7 +318,8 @@ class CategoryController extends Controller
             'searchQuery' => $q,
             'altSlug' => $altSlug,
             'faqs' => $faqs,
-            'testimonialSection' => $testimonialSection
+            'testimonialSection' => $testimonialSection,
+            'serviceReferences' => \App\Services\ServiceReferenceSelectionService::selected('category',(int)$category['id'])
         ]);
     }
 }
