@@ -178,9 +178,16 @@ class NetveraScriptController extends Controller
             'applicationCategory'=>'BusinessApplication',
         ];
         // Schema mirrors the existing public CTA; never advertise quote-only software as a free/in-stock purchase.
-        $schemaBuyUrl=Catalog::publicUrl($data['buy_url']??null);
-        $schemaPurchaseEnabled=array_key_exists('purchase_enabled',$data)?!empty($data['purchase_enabled']):(bool)$schemaBuyUrl;
-        if((float)$p['price']<=0||!$schemaPurchaseEnabled||!$schemaBuyUrl)unset($schema['offers']);
+        $schemaPurchaseEnabled=Catalog::purchaseEnabled($p,$data)
+            && \App\Services\NetveraInquiryService::ready();
+        if(!$schemaPurchaseEnabled){
+            unset($schema['offers']);
+        }else{
+            // URL matches the auto-generated product purchase request CTA.
+            $schema['offers']['url']=url(Catalog::purchasePath((string)$p['slug']));
+            // No instant payment in this isolated software flow: don't claim an in-stock instant checkout.
+            unset($schema['offers']['availability']);
+        }
         if(!empty($p['cover_image']))$schema['image']=url($p['cover_image']);
         if(!empty($data['current_version']))$schema['softwareVersion']=(string)$data['current_version'];
         if($reviews){
