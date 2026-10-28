@@ -50,6 +50,9 @@ class App
         $r->get('/hazir-scriptler/tur/{slug}', 'NetveraScriptController@typePage');
         $r->get('/hazir-scriptler/{mainSlug}/{subSlug}', 'NetveraScriptController@subCategoryPage');
         $r->get('/hazir-scriptler/{slug}', 'NetveraScriptController@detail');
+        // Isolated PayTR checkout for legacy-ready NetVera software products.
+        $r->get('/yazilim-satin-al/{slug}', 'ScriptCheckoutController@index');
+        $r->post('/yazilim-satin-al/{slug}/odeme', 'ScriptCheckoutController@pay');
         $r->get('/hazir-yazilimlar', 'SoftwareController@index');
         $r->get('/hazir-yazilimlar/tur/{slug}', 'SoftwareController@typePage');
         $r->get('/kategoriler', 'CategoryController@index');
