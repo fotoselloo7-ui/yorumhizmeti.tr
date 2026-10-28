@@ -507,7 +507,7 @@
 
     <script src="<?= asset('js/software-marketplace-v36.js') ?>?v=36.1" defer></script>
     <?php if($template==='frontend/netvera-script-detail'): ?>
-    <script src="<?= asset('js/netvera-product-tabs-v60.js') ?>?v=20261013" defer></script>
+    <script src="<?= asset('js/netvera-product-tabs-v60.js') ?>?v=20261028-purchase-auto" defer></script>
     <?php endif; ?>
     <script src="<?= asset('js/category-marquee-drag-v56.js') ?>?v=56.2" defer></script>
 
