@@ -195,6 +195,9 @@
     <?php if($template==='frontend/blog/index'): ?>
     <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261028-editorial-preview-v2">
     <?php endif; ?>
+    <?php if(in_array($template,['frontend/category-detail','frontend/social/category','frontend/social/directory','frontend/social/index'],true)): ?>
+    <link rel="stylesheet" href="<?= asset('css/service-hero-headlines-v1.css') ?>?v=20261028-no-extra-linebreak">
+    <?php endif; ?>
 </head>
 <body class="<?= $template!=='frontend/home'?'nv-inner-page':'' ?><?= $nvThemeEnabled?' nv-theme-enabled':'' ?>">
 
