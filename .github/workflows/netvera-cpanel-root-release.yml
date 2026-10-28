@@ -1,4 +1,4 @@
-name: NetVera cPanel Root Release ZIP
+name: NetVera cPanel Tek ZIP
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -26,10 +26,10 @@ jobs:
           php-version: '8.3'
           extensions: zip, mbstring, pdo_mysql, gd, xml, dom, simplexml, xmlreader, xmlwriter, fileinfo, iconv
           tools: composer:v2
-      - name: Install locked production dependencies for ready-to-run cPanel ZIP
+      - name: Install production dependencies
         working-directory: well-known
         run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
-      - name: Build one-level NetVera document-root ZIP
+      - name: Build and validate the one-level root ZIP
         shell: bash
         run: |
           set -euo pipefail
@@ -37,38 +37,20 @@ jobs:
           file="$(find . -maxdepth 1 -name 'netvera-tr-cpanel-root-*.zip' -type f | head -n 1)"
           test -n "$file"
           unzip -t "$file" >/dev/null
-          unzip -Z1 "$file" | grep -qx 'app/Core/AdminAuth.php'
-          unzip -Z1 "$file" | grep -qx 'public/index.php'
-          unzip -Z1 "$file" | grep -qx '.htaccess'
-          unzip -Z1 "$file" | grep -qx '.env'
-          unzip -Z1 "$file" | grep -qx 'vendor/autoload.php'
-          unzip -Z1 "$file" | grep -qx 'database/database.sql'
-          unzip -Z1 "$file" | grep -qx 'NETVERA-ILK-OKU.txt'
-          test "$(unzip -Z1 "$file" | grep -cx '.env')" -eq 1
-          test "$(unzip -Z1 "$file" | grep -cE '\.sql          unzip -Z1 "$file" | grep -qx 'resources/views/admin/settings/admin-user-edit.php'
+          for required in app/Core/AdminAuth.php public/index.php .htaccess .env vendor/autoload.php database/database.sql NETVERA-ILK-OKU.txt resources/views/admin/settings/admin-user-edit.php; do
+            unzip -Z1 "$file" | grep -Fqx "$required"
+          done
+          test "$(unzip -Z1 "$file" | grep -cx '\.env')" -eq 1
+          test "$(unzip -Z1 "$file" | grep -cE '\.sql$')" -eq 1
           if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env\.|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/|storage/uploads/)|sync-conflict'; then
-            echo 'Unsafe release archive: duplicate env, subdomain, uploads, conflict or extra nesting'
+            echo 'Unsafe ZIP: extra nesting, duplicate env, subdomain, uploads or conflict'
             exit 1
           fi
-          echo "Release archive validated: $file"
-      - name: Upload cPanel-ready archive
+          echo "Verified cPanel-ready root ZIP: $file"
+      - name: Upload one cPanel-ready ZIP
         uses: actions/upload-artifact@v4
         with:
           name: NetVera-cPanel-TekZIP-Direkt-Extract
-          path: netvera-tr-cpanel-root-*.zip
-          retention-days: 14
-          if-no-files-found: error
-)" -eq 1
-          unzip -Z1 "$file" | grep -qx 'resources/views/admin/settings/admin-user-edit.php'
-          if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env($|\.)|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/)|\.sql$'; then
-            echo 'Unsafe release archive: secret, subdomain, uploads, SQL, or extra nesting'
-            exit 1
-          fi
-          echo "Release archive validated: $file"
-      - name: Upload cPanel-ready archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: NetVera-cPanel-Root-Release
           path: netvera-tr-cpanel-root-*.zip
           retention-days: 14
           if-no-files-found: error
