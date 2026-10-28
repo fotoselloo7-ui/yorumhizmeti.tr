@@ -298,7 +298,9 @@ class App
         $r->post('/admin/bayilik/kur', 'Admin\\DealerController@install');
         $r->post('/admin/bayilik/{id}/karar', 'Admin\\DealerController@review');
         $r->get('/admin/uyeler', 'Admin\\SettingsController@users');
-        $r->get('/admin/admin-kullanicilari', 'Admin\\SettingsController@adminUsers');
+        $r->get('/admin/admin-kullanicilari', 'Admin\\AdminAccountController@index');
+        $r->get('/admin/admin-kullanicilari/{id}/duzenle', 'Admin\\AdminAccountController@edit');
+        $r->post('/admin/admin-kullanicilari/{id}/guncelle', 'Admin\\AdminAccountController@update');
         $r->get('/admin/sayfalar', 'Admin\\SettingsController@pages');
         $r->get('/admin/sayfa/{id}/duzenle', 'Admin\\SettingsController@editPage');
         $r->post('/admin/sayfa/{id}/guncelle', 'Admin\\SettingsController@updatePage');
