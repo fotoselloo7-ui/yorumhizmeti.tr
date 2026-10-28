@@ -32,5 +32,6 @@ $socialHeroAction=$socialCatalog['show_services']?'Hizmetleri keşfet':'Paketler
    </div>
   </div>
  </div></section>
+ <?php require __DIR__.'/../partials/service-references.php'; ?>
  <?php require __DIR__.'/editorial.php'; ?>
 </main>
