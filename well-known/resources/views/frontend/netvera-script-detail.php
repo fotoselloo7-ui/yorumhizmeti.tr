@@ -168,22 +168,22 @@ if ($nv60ShowAccounts) {
           <?php if($nv60DemoAccounts): ?>
           <div class="nv62-demo-access">
             <div class="nv62-demo-access-head">
-              <div><span><?= icon('monitor',15) ?></span><div><small>Satın almadan önce</small><strong>Demo Yönetim Paneli</strong></div></div>
-              <span class="nv62-demo-badge">ADMIN</span>
+              <div><span><?= icon('monitor',15) ?></span><div><small>Satın almadan önce</small><strong>Demo Giriş Bilgileri</strong></div></div>
+              <span class="nv62-demo-badge">HERKESE AÇIK TEST</span>
             </div>
             <?php foreach($nv60DemoAccounts as $nv60Account): ?>
             <?php if(!empty($nv60Account['username'])): ?>
-              <?php $nv62LoginLabel=str_contains((string)($nv60Account['username']??''),'@')?'Demo E-posta':'Demo Kullanıcı Adı'; ?>
+              <?php $nv62LoginLabel=str_contains((string)($nv60Account['username']??''),'@')?'E-posta':'Kullanıcı Adı'; $nv62AccountLabel=($nv60Account['type']??'')==='admin'?'Yönetici':(($nv60Account['type']??'')==='user'?'Kullanıcı':trim((string)($nv60Account['label']??'Demo Hesabı'))); ?>
               <?php if(!empty($nv60Account['username'])): ?>
               <div class="nv62-demo-row">
-                <span><?= e($nv62LoginLabel) ?></span>
+                <span><?= e($nv62AccountLabel.' - '.$nv62LoginLabel) ?></span>
                 <code data-nv62-value><?= e($nv60Account['username']) ?></code>
                 <button type="button" class="nv62-demo-copy" data-nv62-copy>Kopyala</button>
               </div>
               <?php endif; ?>
               <?php if(!empty($nv60Account['password'])): ?>
               <div class="nv62-demo-row">
-                <span>Demo Şifresi</span>
+                <span><?= e($nv62AccountLabel) ?> Şifresi</span>
                 <code class="is-hidden" data-nv62-value data-nv62-secret><?= e($nv60Account['password']) ?></code>
                 <button type="button" class="nv62-demo-toggle" data-nv62-toggle aria-pressed="false" aria-label="Demo şifresini göster">Göster</button>
                 <button type="button" class="nv62-demo-copy" data-nv62-copy>Kopyala</button>
