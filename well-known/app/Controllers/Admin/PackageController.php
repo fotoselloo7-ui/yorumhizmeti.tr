@@ -212,6 +212,8 @@ class PackageController extends Controller
         \App\Services\SocialStorefrontService::save('package',(int)$pkgId,$socialContent);
         \App\Services\SocialPackageService::save((int)$pkgId,$_POST);
         \App\Services\ServicePriceMode::save((int)$pkgId,(string)($_POST['price_mode']??'auto'));
+        \App\Services\ServiceReferenceSelectionService::save('package',(int)$pkgId,$_POST['service_reference_ids']??[]);
+        \App\Services\ServicePackageGalleryService::save((int)$pkgId,$_POST,$_FILES);
         \App\Services\PackageHighlightsService::save((int)$pkgId,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$pkgId,$_POST);
         logActivity('package_create', 'Paket oluşturuldu: ' . $data['name']);
