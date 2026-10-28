@@ -1,6 +1,6 @@
 <?php
 /**
- * YorumPanel Pro - Front Controller
+ * NetVera Teknoloji Yazılım - Front Controller
  * Tüm istekler bu dosya üzerinden yönlendirilir.
  */
 
