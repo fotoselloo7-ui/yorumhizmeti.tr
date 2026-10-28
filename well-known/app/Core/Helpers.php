@@ -1,6 +1,6 @@
 <?php
 /**
- * YorumPanel Pro - Global Helper Functions
+ * NetVera Teknoloji Yazılım - Global Helper Functions
  */
 
 use App\Core\Database;
