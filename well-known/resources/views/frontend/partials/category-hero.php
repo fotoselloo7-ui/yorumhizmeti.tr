@@ -12,7 +12,7 @@ if (!empty($heroCategory['parent_category_slug']) && count($heroBreadcrumbs) ===
   <div class="nv-category-hero-grid">
    <div class="nv-category-hero-copy">
     <div class="nv-category-hero-kicker"><span><?= icon($heroPlatformIcon,18) ?></span><?= e($categoryHero['eyebrow']) ?></div>
-    <h1 id="category-hero-heading"><span><?= e($categoryHero['lead']) ?></span><?php if($categoryHero['accent']!==''): ?> <span class="nv-category-hero-accent"><?= e($categoryHero['accent']) ?></span><?php endif; ?></h1>
+    <h1 id="category-hero-heading" class="nv-managed-headline"><?= \App\Services\HeroHeadline::render((string)$categoryHero['lead'],(string)$categoryHero['accent']) ?></h1>
     <p class="nv-category-hero-description"><?= e($categoryHero['description']) ?></p>
     <ul class="nv-category-hero-facts"><?php foreach($categoryHero['facts'] as [$factIcon,$factText]): ?><li><?= icon($factIcon,16) ?><span><?= e($factText) ?></span></li><?php endforeach; ?></ul>
     <div class="nv-category-hero-actions"><a class="nv-category-hero-cta" href="#packages"><?= e($categoryHero['cta']) ?> <?= icon('arrow-right',16) ?></a><span>NetVera Teknoloji Yazılım</span></div>
