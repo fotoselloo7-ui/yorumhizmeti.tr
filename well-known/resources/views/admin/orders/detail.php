@@ -1,3 +1,11 @@
+<?php
+// Installation metadata is stored with the order item, not a separate table.
+// Keep unrelated social-media/package customer fields in their original section.
+$nvInstallFields = array_values(array_filter($fields ?? [], static fn(array $field): bool =>
+    str_starts_with((string)($field['field_key'] ?? ''), 'nv_install_')));
+$nvRegularFields = array_values(array_filter($fields ?? [], static fn(array $field): bool =>
+    !str_starts_with((string)($field['field_key'] ?? ''), 'nv_install_')));
+?>
 <!-- Page Header -->
 <div class="adm-page-top">
     <div class="adm-page-top-left">
@@ -95,15 +103,37 @@
         </div>
         <?php endif; ?>
 
-        <!-- Order Fields -->
-        <?php if (!empty($fields)): ?>
+        <!-- Ready-script domain and hosting installation details -->
+        <?php if ($nvInstallFields): ?>
+        <div class="adm-card">
+            <div class="adm-card-header">
+                <h3><?= icon('server', 18) ?> Yazılım Kurulum / Domain ve Hosting Bilgileri</h3>
+            </div>
+            <div class="adm-card-body">
+                <p class="text-sm text-secondary" style="margin-bottom:14px">
+                    Müşterinin ödeme öncesinde bildirdiği kurulum bilgileri. Hosting şifreleri bu sipariş formunda saklanmaz.
+                </p>
+                <div class="adm-fields-list">
+                    <?php foreach ($nvInstallFields as $field): ?>
+                    <div class="adm-field-row">
+                        <span class="adm-field-label"><?= e($field['field_label']) ?></span>
+                        <span class="adm-field-value" style="overflow-wrap:anywhere;white-space:pre-wrap"><?= e($field['field_value']) ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <!-- Other order fields -->
+        <?php if (!empty($nvRegularFields)): ?>
         <div class="adm-card">
             <div class="adm-card-header">
                 <h3><?= icon('edit', 18) ?> Müşteri Bilgileri</h3>
             </div>
             <div class="adm-card-body">
                 <div class="adm-fields-list">
-                    <?php foreach ($fields as $f): ?>
+                    <?php foreach ($nvRegularFields as $f): ?>
                     <div class="adm-field-row">
                         <span class="adm-field-label"><?= e($f['field_label']) ?></span>
                         <span class="adm-field-value"><?= e($f['field_value']) ?></span>
