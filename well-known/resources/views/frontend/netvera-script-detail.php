@@ -11,11 +11,9 @@ $nv40ListTitle=static function($entry):string {
 };
 $nv40InquiryReady=\App\Services\NetveraInquiryService::ready();
 $nv40OfferHref=$nv40InquiryReady?'#teklif-al':'/iletisim';
-$nv60BuyUrl=\App\Services\NetveraBridgeService::publicUrl($productData['buy_url']??null);
-$nv60PurchaseEnabled=array_key_exists('purchase_enabled',$productData)
-    ? !empty($productData['purchase_enabled'])
-    : (bool)$nv60BuyUrl;
-$nv60CanBuy=$nv40Price>0 && $nv60PurchaseEnabled && $nv60BuyUrl;
+$nv60BuyUrl=\App\Services\NetveraBridgeService::purchasePath((string)$product['slug']);
+$nv60CanBuy=$nv40InquiryReady && \App\Services\NetveraBridgeService::purchaseEnabled($product,$productData);
+$nv60PurchaseIntent=$nv60CanBuy && (string)($_GET['type']??'')==='purchase';
 $nv60DemoNote=trim((string)($productData['demo_note']??''));
 $nv60PublicDemo=[];
 if ($nv40DemoAllowed) {
@@ -204,11 +202,12 @@ if ($nv60ShowAccounts) {
         <?php endif; ?>
         <?php if($nv40InquiryReady): ?>
           <section class="nv40-info-card nv60-offer-panel nv-product-offer" id="teklif-al" role="tabpanel" aria-labelledby="nv60-tab-teklif-al" tabindex="0" data-nv60-panel="teklif-al">
-            <h2><?= icon('message-square',16) ?> Bu Yazılım İçin Teklif Alın</h2>
+            <h2><?= icon('message-square',16) ?> <?= $nv60PurchaseIntent ? 'Satın Alma Talebi' : 'Bu Yazılım İçin Teklif Alın' ?></h2>
             
             <form method="post" action="/netvera/canli-destek/gonder">
               <?= csrfField() ?>
               <input type="hidden" name="source_type" value="offer">
+              <?php if($nv60PurchaseIntent): ?><input type="hidden" name="purchase_intent" value="1"><?php endif; ?>
               <input type="hidden" name="product_slug" value="<?= e($product['slug']) ?>">
               <input type="text" class="nv-chat-honeypot" name="website" autocomplete="off" tabindex="-1" aria-hidden="true">
               <div class="nv-product-offer-grid">
@@ -218,8 +217,8 @@ if ($nv60ShowAccounts) {
               <label class="nv-offer-message">Proje / Kurulum Talebiniz
                 <textarea name="message" required minlength="5" maxlength="3000" placeholder="İhtiyacınızı kısaca anlatın..."></textarea>
               </label>
-              <button type="submit"><?= icon('send',14) ?> Teklif Talebi Gönder</button>
-              <p class="nv-offer-policy">Gönderdiğiniz bilgiler yalnızca teklifinizi yanıtlamak için kullanılır. <a href="/sayfa/kvkk">KVKK</a></p>
+              <button type="submit"><?= icon('send',14) ?> <?= $nv60PurchaseIntent ? 'Satın Alma Talebi Gönder' : 'Teklif Talebi Gönder' ?></button>
+              <p class="nv-offer-policy"><?= $nv60PurchaseIntent ? 'Bu form doğrudan ödeme almaz. Ekibimiz satın alma ve ödeme adımları için sizinle iletişime geçer. ' : '' ?>Gönderdiğiniz bilgiler yalnızca teklifinizi yanıtlamak için kullanılır. <a href="/sayfa/kvkk">KVKK</a></p>
             </form>
           </section>
         <?php endif; ?>
