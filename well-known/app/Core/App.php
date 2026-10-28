@@ -143,7 +143,7 @@ class App
         // ── Admin ──
         $r->get('/admin/giris', 'Admin\\AuthController@login');
         $r->post('/admin/giris', 'Admin\\AuthController@loginPost');
-        $r->get('/admin/cikis', 'Admin\\AuthController@logout');
+        $r->post('/admin/cikis', 'Admin\\AuthController@logout');
 
         $r->get('/admin', 'Admin\\DashboardController@index');
         $r->get('/admin/bilgi-alani', 'Admin\\LandingController@home');
