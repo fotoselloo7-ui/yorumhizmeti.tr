@@ -78,7 +78,7 @@
     <link rel="stylesheet" href="<?= asset('css/netvera-legacy-premium-v40.css') ?>?v=20261016-premium-polish">
     <?php endif; ?>
     <?php if($template==='frontend/netvera-script-detail'): ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=20261013">
+    <link rel="stylesheet" href="<?= asset('css/netvera-product-detail-v60.css') ?>?v=20261028-demo-access">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-inquiries.css') ?>?v=20261016-premium-polish">
     <link rel="stylesheet" href="<?= asset('css/netvera-article-v42.css') ?>?v=20261016-premium-polish">
@@ -190,7 +190,7 @@
     <?= setting('header_script') ?>
     <link rel="stylesheet" href="<?= asset('css/netvera-side-contact-v1.css') ?>?v=20261026-social-theme-rail">
     <?php if(in_array($template,['frontend/package-detail','frontend/category-detail'],true)): ?>
-    <link rel="stylesheet" href="<?= asset('css/netvera-service-detail-v1.css') ?>?v=20261028-real-gallery-references">
+    <link rel="stylesheet" href="<?= asset('css/netvera-service-detail-v1.css') ?>?v=20261028-quote-layout-fix">
     <?php endif; ?>
     <?php if($template==='frontend/blog/index'): ?>
     <link rel="stylesheet" href="<?= asset('css/blog-visual-polish-v1.css') ?>?v=20261028-editorial-preview-v2">
