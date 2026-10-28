@@ -118,6 +118,7 @@ class PackageController extends Controller
             'relatedPackages' => $relatedPackages,
             'faqs' => $faqs,
             'testimonialSection' => $testimonialSection,
+            'serviceReferences'=>\App\Services\ServiceReferenceSelectionService::selected('package',(int)$package['id']),
         ]);
     }
 }
