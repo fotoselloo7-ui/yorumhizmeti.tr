@@ -57,6 +57,18 @@ final class NetveraInquiryController extends Controller
             $error='Teklif talebine yeni sohbet yanıtı eklenemez.';
         if($id===0 && $type==='offer' && ($slug===''||!Catalog::find($slug)))
             $error='Geçerli bir yazılım seçin.';
+        // A legacy ?type=purchase link is a purchase *request*, never an automatic charge.
+        // Only an explicitly sellable, priced script may generate this request.
+        $purchaseIntent=$id===0 && $type==='offer' && ($_POST['purchase_intent']??'')==='1';
+        if($purchaseIntent && $error===''){
+            $selected=Catalog::find($slug);
+            $meta=$selected?Catalog::jsonFields($selected):[];
+            if(!$selected || !Catalog::purchaseEnabled($selected,$meta)){
+                $error='Bu yazılım şu anda doğrudan satın alma talebine açık değil.';
+            }else{
+                $message=mb_substr('Satın alma talebi: '.(string)$selected['name']."\n".$message,0,3000,'UTF-8');
+            }
+        }
         if($error!==''){
             if($isAjax){$this->respondJson(422,['ok'=>false,'error'=>$error]);return;}
             flash('error',$error);redirect('/iletisim');return;
@@ -73,7 +85,7 @@ final class NetveraInquiryController extends Controller
                 $this->respondJson(200,['ok'=>true,'inquiry_id'=>$id,'message'=>'Mesajınız kaydedildi.']);
                 return;
             }
-            flash('success',$type==='offer'?'Yazılım teklif talebiniz alındı.':'Mesajınız alındı.');
+            flash('success',$purchaseIntent?'Yazılım satın alma talebiniz alındı. Ödeme başlatılmadı; ekibimiz size dönüş yapacak.':($type==='offer'?'Yazılım teklif talebiniz alındı.':'Mesajınız alındı.'));
             redirect($slug?'/hazir-scriptler/'.rawurlencode($slug):'/iletisim');
         }catch(\Throwable $e){
             error_log('Netvera inquiry send failed: '.get_class($e));
