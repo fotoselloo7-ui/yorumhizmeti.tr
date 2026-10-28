@@ -22,15 +22,28 @@ $assert(str_contains($social,'.social-package-topline') &&
     str_contains($social,'.social-package-topline .social-package-badge'),
     'Social header badge alignment not styled');
 $assert(!str_contains($blog,'blog-woman-cutout.png'),'Unwanted woman cutout still loaded in blog hero');
-$assert(str_contains($blog,'class="yv-blog-hero-core-v8"') &&
-    str_contains($blog,'class="yv-blog-hero-core-icon-v8"'),
-    'Blog hero visual missing new brand artwork');
-$assert(str_contains($css,'.yv-blog-v8 .yv-blog-featured-media-v8::after') &&
-    str_contains($css,'content:none!important'),'Obscuring featured image overlay still active');
+$assert(!str_contains($blog,'yv-blog-hero-core-v8') &&
+    !str_contains($blog,'yv-blog-float-v8'),
+    'Old tilted billboard or floating logo clutter is still in the blog hero');
+$assert(str_contains($blog,'class="nv-blog-preview-v2"') &&
+    str_contains($blog,'class="nv-blog-preview-articles-v2"'),
+    'Clean neutral editorial preview missing');
+$assert(str_contains($css,'.yv-blog-v8 .yv-blog-hero-art-v8::after') &&
+    str_contains($css,'content:none!important') &&
+    str_contains($css,'transform:none!important'),
+    'Old blob, overlay or rotated hero still active');
+$assert(str_contains($blog,'class="yv-blog-featured-backdrop-v2"') &&
+    str_contains($blog,'class="yv-blog-featured-photo-v12"'),
+    'Real featured article image must render once clearly with blurred same-image backdrop');
+$assert(str_contains($css,'img.yv-blog-featured-backdrop-v2') &&
+    str_contains($css,'filter:blur(19px)') &&
+    str_contains($css,'background:#f0effa!important'),
+    'Featured image background still leaves empty blue panel');
 $assert(str_contains($css,'object-fit:contain!important') &&
-    str_contains($css,'max-height:350px'),'Featured article visual still cropped');
+    str_contains($css,'align-self:center!important'),
+    'Featured article cover must remain fully visible and centered');
 $assert(str_contains($css,'@media(max-width:650px)'),'Responsive blog imagery rules missing');
 $assert(str_contains($layout,'blog-visual-polish-v1.css') &&
     str_contains($layout,'20261027-card-header-badge'),
     'Blog override or social CSS cache bust not linked');
-echo "PASS: badges aligned at every shared social card; premium blog hero and fully visible featured cover at all breakpoints.\n";
+echo "PASS: aligned package badges, clean unrotated blog hero, real centered cover with soft photographic background.\n";
