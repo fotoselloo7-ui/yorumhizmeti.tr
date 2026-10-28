@@ -247,6 +247,8 @@ class PackageController extends Controller
         \App\Services\SocialStorefrontService::save('package',(int)$id,$socialContent);
         \App\Services\SocialPackageService::save((int)$id,$_POST);
         \App\Services\ServicePriceMode::save((int)$id,(string)($_POST['price_mode']??'auto'));
+        \App\Services\ServiceReferenceSelectionService::save('package',(int)$id,$_POST['service_reference_ids']??[]);
+        \App\Services\ServicePackageGalleryService::save((int)$id,$_POST,$_FILES);
         \App\Services\PackageHighlightsService::save((int)$id,(string)($_POST['highlight_lines']??''));
         \App\Services\NetveraSeoBridge::save('package',(int)$id,$_POST);
         logActivity('package_update', 'Paket güncellendi: ' . $data['name']);
