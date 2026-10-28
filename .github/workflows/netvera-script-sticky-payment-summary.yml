@@ -1,0 +1,46 @@
+name: NetVera PayTR Sticky Odeme Ozeti Mini ZIP
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/netvera-script-sticky-payment-summary.yml'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: none
+      - name: Verify only checkout view changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -l well-known/resources/views/frontend/script-checkout.php
+          grep -Fq 'align-items:start' well-known/resources/views/frontend/script-checkout.php
+          grep -Fq 'position:sticky;top:96px' well-known/resources/views/frontend/script-checkout.php
+          grep -Fq 'payment-summary' well-known/resources/views/frontend/script-checkout.php
+      - name: Package one-file cPanel overwrite ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/compact-payment-summary"
+          mkdir -p "$dir/resources/views/frontend"
+          cp well-known/resources/views/frontend/script-checkout.php "$dir/resources/views/frontend/"
+          (cd "$dir" && zip -qr "$GITHUB_WORKSPACE/NETVERA-ODEME-OZETI-STICKY-DUZELTME.zip" resources)
+          file="$GITHUB_WORKSPACE/NETVERA-ODEME-OZETI-STICKY-DUZELTME.zip"
+          unzip -t "$file" >/dev/null
+          test "$(unzip -Z1 "$file" | grep -c '\\.php$')" -eq 1
+          unzip -Z1 "$file" | grep -qx 'resources/views/frontend/script-checkout.php'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NETVERA-ODEME-OZETI-STICKY-DUZELTME
+          path: NETVERA-ODEME-OZETI-STICKY-DUZELTME.zip
+          retention-days: 14
+          if-no-files-found: error
