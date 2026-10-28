@@ -38,5 +38,6 @@ $closed=$socialSale['quantity']<1||$socialSale['unit']===''||!$socialSale['mappi
   </aside>
  </div></div></section>
  <?php if(count($socialAlternatives)>1): ?><section class="social-alternatives"><div class="container"><div class="social-section-heading"><div><span class="social-eyebrow">AYNI HİZMET, FARKLI MİKTARLAR</span><h2>Diğer paketleri karşılaştırın.</h2><p>Başka miktar seçmek isterseniz ilgili paketin sayfasını açabilirsiniz.</p></div></div><div class="social-alternative-grid"><?php foreach($socialAlternatives as $alternative): $alternativeInfo=\App\Services\SocialPackageService::info($alternative); ?><a href="/paket/<?= rawurlencode($alternative['slug']) ?>" <?= (int)$alternative['id']===(int)$package['id']?'aria-current="page"':'' ?>><span><?= e($alternativeInfo['label']) ?></span><strong><?= money(SocialUi::price($alternative)) ?></strong><?= icon('arrow-up-right',16) ?></a><?php endforeach; ?></div></div></section><?php endif; ?>
+ <?php require __DIR__.'/../partials/service-references.php'; ?>
  <?php require __DIR__.'/editorial.php'; ?>
 </main>
