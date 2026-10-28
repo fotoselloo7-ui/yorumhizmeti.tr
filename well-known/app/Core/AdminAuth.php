@@ -30,6 +30,7 @@ class AdminAuth
 
     public static function login(array $admin): void
     {
+        if(session_status()===PHP_SESSION_ACTIVE)session_regenerate_id(true);
         $_SESSION['admin_id'] = $admin['id'];
         $_SESSION['admin_name'] = $admin['name'];
         $_SESSION['admin_email'] = $admin['email'];
