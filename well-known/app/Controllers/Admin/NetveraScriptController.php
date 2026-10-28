@@ -180,6 +180,19 @@ final class NetveraScriptController extends Controller
         // Publishing demo credentials is an explicit decision, restricted to
         // accounts made only for public software demonstrations.
         $newData['demo_credentials_public']=isset($_POST['demo_credentials_public'])?1:0;
+        // Never silently publish credentials merely because their fields were
+        // filled. All three public-demo permissions must be explicitly enabled.
+        if($newData['demo_credentials_public']===1){
+            $hasDemoName=trim((string)($newData['demo_admin_username']??''))!=='' ||
+                trim((string)($newData['demo_username']??''))!=='' ||
+                count($safeDemoAccounts)>0;
+            if(!$newData['demo_is_active'] || !$newData['demo_is_public'] ||
+                empty($newData['demo_url']) || !$hasDemoName){
+                flash('error','DEMO hesaplarını yayınlamak için Demo bağlantısı aktif ve herkese açık seçeneklerini işaretleyin, demo URL ile en az bir TEST kullanıcı adı girin.');
+                redirect($id?'/admin/netvera-yazilimlar/'.$id.'/duzenle':'/admin/netvera-yazilimlar/ekle');
+                return;
+            }
+        }
         $newData['purchase_enabled']=isset($_POST['purchase_enabled'])?1:0;
         $newData['is_featured']=isset($_POST['is_featured'])?1:0;
         $newData['is_popular']=isset($_POST['is_popular'])?1:0;
@@ -222,7 +235,16 @@ final class NetveraScriptController extends Controller
             $id=$this->db->insert('nv_legacy_script_products',$record);
         }
         logActivity('netvera_software_save','Netvera yazılımı güncellendi: '.$name);
-        flash('success','Yazılım bilgileri ve demo ayarları kaydedildi.');
+        $hasStoredDemo=trim((string)($newData['demo_admin_username']??''))!=='' ||
+            trim((string)($newData['demo_username']??''))!=='' || count($safeDemoAccounts)>0;
+        $credentialsLive=$newData['demo_credentials_public']===1 &&
+            $newData['demo_is_active']===1 && $newData['demo_is_public']===1 &&
+            !empty($newData['demo_url']) && $hasStoredDemo;
+        flash('success',$credentialsLive
+            ? 'Yazılım kaydedildi. Herkese açık TEST demo giriş bilgileri Canlı Demo bölümünde gösterilecek.'
+            : ($hasStoredDemo
+                ? 'Yazılım ve demo hesapları kaydedildi ancak DEMO GİRİŞ BİLGİLERİ YAYINDA DEĞİL. Yayınlamak için üçüncü kutuyu da işaretleyip kaydedin.'
+                : 'Yazılım bilgileri ve demo ayarları kaydedildi.'));
         redirect('/admin/netvera-yazilimlar');
     }
     /** Isolated legacy categories. The original indexed slug is immutable on edit. */
