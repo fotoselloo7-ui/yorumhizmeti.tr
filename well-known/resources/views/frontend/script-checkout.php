@@ -4,9 +4,13 @@
 .nv-script-checkout .top{margin-bottom:26px}
 .nv-script-checkout h1{font-size:clamp(25px,3.2vw,38px);line-height:1.2;color:#121d38;margin:8px 0}
 .nv-script-checkout .subtitle{color:#62718a;font-size:14px}
-.nv-script-checkout .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);gap:22px}
+.nv-script-checkout .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);gap:22px;align-items:start}
 .nv-script-checkout .panel{border:1px solid #dde4ef;border-radius:18px;background:#fff;padding:24px;box-shadow:0 12px 30px rgba(31,48,84,.055)}
 .nv-script-checkout .panel h2{font-size:19px;color:#122042;margin:0 0 16px}
+/* Compact payment summary follows scroll within checkout; no stretched white panel. */
+@media(min-width:751px){
+ .nv-script-checkout .payment-summary{position:sticky;top:96px;align-self:start;height:fit-content}
+}
 .nv-script-checkout .product{display:flex;align-items:center;gap:14px;margin-bottom:22px}
 .nv-script-checkout .product img{width:88px;height:75px;object-fit:cover;border-radius:12px;background:#f1f4f9}
 .nv-script-checkout .product strong{display:block;font-size:16px;color:#17244b}
@@ -35,7 +39,7 @@
 .nv-script-checkout .setup-section-title{color:#1b294d;font-size:13px;font-weight:750;margin:16px 0 12px}
 .nv-script-checkout .setup-group[hidden]{display:none!important}
 @media(max-width:520px){.nv-script-checkout .setup-grid{grid-template-columns:1fr}}
-@media(max-width:750px){.nv-script-checkout .grid{grid-template-columns:1fr}.nv-script-checkout .panel{padding:18px}}
+@media(max-width:750px){.nv-script-checkout .grid{grid-template-columns:1fr;align-items:start}.nv-script-checkout .payment-summary{position:static;height:auto}.nv-script-checkout .panel{padding:18px}}
 </style>
 <main class="nv-script-checkout">
  <div class="inner">
@@ -109,7 +113,7 @@
 
     <p class="safe">Ödeme bilgileri NetVera sisteminde saklanmaz. Sipariş yalnızca PayTR tarafından doğrulanmış başarılı ödeme bildirimi sonrasında ödenmiş görünür. Yazılım lisansı ve teslimat ayrıca yönetilir.</p>
    </section>
-   <aside class="panel">
+   <aside class="panel payment-summary" aria-label="Ödeme özeti">
     <h2>Ödeme özeti</h2>
     <div class="summary-row"><span><?= e($product['name']) ?></span><strong>1 adet</strong></div>
     <div class="summary-row total"><span>Toplam</span><strong><?= money((float)$product['price']) ?></strong></div>
