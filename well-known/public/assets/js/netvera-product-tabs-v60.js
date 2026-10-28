@@ -106,7 +106,9 @@
         activate(tabs[next].dataset.nv60Tab,{focus:true,updateUrl:true});
       });
       const initial=decodeURIComponent(location.hash.slice(1));
-      activate(ids.has(initial)?initial:tabs[0].dataset.nv60Tab);
+      // Legacy compatibility: ?type=purchase opens the actual request tab, not a dead link.
+      const purchaseIntent=new URLSearchParams(location.search).get('type')==='purchase';
+      activate(ids.has(initial)?initial:(purchaseIntent && ids.has('teklif-al') ? 'teklif-al' : tabs[0].dataset.nv60Tab));
       window.addEventListener("hashchange", () => {
         const id=decodeURIComponent(location.hash.slice(1));
         if(ids.has(id)) activate(id);
