@@ -59,6 +59,8 @@ jobs:
           node --check well-known/public/assets/js/netvera-product-tabs-v60.js
           node --check well-known/public/assets/js/admin-references.js
           node --check well-known/tests/ui-layout-probe.mjs
+      - name: Quote trust readability and demo copyable account UI QA
+        run: php well-known/tests/netvera-quote-demo-copy-ui-qa.php
 
       - name: Admin release text QA
         run: php well-known/tests/admin-release-copy-qa.php
