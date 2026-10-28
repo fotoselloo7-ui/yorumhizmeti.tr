@@ -90,6 +90,22 @@ final class NetveraBridgeService
     }
 
     /**
+     * Once customer-linked NetVera review import is complete, use its moderated
+     * records for BOTH cards and details. Do not count the older public copy
+     * twice, and do not resurrect a review that has become pending/rejected.
+     */
+    private static function hasMappedReviews(): bool
+    {
+        static $enabled=null;
+        if($enabled!==null)return $enabled;
+        try{
+            return $enabled=(bool)Database::getInstance()->fetch(
+                'SELECT old_review_id FROM nv_private_content_reviews LIMIT 1'
+            );
+        }catch(\\Throwable $e){return $enabled=false;}
+    }
+
+    /**
      * Public catalogue filters. All values are parameterized; sorting is whitelisted.
      * Ratings are calculated only from migrated approved reviews, never fabricated.
      */
@@ -132,6 +148,10 @@ final class NetveraBridgeService
             'rating' => 'COALESCE(rv.review_count, 0) DESC, COALESCE(rv.average_rating, 0) DESC, p.sort_order ASC'
         ][$sort] ?? 'p.sort_order ASC, p.legacy_id DESC';
 
+        $ratingSource=self::hasMappedReviews()
+            ? 'nv_private_content_reviews' : 'nv_legacy_public_reviews';
+        $ratingFilter=self::hasMappedReviews()
+            ? "WHERE target_type='script' AND status='approved'" : '';
         $records=Database::getInstance()->fetchAll(
             "SELECT p.*, c.name AS category_name, c.slug AS category_slug,
                     COALESCE(rv.average_rating, 0) AS average_rating,
@@ -140,7 +160,8 @@ final class NetveraBridgeService
              LEFT JOIN nv_legacy_script_categories c ON c.legacy_id = p.category_legacy_id
              LEFT JOIN (
                 SELECT product_legacy_id, AVG(rating) AS average_rating, COUNT(*) AS review_count
-                FROM nv_legacy_public_reviews
+                FROM {$ratingSource}
+                {$ratingFilter}
                 GROUP BY product_legacy_id
              ) rv ON rv.product_legacy_id = p.legacy_id
              WHERE ".implode(' AND ', $where)."
@@ -262,6 +283,16 @@ final class NetveraBridgeService
 
     public static function reviews(int $id): array
     {
+        if(self::ready() && self::hasMappedReviews()){
+            // Moderation status and owner are sourced from original NetVera;
+            // old approved public rows are not appended or double counted.
+            return Database::getInstance()->fetchAll(
+                "SELECT rating,comment,created_at FROM nv_private_content_reviews
+                 WHERE target_type='script' AND product_legacy_id=?
+                   AND status='approved'
+                 ORDER BY created_at DESC,old_review_id DESC",[$id]
+            );
+        }
         if (self::ready()) {
             $rows=Database::getInstance()->fetchAll(
                 "SELECT rating,comment,created_at FROM nv_legacy_public_reviews
