@@ -869,6 +869,7 @@ CREATE TABLE `nv_private_content_reviews` (
   `old_user_id` int unsigned NOT NULL,
   `new_user_id` int unsigned NOT NULL,
   `target_type` varchar(25) NOT NULL,
+  `target_legacy_id` int unsigned NOT NULL,
   `product_legacy_id` int unsigned DEFAULT NULL,
   `rating` tinyint unsigned NOT NULL,
   `comment` mediumtext NOT NULL,
