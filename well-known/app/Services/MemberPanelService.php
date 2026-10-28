@@ -82,6 +82,7 @@ final class MemberPanelService
             [$userId,SoftwareCatalogService::ROOT_SLUG,SoftwareCatalogService::ROOT_SLUG]);
         // Imported ready-script purchases are represented by a real, signed PayTR
         // payment on an order item with a stable product ID. No license is forged.
+        if (!NetveraBridgeService::ready()) return $native;
         $readyScripts=$db->fetchAll("SELECT i.id,i.package_name,o.id order_id,o.order_number,o.created_at,o.order_status
             FROM order_items i JOIN orders o ON o.id=i.order_id
             JOIN order_fields f ON f.order_item_id=i.id AND f.field_key='netvera_script_id'
