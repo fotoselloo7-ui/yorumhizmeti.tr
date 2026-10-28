@@ -20,13 +20,17 @@ final class HeroHeadline
         if(!$words)return '';
         $lines=count($words)<=3?[$words]:[array_slice($words,0,3),array_slice($words,3)];
         $html='';
-        foreach($lines as $line){
+        foreach($lines as $lineIndex=>$line){
             $tokens=[];
             foreach($line as $word){
                 $token=htmlspecialchars($word['text'],ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
                 if($word['accent'])$token='<span class="'.htmlspecialchars($accentClass,ENT_QUOTES,'UTF-8').'">'.$token.'</span>';
                 $tokens[]=$token;
             }
+            // Keep a real text separator in the DOM between visual lines.
+            // CSS turns each span into a row, but crawlers and screen readers
+            // must still read the full H1 with the original word spacing.
+            if($lineIndex>0)$html.=' ';
             $html.='<span class="nv-headline-line">'.implode(' ',$tokens).'</span>';
         }
         return $html;
