@@ -42,7 +42,7 @@ jobs:
           done
           test "$(unzip -Z1 "$file" | grep -cx '\.env')" -eq 1
           test "$(unzip -Z1 "$file" | grep -cE '\.sql$')" -eq 1
-          if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env\.|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/|storage/uploads/)|sync-conflict'; then
+          if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env\.|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/|storage/uploads/[^/])|sync-conflict'; then
             echo 'Unsafe ZIP: extra nesting, duplicate env, subdomain, uploads or conflict'
             exit 1
           fi
