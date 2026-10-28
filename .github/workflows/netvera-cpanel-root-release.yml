@@ -24,8 +24,11 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: zip, mbstring, pdo_mysql
-          tools: none
+          extensions: zip, mbstring, pdo_mysql, gd, xml, dom, simplexml, xmlreader, xmlwriter, fileinfo, iconv
+          tools: composer:v2
+      - name: Install locked production dependencies for ready-to-run cPanel ZIP
+        working-directory: well-known
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
       - name: Build one-level NetVera document-root ZIP
         shell: bash
         run: |
@@ -37,6 +40,25 @@ jobs:
           unzip -Z1 "$file" | grep -qx 'app/Core/AdminAuth.php'
           unzip -Z1 "$file" | grep -qx 'public/index.php'
           unzip -Z1 "$file" | grep -qx '.htaccess'
+          unzip -Z1 "$file" | grep -qx '.env'
+          unzip -Z1 "$file" | grep -qx 'vendor/autoload.php'
+          unzip -Z1 "$file" | grep -qx 'database/database.sql'
+          unzip -Z1 "$file" | grep -qx 'NETVERA-ILK-OKU.txt'
+          test "$(unzip -Z1 "$file" | grep -cx '.env')" -eq 1
+          test "$(unzip -Z1 "$file" | grep -cE '\.sql          unzip -Z1 "$file" | grep -qx 'resources/views/admin/settings/admin-user-edit.php'
+          if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env\.|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/|storage/uploads/)|sync-conflict'; then
+            echo 'Unsafe release archive: duplicate env, subdomain, uploads, conflict or extra nesting'
+            exit 1
+          fi
+          echo "Release archive validated: $file"
+      - name: Upload cPanel-ready archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: NetVera-cPanel-TekZIP-Direkt-Extract
+          path: netvera-tr-cpanel-root-*.zip
+          retention-days: 14
+          if-no-files-found: error
+)" -eq 1
           unzip -Z1 "$file" | grep -qx 'resources/views/admin/settings/admin-user-edit.php'
           if unzip -Z1 "$file" | grep -Eq '^(well-known/|\.env($|\.)|blog\.netvera\.tr/|lisans\.netvera\.tr/|public/uploads/)|\.sql$'; then
             echo 'Unsafe release archive: secret, subdomain, uploads, SQL, or extra nesting'
