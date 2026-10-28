@@ -126,6 +126,10 @@ jobs:
       - name: Categorized project references and Instagram embed regression
         run: php well-known/tests/reference-portfolio-qa.php
 
+      - name: Service gallery, quote card and portfolio reference integration QA
+        run: |
+          php well-known/tests/netvera-service-gallery-reference-qa.php
+          node --check well-known/public/assets/js/netvera-service-detail-v1.js
       - name: Social alternative badge and blog featured imagery screenshot QA
         run: php well-known/tests/netvera-blog-social-card-visual-qa.php
       - name: Verify genuine Netvera blog covers and inline image files
