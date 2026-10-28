@@ -34,6 +34,71 @@ final class ScriptCheckoutController extends Controller
         return $p;
     }
 
+    /**
+     * Collect only installation metadata, never hosting passwords, API tokens
+     * or credentials. Every field is server-validated before an order is saved.
+     */
+    private function installationFields(array $input): array
+    {
+        $value = static function(string $key, int $max) use ($input): string {
+            $raw = $input[$key] ?? '';
+            if (!is_string($raw) || mb_strlen($raw, 'UTF-8') > $max) {
+                throw new \InvalidArgumentException('Kurulum bilgilerindeki alan uzunluklarını kontrol edin.');
+            }
+            return trim($raw);
+        };
+        $domainMode = $value('install_domain_mode', 24);
+        $hostingMode = $value('install_hosting_mode', 24);
+        if (!in_array($domainMode, ['existing', 'need_domain'], true) ||
+            !in_array($hostingMode, ['existing', 'need_hosting'], true)) {
+            throw new \InvalidArgumentException('Alan adı ve hosting durumunu seçin.');
+        }
+        $domain = strtolower(rtrim($value('install_domain', 253), '.'));
+        if ($domainMode === 'existing') {
+            if ($domain === '' || !str_contains($domain, '.') ||
+                filter_var($domain, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false ||
+                filter_var($domain, FILTER_VALIDATE_IP) !== false) {
+                throw new \InvalidArgumentException('Kurulum yapılacak alan adını örnek.com biçiminde yazın.');
+            }
+        } else {
+            $domain = '';
+        }
+        $provider = $value('install_hosting_provider', 120);
+        $panel = $value('install_hosting_panel', 250);
+        $username = $value('install_hosting_username', 100);
+        if ($hostingMode === 'existing') {
+            if ($provider === '') {
+                throw new \InvalidArgumentException('Hosting firmanızı yazın veya hosting hizmeti istiyorum seçeneğini işaretleyin.');
+            }
+            if ($panel !== '') {
+                $parts = parse_url($panel);
+                if (!filter_var($panel, FILTER_VALIDATE_URL) ||
+                    ($parts['scheme'] ?? '') !== 'https' ||
+                    empty($parts['host']) || isset($parts['user']) || isset($parts['pass'])) {
+                    throw new \InvalidArgumentException('Hosting panel bağlantısı HTTPS adresi olmalı; bağlantıya şifre eklemeyin.');
+                }
+            }
+        } else {
+            $provider = $panel = $username = '';
+        }
+        $note = $value('install_notes', 500);
+        // Avoid encouraging common password/token disclosures in free text.
+        if (preg_match('/(?:şifre|sifre|password|passwd|api[\s_-]*key|secret|access[\s_-]*token|gizli[\s_-]*anahtar)\s*(?:[:=]|-|\s+\S)/iu',
+            implode(' ', [$provider, $panel, $username, $note]))) {
+            throw new \InvalidArgumentException('Hosting şifresi veya API anahtarı bu formdan paylaşılmamalı. Lütfen gizli bilgileri kaldırın.');
+        }
+        $fields = [
+            ['nv_install_domain_mode', 'Alan Adı Durumu', $domainMode === 'existing' ? 'Mevcut alan adım var' : 'Yeni alan adı istiyorum'],
+            ['nv_install_hosting_mode', 'Hosting Durumu', $hostingMode === 'existing' ? 'Mevcut hostingim var' : 'NetVera hosting desteği istiyorum'],
+        ];
+        if ($domain !== '') $fields[] = ['nv_install_domain', 'Kurulacak Domain', $domain];
+        if ($provider !== '') $fields[] = ['nv_install_hosting_provider', 'Hosting Firması', $provider];
+        if ($panel !== '') $fields[] = ['nv_install_hosting_panel', 'Hosting Panel URL', $panel];
+        if ($username !== '') $fields[] = ['nv_install_hosting_username', 'Hosting Kullanıcı Adı', $username];
+        if ($note !== '') $fields[] = ['nv_install_notes', 'Kurulum Notları', $note];
+        return $fields;
+    }
+
     private function paytr(): ?\App\Services\PaymentGatewayInterface
     {
         $service = (new PaymentGatewayManager())->getService('paytr');
@@ -95,6 +160,13 @@ final class ScriptCheckoutController extends Controller
             redirect('/yazilim-satin-al/'.rawurlencode($slug));
             return;
         }
+        try {
+            $installationFields = $this->installationFields($_POST);
+        } catch (\InvalidArgumentException $e) {
+            flash('error', $e->getMessage());
+            redirect('/yazilim-satin-al/'.rawurlencode($slug));
+            return;
+        }
         $gateway = $this->paytr();
         if (!$gateway) {
             flash('error', 'PayTR şu anda aktif veya yapılandırılmış değil. Ödeme alınamadı.');
@@ -136,6 +208,7 @@ final class ScriptCheckoutController extends Controller
             foreach ([
                 ['netvera_script_id', 'Yazılım Ürün Kimliği', (string)$product['legacy_id']],
                 ['netvera_script_slug', 'Yazılım SEO Adresi', (string)$product['slug']],
+                ...$installationFields,
             ] as [$key, $label, $value]) {
                 $this->db->insert('order_fields', [
                     'order_id' => $orderId,
