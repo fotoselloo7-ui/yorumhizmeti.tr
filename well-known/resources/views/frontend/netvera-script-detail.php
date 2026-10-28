@@ -146,7 +146,9 @@ if ($nv60ShowAccounts) {
         <?php if($nv40DemoAllowed): ?>
         <section class="nv40-info-card" id="demo" role="tabpanel" aria-labelledby="nv60-tab-demo" tabindex="0" data-nv60-panel="demo">
           <div class="nv62-demo-panel-head">
-            <div><h2>Canlı Demo & Yazılımı İncele</h2><p>Ön yüzü ve varsa yönetim panelini ayrı ayrı açabilir, yayınlanmış demo hesabı bilgilerini aşağıdan kullanabilirsiniz.</p></div>
+            <div><h2>Canlı Demo & Yazılımı İncele</h2><p><?= $nv60DemoAccounts
+              ? 'Ön yüzü ve demo yönetim panelini inceleyin. Yayınlanmasına izin verilmiş test giriş bilgilerini aşağıdan kopyalayabilirsiniz.'
+              : 'Yazılımın ön yüzünü ve varsa demo yönetim panelini inceleyebilirsiniz. Herkese açık demo hesap bilgisi bu ürün için yayınlanmamıştır.' ?></p></div>
             <?php if($nv60CanBuy): ?><a class="nv62-demo-buy" href="<?= e($nv60BuyUrl) ?>"><?= icon('shopping-cart',14) ?> Satın Al</a><?php endif; ?>
           </div>
           
