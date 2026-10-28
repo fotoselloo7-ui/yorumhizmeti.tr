@@ -1,0 +1,74 @@
+name: NetVera Hazir Yazilim Otomatik Satin Alma URL Patch
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/netvera-script-auto-purchase-patch.yml'
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql
+          tools: none
+      - name: Validate only modified PHP and JS files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            well-known/app/Services/NetveraBridgeService.php \
+            well-known/app/Controllers/Admin/NetveraScriptController.php \
+            well-known/app/Controllers/NetveraScriptController.php \
+            well-known/app/Controllers/NetveraInquiryController.php \
+            well-known/resources/views/admin/netvera-scripts/form.php \
+            well-known/resources/views/frontend/netvera-script-detail.php \
+            well-known/resources/views/layouts/app.php; do
+            php -l "$file"
+          done
+          node --check well-known/public/assets/js/netvera-product-tabs-v60.js
+      - name: Build one-layer drop-in patch ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          staging="$RUNNER_TEMP/netvera-purchase-patch"
+          mkdir -p "$staging"
+          for source in \
+            well-known/app/Services/NetveraBridgeService.php \
+            well-known/app/Controllers/Admin/NetveraScriptController.php \
+            well-known/app/Controllers/NetveraScriptController.php \
+            well-known/app/Controllers/NetveraInquiryController.php \
+            well-known/resources/views/admin/netvera-scripts/form.php \
+            well-known/resources/views/frontend/netvera-script-detail.php \
+            well-known/resources/views/layouts/app.php \
+            well-known/public/assets/js/netvera-product-tabs-v60.js; do
+            target="$(echo "$source" | sed 's|^well-known/||')"
+            mkdir -p "$staging/$(dirname "$target")"
+            cp "$source" "$staging/$target"
+          done
+          (
+            cd "$staging"
+            zip -qr "$GITHUB_WORKSPACE/NETVERA-OTOMATIK-SATIN-ALMA-URL-YAMASI.zip" app resources public
+          )
+          zipfile="$GITHUB_WORKSPACE/NETVERA-OTOMATIK-SATIN-ALMA-URL-YAMASI.zip"
+          unzip -t "$zipfile"
+          test "$(unzip -Z1 "$zipfile" | grep -c '\.php$')" -eq 7
+          test "$(unzip -Z1 "$zipfile" | grep -c '\.js$')" -eq 1
+          if unzip -Z1 "$zipfile" | grep -Eq '(^well-known/|^\.env|\.sql$|sync-conflict|^public/uploads/)'; then
+            echo "Unexpected unsafe file in ZIP"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NETVERA-OTOMATIK-SATIN-ALMA-URL-YAMASI
+          path: NETVERA-OTOMATIK-SATIN-ALMA-URL-YAMASI.zip
+          retention-days: 14
+          if-no-files-found: error
