@@ -169,6 +169,9 @@
                 </div>
             </div>
 
+            <?php if(!$softwareOnly): ?>
+            <?php $nvRefType='package'; $nvRefId=(int)($package['id']??0); require BASE_PATH.'/resources/views/admin/partials/service-references-picker.php'; ?>
+            <?php endif; ?>
             <!-- SEO -->
             <div class="adm-card">
                 <div class="adm-card-header"><h3><?= icon('search', 18) ?> SEO Ayarları</h3></div>
