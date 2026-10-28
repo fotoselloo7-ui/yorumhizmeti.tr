@@ -63,7 +63,7 @@ try {
     $old=$pdo($get('NETVERA_SOURCE_DB_HOST'),$get('NETVERA_SOURCE_DB_NAME'),
         $get('NETVERA_SOURCE_DB_USER'),$get('NETVERA_SOURCE_DB_PASSWORD'));
     $new=$pdo($get('DB_HOST'),$get('DB_NAME'),$get('DB_USER'),$get('DB_PASS'));
-    $tables=['admin_users','customers','orders','order_items','affiliate_accounts','affiliate_commissions','support_tickets','support_ticket_replies','affiliate_clicks','order_referrals'];
+    $tables=['admin_users','customers','orders','order_items','affiliate_accounts','affiliate_commissions','support_tickets','support_ticket_replies','affiliate_clicks','order_referrals','content_reviews'];
     $counts=[];
     foreach($tables as $table) {
         $counts[$table]=(int)$old->query('SELECT COUNT(*) FROM `'.$table.'`')->fetchColumn();
@@ -108,6 +108,7 @@ try {
         'nv_private_support_replies',
         'nv_private_affiliate_clicks',
         'nv_private_order_referrals',
+        'nv_private_content_reviews',
     ]);
 
     $one=static function(PDO $db,string $sql,array $params):?array{
@@ -154,6 +155,54 @@ try {
             $oldId,$userId,(int)$row['is_agency'],(int)$row['want_dealer'],(string)$row['status'],
             $encrypt(json_encode(array_diff_key($row,array_flip(['password_hash','email_verify_code','sms_verify_code'])),JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR))
         ]);
+    }
+    // Preserve every original review (including unpublished moderation states)
+    // under its original ID. Only `script` reviews get a public product link;
+    // the old target ID is retained for all other review types as well.
+    // Existing anonymous public review copies remain untouched, and storefront
+    // chooses one authoritative source to avoid double-counting stars.
+    $reviewRows=$all($old,
+        'SELECT id,user_id,target_type,target_id,rating,comment,status,sort_order,created_at,updated_at FROM content_reviews');
+    $validScriptProduct=$new->prepare(
+        'SELECT 1 FROM nv_legacy_script_products WHERE legacy_id=? LIMIT 1'
+    );
+    $reviewWrite=$new->prepare(
+        'INSERT INTO nv_private_content_reviews
+        (old_review_id,old_user_id,new_user_id,target_type,target_legacy_id,
+         product_legacy_id,rating,comment,status,sort_order,created_at,updated_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+        ON DUPLICATE KEY UPDATE
+          new_user_id=VALUES(new_user_id),
+          target_type=VALUES(target_type),
+          target_legacy_id=VALUES(target_legacy_id),
+          product_legacy_id=VALUES(product_legacy_id),
+          rating=VALUES(rating),comment=VALUES(comment),
+          status=VALUES(status),sort_order=VALUES(sort_order),
+          updated_at=VALUES(updated_at)'
+    );
+    $reviewCount=0;
+    foreach($reviewRows as $review) {
+        $oldUser=(int)$review['user_id'];
+        $newUser=$userMap[$oldUser]??null;
+        if(!$newUser)throw new RuntimeException('Review owner missing from customer map');
+        $type=(string)$review['target_type'];
+        $targetId=(int)$review['target_id'];
+        $productId=null;
+        if($type==='script') {
+            $validScriptProduct->execute([$targetId]);
+            if(!$validScriptProduct->fetchColumn())
+                throw new RuntimeException('Reviewed script not found in imported NetVera catalogue');
+            $productId=$targetId;
+        }
+        $stars=(int)$review['rating'];
+        if($stars<1 || $stars>5 || $targetId<1)
+            throw new RuntimeException('Original review has invalid target or rating');
+        $reviewWrite->execute([
+            (int)$review['id'],$oldUser,$newUser,$type,$targetId,$productId,
+            $stars,(string)$review['comment'],(string)$review['status'],
+            (int)$review['sort_order'],$review['created_at'],$review['updated_at']
+        ]);
+        $reviewCount++;
     }
     $adminRows=$all($old,'SELECT id,name,email,password_hash,role,is_active FROM admin_users');
     foreach($adminRows as $a){
@@ -255,6 +304,7 @@ try {
     }
     $new->commit();
     echo json_encode(['status'=>'STAGING_IMPORTED','users_mapped'=>count($userMap),
+        'source_reviews_mapped'=>$reviewCount,
         'existing_users_merged'=>$collisions,'old_users_deleted'=>0,
         'native_orders_modified'=>0,'old_admins_retained'=>true],
         JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)."\n";
