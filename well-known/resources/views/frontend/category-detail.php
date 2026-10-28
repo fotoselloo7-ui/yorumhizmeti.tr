@@ -160,6 +160,7 @@ $categoryHero = $categoryHero ?? \App\Services\CategoryHeroService::get($categor
 <section class="yv-category-faq-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Sıkça sorulan sorular</div><h2>Merak Ettikleriniz</h2></div><a href="/sss" class="yv-link-button">Tüm Soruları Gör <?= icon('arrow-right',11) ?></a></div><div class="yv-services-faq-grid"><?php foreach($faqs as $faq): ?><div class="premium-faq-item"><button type="button" class="premium-faq-question"><span><?= e($faq['question']) ?></span><?= icon('plus',12) ?></button><div class="premium-faq-answer"><?= nl2br(e($faq['answer'])) ?></div></div><?php endforeach; ?></div></div></section>
 <?php endif; ?>
 
+<?php require __DIR__.'/partials/service-references.php'; ?>
 <?php $nvSeoGuide=\App\Services\ServiceEditorialBlocks::category($category,!empty($quoteMode));require __DIR__.'/partials/service-seo-guide.php'; ?>
 <section class="yv-category-cta-v5"><div class="container"><div><span><?= icon('zap',20) ?></span><strong><?= e($category['name']) ?>'da Bugün Fark Yaratın!</strong><small><?= !empty($quoteMode)?'Hizmet kapsamınızı paylaşın; projenize özel teklif hazırlayalım.':'Mevcut paketleri ve hizmet kapsamlarını karşılaştırın.' ?></small></div><a class="yv-btn yv-btn-light" href="<?= !empty($quoteMode)?'/iletisim':'#packages' ?>"><?= !empty($quoteMode)?'Teklif Al':'Paketleri İncele' ?> <?= icon('arrow-right',11) ?></a></div></section>
 </div>
