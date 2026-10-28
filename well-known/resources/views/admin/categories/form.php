@@ -92,6 +92,7 @@
                 </div>
             </div>
 
+            <?php $nvRefType='category'; $nvRefId=(int)($category['id']??0); require BASE_PATH.'/resources/views/admin/partials/service-references-picker.php'; ?>
             <!-- SEO -->
             <div class="adm-card">
                 <div class="adm-card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
