@@ -127,7 +127,7 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
    </div>
 
    <aside class="yv-product-buy-v5">
-    <div class="yv-product-badges-v5"><span><?= e($package['badge'] ?: 'En Çok Tercih Edilen Paket') ?></span><?php if($discount): ?><b>%<?= $discount ?> İndirim</b><?php endif; ?></div>
+    <div class="yv-product-badges-v5"><?php if(!empty($package['badge'])): ?><span><?= e($package['badge']) ?></span><?php elseif(!empty($quoteMode)): ?><span>Size özel proje kapsamı</span><?php else: ?><span>Paket detayları</span><?php endif; ?><?php if($discount && empty($quoteMode)): ?><b>%<?= $discount ?> İndirim</b><?php endif; ?></div>
     <h2><?= e(package_display_name($package)) ?></h2>
     <div class="yv-product-rating-v5 nv-product-process">
       <b><?= icon('shield-check',14) ?> <?= !empty($quoteMode)?'Güvenli Teklif Süreci':'Güvenli Sipariş' ?></b>
@@ -182,9 +182,9 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
 </section>
 
 <section class="yv-product-content-v5"><div class="container">
- <div class="yv-product-tabs-v5"><span class="active">Açıklama</span><span>Özellikler</span><span>Teslimat Süreci</span><span>Sıkça Sorulan Sorular</span></div>
- <article class="yv-product-copy-v5"><h2><?= e(package_display_name($package)) ?> Nedir?</h2><div class="blog-content"><?php if(!empty($package['description'])): ?><?= $package['description'] ?><?php else: ?><p>Bu paket, ihtiyacınız olan dijital hizmeti güvenli, hızlı ve kolay bir sipariş deneyimiyle sunar. Ödeme ve gerekli bilgiler tamamlandıktan sonra siparişiniz işleme alınır ve hesabınızdan takip edilebilir.</p><?php endif; ?></div></article>
- <div class="yv-product-gains-v5"><h3>Paket Özellikleri</h3><div>
+ <nav class="yv-product-tabs-v5 nv-service-section-nav" aria-label="Paket sayfası bölümleri"><a class="active" href="#nv-product-description">Açıklama</a><a href="#nv-product-features">Özellikler</a><a href="#hizmet-referanslari">Referanslar</a><a href="#nv-product-faq">Sık Sorulan Sorular</a></nav>
+ <article class="yv-product-copy-v5" id="nv-product-description"><h2><?= e(package_display_name($package)) ?> Nedir?</h2><div class="blog-content"><?php if(!empty($package['description'])): ?><?= $package['description'] ?><?php else: ?><p>Bu paket, ihtiyacınız olan dijital hizmeti güvenli, hızlı ve kolay bir sipariş deneyimiyle sunar. Ödeme ve gerekli bilgiler tamamlandıktan sonra siparişiniz işleme alınır ve hesabınızdan takip edilebilir.</p><?php endif; ?></div></article>
+ <div class="yv-product-gains-v5" id="nv-product-features"><h3>Paket Özellikleri</h3><div>
  <?php foreach(\App\Services\PackageHighlightsService::get((int)$package['id'],$package) as $highlight): ?>
   <span><?= icon('check-circle',13) ?> <?= e($highlight) ?></span>
  <?php endforeach; ?>
@@ -192,12 +192,12 @@ $nvServiceIcon=$platform==='store'?'shopping-bag':$platform;
 </div></section>
 
 <?php if(!empty($reviews)): ?>
-<section class="yv-product-reviews-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Müşteri yorumları</div><h2>Gerçek kullanıcı deneyimleri.</h2></div><div class="yv-product-rating-summary-v5"><strong>4.9</strong><span>★★★★★</span><small>Memnuniyet odaklı hizmet</small></div></div><div class="yv-product-review-grid-v5"><?php foreach(array_slice($reviews,0,3) as $review): ?><article><div><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><b><?= e($review['name']??'Müşteri') ?></b><em><?php for($i=0;$i<($review['stars']??5);$i++): ?>★<?php endfor; ?></em></div><p><?= e($review['text']??'') ?></p></article><?php endforeach; ?></div></div></section>
+<section class="yv-product-reviews-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Müşteri yorumları</div><h2>Gerçek kullanıcı deneyimleri.</h2></div><div class="yv-product-rating-summary-v5"><span><?= icon('message-square',18) ?></span><small>Paylaşılan müşteri görüşleri</small></div></div><div class="yv-product-review-grid-v5"><?php foreach(array_slice($reviews,0,3) as $review): ?><article><div><span><?= mb_strtoupper(mb_substr($review['name']??'M',0,1)) ?></span><b><?= e($review['name']??'Müşteri') ?></b><em><?php for($i=0;$i<($review['stars']??5);$i++): ?>★<?php endfor; ?></em></div><p><?= e($review['text']??'') ?></p></article><?php endforeach; ?></div></div></section>
 <?php endif; ?>
 
 <section class="yv-product-why-v5"><div class="container"><div><div class="yv-kicker">Neden NetVera Teknoloji Yazılım?</div><h2>Güvenli, hızlı ve kullanıcı dostu.</h2></div><div class="yv-product-why-stats-v5"><span><?= icon('users',18) ?><b>İhtiyaç Analizi</b><small>Proje kapsamı</small></span><span><?= icon('star-fill',18) ?><b>Şeffaf Süreç</b><small>Açık teslimler</small></span><span><?= icon('headphones',18) ?><b>İletişim</b><small>Destek kanalları</small></span><span><?= icon('shield',18) ?><b>Güvenli İşlem</b><small>Kontrollü süreç</small></span></div></div></section>
 
-<?php if(!empty($faqs)): ?><section class="yv-product-faq-v5"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Sıkça sorulan sorular</div><h2>Bu paket hakkında merak edilenler.</h2></div></div><div class="yv-services-faq-grid"><?php foreach(array_slice($faqs,0,6) as $faq): ?><div class="premium-faq-item"><button type="button" class="premium-faq-question"><span><?= e($faq['question']) ?></span><?= icon('plus',12) ?></button><div class="premium-faq-answer"><?= nl2br(e($faq['answer'])) ?></div></div><?php endforeach; ?></div></div></section><?php endif; ?>
+<?php if(!empty($faqs)): ?><section class="yv-product-faq-v5" id="nv-product-faq"><div class="container"><div class="yv-section-head-v5"><div><div class="yv-kicker">Sıkça sorulan sorular</div><h2>Bu paket hakkında merak edilenler.</h2></div></div><div class="yv-services-faq-grid"><?php foreach(array_slice($faqs,0,6) as $faq): ?><div class="premium-faq-item"><button type="button" class="premium-faq-question"><span><?= e($faq['question']) ?></span><?= icon('plus',12) ?></button><div class="premium-faq-answer"><?= nl2br(e($faq['answer'])) ?></div></div><?php endforeach; ?></div></div></section><?php endif; ?>
 
 <?php require __DIR__.'/partials/service-references.php'; ?>
 <?php $nvSeoGuide=\App\Services\ServiceEditorialBlocks::package($package,!empty($quoteMode)); require __DIR__.'/partials/service-seo-guide.php'; ?>
