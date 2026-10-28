@@ -40,3 +40,28 @@
   .admin-sidebar { width: min(292px, calc(100vw - 24px)); }
   .admin-content { margin-left: 0; }
 }
+
+
+/* High contrast logout button on the dark admin sidebar; never inherit
+   .btn-light or global button text color. */
+.admin-sidebar .nv-admin-logout-wrap{padding:15px 18px 22px!important;margin-top:12px}
+.admin-sidebar .nv-admin-logout-form{display:block!important;width:100%!important;margin:0!important}
+.admin-sidebar .nv-admin-logout-form .nv-admin-logout-button{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ gap:10px!important;width:100%!important;min-height:45px!important;
+ margin:0!important;padding:10px 14px!important;
+ border:1px solid rgba(219,223,255,.32)!important;border-radius:11px!important;
+ background:rgba(111,94,220,.2)!important;color:#fff!important;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
+ font:700 13px/1.35 Poppins,sans-serif!important;letter-spacing:0!important;
+ opacity:1!important;visibility:visible!important;cursor:pointer!important;
+ transition:background .18s ease,border-color .18s ease!important;
+}
+.admin-sidebar .nv-admin-logout-form .nv-admin-logout-button:is(:hover,:focus-visible){
+ background:#533bd0!important;border-color:#9789ff!important;color:#fff!important;
+}
+.admin-sidebar .nv-admin-logout-form .nv-admin-logout-button :is(svg,.icon,span){
+ color:#fff!important;opacity:1!important;visibility:visible!important;
+}
+.admin-sidebar .nv-admin-logout-form .nv-admin-logout-button svg{height:17px!important;width:17px!important;flex:0 0 17px}
+.admin-sidebar .nv-admin-logout-form .nv-admin-logout-button:focus-visible{outline:3px solid #b8adff!important;outline-offset:3px!important}
