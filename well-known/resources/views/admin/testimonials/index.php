@@ -44,6 +44,42 @@
  <?php endforeach; ?>
  </div></div>
 </div>
+<section class="adm-card" id="netvera-musteri-degerlendirmeleri">
+  <div class="adm-card-header">
+    <h3><?= icon('star',18) ?> Eski NetVera Ürün Yorumları ve Yıldızları (<?= count($netveraReviews??[]) ?>)</h3>
+    <span class="badge">Müşteri hesabına bağlı · Salt okunur</span>
+  </div>
+  <div class="adm-card-body">
+    <p style="font-size:12px;color:#65738b;line-height:1.7;margin:0 0 16px">
+      Bunlar geçmiş NetVera sisteminde gerçek müşterilerin ürünlere yaptığı yorumlardır.
+      İçerik ve yıldızları değiştirilmeden, eski müşteri ile yeni üye ve yazılım kimliği üzerinden eşlenir.
+      Yalnız <strong>onaylı</strong> olanlar ürün detayında yayımlanır. Yukarıdaki tanıtım amaçlı referans yorumlarından ayrıdır.
+    </p>
+    <?php if(!($netveraReviews??[])): ?>
+      <p>Henüz aktarılmış müşteri değerlendirmesi bulunmuyor. Özel NetVera müşteri ve yorum aktarımı tamamlandığında burada görüntülenir.</p>
+    <?php else: ?>
+    <div class="table-responsive"><table class="adm-table">
+      <thead><tr><th>Müşteri</th><th>İlgili Yazılım</th><th>Yıldız</th><th>Yorum</th><th>Onay</th><th>Tarih</th></tr></thead>
+      <tbody>
+      <?php foreach($netveraReviews as $legacyReview): ?>
+      <tr>
+        <td><strong><?= e($legacyReview['customer_name']) ?></strong><small class="nv67-table-muted"><?= e($legacyReview['customer_email']) ?></small></td>
+        <td>
+          <?php if(!empty($legacyReview['product_slug'])): ?>
+          <a href="/hazir-scriptler/<?= rawurlencode($legacyReview['product_slug']) ?>" target="_blank" rel="noopener noreferrer"><?= e($legacyReview['product_name']) ?></a>
+          <?php else: ?><span>Eski içerik #<?= (int)$legacyReview['old_review_id'] ?></span><?php endif; ?>
+        </td>
+        <td><span style="white-space:nowrap;color:#da9500" aria-label="<?= (int)$legacyReview['rating'] ?> yıldız"><?= str_repeat('★',max(0,min(5,(int)$legacyReview['rating']))) ?></span></td>
+        <td style="max-width:320px;line-height:1.65;overflow-wrap:anywhere"><?= e($legacyReview['comment']) ?></td>
+        <td><span class="badge <?= $legacyReview['status']==='approved'?'badge-success':'badge-warning' ?>"><?= e($legacyReview['status']) ?></span></td>
+        <td><?= e((string)$legacyReview['created_at']) ?></td>
+      </tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table></div>
+    <?php endif; ?>
+  </div>
+</section>
 <style>
 .rv-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.rv-admin-grid label{display:grid;gap:6px;font-size:12px;font-weight:600}.rv-admin-wide{grid-column:1/-1}.rv-admin-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}.rv-admin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.rv-admin-item{border:1px solid #e4e9f2;border-radius:13px;padding:16px;min-width:0}.rv-admin-person{display:flex;align-items:center;gap:11px}.rv-admin-person img,.rv-admin-person>span{width:48px;height:48px;flex:none;border-radius:14px;object-fit:cover;background:#f0eaff;display:grid;place-items:center}.rv-admin-person strong{display:block}.rv-admin-person small{display:block;color:#687990;margin-top:2px}.rv-admin-item p{margin:13px 0;font-size:12px;line-height:1.7;overflow-wrap:anywhere}@media(max-width:740px){.rv-admin-grid,.rv-admin-list{grid-template-columns:1fr}}
 </style>
