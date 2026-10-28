@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths:
       - 'well-known/scripts/import-netvera-private-customers.php'
+      - 'well-known/tests/netvera-private-reviews-ui-qa.php'
+      - 'well-known/app/Services/NetveraBridgeService.php'
       - 'well-known/tests/netvera-private-synthetic-fixture.php'
       - 'well-known/database/database.sql'
       - 'well-known/app/Services/DealerProgramService.php'
@@ -98,6 +100,10 @@ jobs:
           native_before=$(db "SELECT CONCAT((SELECT COUNT(*) FROM orders),':',(SELECT COUNT(*) FROM order_items),':',(SELECT COUNT(*) FROM payment_gateways))")
           php well-known/scripts/import-netvera-private-customers.php --apply > /tmp/private-first.txt
           [ "$(db 'SELECT COUNT(*) FROM nv_private_user_map')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_content_reviews')" = 2 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_content_reviews WHERE target_type='script' AND product_legacy_id=11 AND status='approved' AND rating=5")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_content_reviews WHERE target_type='script' AND product_legacy_id=11 AND status='pending' AND rating=2")" = 1 ]
+          php well-known/tests/netvera-private-reviews-ui-qa.php
           [ "$(db 'SELECT COUNT(*) FROM nv_private_orders')" = 3 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_order_items')" = 2 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_orders WHERE new_user_id IS NULL')" = 1 ]
@@ -118,6 +124,8 @@ jobs:
           [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE customer_email='qa-guest@example.test' AND new_user_id IS NULL")" = 1 ]
           php well-known/scripts/import-netvera-private-customers.php --apply > /tmp/private-second.txt
           [ "$(db 'SELECT COUNT(*) FROM nv_private_user_map')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_content_reviews')" = 2 ]
+          php well-known/tests/netvera-private-reviews-ui-qa.php
           [ "$(db 'SELECT COUNT(*) FROM nv_private_orders')" = 3 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_order_items')" = 2 ]
           [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliates')" = 1 ]
