@@ -1,13 +1,25 @@
+# NetVera root-ready cPanel layout.
+# The document root /home/.../netvera.tr contains app/, public/, resources/...
+# ONLY netvera.tr is routed into public/; nested SUBDOMAIN document roots
+# are intentionally not intercepted or rewritten by the parent .htaccess.
+Options -Indexes
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
+  RewriteEngine On
+
+  # Main domain private code/data must never be served as static files.
+  RewriteCond %{HTTP_HOST} ^(?:www\.)?netvera\.tr(?::[0-9]+)?$ [NC]
+  RewriteRule ^(?:app|resources|storage|database|bin|scripts|tests|docs|vendor)(?:/|$) - [F,L,NC]
+
+  # Avoid nested /public/public/... internal rewrite passes.
+  RewriteCond %{HTTP_HOST} ^(?:www\.)?netvera\.tr(?::[0-9]+)?$ [NC]
+  RewriteRule ^public/ - [L]
+
+  # App routes/static assets on the bare root URL.
+  RewriteCond %{HTTP_HOST} ^(?:www\.)?netvera\.tr(?::[0-9]+)?$ [NC]
+  RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
-<FilesMatch "^\.env|composer\.(json|lock)|README\.md|task\.md">
-    Order allow,deny
-    Deny from all
+# Protect secrets even when Apache directly evaluates a file.
+<FilesMatch "(?i)(^\.env(?:\..*)?$|^composer\.(json|lock)$|^php\.ini$|^\.user\.ini$|\.(sql|bak|backup|log|conf|ini)$)">
+  Require all denied
 </FilesMatch>
-
-<IfModule mod_autoindex.c>
-    Options -Indexes
-</IfModule>
