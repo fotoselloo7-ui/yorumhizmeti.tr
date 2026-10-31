@@ -51,7 +51,9 @@ const mkPage=(index)=> {
           columnMode:getComputedStyle(wrapper).display,
           width:window.innerWidth,
           rects:bounds, articleRects:articles.map(el=>el.getBoundingClientRect().toJSON()),
-          wrapperRect:wrapper.getBoundingClientRect().toJSON()};
+          wrapperRect:wrapper.getBoundingClientRect().toJSON(),
+          cardGridRect:document.querySelector('[data-component="scripts"] .nvl-card-grid').getBoundingClientRect().toJSON(),
+          cardRects:[...document.querySelectorAll('[data-component="scripts"] .nvl-card')].map(el=>el.getBoundingClientRect().toJSON())};
      });
      const tag=`theme ${i+1}, ${width}px`;
      if(data.overflow>2)errors.push(tag+`: horizontal overflow ${data.overflow}`);
@@ -59,6 +61,15 @@ const mkPage=(index)=> {
      if(width<768 && data.columns==='2')errors.push(tag+': expected one mobile column');
      for(const rect of data.rects) {
        if(rect.width<=0 || rect.x < -2 || rect.right>width+2)errors.push(tag+': misplaced card '+JSON.stringify(rect));
+     }
+     if(width>=768) {
+       const bottomY=Math.max(...data.cardRects.map(r=>r.y));
+       const bottomRow=data.cardRects.filter(r=>Math.abs(r.y-bottomY)<2);
+       const rowLeft=Math.min(...bottomRow.map(r=>r.left));
+       const rowRight=Math.max(...bottomRow.map(r=>r.right));
+       const rowCenter=(rowLeft+rowRight)/2;
+       const gridCenter=data.cardGridRect.x+data.cardGridRect.width/2;
+       if(Math.abs(rowCenter-gridCenter)>12) errors.push(tag+`: incomplete desktop card row is not centered (${rowCenter} vs ${gridCenter})`);
      }
      if(i===2 && width===1440) await page.screenshot({path:process.env.RUNNER_TEMP+'/netvera-green-route-desktop.png',fullPage:true});
      if(i===2 && width===390) await page.screenshot({path:process.env.RUNNER_TEMP+'/netvera-green-route-mobile.png',fullPage:true});
