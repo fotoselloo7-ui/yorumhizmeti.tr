@@ -57,6 +57,42 @@
                     refreshCityScene();
                 }
             }
+            // Only the regional landing OG image input: preview locally before save.
+            const ogUpload = form.querySelector('[data-landing-og-upload]');
+            const ogPreview = form.querySelector('[data-landing-og-preview]');
+            const ogImg = ogPreview?.querySelector('[data-landing-og-preview-image]');
+            const ogLabel = ogPreview?.querySelector('[data-landing-og-preview-label]');
+            if (ogUpload && ogImg && ogPreview) {
+                const originalSrc = ogImg.getAttribute('src') || '';
+                let temporaryUrl = '';
+                ogUpload.addEventListener('change', () => {
+                    if (temporaryUrl) URL.revokeObjectURL(temporaryUrl);
+                    temporaryUrl = '';
+                    const file = ogUpload.files?.[0];
+                    if (file) {
+                        if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type) || file.size > 5*1024*1024) {
+                            ogUpload.setCustomValidity('JPG, PNG, WebP veya GIF görsel seçin (en fazla 5 MB).');
+                            ogUpload.reportValidity();
+                            ogUpload.value = '';
+                            return;
+                        }
+                        ogUpload.setCustomValidity('');
+                        temporaryUrl = URL.createObjectURL(file);
+                        ogImg.src = temporaryUrl;
+                        ogImg.hidden = false;
+                        ogPreview.hidden = false;
+                        if (ogLabel) ogLabel.textContent = 'Seçilen paylaşım görseli (kaydedince yüklenecek)';
+                    } else {
+                        ogUpload.setCustomValidity('');
+                        ogImg.src = originalSrc;
+                        ogImg.hidden = !originalSrc;
+                        ogPreview.hidden = !originalSrc;
+                        if (ogLabel) ogLabel.textContent = 'Mevcut paylaşım görseli';
+                    }
+                    ogUpload.dispatchEvent(new Event('input', {bubbles:true}));
+                });
+                window.addEventListener('pagehide', () => { if (temporaryUrl) URL.revokeObjectURL(temporaryUrl); }, {once:true});
+            }
             const preview = form.querySelector('[data-theme-preview-dialog]');
             let previewOpener;
             if (preview) {
