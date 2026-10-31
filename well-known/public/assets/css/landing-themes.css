@@ -741,7 +741,6 @@
 /* 2026-10-31: Every regional landing stays centered. Long, differently sized
    editorial cards flow without grid-row holes (especially Green Route #03).
    Card content remains fully visible for users and search crawlers. */
-.nv-landing[data-theme] .nvl-section>.nvl-container,
 .nv-landing[data-theme] .nvl-showcase-viewport,
 .nv-landing[data-theme] .nvl-articles,
 .nv-landing[data-theme] .nvl-card-grid,
@@ -854,5 +853,24 @@
   .nv-landing[data-theme] [data-component="blog"][data-variant="editorial"] .nvl-card-grid>.nvl-card{
     flex-basis:calc((100% - 18px)/2);
     min-width:min(190px,100%);
+  }
+}
+
+/* HARD WIDTH INVARIANT: same 1200px centered grid as the shared NetVera header.
+   Earlier .nvl-section>.nvl-container max-width:100% was overriding the
+   foundational .nvl-container max-width:1200px and causing full-screen cards. */
+.nv-landing[data-theme] .nvl-section>.nvl-container,
+.nv-landing[data-theme] .nvl-contact.nvl-container{
+  box-sizing:border-box;
+  width:calc(100% - 40px);
+  max-width:1200px;
+  margin-left:auto;
+  margin-right:auto;
+  min-width:0;
+}
+@media(max-width:420px){
+  .nv-landing[data-theme] .nvl-section>.nvl-container,
+  .nv-landing[data-theme] .nvl-contact.nvl-container{
+    width:calc(100% - 32px);
   }
 }
