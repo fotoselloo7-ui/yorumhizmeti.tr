@@ -737,3 +737,92 @@
     font-size:9px;
   }
 }
+
+/* 2026-10-31: Every regional landing stays centered. Long, differently sized
+   editorial cards flow without grid-row holes (especially Green Route #03).
+   Card content remains fully visible for users and search crawlers. */
+.nv-landing[data-theme] .nvl-section>.nvl-container,
+.nv-landing[data-theme] .nvl-showcase-viewport,
+.nv-landing[data-theme] .nvl-articles,
+.nv-landing[data-theme] .nvl-card-grid,
+.nv-landing[data-theme] .nvl-service-grid{
+  box-sizing:border-box;
+  min-width:0;
+  max-width:100%;
+  margin-inline:auto;
+}
+.nv-landing[data-theme] :is(.nvl-service-grid,.nvl-card-grid){
+  justify-content:center;
+}
+.nv-landing[data-theme] :is(.nvl-service-card,.nvl-card,.nvl-article){
+  overflow-wrap:anywhere;
+}
+@media(min-width:768px){
+  .nv-landing[data-theme] [data-component="content"]:is([data-variant="steps"],[data-variant="timeline"],[data-variant="dark-flow"]) .nvl-articles{
+    display:block;
+    columns:2;
+    column-gap:24px;
+    width:100%;
+    max-width:1180px;
+    margin-inline:auto;
+  }
+  .nv-landing[data-theme] [data-component="content"]:is([data-variant="steps"],[data-variant="timeline"],[data-variant="dark-flow"]) .nvl-articles .nvl-article{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    box-sizing:border-box;
+    width:100%;
+    padding:22px 24px;
+    margin:0 0 24px;
+    border:1px solid var(--nvl-border);
+    border-radius:16px;
+    background:var(--nvl-surface);
+    box-shadow:0 9px 26px #152f2b0d;
+    break-inside:avoid;
+    page-break-inside:avoid;
+    -webkit-column-break-inside:avoid;
+    align-self:start;
+  }
+  .nv-landing[data-theme] [data-component="content"]:is([data-variant="steps"],[data-variant="timeline"],[data-variant="dark-flow"]) .nvl-articles .nvl-article:not(:last-child)::after{display:none}
+  .nv-landing[data-theme] [data-component="content"]:is([data-variant="steps"],[data-variant="timeline"],[data-variant="dark-flow"]) .nvl-articles .nvl-step-marker{
+    border:0;
+    padding:0;
+    width:auto;
+  }
+  .nv-landing[data-theme] [data-component="content"]:is([data-variant="steps"],[data-variant="timeline"],[data-variant="dark-flow"]) .nvl-articles:has(>.nvl-article:only-child){
+    columns:1;
+    max-width:760px;
+  }
+  .nv-landing[data-theme] [data-component="content"][data-variant="dark-flow"] .nvl-articles .nvl-article{
+    background:#ffffff12;
+    border-color:#ffffff30;
+    box-shadow:none;
+  }
+  .nv-landing[data-theme] [data-component="content"][data-variant="dark-flow"] .nvl-articles :is(h2,h3){color:#fff}
+}
+/* Green Route: proper text widths and consistent spacing; no four skinny tracks. */
+.nv-landing[data-theme="landing-03"] [data-component="content"] .nvl-article h2{
+  color:#073c2d;
+  line-height:1.36;
+}
+.nv-landing[data-theme="landing-03"] [data-component="content"] .nvl-articles .nvl-article{
+  border-color:#d9e9dd;
+  box-shadow:0 10px 30px #0d523010;
+}
+.nv-landing[data-theme="landing-03"] [data-component="content"] .nvl-articles .nvl-step-number{
+  background:#e2f5e9;
+  color:#087541;
+}
+@media(max-width:767px){
+  .nv-landing[data-theme] [data-component="content"] .nvl-articles{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    columns:auto;
+    gap:14px;
+    margin-inline:auto;
+  }
+  .nv-landing[data-theme] [data-component="content"] .nvl-article{
+    max-width:100%;
+    box-sizing:border-box;
+  }
+}
