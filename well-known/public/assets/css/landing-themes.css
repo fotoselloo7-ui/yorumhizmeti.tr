@@ -826,33 +826,18 @@
   }
 }
 
-/* Center the final incomplete row of real service/software/blog/reference cards.
-   Desktop only: keep the existing mobile two-column card treatment unchanged. */
+/* Services retain their own responsive centered grid. Catalog, blog and
+   reference card geometry is owned EXCLUSIVELY by regional-showcase-v1.css,
+   never by this generic theme file (conflicting display:flex caused overlaps). */
 @media(min-width:768px){
-  .nv-landing[data-theme] [data-component="services"] .nvl-service-grid,
-  .nv-landing[data-theme] :is([data-component="scripts"],[data-component="references"],[data-component="blog"]:not([data-variant="list"])) .nvl-card-grid{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:stretch;
-    justify-content:center;
-    gap:18px;
-    width:100%;
+  .nv-landing[data-theme] [data-component="services"] .nvl-service-grid{
+    display:flex;flex-wrap:wrap;align-items:stretch;
+    justify-content:center;gap:18px;width:100%;
   }
-  .nv-landing[data-theme] [data-component="services"] .nvl-service-grid>.nvl-service-card,
-  .nv-landing[data-theme] :is([data-component="scripts"],[data-component="references"],[data-component="blog"]:not([data-variant="list"])) .nvl-card-grid>.nvl-card{
+  .nv-landing[data-theme] [data-component="services"] .nvl-service-grid>.nvl-service-card{
     flex:0 1 calc((100% - 54px)/4);
-    min-width:min(220px,100%);
-    max-width:100%;
-    box-sizing:border-box;
+    min-width:min(220px,100%);max-width:100%;box-sizing:border-box;
     align-self:stretch;
-  }
-  .nv-landing[data-theme] [data-component="scripts"]:is([data-variant="horizontal"],[data-variant="wide-covers"]) .nvl-card-grid>.nvl-card{
-    flex-basis:calc((100% - 18px)/2);
-    min-width:min(320px,100%);
-  }
-  .nv-landing[data-theme] [data-component="blog"][data-variant="editorial"] .nvl-card-grid>.nvl-card{
-    flex-basis:calc((100% - 18px)/2);
-    min-width:min(190px,100%);
   }
 }
 
