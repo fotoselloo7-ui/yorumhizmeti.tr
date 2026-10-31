@@ -32,7 +32,7 @@ function check(ok, message){if(!ok)throw new Error(message);}
 (async()=>{
   const browser = await chromium.launch({headless:true});
   let n=0;
-  for (const width of [1440,390]) for (let t=1;t<=10;t++) for (const count of [3,10]) {
+  for (const width of [1920,1440,900,390]) for (let t=1;t<=10;t++) for (const count of [3,10]) {
     const page=await browser.newPage({viewport:{width,height:850},reducedMotion:'reduce'});
     const theme='landing-'+String(t).padStart(2,'0');
     await page.setContent(make(theme,count));
@@ -58,6 +58,12 @@ function check(ok, message){if(!ok)throw new Error(message);}
         sticky:style.position,
         maxHeight:style.maxHeight,
         width:document.documentElement.scrollWidth,
+        asideHeight:side.offsetHeight,
+        asideOverflow:style.overflowY,
+        asideTop:parseFloat(style.top),
+        cardRects:cards.map(c=>c.getBoundingClientRect().toJSON()),
+        viewportRect:viewport.getBoundingClientRect().toJSON(),
+
       };
     });
     const label=`${theme}, ${width}px, ${count} cards`;
@@ -65,6 +71,17 @@ function check(ok, message){if(!ok)throw new Error(message);}
     check(metrics.width<=width+2,label+': page horizontal overflow');
     check(metrics.firstGap>=0&&metrics.firstGap<36,label+': title/CTA gap='+metrics.firstGap);
     check(metrics.cardHeight<340,label+': card contains unnecessary whitespace '+metrics.cardHeight);
+    for(let i=0;i<metrics.cardRects.length;i++) for(let j=i+1;j<metrics.cardRects.length;j++){
+      const a=metrics.cardRects[i],b=metrics.cardRects[j];
+      const x=Math.min(a.right,b.right)-Math.max(a.left,b.left);
+      const y=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+      check(x<1||y<1,label+': card overlap between #'+i+' and #'+j);
+    }
+    if(count>4){
+      const visible=metrics.cardRects.filter(c=>c.left>=metrics.viewportRect.left-2&&c.right<=metrics.viewportRect.right+2);
+      const cols=metrics.viewportRect.width>=1050?4:metrics.viewportRect.width>=660?3:2;
+      check(visible.length>=2*cols,label+': not enough full columns / clipped cards '+visible.length+' / '+2*cols);
+    }
     if (count<=4) {
       check(!metrics.rail&&metrics.controls===0,label+': small set should not become carousel');
     } else {
@@ -86,15 +103,14 @@ function check(ok, message){if(!ok)throw new Error(message);}
       await page.locator('.nvl-rail-prev').click({force:true});
       await page.waitForTimeout(80);
     }
-    if(width===1440){
-      check(metrics.sticky==='sticky',label+': Q&A is not sticky');
-      await page.locator('.nvl-deep-layout').scrollIntoViewIfNeeded();
-      await page.evaluate(()=>window.scrollBy(0,300));
-      await page.waitForTimeout(90);
-      const position=await page.locator('.nvl-deep-questions').evaluate(el=>el.getBoundingClientRect().top);
-      check(position>=94&&position<=110,label+': Q&A sticky top='+position);
+    if(width>900){
+      check(metrics.sticky==='sticky',label+': Q&A not sticky as whole column');
+      check(metrics.asideOverflow==='visible',label+': Q&A has internal scrollbar');
+      check(metrics.maxHeight==='none',label+': Q&A has height clipping');
+      const expected=Math.min(96,850-metrics.asideHeight-24);
+      check(Math.abs(metrics.asideTop-expected)<=2,label+': expected sticky top '+expected+' got '+metrics.asideTop);
     } else {
-      check(metrics.sticky==='static',label+': mobile Q&A must be normal flow');
+      check(metrics.sticky==='static',label+': Q&A must stack on tablets and mobiles');
     }
     if (t===3&&count===10 && width===1440 && process.env.RUNNER_TEMP){
       await page.screenshot({path:process.env.RUNNER_TEMP+'/netvera-regional-cards-desktop.png',fullPage:true});
@@ -102,5 +118,5 @@ function check(ok, message){if(!ok)throw new Error(message);}
     await page.close();n++;
   }
   await browser.close();
-  console.log(`PASS ${n} theme/viewport/card-layout cases + full last-card access, title/CTA spacing and sticky questions`);
+  console.log(`PASS ${n}: all 10 themes, 4 viewport widths, no card overlap/cutoff, whole-column sticky FAQ`);
 })().catch(e=>{console.error(e);process.exit(1)});
