@@ -1,0 +1,144 @@
+name: NetVera Private Customer Migration QA (synthetic only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'well-known/scripts/import-netvera-private-customers.php'
+      - 'well-known/tests/netvera-private-reviews-ui-qa.php'
+      - 'well-known/app/Services/NetveraBridgeService.php'
+      - 'well-known/tests/netvera-private-synthetic-fixture.php'
+      - 'well-known/database/database.sql'
+      - 'well-known/app/Services/DealerProgramService.php'
+      - 'well-known/tests/netvera-dealer-program-qa.php'
+      - 'well-known/resources/views/frontend/account/partials/netvera-owned-software.php'
+      - 'well-known/app/Controllers/DealerController.php'
+      - 'well-known/app/Controllers/Admin/DealerController.php'
+      - 'well-known/resources/views/frontend/account/dealer.php'
+      - 'well-known/resources/views/admin/dealers/index.php'
+      - 'well-known/app/Services/LegacyCustomerService.php'
+      - 'well-known/app/Controllers/Admin/NetveraCustomersController.php'
+      - 'well-known/resources/views/frontend/account/partials/netvera-legacy-history.php'
+      - '.github/workflows/netvera-private-customer-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-source-to-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: isolated_synthetic_qa_only
+          MYSQL_DATABASE: netvera_private_source_qa
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent -pisolated_synthetic_qa_only"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, openssl
+          tools: none
+      - name: Create two separate, synthetic test databases
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq default-mysql-client
+          db() { mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only "$@"; }
+          db -e "CREATE DATABASE netvera_private_target_qa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+          db netvera_private_target_qa < well-known/database/database.sql
+          php well-known/tests/netvera-private-synthetic-fixture.php 127.0.0.1 netvera_private_source_qa root isolated_synthetic_qa_only
+          cat > well-known/.env <<'EOF'
+          APP_ENV=staging
+          APP_DEBUG=false
+          DB_HOST=127.0.0.1
+          DB_NAME=netvera_private_target_qa
+          DB_USER=root
+          DB_PASS=isolated_synthetic_qa_only
+          DB_CHARSET=utf8mb4
+          EOF
+      - name: No source database writes and no staging writes on dry run
+        shell: bash
+        env:
+          NETVERA_SOURCE_DB_HOST: 127.0.0.1
+          NETVERA_SOURCE_DB_NAME: netvera_private_source_qa
+          NETVERA_SOURCE_DB_USER: root
+          NETVERA_SOURCE_DB_PASSWORD: isolated_synthetic_qa_only
+          NETVERA_ADMIN_EMAIL: qa-admin@example.test
+        run: |
+          set -euo pipefail
+          php -l well-known/scripts/import-netvera-private-customers.php
+          php well-known/scripts/import-netvera-private-customers.php > /tmp/dry-run.txt
+          grep -q "SAFE: no target rows modified" /tmp/dry-run.txt
+          [ "$(mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only -N -B netvera_private_target_qa -e "SELECT COUNT(*) FROM nv_private_orders")" = "0" ]
+          echo "PASS: dry-run does not write customer or order records"
+      - name: Import once, verify all historical relationships, then import twice
+        shell: bash
+        env:
+          NETVERA_SOURCE_DB_HOST: 127.0.0.1
+          NETVERA_SOURCE_DB_NAME: netvera_private_source_qa
+          NETVERA_SOURCE_DB_USER: root
+          NETVERA_SOURCE_DB_PASSWORD: isolated_synthetic_qa_only
+          NETVERA_ADMIN_EMAIL: qa-admin@example.test
+          NETVERA_MIGRATION_SECRET: qa-only-randomized-example-48-characters-not-for-any-production-use
+          NETVERA_PRIVATE_IMPORT_ALLOWED: '1'
+          NETVERA_MERGE_EXISTING_EMAILS: '1'
+        run: |
+          set -euo pipefail
+          db() { mysql -h127.0.0.1 -uroot -pisolated_synthetic_qa_only -N -B netvera_private_target_qa -e "$1"; }
+          native_before=$(db "SELECT CONCAT((SELECT COUNT(*) FROM orders),':',(SELECT COUNT(*) FROM order_items),':',(SELECT COUNT(*) FROM payment_gateways))")
+          php well-known/scripts/import-netvera-private-customers.php --apply > /tmp/private-first.txt
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_user_map')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_content_reviews')" = 2 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_content_reviews WHERE target_type='script' AND product_legacy_id=11 AND status='approved' AND rating=5")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_content_reviews WHERE target_type='script' AND product_legacy_id=11 AND status='pending' AND rating=2")" = 1 ]
+          php well-known/tests/netvera-private-reviews-ui-qa.php
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_orders')" = 3 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_order_items')" = 2 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_orders WHERE new_user_id IS NULL')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliates')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliate_commissions')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_support_tickets')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_support_replies')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliate_clicks')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_order_referrals')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_admin_map')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_dealer_accounts')" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_dealer_accounts WHERE status='pending' AND commission_rate=0 AND legacy_affiliate_id=6")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_dealer_audit WHERE action='legacy_import'")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM admins WHERE email='qa-admin@example.test' AND role='super_admin'")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM admins WHERE email='admin@yorumhizmeti.tr'")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE payment_status='paid' AND license_key_encrypted IS NOT NULL AND license_key_encrypted<>'QA-LICENSE-NOT-REAL'")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE payment_status='failed' AND entitlement_json IS NOT NULL")" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_private_orders WHERE customer_email='qa-guest@example.test' AND new_user_id IS NULL")" = 1 ]
+          php well-known/scripts/import-netvera-private-customers.php --apply > /tmp/private-second.txt
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_user_map')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_content_reviews')" = 2 ]
+          php well-known/tests/netvera-private-reviews-ui-qa.php
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_orders')" = 3 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_order_items')" = 2 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_private_affiliates')" = 1 ]
+          [ "$(db 'SELECT COUNT(*) FROM nv_dealer_accounts')" = 1 ]
+          [ "$(db "SELECT COUNT(*) FROM nv_dealer_audit WHERE action='legacy_import'")" = 1 ]
+          native_after=$(db "SELECT CONCAT((SELECT COUNT(*) FROM orders),':',(SELECT COUNT(*) FROM order_items),':',(SELECT COUNT(*) FROM payment_gateways))")
+          [ "$native_before" = "$native_after" ]
+          echo "PASS: source isolation, user/admin mapping, license encryption, preserved guest order, dealer, support, referral, idempotency and untouched native payments"
+      - name: Functional dealer approval and ownership tests
+        shell: bash
+        env:
+          NETVERA_DEALER_QA_ONLY: '1'
+        run: |
+          set -euo pipefail
+          php -l well-known/tests/netvera-dealer-program-qa.php
+          php well-known/tests/netvera-dealer-program-qa.php
