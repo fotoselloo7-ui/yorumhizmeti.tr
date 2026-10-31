@@ -51,51 +51,40 @@ jobs:
         run: |
           set -euo pipefail
           NODE_PATH="$RUNNER_TEMP/playwright-qa/node_modules" RUNNER_TEMP="$RUNNER_TEMP" node well-known/tests/landing-themes-centered-qa.cjs
-      - name: Package seven-file cPanel patch (not the full site)
+      - name: Package ONLY 1200px layout CSS and public stylesheet cache version
         shell: bash
         run: |
           set -euo pipefail
-          stage="$RUNNER_TEMP/landing-style-patch"
-          mkdir -p "$stage"
-          for source in \
-            well-known/app/Controllers/Admin/LandingController.php \
-            well-known/resources/views/admin/landing/seo-fields.php \
-            well-known/public/assets/js/landing-editor.js \
-            well-known/public/assets/css/landing-editor.css \
-            well-known/public/assets/css/landing-themes.css \
-            well-known/resources/views/layouts/admin.php \
-            well-known/resources/views/layouts/app.php; do
-            target="${source#well-known/}"
-            mkdir -p "$stage/$(dirname "$target")"
-            cp "$source" "$stage/$target"
-          done
+          stage="$RUNNER_TEMP/landing-1200-fix"
+          mkdir -p "$stage/public/assets/css" "$stage/resources/views/layouts"
+          cp well-known/public/assets/css/landing-themes.css "$stage/public/assets/css/landing-themes.css"
+          cp well-known/resources/views/layouts/app.php "$stage/resources/views/layouts/app.php"
           cat > "$stage/KURULUM-OKU.txt" <<'EOF'
-          NETVERA LANDING OG GORSEL VE TEMA DUZELTME
-          Ana netvera.tr belge kokunde Extract yapin, mevcut 7 dosyaya yazin.
-          Bu paket .env, SQL, musteriler, odemeler, sluglar ve alt alan adlarini degistirmez.
-          Konumsal Sayfalar > Duzenle > SEO & yayin > SEO/GEO/AIO
-          OG gorseli bilgisayardan yukle bolumunu kullanin (max 5 MB).
-          Kaydettikten sonra sayfayi yenileyin. Ana tema icin Yesil Rota 03'u secin.
-          Baska tema gormek isterseniz tema seciciden tek tek deneyin.
-          Oncelikle mevcut dosyalarin yedegini alin.
+          NETVERA 1200PX LANDING SAYFA DUZELTMESI
+          Sadece iki dosya: public/assets/css/landing-themes.css
+          ve resources/views/layouts/app.php
+          netvera.tr belge kokunde Extract yaparak uzerine yazin.
+          SQL, .env, admin, odemeler, urunler, subdomainler ve sayfa icerigi degismez.
+          Tarayicida CTRL+SHIFT+R ile yenileyin; sayfa temasi aynen kalir.
+          Yedek almayi unutmayin.
           EOF
           (
             cd "$stage"
-            zip -qr "$GITHUB_WORKSPACE/NETVERA-LANDING-OG-TEMA-DUZELTME.zip" app resources public KURULUM-OKU.txt
+            zip -qr "$GITHUB_WORKSPACE/NETVERA-1200PX-LANDING-HIZA-DUZELTME.zip" public resources KURULUM-OKU.txt
           )
-          file="$GITHUB_WORKSPACE/NETVERA-LANDING-OG-TEMA-DUZELTME.zip"
+          file="$GITHUB_WORKSPACE/NETVERA-1200PX-LANDING-HIZA-DUZELTME.zip"
           unzip -t "$file" >/dev/null
-          test "$(unzip -Z1 "$file" | grep -Ec '[.](php|js|css)$')" -eq 7
-          unzip -Z1 "$file" | grep -qx 'resources/views/admin/landing/seo-fields.php'
+          test "$(unzip -Z1 "$file" | grep -Ec '[.](php|js|css)$')" -eq 2
+          unzip -Z1 "$file" | grep -qx 'resources/views/layouts/app.php'
           unzip -Z1 "$file" | grep -qx 'public/assets/css/landing-themes.css'
-          if unzip -Z1 "$file" | grep -Eq '(^well-known/|^\\.env|\\.sql$|sync-conflict|^public/uploads/)'; then
+          if unzip -Z1 "$file" | grep -Eq '(^well-known/|^\.env|\.sql$|sync-conflict|^public/uploads/)'; then
             echo 'Unsafe or unintended file in patch'
             exit 1
           fi
       - uses: actions/upload-artifact@v4
         with:
-          name: NETVERA-LANDING-OG-TEMA-DUZELTME
-          path: NETVERA-LANDING-OG-TEMA-DUZELTME.zip
+          name: NETVERA-1200PX-LANDING-HIZA-DUZELTME
+          path: NETVERA-1200PX-LANDING-HIZA-DUZELTME.zip
           retention-days: 14
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
