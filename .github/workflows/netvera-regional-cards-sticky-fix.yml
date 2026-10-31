@@ -1,5 +1,4 @@
-name: NetVera Landing Kartlari ve Sticky Rehber Duzeltmesi
-
+name: NetVera Landing Kart ve Soru Cevap Duzeltmesi
 on:
   workflow_dispatch:
   push:
@@ -7,9 +6,8 @@ on:
     paths:
       - '.github/workflows/netvera-regional-cards-sticky-fix.yml'
       - 'well-known/tests/regional-cards-and-sticky-qa.cjs'
-
 jobs:
-  qa-and-package:
+  qa-package:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -21,7 +19,7 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, dom, xml
           tools: none
-      - name: Lint only changed files
+      - name: PHP and JS syntax and layout markers
         shell: bash
         run: |
           set -euo pipefail
@@ -29,9 +27,9 @@ jobs:
           php -l well-known/resources/views/layouts/app.php
           node --check well-known/public/assets/js/regional-showcase-v1.js
           node --check well-known/tests/regional-cards-and-sticky-qa.cjs
-          grep -Fq 'scroll-snap-type:x mandatory' well-known/public/assets/css/regional-showcase-v1.css
-          grep -Fq 'position:sticky' well-known/public/assets/css/regional-showcase-v1.css
-      - name: Install isolated Chromium QA
+          grep -Fq 'grid-auto-columns:var(--nvl-rail-card-width' well-known/public/assets/css/regional-showcase-v1.css
+          grep -Fq 'max-height:none!important' well-known/public/assets/css/regional-showcase-v1.css
+      - name: Isolated Chromium test setup
         shell: bash
         run: |
           set -euo pipefail
@@ -39,12 +37,12 @@ jobs:
           cd "$RUNNER_TEMP/pwqa"
           npm install --no-save --no-audit --no-fund playwright@1.56.1
           npx playwright install chromium
-      - name: Test 10 themes and complete end card at desktop/mobile
+      - name: Ten-theme carousel and whole-sidebar QA
         shell: bash
         run: |
           set -euo pipefail
           NODE_PATH="$RUNNER_TEMP/pwqa/node_modules" RUNNER_TEMP="$RUNNER_TEMP" node well-known/tests/regional-cards-and-sticky-qa.cjs
-      - name: Package ONLY 5 changed layout files for cPanel root
+      - name: Package only five changed files
         shell: bash
         run: |
           set -euo pipefail
@@ -56,68 +54,43 @@ jobs:
             well-known/public/assets/js/regional-showcase-v1.js \
             well-known/resources/views/frontend/landing/editorial-deep.php \
             well-known/resources/views/layouts/app.php; do
-            target="${source#well-known/}"
+            target="\${source#well-known/}"
             mkdir -p "$stage/$(dirname "$target")"
             cp "$source" "$stage/$target"
           done
           cat > "$stage/ONCE-OKU.txt" <<'EOF'
-          NETVERA KART / REHBER DUZELTMESI
-          cPanel netvera.tr kok dizinine yukle ve Extract yap.
-          Yalnizca 5 dosya; app kodu, SQL, .env, hosting, PayTR, lisans,
-          SEO icerikleri ve alt alan adlarini degistirmez.
-          Yalnizca public/assets/css/landing-themes.css,
-          public/assets/css/regional-showcase-v1.css,
-          public/assets/js/regional-showcase-v1.js,
-          resources/views/frontend/landing/editorial-deep.php,
-          resources/views/layouts/app.php degisir.
-          Once mevcut 4 dosyanin yedegini al; sayfayi Ctrl+Shift+R ile yenile.
+          NETVERA KART VE REHBER SUTUN DUZELTMESI
+          netvera.tr ana kok dizinine yukleyip Extract yapin.
+          Bes dosyanin uzerine yazilir, yedek alin.
+          SQL, .env, PayTR, admin, sayfa icerigi, lisans degismez.
+          Yukleme sonrasi Ctrl+Shift+R ile yenileyin.
           EOF
           (
             cd "$stage"
-            zip -qr "$GITHUB_WORKSPACE/NETVERA-KART-KESILME-BOSLUK-STICKY-DUZELTME.zip" public resources ONCE-OKU.txt
+            zip -qr "$GITHUB_WORKSPACE/NETVERA-KART-SUTUN-SON-DUZELTME.zip" public resources ONCE-OKU.txt
           )
-          file="$GITHUB_WORKSPACE/NETVERA-KART-KESILME-BOSLUK-STICKY-DUZELTME.zip"
-          unzip -t "$file" >/dev/null
-          test "$(unzip -Z1 "$file" | grep -Ec '[.](php|js|css)
-          unzip -Z1 "$file" | grep -qx 'public/assets/css/landing-themes.css'
-          unzip -Z1 "$file" | grep -qx 'public/assets/css/regional-showcase-v1.css'
-          unzip -Z1 "$file" | grep -qx 'public/assets/js/regional-showcase-v1.js'
-          unzip -Z1 "$file" | grep -qx 'resources/views/frontend/landing/editorial-deep.php'
-          unzip -Z1 "$file" | grep -qx 'resources/views/layouts/app.php'
-          if unzip -Z1 "$file" | grep -Eq '(^well-known/|^\.env|\.sql$|sync-conflict|^public/uploads/)'; then
-            echo 'Unexpected file in hotfix ZIP';exit 1
-          fi
+          archive="$GITHUB_WORKSPACE/NETVERA-KART-SUTUN-SON-DUZELTME.zip"
+          unzip -t "$archive" >/dev/null
+          actual=$(unzip -Z1 "$archive" | grep -E '[.](php|js|css)$' | wc -l)
+          test "$actual" -eq 5
+          for expected in \
+            public/assets/css/landing-themes.css \
+            public/assets/css/regional-showcase-v1.css \
+            public/assets/js/regional-showcase-v1.js \
+            resources/views/frontend/landing/editorial-deep.php \
+            resources/views/layouts/app.php; do
+            unzip -Z1 "$archive" | grep -Fxq "$expected"
+          done
       - uses: actions/upload-artifact@v4
         with:
-          name: NETVERA-KART-KESILME-BOSLUK-STICKY-DUZELTME
-          path: NETVERA-KART-KESILME-BOSLUK-STICKY-DUZELTME.zip
+          name: NETVERA-KART-SUTUN-SON-DUZELTME
+          path: NETVERA-KART-SUTUN-SON-DUZELTME.zip
           retention-days: 14
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: NetVera-Regional-QA-Screenshot
-          path: ${{ runner.temp }}/netvera-regional-cards-desktop.png
-          retention-days: 7
-          if-no-files-found: ignore
-)" -eq 5
-          unzip -Z1 "$file" | grep -qx 'public/assets/css/regional-showcase-v1.css'
-          unzip -Z1 "$file" | grep -qx 'public/assets/js/regional-showcase-v1.js'
-          unzip -Z1 "$file" | grep -qx 'resources/views/frontend/landing/editorial-deep.php'
-          unzip -Z1 "$file" | grep -qx 'resources/views/layouts/app.php'
-          if unzip -Z1 "$file" | grep -Eq '(^well-known/|^\.env|\.sql$|sync-conflict|^public/uploads/)'; then
-            echo 'Unexpected file in hotfix ZIP';exit 1
-          fi
-      - uses: actions/upload-artifact@v4
-        with:
-          name: NETVERA-KART-KESILME-BOSLUK-STICKY-DUZELTME
-          path: NETVERA-KART-KESILME-BOSLUK-STICKY-DUZELTME.zip
-          retention-days: 14
-          if-no-files-found: error
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: NetVera-Regional-QA-Screenshot
-          path: ${{ runner.temp }}/netvera-regional-cards-desktop.png
+          name: NetVera-QA-Gorsel
+          path: \${{ runner.temp }}/netvera-regional-cards-desktop.png
           retention-days: 7
           if-no-files-found: ignore
