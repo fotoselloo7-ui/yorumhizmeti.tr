@@ -30,6 +30,8 @@
     state.viewport.removeAttribute('aria-label');
     state.viewport.removeAttribute('tabindex');
     state.viewport.scrollLeft = 0;
+    state.grid.style.removeProperty('--nvl-rail-card-width');
+    state.grid.style.removeProperty('--nvl-static-card-width');
     state.viewport.classList.remove('is-dragging');
     section.classList.remove('is-nvl-rail','is-nvl-static','is-nvl-loop','nvl-is-side');
     instances.delete(section);
@@ -54,6 +56,25 @@
       prev: null, next: null
     };
     instances.set(section, state);
+    // Exact whole-column widths based on the ACTUAL available viewport.
+    // 4 columns on a 1200px area, 3 on mid-sized widths, 2 on mobile.
+    // This avoids clipped fifth cards and layout collisions across side headings.
+    const setGeometry = () => {
+      if (state.destroyed) return;
+      const available = Math.floor(viewport.clientWidth);
+      if (!available) return;
+      const columns = available >= 1050 ? 4 : available >= 660 ? 3 : 2;
+      const gap = available <= 600 ? 10 : 14;
+      const width = Math.max(1, Math.floor((available - (columns - 1) * gap) / columns));
+      grid.style.setProperty('--nvl-rail-card-width', width + 'px');
+      grid.style.setProperty('--nvl-static-card-width', Math.min(260, width) + 'px');
+    };
+    setGeometry();
+    state.resize = new ResizeObserver(() => {
+      setGeometry();
+      if (typeof queueUpdate === 'function') queueUpdate();
+    });
+    state.resize.observe(viewport);
     const listen = (node, event, handler, opts) => {
       node.addEventListener(event, handler, opts);
       state.listeners.push([node, event, handler, opts]);
@@ -153,9 +174,6 @@
       event.preventDefault(); event.stopImmediatePropagation();
       state.suppressClick = false;
     }, true);
-    state.resize = new ResizeObserver(queueUpdate);
-    state.resize.observe(viewport);
-    state.resize.observe(grid);
     queueUpdate();
   }
 
@@ -179,10 +197,31 @@
     init(section, host.querySelector('main.nv-landing')?.dataset.theme || '');
   }
 
+  // Scroll the PAGE, not the Q&A itself: the complete sidebar remains visible
+  // across the guide. Tall sidebars use a negative sticky top to let their
+  // bottom enter the viewport before sticking; all questions stay in document.
+  const observedSidebars = new WeakSet();
+  const syncStickySidebar = () => {
+    const side = host.querySelector('main.nv-landing .nvl-deep-layout > .nvl-deep-questions');
+    if (!side) return;
+    const h = side.offsetHeight;
+    const stickyTop = Math.min(96, Math.round(window.innerHeight - h - 24));
+    side.style.setProperty('--nvl-qa-sticky-top', stickyTop + 'px');
+    if (!observedSidebars.has(side)) {
+      observedSidebars.add(side);
+      const observer = new ResizeObserver(() => {
+        const top = Math.min(96, Math.round(window.innerHeight - side.offsetHeight - 24));
+        side.style.setProperty('--nvl-qa-sticky-top', top + 'px');
+      });
+      observer.observe(side);
+    }
+  };
+  window.addEventListener('resize', syncStickySidebar, {passive:true});
   function refresh() {
     const main = host.querySelector('main.nv-landing');
     for (const node of instances.keys()) if (!main?.contains(node)) destroy(node);
     if (!main) return;
+    syncStickySidebar();
     main.querySelectorAll('section[data-component]').forEach(section => {
       if (['scripts','blog','references'].includes(section.dataset.component)) {
         init(section, main.dataset.theme);
