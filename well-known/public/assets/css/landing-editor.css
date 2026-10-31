@@ -125,3 +125,46 @@
 }
 @media(max-width:390px){.landing-design-grid{grid-template-columns:1fr}.landing-design-meta>span{min-height:0}}
 @media(prefers-reduced-motion:reduce){.landing-design-option-body{transition:none!important}.landing-design-option:hover .landing-design-option-body{transform:none!important}}
+
+/* Landing SEO & publishing: first-party social card image upload preview. */
+.region-editor-panel .landing-og-upload{
+  margin:18px 0 26px;
+  padding:18px;
+  border:1px solid #ded9f6;
+  border-radius:12px;
+  background:#faf9ff;
+}
+.region-editor-panel .landing-og-upload>label{
+  display:block;
+  margin-bottom:9px;
+  font-weight:700;
+  color:#293657;
+}
+.region-editor-panel .landing-og-upload input[type=file]{
+  width:100%;
+  max-width:100%;
+  min-height:42px;
+  padding:8px;
+  box-sizing:border-box;
+  background:#fff;
+}
+.region-editor-panel .landing-og-preview{
+  max-width:480px;
+  margin-top:16px;
+  padding:9px;
+  border:1px solid #e2e6f0;
+  border-radius:10px;
+  background:#fff;
+}
+.region-editor-panel .landing-og-preview[hidden],
+.region-editor-panel .landing-og-preview img[hidden]{display:none}
+.region-editor-panel .landing-og-preview img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:260px;
+  aspect-ratio:40/21;
+  object-fit:contain;
+  border-radius:7px;
+}
+.region-editor-panel .landing-og-preview small{margin-top:8px;color:#62708b}
