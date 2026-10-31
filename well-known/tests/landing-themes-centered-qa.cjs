@@ -32,12 +32,13 @@ const mkPage=(index)=> {
  <section class="nvl-section" data-component="services" data-variant="tiles"><div class="nvl-container"><div class="nvl-service-grid">${services}</div></div></section>
  <section class="nvl-section nvl-section-content" data-component="content" data-variant="${variant}"><div class="nvl-container"><div class="nvl-articles">${articles}</div></div></section>
  <section class="nvl-section" data-component="scripts" data-variant="gallery"><div class="nvl-container"><div class="nvl-card-grid">${cards}</div></div></section>
+ <section class="nvl-contact nvl-container" data-variant="wide"><div class="nvl-contact-shell"><h2>Teklif alın</h2></div></section>
  </main></body></html>`;
 };
 (async()=>{
  const browser=await chromium.launch({headless:true});
  const errors=[];
- for(const width of [1440,900,390]){
+ for(const width of [2560,1920,1440,900,390]){
    const page=await browser.newPage({viewport:{width,height:820},deviceScaleFactor:1});
    for(let i=0;i<10;i++){
      await page.setContent(mkPage(i),{waitUntil:'load'});
@@ -52,11 +53,18 @@ const mkPage=(index)=> {
           width:window.innerWidth,
           rects:bounds, articleRects:articles.map(el=>el.getBoundingClientRect().toJSON()),
           wrapperRect:wrapper.getBoundingClientRect().toJSON(),
+          contentContainers:[...document.querySelectorAll('.nvl-hero>.nvl-container,.nvl-section>.nvl-container,.nvl-contact.nvl-container')].map(el=>({component:el.parentElement.dataset.component||el.parentElement.className,rect:el.getBoundingClientRect().toJSON()})),
           cardGridRect:document.querySelector('[data-component="scripts"] .nvl-card-grid').getBoundingClientRect().toJSON(),
           cardRects:[...document.querySelectorAll('[data-component="scripts"] .nvl-card')].map(el=>el.getBoundingClientRect().toJSON())};
      });
      const tag=`theme ${i+1}, ${width}px`;
      if(data.overflow>2)errors.push(tag+`: horizontal overflow ${data.overflow}`);
+     const expected=Math.min(1200,width-(width<=420?32:40));
+     for (const item of data.contentContainers) {
+       const rect=item.rect;
+       if(Math.abs(rect.width-expected)>2) errors.push(tag+`: ${item.component} wrapper is ${rect.width}px, must be ${expected}px`);
+       if(Math.abs((rect.left+rect.right)/2-width/2)>2) errors.push(tag+`: ${item.component} wrapper is not horizontally centered`);
+     }
      if((['steps','timeline','dark-flow'].includes(variants[i])) && width>=768 && data.columns!=='2')errors.push(tag+`: expected 2 dense columns, got ${data.columns}`);
      if(width<768 && data.columns==='2')errors.push(tag+': expected one mobile column');
      for(const rect of data.rects) {
@@ -71,12 +79,12 @@ const mkPage=(index)=> {
        const gridCenter=data.cardGridRect.x+data.cardGridRect.width/2;
        if(Math.abs(rowCenter-gridCenter)>12) errors.push(tag+`: incomplete desktop card row is not centered (${rowCenter} vs ${gridCenter})`);
      }
-     if(i===2 && width===1440) await page.screenshot({path:process.env.RUNNER_TEMP+'/netvera-green-route-desktop.png',fullPage:true});
+     if(i===2 && width===1920) await page.screenshot({path:process.env.RUNNER_TEMP+'/netvera-green-route-desktop.png',fullPage:true});
      if(i===2 && width===390) await page.screenshot({path:process.env.RUNNER_TEMP+'/netvera-green-route-mobile.png',fullPage:true});
    }
    await page.close();
  }
  await browser.close();
  if(errors.length){console.error(errors.slice(0,50).join('\n'));process.exit(1);}
- console.log('30 viewport/theme checks passed: 10 themes x desktop/tablet/mobile, including Green Route.');
+ console.log('50 viewport/theme checks passed: 10 themes x 2560/1920/1440/900/390; exact 1200px centered containers and card alignment.');
 })().catch(e=>{console.error(e);process.exit(1)});
