@@ -238,3 +238,118 @@
 .nv-landing .nvl-section .nvl-rail-column > .nvl-card[hidden]{
   display:none!important;
 }
+
+/* 2026-10-31: fixed-edge regional vitrines across ALL 10 landing themes.
+   User-controlled, scroll-snapped rail; never recycle nodes or leave a cut-off
+   final item. The older loop was continuously moving and lacked a real end. */
+.nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport{
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-padding-inline:0!important;
+  scroll-behavior:smooth!important;
+  overscroll-behavior-x:contain;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid{
+  grid-auto-flow:column!important;
+  grid-auto-columns:minmax(0,var(--nvl-card-w))!important;
+  grid-template-rows:repeat(2,max-content)!important;
+  gap:14px!important;
+  width:max-content!important;
+  min-width:100%!important;
+  align-items:start!important;
+  justify-content:start!important;
+  padding:2px 0!important;
+}
+.nv-landing .nvl-section.is-nvl-rail .nvl-card-grid>.nvl-card{
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+/* Compact content-sized cards: no blank space between the title and CTA. */
+.nv-landing .nvl-section:is(.is-nvl-static,.is-nvl-rail) .nvl-card-grid>.nvl-card{
+  height:max-content!important;
+  min-height:0!important;
+  align-self:start!important;
+}
+.nv-landing .nvl-section:is(.is-nvl-static,.is-nvl-rail) .nvl-card-copy{
+  flex:0 0 auto!important;
+  gap:7px!important;
+}
+.nv-landing .nvl-section:is(.is-nvl-static,.is-nvl-rail) .nvl-card-copy .nvl-card-footer{
+  margin-top:8px!important;
+  padding-top:0!important;
+}
+.nv-landing .nvl-section:is(.is-nvl-static,.is-nvl-rail) .nvl-card-copy .nvl-card-link{
+  margin-top:0!important;
+}
+.nv-landing .nvl-section.is-nvl-static .nvl-card-grid{
+  align-items:flex-start!important;
+  justify-content:center!important;
+  padding:2px 0!important;
+}
+.nv-landing .nvl-section.is-nvl-static .nvl-card-grid>.nvl-card{
+  flex-shrink:0!important;
+}
+/* Page-adjacent accessible controls; scroll buttons disable at real ends. */
+.nv-landing .nvl-rail-controls{
+  display:flex;justify-content:flex-end;align-items:center;gap:10px;
+  padding-top:12px;
+}
+.nv-landing .nvl-rail-controls[hidden]{display:none!important}
+.nv-landing .nvl-rail-controls button{
+  display:inline-flex;justify-content:center;align-items:center;
+  width:38px;height:38px;border:1px solid var(--nvl-border);
+  border-radius:10px;background:var(--nvl-surface);color:var(--nvl-brand);
+  font:600 18px/1 system-ui,sans-serif;cursor:pointer;
+}
+.nv-landing .nvl-rail-controls button:disabled{opacity:.3;cursor:default}
+.nv-landing .nvl-rail-controls button:not(:disabled):hover{
+  background:var(--nvl-soft);
+}
+.nv-landing .nvl-rail-controls button:focus-visible{
+  outline:3px solid var(--nvl-brand);outline-offset:2px;
+}
+@media(min-width:801px){
+  .nv-landing .nvl-section.nvl-is-side.is-nvl-rail .nvl-rail-controls{
+    grid-column:2;grid-row:3;
+  }
+  .nv-landing .nvl-section.nvl-is-side.is-nvl-static .nvl-rail-controls{
+    grid-column:2;grid-row:3;
+  }
+}
+@media(max-width:600px){
+  .nv-landing .nvl-section.is-nvl-rail .nvl-card-grid{
+    grid-template-rows:repeat(2,max-content)!important;
+    gap:10px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .nv-landing .nvl-section.is-nvl-rail .nvl-showcase-viewport{
+    scroll-behavior:auto!important;
+  }
+}
+
+/* Deep guide: the question column follows the long article on desktop,
+   yet every answer stays accessible by its own internal scroll. */
+@media(min-width:901px) and (min-height:640px){
+  .nv-landing .nvl-deep-layout>.nvl-deep-questions,
+  .regional-landing .nvl-deep-layout>.nvl-deep-questions{
+    position:sticky;
+    top:96px;
+    align-self:start;
+    max-height:calc(100vh - 116px);
+    max-height:calc(100dvh - 116px);
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    scrollbar-width:thin;
+    scrollbar-color:var(--nvl-deep-border) transparent;
+  }
+}
+@media(max-width:900px),(max-height:639px){
+  .nv-landing .nvl-deep-layout>.nvl-deep-questions,
+  .regional-landing .nvl-deep-layout>.nvl-deep-questions{
+    position:static;
+    max-height:none;
+    overflow:visible;
+  }
+}
