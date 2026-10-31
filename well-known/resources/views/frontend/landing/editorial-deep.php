@@ -32,7 +32,7 @@ if($nvLongTitle!==''||$nvLongLead!==''||$nvLongBody!==''||$nvLongQuestions):
             </article>
             <?php endif; ?>
             <?php if($nvLongQuestions): ?>
-            <div class="nvl-deep-questions" aria-label="Yerel rehber soru ve yanıtları">
+            <aside class="nvl-deep-questions" tabindex="0" role="region" aria-label="Yerel rehber soru ve yanıtları — kaydırılabilir bölüm">
                 <h3>Merak edilenler</h3>
                 <?php foreach($nvLongQuestions as $nvQuestion): ?>
                 <div class="nvl-deep-qa">
@@ -40,7 +40,7 @@ if($nvLongTitle!==''||$nvLongLead!==''||$nvLongBody!==''||$nvLongQuestions):
                     <div class="nvl-deep-answer"><?= EditorialText::rich($nvQuestion['answer']) ?></div>
                 </div>
                 <?php endforeach; ?>
-            </div>
+            </aside>
             <?php endif; ?>
         </div>
     </div>
