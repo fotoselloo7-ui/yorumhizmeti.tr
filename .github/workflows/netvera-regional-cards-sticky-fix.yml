@@ -54,7 +54,7 @@ jobs:
             well-known/public/assets/js/regional-showcase-v1.js \
             well-known/resources/views/frontend/landing/editorial-deep.php \
             well-known/resources/views/layouts/app.php; do
-            target="\${source#well-known/}"
+            target="${source#well-known/}"
             mkdir -p "$stage/$(dirname "$target")"
             cp "$source" "$stage/$target"
           done
@@ -79,7 +79,7 @@ jobs:
             public/assets/js/regional-showcase-v1.js \
             resources/views/frontend/landing/editorial-deep.php \
             resources/views/layouts/app.php; do
-            unzip -Z1 "$archive" | grep -Fxq "$expected"
+            unzip -Z1 "$archive" | grep -Fx "$expected"
           done
       - uses: actions/upload-artifact@v4
         with:
@@ -91,6 +91,6 @@ jobs:
         if: always()
         with:
           name: NetVera-QA-Gorsel
-          path: \${{ runner.temp }}/netvera-regional-cards-desktop.png
+          path: ${{ runner.temp }}/netvera-regional-cards-desktop.png
           retention-days: 7
           if-no-files-found: ignore
