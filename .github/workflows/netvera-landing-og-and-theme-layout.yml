@@ -1,0 +1,107 @@
+name: NetVera Landing OG Yukleme ve Tema Duzeltme ZIP
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/netvera-landing-og-and-theme-layout.yml'
+      - 'well-known/tests/landing-themes-centered-qa.cjs'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, fileinfo, gd
+          tools: none
+      - name: Lint only affected PHP and JS files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            well-known/app/Controllers/Admin/LandingController.php \
+            well-known/resources/views/admin/landing/seo-fields.php \
+            well-known/resources/views/layouts/admin.php \
+            well-known/resources/views/layouts/app.php; do
+            php -l "$file"
+          done
+          node --check well-known/public/assets/js/landing-editor.js
+          node --check well-known/tests/landing-themes-centered-qa.cjs
+          grep -Fq 'seo_og_image_upload' well-known/app/Controllers/Admin/LandingController.php
+          grep -Fq 'seo_og_image_upload' well-known/resources/views/admin/landing/seo-fields.php
+          grep -Fq 'Content::upload' well-known/app/Controllers/Admin/LandingController.php
+          grep -Fq 'columns:2' well-known/public/assets/css/landing-themes.css
+      - name: Setup isolated Chromium layout QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/playwright-qa"
+          cd "$RUNNER_TEMP/playwright-qa"
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          npx playwright install chromium
+      - name: Check ten theme layouts on Chrome engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          NODE_PATH="$RUNNER_TEMP/playwright-qa/node_modules" RUNNER_TEMP="$RUNNER_TEMP" node well-known/tests/landing-themes-centered-qa.cjs
+      - name: Package seven-file cPanel patch (not the full site)
+        shell: bash
+        run: |
+          set -euo pipefail
+          stage="$RUNNER_TEMP/landing-style-patch"
+          mkdir -p "$stage"
+          for source in \
+            well-known/app/Controllers/Admin/LandingController.php \
+            well-known/resources/views/admin/landing/seo-fields.php \
+            well-known/public/assets/js/landing-editor.js \
+            well-known/public/assets/css/landing-editor.css \
+            well-known/public/assets/css/landing-themes.css \
+            well-known/resources/views/layouts/admin.php \
+            well-known/resources/views/layouts/app.php; do
+            target="${source#well-known/}"
+            mkdir -p "$stage/$(dirname "$target")"
+            cp "$source" "$stage/$target"
+          done
+          cat > "$stage/KURULUM-OKU.txt" <<'EOF'
+          NETVERA LANDING OG GORSEL VE TEMA DUZELTME
+          Ana netvera.tr belge kokunde Extract yapin, mevcut 7 dosyaya yazin.
+          Bu paket .env, SQL, musteriler, odemeler, sluglar ve alt alan adlarini degistirmez.
+          Konumsal Sayfalar > Duzenle > SEO & yayin > SEO/GEO/AIO
+          OG gorseli bilgisayardan yukle bolumunu kullanin (max 5 MB).
+          Kaydettikten sonra sayfayi yenileyin. Ana tema icin Yesil Rota 03'u secin.
+          Baska tema gormek isterseniz tema seciciden tek tek deneyin.
+          Oncelikle mevcut dosyalarin yedegini alin.
+          EOF
+          (
+            cd "$stage"
+            zip -qr "$GITHUB_WORKSPACE/NETVERA-LANDING-OG-TEMA-DUZELTME.zip" app resources public KURULUM-OKU.txt
+          )
+          file="$GITHUB_WORKSPACE/NETVERA-LANDING-OG-TEMA-DUZELTME.zip"
+          unzip -t "$file" >/dev/null
+          test "$(unzip -Z1 "$file" | grep -Ec '[.](php|js|css)$')" -eq 7
+          unzip -Z1 "$file" | grep -qx 'resources/views/admin/landing/seo-fields.php'
+          unzip -Z1 "$file" | grep -qx 'public/assets/css/landing-themes.css'
+          if unzip -Z1 "$file" | grep -Eq '(^well-known/|^\\.env|\\.sql$|sync-conflict|^public/uploads/)'; then
+            echo 'Unsafe or unintended file in patch'
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NETVERA-LANDING-OG-TEMA-DUZELTME
+          path: NETVERA-LANDING-OG-TEMA-DUZELTME.zip
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: NetVera-Green-Route-Browser-QA-Screenshots
+          path: ${{ runner.temp }}/netvera-green-route-*.png
+          retention-days: 7
+          if-no-files-found: ignore
