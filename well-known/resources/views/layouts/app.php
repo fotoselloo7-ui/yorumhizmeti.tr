@@ -165,9 +165,9 @@
     <?php if($template==='frontend/landing/show'): ?>
     <link rel="stylesheet" href="<?= asset('css/regional-themes-v62.css') ?>?v=62.1">
     <link rel="stylesheet" href="<?= asset('css/landing-themes.css') ?>?v=20261031-1200px-restored">
-    <link rel="stylesheet" href="<?= asset('css/regional-showcase-v1.css') ?>?v=20261027-compact-overflow-carousel-v6-filter">
+    <link rel="stylesheet" href="<?= asset('css/regional-showcase-v1.css') ?>?v=20261031-no-cut-cards-v7">
     <script src="<?= asset('js/landing-themes.js') ?>?v=20261023" defer></script>
-    <script src="<?= asset('js/regional-showcase-v1.js') ?>?v=20261027-compact-overflow-carousel-v5" defer></script>
+    <script src="<?= asset('js/regional-showcase-v1.js') ?>?v=20261031-full-card-controls-v7" defer></script>
     <script src="<?= asset('js/landing-effects.js') ?>?v=20261025" defer></script>
     <?php endif; ?>
     <?php if(!empty($socialPage)||isset($socialDirectory)): ?>
