@@ -72,7 +72,13 @@
     setGeometry();
     state.resize = new ResizeObserver(() => {
       setGeometry();
-      if (typeof queueUpdate === 'function') queueUpdate();
+      if (state.prev && state.next) requestAnimationFrame(() => {
+        if (state.destroyed) return;
+        const max = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+        state.controls.hidden = max <= 3;
+        state.prev.disabled = max <= 3 || viewport.scrollLeft <= 2;
+        state.next.disabled = max <= 3 || viewport.scrollLeft >= max - 2;
+      });
     });
     state.resize.observe(viewport);
     const listen = (node, event, handler, opts) => {
