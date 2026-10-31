@@ -32,7 +32,7 @@ if($nvLongTitle!==''||$nvLongLead!==''||$nvLongBody!==''||$nvLongQuestions):
             </article>
             <?php endif; ?>
             <?php if($nvLongQuestions): ?>
-            <aside class="nvl-deep-questions" tabindex="0" role="region" aria-label="Yerel rehber soru ve yanıtları — kaydırılabilir bölüm">
+            <aside class="nvl-deep-questions" aria-label="Yerel rehber soruları ve yanıtları">
                 <h3>Merak edilenler</h3>
                 <?php foreach($nvLongQuestions as $nvQuestion): ?>
                 <div class="nvl-deep-qa">
